@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.13.2 (TeX Live 2021/W32TeX)  (format=lualatex 2021.8.8)  18 OCT 2021 10:28
+This is LuaHBTeX, Version 1.13.2 (TeX Live 2021/W32TeX)  (format=lualatex 2021.8.8)  18 OCT 2021 10:41
  restricted system commands enabled.
 **Main.tex
 (./Main.tex
@@ -1110,30 +1110,31 @@ Overfull \hbox (14.13875pt too wide) in paragraph at lines 64--64
 
 {c:/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] (./Einleitung.t
 ex) (./Zielbestimmungen.tex) (./Produkteinsatz.tex) (./Produktumgebung.tex) (./
-Produktdaten.tex) (./Produktleistungen.tex)
-(./Benutzeroberflaeche.tex) (./Qualitaetsanforderungen.tex) (./Testfaelle.tex)
-(./Entwicklungsumgebung.tex) (./Glossar.tex) [1] (./Main.aux)
+Produktfunktionen.tex) (./Produktdaten.tex)
+(./Produktleistungen.tex) (./Benutzeroberflaeche.tex)
+(./Qualitaetsanforderungen.tex) (./Testfaelle.tex) [1]
+(./Entwicklungsumgebung.tex) (./Glossar.tex) [2] (./Main.aux)
 Package rerunfilecheck Info: File `Main.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
 )
 
 Here is how much of LuaTeX's memory you used:
- 30313 strings out of 478095
+ 30324 strings out of 478095
  100000,1373583 words of node,token memory allocated
  614 words of node memory still in use:
    7 hlist, 2 vlist, 2 rule, 5 glue, 4 kern, 1 glyph, 14 attribute, 67 glue_spec
 , 9 attribute_list, 2 write nodes
-   avail lists: 1:1,2:857,3:312,4:179,5:135,6:62,7:1912,8:46,9:305,10:2,11:196
- 49539 multiletter control sequences out of 65536+600000
+   avail lists: 1:1,2:911,3:333,4:191,5:141,6:66,7:2017,8:49,9:320,10:2,11:208
+ 49543 multiletter control sequences out of 65536+600000
  40 fonts using 3319883 bytes
  108i,7n,102p,10598b,770s stack positions out of 5000i,500n,10000p,200000b,80000s
 <c:/texlive/2021/texmf-dist/fonts/opentype/public/lm/lmroman10-regular.otf><c:/t
 exlive/2021/texmf-dist/fonts/opentype/public/lm/lmroman12-regular.otf><c:/texliv
 e/2021/texmf-dist/fonts/opentype/public/lm/lmsans10-bold.otf>
-Output written on Main.pdf (2 pages, 17460 bytes).
+Output written on Main.pdf (3 pages, 17558 bytes).
 
-PDF statistics: 100 PDF objects out of 1000 (max. 8388607)
- 86 compressed objects within 1 object stream
- 16 named destinations out of 1000 (max. 131072)
- 104 words of extra memory for PDF output out of 10000 (max. 100000000)
+PDF statistics: 109 PDF objects out of 1000 (max. 8388607)
+ 94 compressed objects within 1 object stream
+ 18 named destinations out of 1000 (max. 131072)
+ 112 words of extra memory for PDF output out of 10000 (max. 100000000)
 
