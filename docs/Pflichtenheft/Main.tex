@@ -15,14 +15,15 @@
 \usepackage{xcolor}
 \usepackage{todonotes}
 \usepackage[binary-units]{siunitx}
+\usepackage{hyphenat}
+\usepackage{fontspec}
 
-\usepackage[T1]{fontenc}
 \usepackage{tgpagella}
+\setmainfont{TeX Gyre Pagella}
 
 \usepackage[top=3cm]{geometry}
 \usepackage{parskip} %% Absatz anstatt amerikanischer Einrückung
 
-\usepackage{hyperref}
 \makeatletter
 \def\namedlabel#1#2{\begingroup
 	#2%
@@ -54,18 +55,17 @@
 
 \newcommand{\shellcmd}[1]{\texttt{\footnotesize\$ #1}}
 
-\newcommand{\localauthor}[1]{\raggedleft \color{gray} [#1] \normalcolor
+\newcommand{\localauthor}[1]{\color{gray} #1 \normalcolor}
 
-	\raggedright}
-
+\newcommand{\XXitem}[2]{\item[] \textbf{#1} \label{#2}}
 
 \newcommand{\doubletitle}[2]{\title{#1 \\ [1ex] \normalsize #2}}
 \newcommand{\extauthor}[2]{\author{#1 \\ \normalsize #2}}
 
 \begin{document}
-	\doubletitle{Pfichtenheft}{SEP WS 2021/22}
+	\doubletitle{Pflichtenheft}{SEP WS 2021/22}
 
-	\extauthor{Gruppe 2}{Garstenauer Johannes, Gürster Stefanie, Kirz Thomas, Schicho Johann, Vogt Sebastian}
+	\extauthor{Gruppe 2}{Johannes Garstenauer, Stefanie Gürster, Thomas Kirz, Johann Schicho, Sebastian Vogt}
 
 	%%\date{Datum}
 	\pagenumbering{gobble}
