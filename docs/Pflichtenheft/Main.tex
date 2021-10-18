@@ -1,4 +1,4 @@
-\documentclass[a4paper,11pt,parskip=half-]{scrartcl}
+\documentclass[a4paper,11pt,parskip=half-]{article}
 
 \usepackage[ngerman]{babel}
 
@@ -6,6 +6,8 @@
 \usepackage{abstract}
 \usepackage{graphicx}
 \usepackage{booktabs}
+\usepackage{float}
+\usepackage{tabularx}
 \usepackage{amsmath}
 \usepackage{hyperref}
 \usepackage{listings}
@@ -14,7 +16,11 @@
 \usepackage{todonotes}
 \usepackage[binary-units]{siunitx}
 
+\usepackage[T1]{fontenc}
+\usepackage{tgpagella}
+
 \usepackage[top=3cm]{geometry}
+\usepackage{parskip} %% Absatz anstatt amerikanischer Einrückung
 
 \usepackage{hyperref}
 \makeatletter
@@ -54,53 +60,53 @@
 
 \begin{document}
 	\doubletitle{Pfichtenheft}{SEP WS 2021/22}
-	
+
 	\extauthor{Gruppe 2}{Garstenauer Johannes, Gürster Stefanie, Kirz Thomas, Schicho Johann, Vogt Sebastian}
-	
+
 	%%\date{Datum}
 	\pagenumbering{gobble}
-	
+
 	\maketitle
 	\tableofcontents
 	\listoftodos
-	
+
 	%% ENDE Titelblatt
-	
+
 	\newpage
 	\pagenumbering{arabic}
-	
+
 	\section{Einleitung}
 	\input{Einleitung}
-	
+
 	\section{Zielbestimmungen}
 	\input{Zielbestimmungen}
-	
+
 	\section{Produkteinsatz}
 	\input{Produkteinsatz}
-	
+
 	\section{Produktumgebung}
 	\input{Produktumgebung}
-	
+
 	\section{Produktdaten}
 	\input{Produktdaten}
-	
+
 	\section{Produktleistungen}
 	\input{Produktleistungen}
-	
+
 	\section{Benutzeroberfläche}
 	\input{Benutzeroberflaeche}
-	
+
 	\section{Qualitätsanforderungen}
 	\input{Qualitaetsanforderungen}
-	
+
 	\section{Testfälle}
 	\input{Testfaelle}
-	
+
 	\section{Entwicklungsumgebung}
 	\input{Entwicklungsumgebung}
-	
+
 	\section{Glossar}
 	\input{Glossar}
-	
-	
+
+
 \end{document}
