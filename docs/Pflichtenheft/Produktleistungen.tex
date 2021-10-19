@@ -1,1 +1,76 @@
-Johann Schicho
+\localauthor{Johann Schicho}
+
+Die Notation \texttt{/LXXX/} erlaubt eine spätere Referenzierung der einzelnen Produktleistungen in diesem und weiteren
+Dokumenten. \texttt{XXX} entspricht dabei immer einer dreistelligen Zahl.
+
+\subsection{Skalierbarkeit}
+
+\begin{description}
+
+	\XXitem{/L010/}{leist:10} Die Anwendung soll bis zu 1000 verschiedene Nutzer und 100 verschiedene Konferenzen und Journale verwalten können.
+
+	\XXitem{/L020/}{leist:20} Die Anwendung soll bis zu 50 gleichzeitig angemeldete und auf der Webanwendnung agierende Nutzer verarbeiten können.
+
+\end{description}
+
+\subsection{Usability}
+
+\begin{description}
+	\XXitem{/L030/}{leist:30} Die Benutzeroberfläche soll intuitiv zu bedienen sein und pro Seite nur gezielt Informationen anzeigen, die der Nutzer sehen will, und nicht überladen sein.
+
+	\XXitem{/L040/}{leist:40} Lange Listen sollen paginiert werden. Das heißt sie sind über mehrere Seiten aufgeteilt. Ein solcher Umbruch findet nach je 25 Listeneinträgen statt.
+
+	\XXitem{/L050/}{leist:50} Über die Kopfzeile, die auf jeder nach dem Login vorzufindenden Seite der Webanwendung
+	vorhanden ist, soll eine Suchfunktion zur Verfügung stehen.
+
+	\XXitem{/L055/}{leist:55} Über die Fußzeile soll zu jeder Seite eine Kurzhilfe angeboten werden. Durch einen Link wird ein neuer Tab geöffnet, der dann einen kurzen Hilfetext anzeigt.
+
+	\XXitem{/L060/}{leist:60} Die Benutzer sollen über Fehleingaben benachrichtigt werden und diese anschließend ohne erneute Eingabe aller Daten korrigieren können.
+
+	\XXitem{/L065/}{leist:65} Die Verwendung von Cookies ist nicht zwingend erforderlich.
+\end{description}
+
+\subsection{Datensicherheit}
+
+\begin{description}
+	\XXitem{/L070/}{leist:070} Alle in der Anwendung erfassten Daten werden in der PostgreSQL Datenbank persistent abgelegt.
+
+	\XXitem{/L080/}{leist:080} Die Konsistenz der Daten über Änderungen hinweg wird durch Transaktionen sichergestellt.
+
+	\XXitem{/L090/}{leist:090} Sollten durch Löschen bestimmter Datensätze davon abhängige weitere Datensätze gelöscht werden, wird der Nutzer vorher deutlich gewarnt.
+\end{description}
+
+\subsection{Datenschutz}
+
+\begin{description}
+	\XXitem{/L100/}{leist:100} Es wird sichergestellt, dass keine sensiblen Daten für unberechtigte Dritte zugänglich sind.
+
+	\XXitem{/L110/}{leist:110} Alle personenbezogenen Daten werden, wie Nutzerdaten und Passwörter werden über eine verschlüsselte HTTPS Verbindung übertragen.
+
+	\XXitem{/L120/}{leist:120} Der Login in das System ist über Benutzername und Passwort möglich.
+
+	\XXitem{/L130/}{leist:130} Der Benutzername hat eine Länge von 4-30 Zeichen und besteht nur aus Groß- und Kleinbuchstaben, Zahlen und Unterstrichen.
+
+	\XXitem{/L130/}{leist:130} Das Passwort muss 8-100 Zeichen lang sein und mindestens Groß- und Kleinbuchstaben, Zahlen und Sonderzeichen enthalten.
+
+	\XXitem{/L140/}{leist:140} Die Registrierung muss durch eine Bestätigungsemail, die an die vom Nutzer angegebene Email-Adresse gesendet wird, authentifiziert werden.
+\end{description}
+
+\subsection{Internationalisierbarkeit}
+
+\begin{description}
+	\XXitem{/L150/}{leist:150} Die Texte auf der Website werden in UTF-8 kodiert
+	und ausgeliefert, um \textit{Internationalization (i18n)} in verschiedenen Sprachen zu ermöglichen.
+
+	\XXitem{/L155/}{leist:155} Die Standard Sprache der Webanwendung ist Englisch.
+
+	\XXitem{/WL160/}{leist:160} Die mehrsprachige Implementierung umfasst Englisch und Deutsch.
+ \end{description}
+
+\subsection{Installation}
+
+\begin{description}
+	\XXitem{/L170/}{leist:170} Es gibt eine kurze Installationsanleitung für den Systemadministrator. Diese leitet weiter auf Installationsbeschreibungen der einzelnen Softwarevoraussetzungen.
+
+	\XXitem{/L180/}{lesit:180} Die Erstinbetriebnahme soll die Möglichkeit bieten, die benötigtem Datenbankschemata automatisch zu erstellen.
+\end{description}
