@@ -1,6 +1,16 @@
 .headline {
     font-family: "Lucida Console", "Courier New", monospace;
     text-align: center;
-    color: beige;
     border: none;
+}
+
+.align-container {
+    align-items: center;
+}
+
+.main-container {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 15pt;
+    margin: 0 auto;
+    max-width: 30cm;
 }
