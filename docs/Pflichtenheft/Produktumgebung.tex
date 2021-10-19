@@ -1,1 +1,82 @@
-Johann Schicho
+\localauthor{Johann Schicho}
+
+Durch die Verwendung von Java ist die serverseitige Ausführung von LasEs
+grundsätzlich plattformunabhängig.
+Die Verwendung von Anwenderseite setzt nur einen modernen Webbrowser voraus.
+
+\subsection{Hardware}
+
+\begin{itemize}
+	\item \textbf{Client:} Computer (PC oder Laptop) mit Internetanschluss, um darauf einen Webbrowser zu verwenden.
+
+	\item \textbf{Server:} Rechner mit Internetanschluss, um darauf Webserver und Datenbankserver laufen zu lassen. Datenbankserver und Webserver können auch auf zwei unterschiedlichen Rechnern ausgeführt werden.
+
+	Referenzsystem für den Datenbankserver ist der FIM Rechner \texttt{bueno}.
+
+	Referenzsystem für den Webserver ist der FIM CIP Pool Rechner \texttt{ds9}.
+
+	\texttt{\textbf{ds9}} hat folgende Systemspezifikationen:
+
+	\begin{itemize}
+		\XXitem{CPU:}{spez:cpu} Intel Core i7-4790 @ 3.60GHz x 8
+
+		\XXitem{RAM:}{spez:ram} 16 GiB
+
+		\XXitem{Festplattenkapazität:}{spez:rom} 256 GiB
+
+		\XXitem{Systemarchitektur:}{spez:arch} 64-bit
+
+		\XXitem{Betriebssystem}{spez:os} Debian GNU/Linux 11 (bullseye)
+	\end{itemize}
+
+
+\end{itemize}
+
+\subsection{Software}
+
+\begin{itemize}
+
+	\item \textbf{Client:} Betriebssystem (Windows, MacOS, Linux, etc.) und ein installierter Webbrowser.
+
+	\begin{itemize}
+		\item Google Chrome
+		\item Mozilla Firefox
+		\item Microsoft Edge
+	\end{itemize}
+
+	\item \textbf{Datenbankserver:} Betriebssystem (Windows, Linux, etc.) mit folgenden weiteren Voraussetzungen:
+
+	\begin{itemize}
+		\item PostgreSQL SQL Datenbank Server
+	\end{itemize}
+
+	\item \textbf{Anwendungsserver:} Betriebssystem (Windows, Linux, etc.) mit folgenden weiteren Voraussetzungen:
+
+	\begin{itemize}
+		\item JDK 16 Installation
+		\item JSF Referenzimplementation Mojarra $3.0.1$ (mitgeliefert in der Anwendung)
+		\item CDI Framework Weld $4.0.2$ (mitgeliefert in der Anwendung)
+		\item JDBC (mitgeliefert in der Anwendung)
+		\item Apache Tomcat $10.0.x$ HTTP Webserver
+	\end{itemize}
+
+\end{itemize}
+
+	Datenbankserver und Anwendungsserver können auf dem selben Rechner ausgeführt werden. Dazu sind dann beide Server-Softwarevoraussetzungen auf einem System zu installieren.
+
+\subsection{Orgware}
+
+\begin{itemize}
+	\item Installation der Softwarevoraussetzungen
+
+	\item Konfiguration der Anwendung (Erstmaliges Starten der Anwendung, Verbindung mit PostgreSQL, Erstellung des Datenbank Schemata)
+
+	\item Internetanschluss für den Webserver, der über das öffentliche \textit{freie} Internet zugänglich ist und Internetanschluss oder lokale Netzwerkverbindung zu dem Datenbankserver.
+
+	\item Verschlüsselte Kommunikation über HTTPS. Verwendung einer statischen IP-Adresse und und eines vertrauenswürdigem TLS Zertifikats.
+
+	\item Email-Server mit Email-Konto zur Versendung automatisierter Benachrichtigungsemails.
+
+	\item Email-Client auf Rechner des Benutzers um Emails zu anderen Benutzern versenden zu können.
+\end{itemize}
+
