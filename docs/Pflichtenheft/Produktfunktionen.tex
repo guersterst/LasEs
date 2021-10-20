@@ -1,4 +1,8 @@
+%todo Erstellen eines Nutzerprofils als admin? -> FW
 %todo userlist
+%todo global search
+%todo längere einträge in listen aufsplitten
+%todo suchen jeweils mit dropdown
 \localauthor{Johannes Garstenauer}
 Die Funktionalität vom LasEs-System soll nach den Benutzerrollen
 %link
@@ -71,11 +75,18 @@ stehen außerdem folgende weitere Funktionen zur Verfügung.
     Startseite.
 \end{description}
 
-\subsubsection{globale suche}
-%% publ alle
-% nutzer admin, editor
-%papers, admin, nutzer eigene
-%editoren & gutachter zugeordnete papers
+\subsubsection{Suche}
+\begin{description}
+    \XXitem{} Über die globale Suche kann ein Nutzer jederzeit seine eigenen Papers und nach wissenschaftlichen Foren,
+    suchen. Nach Absenden der Suche wird eine Resultatliste angezeigt. Für Papers werden Name, Datum und Status, für
+    wissenschaftliche Foren nur der Name abgebildet. %link /D/
+    Sie sind nach Namen sortiert.
+    \XXitem{} Alle Einträge können anhand der angezeigten Informationen sortiert werden.
+    Mit einem Klick auf einen Eintrag wird der Nutzer auf die jeweilige Ansichtseite
+    der Ressource navigiert.
+    \XXitem{FW} Während der Eeingabe in das Suchfeld werden bis zu 10 mögliche Suchergebnisse in
+    einem Dropdown Menü angezeigt.
+\end{description}
 
 \subsubsection{Profil}
 \begin{description}
@@ -112,38 +123,41 @@ stehen außerdem folgende weitere Funktionen zur Verfügung.
 
 \subsubsection{Liste der wissenschaftlichen Foren}
 \begin{description}
-    %% ergebnisse globale suche
-    \XXitem{} In einer Liste werden die Namen von Journalen \& Konferenzen angezeigt %und mehr?
-    \XXitem{/F130/} Über eine Suchleiste kann nach bestimmten Journals oder Konferenzen mittels
+    \XXitem{} In einer Liste werden die Namen von wissenschaftlichen Foren angezeigt.
+    \XXitem{/F130/} Über eine Suchleiste kann nach bestimmten wissenschaftlichen Foren mittels
     ihres Namens gesucht werden.
-    \XXitem{/F140/} Die Ergebnisse lassen sich sortieren nach %produktdaten journals & kongresse, eig nur Name oder?
-    \XXitem{/F150/} Durch Klick auf den Namen eines Eintrags wird man auf die Seite des
-    jeweiligen Journals oder der jeweiligen Konferenz gelenkt.
+    \XXitem{/F140/} Die Einträge lassen sich ahand ihres Namens alphabetisch sortieren.
+    \XXitem{FW} Die Einträge lassen sich anhand des Namens durchsuchen.
+    \XXitem{/F150/} Durch einen Klick auf den Namen eines Eintrags wird man auf die Seite des
+    jeweiligen wissenschaftlichen Forums navigiert.
 \end{description}
 
 \subsubsection{Wissenschaftliches Forum}
 \begin{description}
-    \XXitem{/F130/} Auf der Seite eines wissensch. Forums werden die zugehörigen Informationen
+    \XXitem{/F130/} Auf der Seite eines wissensch. Forums werden die zugehörigen wesentlichen Daten
     angezeigt. %link /D/
-    \XXitem{/F140/} Dem Nutzer werden seine eigenen Einreichungen in Form einer Liste mit Namen angezeigt.
-    \XXitem{/F160/} Durch Klick auf den Namen einer Einreichung gelangt der Nutzer auf die Übersichtsseite
+    \XXitem{/F140/} Dem Nutzer werden seine eigenen Einreichungen in Form einer Liste mit Namen, Datum und Status
+    angezeigt.
+    \XXitem{/F160/} Durch einen Klick auf den Namen einer Einreichung gelangt der Nutzer auf die Übersichtsseite
     dieser Einreichung.
-    \XXitem{/F140/} Die Einträge lassen sich nach Namen und Datum
-    der Einreichung sortieren und nach Namen der Einreichung durchsuchen. %durchsuchen meinung?
+    \XXitem{/F140/} Die Einträge lassen sich nach Namen, Datum und Status
+    der Einreichung sortieren.
+    \XXitem{FW} Die Einträge lassen sich anhand ihres Namens alphabetisch sortieren.
     \XXitem{} Der Nutzer kann auf die Seite zur Erstellung einer Einreichung navigieren. Hierbei ist
-    das Feld, welches die Konferenz oder das Journal bestimmt bei dem eingereicht wird, bereits mit
-    der Konferenz bzw. dem Journal befüllt von dessen Übersichtsseite aus die Navigation auf diese
+    das Feld, welches die wissenschaftliche Forum bestimmt wird bei dem eingereicht wird, bereits mit
+    dem wissenschaftlichen Forum befüllt von dessen Übersichtsseite aus die Navigation auf diese
     Seite ausgeführt wurde.
 \end{description}
 
 \subsubsection{Einreichungserstellung}
 \begin{description}
     \XXitem{} Der Nutzer kann eine Einreichung im System erstellen. Hierzu gibt er in einem
-    Formular die nötigen Informationen wie Name der Einreichung, Namen und E-Mail Adressen der Ko-Autoren,
-    sowie den gewünschten Editor angeben.
-    %informieren des editors
+    Formular die nötigen Informationen wie Namen der Einreichung, Namen und E-Mail Adressen der Ko-Autoren,
+    sowie den gewünschten Editor angeben. Der Editor wird nach erfolgreicher Erstellung hierüber durch eine
+    automatisierte Mail informiert.
     \XXitem{} Der Nutzer lädt seine Einreichung in Form einer PDF hoch. Die Abgabe darf eine Dateigröße
     von 20MB nicht überschreiten und muss zwingenderweise im PDF-Format erfolgen.
+    \XXitem{FW} Der Nutzer kann bei Einreichung gewünschte Gutachter vorschlagen.
     \XXitem{} Durch Absenden des Formulars wird der Editor des Journals bzw. der Konferenz
     informiert. Das Datum der Einreichung wird auf das Datum zum Zeitpunkt der Einreichung fest-
     gelegt.
@@ -151,8 +165,6 @@ stehen außerdem folgende weitere Funktionen zur Verfügung.
     hochgeladen wurde. Andernfalls wird der Nutzer über das fehlschlagen informiert.
     \XXitem{} Nach der erfolgreichen Einreichungen wird der Nutzer auf die Übersichtsseite der
     Einreichung weitergeleitet.
-    %zugriff: navbar, startseite, publikationsseite
-    %FW Vorschlag von Gutachtern
 \end{description}
 
 \subsubsection{Einreichung}
@@ -163,7 +175,8 @@ stehen außerdem folgende weitere Funktionen zur Verfügung.
     \XXitem{} Außerdem werden die Gutachten in einer
     Liste dargestellt zusammen mit ihrem Erstellungsdatum, Gutachterempfehlung und Download. %link /D/
     \XXitem{} Die Gutachten lassen sich nach Namen und Datum
-    des Gutachten sortieren und nach Namen des Gutachten durchsuchen. %suche optional, meinung?
+    des Gutachten sortieren
+    \XXitem{FW }... und nach Namen des Gutachten durchsuchen.
 %nav
 \end{description}
 
@@ -176,8 +189,14 @@ die Folgenden:
 \begin{description}
     \XXitem{} Dem Gutachter werden auf seiner personalisierten Startseite zusätzlich zu den eigenen
     Einreichungen und zugehörigen wissenschaftlichen Foren diejenigen angezeigt für die er als Gutachter
-    zugeordnet ist. Diese sind als solche gekennzeichnet.%link
-    Für sie gelten dieselben Funktionalitäten wie für eigene Einreichungen.
+    zugeordnet ist. Diese sind als solche gekennzeichnet.
+    Für sie gelten dieselben Funktionalitäten wie für eigene Einreichungen. %link
+\end{description}
+
+\subsubsection{Suche}
+\begin{description}
+    \XXitem{} Ein Gutachter kann ebenfalls Einreichungen finden, welcher er als Gutachter
+    zugeordnet ist. Diese sind als solche gekennzeichnet.
 \end{description}
 
 \subsubsection{Wissenschaftliches Forum}
@@ -197,28 +216,50 @@ die Folgenden:
     \XXitem{FW} Auf der Einreichungsseite von Einreichungen denen der Gutachter zugeordnet ist,
     kann er in der Liste eigene eingereichte Gutachten zurückziehen. Hieraufhin werden sie aus
     der Datenbank entfernt und nicht mehr angezeigt.
+    \XXitem{} Der Einreicher und Editor werden über neue oder entfernte Gutachten mit einer automatisierten
+    Mail informiert.
+    %einreicher & editor über gutachten informieren
 \end{description}
 
 \subsection{Editor}
 Editoren haben Zugriff auf alle Funktionen welche angemeldeten Nutzern zur Verfügung stehen.
 Außerdem hat ein Editor die Folgenden zusätzlichen Funktionalitäten:
 %keine Editierung von eigenen Einreichungen.
+%Hat Profilsichtrechte von Nutzer.
 
 \subsubsection{Startseite}
 \begin{description}
     \XXitem{} Dem Editor werden auf seiner personalisierten Startseite zusätzlich zu den eigenen
     Einreichungen und zugehörigen wissenschaftlichen Foren diejenigen in einer
-    Liste angezeigt welchen er als Editor zugeordnet ist.
+    Liste angezeigt welchen er als Editor zugeordnet ist. Sie sind als solche gekennzeichnet.
     Für diese Einträge gelten dieselben Funktionalitäten wie  %link
+\end{description}
+
+\subsubsection{Suche}
+\begin{description}
+    \XXitem{} Ein Editor kann ebenfalls Einreichungen finden, welchen er als Editor zugeordnet ist
+    Diese sind als solche gekennzeichnet.
+    \XXitem{} Ein Editor kann ebenfalls Einträge zu allen Nutzern finden.
+\end{description}
+
+\subsubsection{Benutzer}
+\begin{description}
+    \XXitem{} Ein Editor kann auf die Nutzerliste über die Kopfzeile zugreifen.
+    \XXitem{} Hier werden ihm alle Nutzer mit Namen und E-Mail übersichtlich in einer Liste angezeigt.
+    \XXitem{} Diese Liste kann alphabetisch nach Namen und Mailaddresse sortiert werden.
+    \XXitem{FW} Die Liste kann anhand von Namen und Mailadresse durchsucht werden.
+    \XXitem{} Mit einem Klick auf einen Eintrag wird der Editor auf das zugehörige Profil navigiert.
 \end{description}
 
 \subsubsection{Wissenschaftliches Forum}
 \begin{description}
     \XXitem{} Einem Editor werden auf der Publikationsseite einer Konferenz bzw. eines Journals für
     welches er als Editor fungiert alle aktiven Einreichungen in einer Liste dargestellt.
+    Solche bei denen er als Editor eingesetzt wird werden als solche gekennzeichnet.
     Für diese Einträge gelten dieselben Funktionalitäten wie für die eigenen Einreichungen. %link
-    %%editoren ernennen/aberkennen
-    %%nutzern editorenn auf dieser seite als ansprechpartner anzeigen
+    \XXitem{} Ein Editor kann andere Editoren ernennen indem er sie mittels ihrer Mailadresse identifiziert.
+    Diese müssen bereits als Nutzer regitriert sein.
+    \XXitem{} Ein Editor kann anderen Editoren den Status als Editor aberkennen.
 \end{description}
 
 \subsubsection{Einreichung}
@@ -228,36 +269,42 @@ Außerdem hat ein Editor die Folgenden zusätzlichen Funktionalitäten:
     %FW Nutzersuche (registrierte Nutzerliste durchsuchbar)
     \XXitem{} Wird eine E-Mail Adresse als Gutachter angegeben, so wird nach Absenden des Formulars
     eine automatisierte Mail an diese Adresse versendet. Sie enthält eine Nachricht mit den relevanten
-    Informationen zu Einreichung, Konferenz bzw. Journal, sowie
+    Informationen zu Einreichung, wissenschaftlichem Forum, sowie
     \begin{itemize}
-        \item Einen Link zur \textbf{Annahme der Begutachtungsanfrage} welcher, sobald geklickt,
+        \item ... einen Link zur \textbf{Annahme der Begutachtungsanfrage} welcher, sobald geklickt,
         auf die Loginseite verweist aud der eine Nachricht des Dankes anzeigt und zur Anmeldung bzw.
         Registrierung auffordert.
-        \item Einen Mailto-Link zur \textbf{Ablehnung der Begutachtungsanfrage} welcher, sobald
+        \item ... einen Mailto-Link zur \textbf{Ablehnung der Begutachtungsanfrage} welcher, sobald
         geklickt, einen Mailentwurf öffnet mit vorausgefülltem Empfänger (zugehöriger Editor)
         und einem Infotext in welchen ein Ablehnungsgrundes eingefügt werden kann.
         Abgesehen hiervon wird zusätzlich eine automatisierte Mail an den Editor versendet in der er
         kurz über die Ablehnung informiert wird, falls die obige E-Mail nie versendet wird.
     \end{itemize}
-    % Annahme/ Ablehnung
+    \XXitem{} Ein Editor kann über Einreichungen eine Annahmeentscheidung treffen. Über diese werden
+    beteiligte Gutachter, der Einreicher und beteiligte Ko-Autoren per automatisierter Mail benachrichtigt.
 \end{description}
 
 \subsection{Administrator}
 Der Administrator besitzt zu Verwaltungszwecken alle Rechte, welche auch Nutzern, Editoren
 und Gutachtern zustehen. %Genau genug definiert?
 Einem Administrator werden in Listen grundsätzlich alle aktiven Einträge angezeigt.
+%UserList editor linken
 %Das ausgliedern in /F/s? oder einfach verlinken der /F/s? -> oder von fall zu fall je nachdem
 %/F/ hier aussagekräftig ist.
 % Einreichungsseite selbe Recht wie Gutachter oder Editor zu verwaltungsszwecken.
+\subsubsection{Suche}
+\begin{description}
+    \XXitem{} Ein Administrator kann in der globalen Suche ebenfalls alle Nutzer finden.
+    \XXitem{} Ein Administrator kann alle vorhandenen Einreichungen finden.
+\end{description}
 
 \subsection{Wissenschaftliches Forum}
 \begin{description}
     \XXitem{} Einem Administrator werden auf der Publikationsseite einer Konferenz bzw. eines Journals
     alle aktiven Einreichungen in einer Liste dargestellt.
     Für diese Einträge gelten dieselben Funktionalitäten wie für eigene Einreichungen. %link
+    \XXitem{}
 \end{description}
-%Publikationsliste -> von hier aus anlegen einer neuen konferenz
-%publikationsseite -> editor ernennen, metadaten (website, name, ediotren) ändern
 
 \subsubsection{Profil}
 \begin{description}
@@ -272,37 +319,35 @@ Einem Administrator werden in Listen grundsätzlich alle aktiven Einträge angez
 
 \subsection{Liste der Wisssenschaftlichen Foren}
 \begin{description}
-    \XXitem{} Auf dieser Seite kann der Admin zur Seite navigieren auf welcher er eine neue
-    Konferenz anlegen kann. %link
+    \XXitem{} Auf dieser Seite kann der Admin zur Seite navigieren auf welcher er ein neues
+    wissenschaftliches Forum anlegen kann. %link
 \end{description}
 
 \subsubsection{Erstellung wissenschaftlicher Foren}
 \begin{description}
-    \XXitem{} Auf der Seite zum Erstellen einer Publikation kann der Administrator dessen
+    \XXitem{} Auf der Seite zum Erstellen eines wissenschaftlichen Forums kann der Administrator dessen
     wesentliche Daten nach /D/ %link
-    festlegen. Nach erfolgreicher Erstellung wird der Administrator auf die Seite dieser
-    Publikation navigiert.
-    %was ist wenn Name schon vorhanden
+    festlegen. Bei der Anngabe von Editoren wird überprüft, dass diese bereits als Nutzer im System registriert sind.
+    Der Name des Forums muss ebenfalls einzigartig sein.
+    Nach erfolgreicher Erstellung wird der Administrator auf die Seite dieses wissenschaftlichen Forums
+    navigiert.
 \end{description}
 
 \subsection{Wissenschaftliches Forum}
 \begin{description}
-    \XXitem{} Auf der Seite einer Publikation kann der Administrator alle wesentlichen Daten
-    verändern. Insbesondere erfolgt hierbei die Ernennung von Editoren.
-    \XXitem{FW} Der Administrator kann den Look der Publikationsseite durch die folgenden Daten
+    \XXitem{} Auf der Seite eines wissenschaftlichen Forums kann der Administrator alle wesentlichen Daten
+    verändern. Insbesondere erfolgt hierbei die Ernennung von Editoren, welche bereits im System
+    registriert sein  müssen. Der Name des weissenschaftlichen Forums muss einzigartig sein.
+    \XXitem{FW} Der Administrator kann den Look des wissenschaftlichen Forums durch die folgenden Daten
     verändern. %link
-    \XXitem{} Auf der Seite einer Publikation kann der Administrator diese aus dem System zu löschen.
+    \XXitem{} Auf der Seite eines wissenschaftlichen Forums kann der Administrator diese aus dem System zu löschen.
     Hierbei wird er dazu aufgefordert seine Entscheidung ein zweites Mal zu bestätigen.
-    Daraufhin werden alle zugehörigen Daten /D/ und Einreichungen aus dem System entfernt.
+    Daraufhin werden alle zugehörigen Daten /D/ und Einreichungen aus dem System entfernt. %link /D/
     %link
 \end{description}
 
 \subsection{Konfiguration}
 \begin{description}
-    %neuen Nutzer anlegen?
     \XXitem{} Ein Administrator kann auf der Konfigurationsseite den vom Betreiber gewünschten
     'Look and Feel' des Systems festlegen. Hierzu bestimmt der die Daten wie in /D/ definiert. %link
 \end{description}
-
-%anmeldung ohne nutzername
-%Erstellen eines Nutzerprofils.
