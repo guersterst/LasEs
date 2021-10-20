@@ -1,1 +1,255 @@
-Johannes Garstenauer
+%todo items permutieren um gleichheit zu verschleiern
+%todo querverweise zu zb produktleistungen und zu produktdaten
+%todo navigationen zwischen seiten -> siehe flussdiagramm -> welche seite ist von wo aus erreichbar.
+%todo namenschaos -> einheitliche Namen für Seiten
+%todo optionale als FW (funktionswunsch) -> so konzipieren, dass >= 50% sicher implementiert werden.
+\localauthor{Johannes Garstenauer}
+Die Funktionalität vom LasEs-System soll nach den Benutzerrollen
+%TODO verlinken
+\textit{anonymer Nutzer}, \textit{angemeldeter Nutzer}, \textit{Editor}, und
+\textit{Administrator} untergliedert werden. Da ein Nutzer mehrere Rollen einnehmen
+kann bestehen Inklusionsbeziehungen die im Folgenden näher erklärt werden.
+%todo inklusionsbeziehungen
+
+\subsection{Anonymer Nutzer}
+Anonyme Nutzer sind unauthentifzierte Nutzer, deren Zugriffsrechte sich
+auf die Registrierung und Anmeldung im System beschränken.
+
+\subsubsection{Allgemein}
+\begin{description}
+    \XXitem{/F010/}{funkt:010} Beim Aufruf einer Seite durch einen nichtangemeldeten Benutzer
+    wird dieser auf die Anmeldeseite weitergeleitet und zur
+    Anmeldung aufgefordert. Ausgenommen davon ist die Hilfeseite zur Anmeldung und die
+    Registrierungsseite.
+    %in dieser allgemeinheit? alle seiten?+
+    %sprachen optional fw
+    \XXitem{/F020/}{funkt:020} Die Standardsprache des Systems ist abhängig von der im Browser
+    eingestellten Sprache. Es werden Deutsch und Englisch angeboten.
+    Sonst ist die Standardsprache Englisch. Die Sprache der Anwendung kann über die
+    Fußzeile geändert werden.
+    \XXitem{/F030/}{funkt:030} Auf den wichtigsten Seiten lassen sich von der Fußzeile aus
+    Hilfetexte zu den angebotenen Funktionalitäten und der jeweiligen Rolle
+    des Nutzers anzeigen. Hierzu öffnet sich ein neuer Tab.
+    \XXitem{/F040}{funkt:040} Beim erstmaligen Aufruf der Anwendungen wird der Nutzer gebeten
+    seine Cookieauswahl zu treffen. Selbst wenn er ablehnt soll die Anwendung
+    für ihn funktionstüchtig bleiben.
+    %Fehlerseite falls Ressource nicht ex. -> auch in angemeld. Nutzer darauf verweisen.
+\end{description}
+
+\subsubsection{Registrierung}
+\begin{description}
+    \XXitem{/F050/} Ein anonymer Nutzer kann von der Anmeldeseite aus mittels eines
+    Buttons auf die Registrierungsseite navigieren.
+    \XXitem{/F060/} Über ein Registrierungsformular wird der Nutzer zur Eingabe seiner
+    Daten aufgefordert. Verlangt wird die Eingabe eines Benutzernamens und Passworts
+    %doppelt? -> sicherheitsanforderungen. benutzername schon verwendet -> jsf validierung.
+    %email regex validierung.
+    %optionale daten
+    sowie von Vor- und Nachname. Außerdem ist ein Arbeitsgeber, ein oder mehrere Spezialgebiete
+    und das Geburtsdatum
+    anzugeben. Optional ist das Einfügen eines Avatarbildes. Letztlich muss die Emailadresse
+    angegeben werden. Durch das Absenden des Formulars wird der E-Mail Verifizierungsprozess
+    gestartet.
+    %link email-ver
+    \XXitem{/F070/} Nach der Registrierung wird eine automatisierte E-Mail
+    an die angegebene Mailadresse gesendet. Der Inhalt der Nachricht Inhalt einen Hinweis auf
+    die versuchte Registrierung sowie einen Verifizierungslink, welcher auf eine Seite führt, welche
+    die erfolgreiche Registrierung bestätigt. Der Account ist nun registriert. Nach einem Augenblick wird der Nutzer auf die Startseite
+    weitergeleitet.
+    \XXitem{/F070/} Von der Registrierungsseite kann man auf die Anmeldeseite gelangen.
+\end{description}
+
+\subsubsection{Login}
+\begin{description}
+    \XXitem{/F080/}{funkt:080} Mittels eines Anmeldeformulars erfolgt eine Anmeldung durch korrekte Zugangsdaten.
+    Diese umfassen den Benutzernamen und das Passwort. Ein anonymer Nutzer wird so zum angemeldeten Benutzer.
+    \XXitem{/F090/} Von der Anmeldeseite ist es möglich zur Registrierungsseite zu gelangen.
+    % Passwort vergessen.
+\end{description}
+
+\subsection{Angemeldeter Nutzer}
+Angemeldete Nutzer haben Zugriff auf die Funktionen
+\hyperref[funkt:010]{/F010/}, \hyperref[funkt:020]{/F020/}, \hyperref[funkt:030]{/F030/}.
+Nach der Anmeldung \hyperref[funkt:080]{/F080/},
+stehen außerdem folgende weitere Funktionen zur Verfügung.
+
+\subsubsection{Allgemein}
+\begin{description}
+    \XXitem{/F100} Bei Zugriff auf die Anmelde- oder Registrationsseite
+    wird auf die Startseite weitergeleitet.
+    \XXitem{/F110} Über einen Button in der Kopfzeile kann ein Logout durchgeführt werden.
+    Der nun anonyme Nutzer wird auf die Anmeldeseite weitergeleitet.
+    \XXitem{/F120/} Die Fußzeile ermöglicht eine Navigation auf das Impressum.
+    %%url def?
+\end{description}
+
+\subsubsection{globale suche}
+%% publ alle
+% nutzer admin, editor
+%papers, admin, nutzer eigene
+%editoren & gutachter zugeordnete papers
+
+\subsubsection{Profil}
+\begin{description}
+    \XXitem{} Über die Kopfzeile kann sich ein Benutzer zu seinem Profil navigieren.
+    \XXitem{} Auf der Profilseite kann der Nutzer alle dynamischen Daten über dieses Profil einsehen,
+    Eine explizite Ausnahme hiervon ist das gehashte Passwort. %link /D/
+    \XXitem{/F130/} Auf der eigenen Profilseite kann der Nutzer jedes dieser Daten %link /D/
+    welche über ihn gespeichert sind permanent verändern.
+    \XXitem{/F140/} Bei Änderung der Mailadresse wird der E-Mailverifikationsprozess erneut
+    begonnen. %link
+    \XXitem{} Der Nutzer kann auf der eigenen Profilseite ein Avatarbild mit einer maximalen
+    Größe von 4MB hochladen oder sein altes Avatarbild entfernen oder austauschen. %link /D/
+    \XXitem{} Auf der eigenen Profilseite kann der Nutzer sein Profil und alle damit verbundenen persistenten
+    Daten löschen. Auch seine Einreichungen werden gelöscht und Gutachter sowie Editoren dieser
+    Einreichung per Mail informiert. Bevor die Löschung vollzogen wird, wird dem Nutzer
+    eine Warnung über diese Konsequenzen angezeigt.
+\end{description}
+
+\subsubsection{Startseite}
+\begin{description}
+    \XXitem{} Die Startseite ist zu jeder Zeit über die Kopfzeile erreichbar.
+    \XXitem{/F130/} Ein Nutzer bekommt auf der Startseite alle Namen von Konferenzen
+    \& Journale in einer Listensicht angezeigt in denen er aktive Einreichungen hat.
+    Die Namen dieser aktiven Einreichungen werden unter den Namen der Konferenzen \& Journale angezeigt.
+    \XXitem{/F140/} Die Einreichungen lassen sich nach Namen und Datum
+    der Einreichung sortieren. Die Konferenzen lassen sich nach ihrem Namen sortieren.
+    %suchfunktion?
+    \XXitem{} Durch den Klick auf einen Eintrag der Liste gelangt man auf die jeweilige Übersichtsseite
+    der Einreichung oder auf die Seite des jew. wissenschaftlichen Forums.
+%info über benachrichtigungen? -> Benachrichtigungssystem? nur mail?
+\end{description}
+
+\subsubsection{Liste der Journals \& Konferenzen}
+\begin{description}
+    %% ergebnisse globale suche
+    \XXitem{/F130/} Über eine Suchleiste kann nach bestimmten Journals oder Konferenzen mittels
+    ihres Namens gesucht werden.
+    \XXitem{/F140/} Die Ergebnisse lassen sich sortieren nach %produktdaten journals & kongresse, eig nur Name oder?
+    \XXitem{/F150/} Durch Klick auf den Namen eines Eintrags wird man auf die Seite des
+    jeweiligen Journals oder der jeweiligen Konferenz gelenkt.
+\end{description}
+
+\subsubsection{Publikationseite}
+\begin{description}
+    \XXitem{/F130/} Auf der Seite eines wissensch. Forums werden die zugehörigen Informationen
+    angezeigt. %link /D/
+    \XXitem{/F140/} Dem Nutzer werden seine eigenen Einreichungen in Form einer Liste mit Namen angezeigt.
+    \XXitem{/F160/} Durch Klick auf den Namen einer Einreichung gelangt der Nutzer auf die Übersichtsseite
+    dieser Einreichung.
+    \XXitem{/F140/} Die Einträge lassen sich nach Namen und Datum
+    der Einreichung sortieren und nach Namen der Einreichung durchsuchen. %durchsuchen meinung?
+    \XXitem{} Der Nutzer kann auf die Seite zur Erstellung einer Einreichung navigieren. Hierbei ist
+    das Feld, welches die Konferenz oder das Journal bestimmt bei dem eingereicht wird, bereits mit
+    der Konferenz bzw. dem Journal befüllt von dessen Übersichtsseite aus die Navigation auf diese
+    Seite ausgeführt wurde.
+\end{description}
+
+\subsubsection{Erstellen einer Einreichung}
+\begin{description}
+    \XXitem{} Der Nutzer kann eine Einreichung im System erstellen. Hierzu gibt er in einem
+    Formular die nötigen Informationen wie Name der Einreichung, Namen und E-Mail Adressen der Ko-Autoren,
+    sowie den gewünschten Editor angeben.
+    %informieren des editors
+    \XXitem{} Der Nutzer lädt seine Einreichung in Form einer PDF hoch. Die Abgabe darf eine Dateigröße
+    von 20MB nicht überschreiten und muss zwingenderweise im PDF-Format erfolgen.
+    \XXitem{} Durch Absenden des Formulars wird der Editor des Journals bzw. der Konferenz
+    informiert. Das Datum der Einreichung wird auf das Datum zum Zeitpunkt der Einreichung fest-
+    gelegt.
+    \XXitem{} Die Einreichung ist erfolgreich, wenn alle Felder ausgefüllt sind und eine PDF
+    hochgeladen wurde. Andernfalls wird der Nutzer über das fehlschlagen informiert.
+    \XXitem{} Nach der erfolgreichen Einreichungen wird der Nutzer auf die Übersichtsseite der
+    Einreichung weitergeleitet.
+    %zugriff: navbar, startseite, publikationsseite
+    %FW Vorschlag von Gutachtern
+\end{description}
+
+\subsubsection{Einreichungsseite}
+\begin{description}
+    \XXitem{/F130/} Dem Nutzer werden Informationen zu seiner Einreichung angezeigt.
+    Hierzu gehören der Status der Einreichung, das Datum der Einreichung, das zugehörige
+    Journal- bzw Konferenz, Namen und E-Mail Adressen der Ko-Autoren, sowie ein Download zur Einreichung.
+    \XXitem{} Außerdem werden die Gutachten in einer
+    Liste dargestellt zusammen mit ihrem Erstellungsdatum, Gutachterempfehlung und Download. %link /D/
+    \XXitem{} Die Gutachten lassen sich nach Namen und Datum
+    des Gutachten sortieren und nach Namen des Gutachten durchsuchen. %suche optional, meinung?
+%nav
+\end{description}
+
+\subsection{Gutachter}
+Gutachter haben diesselben Funktion wie gewöhnliche angemeldete Nutzer. Zusätzlich hierzu kommen
+die Folgenden:
+%ohne /F/ einreichungsseite alle gutachten sehen
+
+\subsubsection{Startseite}
+\begin{description}
+    \XXitem{} Dem Gutachter werden auf seiner personalisierten Startseite zusätzlich zu den eigenen
+    Einreichungen und zugehörigen Konferenzen \& Journalen diejenigen angezeigt für die er als Gutachter
+    zugeordnet ist.
+    Für diese Einträge gelten dieselben Funktionalitäten wie für die eigenen Einreichungen.
+\end{description}
+
+\subsubsection{Publikationsseite}
+\begin{description}
+    \XXitem{} Dem Gutachter werden zusätzlich zu den eigenen Einreichungen diejenigen Einreichungen angezeigt,
+    welchen er als Gutachter zugeordnet ist. Für diese Einträge gelten dieselben Funktionalitäten wie für die
+    eigenen Einreichungen. %link
+\end{description}
+
+\subsubsection{Einreichungsseite}
+\begin{description}
+    \XXitem{} Der Gutachter sieht auf der Übersichtseite einer Einreichung welcher als Gutachter
+    zugeordnet ist, diejenigen Gutachten welche er selbst erstellt hat in einer
+    Liste mit ihrem Erstellungsdatum, Gutachterempfehlung und Download.
+    \XXitem{} Der Gutachter hat zusätzlich die Möglichkeit zu einer Einreichung der er als Gutachter zugeordnet ist
+    ein Gutachten mittels eines Formulars einzureichen. Hierfür ist eine PDF hoc
+    \XXitem{FW} Auf der Einreichungsseite von Einreichungen denen der Gutachter zugeordnet ist,
+    kann er in der Liste eigene eingereichte Gutachten zurückziehen. Hieraufhin werden sie aus
+    der Datenbank entfernt und nicht mehr angezeigt.
+\end{description}
+
+\subsection{Editor}
+Editoren haben Zugriff auf alle Funktionen welche angemeldeten Nutzern zur Verfügung stehen.
+Außerdem hat ein Editor die Folgenden zusätzlichen Funktionalitäten:
+%keine Editierung von eigenen Einreichungen.
+
+\subsubsection{Startseite}
+\begin{description}
+    \XXitem{} Dem Editor werden auf seiner personalisierten Startseite zusätzlich zu den eigenen
+    Einreichungen und zugehörigen Konferenzen \& Journalen diejenigen Konferenzen & Journale in einer
+    Liste angezeigt welchen er als Editor zugeordnet ist.
+    Für diese Einträge gelten dieselben Funktionalitäten wie für die eigenen Einreichungen. %link
+\end{description}
+
+\subsubsection{Publikationsseite}
+\begin{description}
+    \XXitem{} Einem Editor werden auf der Publikationsseite einer Konferenz bzw. eines Journals für
+    welches er als Editor fungiert alle aktiven Einreichungen in einer Liste dargestellt.
+    Für diese Einträge gelten dieselben Funktionalitäten wie für die eigenen Einreichungen. %link
+    %%editoren ernennen/aberkennen
+    %%nutzern editorenn auf dieser seite als ansprechpartner anzeigen
+\end{description}
+
+\subsubsection{Einreichungsseite}
+\begin{description}
+    \XXitem{} Ein Editor kann auf der Seiter einer Einreichung, welcher er als Editor zugeordnet ist,
+    in einem Formular Gutachter zuweisen. Hierzu gibt er deren E-Mail Adressen an.
+    %FW Nutzersuche (registrierte Nutzerliste durchsuchbar)
+    \XXitem{} Wird eine E-Mail Adresse als Gutachter angegeben, so wird nach Absenden des Formulars
+    eine automatisierte Mail an diese Adresse versendet. Sie enthält eine Nachricht mit den relevanten
+    Informationen zu Einreichung, Konferenz bzw. Journal, sowie
+    \begin{itemize}
+        \item Einen Link zur \textbf{Annahme der Begutachtungsanfrage} welcher, sobald geklickt,
+        auf die Loginseite verweist aud der eine Nachricht des Dankes anzeigt und zur Anmeldung bzw.
+        Registrierung auffordert.
+        \item Einen Mailto-Link zur \textbf{Ablehnung der Begutachtungsanfrage} welcher, sobald
+        geklickt, einen Mailentwurf öffnet mit vorausgefülltem Empfänger (zugehöriger Editor)
+        und einem Infotext in welchen ein Ablehnungsgrundes eingefügt werden kann.
+        Abgesehen hiervon wird zusätzlich eine automatisierte Mail an den Editor versendet in der er
+        kurz über die Ablehnung informiert wird, falls die obige E-Mail nie versendet wird.
+    \end{itemize}
+\end{description}
+
+\subsection{Administrator}
+%edit user profiles
+
