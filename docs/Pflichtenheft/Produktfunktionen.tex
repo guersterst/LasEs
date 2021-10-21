@@ -10,9 +10,10 @@ Die Funktionalität vom LasEs-System soll nach den Benutzerrollen
 \textit{anonymer Nutzer}, \textit{angemeldeter Nutzer}, \textit{Editor}, und
 \textit{Administrator} untergliedert werden.
 
-Es gilt darüber hinaus, dass alle Funktionen eines einfachen angemeldeten Nutzers auch den höherrangigen Benutzern, wie Editoren und Administratoren, zur Verfügung stehen. Diese hierarchische Ordnung wird im Folgenden genauer spezifiziert.
+Es gilt darüber hinaus, dass alle Funktionen eines einfachen angemeldeten Nutzers auch den höherrangigen Benutzern, wie Editoren
+und Administratoren, zur Verfügung stehen. Diese hierarchische Ordnung wird im Folgenden genauer spezifiziert.
 
-\subsection{Anonymer Nutzer}
+\subsection{Anonymer Nutzer}\label{funkt:nutzer}
 Anonyme Nutzer sind unauthentifizierte Nutzer, deren Zugriffsrechte sich
 auf die Registrierung und Anmeldung im System beschränken.
 
@@ -44,7 +45,7 @@ auf die Registrierung und Anmeldung im System beschränken.
     gestartet.
     %link email-ver
     \XXitem{/F070/}{funkt:070} Nach der Registrierung wird eine automatisierte E-Mail
-    an die angegebene Mailadresse gesendet. Der Inhalt der Nachricht Inhalt einen Hinweis auf
+    an die angegebene Mailadresse gesendet. Die Nachricht beinhaltet einen Hinweis auf
     die versuchte Registrierung sowie einen Verifizierungslink, welcher auf eine Seite führt, welche
     die erfolgreiche Registrierung bestätigt. Der Account ist nun registriert. Nach einem Augenblick wird der Nutzer
     auf die Startseite weitergeleitet.
@@ -62,8 +63,8 @@ auf die Registrierung und Anmeldung im System beschränken.
 
 \subsection{Angemeldeter Nutzer}
 Angemeldete Nutzer haben Zugriff auf die Funktionen
-\hyperref[funkt:010]{/F110/}, \hyperref[funkt:020]{/F020/}, \hyperref[funkt:030]{/F030/}.
-Nach der Anmeldung \hyperref[funkt:080]{/F080/},
+\hyperref[funkt:010]{/F110/}, \hyperref[funkt:020]{/F020/}, \hyperref[funkt:030]{/F030/}, \hyperref[funkt:040]{/F040/}.
+Nach der Anmeldung \hyperref[funkt:080]{/F080/}, \hyperref[funkt:090]{/F090/}.
 stehen außerdem folgende weitere Funktionen zur Verfügung.
 
 \subsubsection{Allgemein}
@@ -72,8 +73,7 @@ stehen außerdem folgende weitere Funktionen zur Verfügung.
     wird auf die Startseite weitergeleitet.
     \XXitem{/F130}{funkt:130} Über einen Button in der Kopfzeile kann ein Logout durchgeführt werden.
     Der nun anonyme Nutzer wird auf die Anmeldeseite weitergeleitet.
-    \XXitem{/F140/}{funkt:140} Die Fußzeile ermöglicht eine Navigation auf das Impressum.
-
+    \XXitem{/F140/}{funkt:140} Die Fußzeile ermöglicht eine Navigation zum Impressum.
     \XXitem{/F150/}{funkt:150} Über einen Klick auf das Logo der Anmeldung gelangt ein angemeldeter Nutzer auf die
     Startseite.
 \end{description}
@@ -96,25 +96,25 @@ stehen außerdem folgende weitere Funktionen zur Verfügung.
     \XXitem{/F190/}{funkt:190} Über die Kopfzeile kann sich ein Benutzer zu seinem Profil navigieren.
     \XXitem{/F200/}{funkt:200} Auf der Profilseite kann der Nutzer alle dynamischen Daten über dieses Profil einsehen,
     Eine Ausnahme hiervon ist das gehashte Passwort. %link /D/
-    \XXitem{/F205/}{funkt:205} Auf der eigenen Profilseite kann der Nutzer jedes Datum %link /D/
-    welches über ihn gespeichert ist persistent verändern.
-    \XXitem{/F210/} Bei Änderung der Mailadresse wird der E-Mailverifikationsprozess erneut
+    \XXitem{/F205/}{funkt:205} Auf der eigenen Profilseite kann der Nutzer jedes Datum, %link /D/
+    welches über ihn gespeichert ist, persistent verändern.
+    \XXitem{/F210/}{funkt:210} Bei Änderung der Mailadresse wird der E-Mailverifikationsprozess erneut
     begonnen. Die Mailadresse muss im System einzigartig sein. %link
     \XXitem{/F220/}{funkt:220} Der Nutzer kann auf der eigenen Profilseite ein Avatarbild mit einer maximalen
     Größe von 4MB hochladen oder sein altes Avatarbild entfernen oder austauschen. %link /D/
     \XXitem{/F230/}{funkt:230} Auf der eigenen Profilseite kann der Nutzer sein Profil und alle damit verbundenen persistenten
-    Daten löschen. Auch seine Einreichungen werden gelöscht und Gutachter sowie Editoren dieser
-    Einreichung per Mail informiert. Bevor die Löschung vollzogen wird, wird dem Nutzer
+    Daten löschen. Auch seine Einreichungen werden gelöscht und Gutachter, sowie Editoren dieser
+    Einreichung per Mail automatisiert informiert. Bevor die Löschung vollzogen wird, wird dem Nutzer
     eine Warnung über diese Konsequenzen angezeigt.
-    \XXitem{/FW240/}{funkt:240} Der Nutzer kann außerdem seinen Arbeitsgeber, ein oder mehrere Spezialgebiete
+    \XXitem{/FW240/}{funkt:240} Der Nutzer kann außerdem seinen Arbeitgeber, ein oder mehrere Spezialgebiete
     und sein Geburtsdatum angeben.
 \end{description}
 
 \subsubsection{Startseite}
 \begin{description}
     \XXitem{/F250/}{funkt:250} Die Startseite ist zu jeder Zeit über die Kopfzeile erreichbar.
-    \XXitem{/F260/}{funkt:260} Ein Nutzer bekommt auf der Startseite alle Namen von wissenschaftlichen Foren
-    in einer Listensicht angezeigt in denen er aktive Einreichungen hat.
+    \XXitem{/F260/}{funkt:260} Ein Nutzer bekommt auf der Startseite alle Namen von wissenschaftlichen Foren,
+    für die er aktive Einreichungen hat, in einer Listensicht angezeigt.
     Die Namen, das Datum und der Status dieser aktiven Einreichungen werden unter den Namen der wissenschaftlichen
     Foren angezeigt.
     \XXitem{/F270/}{funkt:270} Die Einreichungen lassen sich nach Namen und Datum und Status
@@ -147,8 +147,8 @@ stehen außerdem folgende weitere Funktionen zur Verfügung.
     der Einreichung sortieren.
     \XXitem{/FW390/}{funkt:390} Die Einträge lassen sich anhand ihres Namens alphabetisch sortieren.
     \XXitem{/F400/}{funkt:400} Der Nutzer kann auf die Seite zur Erstellung einer Einreichung navigieren. Hierbei ist
-    das Feld, welches die wissenschaftliche Forum bestimmt wird bei dem eingereicht wird, bereits mit
-    dem wissenschaftlichen Forum befüllt von dessen Übersichtsseite aus die Navigation auf diese
+    das Feld, welches die wissenschaftliche Forum bestimmt, wird bei dem eingereicht wird, bereits mit
+    dem wissenschaftlichen Forum befüllt, von dessen Übersichtsseite aus die Navigation auf diese
     Seite ausgeführt wurde.
 \end{description}
 
@@ -156,16 +156,15 @@ stehen außerdem folgende weitere Funktionen zur Verfügung.
 \begin{description}
     \XXitem{/F410/}{funkt:410} Der Nutzer kann eine Einreichung im System erstellen. Hierzu gibt er in einem
     Formular die nötigen Informationen wie Namen der Einreichung, Namen und E-Mail Adressen der Ko-Autoren,
-    sowie den gewünschten Editor angeben. Der Editor wird nach erfolgreicher Erstellung hierüber durch eine
+    sowie den gewünschten Editor an. Der Editor wird nach erfolgreicher Erstellung hierüber durch eine
     automatisierte Mail informiert.
     \XXitem{/F420/}{funkt:420} Der Nutzer lädt seine Einreichung in Form einer PDF hoch. Die Abgabe darf eine Dateigröße
     von 20MB nicht überschreiten und muss im PDF-Format erfolgen.
     \XXitem{/FW430/}{funkt:430} Der Nutzer kann bei Einreichung gewünschte Gutachter vorschlagen.
     \XXitem{/F440/}{funkt:440} Durch Absenden des Formulars wird der Editor des Journals bzw. der Konferenz
-    informiert. Das Datum der Einreichung wird auf das Datum zum Zeitpunkt der Einreichung fest-
-    gelegt.
+    informiert. Das Datum der Einreichung wird auf das Datum zum Zeitpunkt der Einreichung festgelegt.
     \XXitem{/F450/}{funkt:450} Die Einreichung ist erfolgreich, wenn alle Felder ausgefüllt sind und eine PDF
-    hochgeladen wurde. Andernfalls wird der Nutzer über das fehlschlagen informiert.
+    hochgeladen wurde. Andernfalls wird der Nutzer über das Fehlschlagen informiert.
     \XXitem{/F460/}{funkt:460} Nach der erfolgreichen Einreichungen wird der Nutzer auf die Übersichtsseite der
     Einreichung weitergeleitet.
 \end{description}
@@ -183,10 +182,14 @@ stehen außerdem folgende weitere Funktionen zur Verfügung.
 %nav
 \end{description}
 
+<<<<<<< HEAD
 \subsection{Gutachter}
+Gutachter haben die selben Funktion wie gewöhnliche angemeldete Nutzer. Ausgenommen Zusätzlich hierzu kommen
+=======
+\subsection{Gutachter}\label{funkt:Gutachter}
 Gutachter haben die selben Funktion wie gewöhnliche angemeldete Nutzer. Zusätzlich hierzu kommen
+>>>>>>> hyperrefs-daten
 die Folgenden:
-%ohne /F/ einreichungsseite alle gutachten sehen
 
 \subsubsection{Startseite}
 \begin{description}
@@ -211,24 +214,22 @@ die Folgenden:
 
 \subsubsection{Einreichung}
 \begin{description}
-    \XXitem{/F530/}{funkt:530} Der Gutachter sieht auf der Übersichtseite einer Einreichung welcher als Gutachter
+    \XXitem{/F530/}{funkt:530} Der Gutachter sieht auf der Übersichtsseite einer Einreichung, welcher als Gutachter
     zugeordnet ist, diejenigen Gutachten welche er selbst erstellt hat in einer
-    Liste mit ihrem Erstellungsdatum, Gutachterempfehlung und Download.
+    Liste mit ihrem Erstellungsdatum, Gutachterempfehlung und Download. Explizit nicht zu sehen sind fremde Gutachten.
     \XXitem{/F540/}{funkt:540} Der Gutachter hat zusätzlich die Möglichkeit zu einer Einreichung der er als Gutachter zugeordnet ist
-    ein Gutachten mittels eines Formulars einzureichen. Hierfür ist eine PDF hoc
+    ein Gutachten mittels eines Formulars einzureichen. Hierfür ist eine PDF hochzuladen.
     \XXitem{/FW550/}{funkt:550} Auf der Einreichungsseite von Einreichungen denen der Gutachter zugeordnet ist,
     kann er in der Liste eigene eingereichte Gutachten zurückziehen. Hieraufhin werden sie aus
     der Datenbank entfernt und nicht mehr angezeigt.
     \XXitem{/F560/}{funkt:560} Der Einreicher und Editor werden über neue oder entfernte Gutachten mit einer automatisierten
     Mail informiert.
-    %einreicher & editor über gutachten informieren
 \end{description}
 
-\subsection{Editor}
-Editoren haben Zugriff auf alle Funktionen welche angemeldeten Nutzern zur Verfügung stehen.
+\subsection{Editor}\label{funkt:editor}
+Editoren haben Zugriff auf alle Funktionen welche angemeldeten Nutzern zur Verfügung stehen. Ein Editor kann zusätzlich
+die Rolle eines Gutachters mit allen zugehörigen Funktionen annehmen.
 Außerdem hat ein Editor die Folgenden zusätzlichen Funktionalitäten:
-%keine Editierung von eigenen Einreichungen.
-%Hat Profilsichtrechte von Nutzer.
 
 \subsubsection{Startseite}
 \begin{description}
@@ -252,6 +253,7 @@ Außerdem hat ein Editor die Folgenden zusätzlichen Funktionalitäten:
     \XXitem{/F620/}{funkt:620} Diese Liste kann alphabetisch nach Namen und Mailaddresse sortiert werden.
     \XXitem{/FW630/} Die Liste kann anhand von Namen und Mailadresse durchsucht werden.
     \XXitem{/F640/}{funkt:640} Mit einem Klick auf einen Eintrag wird der Editor auf das zugehörige Profil navigiert.
+    Auf welchem er die Sichtrechte \hyperref[funkt:200]{/F200/} besitzt.
 \end{description}
 
 \subsubsection{Wissenschaftliches Forum}
@@ -279,55 +281,68 @@ Außerdem hat ein Editor die Folgenden zusätzlichen Funktionalitäten:
         Registrierung auffordert.
         \item ... einen Mailto-Link zur \textbf{Ablehnung der Begutachtungsanfrage} welcher, sobald
         geklickt, einen Mailentwurf öffnet mit vorausgefülltem Empfänger (zugehöriger Editor)
-        und einem Infotext in welchen ein Ablehnungsgrundes eingefügt werden kann.
+        und einem Infotext in welchem ein Ablehnungsgrund eingefügt werden kann.
         Abgesehen hiervon wird zusätzlich eine automatisierte Mail an den Editor versendet in der er
-        kurz über die Ablehnung informiert wird, falls die obige E-Mail nie versendet wird.
+        kurz über die Ablehnung informiert wird, genau dann wenn die obige E-Mail innerhalb eines
+        bestimmten Zeitraums nicht versendet wurde.
     \end{itemize}
-    \XXitem{/F700/}{funkt:700} Ein Editor kann über Einreichungen eine Annahmeentscheidung treffen. Über diese werden
-    beteiligte Gutachter, der Einreicher und beteiligte Ko-Autoren per automatisierter Mail benachrichtigt.
+    \XXitem{/F700/}{funkt:700} Ein Editor kann über Einreichungen, welcher er als Editor zugeordnet ist,
+    eine Annahmeentscheidung treffen. Über diese werden beteiligte Gutachter, der Einreicher und beteiligte Ko-Autoren
+    per automatisierter Mail benachrichtigt.
 \end{description}
 
 \subsection{Administrator}
-Der Administrator besitzt zu Verwaltungszwecken alle Rechte, welche auch Nutzern, Editoren
-und Gutachtern zustehen. %Genau genug definiert?
-Einem Administrator werden in Listen grundsätzlich alle aktiven Einträge angezeigt.
-%UserList editor linken
-%Das ausgliedern in /F/s? oder einfach verlinken der /F/s? -> oder von fall zu fall je nachdem
-%/F/ hier aussagekräftig ist.
-% Einreichungsseite selbe Recht wie Gutachter oder Editor zu verwaltungsszwecken.
+Der Administrator besitzt zu Verwaltungszwecken umfassende FUnktionalitäten. Er kann ebenfalls Editorrollen und Nutzerrollen annehmen.
+Einem Administrator werden in Listen grundsätzlich alle aktiven Einträge angezeigt. Er hat ebenfalls die Funktionalitäten
+\hyperref[funkt:600]{/F600/}, \hyperref[funkt:610]{/F610/}, \hyperref[funkt:620]{/F620/}, \hyperref[funkt:630]{/F630/}
+, \hyperref[funkt:640]{/F640/}zur Ansicht der Benutzerliste.
+Außerdem besitzt ein Administrator die Funktionen \hyperref[funkt:530]{/F530/}, \hyperref[funkt:540]{/F540/},
+\hyperref[funkt:550]{/F550/}, \hyperref[funkt:560]{/F560/}, sowie \hyperref[funkt:680]{/F680/}, \hyperref[funkt:690]{/F690/} und
+\hyperref[funkt:700]{/F700/}
+zu Verwaltungszwecken der Einreichungen.
+
 \subsubsection{Suche}
 \begin{description}
     \XXitem{/F710/}{funkt:710} Ein Administrator kann in der globalen Suche ebenfalls alle Nutzer finden.
     \XXitem{/F720/}{funkt:720} Ein Administrator kann alle vorhandenen Einreichungen finden.
 \end{description}
 
-\subsection{Wissenschaftliches Forum}
+\subsubsection{Wissenschaftliches Forum}
 \begin{description}
     \XXitem{/F730/}{funkt:730} Einem Administrator werden auf der Publikationsseite einer Konferenz bzw. eines Journals
     alle aktiven Einreichungen in einer Liste dargestellt.
     Für diese Einträge gelten dieselben Funktionalitäten wie für eigene Einreichungen. %link
+    \XXitem{/F740/}{funkt:740} Auf der Seite eines wissenschaftlichen Forums kann der Administrator alle wesentlichen Daten
+    verändern. Insbesondere erfolgt hierbei die Ernennung von Editoren, welche bereits im System
+    registriert sein  müssen. Der Name des wissenschaftlichen Forums muss einzigartig sein.
+    \XXitem{/FW750/}{funkt:750} Der Administrator kann den Look des wissenschaftlichen Forums durch die folgenden Daten
+    verändern. %link
+    \XXitem{/F760/}{funkt:760} Auf der Seite eines wissenschaftlichen Forums kann der Administrator diese aus dem System zu löschen.
+    Hierbei wird er dazu aufgefordert seine Entscheidung ein zweites Mal zu bestätigen.
+    Daraufhin werden alle zugehörigen Daten /D/ und Einreichungen aus dem System entfernt. %link /D/
+    %link
 \end{description}
 
 \subsubsection{Profil}
 \begin{description}
-    \XXitem{/F740/}{funkt:740} Ein Administrator kann einen anderen Nutzer auf dessen Profilseite zum Administrator ernennen.
-    \XXitem{/F750/}{funkt:750} Ein Administrator kann einem anderen Administrator auf dessen Profilseite seine
+    \XXitem{/F770/}{funkt:770} Ein Administrator kann einen anderen Nutzer auf dessen Profilseite zum Administrator ernennen.
+    \XXitem{/F780/}{funkt:780} Ein Administrator kann einem anderen Administrator auf dessen Profilseite seine
     Administratorrolle aberkennen.
-    \XXitem{/FW760/}{funkt:760} Vor dem An- oder Aberkennen von Administratorrechten ist eine gültige
+    \XXitem{/FW790/}{funkt:790} Vor dem An- oder Aberkennen von Administratorrechten ist eine gültige
     Passworteingabe erforderlich.
-    \XXitem{/F770/}{funkt:770} Der Administrator besitzt auf allen Profilseiten dieselben Rechte zur Änderung
+    \XXitem{/F800/}{funkt:800} Der Administrator besitzt auf allen Profilseiten dieselben Rechte zur Änderung
     der persistierten Daten wie ein Nutzer auf seiner eigenen Profilseite. %link
 \end{description}
 
-\subsection{Liste der Wissenschaftlichen Foren}
+\subsubsection{Liste der Wissenschaftlichen Foren}
 \begin{description}
-    \XXitem{/F780/}{funkt:780} Auf dieser Seite kann der Administrator zur Seite navigieren auf welcher er ein neues
+    \XXitem{/F810/}{funkt:810} Auf dieser Seite kann der Administrator zur Seite navigieren auf welcher er ein neues
     wissenschaftliches Forum anlegen kann. %link
 \end{description}
 
 \subsubsection{Erstellung wissenschaftlicher Foren}
 \begin{description}
-    \XXitem{/F790/}{funkt:790} Auf der Seite zum Erstellen eines wissenschaftlichen Forums kann der Administrator dessen
+    \XXitem{/F820/}{funkt:820} Auf der Seite zum Erstellen eines wissenschaftlichen Forums kann der Administrator dessen
     wesentliche Daten nach /D/ %link
     festlegen. Bei der Angabe von Editoren wird überprüft, dass diese bereits als Nutzer im System registriert sind.
     Der Name des Forums muss ebenfalls einzigartig sein.
@@ -335,20 +350,7 @@ Einem Administrator werden in Listen grundsätzlich alle aktiven Einträge angez
     navigiert.
 \end{description}
 
-\subsection{Wissenschaftliches Forum}
-\begin{description}
-    \XXitem{/F800/}{funkt:800} Auf der Seite eines wissenschaftlichen Forums kann der Administrator alle wesentlichen Daten
-    verändern. Insbesondere erfolgt hierbei die Ernennung von Editoren, welche bereits im System
-    registriert sein  müssen. Der Name des wissenschaftlichen Forums muss einzigartig sein.
-    \XXitem{/FW810/}{funkt:810} Der Administrator kann den Look des wissenschaftlichen Forums durch die folgenden Daten
-    verändern. %link
-    \XXitem{/F820/}{funkt:820} Auf der Seite eines wissenschaftlichen Forums kann der Administrator diese aus dem System zu löschen.
-    Hierbei wird er dazu aufgefordert seine Entscheidung ein zweites Mal zu bestätigen.
-    Daraufhin werden alle zugehörigen Daten /D/ und Einreichungen aus dem System entfernt. %link /D/
-    %link
-\end{description}
-
-\subsection{Konfiguration}
+\subsubsection{Konfiguration}
 \begin{description}
     \XXitem{/F830/}{funkt:830} Ein Administrator kann auf der Konfigurationsseite den vom Betreiber gewünschten
     'Look and Feel' des Systems festlegen. Hierzu bestimmt der die Daten wie in /D/ definiert. %link

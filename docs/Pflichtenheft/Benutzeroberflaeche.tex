@@ -1,1 +1,57 @@
-Stefanie Gürster
+\localauthor{Stefanie Gürster}
+\subsection{Mockups}
+
+Folgende Bilder zeigen einen Prototyp der Anwendung.
+Dargestellt sind zwei Ausschnitte aus Schlüsselfunktionen der Webanwendung.
+
+Die Homepage in Abbildung \ref{fig:homepageMockup} ist auf die Rolle eines/einer Editor:in zugeschnitten, wobei diesem/dieser auch einige
+Reviews bearbeitet und somit auch die Rolle des/der Gutachter/s:in für einige Paper bekleidet.
+Dabei werden bei den Papers die verschiedenen Rollen durch R und E gekennzeichnet.
+
+Die Paper Site in Abbildung \ref{fig:paperMockup} ist auf die Rolle eines authentifizierten Nutzenden ausgelegt.
+Dieser ist jedoch in keinem Fall ein/eine Editor:in oder ein/eine Gutachter:in.
+
+
+\subsubsection{Homepage}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.85\linewidth]{graphics/Homepage_png}
+	\caption{Übersicht auf einer Homepage}
+	\label{fig:homepageMockup}
+\end{figure}
+
+\subsubsection{Paper}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.85\linewidth]{graphics/Paper_png}
+	\caption{Ablauf einer erfolgreichen Einreichung nach Reviews}
+	\label{fig:paperMockup}
+\end{figure}
+
+
+\subsection{Benutzerfluss}
+Im Folgenden werden functioning Aussagen über die Benutzeroberfläche mithilfe eines Benutzerflussdiagramms getroffen.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{graphics/benutzerFlussyEd}
+    \caption{Benutzerfluss}
+	\label{fig:benutzerfluss}
+\end{figure}
+
+Die sich im Diagramm in Abbildung \ref{fig:benutzerfluss} befindlichen Rauten stellen Header (Navigationsleiste) und Footer dar.
+Hierbei wird jedoch wie folgt unterschieden: Der Header ist nur für authentifizierte Nutzer:innen zugänglich,
+d.h. dieser erscheint erst nach einem erfolgreichen Login sichtbar und verschwindet nach einem Logout wieder.
+Der Footer hingegen ist von jeder Seite der Applikation zugänglich und somit sichtbar.
+
+Im Diagramm werden Administratoren, Editoren, Gutachter und normale Nutzende unter dem allgemeinen Begriff
+authentifizierte Nutzer:innen betrachtet.
+Sind die Verbindungspfeile nicht schwarz, sondern andersfarbig dargestellt besitzen auch nur die
+dargestellten Benutzergruppen ein Zugriffsrecht oder das Recht auf eine Aktion.
+
+Des Weiteren ist der Randfall zu betrachten, bei welchem ein externer Gutachter, welcher noch nicht registriert ist,
+eine Einladung eines Editors angenommen hat.
+Diesem wird die Rolle eines Gutachters zugewiesen, jedoch besitzt er erst Zugriffsrechte, nachdem er sich
+authentifiziert hat.
