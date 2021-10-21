@@ -1,5 +1,35 @@
 \localauthor{Stefanie Gürster}
-\subsection{Benutzeroberfläche}
+\subsection{Mockups}
+
+Folgende Bilder zeigen einen Prototyp der Anwendung.
+Dargestellt sind zwei Ausschnitte aus Schlüsselfunktionen der Webanwendung.
+
+Die Homepage in Abbildung \ref{fig:homepageMockup} ist auf die Rolle eines/einer Editor:in zugeschnitten, wobei diesem/dieser auch einige
+Reviews bearbeitet und somit auch die Rolle des/der Gutachter/s:in für einige Paper bekleidet.
+Dabei werden bei den Papers die verschiedenen Rollen durch R und E gekennzeichnet.
+
+Die Paper Site in Abbildung \ref{fig:paperMockup} ist auf die Rolle eines authentifizierten Nutzenden ausgelegt.
+Dieser ist jedoch in keinem Fall ein/eine Editor:in oder ein/eine Gutachter:in.
+
+
+\subsubsection{Homepage}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{graphics/Homepage}
+	\caption{Übersicht auf einer Homepage}
+	\label{fig:homepageMockup}
+\end{figure}
+
+\subsubsection{Paper}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{graphics/Paper}
+	\caption{Ablauf einer erfolgreichen Einreichung nach Reviews}
+	\label{fig:paperMockup}
+\end{figure}
+
 
 \subsection{Benutzerfluss}
 Im Folgenden werden functioning Aussagen über die Benutzeroberfläche mithilfe eines Benutzerflussdiagramms getroffen.
@@ -8,9 +38,10 @@ Im Folgenden werden functioning Aussagen über die Benutzeroberfläche mithilfe 
     \centering
     \includegraphics[width=\linewidth]{graphics/benutzerFlussyEd}
     \caption{Benutzerfluss}
+	\label{fig:benutzerfluss}
 \end{figure}
 
-Die sich im Diagramm befindlichen Rauten stellen Header (Navigationsleiste) und Footer dar.
+Die sich im Diagramm in Abbildung \ref{fig:benutzerfluss} befindlichen Rauten stellen Header (Navigationsleiste) und Footer dar.
 Hierbei wird jedoch wie folgt unterschieden: Der Header ist nur für authentifizierte Nutzer:innen zugänglich,
 d.h. dieser erscheint erst nach einem erfolgreichen Login sichtbar und verschwindet nach einem Logout wieder.
 Der Footer hingegen ist von jeder Seite der Applikation zugänglich und somit sichtbar.
@@ -24,23 +55,3 @@ Des Weiteren ist der Randfall zu betrachten, bei welchem ein externer Gutachter,
 eine Einladung eines Editors angenommen hat.
 Diesem wird die Rolle eines Gutachters zugewiesen, jedoch besitzt er erst Zugriffsrechte, nachdem er sich
 authentifiziert hat.
-
-\subsection{Mockups}
-
-Die Folgenden Bilder zeigen einen Prototypen der Anwendung. Gezeigt sind zwei Ausschnitte aus Schlüsselfunktionen der Webanwendung.
-
-\subsubsection{Homepage}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=\linewidth]{graphics/Homepage}
-	\caption{Übersicht auf der Homepage}
-\end{figure}
-
-\subsubsection{Einreichung}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=\linewidth]{graphics/Paper}
-	\caption{Ablauf einer erfolgreichen Einreichung nach Reviews}
-\end{figure}
