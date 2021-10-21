@@ -28,7 +28,7 @@ Vor Ausführung jeglicher Tests sollten folgende Voraussetzungen erfüllt sein:
 	\end{itemize}
 	\item Es existiert ein Nutzer mit folgenden Nutzerdaten:
 	\begin{itemize}
-		\item \emph{E-Mail Adresse}: tuti@fim.uni-passau.de
+		\item \emph{E-Mail Adresse}: guerster@fim.uni-passau.de
 		\item \emph{Vorname}: Tuti
 		\item \emph{Nachname}: Aslan
 		\item \emph{Passwort}: SupaDöner1970!
@@ -47,7 +47,7 @@ Die Einstellungen, die von der Administratorin getroffen werden, können so im F
 	Von dort aus navigiert sie zur Seite zur Erstellung eines neuen wissenschaftlichen Forums.
 	Dort erstellt sie ein Forum mit folgenden Daten:
 	\begin{itemize}
-		\item \emph{Editor:innen}: Nutzer mit E-Mail-Adresse tuti@fim.uni-passau.de
+		\item \emph{Editor:innen}: Nutzer mit E-Mail-Adresse guerster@fim.uni-passau.de
 		\item \emph{Name}: Chemie Tagung
 		\item \emph{Deadline}: 30.12.2022
 		\item \emph{Kurzbeschreibung}: Es geht um Chemie.
@@ -61,7 +61,7 @@ Die Einstellungen, die von der Administratorin getroffen werden, können so im F
 	Von dort aus navigiert sie zur Seite zur Erstellung eines neuen wissenschaftlichen Forums.
 	Dort erstellt sie ein Forum mit folgenden Daten:
 	\begin{itemize}
-		\item \emph{Editor:innen}: Nutzer mit E-Mail-Adresse tuti@fim.uni-passau.de
+		\item \emph{Editor:innen}: Nutzer mit E-Mail-Adresse guerster@fim.uni-passau.de
 		\item \emph{Name}: Physik Tagung
 		\item \emph{Deadline}: 30.12.2099
 		\item \emph{Kurzbeschreibung}: Es geht um Physik.
@@ -88,7 +88,7 @@ Die Einstellungen, die von der Administratorin getroffen werden, können so im F
 	\XXitem{/T040/}{t040} \emph{Testet \hyperref[funkt:420]{/F420/}}.
 	Anschließend lädt die Nutzerin folgende PDF-Datei hoch: \href{https://dl.acm.org/doi/pdf/10.1145/3321707.3321795}{https://dl.acm.org/doi/pdf/10.1145/3321707.3321795}.
 
-	\XXitem{/T050/}{t050} \emph{Testet \hyperref[funkt:410]{/F410/}}.
+	\XXitem{/T045/}{t045} \emph{Testet \hyperref[funkt:450]{/F450/}}.
 	Sie trägt in den Feldern des Formulars folgende Daten ein:
 	\begin{itemize}
 		\item \emph{Name der Einreichung}: Wichtiges Papier
@@ -96,13 +96,15 @@ Die Einstellungen, die von der Administratorin getroffen werden, können so im F
 		\begin{itemize}
 			\item \emph{Vorname} Valentin
 			\item \emph{Nachname} Kasper
-			\item \emph{E-Mail-Adresse} garstenaue@fim.uni-passau.de
+			\item \emph{E-Mail-Adresse} garstenaue
 		\end{itemize}
-		\item \emph{Editor}: guerster@fim.uni-passau.de
+		\item \emph{Editor}: guerster@fim.uni-dorfen.de
 	\end{itemize}
+	Da die angegebene E-Mail-Adresse nicht gültig ist, ist die Registrierung nicht erfolgreich.
+	Sie bleibt auf der Registrierungsseite und wird mit einer Fehlermeldung über das Problem informiert.
 
-	\todo{evenutell hier noch eine fehlgeschlagenen Absendung von Formular machen F450}
-	\todo{eventuell noch echte email adressen benutzt um zb F440 zu testen}
+	\XXitem{/T050/}{t050} \emph{Testet \hyperref[funkt:410]{/F410/}}.
+	Sie trägt wieder die gleichen Daten in das Formular ein wie in Test \hyperref[t050]{/T050/}, nur diesmal mit der E-Mail-Adresse \texttt{garstenaue@fim.uni-passau.de}
 
 	\XXitem{/T060/}{t060} \emph{Testet \hyperref[funkt:460]{/F460/}}.
 	Nach erfolgreicher Absendung des Formulars wird die Nutzerin auf die Übersichtsseite der Einreichung weitergeleitet.
@@ -131,9 +133,22 @@ Die Einstellungen, die von der Administratorin getroffen werden, können so im F
 \begin{description}
 
 	\XXitem{/T090/}{t090} \emph{Testet \hyperref[]{}}.
-	Der Nutzer mit der E-Mail-Adresse schicho@fim.uni-passau.de meldet sich im System an.
+	Der Nutzer mit der E-Mailc-Adresse schicho@fim.uni-passau.de meldet sich im System an.
 	Von der Startseite aus ruft er die Einreichung ``Wichtiges Papier'' auf und landet auf der Seite dieser Einreichung.
-	
 
+\end{description}
+
+\subsection{Anonyme Nutzer}
+
+\begin{description}
+	\XXitem{/T200/}{t200} \emph{Testet \hyperref[funkt:010]{/F010/}}. Valentin Kasper aus \hyperref[t050]{/T050/} ist noch nicht im System registriert.
+	Er ruft LasEs auf und wird zur Anmeldeseite weitergeleitet.
+	\XXitem{/T210/}{t210} \emph{Testet \hyperref[funkt:060]{/F060/}}. Er klickt auf den Link zur Registrierung und gibt seinen Namen, seine E-Mail-Adresse und das Passwort \texttt{einsZwei3!5678} an.
+
+	Die Registrierung wird bestätigt und er erhält eine Verifizierungs-E-Mail.
+	\XXitem{/T220/}{t220} \emph{Testet \hyperref[funkt:070]{/F070/}}. Er klickt auf den Bestätigungslink in der E-Mail und wird auf die Verifizierungsseite weitergeleitet.
+	Damit ist sein Profil erstellt.
+	Er wird automatisch auf die Homepage weitergeleitet.
+	\XXitem{/T230/}{t230} \emph{Testet \hyperref[funkt:260]{/F260/}}. Da er als Ko-Autor in Test \hyperref[t050]{/T050/} eingetragen wurde, wird ihm das Paper auf der Homepage angezeigt.
 \end{description}
 
