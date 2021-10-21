@@ -3,11 +3,16 @@
 \subsection{Musskriterien}
 Ziel des Projekts ist eine Webapplikation mit Benutzeroberfläche in englischer Sprache, die von mehreren Nutzenden mit verschiedenen Rollen und Rechten benutzt werden kann.
 
-An oberster Stelle in der Hierarchie stehen die Administratoren, welche für das Betreiben der Anwendung zuständig sind.
+An oberster Stelle in der Hierarchie stehen die Administratoren \label{admin} mit allumfassenden Rechten, welche für das Betreiben der Anwendung zuständig sind.
 Sie können das System gemäß den Anforderungen und Wünschen des Betreibers konfigurieren und Benutzende verwalten.
 Außerdem richten sie Konferenzen und Journale ein, also Veranstaltungen bzw.\ Zeitschriften, bei denen wissenschaftliche Artikel veröffentlicht werden.
-Dafür ernennen sie jeweils Editoren, die die Einreichungen für ihre Konferenzen und Journale verwalten.
+Dafür ernennen sie jeweils Editoren \label{editor}, die die Einreichungen für ihre Konferenzen und Journale verwalten.
 Sie laden Gutachter für das Review von Artikeleinreichungen ein und entscheiden nach Fertigstellung des Gutachtens auf dessen Basis, ob sie angenommen oder (mit Begründung) abgelehnt werden sollen.
+
+Gutachter \label{review} können Einladungen zur Begutachtung einer wissenschaftlichen Arbeit annehmen oder ablehnen.
+Nehmen sie diese an so müssen sie sich spätestens zu diesem Zeitpunkt registrieren.
+Dannach können sie das Dokument herunterladen und ihren Bericht in einem eigenen Dokument wieder hochladen.
+Außerdem stehen ihnen Tools wie einem Kommentarfeld oder die Möglichkeit, eine Empfehlung abzugeben, zur Verfügung.
 
 Einreichen kann jeder Wissenschaftler nach Registrierung und Anmeldung am System.
 Sie können mithilfe einer Liste oder Suche eine geeignete Konferenz oder ein Journal finden,
@@ -17,7 +22,9 @@ Dabei suchen sie aus, welcher Editor für die Einreichung verantwortlich sein so
 
 Eine Erweiterung des Systems um zusätzliche Funktionen wie z.B.\ das Publizieren von Artikeln soll einfach möglich sein.
 
-Anonyme Nutzende können sich initial nur registrieren und dann weitere Funktionen benutzen.
+Anonyme Nutzende \label{anonym} können sich initial nur registrieren und dann weitere Funktionen benutzen.
+
+Alle Rollen außer den anonymen Nutzenden werden als authentifizierte Nutzende \label{authentifiziert} bezeichnet und haben zunächst grundlegende Rechte außer sie bekleiden die Rolle eines Administrators, eines Gutachters oder eine Editors.
 
 \subsection{Wunschkriterien}
 
