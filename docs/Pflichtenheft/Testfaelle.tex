@@ -4,7 +4,7 @@
 Vor Ausführung jeglicher Tests sollten folgende Voraussetzungen erfüllt sein:
 \begin{itemize}
 	\item Das System ist vollständig eingerichtet.
-	Insbesondere sind die Datenbankschemata erstellt.
+	Insbesondere sind die Datenbankschemata erstellt und die globalen Einstellungen sind getroffen.
 	\item Es existiert eine Administratorin mit folgenden Nutzerdaten:
 	\begin{itemize}
 		\item \emph{E-Mail Adresse}: mayer@fim.uni-dorfen.de
@@ -14,9 +14,9 @@ Vor Ausführung jeglicher Tests sollten folgende Voraussetzungen erfüllt sein:
 	\end{itemize}
 	\item Es existiert ein Nutzer mit folgenden Nutzerdaten:
 	\begin{itemize}
-		\item \emph{E-Mail Adresse}: maier@fim.uni-dorfen.de
+		\item \emph{E-Mail Adresse}: huber@fim.uni-dorfen.de
 		\item \emph{Vorname}: Franz
-		\item \emph{Nachname}: Maier
+		\item \emph{Nachname}: Huber
 		\item \emph{Passwort}: TSVDorfen2001!
 	\end{itemize}
 	\item Es existiert eine Nutzerin mit folgenden Nutzerdaten:
@@ -34,20 +34,80 @@ Vor Ausführung jeglicher Tests sollten folgende Voraussetzungen erfüllt sein:
 		\item \emph{Passwort}: SupaDöner1970!
 	\end{itemize}
 \end{itemize}
-
-\subsection{Administrator:innen}
-Zuerst testen wir die Funktionen der Administrator:innen.
+Die Tests werden in der angegebenen Reihenfolge ausgeführt.
+Das heißt jeder Test kann die Zustandsänderungen, die durch vorherige Tests ausgelöst worden sind, als gegeben voraussetzen.
+\subsection{Administratoren}
+Zuerst testen wir die Funktionen der Administratoren.
 Die Einstellungen, die von der Administratorin getroffen werden, können so im Folgenden als Voraussetzungen genutzt werden.
 \begin{description}
-	\XXitem{/T010/}{t010} Die Administratorin meldet sich mit ihren Anmeldedaten im System an und wird zur Startseite weitergeleitet.
+
+	\XXitem{/T010/}{t010} \emph{Testet \hyperref[funkt:830]{/F830/}}.
+	Die Administratorin meldet sich mit ihren Anmeldedaten im System an und wird zur Startseite weitergeleitet.
 	Über die Kopfzeile ruft sie nun die Liste der wissenschaftlichen Foren auf.
 	Von dort aus navigiert sie zur Seite zur Erstellung eines neuen wissenschaftlichen Forums.
 	Dort erstellt sie ein Forum mit folgenden Daten:
 	\begin{itemize}
-		\item \emph{Editor:innen}:
-		\item \emph{Deadline}:
-		\item \emph{Kurzbeschreibung}:
-		\item \emph{URL}:
-		\item \emph{Anleitung zur Begutachtung}:
+		\item \emph{Editor:innen}: Nutzer mit E-Mail-Adresse tuti@fim.uni-dorfen.de
+		\item \emph{Name}: Chemie Tagung
+		\item \emph{Deadline}: 30.12.2022
+		\item \emph{Kurzbeschreibung}: Es geht um Chemie.
+		\item \emph{URL}: ch.em.ie
+		\item \emph{Anleitung zur Begutachtung}: Begutachten Sie.
 	\end{itemize}
+	Danach wird sie auf die Seite des wissenschaftlichen Forums weitergeleitet.
+
+	\XXitem{/T015/}{t015} \emph{Testet \hyperref[funkt:830]{/F830/}}.
+	Die Administratorin ruft über die Kopfzeile die Liste der wissenschaftlichen Foren auf.
+	Von dort aus navigiert sie zur Seite zur Erstellung eines neuen wissenschaftlichen Forums.
+	Dort erstellt sie ein Forum mit folgenden Daten:
+	\begin{itemize}
+		\item \emph{Editor:innen}: Nutzer mit E-Mail-Adresse tuti@fim.uni-dorfen.de
+		\item \emph{Name}: Physik Tagung
+		\item \emph{Deadline}: 30.12.2099
+		\item \emph{Kurzbeschreibung}: Es geht um Physik.
+		\item \emph{URL}: ph.ys.ik
+		\item \emph{Anleitung zur Begutachtung}: Begutachten Sie.
+	\end{itemize}
+	Danach wird sie auf die Seite des wissenschaftlichen Forums weitergeleitet.
+
 \end{description}
+
+\subsection{Angemeldeter Nutzer}
+Im Folgenden wird das Einreichen eines Papers getestet. \hyperref[t010]{/T010/} und \hyperref[t015]{/T015/} sind für die folgenden Testfälle vorausgesetzt.
+\begin{description}
+
+	\XXitem{/T020/}{t020} \emph{Testet \hyperref[funkt:160]{/F160/}}.
+	Die Nutzerin mit der E-Mail-Adresse müller@fim.uni-dorfen.de meldet sich im System an.
+	Anschließend gibt sie im Suchfeld in der Kopfzeile ``Chemie Tagung'' ein und schickt die Suchanfrage mit Enter ab.
+	Nun wird sie auf die Seite mit den Suchergebnissen weitergeleitet und das Forum namens ``Chemie Tagung'' ist der einzige Eintrag in der angezeigten Liste.
+	Nach einem Klick auf diesen Eintrag wird die Nutzerin auf die Seite des wissenschaftlichen Forums weitergeleitet.
+
+	\XXitem{/T030/}{t030} \emph{Testet \hyperref[funkt:400]{/F400/}}.
+	Nun navigiert die Nutzerin per Mausklick auf die Seite für eine neue Einreichung.
+	dort ist das Feld mit dem wissenschaftlichen Forum bereits richtig ausgefüllt, und zwar mit ``Chemie Tagung''
+
+	\XXitem{/T040/}{t040} \emph{Testet \hyperref[funkt:420]{/F420/}}.
+	Anschließend lädt die Nutzerin folgende PDF-Datei hoch: \href{https://dl.acm.org/doi/pdf/10.1145/3321707.3321795}{https://dl.acm.org/doi/pdf/10.1145/3321707.3321795}.
+	
+	\XXitem{/T050/}{t050} \emph{Testet \hyperref[funkt:410]{/F410/}}.
+	Sie trägt in den Feldern des Formulars folgende Daten ein:
+	\begin{itemize}
+		\item \emph{Name der Einreichung}: Wichtiges Papier
+		\item \emph{Co-Autoren}: Ein Co-Autor mit folgenden Daten:
+		\begin{itemize}
+			\item \emph{Vorname} Valentin
+			\item \emph{Nachname} Kasper
+			\item \emph{E-Mail-Adresse} kasper@fim.uni-dorfen.de
+		\end{itemize}
+		\item \emph{Editor}: tuti@fim.uni-dorfen.de
+	\end{itemize}
+
+	\todo{evenutell hier noch eine fehlgeschlagenen Absendung von Formular machen F450}
+	\todo{eventuell noch echte email adressen benutzt um zb F440 zu testen}
+
+	\XXitem{/T060/}{t060} \emph{Testet \hyperref[funkt:460]{/F460/}}.
+	Nach erfolgreicher Absendung des Formulars wird die Nutzerin auf die Übersichtsseite der Einreichung weitergeleitet.
+
+
+\end{description}
+
