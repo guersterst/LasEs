@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 1479 457" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
+    <g id="Artboard1" transform="matrix(0.76985,0,0,0.422369,0,0)">
+        <rect x="0" y="0" width="1920" height="1080" style="fill:none;"/>
+        <g transform="matrix(0.913501,0,0,1.66503,-39.0366,-326.205)">
+            <text x="530.266px" y="752.684px" style="font-family:'JavaneseText', 'Javanese Text';font-size:681.114px;">L<tspan x="916.41px 1199.45px 1436.61px 1850.35px " y="752.684px 752.684px 752.684px 752.684px ">asEs</tspan></text>
+        </g>
+        <g transform="matrix(1,0,0,0.99714,0,10.4614)">
+            <clipPath id="_clip1">
+                <rect x="16.395" y="80.473" width="420.767" height="867.358"/>
+            </clipPath>
+            <g clip-path="url(#_clip1)">
+                <g>
+                    <g transform="matrix(1.29895,0,0,2.3676,0,0)">
+                        <path d="M330.365,62.325C330.365,62.325 144.439,56.109 34.762,217.162" style="fill:none;stroke:black;stroke-width:33.35px;"/>
+                    </g>
+                    <g transform="matrix(1.29895,0,0,-2.3676,0,1028.3)">
+                        <path d="M330.365,62.325C330.365,62.325 144.482,56.172 34.805,217.225" style="fill:none;stroke:black;stroke-width:33.35px;"/>
+                    </g>
+                </g>
+                <g transform="matrix(1.85269,0,0,3.37689,17.392,147.486)">
+                    <circle cx="222.419" cy="108.581" r="108.581" style="fill:none;stroke:black;stroke-width:23.4px;"/>
+                </g>
+                <path d="M398.439,353.631C408.035,347.479 418.37,344.151 429.129,344.151C480.605,344.151 522.398,420.326 522.398,514.152C522.398,607.977 480.605,684.152 429.129,684.152C377.653,684.152 335.86,607.977 335.86,514.152C335.86,493.716 337.843,474.119 341.478,455.974C348.807,469.569 359.121,478.017 370.532,478.017C392.862,478.017 410.991,445.662 410.991,405.809C410.991,385.293 406.187,366.764 398.439,353.631Z"/>
+            </g>
+        </g>
+    </g>
+</svg>
