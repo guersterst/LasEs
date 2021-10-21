@@ -7,28 +7,28 @@ Vor Ausführung jeglicher Tests sollten folgende Voraussetzungen erfüllt sein:
 	Insbesondere sind die Datenbankschemata erstellt und die globalen Einstellungen sind getroffen.
 	\item Es existiert eine Administratorin mit folgenden Nutzerdaten:
 	\begin{itemize}
-		\item \emph{E-Mail Adresse}: mayer@fim.uni-dorfen.de
+		\item \emph{E-Mail Adresse}: kirz@fim.uni-passau.de
 		\item \emph{Vorname}: Johanna
 		\item \emph{Nachname}: Mayer
 		\item \emph{Passwort}: UniDorfen1870!
 	\end{itemize}
 	\item Es existiert ein Nutzer mit folgenden Nutzerdaten:
 	\begin{itemize}
-		\item \emph{E-Mail Adresse}: huber@fim.uni-dorfen.de
+		\item \emph{E-Mail Adresse}: schicho@fim.uni-passau.de
 		\item \emph{Vorname}: Franz
 		\item \emph{Nachname}: Huber
 		\item \emph{Passwort}: TSVDorfen2001!
 	\end{itemize}
 	\item Es existiert eine Nutzerin mit folgenden Nutzerdaten:
 	\begin{itemize}
-		\item \emph{E-Mail Adresse}: müller@fim.uni-dorfen.de
+		\item \emph{E-Mail Adresse}: vogt@fim.uni-passau.de
 		\item \emph{Vorname}: Petra
 		\item \emph{Nachname}: Müller
 		\item \emph{Passwort}: TSVDorfen2002!
 	\end{itemize}
 	\item Es existiert ein Nutzer mit folgenden Nutzerdaten:
 	\begin{itemize}
-		\item \emph{E-Mail Adresse}: tuti@fim.uni-dorfen.de
+		\item \emph{E-Mail Adresse}: tuti@fim.uni-passau.de
 		\item \emph{Vorname}: Tuti
 		\item \emph{Nachname}: Aslan
 		\item \emph{Passwort}: SupaDöner1970!
@@ -47,7 +47,7 @@ Die Einstellungen, die von der Administratorin getroffen werden, können so im F
 	Von dort aus navigiert sie zur Seite zur Erstellung eines neuen wissenschaftlichen Forums.
 	Dort erstellt sie ein Forum mit folgenden Daten:
 	\begin{itemize}
-		\item \emph{Editor:innen}: Nutzer mit E-Mail-Adresse tuti@fim.uni-dorfen.de
+		\item \emph{Editor:innen}: Nutzer mit E-Mail-Adresse tuti@fim.uni-passau.de
 		\item \emph{Name}: Chemie Tagung
 		\item \emph{Deadline}: 30.12.2022
 		\item \emph{Kurzbeschreibung}: Es geht um Chemie.
@@ -61,7 +61,7 @@ Die Einstellungen, die von der Administratorin getroffen werden, können so im F
 	Von dort aus navigiert sie zur Seite zur Erstellung eines neuen wissenschaftlichen Forums.
 	Dort erstellt sie ein Forum mit folgenden Daten:
 	\begin{itemize}
-		\item \emph{Editor:innen}: Nutzer mit E-Mail-Adresse tuti@fim.uni-dorfen.de
+		\item \emph{Editor:innen}: Nutzer mit E-Mail-Adresse tuti@fim.uni-passau.de
 		\item \emph{Name}: Physik Tagung
 		\item \emph{Deadline}: 30.12.2099
 		\item \emph{Kurzbeschreibung}: Es geht um Physik.
@@ -73,11 +73,10 @@ Die Einstellungen, die von der Administratorin getroffen werden, können so im F
 \end{description}
 
 \subsection{Angemeldeter Nutzer}
-Im Folgenden wird das Einreichen eines Papers getestet. \hyperref[t010]{/T010/} und \hyperref[t015]{/T015/} sind für die folgenden Testfälle vorausgesetzt.
 \begin{description}
 
 	\XXitem{/T020/}{t020} \emph{Testet \hyperref[funkt:160]{/F160/}}.
-	Die Nutzerin mit der E-Mail-Adresse müller@fim.uni-dorfen.de meldet sich im System an.
+	Die Nutzerin mit der E-Mail-Adresse vogt@fim.uni-passau.de meldet sich im System an.
 	Anschließend gibt sie im Suchfeld in der Kopfzeile ``Chemie Tagung'' ein und schickt die Suchanfrage mit Enter ab.
 	Nun wird sie auf die Seite mit den Suchergebnissen weitergeleitet und das Forum namens ``Chemie Tagung'' ist der einzige Eintrag in der angezeigten Liste.
 	Nach einem Klick auf diesen Eintrag wird die Nutzerin auf die Seite des wissenschaftlichen Forums weitergeleitet.
@@ -88,7 +87,7 @@ Im Folgenden wird das Einreichen eines Papers getestet. \hyperref[t010]{/T010/} 
 
 	\XXitem{/T040/}{t040} \emph{Testet \hyperref[funkt:420]{/F420/}}.
 	Anschließend lädt die Nutzerin folgende PDF-Datei hoch: \href{https://dl.acm.org/doi/pdf/10.1145/3321707.3321795}{https://dl.acm.org/doi/pdf/10.1145/3321707.3321795}.
-	
+
 	\XXitem{/T050/}{t050} \emph{Testet \hyperref[funkt:410]{/F410/}}.
 	Sie trägt in den Feldern des Formulars folgende Daten ein:
 	\begin{itemize}
@@ -97,9 +96,9 @@ Im Folgenden wird das Einreichen eines Papers getestet. \hyperref[t010]{/T010/} 
 		\begin{itemize}
 			\item \emph{Vorname} Valentin
 			\item \emph{Nachname} Kasper
-			\item \emph{E-Mail-Adresse} kasper@fim.uni-dorfen.de
+			\item \emph{E-Mail-Adresse} garstenaue@fim.uni-passau.de
 		\end{itemize}
-		\item \emph{Editor}: tuti@fim.uni-dorfen.de
+		\item \emph{Editor}: guerster@fim.uni-passau.de
 	\end{itemize}
 
 	\todo{evenutell hier noch eine fehlgeschlagenen Absendung von Formular machen F450}
@@ -108,6 +107,33 @@ Im Folgenden wird das Einreichen eines Papers getestet. \hyperref[t010]{/T010/} 
 	\XXitem{/T060/}{t060} \emph{Testet \hyperref[funkt:460]{/F460/}}.
 	Nach erfolgreicher Absendung des Formulars wird die Nutzerin auf die Übersichtsseite der Einreichung weitergeleitet.
 
+	\XXitem{/T070/}{t070} \emph{Testet \hyperref[funkt:460]{/F460/}}.
+	Frau Müller ist jetzt fertig mit ihrer Arbeit und führt mit dem zugehörigen Link in der Kopfzeile den Logout durch.
+	Sie befindet sich nun wieder auf den Anmeldeseite.
+\end{description}
+
+\subsection{Editor}
+\begin{description}
+
+	\XXitem{/T080/}{t080} \emph{Testet \hyperref[funkt:680]{/F680/}}.
+	Der Nutzer mit der E-Mail-Adresse guerster@fim.uni-passau.de meldet sich im System an.
+	Von der Startseite aus ruft er die Einreichung ``Wichtiges Papier'' auf und landet auf der Seite dieser Einreichung.
+	Er gibt in das Formular zur Zuweisung von Gutachtern ``schicho@fim.uni-passau.de'' ein und schickt das Formular ab.
+	Anschließend meldet er sich ab.
+
+	\todo{Evenutuell F690, aso die Versendung der Email noch testen...}
+
+	\todo{F700 noch testen, aber nicht hier, sondern nach den Sachen vong Gutachter}
+
+\end{description}
+
+\subsection{Gutachter}
+\begin{description}
+
+	\XXitem{/T090/}{t090} \emph{Testet \hyperref[]{}}.
+	Der Nutzer mit der E-Mail-Adresse schicho@fim.uni-passau.de meldet sich im System an.
+	Von der Startseite aus ruft er die Einreichung ``Wichtiges Papier'' auf und landet auf der Seite dieser Einreichung.
+	
 
 \end{description}
 
