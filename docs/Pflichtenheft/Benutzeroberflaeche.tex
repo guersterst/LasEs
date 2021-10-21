@@ -4,12 +4,12 @@
 Folgende Bilder zeigen einen Prototyp der Anwendung.
 Dargestellt sind zwei Ausschnitte aus Schlüsselfunktionen der Webanwendung.
 
-Die Homepage in Abbildung \ref{fig:homepageMockup} ist auf die Rolle eines/einer Editor:in zugeschnitten, wobei diesem/dieser auch einige
-Reviews bearbeitet und somit auch die Rolle des/der Gutachter/s:in für einige Paper bekleidet.
+Die Homepage in Abbildung \ref{fig:homepageMockup} ist auf die Rolle eines \hyperref[glo:editor]{Editors} zugeschnitten, wobei dieser auch einige
+Reviews bearbeitet und somit auch die Rolle des \hyperref[glo:gutachter]{Gutachters} für einige Paper bekleidet.
 Dabei werden bei den Papers die verschiedenen Rollen durch R und E gekennzeichnet.
 
-Die Paper Site in Abbildung \ref{fig:paperMockup} ist auf die Rolle eines authentifizierten Nutzenden ausgelegt.
-Dieser ist jedoch in keinem Fall ein/eine Editor:in oder ein/eine Gutachter:in.
+Die Paper Site in Abbildung \ref{fig:paperMockup} ist auf die Rolle eines \hyperref[glo:regnutzer]{authentifizierten Nutzenden} ausgelegt.
+Dieser ist jedoch in keinem Fall ein Editor oder ein Gutachter.
 
 
 \subsubsection{Homepage}
@@ -21,7 +21,7 @@ Dieser ist jedoch in keinem Fall ein/eine Editor:in oder ein/eine Gutachter:in.
 	\label{fig:homepageMockup}
 \end{figure}
 
-\subsubsection{Paper}
+\subsubsection{Submission}
 
 \begin{figure}[H]
 	\centering
@@ -42,14 +42,15 @@ Im Folgenden werden functioning Aussagen über die Benutzeroberfläche mithilfe 
 \end{figure}
 
 Die sich im Diagramm in Abbildung \ref{fig:benutzerfluss} befindlichen Rauten stellen Header (Navigationsleiste) und Footer dar.
-Hierbei wird jedoch wie folgt unterschieden: Der Header ist nur für authentifizierte Nutzer:innen zugänglich,
-d.h. dieser erscheint erst nach einem erfolgreichen Login sichtbar und verschwindet nach einem Logout wieder.
-Der Footer hingegen ist von jeder Seite der Applikation zugänglich und somit sichtbar.
+Hierbei wird jedoch wie folgt unterschieden: Der Header ist nur für \hyperref[glo:regnutzer]{authentifizierte Nutzer} zugänglich,
+d.h. dieser erscheint erst nach einem erfolgreichen Login und verschwindet nach dem Logout wieder.
+Der Footer hingegen ist von jeder Seite der Applikation zugänglich und somit immer sichtbar.
 
-Im Diagramm werden Administratoren, Editoren, Gutachter und normale Nutzende unter dem allgemeinen Begriff
-authentifizierte Nutzer:innen betrachtet.
-Sind die Verbindungspfeile nicht schwarz, sondern andersfarbig dargestellt besitzen auch nur die
-dargestellten Benutzergruppen ein Zugriffsrecht oder das Recht auf eine Aktion.
+Im Diagramm werden \hyperref[glo:admin]{Administratoren}, \hyperref[glo:editor]{Editoren}, \hyperref[glo:gutachter]{Gutachter} und normale Nutzende unter dem allgemeinen Begriff
+authentifizierte Nutzer betrachtet.
+Sind die Verbindungspfeile nicht schwarz, sondern andersfarbig dargestellt, so besitzen auch nur die
+dargestellten Benutzergruppen ein Zugriffsrecht oder das Recht auf eine Aktion. (Administratoren von dieser Regelung
+ausgeschlossen)
 
 Des Weiteren ist der Randfall zu betrachten, bei welchem ein externer Gutachter, welcher noch nicht registriert ist,
 eine Einladung eines Editors angenommen hat.
