@@ -1,6 +1,6 @@
 \localauthor{Sebastian Vogt}
 \todo{Des nummoi erklären mit den TXXX Angelegenheiten}
-\subsection{Test Setup}
+\subsection{Test Setup}\label{setup}
 Vor Ausführung jeglicher Tests sollten folgende Voraussetzungen erfüllt sein:
 \begin{itemize}
 	\item Das System ist vollständig eingerichtet.
@@ -151,17 +151,6 @@ Die Einstellungen, die von der Administratorin getroffen werden, können so im F
 
 \end{description}
 
-\subsection{Angemeldeter Nutzer II}
-
-\begin{description}
-
-	\XXitem{/T110/}{t110} \emph{Testet \hyperref[funkt:480]{/F480/}}.
-	Nun meldet sich die Nutzerin vogt@fim.uni-passau.de an und navigiert zur Seite der Einreichung ``Wichtiges Papier''.
-	Dort ist das Gutachten von schicho@fim.uni-passau.de sichtbar. Nach Betätigung der Download Schaltfläche wird die PDF-Datei \emph{gutachten.pdf} vom Browser heruntergeladen.
-	Die Nutzerin meldet sich wieder vom System ab.
-
-\end{description}
-
 \subsection{Anonyme Nutzer}
 
 \begin{description}
@@ -173,6 +162,33 @@ Die Einstellungen, die von der Administratorin getroffen werden, können so im F
 	\XXitem{/T220/}{t220} \emph{Testet \hyperref[funkt:070]{/F070/}}. Er klickt auf den Bestätigungslink in der E-Mail und wird auf die Verifizierungsseite weitergeleitet.
 	Damit ist sein Profil erstellt.
 	Er wird automatisch auf die Homepage weitergeleitet.
-	\XXitem{/T230/}{t230} \emph{Testet \hyperref[funkt:260]{/F260/}}. Da er als Ko-Autor in Test \hyperref[t050]{/T050/} eingetragen wurde, wird ihm das Paper auf der Homepage angezeigt.
+	\XXitem{/T230/}{t230} \emph{Testet \hyperref[funkt:260]{/F260/}}. Da er als Ko-Autor in Test \hyperref[t050]{/T050/} eingetragen wurde, wird ihm das Paper auf der Homepage angezeigt. Der Nutzer meldet sich ab.
 \end{description}
+
+\subsection{Angemeldeter Nutzer II}
+
+\begin{description}
+
+	\XXitem{/T110/}{t110} \emph{Testet \hyperref[funkt:480]{/F480/}}.
+	Nun meldet sich die Nutzerin vogt@fim.uni-passau.de an und navigiert zur Seite der Einreichung ``Wichtiges Papier''.
+	Dort ist das Gutachten von schicho@fim.uni-passau.de sichtbar.
+	Nach Betätigung der Download Schaltfläche wird die PDF-Datei \emph{gutachten.pdf} vom Browser heruntergeladen.
+
+	\XXitem{/T120/}{t120} \emph{Testet \hyperref[funkt:230]{/F230/}}.
+	Auf der Navigationsleiste klickt die Nutzerin nun den Link, der zum Profil führt.
+	Die Profil-Seite wird angezeigt.
+	Die Nutzerin betätigt nun die Schaltfläche zur Löschung des Kontos.
+	Daraufhin wird eine Warnung angezeigt, dass dies sowohl alle Einreichungen löscht, als auch die Editoren und Gutachter der eingereichten Paper per E-Mail benachrichtigt.
+	Die Nutzerin akzeptiert diese Nachricht und wird auf die Anmeldeseite weitergeleitet.
+	Der Nutzer schicho@fim.uni-passau.de hat nun eine E-Mail über die Löschung des Nutzers erhalten.
+	Er meldet sich wieder ab.
+	Die Administratorin meldet sich nun im System an, navigiert über die Navigationsleiste zur Liste der wissenschaftlichen Foren und von dort auf auf ``Chemie Tagung''. Dort stellt er fest, dass keine Paper existieren.
+
+\end{description}
+
+\subsection{Reset}
+Der Programmzustand, der im Abschnitt \emph{\hyperref[setup]{Setup}} beschrieben ist, muss nach den Tests wiederhergestellt werden.
+Dies ermöglicht eine weitere korrekte Durchführung der Tests.
+
+
 
