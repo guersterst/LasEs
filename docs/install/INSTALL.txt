@@ -41,7 +41,7 @@ eine Konfigurationsdatei namens Config.ini finden.
 Hier können sie nach dem Key, Value Prinzip die nötigen Konfigurations-
 informationen angeben. Das Schema ist immer Key=Value.
 
-Hier müssen sie nun die IP-Adresse Ihres PostgreSQL Servers und die
+Hier müssen Sie nun die IP-Adresse Ihres PostgreSQL Servers und die
 Zugangsdaten hinterlegen und speichern.
 
 4. Starten der Anwendung
