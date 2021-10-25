@@ -1,8 +1,4 @@
-%todo Erstellen eines Nutzerprofils als admin? -> FW
 %todo längere einträge in listen aufsplitten
-%todo suchen jeweils mit dropdown
-%todo ablehnung -> aus Forum entfernt -> auf startseite des nutzers zu sehen
-%todo fw? nutzer einreichung zurücknehmen
 \localauthor{Johannes Garstenauer}
 
 
@@ -111,7 +107,7 @@ Es stehen außerdem folgende weitere Funktionen zur Verfügung.
 \begin{description}
     \XXitem{/F250/}{funkt:250} Die Startseite ist zu jeder Zeit über die Kopfzeile erreichbar.
     \XXitem{/F260/}{funkt:260} Ein Nutzer bekommt auf der Startseite alle Namen von wissenschaftlichen Foren,
-    für die er aktive Einreichungen hat, in einer Listensicht angezeigt.
+    für die er aktive Einreichungen hat (d.h. Ersteller oder Ko-Autor), in einer Listensicht angezeigt.
     Die Namen, das Datum und der Status dieser aktiven Einreichungen werden unter den Namen der wissenschaftlichen
     Foren angezeigt.
     \XXitem{/F270/}{funkt:270} Die Einreichungen lassen sich nach Namen und Datum und Status
@@ -150,12 +146,22 @@ Es stehen außerdem folgende weitere Funktionen zur Verfügung.
 \subsubsection{Einreichungserstellung}
 \begin{description}
     \XXitem{/F410/}{funkt:410} Der Nutzer kann eine Einreichung im System erstellen. Hierzu gibt er in einem
-    Formular die nötigen Informationen wie Namen der Einreichung, Namen und E-Mail Adressen der Ko-Autoren,
-    sowie den gewünschten Editor an. Der Editor wird nach erfolgreicher Erstellung hierüber durch eine
+    Formular die nötigen Informationen wie Name der Einreichung, Namen und E-Mail Adressen der Ko-Autoren,
+    sowie den gewünschten Editor, durch ein Dropdown-Menü, an. Der Editor wird nach erfolgreicher Erstellung hierüber durch eine
     automatisierte Mail informiert.
-    \XXitem{/F420/}{funkt:420} Der Nutzer lädt seine Einreichung in Form einer PDF hoch. Die Abgabe darf eine Dateigröße
-    von 20MB nicht überschreiten und muss im PDF-Format erfolgen.
+    \XXitem{/F420/}{funkt:420} Der Nutzer lädt seine Einreichung in Form eines PDF hoch. Die Abgabe darf eine Dateigröße
+    von 20MB nicht überschreiten (dieser Wert ist nicht konfigurierbar) und muss im PDF-Format erfolgen.
     \XXitem{/FW430/}{funkt:430} Der Nutzer kann bei Einreichung gewünschte Gutachter vorschlagen.
+    \XXitem{/F435/}{funkt:435} Der Nutzer kann bei Einreichung seine Ko-Autoren angeben.
+    \XXitem{/F436/}{funkt:436} Die Angabe von Ko-Autoren und Gutachtern erfolgt über ein Dropdown-Menü, welches
+    nach Namen und E-Mailadressen durchsuchbar ist (optional auch nach Spezialgebieten und Arbeitgebern \hyperref[funkt:240]{/FW240/})
+    oder über ein Eingabefeld für E-Mailadressen. Zweiteres ist vorgesehen für (noch) unregistrierte Personen.
+    \XXitem{/F437/}{funkt:437} Ko-Autoren werden mittels einer automatisierten E-Mail informiert. Wenn sie bereits
+    registriert sind gelangen sie über einen Link in der E-Mail auf die Seite der Einreichung bzw. auf die Seite des Logins,
+    falls keine aktive angemeldete Session besteht.
+    Falls unregistriert, gelangt der anonyme Nutzer über den Link zur Seite der Registration. Nach Accounterstellung
+    erscheint die Einreichung, für welche er als Ko-Autor fungiert, auf der Startseite.
+    Alternativ kann für Ko-Autoren und Gutachter auch nur Name und E-Mailadresse angegeben werden.
     \XXitem{/F440/}{funkt:440} Durch Absenden des Formulars wird der Editor des wissenschaftlichen Forums
     informiert. Das Datum der Einreichung wird auf das Datum zum Zeitpunkt der Einreichung festgelegt.
     \XXitem{/F450/}{funkt:450} Die Einreichung ist erfolgreich, wenn alle Felder ausgefüllt sind und eine PDF
@@ -166,9 +172,10 @@ Es stehen außerdem folgende weitere Funktionen zur Verfügung.
 
 \subsubsection{Einreichung}
 \begin{description}
-    \XXitem{/F470/}{funkt:470} Dem Nutzer werden Informationen zu seiner Einreichung angezeigt.
+    \XXitem{/F470/}{funkt:470} Dem Nutzer werden Informationen \hyperref[d025]{/D025/} zu seiner Einreichung angezeigt.
     Hierzu gehören der Status der Einreichung, das Datum der Einreichung, das zugehörige
-    wissenschaftliche Forum, Namen und E-Mail Adressen der Ko-Autoren, sowie ein Download zur Einreichung.
+    wissenschaftliche Forum, Namen und E-Mail Adressen der Ko-Autoren, ggf. eine Deadline für Gutachten,
+    sowie ein Download zur Einreichung.
     \XXitem{/F480/}{funkt:480} Außerdem werden die freigeschalteten Gutachten in einer
     Liste dargestellt, zusammen mit ihrem Erstellungsdatum, Gutachterempfehlung und Download \hyperref[d040]{/D040/}.
     \XXitem{/F485/}{funkt:485} Die Gutachten lassen sich nach Namen und Datum
@@ -213,7 +220,8 @@ Gutachter haben die selben Funktion wie gewöhnliche angemeldete Nutzer. Zusätz
     zugeordnet ist, diejenigen Gutachten welche er selbst erstellt hat in einer
     Liste mit ihrem Erstellungsdatum, Gutachterempfehlung und Download. Explizit nicht zu sehen sind fremde Gutachten.
     \XXitem{/F540/}{funkt:540} Der Gutachter hat zusätzlich die Möglichkeit zu einer Einreichung der er als Gutachter zugeordnet ist
-    ein Gutachten mittels eines Formulars einzureichen. Hierfür ist eine PDF hochzuladen.
+    ein Gutachten mittels eines Formulars einzureichen. Hierfür ist eine PDF hochzuladen. Dies ist möglich solange keine
+    Deadline zur Gutachtenseinreichung überschritten wurde.
     \XXitem{/FW550/}{funkt:550} Auf der Einreichungsseite von Einreichungen denen der Gutachter zugeordnet ist,
     kann er in der Liste eigene eingereichte Gutachten zurückziehen. Hieraufhin werden sie aus
     der Datenbank entfernt und nicht mehr angezeigt.
@@ -267,23 +275,30 @@ Außerdem hat ein Editor die Folgenden zusätzlichen Funktionalitäten:
 \subsubsection{Einreichung}
 \begin{description}
     \XXitem{/F680/}{funkt:680} Ein Editor kann auf der Seite einer Einreichung, welcher er als Editor zugeordnet ist,
-    in einem Formular Gutachter zuweisen. Hierzu gibt er deren E-Mail Adressen an.
-    %FW Nutzersuche (registrierte Nutzerliste durchsuchbar)
+    in einem Formular Gutachter zuweisen. Die Angabe von Gutachtern erfolgt über ein Dropdown-Menü, welches
+    nach Namen und E-Mailadressen durchsuchbar ist (optional auch nach Spezialgebieten und Arbeitgebern \hyperref[funkt:240]{/FW240/})
+    oder über ein Eingabefeld für E-Mailadressen. Zweiteres ist vorgesehen für (noch) unregistrierte Personen.
     \XXitem{/F685/}{funkt:685} Ein Ein Editor kann noch nicht freigeschaltete Gutachten einsehen und freischalten.
-    \XXitem{/F690/}{funkt:690} Wird eine E-Mail Adresse als Gutachter angegeben, so wird nach Absenden des Formulars
-    eine automatisierte Mail an diese Adresse versendet. Sie enthält eine Nachricht mit den relevanten
+    \XXitem{/F690/}{funkt:690} Wird eine E-Mail Adresse oder ein registrierter Nutzer als Gutachter angegeben,
+    so wird nach Absenden des Formulars eine automatisierte Mail an diese Adresse versendet. Sie enthält eine Nachricht mit den relevanten
     Informationen zu Einreichung, wissenschaftlichem Forum, sowie
     \begin{itemize}
         \item ... einen Link zur \textbf{Annahme der Begutachtungsanfrage} welcher, sobald geklickt,
         auf die Loginseite verweist auf der eine Nachricht des Dankes anzeigt und zur Anmeldung bzw.
-        Registrierung auffordert.
+        Registrierung auffordert, wenn der Gutachter noch unregistriert ist. Sonst leitet der Link auf die Seite der
+        Einreichung weiter. %todo link
         \item ... einen Mailto-Link zur \textbf{Ablehnung der Begutachtungsanfrage} welcher, sobald
         geklickt, einen Mailentwurf öffnet mit vorausgefülltem Empfänger (zugehöriger Editor)
         und einem Infotext in welchem ein Ablehnungsgrund eingefügt werden kann.
     \end{itemize}
+    \XXitem{/F695/}{funkt:695} Ein Editor kann einer Einreichung, welcher er als Editor zugewiesen ist, einen anderen Editor
+    über ein Dropdown-Menü zuweisen. Er selbst ist nun kein Editor dieser Einreichung mehr. Der neue Editor wird per
+    automatisierter E-Mail hierüber informiert.
     \XXitem{/F700/}{funkt:700} Ein Editor kann über Einreichungen, welcher er als Editor zugeordnet ist,
     eine Annahmeentscheidung treffen. Über diese werden beteiligte Gutachter, der Einreicher und beteiligte Ko-Autoren
     per automatisierter Mail benachrichtigt.
+    \XXitem{/F705/}{funkt:705} Ein Editor kann einer Einreichung, welcher er als Editor zugeordnet ist, eine Deadline für
+    Gutachten zuweisen oder entfernen.
 \end{description}
 
 \subsection{Administrator}
