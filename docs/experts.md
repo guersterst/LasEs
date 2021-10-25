@@ -2,5 +2,7 @@
 
 | Area of expertise | Expert |
 | ----------------- | ------ |
-| LaTeX | Thomas |
-| internationalisation | Thomas
+| LaTeX | Thomas Kirz |
+| internationalisation | Thomas Kirz |
+| Selenium | Sebastian Vogt |
+| SQL | Johann Schicho |
