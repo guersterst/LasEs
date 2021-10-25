@@ -7,25 +7,31 @@ Dokumenten. \texttt{XXX} entspricht dabei immer einer dreistelligen Zahl.
 
 \begin{description}
 
-	\XXitem{/L010/}{leist:10} Die Anwendung soll bis zu 1000 verschiedene Nutzer und 100 verschiedene Konferenzen und Journale verwalten können.
+	\XXitem{/L010/}{leist:10} Die Anwendung wird bis zu 100000 verschiedene Nutzer und 2000 verschiedene Konferenzen und Journale verwalten können.
 
-	\XXitem{/L020/}{leist:20} Die Anwendung soll bis zu 50 gleichzeitig angemeldete und auf der Webanwendnung agierende Nutzer verarbeiten können.
+	\XXitem{/L020/}{leist:20} Die Anwendung wird bis zu 50 gleichzeitig angemeldete und auf der Webanwendung agierende Nutzer verarbeiten können. Dabei wird die Reaktionszeit jeglicher Nutzerinteraktion mit der Webanwendung nicht mehr als 3 Sekunden dauern. Ausnahme davon ist die allgemeine Suchfunktion, die nicht mehr als 5 Sekunden dauert, um ein Ergebnis anzuzeigen.
 
 \end{description}
 
 \subsection{Usability}
 
 \begin{description}
-	\XXitem{/L030/}{leist:30} Die Benutzeroberfläche soll intuitiv zu bedienen sein und pro Seite nur gezielt Informationen anzeigen, die der Nutzer sehen will, und nicht überladen sein.
+	\XXitem{/L030/}{leist:30} Die Benutzeroberfläche ist intuitiv zu bedienen sein und zeigt pro Seite nur gezielt Informationen, die der Nutzer sehen will, und ist nicht überladen.
 
-	\XXitem{/L040/}{leist:40} Lange Listen sollen paginiert werden. Das heißt sie sind über mehrere Seiten aufgeteilt. Ein solcher Umbruch findet nach je 25 Listeneinträgen statt.
+	\XXitem{/L040/}{leist:40} Lange Listen werden paginiert. Das heißt sie sind über mehrere Seiten aufgeteilt. Ein solcher Umbruch findet nach je 25 Listeneinträgen statt.
+
+	\XXitem{/L042/}{leist:042} Listen werden filterbar sein. Eine Spalte kann also auf einen bestimmten Wert gefiltert werden.
+
+	\XXitem{/L045/}{leist:045} Alle Listen sind nach ihren Spalten auf- oder absteigend sortierbar.
 
 	\XXitem{/L050/}{leist:50} Über die Kopfzeile, die auf jeder nach dem Login vorzufindenden Seite der Webanwendung
-	vorhanden ist, soll eine Suchfunktion zur Verfügung stehen.
+	vorhanden ist, steht eine Suchfunktion zur Verfügung.
 
-	\XXitem{/L055/}{leist:55} Über die Fußzeile soll zu jeder Seite eine Kurzhilfe angeboten werden. Durch einen Link wird ein neuer Tab geöffnet, der dann einen kurzen Hilfetext anzeigt.
+	\XXitem{/L055/}{leist:55} Über \emph{Tooltips} kann zu wesentlichen Funktionen der Anwendung eine Kurzhilfe eingeblendet werden. Damit können etwaige Fragen der Nutzer geklärt werden.
 
-	\XXitem{/L060/}{leist:60} Die Benutzer sollen über Fehleingaben benachrichtigt werden und diese anschließend ohne erneute Eingabe aller Daten korrigieren können.
+	\XXitem{/L060/}{leist:60} Bei fehlerhaften Eingaben wird der Nutzer informiert und kann diese ohne erneutes Eingeben korrigieren, da sie stehen bleiben. Eine Ausnahme ist die Eingabe eines neues Passworts.
+
+	\XXitem{/L062/}{leist:062} Nach erfolgreichen Datenänderungen wird der Nutzer darüber in kurzen Hinweistexten informiert.
 
 	\XXitem{/L065/}{leist:65} Die Verwendung von Cookies ist nicht zwingend erforderlich.
 \end{description}
@@ -52,12 +58,14 @@ Dokumenten. \texttt{XXX} entspricht dabei immer einer dreistelligen Zahl.
 	\XXitem{/L130/}{leist:130} Das Passwort muss 8-100 Zeichen lang sein und mindestens Groß- und Kleinbuchstaben, Zahlen und Sonderzeichen enthalten.
 
 	\XXitem{/L140/}{leist:140} Die Registrierung muss durch eine \hyperref[funkt:060]{Bestätigungsemail}, die an die vom Nutzer angegebene Email-Adresse gesendet wird, authentifiziert werden.
+
+	\XXitem{/L142/}{leist:142} Bei Änderung der hinterlegten Email-Adresse muss diese ebenfalls bestätigt werden. Dazu wird eine Bestätigungsemail an die neue Email-Adresse gesendet.
 \end{description}
 
 \subsection{Logging}
 
 \begin{description}
-	\XXitem{/L145/}{leist:145} Das System verfügt über einen detaillierten Logger, der alle Fehler während der Laufzeit des Systems sammelt. Damit soll Debugging und Fehlersuche erleichtert werden.
+	\XXitem{/L145/}{leist:145} Das System verfügt über einen detaillierten Logger, der alle Fehler und Events während der Laufzeit des Systems sammelt. Hierbei werden die Fehler in 3 verschiedene Fehlerklassen eingeteilt: \emph{Error}, \emph{Warning} und \emph{Debug}.
 \end{description}
 
 \subsection{Internationalisierbarkeit}
@@ -74,7 +82,7 @@ Dokumenten. \texttt{XXX} entspricht dabei immer einer dreistelligen Zahl.
 \subsection{Installation}
 
 \begin{description}
-	\XXitem{/L170/}{leist:170} Es gibt eine kurze Installationsanleitung für den Systemadministrator. Diese leitet weiter auf Installationsbeschreibungen der einzelnen Softwarevoraussetzungen.
+	\XXitem{/L170/}{leist:170} Es gibt eine kurze Installationsanleitung\footnote{Siehe mitgelieferte INSTALL.txt} für den Systemadministrator. Diese leitet weiter auf Installationsbeschreibungen der einzelnen Softwarevoraussetzungen.
 
-	\XXitem{/L180/}{lesit:180} Die Erstinbetriebnahme soll die Möglichkeit bieten, die benötigtem Datenbankschemata automatisch zu erstellen.
+	\XXitem{/L180/}{leist:180} Die Erstinbetriebnahme soll die Möglichkeit bieten, die benötigten Datenbankschemata automatisch zu erstellen.
 \end{description}
