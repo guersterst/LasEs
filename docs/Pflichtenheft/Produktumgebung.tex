@@ -1,13 +1,13 @@
 \localauthor{Johann Schicho}
 
 Durch die Verwendung von Java ist die serverseitige Ausführung von LasEs
-grundsätzlich plattformunabhängig.
-Die Verwendung von Anwenderseite setzt nur einen modernen Webbrowser voraus.
+grundsätzlich plattformunabhängig. Auch sind Java EE Application Server für verschiedene Plattformen verfügbar.
+Die Anwenderseite setzt nur einen modernen Webbrowser voraus, da die Verwendung von JSF den HTML 5 Standard liefert, der von allen gängigen Browsern unterstützt wird.
 
 \subsection{Hardware}
 
 \begin{itemize}
-	\item \textbf{Client:} Computer (PC oder Laptop) mit Internetanschluss, um darauf einen Webbrowser zu verwenden.
+	\item \textbf{Client:} Computer (PC oder Laptop) mit Internetanschluss, um darauf einen modernen Webbrowser zu verwenden. Die Mindestauflösung des Bildschirms muss $1280 \times 720$ Pixel betragen.
 
 	\item \textbf{Server:} Rechner mit Internetanschluss, um darauf Webserver und Datenbankserver laufen zu lassen. Datenbankserver und Webserver können auch auf zwei unterschiedlichen Rechnern ausgeführt werden.
 
@@ -44,10 +44,12 @@ Die Verwendung von Anwenderseite setzt nur einen modernen Webbrowser voraus.
 	\item \textbf{Client:} Betriebssystem (Windows, MacOS, Linux, etc.) und ein installierter Webbrowser.
 
 	\begin{itemize}
-		\item Google Chrome
-		\item Mozilla Firefox
-		\item Microsoft Edge
+		\item Google Chrome $95.0$
+		\item Mozilla Firefox $93.0$
+		\item Microsoft Edge $95.0$
 	\end{itemize}
+
+	Da der HTML 5 Standard eingehalten wird, sollten auch alle anderen Browser, die diesen Standard unterstützen, LasEs problemlos verwenden können.
 
 	\item \textbf{Datenbankserver:} Betriebssystem (Windows, Linux, etc.) mit folgenden weiteren Voraussetzungen:
 
@@ -59,15 +61,13 @@ Die Verwendung von Anwenderseite setzt nur einen modernen Webbrowser voraus.
 
 	\begin{itemize}
 		\item JDK 16 Installation
-		\item JSF Referenzimplementation Mojarra $3.0.1$ (mitgeliefert in der Anwendung)
-		\item CDI Framework Weld $4.0.2$ (mitgeliefert in der Anwendung)
-		\item JDBC (mitgeliefert in der Anwendung)
-		\item Apache Tomcat $10.0.x$ HTTP Webserver
+		\item Apache Tomcat $10.0.10$ Applicationserver
 	\end{itemize}
 
 \end{itemize}
 
-	Datenbankserver und Anwendungsserver können auf dem selben Rechner ausgeführt werden. Dazu sind dann beide Server-Softwarevoraussetzungen auf einem System zu installieren.
+	Datenbankserver und Anwendungsserver können bei ausreichend Rechnenleistung auf dem selben Rechner ausgeführt werden. Die Performance kann dadurch eingeschränkt sein. Dazu sind dann beide Server-Softwarevoraussetzungen auf einem System zu installieren.\\
+	Getestet wird ein Setup in dem Datenbankserver und Anwendungsserver getrennt sind.
 
 \subsection{Orgware}
 
@@ -76,12 +76,14 @@ Die Verwendung von Anwenderseite setzt nur einen modernen Webbrowser voraus.
 
 	\item Konfiguration der Anwendung (Erstmaliges Starten der Anwendung, Verbindung mit PostgreSQL, Erstellung des Datenbank Schemata)
 
-	\item Internetanschluss für den Webserver, der über das öffentliche \textit{freie} Internet zugänglich ist und Internetanschluss oder lokale Netzwerkverbindung zu dem Datenbankserver.
+	\item Internetanschluss mit einer Bandbreite von 1 GBit/s für den Webserver, der über das öffentliche \emph{freie} Internet zugänglich ist und genauso schneller Internetanschluss oder lokale Netzwerkverbindung zu dem Datenbankserver.
 
-	\item Verschlüsselte Kommunikation über HTTPS. Verwendung einer statischen IP-Adresse und eines vertrauenswürdigem TLS Zertifikats.
+	\item Verschlüsselte Kommunikation über HTTPS. Verwendung einer statischen IP-Adresse und eines vertrauenswürdigen TLS Zertifikats einer Zertifizierungsstelle.
 
-	\item E-Mail-Server mit E-Mail-Konto zur Versendung automatisierter Benachrichtigung.
+	\item SMTP E-Mail-Server mit E-Mail-Konto zur Versendung automatisierter Benachrichtigung.
 
-	\item E-Mail-Client auf Rechner des Benutzers um E-Mails zu anderen Benutzern versenden zu können.
+	\item Internetverbindung der Clients mit einer Bandbreite von mindestens 1 MBit/s zum Aufrufen der Webanwendung.
+
+	\item E-Mail-Client auf Rechner des Benutzers um E-Mails zu anderen Benutzern versenden und empfangen zu können.
 \end{itemize}
 
