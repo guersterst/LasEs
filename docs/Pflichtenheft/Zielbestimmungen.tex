@@ -2,25 +2,35 @@
 
 \subsection{Musskriterien}
 Ziel des Projekts ist eine Webapplikation mit Benutzeroberfläche in englischer Sprache, die von mehreren Nutzenden mit verschiedenen Rollen und Rechten benutzt werden kann.
+Alle Rollen, außer den anonymen Nutzenden, werden als authentifizierte Nutzende bezeichnet und haben zunächst grundlegende Rechte, außer sie bekleiden die Rolle eines Administrators, eines Gutachters oder eines Editors.
 
-An oberster Stelle in der Hierarchie stehen die Administratoren mit allumfassenden Rechten, welche für das Betreiben der Anwendung zuständig sind.
+Eine Erweiterung des Systems um Funktionen, die über die folgenden Kriterien hinausgehen, wie z.B.\ das Publizieren von Artikeln, soll einfach möglich sein.
+
+\subsubsection{Administratoren}
+An oberster Stelle in der Hierarchie stehen die Administratoren mit allumfassenden Rechten, welche als Betreiber der Anwendung fungieren.
 Sie können das System gemäß den Anforderungen und Wünschen des Betreibers konfigurieren und Benutzende verwalten.
 Außerdem richten sie Konferenzen und Journale ein, also Veranstaltungen bzw.\ Zeitschriften, bei denen wissenschaftliche Artikel veröffentlicht werden.
 Dafür ernennen sie jeweils Editoren, die die Einreichungen für ihre Konferenzen und Journale verwalten.
-Sie laden Gutachter für das Review von Artikeleinreichungen ein und entscheiden nach Fertigstellung des Gutachtens auf dessen Basis, ob sie angenommen oder (mit Begründung) abgelehnt werden sollen.
 
+\subsubsection{Editoren}
+Editoren können auch weitere Editoren für ein \hyperref[glo:wissForum]{wissenschaftliches Forum} ernennen.
+Sie laden Gutachter für das Review von Artikeleinreichungen ein und entscheiden nach Fertigstellung der Gutachten auf dessen Basis, ob sie angenommen oder (mit Begründung) abgelehnt werden sollen.
+
+\subsubsection{Gutachter}
 Gutachter können Einladungen zur Begutachtung einer wissenschaftlichen Arbeit annehmen oder ablehnen.
 Nehmen sie diese an, so müssen sie sich spätestens zu diesem Zeitpunkt registrieren.
-Dannach können sie das Dokument herunterladen und ihren Bericht in einem eigenen Dokument wieder hochladen.
-Außerdem stehen ihnen Tools wie einem Kommentarfeld oder die Möglichkeit, eine Empfehlung abzugeben, zur Verfügung.
+Danach können sie das Dokument herunterladen und ihren Bericht in einem eigenen PDF-Dokument bei Einhaltung einer vom Editor festgelegten Deadline wieder hochladen.
+Außerdem stehen ihnen Tools wie ein Kommentarfeld oder die Möglichkeit, eine Empfehlung abzugeben, zur Verfügung.
 
+\subsubsection{Angemeldete Nutzer}
 Einreichen kann jeder Wissenschaftler nach Registrierung und Anmeldung am System.
 Sie können mithilfe einer Liste oder Suche eine geeignete Konferenz oder ein Journal finden,
 dort können sie ihre Artikel als PDF-Datei hochladen und mit Metainformationen wie Daten der Koautoren versehen.
-Dabei suchen sie aus, welcher Editor für die Einreichung verantwortlich sein soll.
-Über eine Entscheidung der Editoren werden sie per E-Mail benachrichtigt.
+Dabei haben sie die Möglichkeit, auszusuchen, welcher Editor für die Einreichung verantwortlich sein soll.
+Über eine Entscheidung des Editors werden sie per E-Mail benachrichtigt.
 
-Eine Erweiterung des Systems um zusätzliche Funktionen wie z.B.\ das Publizieren von Artikeln soll einfach möglich sein.
+\subsubsection{Anonyme Nutzer}
+Anonyme Nutzer können sich initial nur registrieren und dann erst weitere Funktionen benutzen.
 
 Anonyme Nutzende können sich initial nur registrieren und dann erst weitere Funktionen benutzen.
 
