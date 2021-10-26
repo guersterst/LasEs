@@ -37,9 +37,10 @@ Danach können Sie Tomcat per
 
 Nun können sie unter
 <Tomcat Installationsverzeichnis>/webapps/lases
-eine Konfigurationsdatei namens Config.ini finden.
-Hier können sie nach dem Key, Value Prinzip die nötigen Konfigurations-
+eine Konfigurationsdatei namens "configuration.ini" finden.
+Hier können sie nach dem Key-Value Prinzip die nötigen Konfigurations-
 informationen angeben. Das Schema ist immer Key=Value.
+Die einzutragenden Informationen sind in der Datei näher beschrieben.
 
 Hier müssen Sie nun die IP-Adresse Ihres PostgreSQL Servers und die
 Zugangsdaten hinterlegen und speichern.
