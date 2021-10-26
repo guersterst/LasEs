@@ -1,4 +1,3 @@
-%todo längere einträge in listen aufsplitten
 \localauthor{Johannes Garstenauer}
 
 
@@ -36,9 +35,11 @@ auf die Registrierung, Anmeldung und Verifizierung im System beschränken.
     Buttons auf die Registrierungsseite navigieren.
     \XXitem{/F060/}{funkt:060} Über ein Registrierungsformular wird der Nutzer zur Eingabe seiner
     Daten aufgefordert. Verlangt wird die Eingabe eines Passworts (\hyperref[leist:130]{/L130/}),
-    sowie von Vor- und Nachname. Optional ist das Einfügen eines Avatarbildes. Letztlich muss die Emailadresse
+    sowie von Vor- und Nachname. Letztlich muss die Emailadresse
     angegeben werden, welche einzigartig im System sein muss. Durch das Absenden des Formulars wird der E-Mail Verifizierungsprozess
     \hyperref[funkt:070]{/F070/} gestartet.
+    \XXitem{/F061/}{funkt:061} Optional ist das Einfügen eines Avatarbildes nach %todo link
+    bei der Registration.
     \XXitem{/F070/}{funkt:070} Nach der Registrierung wird eine automatisierte E-Mail
     an die angegebene Mailadresse gesendet. Die Nachricht beinhaltet einen Hinweis auf
     die versuchte Registrierung sowie einen Verifizierungslink, der eine Stunde gültig ist und auf die Verifzierungsseite führt, welche
@@ -80,7 +81,7 @@ Es stehen außerdem folgende weitere Funktionen zur Verfügung.
     einem Dropdown Menü angezeigt.
 \end{description}
 
-\subsubsection{Profil}
+\subsubsection{Profil} \label{nut:profil}
 \begin{description}
     \XXitem{/F190/}{funkt:190} Über die Kopfzeile kann sich ein Benutzer zu seinem Profil navigieren.
     \XXitem{/F200/}{funkt:200} Auf der Profilseite kann der Nutzer alle dynamischen Daten \hyperref[d010]{/D010/} über dieses Profil einsehen.
@@ -89,14 +90,14 @@ Es stehen außerdem folgende weitere Funktionen zur Verfügung.
     welches über ihn gespeichert ist, persistent verändern.
     \XXitem{/F210/}{funkt:210} Bei Änderung der Mailadresse wird der E-Mailverifikationsprozess \hyperref[funkt:070]{/F070/} erneut
     begonnen. Die Mailadresse muss im System einzigartig sein.
-    \XXitem{/F220/}{funkt:220} Der Nutzer kann auf der eigenen Profilseite ein Avatarbild mit einer maximalen
+    \XXitem{/FW220/}{funkt:220} Der Nutzer kann auf der eigenen Profilseite ein Avatarbild mit einer maximalen
     Größe von 4MB hochladen oder sein altes Avatarbild entfernen oder austauschen. %todo link /D/
     \XXitem{/F230/}{funkt:230} Auf der eigenen Profilseite kann der Nutzer sein Profil und alle damit verbundenen persistenten
     Daten löschen. Auch seine Einreichungen werden gelöscht und Gutachter, sowie Editoren dieser
     Einreichung per Mail automatisiert informiert. Bevor die Löschung vollzogen wird, wird dem Nutzer
     eine Warnung über diese Konsequenzen angezeigt.
     \XXitem{/FW240/}{funkt:240} Der Nutzer kann außerdem seinen Arbeitgeber, ein oder mehrere Spezialgebiete
-    und sein Geburtsdatum angeben und verändern.
+    und sein Geburtsdatum angeben und verändern, siehe \hyperref[d015]{/DW015}.
 \end{description}
 
 \subsubsection{Startseite}
@@ -160,7 +161,6 @@ Es stehen außerdem folgende weitere Funktionen zur Verfügung.
 \begin{description}
     \XXitem{/F470/}{funkt:470} Dem Nutzer werden die Informationen \hyperref[d025]{/D025/} zu seiner Einreichung angezeigt.
     Hierzu gehören der Status der Einreichung, das Datum der Einreichung, das zugehörige
-    %todo frist für gutachten nur gutachter
     wissenschaftliche Forum, Namen und E-Mail Adressen der Ko-Autoren, ggf. eine Deadline für Gutachten und Frist für Revisionen,
     sowie ein Download zur Einreichung.
     \XXitem{/F480/}{funkt:480} Außerdem werden die freigeschalteten Gutachten in einer
@@ -208,8 +208,8 @@ Gutachter haben die selben Funktion wie gewöhnliche angemeldete Nutzer. Zusätz
     ein Gutachten mittels eines Formulars einzureichen. Hierfür ist eine PDF hochzuladen. Dies ist möglich solange keine
     Deadline zur Gutachtenseinreichung überschritten wurde.
     \XXitem{/FW550/}{funkt:550} Auf der Einreichungsseite von Einreichungen denen der Gutachter zugeordnet ist,
-    kann er in der Liste eigene eingereichte Gutachten zurückziehen. Hieraufhin werden sie aus
-    der Datenbank entfernt und nicht mehr angezeigt.
+    kann er in der Liste eigene eingereichte Gutachten zurückziehen.
+    Daraufhin werden sie aus der Datenbank entfernt und nicht mehr angezeigt.
     \XXitem{/F560/}{funkt:560} Der Einreicher und Editor werden über neue oder entfernte Gutachten mit einer automatisierten
     Mail informiert.
 \end{description}
@@ -228,14 +228,14 @@ Außerdem hat ein Editor die Folgenden zusätzlichen Funktionalitäten:
     wie für eigene Einreichungen.
 \end{description}
 
-\subsubsection{Suche}
+\subsubsection{Suche} \label{ed:suche}
 \begin{description}
     \XXitem{/F580/}{funkt:580} Ein Editor kann ebenfalls Einreichungen finden, welchen er als Editor zugeordnet ist.
     Diese sind als solche gekennzeichnet.
     \XXitem{/F590/}{funkt:590} Ein Editor kann ebenfalls Einträge zu allen Nutzern finden.
 \end{description}
 
-\subsubsection{Benutzer}
+\subsubsection{Benutzer} \label{ed:benutzer}
 \begin{description}
     \XXitem{/F600/}{funkt:600} Ein Editor kann auf die Nutzerliste nach \hyperref[leist:40]{/L040/} über die Kopfzeile zugreifen.
     \XXitem{/F640/}{funkt:640} Mit einem Klick auf einen Eintrag wird der Editor auf das zugehörige Profil navigiert.
@@ -253,6 +253,8 @@ Außerdem hat ein Editor die Folgenden zusätzlichen Funktionalitäten:
     wie in \hyperref[funkt:436]{/F436/} beschrieben auswählt.
     \XXitem{/F670/}{funkt:670} Ein Editor kann anderen Editoren den Status als Editor aberkennen,
     solange ein weiterer Editor vorhanden ist.
+    \XXitem{/F671/}{funkt:671} Ein Editor kann in einem wissenschaftlichen Forum, welchem er als Editor zugeordnet ist,
+    außerdem alle weiteren zugehörigen Daten \hyperref[d030]{/D030/} editieren.
 \end{description}
 
 \subsubsection{Einreichung}
@@ -265,11 +267,11 @@ Außerdem hat ein Editor die Folgenden zusätzlichen Funktionalitäten:
     so wird nach Absenden des Formulars eine automatisierte Mail an diese Adresse versendet. Sie enthält eine Nachricht mit den relevanten
     Informationen zu Einreichung, wissenschaftlichem Forum, sowie
     \begin{itemize}
-        \item ... einen Link zur \textbf{Annahme der Begutachtungsanfrage} welcher, sobald geklickt,
+        \item \ldots einen Link zur \textbf{Annahme der Begutachtungsanfrage} welcher, sobald geklickt,
         auf die Loginseite verweist auf der eine Nachricht des Dankes anzeigt und zur Anmeldung bzw.
         Registrierung auffordert, wenn der Gutachter noch unregistriert ist. Sonst leitet der Link auf die Seite der
         Einreichung weiter. %todo link
-        \item ... einen Mailto-Link zur \textbf{Ablehnung der Begutachtungsanfrage} welcher, sobald
+        \item \ldots einen Mailto-Link zur \textbf{Ablehnung der Begutachtungsanfrage} welcher, sobald
         geklickt, einen Mailentwurf öffnet mit vorausgefülltem Empfänger (zugehöriger Editor)
         und einem Infotext in welchem ein Ablehnungsgrund eingefügt werden kann.
     \end{itemize}
@@ -281,7 +283,7 @@ Außerdem hat ein Editor die Folgenden zusätzlichen Funktionalitäten:
     \item Über diese werden der Einreicher und beteiligte Ko-Autoren per automatisierter Mail benachrichtigt.
     \XXitem{/FW702/}{funkt:702} Ein Editor kann für Einreichungen, welchen er als Editor zugeordnet ist,
     eine Revision ("Gelb": \hyperref[d025]{/D025/}) verlangen. In diesem Fall gibt er eine Frist für die Revision an.
-    \XXitem{/FW703}{funkt:703} Ein Editor kann Revisionenn für Gutachter freischalten, sodass diese für sie sichtbar werden.
+    \XXitem{/FW703}{funkt:703} Ein Editor kann Revisionen für Gutachter freischalten, sodass diese für sie sichtbar werden.
     Hierüber werden die beteiligten Gutachter per automatisierter Mail informiert.
     \XXitem{/F705/}{funkt:705} Ein Editor kann einer Einreichung, welcher er als Editor zugeordnet ist, eine Deadline für
     Gutachten zuweisen oder entfernen.
@@ -289,15 +291,10 @@ Außerdem hat ein Editor die Folgenden zusätzlichen Funktionalitäten:
 
 \subsection{Administrator}
 Der Administrator besitzt zu Verwaltungszwecken umfassende Funktionalitäten. Er besitzt alle Funktionalitäten die
-einem angemeldeten Benutzer zur Verfügung stehen. Er kann ebenfalls Editorrollen und Nutzerrollen annehmen.
-Einem Administrator werden in Listen grundsätzlich alle aktiven Einträge angezeigt. Er hat ebenfalls die Funktionalitäten
-\hyperref[funkt:600]{/F600/}, \hyperref[funkt:610]{/F610/}, \hyperref[funkt:620]{/F620/}, \hyperref[funkt:630]{/F630/}
-, \hyperref[funkt:640]{/F640/} zur Ansicht der Benutzerliste.
-Außerdem besitzt ein Administrator die Funktionen \hyperref[funkt:530]{/F530/}, \hyperref[funkt:540]{/F540/},
-\hyperref[funkt:550]{/F550/}, \hyperref[funkt:560]{/F560/}, sowie \hyperref[funkt:680]{/F680/}, \hyperref[funkt:685]{/F685/},
-\hyperref[funkt:690]{/F690/}, \hyperref[funkt:700]{/F700/} und außerdem
-\hyperref[funkt:495]{/F495/} und \hyperref[funkt:496]{/F496/}
-zu Verwaltungszwecken auf allen Einreichungen.
+einem angemeldeten Benutzer zur Verfügung stehen. Er kann ebenfalls Editorrollen und Gutachterrollen annehmen.
+Einem Administrator werden in Listen grundsätzlich alle aktiven Einträge angezeigt.
+Er besitzt alle Funktionalitäten des Editors auf allen wissenschaftlichen Foren und Einreichungen, alle Funktionen eines Gutachters auf allen Einreichungen
+und zusätzlich die Folgenden.
 
 \subsubsection{Suche}
 \begin{description}
@@ -311,12 +308,10 @@ zu Verwaltungszwecken auf allen Einreichungen.
     alle aktiven Einreichungen in einer Liste dargestellt.
     Für diese Einträge gelten dieselben Funktionalitäten wie für die
     eigenen Einreichungen siehe \hyperref[funkt:370]{/F370}, \hyperref[funkt:380]{/F380/}, \hyperref[funkt:390]{/FW390/}.
-    \XXitem{/F740/}{funkt:740} Auf der Seite eines wissenschaftlichen Forums kann der Administrator alle wesentlichen Daten \hyperref[d030]{/D030/}
-    verändern. Insbesondere erfolgt hierbei die Ernennung von Editoren, welche bereits im System
-    registriert sein  müssen. Der Name des wissenschaftlichen Forums muss einzigartig sein.
+    Der Name des wissenschaftlichen Forums muss einzigartig sein.
     \XXitem{/FW750/}{funkt:750} Der Administrator kann den Look \hyperref[d051]{/D051/}
     des wissenschaftlichen Forums verändern.
-    \XXitem{/F760/}{funkt:760} Auf der Seite eines wissenschaftlichen Forums kann der Administrator diese aus dem System zu löschen.
+    \XXitem{/F760/}{funkt:760} Auf der Seite eines wissenschaftlichen Forums kann der Administrator diese aus dem System löschen.
     Hierbei wird er dazu aufgefordert seine Entscheidung ein zweites Mal zu bestätigen.
     Daraufhin werden alle zugehörigen Daten \hyperref[d030]{/D030/}, \hyperref[d051]{/D051/}
     und Einreichungen aus dem System entfernt.
@@ -330,7 +325,8 @@ zu Verwaltungszwecken auf allen Einreichungen.
     \XXitem{/FW790/}{funkt:790} Vor dem An- oder Aberkennen von Administratorrechten ist eine gültige
     Passworteingabe erforderlich.
     \XXitem{/F800/}{funkt:800} Der Administrator besitzt auf allen Profilseiten dieselben Rechte zur Änderung
-    der persistierten Daten wie ein Nutzer auf seiner eigenen Profilseite. %todo link
+    der persistierten Daten wie ein Nutzer auf seiner eigenen
+    \hyperref[nut:profil]{Profilseite (Link)}.
 \end{description}
 
 \subsubsection{Liste der Wissenschaftlichen Foren}
