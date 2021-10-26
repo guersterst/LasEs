@@ -7,16 +7,22 @@
 <body>
 
 <div id="headline" class="headline">
-    <h1>Kurzhilfe LasEs</h1>
+    <h1>Vorläufiges Handbuch zu LasEs</h1>
+    <h3>[Johann Schicho]</h3>
 </div>
+
 
 <div class="align-container">
     <div class="main-container">
 
+        <div id="login-process" class="topic">
+            <h2>Login Prozess</h2>
+        </div>
+
         <div id="login" class="entry">
             <h2>Login</h2>
             <p class="helptext">
-                Auf der Loginseite können Sie sich mit Ihrem Nutzernamen und Passwort anmelden.
+                Auf der Loginseite können Sie sich mit Ihrer E-mailadresse und Passwort anmelden.
                 Nach Eingabe der Daten gelangen Sie durch Klicken des Knopfes "Login" auf die Homepage. <br>
                 Sollten Sie noch kein Benutzerkonto besitzen, so müssen Sie sich zuvor registrieren.
             </p>
@@ -26,23 +32,27 @@
             <h2>Registrieren</h2>
             <p class="helptext">
                 Hier können Sie sich bei dem System erstmalig registrieren.<br>
-                Dafür müssen Sie Ihre Emailadresse, vollständigen Namen, einen von Ihnen gewählten Nutzernamen
+                Dafür müssen Sie Ihre E-mailadresse, vollständigen Namen
                 und ein neues Passwort angeben. Durch Klicken des Knopfes "Registrieren" werden Sie registriert. <br>
-                Anschließend erhalten Sie eine Email an Ihre zuvor genannte Emailadresse, um sicher zu gehen, dass
-                Ihre Emailadresse valide ist.<br>
-                In der gesandten Email befindet sich ein Bestätigungslink. Durch Aufrufen des Links wird ihr
+                Anschließend erhalten Sie eine E-mail an Ihre zuvor genannte E-mailadresse, um sicher zu gehen, dass
+                Ihre E-mailadresse valide ist.<br>
+                In der gesandten E-mail befindet sich ein Bestätigungslink. Durch Aufrufen des Links wird ihr
                 Benutzerkonto
-                verifiziert und final erstellt und Sie können sich fortan mit ihrer Emailadresse und Passwort anmelden.
+                verifiziert und final erstellt und Sie können sich fortan mit ihrer E-mailadresse und Passwort anmelden.
             </p>
         </div>
 
         <div id="verification" class="entry">
             <h2>Verifizierung</h2>
             <p class="helptext">
-                Sobald Sie diese Seite über einen Link der Ihner per Email zugesendet wurde aufrufen, ist Ihr Konto
-                verifiziert.
+                Auf diese Seite gelangen Sie durch den Bestätigungslink in der Ihnen zugesandten E-mail.
+                Sobald Sie diese Seite aufrufen, ist Ihr Konto verifiziert. Ihr Konto ist nun vollständig einsetzbar.
                 Anschließend werden Sie auf die Homepage weitergeleitet.
             </p>
+        </div>
+
+        <div id="header-and-footer" class="topic">
+            <h2>Kopf- und Fußzeile</h2>
         </div>
 
         <div id="nav-header" class="entry">
@@ -54,10 +64,6 @@
                 Außerdem können Sie Ihr Profil aufrufen.
                 Über die Suchleiste können Sie Journale und Konferenzen, sowie Ihre Paper finden.
                 Darüber hinaus können Sie auch eine Liste alle Journale und Konferenzen aufrufen.
-                <br><br>
-                Editor:innen und Administrator:innen können zusätzlich noch eine Liste aller Nutzer aufrufen.
-                Administrator:innen können weiter noch auf die Administrationsseite gelangen, um die Einstellungen der
-                Anwendung zu ändern.
             </p>
         </div>
 
@@ -65,7 +71,7 @@
             <h2>Fußzeile</h2>
             <p class="helptext">
                 Die Fußzeile befindet sich immer am unteren Bildschirmrand.
-                Hierüber erreichen Sie immer diese Hilfeseite und das Impressum.
+                Hierüber erreichen Sie das Impressum.
                 Außerdem können Sie hier die Sprache ändern.
             </p>
         </div>
@@ -77,56 +83,90 @@
             </p>
         </div>
 
+        <div id="functions-overview" class="topic">
+            <h2>Funktionen und Übersicht</h2>
+        </div>
+
+        Die einzelnen Nutzergruppen sind nach ihren Nutzungsrechten und Bearbeitungsrechten auf
+        der Website kaskadierend aufgebaut. Das heißt die Funktionen, die einem einfachen Benutzer
+        zur Verfügung stehen, stehen auch einem Gutachter, Editor und Administrator zur Verfügung.
+        <br><br>
+        Dabei ist die Hierarchie so aufgebaut: Nutzer < Gutachter < Editor < Administrator.
+        <br><br>
+        Wobei eben Links die Benutzergruppe mit den wenigeren Rechten und Funktion steht und Rechts
+        die Gruppe mit allen Rechten und Funktionen.<br>
+        In diesem Handbuch werden also Funktionen die der einfachen Nutzergruppe zur Verfügung stehen, nicht
+        nochmals explizit bei höherrangigen Gruppen erwähnt, sondern sind implizit inkludiert.
+
+        <div id="functions-user" class="topic">
+            <h2>Funktionen Nutzer</h2>
+        </div>
+
+        <div id="list-functions" class="entry">
+            <h2>Listen</h2>
+            <p class="helptext">
+                In mehreren folgenden Beschreibungen wird über Listen gesprochen.
+                Alle Listen in LasEs sind nach ihren einzelnen Spalten auf- oder absteigend
+                sortierbar. Außerdem sind die Listen nach ihren Kategorien filterbar.
+                Beispielsweise kann eine Liste mit allen Journalen und Konferenzen nach einem
+                bestimmten Thema, z.B. Informatik, gefiltert werden. Darüber hinaus sind lange
+                Listen paginiert. Nach je 25 Listeneinträgen werden die nächsten Listeneinträge
+                durch Klicken auf die nächste Seite angezeigt.
+            </p>
+        </div>
+
         <div id="homepage-user" class="entry">
-            <h2>Homepage Benutzer</h2>
+            <h2>Homepage</h2>
             <p class="helptext">
-                Hier gibt es die Übersicht über die eigenen Papers sortiert nach den
-                einzelnen Konferenzen und Journalen.
+                Hier gibt es die Übersicht über die eigenen Papers in einer Liste.
                 <br>
                 Durch Klicken auf ein Paper kann die Übersicht über den aktuellen Reviewprozess
                 aufgerufen werden.
             </p>
         </div>
 
-        <div id="homepage-reviewer" class="entry">
-            <h2>Homepage Gutachter</h2>
+        <div id="new-submission" class="entry">
+            <h2>Neue Einreichung</h2>
             <p class="helptext">
-                Hier gibt es in der linken Spalte die Übersicht über die eigenen Papers sortiert nach den
-                einzelnen Konferenzen und Journalen.
+                Hier kann ein Paper eingereicht werden.
+                Hier können sie Ihr Paper als PDF Datei hochladen, den Titel des Papers, E-mailadressen der
+                Ko-Autoren angeben und einen Editor festlegen.
+                Alle Felder müssen ausgefüllt sein, bis auf die optionalen Ko-Autoren.
                 <br>
-                Durch Klicken auf ein Paper kann die Übersicht über den aktuellen Reviewprozess
-                aufgerufen werden.
+                Durch drücken des Submit-Knopfes wird das Paper dann eingereicht und in Zukunft reviewt.
+            </p>
+        </div>
+
+        <div id="submission-overview" class="entry">
+            <h2>Einreichungsübersicht</h2>
+            <p class="helptext">
+                Hier ist die Übericht über ein eigenes Paper.
+                In der Liste werden alle zugehörigen Einträge zum Annahmeverfahren gelistet.
+                Der erste Eintrag ist Ihr eigenes Paper.
+                Eine Art Ampelsystem zeigt den Zustand ihres Papers im Gutachtungsverfahren.
                 <br>
-                In der rechten Spalte sind alle Papers für die Sie als Gutachter beantragt worden sind.
-                Durch Klicken auf ein Paper kommen Sie auf die zugehörige Übersichtsseite.
+                Die Ampel ist farblos direkt nach der Einreichung. Nach Eingang der Reviews ist die
+                Ampel gelb, falls Änderungen verlangt werden.
+                Die Ampel ist grün, wenn das Paper akzeptiert ist.
+                Die Ampel ist rot, wenn das Paper abgelehnt worden ist.
+                Alle folgenden Einträge in der Liste sind fertiggestellte Reviews von Peers.
             </p>
         </div>
 
-        <div id="administration" class="entry">
-            <h2>Administrierung</h2>
+        <div id="profile" class="entry">
+            <h2>Profil</h2>
             <p class="helptext">
-                Hier können Sie als Administrator:in die Einstellungen der Website ändern,
-                das Impressum bearbeiten, das Farbschema ändern, neue Konferenzen und Journale anlegen.
+                Über die Kopfzeile oben rechts gelangen sie auf Ihr Profil.
+                Hier können Sie Ihren hinterlegten Namen, E-Mailadresse und Passwort ändern.
             </p>
         </div>
 
-        <div id="result-list" class="entry">
-            <h2>Suchergebnisse</h2>
+        <div id="search" class="entry">
+            <h2>Suche</h2>
             <p class="helptext">
-                Nach der Suche eines Suchbegriffs gelangen Sie auf die Ergebnisseite.
-                Hier finden Sie dann Ihre Journale und Konferenzen und Papers die zu Ihrem Suchbegriff passen.
-                <br><br>
-                Administrator:innen und Editor:innen können zusätzlich noch alle Benutzer finden.
-            </p>
-        </div>
-
-        <div id="new-scientific-forum" class="entry">
-            <h2>Neues Journal/Konferenz</h2>
-            <p class="helptext">
-                Hier können Sie als Administrator:in ein neues Journal oder neue Konferenz anlegen.
-                Dazu müssen Sie mindestens eine:n initialen Editor:in angeben.<br>
-                Außerdem können Sie eine Kurzbeschreibung hinzufügen und die zugehörige Website des Journals/Konferenz
-                verlinken.
+                In der Kopfzeile gibt es eine Suchfunktion.
+                Darüber können sie Journale, Konferenzen und Ihre eigenen Papers finden.
+                Alle Ergebnisse werden in einer Liste angezeigt.
             </p>
         </div>
 
@@ -143,48 +183,49 @@
             <p class="helptext">
                 Hier können Sie die Kurzbeschreibung lesen und die Website des Journals/Konferenz finden.
                 Außerdem sehen Sie alle Ihre eingereichten Papers.
-                <br><br>
-                Editoren können alle dazu eingereichten Paper sehen.
-                <br><br>
-                Gutachter sehen alle eingereichten Paper, zu denen Sie ein Gutachten schreiben sollen.
             </p>
         </div>
 
-        <div id="submission-overview" class="entry">
-            <h2>Einreichungsübersicht</h2>
+        <div id="functions-reviewer" class="topic">
+            <h2>Funktionen Gutachter</h2>
+        </div>
+
+        <div id="homepage-reviewer" class="entry">
+            <h2>Homepage Gutachter</h2>
             <p class="helptext">
-                Hier ist die Übericht über ein eigenes Paper.
-                Der erste Eintrag ist Ihr eigenes Paper.
-                Eine Art Ampelsystem zeigt den Zustand ihres Papers im Gutachtungsverfahren.
-                <br>
-                Die Ampel ist farblos direkt nach der Einreichung. Nach Eingang der Reviews ist die
-                Ampel gelb, falls Änderungen verlangt werden.
-                Die Ampel ist grün, wenn das Paper akzeptiert ist.
-                Die Ampel ist rot, wenn das Paper abgelehnt worden ist.
-                Alle folgenden Einträge in der Liste sind fertiggestellte Reviews von Peers.
+                Zusätzlich zur Übersicht über Ihre eigenen Papers können Sie über den Reiter über der Liste
+                auf die Liste der Papers umschalten, für welche Sie Gutachten schreiben sollen.
+                Dabei sehen Sie den Status der Papers und gelangen durch Klicken auf die jeweilige
+                Einreichungsseite.
             </p>
         </div>
 
-        <div id="new-submission" class="entry">
-            <h2>Neue Einreichung</h2>
+        <div id="upload-review" class="entry">
+            <h2>Gutachten einreichen</h2>
             <p class="helptext">
-                Hier kann ein Paper eingereicht werden.
-                Es steht zur Auswahl ein Upload für ein PDF (Ihr Paper), eine Eingabe Zeile für den Titel Ihres Papers,
-                die Auswahl der Konferenz, E-Mailadressen von Koautoren, festlegen des Editors und optional einen
-                Gutachter
-                vorschlagen.<br>
-                Alle Felder müssen ausgefüllt sein, bis auf die optionalen Koautoren und vorgeschlagenen Gutachter.
-                <br>
-                Durch drücken des Submit-Knopfes wird das Paper dann eingereicht und in Zukunft reviewt.
+
             </p>
         </div>
 
-        <div id="profile" class="entry">
-            <h2>Profil</h2>
+        <div id="functions-editor" class="topic">
+            <h2>Funktionen Editor</h2>
+        </div>
+
+        <div id="administration" class="entry">
+            <h2>Administrierung</h2>
             <p class="helptext">
-                Hier ist die Übersicht über Ihr Profil.
-                Hier können Sie Ihren hinterlegten Namen, E-Mailadresse und Profilbild ändern.
-                Speichern Sie Änderungen durch Klicken des Speichernknopfes.
+                Hier können Sie als Administrator:in die Einstellungen der Website ändern,
+                das Impressum bearbeiten, das Farbschema ändern, neue Konferenzen und Journale anlegen.
+            </p>
+        </div>
+
+        <div id="new-scientific-forum" class="entry">
+            <h2>Neues Journal/Konferenz</h2>
+            <p class="helptext">
+                Hier können Sie als Administrator:in ein neues Journal oder neue Konferenz anlegen.
+                Dazu müssen Sie mindestens eine:n initialen Editor:in angeben.<br>
+                Außerdem können Sie eine Kurzbeschreibung hinzufügen und die zugehörige Website des Journals/Konferenz
+                verlinken.
             </p>
         </div>
 

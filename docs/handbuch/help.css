@@ -1,7 +1,20 @@
 .headline {
     font-family: "Lucida Console", "Courier New", monospace;
     text-align: center;
+    font-size: large;
+    font-weight: bold;
     border: none;
+    margin-bottom: 1cm;
+    margin-top: 1cm;
+    text-decoration: underline;
+}
+
+.topic {
+    font-family: "Lucida Console", "Courier New", monospace;
+    font-size: 15pt;
+    font-weight: bold;
+    text-decoration: underline;
+    margin-top: 2cm;
 }
 
 .align-container {
