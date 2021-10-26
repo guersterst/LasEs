@@ -11,7 +11,7 @@
 
 .topic {
     font-family: "Lucida Console", "Courier New", monospace;
-    font-size: 15pt;
+    font-size: 16pt;
     font-weight: bold;
     text-decoration: underline;
     margin-top: 2cm;
@@ -26,4 +26,8 @@
     font-size: 15pt;
     margin: 0 auto;
     max-width: 30cm;
+}
+
+.helptext {
+    margin-left: 0.5cm;
 }
