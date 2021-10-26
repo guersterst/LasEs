@@ -4,23 +4,88 @@ Die Notation \texttt{/DXXX/} erlaubt eine spätere Referenzierung der einzelnen 
 Dokumenten. \texttt{/DXXX/} steht dabei für ein Musskriterium, \texttt{/DWXXX/} für ein Wunschkriterium. \texttt{XXX} entspricht dabei immer einer dreistelligen Zahl.
 
 \begin{description}
-	\XXitem{/D010/}{d010} Für jeden \emph{Nutzer} sind folgende Informationen gespeichert: \hyperref[funkt:nutzer]{Nutzerrolle}, Titel, Vorname, Nachname, E-Mail Adresse, sowie die Menge aller \hyperref[d025]{Einreichungen}.
 
-	\XXitem{/DW015/}{d015} Für jeden Nutzer wird darüber hinaus Arbeitgeber, Spezialgebiet und Geburtsdatum abgespeichert. Siehe \hyperref[funkt:240]{/FW240/}
+	\XXitem{/D010/}{d010} Für jeden \emph{Nutzer} sind folgende Informationen gespeichert:
+	\begin{itemize}
+		\item \hyperref[funkt:nutzer]{Nutzerrolle}
+		\item Titel
+		\item Vorname
+		\item Nachname
+		\item E-Mail-Adresse
+		\item Menge aller \hyperref[d025]{Einreichungen}
+	\end{itemize}
 
-	\XXitem{/D020/}{d020} Für jedes \emph{Manuskript} sind folgende Informationen abgespeichert: Der Titel, die Namen und E-Mail Adressen der Co-Autoren und die zugehörige PDF-Datei.
+	\XXitem{/DW015/}{d015} Für jeden Nutzer wird darüber hinaus gespeichert:
+	\begin{itemize}
+		\item Avatarbild
+		\item Arbeitgeber
+		\item Spezialgebiet
+		\item Geburtsdatum
+	\end{itemize}
+	Siehe \hyperref[funkt:240]{/FW240/}.
 
-	\XXitem{/D025/}{d025} Für jede \emph{Einreichung} wird das zugehörige \hyperref[d020]{Manuskript}, der Zeitpunkt der Einreichung, das zugehörige \hyperref[d030]{wissenschaftliche Forum}, der \hyperref[funkt:editor]{Editor} der Einreichung, der Status der Einreichung (\emph{schwarz}: Eingereicht, \emph{gelb}: Revision verlangt, \emph{rot}: Abgelehnt, \emph{grün}: Angenommen), die Gutachter, die Abgabefrist für \hyperref[d040]{Gutachten} und die abgegebenen \hyperref[d040]{Gutachten} gespeichert.
+	\XXitem{/D020/}{d020} Für jedes \emph{Manuskript} sind folgende Informationen abgespeichert:
+	\begin{itemize}
+		\item der Titel
+		\item die Namen und E-Mail Adressen der Ko-Autoren
+		\item die zugehörige PDF-Datei
+		\item eine Versionsnummer
+	\end{itemize}
 
-	\XXitem{/DW021/}{d021} Für jede \emph{Einreichung} sind zusätzlich folgende Informationen abgespeichert: Frist für das Einreichen einer erneuten Revision, alle Revisionen (in Form von \hyperref[d020]{Manuskripten}) und die Information, ob diese Revisionen bereits für die Gutachter freigeschaltet sind.
+	\XXitem{/D025/}{d025} Für jede \emph{Einreichung} wird gespeichert:
+	\begin{itemize}
+		\item das zugehörige \hyperref[d020]{Manuskript}
+		\item der Zeitpunkt der Einreichung
+		\item das zugehörige \hyperref[d030]{wissenschaftliche Forum}
+		\item der \hyperref[funkt:editor]{Editor} der Einreichung
+		\item der Status der Einreichung (\emph{schwarz}: Eingereicht, \emph{gelb}: Revision verlangt, \emph{rot}: Abgelehnt, \emph{grün}: Angenommen)
+		\item die Gutachter
+		\item die Abgabefrist für \hyperref[d040]{Gutachten}
+		\item die abgegebenen \hyperref[d040]{Gutachten}
+		\item eine Deadline für Gutachten
+	\end{itemize}
 
-	\XXitem{/DW022/}{d022} Ein \emph{Einreichung} speichert zusätzlich, welche Nutzer als Gutacher vorgeschlagen sind. Diese Werden mit Vorname, Nachname und E-Mail Adresse gespeichert, da sie nicht als Nutzer in der Datenbank existieren müssen.
+	\XXitem{/DW021/}{d021} Für jede \emph{Einreichung} sind zusätzlich folgende Informationen abgespeichert:
+	\begin{itemize}
+		\item Frist für das Einreichen einer erneuten Revision
+		\item alle Revisionen (in Form von \hyperref[d020]{Manuskripten})
+		\item die Information, ob diese Revisionen bereits für die Gutachter freigeschaltet sind
+	\end{itemize}
 
-	\XXitem{/D030/}{d030} Für jedes \emph{wissenschaftliche Forum} ist der Name, die zugehörigen Editoren (mit deren Emailadressen), die Deadline für \hyperref[d025]{Einreichungen}, eine Kurzbeschreibung, eine URL zur Website des Forums und eine Anleitung zur Begutachtung gespeichert.
+	\XXitem{/DW022/}{d022} Eine \emph{Einreichung} speichert zusätzlich, welche Nutzer als Gutachter vorgeschlagen sind.
+	Falls diese noch nicht als Nutzer im System existieren, werden folgende Daten pro Gutachter gespeichert:
+	\begin{itemize}
+		\item Vorname
+		\item Nachname
+		\item E-Mail-Addresse
+	\end{itemize}
 
-	\XXitem{/D040/}{d040} Für jedes \emph{Gutachten} wird der Inhalt des Gutachtens als PDF gespeichert, ein Kommentar als Freitext und zusätzlich noch der zugehörige \hyperref[funkt:Gutachter]{Gutachter} und die zugehörige \hyperref[d025]{Einreichung} und ob das Gutachten zur Ansicht für den Einreichenden freigeschaltet ist.
+	\XXitem{/D030/}{d030} Für jedes \emph{wissenschaftliche Forum} ist folgendes gespeichert:
+	\begin{itemize}
+		\item der name
+		\item die zugehörigen Editoren (mit deren Emailadressen)
+		\item die Deadline für \hyperref[d025]{Einreichungen}
+		\item eine Kurzbeschreibung
+		\item eine URL zur Website des Forums
+		\item eine Anleitung zur Begutachtung
+	\end{itemize}
 
-	\XXitem{/D050/}{d050} Systemweit ist das Logo und der Name der betreibenden Einrichtung, das Farbschema der Kopf- und Fußzeile und das Impressum gespeichert.
+	\XXitem{/D040/}{d040} Für jedes \emph{Gutachten} wird gespeichert:
+	\begin{itemize}
+		\item der Inhalt des Gutachtens als PDF
+		\item ein Kommentar als Freitext
+		\item der zugehörige \hyperref[funkt:Gutachter]{Gutachter}
+		\item die zugehörige \hyperref[d025]{Einreichung}
+		\item die Information, ob das Gutachten zur Ansicht für den Einreichenden freigeschaltet ist
+	\end{itemize}
+
+	\XXitem{/D050/}{d050} Systemweit ist gespeichert:
+	\begin{itemize}
+		\item das Logo der betreibenden Einrichtung
+		\item der Name der betreibenden Einrichtung
+		\item das Farbschema der Kopf- und Fußzeile
+		\item das Impressum
+	\end{itemize}
 
 	\XXitem{/DW051/}{d051} Die gespeicherten Informationen aus \hyperref[d050]{/D050/} sind für jedes \hyperref[d030]{wissenschaftliche Forum} separat gespeichert.
 \end{description}
