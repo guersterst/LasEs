@@ -2,12 +2,13 @@
 \localauthor{Johannes Garstenauer}
 
 
-Die Funktionalität vom LasEs-System soll nach den Benutzerrollen
+Die Funktionalität vom LasEs-System wird nach den Benutzerrollen
 \textit{anonymer Nutzer}, \textit{angemeldeter Nutzer}, \textit{Gutachter}, \textit{Editor}, und
 \textit{Administrator} untergliedert werden.
 
-Es gilt darüber hinaus, dass alle Funktionen eines einfachen \hyperref[glo:regnutzer]{angemeldeten Nutzers} auch den höherrangigen Benutzern, wie \hyperref[glo:editor]{Editoren}
-und \hyperref[glo:admin]{Administratoren}, zur Verfügung stehen. Diese hierarchische Ordnung wird im Folgenden genauer spezifiziert.
+Es gilt darüber hinaus, dass alle Funktionen eines einfachen \hyperref[glo:regnutzer]{angemeldeten Nutzers} auch den höherrangigen Benutzern, wie
+\hyperref[glo:editor]{Editoren} und \hyperref[glo:admin]{Administratoren}, zur Verfügung stehen.
+Diese hierarchische Ordnung wird im Folgenden genauer spezifiziert.
 Die Funktionen werden nach dem Schema /FXXX/ bzw. /FWXXX/ für Wunschfunktionen benannt, wobei XXX eine dreistellige Ganzzahl ist.
 
 \subsection{Anonymer Nutzer}\label{funkt:nutzer}
@@ -16,23 +17,22 @@ auf die Registrierung, Anmeldung und Verifizierung im System beschränken.
 
 \subsubsection{Allgemein}
 \begin{description}
-    \XXitem{/F010/}{funkt:010} Beim Aufruf einer Seite durch einen nicht-angemeldeten Benutzer
-    wird dieser auf die Anmeldeseite weitergeleitet und zur
-    Anmeldung aufgefordert. Ausgenommen davon ist die Hilfeseite und die Registrierungsseite.
+    \XXitem{/F010/}{funkt:010} Beim Aufruf einer der Anwendung zugeordnete URL durch einen nicht-angemeldeten Benutzer
+    wird dieser auf die Anmelde- und Willkommensseite weitergeleitet. Ausgenommen davon ist die Registrierungsseite.
     \XXitem{/FW020/}{funkt:020} Die Standardsprache des Systems ist abhängig von der im Browser
     eingestellten Sprache. Es werden Deutsch und Englisch angeboten.
     Sonst ist die Standardsprache Englisch. Die Sprache der Anwendung kann über die
     Fußzeile geändert werden. (\hyperref[leist:160]{/L160/})
-    \XXitem{/F030/}{funkt:030} Auf jeder Seite lassen sich von der Fußzeile aus
+    \XXitem{/F030/}{funkt:030} Auf jeder Seite lassen sich
     Hilfetexte \hyperref[leist:055]{/L055/} zu den angebotenen Funktionalitäten und der jeweiligen Rolle
-    des Nutzers, sowie das Impressum anzeigen. Die Hilfeseite öffnet sich in einem neuen Tab.
+    des Nutzers, sowie das Impressum anzeigen.
     \XXitem{/F040/}{funkt:040} Ist eine Ressource über eine URL nicht erreichbar (z.B. weil sie nicht existiert oder
      die URL fehlerhaft ist) wird eine Fehlerseite angezeigt.
 \end{description}
 
 \subsubsection{Registration}
 \begin{description}
-    \XXitem{/F050/}{funkt:050} Ein anonymer Nutzer kann von der Anmeldeseite aus mittels eines
+    \XXitem{/F050/}{funkt:050} Ein anonymer Nutzer kann von der Anmelde- und Willkommensseite aus mittels eines
     Buttons auf die Registrierungsseite navigieren.
     \XXitem{/F060/}{funkt:060} Über ein Registrierungsformular wird der Nutzer zur Eingabe seiner
     Daten aufgefordert. Verlangt wird die Eingabe eines Passworts (\hyperref[leist:130]{/L130/}),
@@ -41,7 +41,7 @@ auf die Registrierung, Anmeldung und Verifizierung im System beschränken.
     \hyperref[funkt:070]{/F070/} gestartet.
     \XXitem{/F070/}{funkt:070} Nach der Registrierung wird eine automatisierte E-Mail
     an die angegebene Mailadresse gesendet. Die Nachricht beinhaltet einen Hinweis auf
-    die versuchte Registrierung sowie einen Verifizierungslink, welcher auf die Verifzierungsseite führt, welche
+    die versuchte Registrierung sowie einen Verifizierungslink, der eine Stunde gültig ist und auf die Verifzierungsseite führt, welche
     die Registrierung erfolgreich abschließt. Nach einem Augenblick wird der Nutzer
     auf die Startseite weitergeleitet. (\hyperref[leist:140]{/L140/})
 \end{description}
@@ -52,7 +52,7 @@ auf die Registrierung, Anmeldung und Verifizierung im System beschränken.
     Diese umfassen die Mailadresse und das Passwort. (\hyperref[leist:120]{/L120/})
     Ein anonymer Nutzer wird so zum angemeldeten Benutzer.
     Nach erfolgreicher Anmeldung erfolgt eine Weiterleitung auf die Startseite.
-    \XXitem{/F090/}{funkt:090} Von der Anmeldeseite ist es möglich zur Registrierungsseite zu gelangen.
+    \XXitem{/F090/}{funkt:090} Von der Anmelde- und Willkommensseite ist es möglich zur Registrierungsseite zu gelangen.
 \end{description}
 
 \subsection{Angemeldeter Nutzer}
@@ -66,7 +66,7 @@ Es stehen außerdem folgende weitere Funktionen zur Verfügung.
     \XXitem{/F120/}{funkt:120} Bei Zugriff auf die Anmelde- oder Registrierungsseite
     wird auf die Startseite weitergeleitet.
     \XXitem{/F130}{funkt:130} Über einen Button in der Kopfzeile kann ein Logout durchgeführt werden.
-    Der nun anonyme Nutzer wird auf die Anmeldeseite weitergeleitet.
+    Der nun anonyme Nutzer wird auf die Anmelde- und Willkommensseite weitergeleitet.
     \XXitem{/F150/}{funkt:150} Über einen Klick auf das Logo der Anmeldung gelangt ein angemeldeter Nutzer auf die
     Startseite.
 \end{description}
@@ -74,12 +74,8 @@ Es stehen außerdem folgende weitere Funktionen zur Verfügung.
 \subsubsection{Suche} nach \hyperref[leist:050]{/L050/}
 \begin{description}
     \XXitem{/F160/}{funkt:160} Über die globale Suche kann ein Nutzer jederzeit seine eigenen Papers und nach wissenschaftlichen Foren
-    suchen. Nach Absenden der Suche wird eine Resultatliste angezeigt. Für Papers werden Name, Datum und Status, für
-    wissenschaftliche Foren nur der Name abgebildet.
-    Sie sind nach Namen sortiert.
-    \XXitem{/F170/}{funkt:170} Alle Einträge können anhand der angezeigten Informationen sortiert werden.
-    Mit einem Klick auf einen Eintrag wird der Nutzer auf die jeweilige Ansichtseite
-    der Ressource navigiert.
+    suchen. Nach Absenden der Suche wird eine Resultatliste nach \hyperref[leist:40]{/L040/} angezeigt.
+    Für Papers werden Name, Datum und Status, für wissenschaftliche Foren nur der Name abgebildet.
     \XXitem{/FW180/}{funkt:180} Während der Eingabe in das Suchfeld werden bis zu 10 mögliche Suchergebnisse in
     einem Dropdown Menü angezeigt.
 \end{description}
@@ -107,11 +103,9 @@ Es stehen außerdem folgende weitere Funktionen zur Verfügung.
 \begin{description}
     \XXitem{/F250/}{funkt:250} Die Startseite ist zu jeder Zeit über die Kopfzeile erreichbar.
     \XXitem{/F260/}{funkt:260} Ein Nutzer bekommt auf der Startseite alle Namen von wissenschaftlichen Foren,
-    für die er aktive Einreichungen hat (d.h. Ersteller oder Ko-Autor), in einer Listensicht angezeigt.
+    für die er aktive Einreichungen hat (d.h. Ersteller oder Ko-Autor), in einer Listensicht nach \hyperref[leist:40]{/L040/} angezeigt.
     Die Namen, das Datum und der Status dieser aktiven Einreichungen werden unter den Namen der wissenschaftlichen
     Foren angezeigt.
-    \XXitem{/F270/}{funkt:270} Die Einreichungen lassen sich nach Namen und Datum und Status
-    der Einreichung sortieren. Die wissenschaftlichen Foren lassen sich nach ihrem Namen sortieren.
     \XXitem{/FW280/}{funkt:280} Die Listen lassen sich nach den Namen der Einträge durchsuchen.
     \XXitem{/F290/}{funkt:290} Durch den Klick auf den Namen eines Eintrags der Liste gelangt man auf die jeweilige Übersichtsseite
     der Einreichung oder auf die Seite des jeweiligen wissenschaftlichen Forums.
@@ -119,24 +113,16 @@ Es stehen außerdem folgende weitere Funktionen zur Verfügung.
 
 \subsubsection{Liste der wissenschaftlichen Foren}
 \begin{description}
-    \XXitem{/F300/}{funkt:300} In einer Liste werden die Namen von wissenschaftlichen Foren angezeigt.
-    \XXitem{/F320/}{funkt:320} Die Einträge lassen sich anhand ihres Namens alphabetisch sortieren.
-    \XXitem{/FW330/}{funkt:330} Die Einträge lassen sich anhand des Namens durchsuchen.
-    \XXitem{/F340/}{funkt:340} Durch einen Klick auf den Namen eines Eintrags wird man auf die Seite des
-    jeweiligen wissenschaftlichen Forums navigiert.
+    \XXitem{/F300/}{funkt:300} In einer Liste werden die Namen von wissenschaftlichen Foren nach \hyperref[leist:40]{/L040/}
+    angezeigt.
 \end{description}
 
 \subsubsection{Wissenschaftliches Forum}
 \begin{description}
     \XXitem{/F350/}{funkt:350} Auf der Seite eines wissenschaftlichen Forums werden die zugehörigen wesentlichen Daten \hyperref[d030]{/D030},
     Name, Kurzbeschreibung, Editoren, potentielle Deadlines und Website angezeigt.
-    \XXitem{/F360/}{funkt:360} Dem Nutzer werden seine eigenen Einreichungen in Form einer Liste mit Namen, Datum und Status
-    angezeigt.
-    \XXitem{/F370/}{funkt:370} Durch einen Klick auf den Namen einer Einreichung gelangt der Nutzer auf die Übersichtsseite
-    dieser Einreichung.
-    \XXitem{/F380/}{funkt:380} Die Einträge lassen sich nach Namen, Datum und Status
-    der Einreichung sortieren.
-    \XXitem{/FW390/}{funkt:390} Die Einträge lassen sich anhand ihres Namens alphabetisch sortieren.
+    \XXitem{/F360/}{funkt:360} Dem Nutzer werden seine eigenen Einreichungen in Form einer Liste  nach \hyperref[leist:40]{/L040/}
+    mit Namen, Datum und Status angezeigt.
     \XXitem{/F400/}{funkt:400} Der Nutzer kann auf die Seite zur Erstellung einer Einreichung navigieren. Hierbei ist
     das Feld, welches das wissenschaftliche Forum bestimmt bei dem eingereicht wird, bereits mit
     dem wissenschaftlichen Forum befüllt, von dessen Übersichtsseite aus die Navigation auf diese
@@ -172,20 +158,19 @@ Es stehen außerdem folgende weitere Funktionen zur Verfügung.
 
 \subsubsection{Einreichung}
 \begin{description}
-    \XXitem{/F470/}{funkt:470} Dem Nutzer werden Informationen \hyperref[d025]{/D025/} zu seiner Einreichung angezeigt.
+    \XXitem{/F470/}{funkt:470} Dem Nutzer werden die Informationen \hyperref[d025]{/D025/} zu seiner Einreichung angezeigt.
     Hierzu gehören der Status der Einreichung, das Datum der Einreichung, das zugehörige
-    wissenschaftliche Forum, Namen und E-Mail Adressen der Ko-Autoren, ggf. eine Deadline für Gutachten,
+    %todo frist für gutachten nur gutachter
+    wissenschaftliche Forum, Namen und E-Mail Adressen der Ko-Autoren, ggf. eine Deadline für Gutachten und Frist für Revisionen,
     sowie ein Download zur Einreichung.
     \XXitem{/F480/}{funkt:480} Außerdem werden die freigeschalteten Gutachten in einer
-    Liste dargestellt, zusammen mit ihrem Erstellungsdatum, Gutachterempfehlung und Download \hyperref[d040]{/D040/}.
-    \XXitem{/F485/}{funkt:485} Die Gutachten lassen sich nach Namen und Datum
-    des Gutachten sortieren
-    \XXitem{/FW490/}{funkt:490}... und nach Namen des Gutachten durchsuchen.
+    Liste nach \hyperref[leist:40]{/L040/} dargestellt, zusammen mit ihrem Erstellungsdatum, Gutachterempfehlung und Download \hyperref[d040]{/D040/}.
     \XXitem{/F495/}{funkt:495} Der Nutzer kann die Einreichung zurückziehen. Es werden alle zugehörigen Daten
-    \hyperref[leist:025]{/L025/} gelöscht und die Editoren sowie Gutachter per automatisierter Mail informiert.
+    \hyperref[d025]{/D025/} gelöscht und die Editoren sowie Gutachter per automatisierter Mail informiert.
     Der Nutzer wird vorher auf die Konsequenzen hingewiesen.
-    \XXitem{/F496/}{funkt:496} Der Nutzer kann eine Revision des Manuskripts \hyperref[d020]{/D020/} hochladen.
-    Gutachter und Editoren werden hierüber per automatisierter Mail informiert.
+    \XXitem{/FW496/}{funkt:496} Der Nutzer kann, wenn verlangt (gelber Status: \hyperref[do025]{/D025/}, Funktion: \hyperref[funkt:702]{/FW702}),
+    eine Revision des Manuskripts \hyperref[d020]{/D020/} innerhalb der Frist hochladen.
+    Editoren werden hierüber per automatisierter Mail informiert.
 %nav
 \end{description}
 
@@ -252,10 +237,7 @@ Außerdem hat ein Editor die Folgenden zusätzlichen Funktionalitäten:
 
 \subsubsection{Benutzer}
 \begin{description}
-    \XXitem{/F600/}{funkt:600} Ein Editor kann auf die Nutzerliste über die Kopfzeile zugreifen.
-    \XXitem{/F610/}{funkt:610} Hier werden ihm alle Nutzer mit Namen und E-Mail übersichtlich in einer Liste angezeigt.
-    \XXitem{/F620/}{funkt:620} Diese Liste kann alphabetisch nach Namen und Mailaddresse sortiert werden.
-    \XXitem{/FW630/}{funkt:630} Die Liste kann anhand von Namen und Mailadresse durchsucht werden.
+    \XXitem{/F600/}{funkt:600} Ein Editor kann auf die Nutzerliste nach \hyperref[leist:40]{/L040/} über die Kopfzeile zugreifen.
     \XXitem{/F640/}{funkt:640} Mit einem Klick auf einen Eintrag wird der Editor auf das zugehörige Profil navigiert.
     Auf welchem er die Sichtrechte \hyperref[funkt:200]{/F200/} besitzt.
 \end{description}
@@ -267,17 +249,17 @@ Außerdem hat ein Editor die Folgenden zusätzlichen Funktionalitäten:
     Solche bei denen er als Editor eingesetzt wird werden als solche gekennzeichnet.
     Für diese Einträge gelten dieselben Funktionalitäten wie für die
     eigenen Einreichungen siehe \hyperref[funkt:370]{/F370}, \hyperref[funkt:380]{/F380/}, \hyperref[funkt:390]{/FW390/}.
-    \XXitem{/F660/}{funkt:660} Ein Editor kann andere Editoren ernennen, indem er sie mittels ihrer Mailadresse identifiziert.
-    Diese müssen bereits als Nutzer registriert sein.
-    \XXitem{/F670/}{funkt:670} Ein Editor kann anderen Editoren den Status als Editor aberkennen.
+    \XXitem{/F660/}{funkt:660} Ein Editor kann andere Editoren ernennen, indem er sie aus einem Dropdown-Menü
+    wie in \hyperref[funkt:436]{/F436/} beschrieben auswählt.
+    \XXitem{/F670/}{funkt:670} Ein Editor kann anderen Editoren den Status als Editor aberkennen,
+    solange ein weiterer Editor vorhanden ist.
 \end{description}
 
 \subsubsection{Einreichung}
 \begin{description}
     \XXitem{/F680/}{funkt:680} Ein Editor kann auf der Seite einer Einreichung, welcher er als Editor zugeordnet ist,
-    in einem Formular Gutachter zuweisen. Die Angabe von Gutachtern erfolgt über ein Dropdown-Menü, welches
-    nach Namen und E-Mailadressen durchsuchbar ist (optional auch nach Spezialgebieten und Arbeitgebern \hyperref[funkt:240]{/FW240/})
-    oder über ein Eingabefeld für E-Mailadressen. Zweiteres ist vorgesehen für (noch) unregistrierte Personen.
+    in einem Formular Gutachter zuweisen. Die Angabe von Gutachtern erfolgt über ein Dropdown-Menü und Eingabefeld für E-Mailadressen
+    wie in \hyperref[funkt:436]{/F436/} beschrieben.
     \XXitem{/F685/}{funkt:685} Ein Ein Editor kann noch nicht freigeschaltete Gutachten einsehen und freischalten.
     \XXitem{/F690/}{funkt:690} Wird eine E-Mail Adresse oder ein registrierter Nutzer als Gutachter angegeben,
     so wird nach Absenden des Formulars eine automatisierte Mail an diese Adresse versendet. Sie enthält eine Nachricht mit den relevanten
@@ -295,8 +277,12 @@ Außerdem hat ein Editor die Folgenden zusätzlichen Funktionalitäten:
     über ein Dropdown-Menü zuweisen. Er selbst ist nun kein Editor dieser Einreichung mehr. Der neue Editor wird per
     automatisierter E-Mail hierüber informiert.
     \XXitem{/F700/}{funkt:700} Ein Editor kann über Einreichungen, welcher er als Editor zugeordnet ist,
-    eine Annahmeentscheidung treffen. Über diese werden beteiligte Gutachter, der Einreicher und beteiligte Ko-Autoren
-    per automatisierter Mail benachrichtigt.
+    eine Annahmeentscheidung ("Rot", "Grün": \hyperref[d025]{/D025/}) treffen.
+    \item Über diese werden der Einreicher und beteiligte Ko-Autoren per automatisierter Mail benachrichtigt.
+    \XXitem{/FW702/}{funkt:702} Ein Editor kann für Einreichungen, welchen er als Editor zugeordnet ist,
+    eine Revision ("Gelb": \hyperref[d025]{/D025/}) verlangen. In diesem Fall gibt er eine Frist für die Revision an.
+    \XXitem{/FW703}{funkt:703} Ein Editor kann Revisionenn für Gutachter freischalten, sodass diese für sie sichtbar werden.
+    Hierüber werden die beteiligten Gutachter per automatisierter Mail informiert.
     \XXitem{/F705/}{funkt:705} Ein Editor kann einer Einreichung, welcher er als Editor zugeordnet ist, eine Deadline für
     Gutachten zuweisen oder entfernen.
 \end{description}
@@ -340,11 +326,11 @@ zu Verwaltungszwecken auf allen Einreichungen.
 \begin{description}
     \XXitem{/F770/}{funkt:770} Ein Administrator kann einen anderen Nutzer auf dessen Profilseite zum Administrator ernennen.
     \XXitem{/F780/}{funkt:780} Ein Administrator kann einem anderen Administrator auf dessen Profilseite seine
-    Administratorrolle aberkennen.
+    Administratorrolle aberkennen, solange ein weiterer Admin vorhanden ist.
     \XXitem{/FW790/}{funkt:790} Vor dem An- oder Aberkennen von Administratorrechten ist eine gültige
     Passworteingabe erforderlich.
     \XXitem{/F800/}{funkt:800} Der Administrator besitzt auf allen Profilseiten dieselben Rechte zur Änderung
-    der persistierten Daten wie ein Nutzer auf seiner eigenen Profilseite. %link
+    der persistierten Daten wie ein Nutzer auf seiner eigenen Profilseite. %todo link
 \end{description}
 
 \subsubsection{Liste der Wissenschaftlichen Foren}
@@ -358,8 +344,10 @@ zu Verwaltungszwecken auf allen Einreichungen.
     \XXitem{/F820/}{funkt:820} Auf der Seite zum Erstellen eines wissenschaftlichen Forums kann der Administrator dessen
     wesentliche Daten \hyperref[d030]{/D030/} und \hyperref[d051]{/D051/}
     festlegen. Deadline, Kurzbeschreibung, URL, Anleitung zur Begutachtung sind hierbei optional, der Rest nicht.
+    Die Kategorie (Physik, Chemie \ldots) kann aus existierenden ausgewählt oder neu erstellt werden.
     Bei der Angabe von Editoren wird überprüft, dass diese bereits als Nutzer im System registriert sind.
-    Es muss mindestens ein Editor per E-Mail eingetragen werden, welcher per automatisierter E-Mail darüber informiert wird.
+    Es muss mindestens ein Editor über einDropdown-Menü, wie in \hyperref[funkt:436]{/F436/} beschrieben, eingetragen werden,
+    welcher per automatisierter E-Mail darüber informiert wird.
     Der Name des Forums muss ebenfalls einzigartig sein.
     Nach erfolgreicher Erstellung wird der Administrator auf die Seite dieses wissenschaftlichen Forums
     navigiert.
