@@ -6,9 +6,9 @@ Die Funktionalität vom LasEs-System wird nach den Benutzerrollen
 \textit{Administrator} untergliedert.
 
 Es gilt darüber hinaus, dass alle Funktionen eines einfachen \hyperref[glo:regnutzer]{angemeldeten Nutzers} auch den höherrangigen Benutzern, wie
-\hyperref[glo:editor]{Editoren} und \hyperref[glo:admin]{Administratoren}, zur Verfügung stehen. EIn Nutzer kann mehrere Rollenn annehmen.
+\hyperref[glo:editor]{Editoren} und \hyperref[glo:admin]{Administratoren}, zur Verfügung stehen. Ein Nutzer kann mehrere Rollen annehmen.
 Diese hierarchische Ordnung wird im Folgenden genauer spezifiziert.
-Die Funktionen werden nach dem Schema /FXXX/ bzw. /FWXXX/ für Wunschfunktionen benannt, wobei XXX eine dreistellige Ganzzahl ist.
+Die Funktionen werden nach dem Schema \texttt{/FXXX/} bzw. \texttt{/FWXXX/} für Wunschfunktionen benannt, wobei \texttt{XXX} eine dreistellige Ganzzahl ist.
 
 \subsection{Anonymer Nutzer}\label{funkt:nutzer}
 Anonyme Nutzer sind nicht authentifizierte Nutzer, deren Zugriffsrechte sich
@@ -16,19 +16,19 @@ auf die Registrierung, Anmeldung und Verifizierung im System beschränken.
 
 \subsubsection{Allgemein}
 \begin{description}
-    \XXitem{/F010/}{funkt:010} Beim Aufruf einer der Anwendung zugeordnete URL durch einen nicht-angemeldeten Benutzer
-    wird dieser auf die \hyperref[an:log]{Anmelde- und Willkommensseite}weitergeleitet. Ausgenommen davon ist die \hyperref[an:reg]{Registrierungsseite}.
+    \XXitem{/F010/}{funkt:010} Beim Aufruf einer der Anwendung zugeordneten URL durch einen nicht-angemeldeten Benutzer
+    wird dieser auf die \hyperref[an:log]{Anmelde- und Willkommensseite} weitergeleitet. Ausgenommen davon ist die \hyperref[an:reg]{Registrierungsseite}.
     \XXitem{/FW020/}{funkt:020} Die Standardsprache des Systems ist abhängig von der im Browser
     eingestellten Sprache. Es werden Deutsch und Englisch angeboten.
     Sonst ist die Standardsprache Englisch. Die Sprache der Anwendung kann zusätzlich über die
     Fußzeile geändert werden. (\hyperref[leist:160]{/L160/})
     \XXitem{/F030/}{funkt:030} Auf jeder Seite lassen sich
-    Hilfetexte \hyperref[leist:055]{/L055/} zu den angebotenen Funktionalitäten und der jeweiligen Rolle
+    Hilfetexte \hyperref[leist:055]{/L055/} als Tooltips zu den angebotenen Funktionalitäten und der jeweiligen Rolle
     des Nutzers, sowie das Impressum anzeigen.
     \XXitem{/F040/}{funkt:040} Ist eine Ressource über eine URL nicht erreichbar (z.B. weil sie nicht existiert oder
      die URL fehlerhaft ist) wird eine Fehlerseite angezeigt.
     \XXitem{/F045/}{funkt:045} E-Mail Benachrichtigungen werden grundsätzlich immer zweisprachig,
-    auf deutsch und englisch, versendet.
+    in Deutsch und Englisch, versendet.
 \end{description}
 
 \subsubsection{Registration}\label{an:reg}
@@ -37,15 +37,16 @@ auf die Registrierung, Anmeldung und Verifizierung im System beschränken.
     Buttons auf die Registrierungsseite navigieren.
     \XXitem{/F060/}{funkt:060} Über ein Registrierungsformular wird der Nutzer zur Eingabe seiner
     Daten aufgefordert. Verlangt wird die Eingabe eines Passworts (\hyperref[leist:130]{/L130/}),
-    sowie von Vor- und Nachname. Die Eingabe eines Titels ist optional. Letztlich muss die Emailadresse
+    sowie von Vor- und Nachname. Letztlich muss die E-Mail-Adresse
+    sowie von Vor- und Nachname. Die Eingabe eines Titels ist optional. Letztlich muss die E-Mailadresse
     angegeben werden, welche einzigartig im System sein muss. Durch das Absenden des Formulars wird der E-Mail Verifizierungsprozess
     \hyperref[funkt:070]{/F070/} gestartet.
-    \XXitem{/FW061/}{funkt:061} Optional ist das Einfügen eines Avatarbildes, siehe \hyperref[d015]{/DW015},
+    \XXitem{/FW061/}{funkt:061} Optional ist das Einfügen eines Avatarbildes, siehe \hyperref[d015]{/DW015/},
     bei der Registration.
     \XXitem{/F070/}{funkt:070} Nach der Registrierung wird eine automatisierte E-Mail
     an die angegebene Mailadresse gesendet. Die Nachricht beinhaltet einen Hinweis auf
-    die versuchte Registrierung sowie einen Verifizierungslink, der eine Stunde gültig ist und auf die Verifzierungsseite führt, welche
-    die Registrierung erfolgreich abschließt. Nach einem Augenblick wird der Nutzer
+    die versuchte Registrierung, sowie einen Verifizierungslink, der eine Stunde gültig ist und auf die Verifzierungsseite führt.
+    Damit ist die Registrierung erfolgreich abgeschlossen. Nach einem Augenblick wird der Nutzer
     auf die \hyperref[nut:start]{Startseite} weitergeleitet. (\hyperref[leist:140]{/L140/})
 \end{description}
 
@@ -54,7 +55,7 @@ auf die Registrierung, Anmeldung und Verifizierung im System beschränken.
     \XXitem{/F080/}{funkt:080} Mittels eines Anmeldeformulars erfolgt eine Anmeldung durch korrekte Zugangsdaten.
     Diese umfassen die Mailadresse und das Passwort. (\hyperref[leist:120]{/L120/})
     Ein anonymer Nutzer wird so zum angemeldeten Benutzer.
-    Nach erfolgreicher Anmeldung erfolgt eine Weiterleitung auf die \hyperref[nut:start]{Startseite}
+    Nach erfolgreicher Anmeldung erfolgt eine Weiterleitung auf die \hyperref[nut:start]{Startseite}.
     \XXitem{/F090/}{funkt:090} Von der \hyperref[an:log]{Anmelde- und Willkommensseite} ist es möglich zur \hyperref[an:reg]{Registrierungsseite} zu gelangen.
 \end{description}
 
