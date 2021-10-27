@@ -37,7 +37,7 @@ auf die Registrierung, Anmeldung und Verifizierung im System beschränken.
     Buttons auf die Registrierungsseite navigieren.
     \XXitem{/F060/}{funkt:060} Über ein Registrierungsformular wird der Nutzer zur Eingabe seiner
     Daten aufgefordert. Verlangt wird die Eingabe eines Passworts (\hyperref[leist:130]{/L130/}),
-    sowie von Vor- und Nachname. Letztlich muss die Emailadresse
+    sowie von Vor- und Nachname. Die Eingabe eines Titels ist optional. Letztlich muss die Emailadresse
     angegeben werden, welche einzigartig im System sein muss. Durch das Absenden des Formulars wird der E-Mail Verifizierungsprozess
     \hyperref[funkt:070]{/F070/} gestartet.
     \XXitem{/FW061/}{funkt:061} Optional ist das Einfügen eines Avatarbildes, siehe \hyperref[d015]{/DW015},
@@ -74,10 +74,11 @@ Es stehen außerdem folgende weitere Funktionen zur Verfügung.
 
 \subsubsection{Suche} nach \hyperref[leist:050]{/L050/}
 \begin{description}
-    \XXitem{/F160/}{funkt:160} Über die globale Suche kann ein Nutzer jederzeit seine eigenen Papers per Namen und nach
-    \hyperref[glo:wissForum]{wissenschaftlichen Foren} per Namen oder Kategorie
+    \XXitem{/F160/}{funkt:160} Über die globale Suche kann ein Nutzer jederzeit seine eigenen Einreichungen per Namen und Ko-Autoren
+    und nach \hyperref[glo:wissForum]{wissenschaftlichen Foren} per Namen oder Kategorie
     suchen. Nach Absenden der Suche werden Resultatlisten nach \hyperref[leist:40]{/L040/} angezeigt.
-    Für Papers werden Name, Datum und Status, für wissenschaftliche Foren nur der Name abgebildet.
+    Für Einreichungen werden Name, Zeitpunkt der Einreichung und Status, für wissenschaftliche Foren nur der Name und
+    bis zu drei Kategorien abgebildet
     \XXitem{/FW180/}{funkt:180} Während der Eingabe in das Suchfeld werden bis zu 10 mögliche Suchergebnisse in
     einem Dropdown Menü angezeigt.
 \end{description}
@@ -118,7 +119,7 @@ Es stehen außerdem folgende weitere Funktionen zur Verfügung.
     angezeigt.
 \end{description}
 
-\subsubsection{Wissenschaftliches Forum}\label{nut:wissFor}
+\subsubsection{Wissenschaftliches Forum} \label{nut:wissfor}
 \begin{description}
     \XXitem{/F350/}{funkt:350} Auf der Seite eines wissenschaftlichen Forums werden die zugehörigen wesentlichen Daten \hyperref[d030]{/D030},
     Name, Kurzbeschreibung, Editoren, potentielle Deadlines und Website angezeigt.
@@ -221,14 +222,18 @@ Außerdem hat ein Editor die Folgenden zusätzlichen Funktionalitäten:
 \begin{description}
     \XXitem{/F570/}{funkt:570} Dem Editor werden auf seiner personalisierten Startseite in getrennten Listen nach \hyperref[leist:040]{/L040/}zusätzlich zu den eigenen
     Einreichungen und zugehörigen wissenschaftlichen Foren diejenigen angezeigt welchen er als Editor zugeordnet ist.
-    Sie sind als solche gekennzeichnet. Für sie gelten dieselben \hyperref[nut:start]{Funktionalitäten} wie für eigene Einreichungen.
+    Sie sind als solche gekennzeichnet.
+    Für sie gelten \hyperref[nut:start]{dieselben Funktionalitäten} wie für eigene Einreichungen.
 \end{description}
 
 \subsubsection{Suche} \label{ed:suche}
 \begin{description}
     \XXitem{/F580/}{funkt:580} Ein Editor kann ebenfalls Einreichungen finden, welchen er als Editor zugeordnet ist.
     Diese sind als solche gekennzeichnet.
-    \XXitem{/F590/}{funkt:590} Ein Editor kann ebenfalls Einträge zu allen Nutzern finden.
+    \XXitem{/F590/}{funkt:590} Ein Editor kann ebenfalls Einträge zu allen Nutzern per Namen, E-Mail und
+    evtl. (\hyperref[funkt:240]{/FW240/}) nach Arbeitgeber und Spezialgebieten finden.
+    Die zugehörige Resultatliste enthält alle dem Nutzer zugehörigen Daten \hyperref[d010]{/D010/} und evtl. \hyperref[d015]{/DW015/}
+    und ist nach \hyperref[leist:040]{/L040/ und Folgenden} umgesetzt.
 \end{description}
 
 \subsubsection{Benutzer} \label{ed:benutzer}
