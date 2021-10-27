@@ -7,6 +7,7 @@ Vor Ausführung jeglicher Tests sollten folgende Voraussetzungen erfüllt sein:
 \begin{itemize}
 	\item Das System ist vollständig eingerichtet.
 	Insbesondere sind die Datenbankschemata erstellt und die globalen Einstellungen sind getroffen.
+	\item Der Testmodus der Anwendung ist aktiviert.
 	\item Es existiert eine Administratorin mit folgenden Nutzerdaten:
 	\begin{itemize}
 		\item \emph{E-Mail Adresse}: kirz@fim.uni-passau.de
@@ -111,6 +112,7 @@ Das heißt jeder Test kann die Zustandsänderungen, die durch vorherige Tests au
 	Er gibt in das Formular zur Zuweisung von Gutachtern ``schicho@fim.uni-passau.de'' ein und schickt das Formular ab.
 	Es wird eine Rückmeldung für das erfolgreiche Hinzufügen eines Gutachters angezeigt.
 	Anschließend meldet er sich ab.
+	Da der Testmodus aktiviert ist, werden Links zur Annahme und Ablehnung für den eingeladenen Gutachter angezeigt.
 
 \end{description}
 
@@ -124,13 +126,13 @@ Das heißt jeder Test kann die Zustandsänderungen, die durch vorherige Tests au
 		\item ein Link zur Annahme der Begutachtungsanfrage
 		\item ein Link zur Ablehnung der Begutachtungsanfrage.
 	\end{itemize}
-	Er nutzt den Link zur Annahme der Begutachtungsanfrage und ist nun Gutachter.
+	Er nutzt den Link aus Test \hyperref[t080]{/T080/} zur Annahme der Begutachtungsanfrage und ist nun Gutachter.
 
 	\XXitem{/T090/}{t090} \emph{Testet \hyperref[funkt:540]{/F540/}}.
 	Der Nutzer mit der E-Mail-Adresse schicho@fim.uni-passau.de meldet sich im System an.
 	Von der Startseite aus ruft er die Einreichung ``P\neq NP'' auf und landet auf der Seite dieser Einreichung.
 	Er nutzt das angezeigte Formular, um eine einseitige PDF-Datei namens \emph{gutachten.pdf} als Gutachten hochzuladen.
-	Das Gutachten wurder erfolgreich hochgeladen und ist jetzt auf der Seite der Einreichung sichtbar.
+	Das Gutachten wurde erfolgreich hochgeladen und ist jetzt auf der Seite der Einreichung sichtbar.
 	Anschließend meldet er sich ab.
 
 \end{description}
@@ -155,9 +157,10 @@ Das heißt jeder Test kann die Zustandsänderungen, die durch vorherige Tests au
 	Er ruft LasEs auf und wird zur Anmeldeseite weitergeleitet.
 	\XXitem{/T120/}{t120} \emph{Testet \hyperref[funkt:060]{/F060/}}.
 	Er klickt auf den Link zur Registrierung und gibt seinen Namen, seine E-Mail-Adresse und das Passwort \texttt{einsZwei3!5678} an.
-	Die Registrierung wird bestätigt und er erhält eine Verifizierungs-E-Mail.
+	Die Registrierung wird bestätigt.
+	Da der Testmodus aktiviert ist, wird der Verifizierungslink, hier angezeigt.
 	\XXitem{/T130/}{t130} \emph{Testet \hyperref[funkt:070]{/F070/}}.
-	Er klickt auf den Bestätigungslink in der E-Mail und wird auf die Verifizierungsseite weitergeleitet.
+	Er klickt auf den Verifizierungslink und wird auf die Verifizierungsseite weitergeleitet.
 	Damit ist sein Profil erstellt.
 	Er wird automatisch auf die Homepage weitergeleitet.
 	\XXitem{/T140/}{t140} \emph{Testet \hyperref[funkt:260]{/F260/}, \hyperref[funkt:437]{/F437/}}.
