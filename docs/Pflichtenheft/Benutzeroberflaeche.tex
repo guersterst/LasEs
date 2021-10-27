@@ -1,4 +1,30 @@
 \localauthor{Stefanie Gürster}
+\subsection{Benutzerfluss}
+Im Folgenden werden functioning Aussagen über die Benutzeroberfläche mithilfe eines Benutzerflussdiagramms getroffen.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{graphics/benutzerFlussyEd}
+	\caption{Analyse der Navigationsstruktur}
+	\label{fig:benutzerfluss}
+\end{figure}
+
+Die sich im Diagramm in Abbildung \ref{fig:benutzerfluss} befindlichen Rauten stellen Header (Navigationsleiste) und Footer dar.
+Hierbei wird jedoch wie folgt unterschieden: Der Header ist nur für \hyperref[glo:regnutzer]{authentifizierte Nutzer} zugänglich,
+d.h. dieser erscheint erst nach einem erfolgreichen Login und verschwindet nach dem Logout wieder.
+Der Footer hingegen ist von jeder Seite der Applikation zugänglich und somit immer sichtbar.
+
+Im Diagramm werden \hyperref[glo:admin]{Administratoren}, \hyperref[glo:editor]{Editoren}, \hyperref[glo:gutachter]{Gutachter} und normale Nutzende unter dem allgemeinen Begriff
+authentifizierte Nutzer betrachtet.
+Sind die Verbindungspfeile nicht schwarz, sondern andersfarbig dargestellt, so besitzen auch nur die
+dargestellten Benutzergruppen ein Zugriffsrecht oder das Recht auf eine Aktion. (Administratoren sind von dieser Regelung
+ausgeschlossen)
+
+Des Weiteren ist der Randfall zu betrachten, bei welchem ein externer Gutachter, welcher noch nicht registriert ist,
+eine Einladung eines Editors angenommen hat.
+Diesem wird die Rolle eines Gutachters zugewiesen, jedoch besitzt er erst Zugriffsrechte, nachdem er sich registriert und
+authentifiziert hat.
+
 \subsection{Wireframe}
 
 Die Grundstruktur der Applikation wird in Abbildung \ref{fig:wireframe} abbgebildet, welche sich auch in den folgenden Mockups in Abbildung \ref{fig:homepageMockup} und in Abbildung \ref{fig:submission} wiederspiegelt.
@@ -42,30 +68,3 @@ Mithilfe dieser kann er Gutachter verwalten, einen anderen \hyperref[glo:editor]
 	\caption{Ablauf einer erfolgreichen Einreichung nach Reviews}
 	\label{fig:submission}
 \end{figure}
-
-
-\subsection{Benutzerfluss}
-Im Folgenden werden functioning Aussagen über die Benutzeroberfläche mithilfe eines Benutzerflussdiagramms getroffen.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\linewidth]{graphics/benutzerFlussyEd}
-    \caption{Benutzerfluss}
-	\label{fig:benutzerfluss}
-\end{figure}
-
-Die sich im Diagramm in Abbildung \ref{fig:benutzerfluss} befindlichen Rauten stellen Header (Navigationsleiste) und Footer dar.
-Hierbei wird jedoch wie folgt unterschieden: Der Header ist nur für \hyperref[glo:regnutzer]{authentifizierte Nutzer} zugänglich,
-d.h. dieser erscheint erst nach einem erfolgreichen Login und verschwindet nach dem Logout wieder.
-Der Footer hingegen ist von jeder Seite der Applikation zugänglich und somit immer sichtbar.
-
-Im Diagramm werden \hyperref[glo:admin]{Administratoren}, \hyperref[glo:editor]{Editoren}, \hyperref[glo:gutachter]{Gutachter} und normale Nutzende unter dem allgemeinen Begriff
-authentifizierte Nutzer betrachtet.
-Sind die Verbindungspfeile nicht schwarz, sondern andersfarbig dargestellt, so besitzen auch nur die
-dargestellten Benutzergruppen ein Zugriffsrecht oder das Recht auf eine Aktion. (Administratoren von dieser Regelung
-ausgeschlossen)
-
-Des Weiteren ist der Randfall zu betrachten, bei welchem ein externer Gutachter, welcher noch nicht registriert ist,
-eine Einladung eines Editors angenommen hat.
-Diesem wird die Rolle eines Gutachters zugewiesen, jedoch besitzt er erst Zugriffsrechte, nachdem er sich
-authentifiziert hat.
