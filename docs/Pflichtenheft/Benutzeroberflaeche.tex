@@ -1,4 +1,4 @@
-\localauthor{Stefanie Gürster}
+\usepackage{hyperref}\localauthor{Stefanie Gürster}
 \subsection{Benutzerfluss}
 Im Folgenden werden funktionale Aussagen über die Benutzeroberfläche, mithilfe eines Benutzerflussdiagramms, getroffen.
 
@@ -10,11 +10,11 @@ Im Folgenden werden funktionale Aussagen über die Benutzeroberfläche, mithilfe
 \end{figure}
 
 Die sich im Diagramm in Abbildung \ref{fig:benutzerfluss} befindlichen Rauten stellen Header (Navigationsleiste) und Footer dar.
-Hierbei wird jedoch wie folgt unterschieden: Der Header ist nur für \hyperref[glo:regnutzer]{authentifizierte Nutzer} zugänglich,
+Hierbei wird jedoch wie folgt unterschieden: Der Header ist nur für \hyperref[mkrit:angemeldet]{authentifizierte Nutzer} zugänglich,
 d.h. dieser erscheint erst nach einem erfolgreichen Login und verschwindet nach dem Logout wieder.
 Der Footer hingegen ist von jeder Seite der Applikation zugänglich und somit immer sichtbar.
 
-Im Diagramm werden \hyperref[glo:admin]{Administratoren}, \hyperref[glo:editor]{Editoren}, \hyperref[glo:gutachter]{Gutachter} und normale Nutzende unter dem allgemeinen Begriff
+Im Diagramm werden \hyperref[mkrit:admin]{Administratoren}, \hyperref[mkrit:editor]{Editoren}, \hyperref[mkrit:gutachter]{Gutachter} und \hyperref[mkrit:angemeldet]{normale Nutzende} unter dem allgemeinen Begriff
 authentifizierte Nutzer betrachtet.
 Sind die Verbindungspfeile nicht schwarz, sondern andersfarbig dargestellt, so besitzen auch nur die
 dargestellten Benutzergruppen ein Zugriffsrecht oder das Recht auf eine Aktion. (Administratoren sind von dieser Regelung
@@ -37,13 +37,13 @@ Inhalte mit gestrichelten Linen sind dabei nicht immer in jeder Ansicht sichtbar
 Folgende Bilder zeigen einen Prototyp der Anwendung.
 Dargestellt sind zwei Ausschnitte aus Schlüsselfunktionen der Webanwendung.
 
-Die Startseite in Abbildung \ref{fig:homepageMockup} ist auf die Rolle eines \hyperref[glo:editor]{Editors} zugeschnitten, wobei dieser auch einige
-Reviews bearbeitet und somit auch die Rolle des \hyperref[glo:gutachter]{Gutachters} für einige Einreichungen bekleidet.
+Die Startseite in Abbildung \ref{fig:homepageMockup} ist auf die Rolle eines \hyperref[mkrit:editor]{Editors} zugeschnitten, wobei dieser auch einige
+Reviews bearbeitet und somit auch die Rolle des \hyperref[mkrit:gutachter]{Gutachters} für einige Einreichungen bekleidet.
 Je nach ausgewähltem Reiter erscheinen entweder eigene, zu begutachtende Einreichungen oder Einreichungen die in eigener editorialer Verantwortung liegen.
 
-Die Übersichtsseite der Einreichung, die Submission Seite, in Abbildung \ref{fig:submission} ist ebenfalls auf die Rolle eines \hyperref[glo:editor]{Editors} ausgelegt.
-Ihm steht im Gegensatz zu einem \hyperref[glo:regnutzer]{normalen Nutzer}, welcher keine ander Rolle bekleidet, eine Toolbar zur Verfügung.
-Mithilfe dieser kann er Gutachter verwalten, einen anderen \hyperref[glo:editor]{Editor} ernennen oder eine Revision anfordern.
+Die Übersichtsseite der Einreichung, die Submission Seite, in Abbildung \ref{fig:submission} ist ebenfalls auf die Rolle eines \hyperref[mkrit:editor]{Editors} ausgelegt.
+Ihm steht im Gegensatz zu einem \hyperref[mkrit:angemeldet]{normalen Nutzer}, welcher keine ander Rolle bekleidet, eine Toolbar zur Verfügung.
+Mithilfe dieser kann er Gutachter verwalten, einen anderen \hyperref[mkrit:editor]{Editor} ernennen oder eine Revision anfordern.
 
 
 \subsubsection{Startseite}
