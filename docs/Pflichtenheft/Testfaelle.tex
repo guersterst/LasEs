@@ -87,7 +87,7 @@ Das heißt jeder Test kann die Zustandsänderungen, die durch vorherige Tests au
 			\item \emph{Nachname} Bachmaier
 			\item \emph{E-Mail-Adresse} garstenaue
 		\end{itemize}
-		\item \emph{Editor}: guerster@fim.uni-dorfen.de
+		\item \emph{Editor}: guerster@fim.uni-passau.de
 	\end{itemize}
 	Sie klickt auf den Button ``Submit Paper''
 	Da die angegebene E-Mail-Adresse ``garstenaue'' nicht gültig ist, ist das Einreichen nicht erfolgreich.
@@ -141,7 +141,7 @@ Das heißt jeder Test kann die Zustandsänderungen, die durch vorherige Tests au
 \begin{description}
 
 	\XXitem{/T100/}{t100} \emph{Testet \hyperref[funkt:685]{/F685/}}.
-	Der Nutzer guerster@fim.uni-passau.de meldet sich wie oben beschrieben an und navigiert wie oben beschrieben zur Seite der Einreichung ``P\neq NP''.
+	Der Nutzer guerster@fim.uni-passau.de meldet sich wie oben beschrieben an und navigiert, wie oben beschrieben, zur Seite der Einreichung ``P\neq NP''.
 	Dort sieht er ein Gutachten von schicho@fim.uni-passau.de.
 	Er betätigt die Schaltfläche zur Freigabe dieses Gutachtens.
 	Eine Bestätigung über die Freigabe des Gutachtens wird angezeigt.
@@ -188,13 +188,16 @@ Das heißt jeder Test kann die Zustandsänderungen, die durch vorherige Tests au
 
 \end{description}
 
-\subsection{Fehlerhafte Zugriffe}
+\subsection{Fehlerhafte und illegale Zugriffe}
 
 \begin{description}
 	\XXitem{/T200/}{t200}
 	Der Nutzer guerster@fim.uni-passau.de meldet sich an und ruft mit seinem Browser \texttt{<URL zur LasEs-Startseite>/freebitcoin.html} auf.
 	Er wird auf eine 404-Fehlerseite weitergeleitet.
-	\todo{Referenz auf Produktfunktionen}
+	\XXitem{/T210/}{t210}
+	Der Nutzer guerster@fim.uni-passau.de meldet sich an und ruft mit seinem Browser \texttt{<URL zur LasEs-Startseite>/administration.xhtml} auf.
+	Er wird auf eine 404-Fehlerseite weitergeleitet.
+	\todo{Referenzen auf Produktfunktionen}
 \end{description}
 
 \subsection{Reset}
