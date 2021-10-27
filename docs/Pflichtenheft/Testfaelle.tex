@@ -35,7 +35,6 @@ Vor Ausführung jeglicher Tests sollten folgende Voraussetzungen erfüllt sein:
 		\item \emph{Nachname}: Aslan
 		\item \emph{Passwort}: SupaDöner1970!
 	\end{itemize}
-	\item Die Browser aller Nutzer fordern die Webseiten auf deutscher Sprache an.
 \end{itemize}
 Die Tests werden in der angegebenen Reihenfolge ausgeführt.
 Das heißt jeder Test kann die Zustandsänderungen, die durch vorherige Tests ausgelöst worden sind, als gegeben voraussetzen.
@@ -44,8 +43,7 @@ Das heißt jeder Test kann die Zustandsänderungen, die durch vorherige Tests au
 
 	\XXitem{/T010/}{t010} \emph{Testet \hyperref[funkt:830]{/F830/}}.
 	Die Administratorin meldet sich mit ihren Anmeldedaten im System an und wird zur Startseite weitergeleitet.
-	Auf der Kopfzeile klickt sie auf ``Journale und Konferenzen'' und wird zur Liste der wissenschaftlichen Foren weitergeleitet.
-	\todo{"navigiert sie zu..." auch spezifischer? wie genau die Buttons heißen wissen wir ja eig noch nicht}
+	Auf der Kopfzeile klickt sie auf ``Journals \& Conferences'' und wird zur Liste der wissenschaftlichen Foren weitergeleitet.
 	Von dort aus navigiert sie zur Seite zur Erstellung eines neuen wissenschaftlichen Forums.
 	Dort erstellt sie ein Forum mit folgenden Daten:
 	\begin{itemize}
@@ -57,22 +55,7 @@ Das heißt jeder Test kann die Zustandsänderungen, die durch vorherige Tests au
 		\item \emph{Anleitung zur Begutachtung}: Begutachten Sie.
 	\end{itemize}
 	Die Konferenz wurde erfolgreich gespeichert und sie wird auf die Seite des wissenschaftlichen Forums weitergeleitet.
-
-	\XXitem{/T015/}{t015} \emph{Testet \hyperref[funkt:830]{/F830/}}.
-	Die Administratorin ruft über die Kopfzeile die Liste der wissenschaftlichen Foren auf.
-	Von dort aus navigiert sie zur Seite zur Erstellung eines neuen wissenschaftlichen Forums.
-	Dort erstellt sie ein Forum mit folgenden Daten:
-	\begin{itemize}
-		\item \emph{Editor:innen}: Nutzer mit E-Mail-Adresse guerster@fim.uni-passau.de
-		\item \emph{Name}: Physik Tagung
-		\item \emph{Deadline}: 30.12.2099
-		\item \emph{Kurzbeschreibung}: Es geht um Physik.
-		\item \emph{URL}: https://ph.ys.ik/
-		\item \emph{Anleitung zur Begutachtung}: Begutachten Sie.
-		\todo{Die Anmerkung kann ich nicht lesen lol}
-	\end{itemize}
-	Danach wird sie auf die Seite des wissenschaftlichen Forums weitergeleitet.
-	Zum Schluss meldet sie sich mit der Logout-Schaltfläche in der Navigationsleiste vom System ab.
+	Sie meldet sich ab.
 
 \end{description}
 
@@ -105,17 +88,17 @@ Das heißt jeder Test kann die Zustandsänderungen, die durch vorherige Tests au
 		\end{itemize}
 		\item \emph{Editor}: guerster@fim.uni-dorfen.de
 	\end{itemize}
-	Sie klickt auf den Button ``Einreichen''
+	Sie klickt auf den Button ``Submit Paper''
 	Da die angegebene E-Mail-Adresse ``garstenaue'' nicht gültig ist, ist das Einreichen nicht erfolgreich.
 	Sie bleibt auf der Einreichungsseite und wird mit einer Fehlermeldung über das Problem informiert.
 	Die validen Daten bleiben jedoch erhalten.
 
 	\XXitem{/T050/}{t050} \emph{Testet \hyperref[funkt:410]{/F410/}}.
-	Sie bessert nun die E-Mail-Adresse aus: ``garstenaue@fim.uni-passau.de'' und klickt wieder auf ``Einreichen''.
+	Sie bessert nun die E-Mail-Adresse aus: ``garstenaue@fim.uni-passau.de'' und klickt wieder auf ``Submit Paper''.
 	Diesmal ist das Einreichen erfolgreich und sie wird auf die Übersichtsseite der Einreichung weitergeleitet.
 
 	\XXitem{/T060/}{t060} \emph{Testet \hyperref[funkt:460]{/F460/}}.
-	Frau Müller klickt auf den Profil-Button in der Kopfzeile und dann auf "Abmelden".
+	Frau Müller klickt auf den Profil-Button in der Kopfzeile und dann auf ``Log out''.
 	Sie wird erfolgreich ausgeloggt und auf die Anmeldeseite weitergeleitet.
 \end{description}
 
@@ -167,32 +150,34 @@ Das heißt jeder Test kann die Zustandsänderungen, die durch vorherige Tests au
 \subsection{Anonyme Nutzer}
 
 \begin{description}
-	\XXitem{/T200/}{t200} \emph{Testet \hyperref[funkt:010]{/F010/}}.
+	\XXitem{/T110/}{t2110} \emph{Testet \hyperref[funkt:010]{/F010/}}.
 	Christian Bachmaier aus \hyperref[t050]{/T050/} ist noch nicht im System registriert.
 	Er ruft LasEs auf und wird zur Anmeldeseite weitergeleitet.
-	\XXitem{/T210/}{t210} \emph{Testet \hyperref[funkt:060]{/F060/}}.
+	\XXitem{/T120/}{t120} \emph{Testet \hyperref[funkt:060]{/F060/}}.
 	Er klickt auf den Link zur Registrierung und gibt seinen Namen, seine E-Mail-Adresse und das Passwort \texttt{einsZwei3!5678} an.
 	Die Registrierung wird bestätigt und er erhält eine Verifizierungs-E-Mail.
-	\XXitem{/T220/}{t220} \emph{Testet \hyperref[funkt:070]{/F070/}}.
+	\XXitem{/T130/}{t130} \emph{Testet \hyperref[funkt:070]{/F070/}}.
 	Er klickt auf den Bestätigungslink in der E-Mail und wird auf die Verifizierungsseite weitergeleitet.
 	Damit ist sein Profil erstellt.
 	Er wird automatisch auf die Homepage weitergeleitet.
-	\XXitem{/T230/}{t230} \emph{Testet \hyperref[funkt:260]{/F260/}}. Da er als Ko-Autor in Test \hyperref[t050]{/T050/} eingetragen wurde, wird ihm die Einreichung auf der Homepage angezeigt. Der Nutzer meldet sich ab.
+	\XXitem{/T140/}{t140} \emph{Testet \hyperref[funkt:260]{/F260/}}.
+	Da er als Ko-Autor in Test \hyperref[t050]{/T050/} eingetragen wurde, wird ihm die Einreichung auf der Homepage angezeigt.
+	Der Nutzer meldet sich ab.
 \end{description}
 
 \subsection{Angemeldeter Nutzer II}
 
 \begin{description}
 
-	\XXitem{/T110/}{t110} \emph{Testet \hyperref[funkt:480]{/F480/}}.
+	\XXitem{/T150/}{t150} \emph{Testet \hyperref[funkt:480]{/F480/}}.
 	Nun meldet sich die Nutzerin vogt@fim.uni-passau.de an und navigiert zur Seite der Einreichung ``P\neq NP''.
 	Dort ist das Gutachten von schicho@fim.uni-passau.de sichtbar.
 	Nach Betätigung der Download Schaltfläche wird die PDF-Datei \emph{gutachten.pdf} vom Browser heruntergeladen.
 
-	\XXitem{/T120/}{t120} \emph{Testet \hyperref[funkt:230]{/F230/}}.
+	\XXitem{/T160/}{t160} \emph{Testet \hyperref[funkt:230]{/F230/}}.
 	Auf der Navigationsleiste klickt die Nutzerin auf den Profil-Button.
 	Die Profil-Seite wird angezeigt.
-	Die Nutzerin betätigt nun die Schaltfläche ``Konto löschen''.
+	Die Nutzerin betätigt nun die Schaltfläche ``Delete account''.
 	Daraufhin wird eine Warnung angezeigt, dass dies sowohl alle ihre Einreichungen löscht, als auch die Editoren und Gutachter der eingereichten Paper per E-Mail benachrichtigt.
 	Die Nutzerin akzeptiert diese Nachricht und wird auf die Anmeldeseite weitergeleitet.
 	Die Administratorin meldet sich nun im System an, navigiert über die Navigationsleiste zur Liste der wissenschaftlichen Foren und von dort auf ``Chemie Tagung''.
