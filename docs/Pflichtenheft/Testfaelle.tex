@@ -35,17 +35,17 @@ Vor Ausführung jeglicher Tests sollten folgende Voraussetzungen erfüllt sein:
 		\item \emph{Nachname}: Aslan
 		\item \emph{Passwort}: SupaDöner1970!
 	\end{itemize}
+	\item Die Browser aller Nutzer fordern die Webseiten auf deutscher Sprache an.
 \end{itemize}
 Die Tests werden in der angegebenen Reihenfolge ausgeführt.
 Das heißt jeder Test kann die Zustandsänderungen, die durch vorherige Tests ausgelöst worden sind, als gegeben voraussetzen.
 \subsection{Administratoren}
-Zuerst testen wir die Funktionen der Administratoren.
-Die Einstellungen, die von der Administratorin getroffen werden, können so im Folgenden als Voraussetzungen genutzt werden.
 \begin{description}
 
 	\XXitem{/T010/}{t010} \emph{Testet \hyperref[funkt:830]{/F830/}}.
 	Die Administratorin meldet sich mit ihren Anmeldedaten im System an und wird zur Startseite weitergeleitet.
-	Über die Kopfzeile ruft sie nun die Liste der wissenschaftlichen Foren auf.
+	Auf der Kopfzeile klickt sie auf ``Journale und Konferenzen'' und wird zur Liste der wissenschaftlichen Foren weitergeleitet.
+	\todo{"navigiert sie zu..." auch spezifischer? wie genau die Buttons heißen wissen wir ja eig noch nicht}
 	Von dort aus navigiert sie zur Seite zur Erstellung eines neuen wissenschaftlichen Forums.
 	Dort erstellt sie ein Forum mit folgenden Daten:
 	\begin{itemize}
@@ -53,10 +53,10 @@ Die Einstellungen, die von der Administratorin getroffen werden, können so im F
 		\item \emph{Name}: Chemie Tagung
 		\item \emph{Deadline}: 30.12.2099
 		\item \emph{Kurzbeschreibung}: Es geht um Chemie.
-		\item \emph{URL}: ch.em.ie
+		\item \emph{URL}: https://ch.em.ie/
 		\item \emph{Anleitung zur Begutachtung}: Begutachten Sie.
 	\end{itemize}
-	Danach wird sie auf die Seite des wissenschaftlichen Forums weitergeleitet.
+	Die Konferenz wurde erfolgreich gespeichert und sie wird auf die Seite des wissenschaftlichen Forums weitergeleitet.
 
 	\XXitem{/T015/}{t015} \emph{Testet \hyperref[funkt:830]{/F830/}}.
 	Die Administratorin ruft über die Kopfzeile die Liste der wissenschaftlichen Foren auf.
@@ -67,8 +67,9 @@ Die Einstellungen, die von der Administratorin getroffen werden, können so im F
 		\item \emph{Name}: Physik Tagung
 		\item \emph{Deadline}: 30.12.2099
 		\item \emph{Kurzbeschreibung}: Es geht um Physik.
-		\item \emph{URL}: ph.ys.ik
+		\item \emph{URL}: https://ph.ys.ik/
 		\item \emph{Anleitung zur Begutachtung}: Begutachten Sie.
+		\todo{Die Anmerkung kann ich nicht lesen lol}
 	\end{itemize}
 	Danach wird sie auf die Seite des wissenschaftlichen Forums weitergeleitet.
 	Zum Schluss meldet sie sich mit der Logout-Schaltfläche in der Navigationsleiste vom System ab.
@@ -82,36 +83,40 @@ Die Einstellungen, die von der Administratorin getroffen werden, können so im F
 	Die Nutzerin mit der E-Mail-Adresse vogt@fim.uni-passau.de meldet sich im System an.
 	Anschließend gibt sie im Suchfeld in der Kopfzeile ``Chemie Tagung'' ein und schickt die Suchanfrage mit Enter ab.
 	Nun wird sie auf die Seite mit den Suchergebnissen weitergeleitet und das Forum namens ``Chemie Tagung'' ist der einzige Eintrag in der angezeigten Liste.
-	Nach einem Klick auf diesen Eintrag wird die Nutzerin auf die Seite des wissenschaftlichen Forums weitergeleitet.
 
 	\XXitem{/T030/}{t030} \emph{Testet \hyperref[funkt:400]{/F400/}}.
+	Sie klickt auf das angezeigte Forum und wird auf dessen Übersichtsseite weitergeleitet.
 	Nun navigiert die Nutzerin per Mausklick auf die Seite für eine neue Einreichung.
-	dort ist das Feld mit dem wissenschaftlichen Forum bereits richtig ausgefüllt, und zwar mit ``Chemie Tagung''
+	Dort ist das Feld mit dem wissenschaftlichen Forum bereits richtig ausgefüllt, und zwar mit ``Chemie Tagung''
 
 	\XXitem{/T040/}{t040} \emph{Testet \hyperref[funkt:420]{/F420/}}.
 	Anschließend lädt die Nutzerin folgende PDF-Datei hoch: \href{https://dl.acm.org/doi/pdf/10.1145/3321707.3321795}{https://dl.acm.org/doi/pdf/10.1145/3321707.3321795}.
+	Das erfolgreiche Hochladen wird ihr durch Anzeige des Dateinamens bestätigt.
 
 	\XXitem{/T045/}{t045} \emph{Testet \hyperref[funkt:450]{/F450/}}.
 	Sie trägt in den Feldern des Formulars folgende Daten ein:
 	\begin{itemize}
-		\item \emph{Name der Einreichung}: Wichtiges Papier
-		\item \emph{Co-Autoren}: Ein Co-Autor mit folgenden Daten:
+		\item \emph{Name der Einreichung}: P\neq NP
+		\item \emph{Co-Autoren}: Ein Ko-Autor mit folgenden Daten:
 		\begin{itemize}
-			\item \emph{Vorname} Valentin
-			\item \emph{Nachname} Kasper
+			\item \emph{Vorname} Christian
+			\item \emph{Nachname} Bachmaier
 			\item \emph{E-Mail-Adresse} garstenaue
 		\end{itemize}
 		\item \emph{Editor}: guerster@fim.uni-dorfen.de
 	\end{itemize}
-	Da die angegebene E-Mail-Adresse ``garstenaue'' nicht gültig ist, ist die Registrierung nicht erfolgreich.
-	Sie bleibt auf der Registrierungsseite und wird mit einer Fehlermeldung über das Problem informiert. Die validen Daten bleiben jedoch erhalten.
+	Sie klickt auf den Button ``Einreichen''
+	Da die angegebene E-Mail-Adresse ``garstenaue'' nicht gültig ist, ist das Einreichen nicht erfolgreich.
+	Sie bleibt auf der Einreichungsseite und wird mit einer Fehlermeldung über das Problem informiert.
+	Die validen Daten bleiben jedoch erhalten.
 
 	\XXitem{/T050/}{t050} \emph{Testet \hyperref[funkt:410]{/F410/}}.
-	Sie bessert nun die E-Mail-Adresse aus: ``garstenaue@fim.uni-passau.de''
+	Sie bessert nun die E-Mail-Adresse aus: ``garstenaue@fim.uni-passau.de'' und klickt wieder auf ``Einreichen''.
+	Diesmal ist das Einreichen erfolgreich und sie wird auf die Übersichtsseite der Einreichung weitergeleitet.
 
 	\XXitem{/T060/}{t060} \emph{Testet \hyperref[funkt:460]{/F460/}}.
-	Nach erfolgreicher Absendung des Formulars wird die Nutzerin auf die Übersichtsseite der Einreichung weitergeleitet. Frau Müller ist jetzt fertig mit ihrer Arbeit und führt mit dem zugehörigen Link in der Kopfzeile den Logout durch.
-	Sie befindet sich nun wieder auf den Anmeldeseite.
+	Frau Müller klickt auf den Profil-Button in der Kopfzeile und dann auf "Abmelden".
+	Sie wird erfolgreich ausgeloggt und auf die Anmeldeseite weitergeleitet.
 \end{description}
 
 \subsection{Editor I}
@@ -119,7 +124,7 @@ Die Einstellungen, die von der Administratorin getroffen werden, können so im F
 
 	\XXitem{/T080/}{t080} \emph{Testet \hyperref[funkt:680]{/F680/}}.
 	Der Nutzer mit der E-Mail-Adresse guerster@fim.uni-passau.de meldet sich im System an.
-	Von der Startseite aus ruft er die Einreichung ``Wichtiges Papier'' auf und landet auf der Seite dieser Einreichung.
+	Von der Startseite aus ruft er die Einreichung ``P\neq NP'' auf und landet auf der Seite dieser Einreichung.
 	Er gibt in das Formular zur Zuweisung von Gutachtern ``schicho@fim.uni-passau.de'' ein und schickt das Formular ab.
 	Es wird eine Rückmeldung für das erfolgreiche Hinzufügen eines Gutachters angezeigt.
 	Anschließend meldet er sich ab.
@@ -140,9 +145,10 @@ Die Einstellungen, die von der Administratorin getroffen werden, können so im F
 
 	\XXitem{/T090/}{t090} \emph{Testet \hyperref[funkt:540]{/F540/}}.
 	Der Nutzer mit der E-Mail-Adresse schicho@fim.uni-passau.de meldet sich im System an.
-	Von der Startseite aus ruft er die Einreichung ``Wichtiges Papier'' auf und landet auf der Seite dieser Einreichung.
-	Er nutzt das angezeigte Formular um eine einseitige PDF-Datei namens \emph{gutachten.pdf} als Gutachten hochzuladen.
-	Dann meldet er sich wieder ab mit der Logout Funktionalität.
+	Von der Startseite aus ruft er die Einreichung ``P\neq NP'' auf und landet auf der Seite dieser Einreichung.
+	Er nutzt das angezeigte Formular, um eine einseitige PDF-Datei namens \emph{gutachten.pdf} als Gutachten hochzuladen.
+	Das Gutachten wurder erfolgreich hochgeladen und ist jetzt auf der Seite der Einreichung sichtbar.
+	Anschließend meldet er sich ab.
 
 \end{description}
 
@@ -150,9 +156,10 @@ Die Einstellungen, die von der Administratorin getroffen werden, können so im F
 \begin{description}
 
 	\XXitem{/T100/}{t100} \emph{Testet \hyperref[funkt:685]{/F685/}}.
-	Der Nutzer guerster@fim.uni-passau.de meldet sich wie oben beschrieben an und navigiert wie oben beschrieben zur Seite der Einreichung ``Wichtiges Papier''.
+	Der Nutzer guerster@fim.uni-passau.de meldet sich wie oben beschrieben an und navigiert wie oben beschrieben zur Seite der Einreichung ``P\neq NP''.
 	Dort sieht er ein Gutachten von schicho@fim.uni-passau.de.
-	Er betätigt die Schaltfläche zur Freigabe dieses Gutachtens. Eine Bestätigung über die Freigabe des Gutachtens wird angezeigt.
+	Er betätigt die Schaltfläche zur Freigabe dieses Gutachtens.
+	Eine Bestätigung über die Freigabe des Gutachtens wird angezeigt.
 	Dann meldet er sich wieder ab.
 
 \end{description}
@@ -160,12 +167,14 @@ Die Einstellungen, die von der Administratorin getroffen werden, können so im F
 \subsection{Anonyme Nutzer}
 
 \begin{description}
-	\XXitem{/T200/}{t200} \emph{Testet \hyperref[funkt:010]{/F010/}}. Valentin Kasper aus \hyperref[t050]{/T050/} ist noch nicht im System registriert.
+	\XXitem{/T200/}{t200} \emph{Testet \hyperref[funkt:010]{/F010/}}.
+	Christian Bachmaier aus \hyperref[t050]{/T050/} ist noch nicht im System registriert.
 	Er ruft LasEs auf und wird zur Anmeldeseite weitergeleitet.
-	\XXitem{/T210/}{t210} \emph{Testet \hyperref[funkt:060]{/F060/}}. Er klickt auf den Link zur Registrierung und gibt seinen Namen, seine E-Mail-Adresse und das Passwort \texttt{einsZwei3!5678} an.
-
+	\XXitem{/T210/}{t210} \emph{Testet \hyperref[funkt:060]{/F060/}}.
+	Er klickt auf den Link zur Registrierung und gibt seinen Namen, seine E-Mail-Adresse und das Passwort \texttt{einsZwei3!5678} an.
 	Die Registrierung wird bestätigt und er erhält eine Verifizierungs-E-Mail.
-	\XXitem{/T220/}{t220} \emph{Testet \hyperref[funkt:070]{/F070/}}. Er klickt auf den Bestätigungslink in der E-Mail und wird auf die Verifizierungsseite weitergeleitet.
+	\XXitem{/T220/}{t220} \emph{Testet \hyperref[funkt:070]{/F070/}}.
+	Er klickt auf den Bestätigungslink in der E-Mail und wird auf die Verifizierungsseite weitergeleitet.
 	Damit ist sein Profil erstellt.
 	Er wird automatisch auf die Homepage weitergeleitet.
 	\XXitem{/T230/}{t230} \emph{Testet \hyperref[funkt:260]{/F260/}}. Da er als Ko-Autor in Test \hyperref[t050]{/T050/} eingetragen wurde, wird ihm die Einreichung auf der Homepage angezeigt. Der Nutzer meldet sich ab.
@@ -176,21 +185,22 @@ Die Einstellungen, die von der Administratorin getroffen werden, können so im F
 \begin{description}
 
 	\XXitem{/T110/}{t110} \emph{Testet \hyperref[funkt:480]{/F480/}}.
-	Nun meldet sich die Nutzerin vogt@fim.uni-passau.de an und navigiert zur Seite der Einreichung ``Wichtiges Papier''.
+	Nun meldet sich die Nutzerin vogt@fim.uni-passau.de an und navigiert zur Seite der Einreichung ``P\neq NP''.
 	Dort ist das Gutachten von schicho@fim.uni-passau.de sichtbar.
 	Nach Betätigung der Download Schaltfläche wird die PDF-Datei \emph{gutachten.pdf} vom Browser heruntergeladen.
 
 	\XXitem{/T120/}{t120} \emph{Testet \hyperref[funkt:230]{/F230/}}.
-	Auf der Navigationsleiste klickt die Nutzerin nun den Link, der zum Profil führt.
+	Auf der Navigationsleiste klickt die Nutzerin auf den Profil-Button.
 	Die Profil-Seite wird angezeigt.
-	Die Nutzerin betätigt nun die Schaltfläche zur Löschung des Kontos.
-	Daraufhin wird eine Warnung angezeigt, dass dies sowohl alle Einreichungen löscht, als auch die Editoren und Gutachter der eingereichten Paper per E-Mail benachrichtigt.
+	Die Nutzerin betätigt nun die Schaltfläche ``Konto löschen''.
+	Daraufhin wird eine Warnung angezeigt, dass dies sowohl alle ihre Einreichungen löscht, als auch die Editoren und Gutachter der eingereichten Paper per E-Mail benachrichtigt.
 	Die Nutzerin akzeptiert diese Nachricht und wird auf die Anmeldeseite weitergeleitet.
-	Der Nutzer schicho@fim.uni-passau.de hat nun eine E-Mail über die Löschung des Nutzers erhalten.
-	Die Nutzerin vogt@fim.uni-passau.de meldet sich wieder ab.
-	Die Administratorin meldet sich nun im System an, navigiert über die Navigationsleiste zur Liste der wissenschaftlichen Foren und von dort auf auf ``Chemie Tagung''. Dort stellt sie fest, dass keine Paper existieren.
+	Die Administratorin meldet sich nun im System an, navigiert über die Navigationsleiste zur Liste der wissenschaftlichen Foren und von dort auf ``Chemie Tagung''.
+	Dort stellt sie fest, dass keine Paper existieren.
 
 \end{description}
+
+\todo{404 / forbidden tests etc? eigentlich nicht soo wichtig wuerd ich sagen, und das braucht wieder noch mehr platz...}
 
 \subsection{Reset}
 Der Programmzustand, der im Abschnitt \emph{\hyperref[setup]{Setup}} beschrieben ist, muss nach den Tests wiederhergestellt werden.
