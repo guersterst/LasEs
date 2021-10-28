@@ -16,7 +16,7 @@ https://www.postgresql.org/docs/12/admin.html
 
 2. Installation von Tomcat 10.0.10
 
-Der Downloadlink befindet sich  auf der Website
+Der Downloadlink befindet sich auf der Website
 https://tomcat.apache.org/download-10.cgi
 
 Unter http://tomcat.apache.org/tomcat-10.0-doc/index.html gibt es eine
@@ -25,7 +25,7 @@ ausführliche Beschreibung und Installationsanleitung.
 3. Erstmaliges Starten der Anwendung
 
 Kopieren Sie die .war Datei nach <Tomcat Installationsverzeichnis>/webapps
-Das Installationsverzeichnis haben Sie während des Installationsprozess gewählt.
+Das Installationsverzeichnis haben Sie während des Installationsprozesses gewählt.
 
 Anschließend starten Sie Tomcat. Dafür führen Sie
 <Tomcat Installationsverzeichnis>/bin/startup.bat bzw.
@@ -50,9 +50,9 @@ Zugangsdaten hinterlegen und speichern.
 Nun kann der Server erneut gestartet werden. Sie gelangen, wenn Sie die
 Applikation über Ihren Webbrowser aufrufen, auf eine Website zur erstmaligen
 Nutzung. Hier können Sie die erfolgreiche Verbindung mit der Datenbank
- überprüfen und das Datenbankschema erstellen lassen.
+überprüfen und das Datenbankschema erstellen lassen.
 
- Es wird Ihnen auch ein Adminprofil erstellt. Damit können Sie sich fortan
- über die Loginseite von LasEs anmelden.
+Es wird Ihnen außerdem ein Adminprofil erstellt. Damit können Sie sich fortan
+über die Loginseite von LasEs anmelden.
 
  Damit ist die Konfiguration des Systems abgeschlossen.
