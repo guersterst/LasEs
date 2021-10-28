@@ -45,6 +45,9 @@ Die einzutragenden Informationen sind in der Datei näher beschrieben.
 Hier müssen Sie nun die IP-Adresse Ihres PostgreSQL Servers und die
 Zugangsdaten hinterlegen und speichern.
 
+Darüberhinaus müssen in dieser Datei auch die Email-Daten für System-E-mails
+hinterlegt werden.
+
 4. Starten der Anwendung
 
 Nun kann der Server erneut gestartet werden. Sie gelangen, wenn Sie die
