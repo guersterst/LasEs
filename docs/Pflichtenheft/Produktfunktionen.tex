@@ -1,5 +1,5 @@
 \localauthor{Johannes Garstenauer}
-
+%todo kategorien wer entscheidet und wie?
 
 Die Funktionalität vom LasEs-System wird nach den Benutzerrollen
 \textit{anonymer Nutzer}, \textit{angemeldeter Nutzer}, \textit{Gutachter}, \textit{Editor}, und
@@ -25,8 +25,8 @@ auf die Registrierung, Anmeldung und Verifizierung im System beschränken.
     \XXitem{/F030/}{funkt:030} Auf jeder Seite lassen sich
     Hilfetexte \hyperref[leist:055]{/L055/} als Tooltips zu den angebotenen Funktionalitäten und der jeweiligen Rolle
     des Nutzers, sowie das Impressum anzeigen.
-    \XXitem{/F040/}{funkt:040} Ist eine Ressource über eine URL nicht erreichbar (z.B. weil sie nicht existiert oder
-     die URL fehlerhaft ist) wird eine Fehlerseite angezeigt.
+    \XXitem{/F040/}{funkt:040} Ist eine Ressource über eine URL nicht erreichbar (z.B. weil sie nicht existiert,
+     die URL fehlerhaft ist oder Zugriffsrechte fehlen) wird eine Fehlerseite angezeigt.
     \XXitem{/F045/}{funkt:045} E-Mail Benachrichtigungen werden grundsätzlich immer zweisprachig,
     auf Deutsch und Englisch, versendet.
 \end{description}
@@ -46,7 +46,7 @@ auf die Registrierung, Anmeldung und Verifizierung im System beschränken.
     \XXitem{/FW062/}{funkt:062} Weiterhin kann der Nutzer optional weitere Daten wie in \hyperref[funkt:240]{/FW240/} beschrieben angeben.
     \XXitem{/F070/}{funkt:070} Nach der Registrierung wird eine automatisierte E-Mail
     an die angegebene Mailadresse gesendet. Die Nachricht beinhaltet einen Hinweis auf
-    die versuchte Registrierung sowie einen Verifizierungslink, der eine Stunde gültig ist und auf die Verifzierungsseite führt.
+    die versuchte Registrierung, sowie einen Verifizierungslink, der eine Stunde gültig ist und auf die Verifzierungsseite führt.
     Damit ist die Registrierung erfolgreich abgeschlossen. Nach einem Augenblick wird der Nutzer von hier
     auf die \hyperref[nut:start]{Startseite} weitergeleitet. (\hyperref[leist:140]{/L140/})
 \end{description}
@@ -97,7 +97,7 @@ Umgesetzt nach \hyperref[leist:050]{/L050/}
     Größe von 4MB (dieser Wert ist nicht konfigurierbar) hochladen oder sein altes Avatarbild entfernen oder austauschen.
     \XXitem{/F230/}{funkt:230} Auf der eigenen Profilseite kann der Nutzer sein Profil und alle damit verbundenen persistenten
     Daten löschen. Auch seine Einreichungen werden gelöscht und Gutachter, sowie Editoren dieser
-    Einreichung per Mail automatisiert informiert, wenn der Status der Erinreichung noch nicht abgeschlossen ist.
+    Einreichung per Mail automatisiert informiert, wenn der Status der Einreichung noch nicht abgeschlossen ist.
     Bevor die Löschung vollzogen wird, wird dem Nutzer eine Warnung über diese Konsequenzen angezeigt.
     \XXitem{/FW240/}{funkt:240} Der Nutzer kann außerdem seinen Arbeitgeber, ein oder mehrere Spezialgebiete
     und sein Geburtsdatum angeben und verändern, siehe \hyperref[d015]{/DW015}.
@@ -126,7 +126,7 @@ Umgesetzt nach \hyperref[leist:050]{/L050/}
     \XXitem{/F360/}{funkt:360} Dem Nutzer werden seine eigenen \hyperref[nut:ein]{Einreichungen} in Form einer Liste  nach \hyperref[leist:40]{/L040/ und Folgenden}
     mit Namen, Datum und Status angezeigt.
     \XXitem{/F400/}{funkt:400} Der Nutzer kann auf die \hyperref[nut:eein]{Seite zur Erstellung einer Einreichung} navigieren. Hierbei ist
-    das Feld, welches das wissenschaftliche Forum bestimmt bei dem eingereicht wird, bereits mit
+    das Eingabefeld, welches das wissenschaftliche Forum bestimmt bei dem eingereicht wird, bereits mit
     dem wissenschaftlichen Forum befüllt, von dessen \hyperref[nut:wissFor]{Übersichtsseite} aus die Navigation auf diese
     Seite ausgeführt wurde.
 \end{description}
@@ -137,7 +137,7 @@ Umgesetzt nach \hyperref[leist:050]{/L050/}
     Formular die nötigen Informationen wie Name der Einreichung, sowie den gewünschten Editor durch ein Dropdown-Menü
     (siehe \hyperref[funkt:665]{/F665/})
     an.
-    Der Editor wird nach erfolgreicher Erstellung hierüber durch eine automatisierte Mail informiert.
+    Der Editor wird nach erfolgreicher Einreichung hierüber durch eine automatisierte Mail informiert.
     \XXitem{/F420/}{funkt:420} Der Nutzer lädt seine Einreichung in Form eines PDF hoch. Die Abgabe darf eine Dateigröße
     von 20MB nicht überschreiten (dieser Wert ist nicht konfigurierbar) und muss im PDF-Format erfolgen.
     \XXitem{/FW430/}{funkt:430} Der Nutzer kann bei Erstellung der Einreichung maximal 10 gewünschte Gutachter per
@@ -259,8 +259,7 @@ Außerdem hat ein Editor die Folgenden zusätzlichen Funktionalitäten:
     \XXitem{/F665/}{funkt:665} Das Dropdown-Menü ist nach Vor-/Namen und E-Mailadressen
     (optional auch nach Spezialgebieten und Arbeitgebern \hyperref[funkt:240]{/FW240/}) durchsuchbar.
     \XXitem{/F670/}{funkt:670} Ein Editor kann, in einem wissenschaftlichen Forum, welcher er als Editor zugeordnet ist,
-    anderen Editoren den Status als Editor aberkennen,
-    solange ein weiterer Editor vorhanden ist.
+    anderen Editoren den Status als Editor aberkennen, solange ein weiterer Editor vorhanden ist.
     \XXitem{/F671/}{funkt:671} Ein Editor kann in einem wissenschaftlichen Forum, welchem er als Editor zugeordnet ist,
     außerdem alle weiteren zugehörigen Daten \hyperref[d030]{/D030/} editieren.
 \end{description}
@@ -357,8 +356,8 @@ und zusätzlich die Folgenden.
     festlegen.
     \begin{itemize}
         \item Deadline, Kurzbeschreibung, URL, Anleitung zur Begutachtung sind hierbei optional.
-        \item  Die Kategorie (Physik, Chemie \ldots) kann aus existierenden ausgewählt oder neu erstellt werden.
-        \item Bei der Angabe von Editoren wird überprüft, dass diese bereits als Nutzer im System registriert sind.
+        \item  Die Kategorie (Algorithmik, Graphentheorie, Analysis, \ldots) kann aus existierenden ausgewählt oder neu erstellt werden.
+        \item Bei der Angabe von Editoren wird sichergestellt, dass diese bereits als Nutzer im System registriert sind.
         Es muss mindestens ein Editor über ein Dropdown-Menü, wie in \hyperref[funkt:665]{/665/} beschrieben, eingetragen werden,
         welcher per automatisierter E-Mail darüber informiert wird.
         \item Der Name des Forums muss einzigartig sein.
