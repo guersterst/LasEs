@@ -1,0 +1,61 @@
+[Johann Schicho]
+
+Zur Installation der Webanwendung gibt es hier eine kurze Übersicht über die
+einzelnen Softwarevoraussetzungen. Auf weiterleitende Hilfe wird verwiesen.
+
+1. Installation von PostgreSQL 12.x
+
+Download Seite:
+https://www.postgresql.org/download/
+
+Durch Auswahl des Betriebssystems Ihres Servers werden Sie auf die richtige
+Downloadseite mit den Installationsbeschreibungen weitergeleitet.
+
+Weiterführende Hilfe gibt es auf der Dokumentationswebsite:
+https://www.postgresql.org/docs/12/admin.html
+
+2. Installation von Tomcat 10.0.10
+
+Der Downloadlink befindet sich auf der Website
+https://tomcat.apache.org/download-10.cgi
+
+Unter http://tomcat.apache.org/tomcat-10.0-doc/index.html gibt es eine
+ausführliche Beschreibung und Installationsanleitung.
+
+3. Erstmaliges Starten der Anwendung
+
+Kopieren Sie die .war Datei nach <Tomcat Installationsverzeichnis>/webapps
+Das Installationsverzeichnis haben Sie während des Installationsprozesses gewählt.
+
+Anschließend starten Sie Tomcat. Dafür führen Sie
+<Tomcat Installationsverzeichnis>/bin/startup.bat bzw.
+<Tomcat Installationsverzeichnis>/bin/startup.sh aus.
+
+Danach können Sie Tomcat per
+<Tomcat Installationsverzeichnis>/bin/shutdown.bat bzw.
+<Tomcat Installationsverzeichnis>/bin/shutdown.sh wieder ausschalten.
+
+Nun können sie unter
+<Tomcat Installationsverzeichnis>/webapps/lases
+eine Konfigurationsdatei namens "configuration.ini" finden.
+Hier können sie nach dem Key-Value Prinzip die nötigen Konfigurations-
+informationen angeben. Das Schema ist immer Key=Value.
+Die einzutragenden Informationen sind in der Datei näher beschrieben.
+
+Hier müssen Sie nun die IP-Adresse Ihres PostgreSQL Servers und die
+Zugangsdaten hinterlegen und speichern.
+
+Darüberhinaus müssen in dieser Datei auch die Email-Daten für System-E-mails
+hinterlegt werden.
+
+4. Starten der Anwendung
+
+Nun kann der Server erneut gestartet werden. Sie gelangen, wenn Sie die
+Applikation über Ihren Webbrowser aufrufen, auf eine Website zur erstmaligen
+Nutzung. Hier können Sie die erfolgreiche Verbindung mit der Datenbank
+überprüfen und das Datenbankschema erstellen lassen.
+
+Es wird Ihnen außerdem ein Adminprofil erstellt. Damit können Sie sich fortan
+über die Loginseite von LasEs anmelden.
+
+ Damit ist die Konfiguration des Systems abgeschlossen.
