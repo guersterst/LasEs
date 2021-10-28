@@ -2,23 +2,20 @@
 
 Durch die Verwendung von Java ist die serverseitige Ausführung von LasEs
 grundsätzlich plattformunabhängig. Auch sind Java EE Application Server für verschiedene Plattformen verfügbar.
-Die Anwenderseite setzt nur einen modernen Webbrowser voraus, da die Verwendung von JSF den HTML 5 Standard liefert, der von allen gängigen Browsern unterstützt wird.
+Die Anwenderseite setzt nur einen modernen Webbrowser voraus.
 
 \subsection{Hardware}
 
 \begin{itemize}
 	\item \textbf{Client:} Computer (PC oder Laptop) mit Internetanschluss, um darauf einen modernen Webbrowser zu verwenden. Die Mindestauflösung des Bildschirms muss $1280 \times 720$ Pixel betragen.
 
-	\item \textbf{Server:} Rechner mit Internetanschluss, um darauf Webserver und Datenbankserver laufen zu lassen. Datenbankserver und Webserver können auch auf zwei unterschiedlichen Rechnern ausgeführt werden.
+	\item \textbf{Server:} Rechner mit Internetanschluss, um darauf Anwendungsserver und Datenbankserver laufen zu lassen. Datenbankserver und Anwendungsserver können auch auf zwei unterschiedlichen Rechnern ausgeführt werden. Getestet wird mit einem Setup, in dem Datenbankserver und Anwendungsserver getrennt sind.\\
 
-	\phantomsection
-	\label{dbspezi}
+	\phantomsection \label{dbspezi}
 	Referenzsystem für den Datenbankserver ist der FIM Rechner \texttt{bueno}.\\
 	\texttt{\textbf{bueno}} führt PostgreSQL 12.x aus.
 
-	\phantomsection
-	\label{spezi}
-
+	\phantomsection \label{spezi}
 	Referenzsystem für den Webserver ist der FIM CIP Pool Rechner \texttt{ds9}.\\
 	\texttt{\textbf{ds9}} hat folgende Systemspezifikationen:
 
@@ -60,14 +57,11 @@ Die Anwenderseite setzt nur einen modernen Webbrowser voraus, da die Verwendung 
 	\item \textbf{Anwendungsserver:} Betriebssystem (Windows, Linux, etc.) mit folgenden weiteren Voraussetzungen:
 
 	\begin{itemize}
-		\item JDK 16 Installation
+		\item JDK $16.0.2$ Installation
 		\item Apache Tomcat $10.0.10$ Applicationserver
 	\end{itemize}
 
 \end{itemize}
-
-	Datenbankserver und Anwendungsserver können bei ausreichend Rechnenleistung auf dem selben Rechner ausgeführt werden. Die Performance kann dadurch eingeschränkt sein. Dazu sind dann beide Server-Softwarevoraussetzungen auf einem System zu installieren.\\
-	Getestet wird mit einem Setup, in dem Datenbankserver und Anwendungsserver getrennt sind.
 
 \subsection{Orgware}
 
