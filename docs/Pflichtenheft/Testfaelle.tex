@@ -8,6 +8,7 @@ Vor Ausführung jeglicher Tests sollten folgende Voraussetzungen erfüllt sein:
 	\item Das System ist vollständig eingerichtet.
 	Insbesondere sind die Datenbankschemata erstellt und die globalen Einstellungen sind getroffen.
 	\item Der Testmodus der Anwendung ist aktiviert.
+	Dieser zeigt Links, die durch eine Aktion per E-Mail versendet werden, nach Durchführen dieser Aktion direkt in einer Hinweisbox auf der Website an.
 	\item Es existiert eine Administratorin mit folgenden Nutzerdaten:
 	\begin{itemize}
 		\item \emph{E-Mail Adresse}: kirz@fim.uni-passau.de
@@ -55,7 +56,7 @@ Das heißt jeder Test kann die Zustandsänderungen, die durch vorherige Tests au
 		\item \emph{URL}: https://ch.em.ie/
 		\item \emph{Anleitung zur Begutachtung}: Begutachten Sie.
 	\end{itemize}
-	Die Konferenz wurde erfolgreich gespeichert und sie wird auf die Seite des wissenschaftlichen Forums weitergeleitet.
+	Die Konferenz wird erfolgreich gespeichert und sie wird auf die Seite des wissenschaftlichen Forums weitergeleitet.
 	Sie meldet sich ab.
 
 \end{description}
@@ -89,7 +90,7 @@ Das heißt jeder Test kann die Zustandsänderungen, die durch vorherige Tests au
 		\end{itemize}
 		\item \emph{Editor}: guerster@fim.uni-passau.de
 	\end{itemize}
-	Sie klickt auf den Button ``Submit Paper''
+	Sie klickt auf den Button ``Submit Paper''.
 	Da die angegebene E-Mail-Adresse ``garstenaue'' nicht gültig ist, ist das Einreichen nicht erfolgreich.
 	Sie bleibt auf der Einreichungsseite und wird mit einer Fehlermeldung über das Problem informiert.
 	Die validen Daten bleiben jedoch erhalten.
@@ -112,7 +113,7 @@ Das heißt jeder Test kann die Zustandsänderungen, die durch vorherige Tests au
 	Er gibt in das Formular zur Zuweisung von Gutachtern ``schicho@fim.uni-passau.de'' ein und schickt das Formular ab.
 	Es wird eine Rückmeldung für das erfolgreiche Hinzufügen eines Gutachters angezeigt.
 	Anschließend meldet er sich ab.
-	Da der Testmodus aktiviert ist, werden Links zur Annahme und Ablehnung für den eingeladenen Gutachter angezeigt.
+	Da der Testmodus aktiviert ist, sind Links zur Annahme und Ablehnung für den eingeladenen Gutachter bekannt.
 
 \end{description}
 
@@ -131,7 +132,8 @@ Das heißt jeder Test kann die Zustandsänderungen, die durch vorherige Tests au
 	\XXitem{/T090/}{t090} \emph{Testet \hyperref[funkt:540]{/F540/}}.
 	Der Nutzer mit der E-Mail-Adresse schicho@fim.uni-passau.de meldet sich im System an.
 	Von der Startseite aus ruft er die Einreichung ``P\neq NP'' auf und landet auf der Seite dieser Einreichung.
-	Er nutzt das angezeigte Formular, um eine einseitige PDF-Datei namens \emph{gutachten.pdf} als Gutachten hochzuladen.
+	Er klickt auf ``Review''
+	Er nutzt das angezeigte Formular, um eine einseitige PDF-Datei namens \emph{gutachten.pdf} als Gutachten hochzuladen und klickt auf ``Submit Review''.
 	Das Gutachten wurde erfolgreich hochgeladen und ist jetzt auf der Seite der Einreichung sichtbar.
 	Anschließend meldet er sich ab.
 
@@ -141,7 +143,7 @@ Das heißt jeder Test kann die Zustandsänderungen, die durch vorherige Tests au
 \begin{description}
 
 	\XXitem{/T100/}{t100} \emph{Testet \hyperref[funkt:685]{/F685/}}.
-	Der Nutzer guerster@fim.uni-passau.de meldet sich wie oben beschrieben an und navigiert, wie oben beschrieben, zur Seite der Einreichung ``P\neq NP''.
+	Der Nutzer guerster@fim.uni-passau.de meldet sich wie oben beschrieben an und navigiert zur Seite der Einreichung ``P\neq NP''.
 	Dort sieht er ein Gutachten von schicho@fim.uni-passau.de.
 	Er betätigt die Schaltfläche zur Freigabe dieses Gutachtens.
 	Eine Bestätigung über die Freigabe des Gutachtens wird angezeigt.
@@ -184,7 +186,7 @@ Das heißt jeder Test kann die Zustandsänderungen, die durch vorherige Tests au
 	Daraufhin wird eine Warnung angezeigt, dass dies sowohl alle ihre Einreichungen löscht, als auch die Editoren und Gutachter der eingereichten Paper per E-Mail benachrichtigt.
 	Die Nutzerin akzeptiert diese Nachricht und wird auf die Anmeldeseite weitergeleitet.
 	Die Administratorin meldet sich nun im System an, navigiert über die Navigationsleiste zur Liste der wissenschaftlichen Foren und von dort auf ``Chemie Tagung''.
-	Dort stellt sie fest, dass keine Paper existieren.
+	Dort stellt sie fest, dass keine Paper eingereicht sind.
 
 \end{description}
 
