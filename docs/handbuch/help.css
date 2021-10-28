@@ -1,0 +1,35 @@
+.headline {
+    font-family: "Lucida Console", "Courier New", monospace;
+    text-align: center;
+    font-size: large;
+    font-weight: bold;
+    border: none;
+    margin-bottom: 1cm;
+    margin-top: 1cm;
+    text-decoration: underline;
+}
+
+.topic {
+    font-family: "Lucida Console", "Courier New", monospace;
+    font-size: 16pt;
+    font-weight: bold;
+    text-decoration: underline;
+    margin-top: 2cm;
+    margin-bottom: 1.5cm;
+}
+
+.align-container {
+    align-items: center;
+    margin-bottom: 2cm;
+}
+
+.main-container {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 15pt;
+    margin: 0 auto;
+    max-width: 30cm;
+}
+
+.helptext {
+    margin-left: 0.5cm;
+}

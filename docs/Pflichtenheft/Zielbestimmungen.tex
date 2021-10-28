@@ -2,47 +2,60 @@
 
 \subsection{Musskriterien}
 Ziel des Projekts ist eine Webapplikation mit Benutzeroberfläche in englischer Sprache, die von mehreren Nutzenden mit verschiedenen Rollen und Rechten benutzt werden kann.
+Alle Rollen, außer die anonymen Nutzenden, werden als authentifizierte Nutzende bezeichnet und können Papers einreichen.
+Falls sie die Rolle eines Administrators, eines Gutachters oder eines Editors bekleiden, stehen ihnen weitere Funktionen zur Verfügung..
 
-An oberster Stelle in der Hierarchie stehen die Administratoren mit allumfassenden Rechten, welche für das Betreiben der Anwendung zuständig sind.
-Sie können das System gemäß den Anforderungen und Wünschen des Betreibers konfigurieren und Benutzende verwalten.
+Eine Erweiterung des Systems um Funktionen, die über die folgenden Kriterien hinausgehen, wie z.B.\ das Publizieren von Artikeln, soll einfach möglich sein.
+
+\subsubsection{Administratoren}\label{mkrit:admin}
+An oberster Stelle in der Hierarchie stehen die Administratoren mit allumfassenden Rechten, welche als Betreiber der Anwendung fungieren.
+Sie konfigurieren das System gemäß den Anforderungen und Wünschen des Betreibers und verwalten Benutzende.
 Außerdem richten sie Konferenzen und Journale ein, also Veranstaltungen bzw.\ Zeitschriften, bei denen wissenschaftliche Artikel veröffentlicht werden.
 Dafür ernennen sie jeweils Editoren, die die Einreichungen für ihre Konferenzen und Journale verwalten.
-Sie laden Gutachter für das Review von Artikeleinreichungen ein und entscheiden nach Fertigstellung des Gutachtens auf dessen Basis, ob sie angenommen oder (mit Begründung) abgelehnt werden sollen.
 
+\subsubsection{Editoren}\label{mkrit:editor}
+Editoren haben die Möglichkeit, weitere Editoren für ein \hyperref[glo:wissForum]{wissenschaftliches Forum} ernennen.
+Sie laden Gutachter für das Review von Artikeleinreichungen ein und entscheiden nach Fertigstellung der Gutachten auf dessen Basis, ob sie angenommen oder (mit Begründung) abgelehnt werden sollen.
+
+\subsubsection{Gutachter}\label{mkrit:gutachter}
 Gutachter können Einladungen zur Begutachtung einer wissenschaftlichen Arbeit annehmen oder ablehnen.
 Nehmen sie diese an, so müssen sie sich spätestens zu diesem Zeitpunkt registrieren.
-Dannach können sie das Dokument herunterladen und ihren Bericht in einem eigenen Dokument wieder hochladen.
-Außerdem stehen ihnen Tools wie einem Kommentarfeld oder die Möglichkeit, eine Empfehlung abzugeben, zur Verfügung.
+Danach laden sie das Dokument herunter und erstellen ihren Bericht in einem eigenen PDF-Dokument.
+Unter Einhaltung einer vom Editor festgelegten Deadline laden sie dieses hoch.
+Außerdem stehen ihnen Tools wie ein Kommentarfeld oder die Möglichkeit, eine Empfehlung abzugeben, zur Verfügung.
 
+\subsubsection{Angemeldete Nutzer}\label{mkrit:angemeldet}
 Einreichen kann jeder Wissenschaftler nach Registrierung und Anmeldung am System.
-Sie können mithilfe einer Liste oder Suche eine geeignete Konferenz oder ein Journal finden,
-dort können sie ihre Artikel als PDF-Datei hochladen und mit Metainformationen wie Daten der Koautoren versehen.
-Dabei suchen sie aus, welcher Editor für die Einreichung verantwortlich sein soll.
-Über eine Entscheidung der Editoren werden sie per E-Mail benachrichtigt.
+Sie finden mithilfe einer Liste oder Suche eine geeignete Konferenz oder ein Journal.
+Dort laden sie ihre Artikel als PDF-Datei hoch versehen sie mit Metainformationen wie Daten der Koautoren.
+Dabei haben sie die Möglichkeit, auszusuchen, welcher Editor für die Einreichung verantwortlich sein soll.
+Über eine Entscheidung des Editors werden sie per E-Mail benachrichtigt.
 
-Eine Erweiterung des Systems um zusätzliche Funktionen wie z.B.\ das Publizieren von Artikeln soll einfach möglich sein.
+\subsubsection{Anonyme Nutzer}\label{mkrit:anon}
+Anonyme Nutzer können sich initial nur registrieren und dann erst weitere Funktionen benutzen.
 
-Anonyme Nutzende können sich initial nur registrieren und dann erst weitere Funktionen benutzen.
-
-Alle Rollen, außer den anonymen Nutzenden, werden als authentifizierte Nutzende bezeichnet und haben zunächst grundlegende Rechte außer sie bekleiden die Rolle eines Administrators, eines Gutachters oder eines Editors.
 
 \subsection{Wunschkriterien}
 
 Über die nötigen Funktionen hinaus gibt es noch folgende wünschenswerte Kriterien.
 
-Es wäre möglich, dass bei der Einreichung ein Editor nicht verbindlich ausgesucht, sondern nur vorgeschlagen wird;
-die Editoren können dann selbst unter sich ausmachen, wer welche Einreichung betreut.
-Außerdem könnte es die Funktion geben, Gutachter bei der Einreichung unverbindlich vorzuschlagen.
+Eine Möglichkeit ist, Gutachter bei der Einreichung unverbindlich vorschlagen zu können.
 
-Weitere Möglichkeiten zur Personalisierung sind möglich,
-zum einen die Anzeige von eigener Logos und Farbschemata für Konferenzen und Journale oder auch Avatarbilder für die Nutzerprofile.
+Weitere Einstellungen zur Personalisierung sind möglich,
+zum einen die Anzeige eigener Logos und Farbschemata für Konferenzen und Journale oder auch Avatarbilder für die Nutzerprofile.
 
 Neben direkter Annahme oder Ablehnung einer Einreichung ist das Anfordern einer Revision optional.
-Die Einreichung müssten also mit gewünschten Änderungen erneut eingesendet werden, erneut begutachtet und evtl.\ akzeptiert werden.
+Die Einreichung müsste also mit gewünschten Änderungen erneut eingesendet werden, erneut begutachtet und evtl.\ akzeptiert werden.
+
+Für Gutachter kann es die Möglichkeit geben, eigene Gutachten zurückzuziehen und löschen zu lassen.
 
 Schließlich gibt es noch die Möglichkeit, die Webseite zweisprachig auf Englisch und Deutsch anzubieten.
 
 \subsection{Abgrenzungskriterien}
+
+Artikel müssen als PDF-Datei eingereicht werden. Das Hochladen von bspw.\ Word- \hyperref[glo:latex]{\LaTeX}-Dateien ist nicht möglich.
+Außerdem können diese Dokumente nicht direkt auf der Webseite angezeigt oder bearbeitet werden;
+die Nutzer müssen die Dateien herunterladen und dafür eigene Tools benutzen.
 
 Die Veröffentlichung und Lizenzierung von Artikeln ist keine Funktion der Software,
 die Annahme oder Ablehnung ist der letzte Schritt einer Einreichung für LasEs.

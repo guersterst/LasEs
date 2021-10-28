@@ -25,6 +25,11 @@
 \usepackage[top=3cm]{geometry}
 \usepackage{parskip} %% Absatz anstatt amerikanischer Einrückung
 
+% configure vertical spacing in lists
+\usepackage{enumitem}
+\setitemize{partopsep=4pt,parsep=2pt}
+\setdescription{partopsep=4pt,parsep=6pt}
+
 \makeatletter
 \def\namedlabel#1#2{\begingroup
 	#2%
