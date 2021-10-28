@@ -5,8 +5,8 @@ Die Funktionalität vom LasEs-System wird nach den Benutzerrollen
 \textit{anonymer Nutzer}, \textit{angemeldeter Nutzer}, \textit{Gutachter}, \textit{Editor}, und
 \textit{Administrator} untergliedert.
 
-Es gilt darüber hinaus, dass alle Funktionen eines einfachen \hyperref[glo:regnutzer]{angemeldeten Nutzers} auch den höherrangigen Benutzern, wie
-\hyperref[glo:gutachter]{Gutachtern}, \hyperref[glo:editor]{Editoren} und \hyperref[glo:admin]{Administratoren} zur Verfügung stehen.
+Es gilt darüber hinaus, dass alle Funktionen eines einfachen \hyperref[mkrit:angemeldet]{angemeldeten Nutzers} auch den höherrangigen Benutzern, wie
+\hyperref[mkrit:gutachter]{Gutachtern}, \hyperref[mkrit:editor]{Editoren} und \hyperref[mkrit:admin]{Administratoren} zur Verfügung stehen.
 Ein Nutzer kann mehrere Rollen annehmen. Diese hierarchische Ordnung wird in Bemerkungen zu den jeweiligen Rollen im Folgenden
 übersichtlich erklärt.
 Die Funktionen werden nach dem Schema /FXXX/ bzw. /FWXXX/ für Wunschfunktionen benannt, wobei XXX eine dreistellige Ganzzahl ist.
@@ -182,22 +182,21 @@ Gutachter haben die selben Funktion wie gewöhnliche angemeldete Nutzer. Zusätz
     \XXitem{/F500/}{funkt:500} Dem Gutachter werden auf seiner personalisierten Startseite zusätzlich zu den eigenen
     Einreichungen und zugehörigen wissenschaftlichen Foren diejenigen angezeigt für die er als Gutachter
     zugeordnet ist.
-    Für sie gelten \hyperref[nut:start]{dieselben Funktionalitäten} wie für die Einreichungen.
+    Für sie gelten \hyperref[nut:start]{dieselben Funktionalitäten} wie für die Darstellung eigener Einreichungen.
 \end{description}
 
 \subsubsection{Suche}
 \begin{description}
-    \XXitem{/F510/}{funkt:510} Ein Gutachter kann bei der Suche ebenfalls Einreichungen finden, welchen er als Gutachter
-    zugeordnet ist.
+    \XXitem{/F510/}{funkt:510} Ein Gutachter kann bei der Suche ebenfalls Einreichungen finden, welche er begutachtet.
 \end{description}
 
 \subsubsection{Wissenschaftliches Forum}
 \begin{description}
     \XXitem{/F520/}{funkt:520} Dem Gutachter werden zusätzlich zu den eigenen Einreichungen diejenigen Einreichungen angezeigt
-    \hyperref[funkt:360]{/F360/}, welchen er als Gutachter zugeordnet ist.
+    \hyperref[funkt:360]{/F360/}, welche er begutachtet.
 \end{description}
 
-\subsubsection{Einreichung}\label{gut:ein}
+\subsubsection{Einreichung} \label{gut:ein}
 \begin{description}
     \XXitem{/F530/}{funkt:530} Der Gutachter sieht auf der Übersichtsseite einer Einreichung, welcher als Gutachter
     zugeordnet ist, diejenigen Gutachten welche er selbst erstellt hat in einer
@@ -218,19 +217,20 @@ Gutachter haben die selben Funktion wie gewöhnliche angemeldete Nutzer. Zusätz
 
 \subsection{Editor}\label{funkt:editor}
 Editoren haben Zugriff auf alle Funktionen welche angemeldeten Nutzern zur Verfügung stehen.
-Editoren haben alle Funktionen von Gutachtern auf Einreichungen, welchen sie als Editor zugeordnet sind.
+Editoren haben alle Funktionen von Gutachtern auf Einreichungen, welche sie verwalten.
 Außerdem hat ein Editor die Folgenden zusätzlichen Funktionalitäten:
 
 \subsubsection{Startseite}
 \begin{description}
-    \XXitem{/F570/}{funkt:570} Dem Editor werden auf seiner personalisierten Startseite in getrennten Listen nach \hyperref[leist:040]{/L040/}zusätzlich zu den eigenen
-    Einreichungen und zugehörigen wissenschaftlichen Foren diejenigen angezeigt welchen er als Editor zugeordnet ist.
-    Für sie gelten \hyperref[nut:start]{dieselben Funktionalitäten} wie für eigene Einreichungen.
+    \XXitem{/F570/}{funkt:570} Dem Editor werden auf seiner personalisierten Startseite in getrennten Listen nach \hyperref[leist:040]{/L040/}
+    zusätzlich zu den eigenen
+    Einreichungen und zugehörigen wissenschaftlichen Foren diejenigen angezeigt, welche er verwaltet.
+    Für sie gelten \hyperref[nut:start]{dieselben Funktionalitäten} wie für die Darstellung eigener Einreichungen.
 \end{description}
 
 \subsubsection{Suche} \label{ed:suche}
 \begin{description}
-    \XXitem{/F580/}{funkt:580} Ein Editor kann ebenfalls Einreichungen finden, welchen er als Editor zugeordnet ist.
+    \XXitem{/F580/}{funkt:580} Ein Editor kann ebenfalls Einreichungen finden, welche er verwaltet.
     Diese sind als solche gekennzeichnet.
     \XXitem{/F590/}{funkt:590} Ein Editor kann ebenfalls Einträge zu allen Nutzern per Namen, E-Mail und
     evtl. (\hyperref[funkt:240]{/FW240/}) nach Arbeitgeber und Spezialgebieten finden.
@@ -293,7 +293,7 @@ Außerdem hat ein Editor die Folgenden zusätzlichen Funktionalitäten:
     eine Annahmeentscheidung ("Rot", "Grün": \hyperref[d025]{/D025/}) treffen.
     Der Editor kann Einreicher und beteiligte Ko-Autoren per \hyperref[glo:mailto]{Mailto-Nachricht} mit vorgefertigtem Inhalt
     hierüber informieren.
-    \XXitem{/FW702/}{funkt:702} Ein Editor kann für Einreichungen, welchen er als Editor zugeordnet ist,
+    \XXitem{/FW702/}{funkt:702} Ein Editor kann für Einreichungen, welche er verwaltet,
     eine Revision ("Gelb": \hyperref[d025]{/D025/}) verlangen. In diesem Fall gibt er eine Frist für die Revision an.
     Der Editor benachrichtigt den Einreicher hierüber per \hyperref[glo:mailto]{Mailto-Nachricht} mit vorgefertigtem Inhalt.
     \XXitem{/FW703}{funkt:703} Ein Editor kann Revisionen für Gutachter freischalten, sodass diese für sie sichtbar werden.
