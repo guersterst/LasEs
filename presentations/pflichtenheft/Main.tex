@@ -3,18 +3,24 @@
 \usepackage[ngerman]{babel}
 \usepackage{graphicx}
 
-%% Example here:
-%% https://github.com/josephwright/beamer/blob/main/doc/solutions/conference-talks/conference-ornate-20min.de.tex
+
+% Example here:
+% https://github.com/josephwright/beamer/blob/main/doc/solutions/conference-talks/conference-ornate-20min.de.tex
 
 \mode<presentation>
 {
 	\usetheme{Singapore}
+	%\usetheme{AnnArbor}
+	%\usecolortheme{apricot}
 }
 
-\title{Pflichtenheft}
+\title{Kolloquium Pflichtenheft}
 \subtitle{Speaker: Johann Schicho}
 
+%\titlegraphic{\includegraphics[width=5cm]{../../docs/Pflichtenheft/graphics/LasEs-logo}}
+
 \date{\small 2. November 2021}
+\logo{\includegraphics[width=1.5cm]{../../docs/Pflichtenheft/graphics/LasEs-logo}}
 
 \author{\textbf{Team 2} \\ \small {Johannes Garstenauer, Stefanie Gürster, Thomas Kirz,\\ Johann Schicho, Sebastian Vogt} \normalsize}
 
@@ -29,14 +35,29 @@
 		\tableofcontents
 	\end{frame}
 
-\section{Unser Killer Feature}
-\begin{frame}{Das killt!}
-	Okedoke:
+\section{Anforderungen und Funktionalität}
 
+\begin{frame}{Anforderungen}
 	\begin{itemize}
-		\item erste
-		\item zweite
+		\item \emph{Submission und Review Management Systems}
+		\pause % Durchklicken wie bei Kraftpunkt.
+
+		\item Aufteilung in Rollen
+		\begin{itemize}
+			\item Nutzer
+			\item Gutachter
+			\item Editor
+			\item Administrator
+		\end{itemize}
+		\pause
+
+		\item Java mit Jakarta Server Faces
+
 	\end{itemize}
+\end{frame}
+
+\begin{frame}{Funktionalität}
+	content...
 \end{frame}
 
 \end{document}
