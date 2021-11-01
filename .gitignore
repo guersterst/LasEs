@@ -5,5 +5,7 @@ Main.pdf
 *.synctex.gz
 *.tdo
 *.toc
+*.nav
+*.snm
 .idea/
 
