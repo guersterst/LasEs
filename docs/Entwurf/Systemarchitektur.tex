@@ -40,7 +40,7 @@ die von der Anwendungslogik selbst getrennt werden können.
 \textbf{\emph{edu.uni\_passau.lases.business.exception}}
 enthält die Exceptions, die ein Fehlverhalten im System repräsentieren.
 \newline\newline
-\textbf{\emph{edu.uni\_passau.lases.business.internal}
+\textbf{\emph{edu.uni\_passau.lases.business.internal}}
 enthält die Klassen, welche zur Verwaltung intern verwendet werden.
 Hierzugehört beispielsweise die Sessionverwaltung, sowie der Systemstart und -stop.
 
@@ -49,15 +49,28 @@ Dieses Paket enthält alle Schichten der Persistenzschicht.
 \newline\newline
 \textbf{\emph{edu.uni\_passau.lases.persistence.repository}}
 enthält alle Klassen die den Zugriff auf, in der Datenbank gelagerte,
-    Daten ermöglichen
-    \newline\newline
-    \textbf{\emph{edu.uni\_passau.lases.persistence.util}
-    enthält die Hilfsklassen zur Datenbankverwaltung wie einen
-    Connection-Pool oder Mailverwaltung.
-    \newline\newline
-    \textbf{\emph{edu.uni\_passau.lases.persistence.exception}
-    enthält die Exceptions welche ein Fehlverhalten im Umgang mit der
-    Datenbank repräsentieren.
-    \subsection{Frameworks}\label{arch:frameworks}
+Daten ermöglichen
+\newline\newline
+\textbf{\emph{edu.uni\_passau.lases.persistence.util}
+enthält die Hilfsklassen zur Datenbankverwaltung wie einen
+Connection-Pool oder Mailverwaltung.
+\newline\newline
+\textbf{\emph{edu.uni\_passau.lases.persistence.exception}
+enthält die Exceptions welche ein Fehlverhalten im Umgang mit der
+Datenbank repräsentieren.
 
-    \subsection{Patterns}\label{arch:patterns}
+\subsubsection{edu.uni\_passau.lases.global}
+Dieses Paket enthält alle Klassen welche über Schichten hinweg
+verwendet werden.
+\newline\newline
+\textbf{\emph{edu.uni\_passau.lases.global.logging}}
+enthält Hilfsklassen für schichtenübergreifende Aufgaben, wie das Logging.
+\newline\newline
+\textbf{\emph{edu.uni\_passau.lases.global.transport}}
+enthält alle POJO-Klassen die Daten in der Anwendung repräsentieren und zu deren
+Transport verwendet werden.
+
+%todo i18n resource bundles: info (tooltips), names (labels), messages (facesmsg)
+\subsection{Frameworks}\label{arch:frameworks}
+
+\subsection{Patterns}\label{arch:patterns}
