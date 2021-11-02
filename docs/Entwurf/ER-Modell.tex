@@ -1,6 +1,29 @@
 \localauthor{Johann Schicho}
 
-Im Folgenden ER-Diagramm sieht man die gesamte persistente Datenstruktur von LasEs. Die Kardinalität der \emph{Relationships} gibt die ganzzahligen Abhängigkeiten zwischen der einzelnen \emph{Entities} an. Die \emph{is-A} Spezialisierungen modellieren die unterschiedlichen Rollen/Typen einer Entität.
+Im Folgenden Entity-Relationship-Diagramm sieht man die gesamte persistente Datenstruktur von LasEs. Die Kardinalität der \emph{Relationships} gibt die ganzzahligen Abhängigkeiten zwischen der einzelnen \emph{Entities} an. Die \emph{is-A} Spezialisierungen modellieren die unterschiedlichen Rollen/Typen einer Entität. Ein im Diagramm doppelt umrandetes Entity ist ein \emph{schwaches} Entity. Das heißt, es existiert nur im Zusammenhang mit dem übergeordneten Entity. In unserem Fall kann beispielsweise kein Paper in der Datenbank existieren, ohne einer Einreichung zugeteilt zu sein.
+
+\subsection{Entities}
+
+Hier werden die einzelnen Entities nochmal im Detail beschrieben. Mit der Notation \texttt{/DXXX/} wird sich auf die im Pflichtenheft aufgeführten Produktdaten bezogen.
+
+\begin{description}
+	\XXitem{User}{er:user} Ein Nutzer kann von verschiedene Rollen wahrnehmen, diese werden durch die \emph{is-A}-Spezifizierung modelliert. Die Attribute entsprechen den in \texttt{\textbf{/D010/}} und \texttt{\textbf{/DW015/}} angegebenen Daten.\\Zusätzlich werden auch noch der Passwort-Hash und das zugehörige Salt zum generieren des Hashes gespeichert.
+
+	\XXitem{Paper}{er:paper} Ein Paper ist das in einem Einreichungsprozess hochgeladene Paper. Es ist modelliert als eine schwache Entität, abhängig von einer Einreichung, da ein Paper nicht im System existieren kann, ohne zu einem Einreichungsprozess zugeordnet zu werden. Es speichert die in \texttt{\textbf{/D020/}} angegebenen Daten.
+
+	\XXitem{Submission}{er:submission} Eine Einreichung speichert alle zu einem Einreichungsprozess gehörenden Daten, inklusive der Metadaten, also alle in \texttt{\textbf{/D025/}} und \texttt{\textbf{/DW021/}} angegebenen Daten.
+
+	\XXitem{Review}{er:review} Ein Gutachten ist immer genau einer Einreichung zugeordnet. Es speichert die PDF Datei ab und alle zugehörigen Metadaten.
+	Damit spiegelt es \texttt{\textbf{/D040/}} wieder.
+
+	\XXitem{Scientific Forum}{er:forum} Ein wissenschaftliches Forum besitzt die Referenz auf alle zu diesem Journal/Konferenz eingereichten Papers. Zusätzlich sind allgemeine Metadaten abgespeichert. Damit erfüllt es \texttt{\textbf{/D030/}}
+
+	\XXitem{Scientific Field}{er:field} Liste aller Fachgebiete bzw. Interessengebiete, nach \texttt{\textbf{/D035/}}.
+
+	\XXitem{System}{er:system} Systemdaten speichern allgemeine Informationen über die Firma, die LasEs einsetzt. Diese werden vom Administrator gesetzt.
+	Sie sind in \texttt{\textbf{/D050/}} spezifiziert.
+
+\end{description}
 
 \begin{figure}[H]
 	\centering
