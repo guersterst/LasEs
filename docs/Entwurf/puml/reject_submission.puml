@@ -1,0 +1,31 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+'!theme amiga
+'skinparam sequenceMessageAlign center
+'autonumber
+
+actor Gutachter as reviewer
+participant ":NewReviewBacking" as newReviewBacking
+
+reviewer -> newReviewBacking: init()
+note left
+ruft die
+NewReview-
+Seite auf
+end note
+reviewer -> newReviewBacking: submit()
+
+Bob --> Alice: Authentication Response
+
+'activate "Gutachter"
+'
+'"Gutachter" -> Alice: Anfrage
+'
+'Alice -> Bob: Another authentication Request
+'Alice <-- Bob: another authentication Response
+'
+'Alice --> "Gutachter": OK
+
+
+@enduml
