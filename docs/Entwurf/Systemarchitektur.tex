@@ -1,0 +1,63 @@
+\localauthor{Johannes Garstenauer}
+
+\subsection{Schichten}\label{arch:schichten}
+
+\subsection{Pakete}\label{arch:pakete}
+
+\subsubsection{edu.uni\_passau.lases.control}
+Dieses Paket enthält alle Klassen der Kontrollschicht.
+\newline\newline
+\textbf{\emph{edu.uni\_passau.lases.control.conversion}}
+enthält alle Klassen die zur Konvertierung von Nutzereingaben
+in Facelets verwendet werden.
+\newline\newline
+\textbf{\emph{edu.uni\_passau.lases.control.validiation}}
+enthält alle Klassen die zur Validierung von Nutzereingaben
+in Facelets verwendet werden.
+\newline\newline
+\textbf{\emph{edu.uni\_passau.lases.control.backing}}\label{arch:backing}
+enthält alle Managed Beans welche zur Darstellung der Facelets aus der
+%todo link
+View Verwendung finden. Zu jedem Facelet [facelet] existiert genau ein
+Backing-Bean, welches [facelet]Backing genannt wird.
+%todo
+%\subsubsection*{edu.uni_passau.lases.control.servlet}
+
+\subsubsection{edu.uni\_passau.lases.business}
+Dieses Paket enthält alle Klassen der Logikschicht.
+\newline\newline
+\textbf{\emph{edu.uni\_passau.lases.business.service}}
+enthält alle Klassen die den Hauptteil der Anwendungslogik.
+Das sind also alle Dienste welche den
+\hyperref[arch:backing]{Backing Beans} zur Verfügung
+gestellt werden und auf die auf die %todo link repos
+Repositories zugreifen.
+\newline\newline
+\textbf{\emph{edu.uni\_passau.lases.business.util}}
+enthält die Hilfsklassen, welche Dienste zur Verfügung stellen,
+die von der Anwendungslogik selbst getrennt werden können.
+\newline\newline
+\textbf{\emph{edu.uni\_passau.lases.business.exception}}
+enthält die Exceptions, die ein Fehlverhalten im System repräsentieren.
+\newline\newline
+\textbf{\emph{edu.uni\_passau.lases.business.internal}
+enthält die Klassen, welche zur Verwaltung intern verwendet werden.
+Hierzugehört beispielsweise die Sessionverwaltung, sowie der Systemstart und -stop.
+
+\subsubsection{edu.uni\_passau.lasses.persistence}
+Dieses Paket enthält alle Schichten der Persistenzschicht.
+\newline\newline
+\textbf{\emph{edu.uni\_passau.lases.persistence.repository}}
+enthält alle Klassen die den Zugriff auf, in der Datenbank gelagerte,
+    Daten ermöglichen
+    \newline\newline
+    \textbf{\emph{edu.uni\_passau.lases.persistence.util}
+    enthält die Hilfsklassen zur Datenbankverwaltung wie einen
+    Connection-Pool oder Mailverwaltung.
+    \newline\newline
+    \textbf{\emph{edu.uni\_passau.lases.persistence.exception}
+    enthält die Exceptions welche ein Fehlverhalten im Umgang mit der
+    Datenbank repräsentieren.
+    \subsection{Frameworks}\label{arch:frameworks}
+
+    \subsection{Patterns}\label{arch:patterns}
