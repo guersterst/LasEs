@@ -4,7 +4,7 @@
 
 \subsection{Pakete}\label{arch:pakete}
 
-\subsubsection{edu.uni\_passau.lases.control}
+\subsubsection{edu.uni\_passau.lases.control} \label{arch:control}
 Dieses Paket enthält alle Klassen der Kontrollschicht.
 \newline\newline
 \textbf{\emph{edu.uni\_passau.lases.control.conversion}}
@@ -23,10 +23,10 @@ Backing-Bean, welches [facelet]Backing genannt wird.
 %todo
 %\subsubsection*{edu.uni_passau.lases.control.servlet}
 
-\subsubsection{edu.uni\_passau.lases.business}
+\subsubsection{edu.uni\_passau.lases.business}\label{arch:business}
 Dieses Paket enthält alle Klassen der Logikschicht.
 \newline\newline
-\textbf{\emph{edu.uni\_passau.lases.business.service}}
+\textbf{\emph{edu.uni\_passau.lases.business.service}}\label{arch:service}
 enthält alle Klassen die den Hauptteil der Anwendungslogik.
 Das sind also alle Dienste welche den
 \hyperref[arch:backing]{Backing Beans} zur Verfügung
@@ -44,18 +44,18 @@ enthält die Exceptions, die ein Fehlverhalten im System repräsentieren.
 enthält die Klassen, welche zur Verwaltung intern verwendet werden.
 Hierzugehört beispielsweise die Sessionverwaltung, sowie der Systemstart und -stop.
 
-\subsubsection{edu.uni\_passau.lasses.persistence}
+\subsubsection{edu.uni\_passau.lasses.persistence}\label{arch:persistence}
 Dieses Paket enthält alle Schichten der Persistenzschicht.
 \newline\newline
 \textbf{\emph{edu.uni\_passau.lases.persistence.repository}}
 enthält alle Klassen die den Zugriff auf, in der Datenbank gelagerte,
 Daten ermöglichen
 \newline\newline
-\textbf{\emph{edu.uni\_passau.lases.persistence.util}
+\textbf{\emph{edu.uni\_passau.lases.persistence.util}}
 enthält die Hilfsklassen zur Datenbankverwaltung wie einen
 Connection-Pool oder Mailverwaltung.
 \newline\newline
-\textbf{\emph{edu.uni\_passau.lases.persistence.exception}
+\textbf{\emph{edu.uni\_passau.lases.persistence.exception}}
 enthält die Exceptions welche ein Fehlverhalten im Umgang mit der
 Datenbank repräsentieren.
 
@@ -71,6 +71,108 @@ enthält alle POJO-Klassen die Daten in der Anwendung repräsentieren und zu der
 Transport verwendet werden.
 
 %todo i18n resource bundles: info (tooltips), names (labels), messages (facesmsg)
+
 \subsection{Frameworks}\label{arch:frameworks}
+\subsubsection{Jakarta Server Faces}
+Jakarta Server Faces (JSF; früher JavaServer Faces) ist ein Framework-Standard zur
+Entwicklung von grafischen Benutzeroberflächen für Webanwendungen, basierend auf Servlets und JSP-Technik.
+Es wird die Referenzimplementierung \emph{Mojarra} verwendet.
+
+\subsubsection{Context and Dependency Injection}
+Die \emph{Context and Dependency Injection} ist eine Technologie welche die
+Abhängigkeitsverwaltung zwischen Objekten vereinfacht. Im Sinne der
+\emph{Inversion of Control} werden dem Entwickler Werkzeuge an die Hand gelegt mithilfe derer
+er Objektrefernzierung tätigen kann, ohne diese Objekte vorher explizit zu erstellen.
+Diese referenzierten Objekte können ebenfalls in andere Objekte zur Laufzeit \emph{injected}
+werden und somit ohne Initialisierung oder umständlichen Transport der Referenzierung
+verwendet werden.
+Dies ermöglicht eine loosere Kupplung zwischen Klassen und ermöglicht somit Erweiterbarkeit
+und Austauschbarkeit.
+CDI verwaltet in dieser Anwendung alle Objekte der \hyperref[arch:backing]{Backing-Beans}
+und \hyperref[arch:service]{Services}.
+Es wird die Referenzimplementierung \emph{Weld} von \emph{JBoss} verwendet.
 
 \subsection{Patterns}\label{arch:patterns}
+%todo konkret auf unser System abstimmen. (Keine allg. erklärung der patterns)
+
+\subsubsection{Model View Controller}
+Dieses Entwurfsmuster trennt die Klassen und Komponenten der Anwendung in drei
+verschieden Teile, welche jeweils eigene Aufgaben übernehmen:
+\begin{itemize}
+    \item Die \emph{\textbf{View-Komponenten}} übernehmen alle Aufgaben,
+    welche mit der grafischen Darstellung der Anwendung zusammenhängen.
+    In dieser Anwendung sind dies die Facelets. %todo link facelets
+    \item Die \emph{\textbf{Controller-Klassen}} übernehmen alle Aufgaben,
+    welche die Interaktion zwischen der View und dem Model betrifft. Sie behandeln
+    Nutzereingaben, Validation und Konvertierung etc. In dieser Anwendung befinden sie
+    sich in den \hyperref[arch:control]{edu.uni\_passau.lases.control} Paketen.
+    \item Die \emph{\textbf{Model-Komponenten}} beinhalten die Modelldaten, sowie jene
+    Klassen welche sich mit deren Beschaffung und Verarbeitung beschäftigen. In dieser
+    Anwendung befinden sie sich in den \hyperref[arch:business]{edu.uni\_passau.lases.business}
+    und \hyperref[arch:persistence]{edu.uni\_passau.lases.persistence} Paketen.
+\end{itemize}
+Die Verwendung dieses Patterns bietet viele Vorteile hinsichtlich der Modularität
+und Erweiterbarkeit der Anwendung.
+
+\subsubsection{Singleton}
+Eine Klasse, welche nach dem Singleton-Entwurfsmuster implementiert wurde zeichnet
+sich dadurch aus, dass es nur genau eine Instanziierung von dieser Klasse geben
+kann und darf. Hierdurch werden vorrangig Ressourcen gespart, außerdem wird die
+Verwaltung der im Objekt gekapselten Funktionalität erleichtert.
+Ein Beispiel hierfür ist der Connection Pool, %todo link und mehr? Config reader
+welcher ein Singleton ist damit, unter anderem, sichergestellt wird, dass
+eine genau festgelegte Anzahl an Datenbankverbindungen existiert und nicht mehr.
+
+\subsubsection{Data Transfer Object}
+Dieses Entwurfsmuster schreibt die Verwendung von \emph{Data Transfer Objects}
+zur einheitlichen Darstellung der Entitäten in den Modelldaten und dem Transport
+von Daten vor.
+Diese sind POJOs, welche private Felder zur Repräsentation der Daten mit Getter- und
+Settermethoden haben.
+Der Vorteil der Verwendung dieses Entwurfsmusters liegt darin, dass eine
+einheitliche und übersichtliche Schnittstelle für Datenrepräsentation und Transport
+in der Anwendung besteht. Die zugehörigen Klassen lagern im
+\hyperref[arch:transport]{edu.uni\_passau.lases.transport} Paket.
+
+\subsubsection{Repository}
+Beim \emph{Repository} Pattern wird für jedes Business-Objekt oder jede Entität
+eine Klasse definiert welche den Datenbankzugriff auf die zugehörigen Daten steuert.
+Für diesen Zugriff werden oft die \textit{CRUD}-Methoden, das heißt
+\begin{itemize}
+    \item \textit{CREATE} zur Erstellung,
+    \item \textit{READ} zum Erhalten,
+    \item \textit{UPDATE} zum Updaten,
+    \item und \textit{DELETE} zum Löschen
+    \end{itemize}
+eines oder mehrerer Datenbankeinträge der zugehörigen Entität, angeboten.
+Weiterhin findet das Mapping auf die \hyperref[arch:transport]{DTO-Objekte} statt.
+In dieser Anwendung finden sich die \emph{Repository-Pattern} Klassen im Paket
+\hyperref[arch:repository]{edu.uni_passau.lases.repository}. Durch die mit
+der Verwendung dieses Patterns gewonnenen Übersichtlichkeit erleichtern wir uns die
+Implementation und ermöglichen leichte Erweiterbarkeit der Datenschemas.
+
+\subsubsection{Object Pool}
+Das \emph{Object Pool} Erzeugungsmuster wird dazu verwendet, Objekte nach initialer Erzeugung
+vorzubehalten, da sinnvoller ist als sie bei jeder Verwendung neu zu erzeugen.
+Somit werden Ressourcen gespart. In dieser Anwenfung findet dieses Entwurfsmuster
+beim Connection Pool %todo link
+Verwendung und bietet den zusätzlichen Vorteil, dass eine feste Maximalanzahl an
+Datenbankverbindungen festgelegt werden kann.
+
+\subsubsection{Observer}
+Das \emph{Observer} Verhaltensmuster beschreibt Methoden, welche auf
+Änderungen im Zustand eines Systems warten und daraufhin handeln.
+In unserem System findet das beispielsweise beim LifeCycleListener %todo link
+zur Reaktion auf das Herunterfahren oder Starten des Systems Verwendung.
+%todo propagation der messages aus service in backingbeans
+
+\subsection{Fehlerbehandlung}
+Bei Verwendung der Anwendung können Fehler auftreten. Diese werden zur Nachvollziehbarkeit
+immer geloggt. Daraufhin wird auf verschiedene Weisen weiterverfahren.
+
+\subsubsection{Geprüfte Ausnahmen}
+Geprüfte Ausnahmen repräsentieren Ausnahmesituationen, mit
+denen gerechnet werden muss und auf die reagiert werden sollte.
+Beispielsweise FileNotFoundException oder IOException.
+
+\subsubsection{Ungeprüfte Ausnahmen}
