@@ -1,4 +1,29 @@
 \localauthor{Thomas Kirz}
 
 \subsection{Logging}\label{subsec:logging}
-Es gibt verschiedene Loglevel, zu denen bei relevanten Ereignissen ein Eintrag in eine Logdatei hinzugefügt wird
+Es gibt verschiedene Loglevel, zu denen bei relevanten Ereignissen ein Eintrag in eine Logdatei hinzugefügt wird: \texttt{ERROR}, \texttt{WARNING} und \texttt{INFO}
+
+\subsection{Sicherheit}\label{subsec:sicherheit}
+Relevante Sicherheitsrisiken nach OWASP Top Ten \todo{link}
+
+\subsubsection*{Fehlerhafte Zugangskontrolle}
+aber wir ham gut abegtrennte rollen und nen guten trespass listener und so
+
+\subsubsection*{Kryptographie-Fehler}
+da machen wir wenig selbst und benutzen robuste Java-Bibliotheken
+
+\subsubsection*{Injection \& XSS}
+wir sanitizen alles brav
+
+\subsubsection*{Verwendung veralteter Komponenten}
+Wir benutzen moderne dependencies und Technologien.
+Da Java-Code so rückwärtskompatibel ist, ist der Upgrade auf neue Versionen einfach.
+
+\subsection{Wartungsthread für Säuberung unso}\label{subsec:wartungsthread}
+\todo{mach ma ned oder}
+
+\subsection{Systemstart}\label{subsec:systemstart}
+Logging wird initialisiert, Konfigurationsdatei gelesen
+
+\subsection{Systemstopp}\label{subsec:systemstopp}
+Bei Systemstopp (Applikationsserver via shutdown port herunterfahren) wird der Connection Pool gestoppt und dabei alle Datenbankverbindungen geschlossen
