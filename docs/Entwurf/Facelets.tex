@@ -14,7 +14,7 @@ Zusätzlich gibt ein Login-Formular zur Anmeldung im System.
 Für nicht registrierte Nutzer wird man über einem gegebenen Link zu \emph{registration.xhtml} weitergeleitet.
 
 
-\begin{tabular}[H]{|m{3cm}|m{3cm}|m{6cm}|m{2cm}|}
+\begin{tabular}[H]{|m{2.5cm}|m{3cm}|m{6cm}|m{2.5cm}|}
     \hline
     \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
     \hline
@@ -27,13 +27,13 @@ Für nicht registrierte Nutzer wird man über einem gegebenen Link zu \emph{regi
     \hline
     login & commandButton & Ausführen des Login-Prozesses. & Alle \\
     \hline
-    registerate & outputLink & Weiterleitung zur Registrierung. & Alle \\
+    register & outputLink & Weiterleitung zur Registrierung. & Alle \\
     \hline
 \end{tabular}
 
 \textbf{registration.xhtml} Seite zur Registrierung anonymer Nutzer.
 
-\begin{tabular}[H]{|m{3cm}|m{3cm}|m{6cm}|m{2cm}|}
+\begin{tabular}[H]{|m{2.5cm}|m{3cm}|m{6cm}|m{2.5cm}|}
     \hline
     \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
     \hline
@@ -48,19 +48,80 @@ Für nicht registrierte Nutzer wird man über einem gegebenen Link zu \emph{regi
     \hline
     email & inputText & Angabe einer validen E-Mail. & Alle \\
     \hline
-    registrate & commandButton & Ausführen des Registrations-Prozesses. & Alle \\
+    register & commandButton & Ausführen des Registrations-Prozesses. & Alle \\
+    \hline
+    welcomepage & outputLink & Weiterleitung zur Login Seite. & Alle\\
     \hline
 \end{tabular}
 
-verification.xhtml
-homepage.xhtml
+\textbf{verification.xhtml} Wird bei erfolgreicher Verifikation der E-Mail angezeigt.
+
+\begin{tabular}[H]{|m{2.5cm}|m{3cm}|m{6cm}|m{2.5cm}|}
+    \hline
+    \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
+    \hline
+    \hline
+    successText & outputText & Text zur erfolgreichen Verifizierung der E-Mail & Alle\\
+    \hline
+    countdown & timer & Timer bis zur Weiterleitung auf die Homepage. & Alle \\
+    \hline
+\end{tabular}
+
+\textbf{homepage.xhtml} Startseite die den Überblick über alle Einreichungen beinhaltet.
+
 submission.xhtml
-newSubmission.xhtml
+
+\textbf{newSubmission.xhtml} Hier können neue Paper eingereicht werden.
+
+\begin{tabular}[H]{|m{2.5cm}|m{3cm}|m{6cm}|m{2.5cm}|}
+    \hline
+    \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
+    \hline
+    \hline
+    submissionName & inputText & Name des abzugebenden Papers. & Alle\\
+    \hline
+    editorSearch & inputText & Angabe eines Editors & Alle\\
+
+    \hline
+\end{tabular}
+\todo{Pdf und Wunschkriterium Editoren FW430 + F435}
+
 newReview.xhtml
 scientificForum.xhtml
 resultList.xhtml
 scientificForumList.xhtml
-profile.xhtml
+
+\textbf{profile.xhtml} Die Profilseite eines angemeldeten Nutzers.
+
+\begin{tabular}[H]{|m{2.5cm}|m{3cm}|m{6cm}|m{2.5cm}|}
+    \hline
+    \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
+    \hline
+    \hline
+    title & inputText & Titel des Nutzenden. & Nutzer\\
+    \hline
+    firstName & inputText & Vorname des Nutzenden. & Nutzer\\
+    \hline
+    name & inputText & Nachname des Nutzenden. & Nutzer\\
+    \hline
+    email & inputText & E-Mail des Nutzenden. & nutzer\\
+    \hline
+    submissionNumber & outputText & Anzahl der eigenen Einreichungen & Alle\\
+    \hline
+    employer & inputText & Angabe des Arbeitgebers & Nutzer \\
+    \hline
+    specialty & & Spezialgebiete des Nutzers & Nutzer \\
+    \hline
+    dateOfBirth & inputText & Angabe des Geburtstages & Nutzer\\
+    \hline
+    save & commandButton & Daten werden persistiert. & Nutzer\\
+    \hline
+    delete & commandButton & Nutzer und alle damit verbundenen Daten werden gelöscht. & Nutzer\\
+    \hline
+\end{tabular}
+
+\todo{bearbeiten kann es nur der nutzer aber betrachten andere....+ was ist mit Passwort F200+ doch getrennte Profilseiten? + avatarbild}
+
 errorPage.xhtml
 userList.xhtml
 newUser.xhtml
