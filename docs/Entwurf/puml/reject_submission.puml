@@ -1,15 +1,17 @@
 @startuml
 'https://plantuml.com/sequence-diagram
 
-'!theme amiga
+'!theme aws-orange
 skinparam sequenceMessageAlign center
 'autonumber
 'autoactivate on
 
 actor Editor as editor
 participant ":SubmissionBacking" as submissionBacking
+participant ":ResourceBundle" as rscBundle
+participant ":EmailService" as emailService
+participant ":SubmissionStorage" as subStorage
 participant "sub:Submission" as sub
-participant "subStorage:submissionStorage" as subStorage
 database "Database" as db
 
 editor -> submissionBacking ** : init()
@@ -29,19 +31,29 @@ subStorage -> sub
 return sub : Submission
 deactivate submissionBacking
 
-note left of editor
-gibt Begründung zur
-Ablehnungan
-end note
-
 editor -> submissionBacking : reject()
 note left
 klickt auf "Reject"
 end note
 activate submissionBacking
-submissionBacking -> sub : reject(reason)
+submissionBacking -> sub : reject()
 activate sub
 deactivate sub
+
+submissionBacking -> sub : getAuthorEmailAddresses()
+activate sub
+return addrs
+submissionBacking -> rscBundle : getRejectionEmailSubject()
+activate rscBundle
+return subject
+submissionBacking -> rscBundle : getRejectionEmailBody()
+activate rscBundle
+return body
+
+submissionBacking -> emailService : generateMailto(addrs, subject, body)
+activate emailService
+return mailtoLink
+
 submissionBacking -> subStorage : updateSubmission(subId, sub)
 activate subStorage
 subStorage -> db : ...
@@ -49,19 +61,7 @@ activate db
 deactivate db
 deactivate subStorage
 
-return confirmation
-
-
-'Bob --> Alice: Authentication Response
-'
-'activate "Gutachter"
-'
-'"Gutachter" -> Alice: Anfrage
-'
-'Alice -> Bob: Another authentication Request
-'Alice <-- Bob: another authentication Response
-'
-'Alice --> "Gutachter": OK
+return mailtoLink
 
 
 @enduml
