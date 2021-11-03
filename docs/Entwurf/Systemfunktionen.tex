@@ -1,29 +1,48 @@
 \localauthor{Thomas Kirz}
 
 \subsection{Logging}\label{subsec:logging}
-Es gibt verschiedene Loglevel, zu denen bei relevanten Ereignissen ein Eintrag in eine Logdatei hinzugefügt wird: \texttt{ERROR}, \texttt{WARNING} und \texttt{INFO}
+Die Java Logging API wird benutzt, um bei bestimmten Ereignissen Meldungen in eine Logdatei zu schreiben.
+Dabei kann man verschiedene \emph{Loglevel} einstellen, um nur Meldungen mit bestimmter Wichtigkeit zu speichern.
+Es gibt folgende Loglevel, wobei jedes Level jeweils die Nachrichten des vorherigen Levels beinhaltet:
+\begin{description}
+    \item[\texttt{SEVERE}] Sehr wichtige Ereignisse, die eine reguläre Benutzung verhindern und deren Auswirkungen auch für Nutzer verständlich sind.
+    \item[\texttt{WARNING}] Wichtige Ereignisse, die zu Problemen führen können und für Administratoren und Endnutzer relevant sind.
+    \item[\texttt{INFO}] Für den Administrator relevante Meldungen im normalen Betrieb.
+    \item[\texttt{FINE}] Feingranulare Ereignisse, die für Entwickler und Tester relevant sein können.
+\end{description}
 
 \subsection{Sicherheit}\label{subsec:sicherheit}
-Relevante Sicherheitsrisiken nach OWASP Top Ten \todo{link}
+Für die häufigsten Sicherheitsschwachstellen bei Webanwendungen, die für LasEs relevant sind, wird im Folgenden erklärt, wie ausnutzende Angriffe verhindert werden.
 
-\subsubsection*{Fehlerhafte Zugangskontrolle}
-aber wir ham gut abegtrennte rollen und nen guten trespass listener und so
+\begin{description}
+\item[Fehlerhafte Zugangskontrolle] 
+Um unerlaubten Zugriff auf Seiten, Informationen und Aktionen zu verhindern, werden Zugriffe auf nicht-öffentliche Ressourcen (das ist alles außer Start- und Registrierungsseite) standardmäßig zuerst abgelehnt.
+Die Klasse \code{TrespassListener} entscheidet dann, ob der Nutzer die nötigen Rechte hat und akzeptiert eine Anfrage nur dann, sonst wird auf eine Fehler-Seite weitergeleitet.
+Das hängt von der Rolle des Nutzers und von seiner Beziehung zur angefragten Ressource ab (ein normaler Nutzer kann z.B.\ nur sein \emph{eigenes} Profil oder eine \emph{eigene} Einreichung sehen).
+Da dies zentral in dieser Klasse passiert, entstehen weniger Fehler als bei der Prüfung an vielen verschiedenen Stellen des Programms.
 
-\subsubsection*{Kryptographie-Fehler}
-da machen wir wenig selbst und benutzen robuste Java-Bibliotheken
+\item[Kryptographie-Probleme \& Verlust der Vertraulichkeit sensibler Daten]
+Alle Anfragen und Antworten werden mit dem HTTPS-Protokoll mit TLS-Verschlüsselung durchgeführt.
+Dafür wird der Tomcat-Server, der diese Technologie unterstützt, entsprechend konfiguriert.
+\\
+Passwörter werden mit der modernen und sicheren PBKDF2-Funktion gehasht. Dabei wird für jedes Passwort ein eigener zufällig generierter Salt benutzt. Eingegebene Passwörter werden so früh wie möglich gehasht, damit die Klartextpasswörter eine minimale Lebenszeit auf dem Server haben.  Dafür wird die robuste \code{javax.crypto}-Bibliothek verwendet. \todo{Vogte bitte kurz schauen dass ich hier keinen bullshit schreibe}
 
-\subsubsection*{Injection \& XSS}
-wir sanitizen alles brav
+\item[Injection \& Cross-site-Scripting]
+Da JSF components für die HTML-Ausgabe verwendet werden, bereinigt JSF alle Nutzereingaben und macht Cross-site-Scripting unmöglich.
+\\
+Für SQL-Code werden \code{PreparedStatements} benutzt, um SQL-Injections zu verhindern.
 
-\subsubsection*{Verwendung veralteter Komponenten}
-Wir benutzen moderne dependencies und Technologien.
-Da Java-Code so rückwärtskompatibel ist, ist der Upgrade auf neue Versionen einfach.
+\item[Session Hijacking]
+In der \code{web.xml}-Datei ist ein Timeout für Sessions konfigurierbar.
+Dieser wirkt Session Hijacking sowie unerwünschten physischen Zugriffen auf den Browser des Clients entgegen.
 
-\subsection{Wartungsthread für Säuberung unso}\label{subsec:wartungsthread}
-\todo{mach ma ned oder}
+\end{description}
+
+\subsection{Asynchrone Threads}\label{subsec:threads}
+Für das Versenden von E-Mails und für das periodische Aufräumen von nicht mehr benötigten Datenbankeinträgen (abgelaufene E-Mail-Verifikationslinks) gibt es eigene Threads.
 
 \subsection{Systemstart}\label{subsec:systemstart}
-Logging wird initialisiert, Konfigurationsdatei gelesen
+Beim Systemstart wird das Logging wird initialisiert und die Konfigurationsdatei gelesen. Die Threads aus Kapitel \ref{subsec:threads} und der \code{ConnectionPool} werden gestartet.
 
 \subsection{Systemstopp}\label{subsec:systemstopp}
-Bei Systemstopp (Applikationsserver via shutdown port herunterfahren) wird der Connection Pool gestoppt und dabei alle Datenbankverbindungen geschlossen
+Der Server kann über den \emph{shutdown port} heruntergefahren werden. Dies stoppt auch den Connection Pool und alle bestehenden Datenbankverbindungen werden geschlossen.
