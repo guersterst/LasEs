@@ -2,22 +2,58 @@
 'https://plantuml.com/sequence-diagram
 
 '!theme amiga
-'skinparam sequenceMessageAlign center
+skinparam sequenceMessageAlign center
 'autonumber
+'autoactivate on
 
-actor Gutachter as reviewer
-participant ":NewReviewBacking" as newReviewBacking
+actor Editor as editor
+participant ":SubmissionBacking" as submissionBacking
+participant "sub:Submission" as sub
+participant "subStorage:submissionStorage" as subStorage
+database "Database" as db
 
-reviewer -> newReviewBacking: init()
+editor -> submissionBacking ** : init()
 note left
 ruft die
-NewReview-
+Submission-
 Seite auf
 end note
-reviewer -> newReviewBacking: submit()
+activate submissionBacking
+submissionBacking -> subStorage : getSubmission(subId)
+activate subStorage
+subStorage -> db : ...
+activate db
+return ...
+create sub
+subStorage -> sub
+return sub : Submission
+deactivate submissionBacking
 
-Bob --> Alice: Authentication Response
+note left of editor
+gibt Begründung zur
+Ablehnungan
+end note
 
+editor -> submissionBacking : reject()
+note left
+klickt auf "Reject"
+end note
+activate submissionBacking
+submissionBacking -> sub : reject(reason)
+activate sub
+deactivate sub
+submissionBacking -> subStorage : updateSubmission(subId, sub)
+activate subStorage
+subStorage -> db : ...
+activate db
+deactivate db
+deactivate subStorage
+
+return confirmation
+
+
+'Bob --> Alice: Authentication Response
+'
 'activate "Gutachter"
 '
 '"Gutachter" -> Alice: Anfrage
