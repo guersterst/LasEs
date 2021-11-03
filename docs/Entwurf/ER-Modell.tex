@@ -1,6 +1,6 @@
 \localauthor{Johann Schicho}
 
-Im Folgenden Entity-Relationship-Diagramm sieht man die gesamte persistente Datenstruktur von LasEs. Die Kardinalität der \emph{Relationships} gibt die ganzzahligen Abhängigkeiten zwischen der einzelnen \emph{Entities} an. Die \emph{is-A} Spezialisierungen modellieren die unterschiedlichen Rollen/Typen einer Entität. Ein im Diagramm doppelt umrandetes Entity ist ein \emph{schwaches} Entity. Das heißt, es existiert nur im Zusammenhang mit dem übergeordneten Entity. In unserem Fall kann beispielsweise kein Paper in der Datenbank existieren, ohne einer Einreichung zugeteilt zu sein.
+Im Entity-Relationship-Diagramm in Abbildung \ref{er:diagramm} sieht man die gesamte persistente Datenstruktur von LasEs. Die Kardinalität der \emph{Relationships} gibt die ganzzahligen Abhängigkeiten zwischen der einzelnen \emph{Entities} an. Die \emph{is-A} Spezialisierungen modellieren die unterschiedlichen Subtypen einer Entität. Ein im Diagramm doppelt umrandetes Entity ist ein \emph{schwaches} Entity. Das heißt, es existiert nur im Zusammenhang mit dem übergeordneten Entity. In unserem Fall kann beispielsweise kein Paper in der Datenbank existieren, ohne einer Einreichung zugeteilt zu sein.
 
 \begin{figure}[H]
 	\centering
@@ -25,9 +25,8 @@ Hier werden die einzelnen Entities nochmal im Detail beschrieben. Mit der Notati
 
 	\XXitem{Scientific Forum}{er:forum} Ein wissenschaftliches Forum besitzt die Referenz auf alle zu diesem Journal/Konferenz eingereichten Papers. Zusätzlich sind allgemeine Metadaten abgespeichert. Damit erfüllt es \texttt{\textbf{/D030/}}
 
-	\XXitem{Scientific Field}{er:field} Liste aller Fachgebiete bzw. Interessengebiete, die in LasEs verwendet werden. Die Entity wird durch Administratoren verwaltet und neue Einträge hinzugefügt. Nach \texttt{\textbf{/D035/}}.
+	\XXitem{Scientific Field}{er:field} Liste aller Fachgebiete bzw. Interessengebiete, die in LasEs verwendet werden. Nach \texttt{\textbf{/D035/}}.
 
-	\XXitem{System}{er:system} Systemdaten speichern allgemeine Informationen über die Firma, die LasEs einsetzt. Diese werden vom Administrator gesetzt.
-	Sie sind in \texttt{\textbf{/D050/}} spezifiziert.
+	\XXitem{System}{er:system} Systemdaten speichern allgemeine Informationen über die Firma, die LasEs einsetzt. Sie sind in \texttt{\textbf{/D050/}} spezifiziert.
 
 \end{description}
