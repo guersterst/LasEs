@@ -1,6 +1,23 @@
 \localauthor{Johannes Garstenauer}
 
 \subsection{Schichten}\label{arch:schichten}
+Diese Anwendung folgt einer Schichtenarchitektur.
+\begin{itemize}
+    \item Die \emph{view}-Schicht enthält die Komponenten zur grafischen Darstellung.
+    \item Die \emph{control}-Schicht enthält die Komponenten zur Steuerung der grafischen Darstellung und Reaktion auf
+    Nutzereingaben
+    \item Die \emph{business}-Schicht enthält die Komponenten, welche die Anwendungslogik umsetzen.
+    \item Die \emph{persistence}-Schicht enthält die Komponenten zum Zugriff auf die Datenbasis.
+\end{itemize}
+Diese Schichten folgen der \emph{\hyperref[arch:mvc]{MVC-Architektur}} wie in \hyperref[arch:pakdia]{Abbildung 1} dargestellt.
+\begin{figure}[h]
+    \includegraphics[width=0.85\linewidth]{graphics/Paketdiagramm3.0}\label{arch:pakdia}
+    \caption{Das Schichtenmodell der LasEs-Anwendung.}
+\end{figure}
+
+%todo mvc sichtbar machen.
+%todo view einfügen
+%todo servlets?
 
 \subsection{Pakete}\label{arch:pakete}
 
@@ -8,8 +25,8 @@
 Dieses Paket enthält alle Klassen der Kontrollschicht.
 \newline\newline
 \textbf{\emph{edu.uni\_passau.lases.control.conversion}}
-enthält alle Klassen die zur Konvertierung von Nutzereingaben
-in Facelets verwendet werden.
+enthält alle Klassen, die zur Konvertierung von Nutzereingaben
+in Facelets, verwendet werden.
 \newline\newline
 \textbf{\emph{edu.uni\_passau.lases.control.validiation}}
 enthält alle Klassen die zur Validierung von Nutzereingaben
@@ -27,7 +44,7 @@ Backing-Bean, welches [facelet]Backing genannt wird.
 Dieses Paket enthält alle Klassen der Logikschicht.
 \newline\newline
 \textbf{\emph{edu.uni\_passau.lases.business.service}}\label{arch:service}
-enthält alle Klassen die den Hauptteil der Anwendungslogik.
+enthält alle Klassen, die den Hauptteil der Anwendungslogik umsetzen.
 Das sind also alle Dienste welche den
 \hyperref[arch:backing]{Backing Beans} zur Verfügung
 gestellt werden und auf die auf die %todo link repos
@@ -37,7 +54,7 @@ Repositories zugreifen.
 enthält die Hilfsklassen, welche Dienste zur Verfügung stellen,
 die von der Anwendungslogik selbst getrennt werden können.
 \newline\newline
-\textbf{\emph{edu.uni\_passau.lases.business.exception}}
+\textbf{\emph{edu.uni\_passau.lases.business.exception}} \label{arch:busex}
 enthält die Exceptions, die ein Fehlverhalten im System repräsentieren.
 \newline\newline
 \textbf{\emph{edu.uni\_passau.lases.business.internal}}
@@ -47,17 +64,16 @@ Hierzugehört beispielsweise die Sessionverwaltung, sowie der Systemstart und -s
 \subsubsection{edu.uni\_passau.lasses.persistence}\label{arch:persistence}
 Dieses Paket enthält alle Schichten der Persistenzschicht.
 \newline\newline
-\textbf{\emph{edu.uni\_passau.lases.persistence.repository}}
-enthält alle Klassen die den Zugriff auf, in der Datenbank gelagerte,
-Daten ermöglichen
+\textbf{\emph{edu.uni\_passau.lases.persistence.repository}}\label{arch:repository}
+enthält alle Klassen, die dem direkten Zugriff auf die Datenbasis dienen.
 \newline\newline
 \textbf{\emph{edu.uni\_passau.lases.persistence.util}}
-enthält die Hilfsklassen zur Datenbankverwaltung wie einen
-Connection-Pool oder Mailverwaltung.
+enthält die Hilfsklassen zur Datenbankverwaltung, wie einen
+Connection-Pool oder Mailservice.
 \newline\newline
 \textbf{\emph{edu.uni\_passau.lases.persistence.exception}}
-enthält die Exceptions welche ein Fehlverhalten im Umgang mit der
-Datenbank repräsentieren.
+enthält die Exceptions, welche ein Fehlverhalten im Umgang mit der
+Datenbasis repräsentieren.
 
 \subsubsection{edu.uni\_passau.lases.global}
 Dieses Paket enthält alle Klassen welche über Schichten hinweg
@@ -66,24 +82,40 @@ verwendet werden.
 \textbf{\emph{edu.uni\_passau.lases.global.logging}}
 enthält Hilfsklassen für schichtenübergreifende Aufgaben, wie das Logging.
 \newline\newline
-\textbf{\emph{edu.uni\_passau.lases.global.transport}}
-enthält alle POJO-Klassen die Daten in der Anwendung repräsentieren und zu deren
+\textbf{\emph{edu.uni\_passau.lases.global.transport}}\label{arch:transport}
+enthält alle POJO-Klassen, die Daten in der Anwendung repräsentieren und zu deren
 Transport verwendet werden.
 
 %todo i18n resource bundles: info (tooltips), names (labels), messages (facesmsg)
 
 \subsection{Fehlerbehandlung}
 Bei Verwendung der Anwendung können Fehler auftreten. Diese werden zur Nachvollziehbarkeit
-immer geloggt. Daraufhin wird auf verschiedene Weisen weiterverfahren.
+immer geloggt. Daraufhin wird auf verschiedene Weisen verfahren.
 
 \subsubsection{Geprüfte Ausnahmen}
 Geprüfte Ausnahmen repräsentieren Ausnahmesituationen, mit
 denen gerechnet werden muss und auf die reagiert werden sollte.
-Beispielsweise FileNotFoundException oder IOException.
+Treten solche auf, dann werden sie mit einer semantisch aussagekräftigen
+\hyperref[arch:busex]{Ausnahmeklasse} und Nachricht
+an den Aufrufer weiterpropagiert.
+In \hyperref[arch:service]{Service-Klassen} werden auftretende Ausnahmen weiter zu den
+\hyperref[arch:backing]{Backing-Beans} propagiert, wo FacesMessages %todo link
+generiert werden.
+Diese werden dann von den zugehörigen Facelets %todo link
+gerendert.
 
 \subsubsection{Ungeprüfte Ausnahmen}
+Bei ungeprüften Ausnahmen handelt es sich um fatale Fehler, wie sie beispielsweise durch
+Programmierfehler entstehen können. Diesen werden vom anwendungsweiten
+ExceptionHandler %todo link
+aufgegriffen. Der User wird daraufhin auf die Fehlerseite %todo link
+weitergeleitet.
+Falls in der \emph{web.xml} die \emph{PROJECTPHASE}-Konstante auf \emph{DEVELOP} gesetzt ist,
+dann wird der gesamte Stacktrace auf der Fehlerseite angezeigt.
+%todo stacktrace wirklich drinnen lassen oder offensichtliche Kopie?
 
 \subsection{Frameworks}\label{arch:frameworks}
+
 \subsubsection{Jakarta Server Faces}
 Jakarta Server Faces (JSF; früher JavaServer Faces) ist ein Framework-Standard zur
 Entwicklung von grafischen Benutzeroberflächen für Webanwendungen, basierend auf Servlets und JSP-Technik.
@@ -92,21 +124,21 @@ Es wird die Referenzimplementierung \emph{Mojarra} verwendet.
 \subsubsection{Context and Dependency Injection}
 Die \emph{Context and Dependency Injection} ist eine Technologie welche die
 Abhängigkeitsverwaltung zwischen Objekten vereinfacht. Im Sinne der
-\emph{Inversion of Control} werden dem Entwickler Werkzeuge an die Hand gelegt mithilfe derer
+\emph{Inversion of Control} werden dem Entwickler Werkzeuge an die Hand gelegt, mithilfe derer
 er Objektrefernzierung tätigen kann, ohne diese Objekte vorher explizit zu erstellen.
-Diese referenzierten Objekte können ebenfalls in andere Objekte zur Laufzeit \emph{injected}
-werden und somit ohne Initialisierung oder umständlichen Transport der Referenzierung
+Diese referenzierten Objekte können in andere Objekte zur Laufzeit \emph{injiziert} werden.
+Somit können Objekte in dieser Anwendung ohne Initialisierung oder umständlichen Transport der Referenzierung
 verwendet werden.
-Dies ermöglicht eine loosere Kupplung zwischen Klassen und ermöglicht somit Erweiterbarkeit
+Dies ermöglicht eine loosere Kupplung zwischen Klassen und somit Erweiterbarkeit
 und Austauschbarkeit.
-CDI verwaltet in dieser Anwendung alle Objekte der \hyperref[arch:backing]{Backing-Beans}
+Das \emph{CDI} verwaltet in dieser Anwendung alle Objekte der \hyperref[arch:backing]{Backing-Beans}
 und \hyperref[arch:service]{Services}.
 Es wird die Referenzimplementierung \emph{Weld} von \emph{JBoss} verwendet.
 
 \subsection{Patterns}\label{arch:patterns}
 %todo konkret auf unser System abstimmen. (Keine allg. erklärung der patterns)
 
-\subsubsection{Model View Controller}
+\subsubsection{Model View Controller}\label{arch:mvc}
 Dieses Entwurfsmuster trennt die Klassen und Komponenten der Anwendung in drei
 verschieden Teile, welche jeweils eigene Aufgaben übernehmen:
 \begin{itemize}
@@ -154,11 +186,11 @@ Für diesen Zugriff werden oft die \textit{CRUD}-Methoden, das heißt
     \item \textit{READ} zum Erhalten,
     \item \textit{UPDATE} zum Updaten,
     \item und \textit{DELETE} zum Löschen
-    \end{itemize}
+\end{itemize}
 eines oder mehrerer Datenbankeinträge der zugehörigen Entität, angeboten.
-Weiterhin findet das Mapping auf die \hyperref[arch:transport]{DTO-Objekte} statt.
+Weiterhin findet das Mapping auf die \hyperref[arch:transport]{DTO-Objekte} dieser Anwendung statt.
 In dieser Anwendung finden sich die \emph{Repository-Pattern} Klassen im Paket
-\hyperref[arch:repository]{edu.uni_passau.lases.repository}. Durch die mit
+\hyperref[arch:repository]{edu.uni\_passau.lases.repository}. Durch die mit
 der Verwendung dieses Patterns gewonnenen Übersichtlichkeit erleichtern wir uns die
 Implementation und ermöglichen leichte Erweiterbarkeit der Datenschemas.
 
