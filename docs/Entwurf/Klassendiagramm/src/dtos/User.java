@@ -1,13 +1,14 @@
 package dtos;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
-import model.Privileges;
+import model.Privilege;
 
 public class User {
 	
-	private Privileges priveleges;
+	private List<Privilege> priveleges;
 	
 	private String title;
 	
@@ -17,90 +18,25 @@ public class User {
 	
 	private String emailAddress;
 	
+	private String unvalidatedEmailAddress;
+	
+	private LocalDateTime emailValidationStarted;
+	
 	private int id;
 	
 	private LocalDate dateOfBirth;
 	
-	private List<ScienceField> scienceFields;
+	private List<ScienceField> interests;
 	
-	// Arbeitgeber
-
-	
-	public LocalDate getDateOfBirth() {
-		return dateOfBirth;
-	}
-
-	public void setDateOfBirth(LocalDate dateOfBirth) {
-		this.dateOfBirth = dateOfBirth;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
+	private String employer;
 
 	private byte[] avatar;
 	
 	private byte[] avatarThumbnail;
-
-	public byte[] getAvatarThumbnail() {
-		return avatarThumbnail;
-	}
-
-	public void setAvatarThumbnail(byte[] avatarThumbnail) {
-		this.avatarThumbnail = avatarThumbnail;
-	}
-
-	public byte[] getAvatar() {
-		return avatar;
-	}
-
-	public void setAvatar(byte[] avatar) {
-		this.avatar = avatar;
-	}
-
-	public Privileges getPriveleges() {
-		return priveleges;
-	}
-
-	public void setPriveleges(Privileges priveleges) {
-		this.priveleges = priveleges;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public String getEmailAddress() {
-		return emailAddress;
-	}
-
-	public void setEmailAddress(String emailAddress) {
-		this.emailAddress = emailAddress;
-	}
+	
+	private String passwordHashed;
+	
+	private String passwordSalt;
 	
 
 }
