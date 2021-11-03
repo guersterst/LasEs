@@ -14,7 +14,7 @@ Im Entity-Relationship-Diagramm in Abbildung \ref{er:diagramm} sieht man die ges
 Hier werden die einzelnen Entities nochmal im Detail beschrieben. Mit der Notation \texttt{/DXXX/} wird sich auf die im Pflichtenheft aufgeführten Produktdaten bezogen.
 
 \begin{description}
-	\XXitem{User}{er:user} Ein Nutzer kann von verschiedene Rollen wahrnehmen, diese werden durch die \emph{is-A}-Spezifizierung modelliert. Die Attribute entsprechen den in \texttt{\textbf{/D010/}} und \texttt{\textbf{/DW015/}} angegebenen Daten.\\Zusätzlich werden auch noch der Passwort-Hash und das zugehörige Salt zum generieren des Hashes gespeichert.
+	\XXitem{User}{er:user} Ein Nutzer kann verschiedene Rollen wahrnehmen, diese werden durch die \emph{is-A}-Spezifizierung modelliert. Die Attribute entsprechen den in \texttt{\textbf{/D010/}} und \texttt{\textbf{/DW015/}} angegebenen Daten.\\Zusätzlich werden auch noch der Passwort-Hash und das zugehörige Salt zum generieren des Hashes gespeichert.
 
 	\XXitem{Paper}{er:paper} Ein Paper ist das in einem Einreichungsprozess hochgeladene Paper. Es ist modelliert als eine schwache Entität, abhängig von einer Einreichung, da ein Paper nicht im System existieren kann, ohne zu einem Einreichungsprozess zugeordnet zu werden. Es speichert die in \texttt{\textbf{/D020/}} angegebenen Daten.
 
