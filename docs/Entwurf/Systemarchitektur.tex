@@ -72,6 +72,17 @@ Transport verwendet werden.
 
 %todo i18n resource bundles: info (tooltips), names (labels), messages (facesmsg)
 
+\subsection{Fehlerbehandlung}
+Bei Verwendung der Anwendung können Fehler auftreten. Diese werden zur Nachvollziehbarkeit
+immer geloggt. Daraufhin wird auf verschiedene Weisen weiterverfahren.
+
+\subsubsection{Geprüfte Ausnahmen}
+Geprüfte Ausnahmen repräsentieren Ausnahmesituationen, mit
+denen gerechnet werden muss und auf die reagiert werden sollte.
+Beispielsweise FileNotFoundException oder IOException.
+
+\subsubsection{Ungeprüfte Ausnahmen}
+
 \subsection{Frameworks}\label{arch:frameworks}
 \subsubsection{Jakarta Server Faces}
 Jakarta Server Faces (JSF; früher JavaServer Faces) ist ein Framework-Standard zur
@@ -165,14 +176,3 @@ Das \emph{Observer} Verhaltensmuster beschreibt Methoden, welche auf
 In unserem System findet das beispielsweise beim LifeCycleListener %todo link
 zur Reaktion auf das Herunterfahren oder Starten des Systems Verwendung.
 %todo propagation der messages aus service in backingbeans
-
-\subsection{Fehlerbehandlung}
-Bei Verwendung der Anwendung können Fehler auftreten. Diese werden zur Nachvollziehbarkeit
-immer geloggt. Daraufhin wird auf verschiedene Weisen weiterverfahren.
-
-\subsubsection{Geprüfte Ausnahmen}
-Geprüfte Ausnahmen repräsentieren Ausnahmesituationen, mit
-denen gerechnet werden muss und auf die reagiert werden sollte.
-Beispielsweise FileNotFoundException oder IOException.
-
-\subsubsection{Ungeprüfte Ausnahmen}
