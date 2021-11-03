@@ -8,8 +8,6 @@ public class Review {
 	 * PDF muast soiba lod'n.
 	 */
 	
-	private int id;
-	
 	private LocalDateTime timestampUpdloaded;
 	
 	private boolean visible;

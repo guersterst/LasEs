@@ -9,6 +9,8 @@ public class Submission {
 	
 	private int id;
 	
+	private String title;
+	
 	private SubmissionState state;
 	
 	private LocalDateTime deadlineReviews;

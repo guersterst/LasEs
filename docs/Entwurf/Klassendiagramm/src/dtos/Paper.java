@@ -10,10 +10,6 @@ public class Paper {
 	 * Important: Reviews soist soiba lod'n
 	 */
 	
-	private int id;
-	
-	private String title;
-	
 	private int version;
 	
 	private LocalDateTime uploadTime;
