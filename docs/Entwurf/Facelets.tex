@@ -1,4 +1,9 @@
 \localauthor{Stefanie Gürster}
+Im Folgendem Abschnitt werden Abkürzungen für die verschiedenen Rollen eingeführt:
+\textbf{A} steht für Administrator, \textbf{N} für einen angemeldeten Nutzer, \textbf{E} für einen Editor und \textbf{G} steht für einen Gutachter.
+Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem Begriff \textbf{Alle} zusammengefasst.
+
+\todo{OutputText oder graphicimages für Bezeichnung hinzufügen}
 
 \subsection{Templates}
 navigation.xhtml
@@ -14,7 +19,7 @@ Zusätzlich gibt ein Login-Formular zur Anmeldung im System.
 Für nicht registrierte Nutzer wird man über einem gegebenen Link zu \emph{registration.xhtml} weitergeleitet.
 
 
-\begin{tabular}[H]{|m{2.5cm}|m{3cm}|m{6cm}|m{2.5cm}|}
+\begin{tabular}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
     \hline
     \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
     \hline
@@ -27,13 +32,13 @@ Für nicht registrierte Nutzer wird man über einem gegebenen Link zu \emph{regi
     \hline
     login & commandButton & Ausführen des Login-Prozesses. & Alle \\
     \hline
-    register & outputLink & Weiterleitung zur Registrierung. & Alle \\
+    register & link & Weiterleitung zur Registrierung. & Alle \\
     \hline
 \end{tabular}
 
 \textbf{registration.xhtml} Seite zur Registrierung anonymer Nutzer.
 
-\begin{tabular}[H]{|m{2.5cm}|m{3cm}|m{6cm}|m{2.5cm}|}
+\begin{tabular}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
     \hline
     \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
     \hline
@@ -50,13 +55,13 @@ Für nicht registrierte Nutzer wird man über einem gegebenen Link zu \emph{regi
     \hline
     register & commandButton & Ausführen des Registrations-Prozesses. & Alle \\
     \hline
-    welcomepage & outputLink & Weiterleitung zur Login Seite. & Alle\\
+    welcomepage & link & Weiterleitung zur Login Seite. & Alle\\
     \hline
 \end{tabular}
 
 \textbf{verification.xhtml} Wird bei erfolgreicher Verifikation der E-Mail angezeigt.
 
-\begin{tabular}[H]{|m{2.5cm}|m{3cm}|m{6cm}|m{2.5cm}|}
+\begin{tabular}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
     \hline
     \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
     \hline
@@ -73,58 +78,330 @@ submission.xhtml
 
 \textbf{newSubmission.xhtml} Hier können neue Paper eingereicht werden.
 
-\begin{tabular}[H]{|m{2.5cm}|m{3cm}|m{6cm}|m{2.5cm}|}
+\begin{tabular}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
     \hline
     \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
     \hline
     \hline
-    submissionName & inputText & Name des abzugebenden Papers. & Alle\\
+    submissionName & inputText & Name des abzugebenden Papers. & N\\
     \hline
-    editorSearch & inputText & Angabe eines Editors & Alle\\
-
+    forumName & inputText & Name des Forums, bei welchem abgegeben wird. & N \\
+    \hline
+    editorSearch & inputText & Angabe eines Editors & N\\
+    \hline
+    pfdUpload & inputFile & Angabe der Abgabedatei. & N\\
+    \hline
+    titel & inputText & Angabe eines Titels. & N\\
+    \hline
+    coAuthorFirstName & inputText & Angabe des Vornamen eines Co-Autors.& N\\
+    \hline
+    coAuthorName & inputText & Angabe des Namen eines Co-Autors. & N\\
+    \hline
+    coAuthorEMail & inputText & Angabe der E-Mail eines Co-Autors. & N\\
+    \hline
+    submitCoAuthor & commandButton & Ausgabe des Co-Autors in einer Liste. & N\\
+    \hline
+    coAuthorList & outputText & Anzeige aller Co-Authoren in einer Liste. & N\\
+    \hline
+    deleteCoAuthor & commandButton & Löschen des zugehörigen Co-Authors. & N\\
+    \hline
+    submit & commandButton & Ausführen des Abgabe-Prozesses. & N \\
     \hline
 \end{tabular}
-\todo{Pdf und Wunschkriterium Editoren FW430 + F435}
 
-newReview.xhtml
-scientificForum.xhtml
+\textbf{newReview.xhtml} Möchte ein Gutachter eines Papers seine Beurteilung abgeben, so ist dies auf dieser Seite möglich.
+
+\begin{tabular}{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
+    \hline
+    \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
+    \hline
+    \hline
+    versionNumber & outputText & Versionsnummer des eingereichten Papers, zu welchem der Gutachter ein Gutachten abgeben kann. & G,A\\
+    \hline
+    recommendation & checkbox & Empfehlung des Gutachters ein Paper freizuschalten. & G,A\\
+    \hline
+    comment & inputTextarea & Kommentar eines Gutachters & G,A\\
+    \hline
+    reviewPdf & inputFile & Einzureichendes Gutachten. & G,A \\
+    \hline
+\end{tabular}
+
+
 resultList.xhtml
 scientificForumList.xhtml
 
-\textbf{profile.xhtml} Die Profilseite eines angemeldeten Nutzers.
+\textbf{profile.xhtml} Die Profilseite eines angemeldeten Nutzers ist nur vom Nutzer selbst und vom Administrator editierbar.
+Ein Editor besitzt nur Leserechte. Alle zuvor gespeicherten Angaben werden in den jeweiligen Feldern angezeigt.
 
-\begin{tabular}[H]{|m{2.5cm}|m{3cm}|m{6cm}|m{2.5cm}|}
+\begin{tabular}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
     \hline
     \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
     \hline
     \hline
-    title & inputText & Titel des Nutzenden. & Nutzer\\
+    avatar & graphicImage & Aktueller Avatar. & N,A,E\\
     \hline
-    firstName & inputText & Vorname des Nutzenden. & Nutzer\\
+    newAvatar & inputFile & Hochladen eines neuen Avatars. & N,A,E\\
     \hline
-    name & inputText & Nachname des Nutzenden. & Nutzer\\
+    deleteAvatar & commandButton & Löschen des Avatars. & N,A,E\\
     \hline
-    email & inputText & E-Mail des Nutzenden. & nutzer\\
+    role & outputText & Angabe der Rolle eines Nutzers & N,A,E\\
     \hline
-    submissionNumber & outputText & Anzahl der eigenen Einreichungen & Alle\\
+    isAdmin & checkbox & Zuteilung der Rolle des Administrators. & A\\
     \hline
-    employer & inputText & Angabe des Arbeitgebers & Nutzer \\
+    title & inputText & Titel des Nutzenden. & N,A,E\\
     \hline
-    specialty & & Spezialgebiete des Nutzers & Nutzer \\
+    firstName & inputText & Vorname des Nutzenden. & N,A,E\\
+    \hline
+    name & inputText & Nachname des Nutzenden. & N,A,E\\
+    \hline
+    password & inputSecret & Leeres Eingabefeld für ein neues Passwort. & N,A\\
+    \hline
+    email & inputText & E-Mail des Nutzenden. & N,A,E\\
+    \hline
+    submissionNumber & outputText & Anzahl der eigenen Einreichungen & N,A,E\\
+    \hline
+    employer & inputText & Angabe des Arbeitgebers & N,A,E\\
+    \hline
+    specialty & & Spezialgebiete des Nutzers & N,A,E \\
     \hline
     dateOfBirth & inputText & Angabe des Geburtstages & Nutzer\\
     \hline
-    save & commandButton & Daten werden persistiert. & Nutzer\\
+    save & commandButton & Daten werden persistiert. & N,A,E\\
     \hline
-    delete & commandButton & Nutzer und alle damit verbundenen Daten werden gelöscht. & Nutzer\\
+    delete & commandButton & Nutzer und alle damit verbundenen Daten werden gelöscht. & N,A,E\\
     \hline
 \end{tabular}
 
-\todo{bearbeiten kann es nur der nutzer aber betrachten andere....+ was ist mit Passwort F200+ doch getrennte Profilseiten? + avatarbild}
+Sollte ein Administrator einem Nutzer die Rolle des Admins zuweisen oder entziehen, so erscheint beim Auslösen des Save-Buttons ein Popup-Dialog.
+In diesem Fenster  wird der Administrator angewiesen die Änderung mit seinem Passwort zu bestätigen.
 
-errorPage.xhtml
+\begin{tabular}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
+    \hline
+    \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
+    \hline
+    \hline
+    password & inputSecret & Angabe eines Passworts. & A\\
+    \hline
+    reference & outputText & Hinweis zur Veränderung der Adminrolle. & A\\
+    \hline
+    abort & commandButton & Abbruch der Änderung. & A\\
+    \hline
+    save & commandButton & Speichern aller Änderungen. & A\\
+    \hline
+\end{tabular}
+
+\todo{bearbeiten kann es nur der Nutzer aber betrachten andere....+ was ist mit Passwort F200+ doch getrennte Profilseiten? + avatarbild}
+
+\textbf{errorPage.xhtml} Auf diese Seite wird navigiert, wenn auf eine nicht existierende URL oder auf eine URL zugegriffen wird, auf die man keine Zugriffsrechte hat.
+
+\begin{tabular}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
+    \hline
+    \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
+    \hline
+    \hline
+    errorMessage & outputText & Anzeige einer Fehlermeldung. & Alle\\
+    \hline
+\end{tabular}
+
 userList.xhtml
-newUser.xhtml
-administration.xhtml
-newScientificForum.xhtml
+
+\textbf{newUser.xhtml} Der Administrator kann hier einen neuen Nutzer anlegen.
+
+\begin{tabular}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
+    \hline
+    \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
+    \hline
+    \hline
+    password & inputSecret & Angabe des Passworts. & A\\
+    \hline
+    firstName & inputText & Angabe des Vornamen. & A\\
+    \hline
+    name & inputText & Angabe des Nachnamen. & A\\
+    \hline
+    titel & inputText & Angabe eines Titels. & A\\
+    \hline
+    email & inputText & Angabe einer E-Mail-Adresse. & A\\
+    \hline
+    isAdmin & checkbox & Zuordnung einer Administratorenrolle. & A\\
+    \hline
+    abrot & commandButton & Abbruch des Vorgangs: Nutzererstellen. & A\\
+    \hline
+    save & commandButton & Speichern des neuen Nutzers. & A \\
+    \hline
+\end{tabular}
+
+\textbf{administration.xhtml} Hier kann ein Administrator Konfigurationen vornehmen.
+
+\begin{tabular}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
+    \hline
+    \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
+    \hline
+    \hline
+    orangeTheme & outputText & Standart Theme der Applikation. & A\\
+    \hline
+    orange & radioButton & Auswahl des Standart Themes. & A\\
+    \hline
+    darkTheme & outputText & Dark Theme der Applikation. & A\\
+    \hline
+    dark & radioButton & Auswahl des Dark Themes. & A\\
+    \hline
+    blueTheme & outputText & Blue Theme der Applikation & A\\
+    \hline
+    blue & radioButton & Auswahl des Blue Themes. & A\\
+    \hline
+    greenTheme & outputText & Green Theme der Applikation. & A\\
+    \hline
+    green & radioButton & Auswahl des Green Themes. & A\\
+    \hline
+    logo & graphicImage & Logo des Systems. & A\\
+    \hline
+    changeLogo & inputFile & Hochladen eines neuen Logos. & A\\
+    \hline
+    institution & inputText & Angabe des Namens der Einrichtung. & A\\
+    \hline
+    imprint & inputTextArea & Angabe des Impressums der Einrichtung. & A\\
+    \hline
+    abort & commandButton & Abbruch des Änderungsvorgangs. & A \\
+    \hline
+    save & commandButton & Speichern der Änderungen. & A\\
+    \hline
+    newUser & link & Weiterleitung zu \emph{newUser.xhtml}. & A\\
+    \hline
+    newScientificForum & link & Weiterleitung zu \emph{newScientificForum.xhtml}. & A\\
+    \hline
+\end{tabular}
+
+\textbf{newScientificForum.xhtml} Auf der Seite zum Erstellen eines wissenschaftlichen Forums kann ein Administrator dessen wesentlichen Daten festlege.
+
+\begin{tabular}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
+    \hline
+    \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
+    \hline
+    \hline
+    forumName & inputText & Angabe des Name des Forums. & A\\
+    \hline
+    fName & outputLabel & Label Name des Forums. & A\\
+    \hline
+    emailEditor & inputText & Angabe der E-Mail-Adresse eines Editor. & A\\
+    \hline
+    emailE & outputLabel & Label für E-Mail-Adresse eines Editors. & A\\
+    \hline
+    addEditor & commandButton & Hinzufügen eines Editors in eine Liste. & A\\
+    \hline
+    deleteEditor & commandButton & Löschen des zugehörigen Editors von der Liste. & A\\
+    \hline
+    deadline & inputText & Hinzufügen einer Deadline des Forums. & A\\
+    \hline
+    deadlineLabel & outputLabel & Label für Deadline des Forums. & A\\
+    \hline
+    description & inputTextArea & Angabe einer Kurzbeschreibung. & A\\
+    \hline
+    descriptionLabel & outputLabel & Label für Kurzbeschreibung. & A\\
+    \hline
+    url & inputText & Link zur Konferenz oder zum Journal. & A\\
+    \hline
+    urlLabel & outputLabel & Label für URL des Forums. & A\\
+    \hline
+    reviewInstructions  & inputTextArea & Angabe einer Anleitung für eine Begutachtung. & A\\
+    \hline
+    specialty & selectOnMenus & Auswahl von Fachgebieten. & A\\
+    \hline
+    specialtyLabel & outputLabel & Label für Fachgebiete. & A\\
+    \hline
+    newSpecialty & inputText & Hinzufügen neuer Fachgebiete. & A\\
+    \hline
+    addSpecialty & commandButton & Ausführen der Hinzufüge-Aktion. & A\\
+    \hline
+    save & commandButton & Speichern des neuen Forums. & A\\
+    \hline
+    abort & commandButton & Abbruch des Erstellungsprozesses. & A\\
+    \hline
+\end{tabular}
+
+\textbf{editForum.xhtml} Hier kann der Administrator eine schon existierende Seite bearbeiten.
+
+\begin{tabular}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
+    \hline
+    \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
+    \hline
+    \hline
+    forumName & inputText & Angabe des Name des Forums. & A\\
+    \hline
+    fName & outputLabel & Label Name des Forums. & A\\
+    \hline
+    emailEditor & inputText & Angabe der E-Mail-Adresse eines Editor. & A\\
+    \hline
+    emailE & outputLabel & Label für E-Mail-Adresse eines Editors. & A\\
+    \hline
+    addEditor & commandButton & Hinzufügen eines Editors in eine Liste. & A\\
+    \hline
+    deleteEditor & commandButton & Löschen des zugehörigen Editors von der Liste. & A\\
+    \hline
+    deadline & inputText & Hinzufügen einer Deadline des Forums. & A\\
+    \hline
+    deadlineLabel & outputLabel & Label für Deadline des Forums. & A\\
+    \hline
+    description & inputTextArea & Angabe einer Kurzbeschreibung. & A\\
+    \hline
+    descriptionLabel & outputLabel & Label für Kurzbeschreibung. & A\\
+    \hline
+    url & inputText & Link zur Konferenz oder zum Journal. & A\\
+    \hline
+    urlLabel & outputLabel & Label für URL des Forums. & A\\
+    \hline
+    reviewInstructions  & inputTextArea & Angabe einer Anleitung für eine Begutachtung. & A\\
+    \hline
+    specialty & selectOnMenus & Auswahl von Fachgebieten. & A\\
+    \hline
+    specialtyLabel & outputLabel & Label für Fachgebiete. & A\\
+    \hline
+    newSpecialty & inputText & Hinzufügen neuer Fachgebiete. & A\\
+    \hline
+    addSpecialty & commandButton & Ausführen der Hinzufüge-Aktion. & A\\
+    \hline
+    save & commandButton & Speichern des Forums. & A\\
+    \hline
+    abort & commandButton & Abbruch des Erstellungsprozesses. & A\\
+    \hline
+\end{tabular}
+
+\textbf{scientificForum.xhtml} Die Ansicht eines Forums dient zur Ausgabe von Informationen über die jeweilige Konferenz oder das jeweilige Journal.
+
+\begin{tabular}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
+    \hline
+    \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
+    \hline
+    \hline
+    forumName & outputText & Name des Forums. & Alle\\
+    \hline
+    fName & outputLabel & Label Name des Forums. & Alle\\
+    \hline
+    editor & outputText & Liste der verantwortliche Editoren. & Alle\\
+    \hline
+    deadline & outputText & Deadline des Forums. & Alle\\
+    \hline
+    deadlineLabel & outputLabel & Label für Deadline des Forums. & Alle\\
+    \hline
+    description & outputText & Kurzbeschreibung des Forums. & Alle\\
+    \hline
+    descriptionLabel & outputLabel & Label für Kurzbeschreibung. & Alle\\
+    \hline
+    url & outputLink & Link zur Konferenz oder zum Journal. & Alle\\
+    \hline
+    urlLabel & outputLabel & Label für URL des Forums. & Alle\\
+    \hline
+    reviewInstructions  & outputText & Anleitung für eine Begutachtung. & Alle\\
+    \hline
+    specialty & outputText & Fachgebiet des Forums. & Alle\\
+    \hline
+    specialtyLabel & outputLabel & Label für Fachgebiete. & Alle\\
+    \hline
+    save & commandButton & Speichern des Forums. & Alle\\
+    \hline
+    abort & commandButton & Abbruch des Erstellungsprozesses. & Alle\\
+    \hline
+\end{tabular}
+
 imprint.xhtml
+
+\todo{Forum bearbeiten können ? Löschen?}
