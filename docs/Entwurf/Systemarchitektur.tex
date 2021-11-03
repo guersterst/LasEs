@@ -29,7 +29,7 @@ enthält alle Klassen, die zur Konvertierung von Nutzereingaben
 in Facelets, verwendet werden.
 \newline\newline
 \textbf{\emph{edu.uni\_passau.lases.control.validiation}}
-enthält alle Klassen die zur Validierung von Nutzereingaben
+enthält alle Klassen, die zur Validierung von Nutzereingaben
 in Facelets verwendet werden.
 \newline\newline
 \textbf{\emph{edu.uni\_passau.lases.control.backing}}\label{arch:backing}
@@ -110,8 +110,6 @@ Programmierfehler entstehen können. Diesen werden vom anwendungsweiten
 ExceptionHandler %todo link
 aufgegriffen. Der User wird daraufhin auf die Fehlerseite %todo link
 weitergeleitet.
-Falls in der \emph{web.xml} die \emph{PROJECTPHASE}-Konstante auf \emph{DEVELOP} gesetzt ist,
-dann wird der gesamte Stacktrace auf der Fehlerseite angezeigt.
 %todo stacktrace wirklich drinnen lassen oder offensichtliche Kopie?
 
 \subsection{Frameworks}\label{arch:frameworks}
@@ -196,7 +194,7 @@ Implementation und ermöglichen leichte Erweiterbarkeit der Datenschemas.
 
 \subsubsection{Object Pool}
 Das \emph{Object Pool} Erzeugungsmuster wird dazu verwendet, Objekte nach initialer Erzeugung
-vorzubehalten, da sinnvoller ist als sie bei jeder Verwendung neu zu erzeugen.
+vorzubehalten, da dies sinnvoller ist als sie bei jeder Verwendung neu zu erzeugen.
 Somit werden Ressourcen gespart. In dieser Anwenfung findet dieses Entwurfsmuster
 beim Connection Pool %todo link
 Verwendung und bietet den zusätzlichen Vorteil, dass eine feste Maximalanzahl an
