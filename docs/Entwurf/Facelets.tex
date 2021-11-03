@@ -14,7 +14,7 @@ toolbar.xhtml
 \subsection{Seiten}
 initialConfig.xhtml
 
-\textbf{welcome.xhtml} Auf der Login- bzw. Welcomeseite wird \emph{LasEs} vorgestellt.
+\textbf{welcome.xhtml} Auf der Login- bzw. Welcome-Seite wird \emph{LasEs} vorgestellt.
 Zusätzlich gibt ein Login-Formular zur Anmeldung im System.
 Für nicht registrierte Nutzer wird man über einem gegebenen Link zu \emph{registration.xhtml} weitergeleitet.
 
@@ -23,6 +23,8 @@ Für nicht registrierte Nutzer wird man über einem gegebenen Link zu \emph{regi
     \hline
     \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
     \hline
+    \hline
+    welcomeHeading & outputText & Überschrift der Welcomepage. & Alle\\
     \hline
     welcomeText & outputText & Bewerben der Applikation mithilfe einer Kurzbeschreibung. & Alle \\
     \hline
@@ -237,6 +239,8 @@ userList.xhtml
     \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
     \hline
     \hline
+    themeHeading & outputText & Überschrift für Farbthemen. & A\\
+    \hline
     orangeTheme & outputText & Standart Theme der Applikation. & A\\
     \hline
     orange & radioButton & Auswahl des Standart Themes. & A\\
@@ -253,9 +257,13 @@ userList.xhtml
     \hline
     green & radioButton & Auswahl des Green Themes. & A\\
     \hline
+    logoHeading & outputText & Überschrift für Logo-Bereich. & A\\
+    \hline
     logo & graphicImage & Logo des Systems. & A\\
     \hline
     changeLogo & inputFile & Hochladen eines neuen Logos. & A\\
+    \hline
+    institutionHeading & outputText & Überschrift für Einstellungen der Einrichtung. & A\\
     \hline
     institution & inputText & Angabe des Namens der Einrichtung. & A\\
     \hline
@@ -402,6 +410,17 @@ userList.xhtml
     \hline
 \end{tabular}
 
-imprint.xhtml
+\textbf{imprint.xhtml} Das Impressum gibt die vom Administrator angegebenen Kontaktdaten des Betreibers wieder.
+
+\begin{tabular}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
+    \hline
+    \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
+    \hline
+    \hline
+    imprintHeading & outputText & Überschrift der Ansicht & A\\
+    \hline
+    imprint & outputText & Impressum des Betreibers. & A\\
+    \hline
+\end{tabular}
 
 \todo{Forum bearbeiten können ? Löschen?}
