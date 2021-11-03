@@ -5,6 +5,7 @@
 \definecolor{plantucolor0003}{RGB}{254,254,206}
 \definecolor{plantucolor0004}{RGB}{251,251,119}
 \begin{tikzpicture}[yscale=-1
+,font=\Large
 ,pstyle0/.style={color=plantucolor0001,fill=white,line width=1.0pt}
 ,pstyle1/.style={color=plantucolor0001,line width=1.0pt,dash pattern=on 5.0pt off 5.0pt}
 ,pstyle2/.style={color=plantucolor0001,fill=plantucolor0003,line width=2.0pt}
