@@ -2,6 +2,13 @@
 
 Im Folgenden Entity-Relationship-Diagramm sieht man die gesamte persistente Datenstruktur von LasEs. Die Kardinalität der \emph{Relationships} gibt die ganzzahligen Abhängigkeiten zwischen der einzelnen \emph{Entities} an. Die \emph{is-A} Spezialisierungen modellieren die unterschiedlichen Rollen/Typen einer Entität. Ein im Diagramm doppelt umrandetes Entity ist ein \emph{schwaches} Entity. Das heißt, es existiert nur im Zusammenhang mit dem übergeordneten Entity. In unserem Fall kann beispielsweise kein Paper in der Datenbank existieren, ohne einer Einreichung zugeteilt zu sein.
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{graphics/ER-Modell}
+	\caption{Übersicht über die Zusammenhänge zwischen den Entitys}
+	\label{er:diagramm}
+\end{figure}
+
 \subsection{Entities}
 
 Hier werden die einzelnen Entities nochmal im Detail beschrieben. Mit der Notation \texttt{/DXXX/} wird sich auf die im Pflichtenheft aufgeführten Produktdaten bezogen.
@@ -24,10 +31,3 @@ Hier werden die einzelnen Entities nochmal im Detail beschrieben. Mit der Notati
 	Sie sind in \texttt{\textbf{/D050/}} spezifiziert.
 
 \end{description}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=\linewidth]{graphics/ER-Modell}
-	\caption{Übersicht über die Zusammenhänge zwischen den Entitys}
-	\label{er:diagramm}
-\end{figure}
