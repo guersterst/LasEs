@@ -4,5 +4,7 @@ import idk.SessionInformation;
 
 public class UserListBacking {
 
+	private SessionInformation sessionInformation;
+
 
 }

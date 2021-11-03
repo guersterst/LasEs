@@ -4,4 +4,6 @@ import idk.SessionInformation;
 
 public class HomepageBacking {
 
+	private SessionInformation sessionInformation;
+
 }

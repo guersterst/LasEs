@@ -2,7 +2,7 @@ package controller.validation;
 
 import model.util.EmailService;
 
-public class EmailAddressValidaor implements Validator<String> {
+public class EmailAddressValidator implements Validator<String> {
 
 
     @Override
