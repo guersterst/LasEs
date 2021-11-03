@@ -6,9 +6,55 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
 \todo{OutputText oder graphicimages für Bezeichnung hinzufügen}
 
 \subsection{Templates}
-navigation.xhtml
-footer.xhtml
-main.xhtml
+\textbf{navigation.xhtml} ist die Kopfzeile der Webanwendung. Diese bietet die Suchfunktion an und Links zu verschiedenen Listen und dem Profil.
+
+\begin{tabular}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
+	\hline
+	\textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
+	\hline
+	\hline
+	searchfield & inputText & Suchleiste & N \\
+	\hline
+	user-list-link & link & Link zur Übersichtsseite aller Nutzer & A, E \\
+	\hline
+	forum-list-link & link & Link zur Übersichtsseite alle Journale und Konferenzen & N \\
+	\hline
+	logout-button & commandButton & Loggt den Nutzer aus dem System aus und leitet zur Loginseite weiter & N \\
+	\hline
+	profile-link & link & Link zur Profilübersicht & N \\
+	\hline
+\end{tabular}
+
+\textbf{main.xhtml} ist das Template, welches die Seiten zwischen Kopf- und Fußzeile einbettet.
+
+\begin{tabular}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
+	\hline
+	\textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
+	\hline
+	\hline
+	navigation-bar & include & Kopfzeile & Alle\\
+	\hline
+	main-content & insert & Seiteninhalt & Alle \\
+	\hline
+	footer-bar & include & Fußzeile & Alle \\
+	\hline
+	tool-bar & include & Seitenleiste & A, E \\
+	\hline
+\end{tabular}
+
+\textbf{footer.xhtml} ist die Fußzeile der Webanwendung und für alle sichtbar.
+
+\begin{tabular}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
+	\hline
+	\textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
+	\hline
+	\hline
+	imprint-link & link & Link zur Seite des Impressums & Alle\\
+	\hline
+\end{tabular}
+
+\todo{Toolbar}
+
 toolbar.xhtml
 
 \subsection{Seiten}
