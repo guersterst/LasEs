@@ -1,0 +1,76 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+'!theme aws-orange
+skinparam sequenceMessageAlign center
+'autonumber
+'autoactivate on
+
+actor User as user
+participant ":SubmissionBacking" as submissionBacking
+participant "sub:Submission" as sub
+participant ":ResourceBundle" as rscBundle
+participant ":SubmissionStorage" as subStorage
+participant ":ConnectionPool" as connPool
+database "Database" as db
+
+user -> submissionBacking ** : init()
+note left
+ruft die
+Submission-
+Seite auf
+end note
+activate submissionBacking
+submissionBacking -> subStorage : getSubmission(subId)
+activate subStorage
+subStorage -> connPool : getConnection()
+activate connPool
+return conn
+subStorage -> db : ...
+activate db
+return ...
+subStorage -> connPool : releaseConnection()
+activate connPool
+deactivate connPool
+create sub
+subStorage -> sub
+return sub : Submission
+return submission.xhtml
+
+user -> submissionBacking : setRevisionPart()
+activate submissionBacking
+note left
+lädt die PDF-Datei hoch und
+klickt auf "Submit" revision
+end note
+user -> submissionBacking : addRevision()
+submissionBacking -> sub : getId()
+activate sub
+return id
+
+submissionBacking -> subStorage : addRevision(subId, revisionPdf)
+activate subStorage
+subStorage -> connPool : getConnection()
+activate connPool
+return conn
+subStorage -> db : get highest existing version
+activate db
+return maxV
+subStorage -> db : upload paper version v+1
+activate db
+deactivate db
+subStorage -> connPool : releaseConnection()
+activate connPool
+deactivate connPool
+return
+
+submissionBacking -> rscBundle : getRevisionAddedConfirmationMsg()
+activate rscBundle
+return
+
+return submission.xhtml\nwith facesMessage
+
+
+
+
+@enduml
