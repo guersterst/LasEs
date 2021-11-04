@@ -43,5 +43,7 @@ Für das Versenden von E-Mails und für das periodische Aufräumen von nicht meh
 \subsection{Systemstart}\label{subsec:systemstart}
 Beim Systemstart wird das Logging wird initialisiert und die Konfigurationsdatei gelesen. Die Threads aus Kapitel \ref{subsec:threads} und der \code{ConnectionPool} werden gestartet.
 
+Dies passiert, wenn das Servlet bereit ist, dazu hört ein \code{ServletContextListener} mit der \code{@WebListener}-Annotation auf das \code{contextInitialized}-Event.
+
 \subsection{Systemstopp}\label{subsec:systemstopp}
 Der Server kann über den \emph{shutdown port} heruntergefahren werden. Dies stoppt auch den Connection Pool und alle bestehenden Datenbankverbindungen werden geschlossen. Damit wird ein geordneter Shutdown sichergestellt
