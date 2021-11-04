@@ -53,9 +53,37 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
 	\hline
 \end{tabular}
 
-\todo{Toolbar}
+\begin{samepage} %https://stackoverflow.com/questions/4003473/make-an-unbreakable-block-in-tex
 
-toolbar.xhtml
+\textbf{toolbar.xhtml} ist die Seitenleiste für Editoren und Administratoren auf der Einreichungsübersichtsseite. Hier wird die Einreichung verwaltet.
+\nopagebreak
+
+\begin{tabular}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
+	\hline
+	\textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
+	\hline
+	\hline
+	add-reviewer-field & inputText & Eingabefeld zur Angabe einer E-Mailadresse & A, E \\
+	\hline
+	add-reviewer-btn & commandButton & Knopf zum hinzufügen des Gutachters & A, E \\
+	\hline
+	reviewer-table & dataTable & Liste der Gutachter & A, E \\
+	\hline
+	remove-reviewer & commandButton & Entferne einen bestimmten Gutachter & A, E \\
+	\hline
+	select-editor & selectOneMenu & Auswahländerung des verwaltenden Editors & A, E \\
+	\hline
+	save-editor & commandButton & Speichern des geänderten Editors & A, E \\
+	\hline
+	require-revision-btn & commandButton & Fordert den Einreicher auf, seine Einreichung zu überarbeiten & A, E \\
+	\hline
+	accept-submission-btn & commandButton & Akzeptiere die Einreichung & A, E \\
+	\hline
+	reject-submission-btn & commandButton & Lehne die Einreichung ab & A, E \\
+	\hline
+\end{tabular}
+
+\end{samepage}
 
 \subsection{Seiten}
 initialConfig.xhtml
