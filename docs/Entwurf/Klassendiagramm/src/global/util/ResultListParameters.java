@@ -17,4 +17,7 @@ public class ResultListParameters {
 	
 	private String sortColumn;
 
+	private SortOrder sortOrder;
+
+
 }
