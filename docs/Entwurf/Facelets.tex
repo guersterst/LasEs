@@ -22,6 +22,8 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
 
 \subsection{Templates}
 
+\localauthor{Johann Schicho}
+
 % https://stackoverflow.com/questions/4003473/make-an-unbreakable-block-in-tex
 % Mit samepage bleiben überschrift und tabelle auf der glechen Seite
 
@@ -69,19 +71,6 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
 \end{samepage}
 
 \begin{samepage}
-    \textbf{listPagination.xhtml} Composite Component zur paginierung von Listen.
-    \emph{listPagination.xhtml} wird in jeder Tabelle oder Liste eingebunden.
-    \todo{Beschreibung von ListPagination verändern.}
-    \nopagebreak
-
-    \ftable{
-        \fentry{back}{commandButton}{Laden der vorherigen Seite der Liste.}{Alle}
-        \fentry{next}{commandButton}{Laden der nächsten Seite der Liste.}{Alle}
-        \fentry{page}{selectOneMenue}{Laden einer bestimmten Seite}{Alle}
-    }
-\end{samepage}
-
-\begin{samepage}
     \textbf{toolbar.xhtml} ist die Seitenleiste für Editoren und Administratoren auf der Einreichungsübersichtsseite. Hier wird die Einreichung verwaltet.
     \nopagebreak
 
@@ -107,7 +96,24 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
     }
 \end{samepage}
 
+\localauthor{Stefanie Gürster}
+
+\begin{samepage}
+\textbf{listPagination.xhtml} Composite Component zur paginierung von Listen.
+\emph{listPagination.xhtml} wird in jeder Tabelle oder Liste eingebunden.
+\todo{Beschreibung von ListPagination verändern.}
+\nopagebreak
+
+\ftable{
+        \fentry{back}{commandButton}{Laden der vorherigen Seite der Liste.}{Alle}
+        \fentry{next}{commandButton}{Laden der nächsten Seite der Liste.}{Alle}
+        \fentry{page}{selectOneMenue}{Laden einer bestimmten Seite}{Alle}
+}
+\end{samepage}
+
 \subsection{Seiten}
+
+\localauthor{Stefanie Gürster}
 
 \begin{samepage}
     \textbf{initialConfig.xhtml} Auf dieser Seite landet man beim ersten Systemstart. Sie ist nur für Administratoren zugänglich. Hier kann der Administrator die Datenbankschemata erstellen lassen.
