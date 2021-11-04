@@ -3,63 +3,87 @@
 
 '!theme aws-orange
 skinparam sequenceMessageAlign center
+skinparam BoxPadding 10
 'autonumber
 'autoactivate on
 
 actor Editor as editor
-participant ":SubmissionBacking" as submissionBacking
-participant ":ResourceBundle" as rscBundle
+box "control.backing"
+    participant ":SubmissionBacking" as subBacking
+end box
+box "service?"
+    participant ":SubmissionService" as subService
+end box
+box "dtos"
+    participant "sub:Submission" as sub
+end box
+
+box "???"
+    participant ":ResourceBundle" as rscBundle
+end box
+box "business.util"
 participant ":EmailService" as emailService
-participant ":SubmissionStorage" as subStorage
-participant "sub:Submission" as sub
+end box
+box persistence
+    participant ":SubmissionRepository" as subRepo
+    participant ":ConnectionPool" as connPool
+end box
 database "Database" as db
 
-editor -> submissionBacking ** : init()
+editor -> subBacking ** : init()
 note left
     ruft die
     Submission-
     Seite auf
 end note
-activate submissionBacking
-    submissionBacking -> subStorage : getSubmission(subId)
-    activate subStorage
-        subStorage -> db : ...
-        activate db
-        return ...
-        create sub
-        subStorage -> sub
-    return sub : Submission
-deactivate submissionBacking
+activate subBacking
+        subBacking -> subService : getSubmission(subId)
+        activate subService
+            subService -> subRepo : getSubmission(subId)
+            activate subRepo
+                subRepo -> connPool : getConnection()
+                activate connPool
+                return conn
+                subRepo -> db : ...
+                activate db
+                return
+                subRepo -> connPool : releaseConnection()
+                    activate connPool
+                    return
+                create sub
+                subRepo -> sub
+            return sub : Submission
+        return sub : Submission
+deactivate subBacking
 
-editor -> submissionBacking : reject()
+editor -> subBacking : reject()
 note left
     klickt auf "Reject"
 end note
-activate submissionBacking
-    submissionBacking -> sub : reject()
-    activate sub
-    deactivate sub
+activate subBacking
+    subBacking -> subService : reject(sub)
+    activate subService
+        subService -> sub : getAuthorEmailAddresses()
+        activate sub
+        return addrs
+        subService -> rscBundle : getRejectionEmailSubject()
+        activate rscBundle
+        return subject
+        subService -> rscBundle : getRejectionEmailBody()
+        activate rscBundle
+        return body
 
-    submissionBacking -> sub : getAuthorEmailAddresses()
-    activate sub
-    return addrs
-    submissionBacking -> rscBundle : getRejectionEmailSubject()
-    activate rscBundle
-    return subject
-    submissionBacking -> rscBundle : getRejectionEmailBody()
-    activate rscBundle
-    return body
+        subService -> emailService : generateMailto(addrs, subject, body)
+        activate emailService
+        return mailtoLink
 
-    submissionBacking -> emailService : generateMailto(addrs, subject, body)
-    activate emailService
-    return mailtoLink
-
-    submissionBacking -> subStorage : updateSubmission(subId, sub)
-    activate subStorage
-        subStorage -> db : ...
-        activate db
-        deactivate db
-    deactivate subStorage
+        subService -> subRepo : updateSubmission(subId, sub)
+        activate subRepo
+            subRepo -> db : ...
+            activate db
+            return
+        return
+    return
 
 return mailtoLink
 
