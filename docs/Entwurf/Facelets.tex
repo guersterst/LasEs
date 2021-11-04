@@ -345,8 +345,8 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
     \textbf{resultList.xhtml} zeigt alle Ergebnisse einer Suche an.
     \nopagebreak
 
-    Wird nach den eigenen Einreichungen, Gutachten oder Einreichungen in eingener editorialen Verantwortung gesucht, so erscheint das gleiche Schema wie auch auf \hyperref[flt:homepage]{der Homepage}.
-    Ergibt die Suche eine Liste von User so wird 
+    Wird nach den eigenen Einreichungen, Gutachten oder Einreichungen in eingener editorialen Verantwortung gesucht, so erscheinen die Listen im gleiche Schema wie auch auf \hyperref[flt:homepage]{der Homepage}.
+    Ergibt die Suche eine Liste von User, so wird diese wie in \hyperref[flt:userList]{der Userliste} für den Administrator und dem Editor angezeigt.
     \nopagebreak
 
     \ftable{
@@ -485,11 +485,20 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
 		\fentry{roleDown}{commandButton}{Nutzer werden absteigend nach Rolle angezeigt.}{E,A}
 
-		\fentry{submissionTable}{dataTable}{Liste aller Nutzer im System.}{E,A}
+		\fentry{userTable}{dataTable}{Liste aller Nutzer im System.}{E,A}
 
 		\fentry{pagination}{listPagination}{Die Tabelle enthält eine Paginierung.}{E,A}
 }
 \end{samepage}
+
+\begin{samepage}
+    Für die Benutzerliste sind die folgenden Elemente vorgesehen, wobei diese in die Bereiche: Nutzerrolle, Name, E-Mail-Adresse, Arbeitgeber und Fachgebiete aufgegliedert ist.
+
+    \ftable{
+        \fentry{role}{outputText}{Rolle des Nutzers}{E, A}
+    }
+\end{samepage}
+
 \todo{Dropdown für rollen.}
 
 \begin{samepage}
