@@ -1,0 +1,101 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+'!theme aws-orange
+skinparam sequenceMessageAlign center
+skinparam BoxPadding 10
+'autonumber
+'autoactivate on
+'hide footbox
+
+actor User as user
+
+box "control.backing"
+    participant ":SubmissionBacking" as subBacking
+end box
+box "???"
+    participant ":ResourceBundle" as rscBundle
+end box
+box "business.service"
+    participant ":SubmissionService" as subService
+end box
+box "dtos"
+    participant "sub:Submission" as sub
+    participant "paper:Paper" as paper
+end box
+box persistence.repository
+    participant ":SubmissionRepository" as subRepo
+end box
+box persistence.util
+    participant ":ConnectionPool" as connPool
+end box
+database "Database" as db
+
+user -> subBacking ** : init()
+note left
+    ruft die
+    Submission-
+    Seite auf
+end note
+activate subBacking
+    subBacking -> subService : getSubmission(subId)
+    activate subService
+        subService -> subRepo : getSubmission(subId)
+        activate subRepo
+            subRepo -> connPool : getConnection()
+            activate connPool
+            return conn
+            subRepo -> db : SQL-req
+            activate db
+            return res
+            subRepo -> connPool : releaseConnection()
+            activate connPool
+            return
+            create sub
+            subRepo -> sub
+        return sub : Submission
+    return sub : Submission
+return submission.xhtml
+
+user -> subBacking : setRevisionPart()
+activate subBacking
+    note left
+        lädt die PDF-Datei hoch und
+        klickt auf "Submit" revision
+    end note
+    user -> subBacking : addRevision()
+    subBacking -> sub : getId()
+    activate sub
+    return id
+    subBacking -> sub : getPapers()
+    activate sub
+    return papers
+
+    subBacking -> paper ** : new Paper(subId, papers.size())
+
+    subBacking -> subService : addRevision(sub, paper)
+    activate subService
+        subService -> subRepo : addPaper(paper)
+        activate subRepo
+            subRepo -> connPool : getConnection()
+            activate connPool
+            return conn
+            subRepo -> db : SQL-req
+            activate db
+            return
+            subRepo -> connPool : releaseConnection()
+            activate connPool
+            return
+        return
+    return
+
+    subBacking -> rscBundle : getAddRevision\\\nConfirmationMsg()
+    activate rscBundle
+    return msg
+
+return submission.xhtml\nwith facesMessage
+
+
+
+
+@enduml
