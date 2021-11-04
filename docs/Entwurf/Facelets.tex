@@ -216,7 +216,7 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
         \fentry{editorTable}{dataTable}{Liste aller Einreichungen für einen Editor.}{E}
         \fentry{pagination}{listPagination}{Jede Tabelle enthält eine Paginierung.}{Alle}
     }
-    \todo{kann nach Forum gefiltert werden wenn ja wie?}
+
 \end{samepage}
 \begin{samepage}
     Die einzelnen Tabellen \emph{submissionTable}, \emph{reviewTable} und \emph{editorTable} sind nach den gleichen Punkten gegliedert:
@@ -307,7 +307,6 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
     \nopagebreak
 
     \ftable{
-
         \fentry{submissionName}{inputText}{Name des abzugebenden Papers.}{N}
 
         \fentry{forumName}{inputText}{Name des Forums, bei welchem abgegeben wird.}{N }
@@ -318,9 +317,9 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
 
         \fentry{titel}{inputText}{Angabe eines Titels.}{N}
 
-        coAuthorFirstName & inputText & Angabe des Vornamen eines Co-Autors.& N\\
+        \fentry{coAuthorFirstName}{inputText}{Angabe des Vornamen eines Co-Autors.}{N}
 
-        \fentry{coAuthorName}{inputText}{Angabe des Namen eines Co-Autors.}{N}
+        \fentry{coAuthorLastName}{inputText}{Angabe des Namen eines Co-Autors.}{N}
 
         \fentry{coAuthorEMail}{inputText}{Angabe der E-Mail eines Co-Autors.}{N}
 
@@ -453,8 +452,6 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
 }
 
-\todo{bearbeiten kann es nur der Nutzer aber betrachten andere....+ was ist mit Passwort F200+ doch getrennte Profilseiten? + avatarbild}
-
 \begin{samepage}
     \textbf{errorPage.xhtml} Auf diese Seite wird navigiert, wenn auf eine nicht existierende URL oder auf eine URL zugegriffen wird, auf die man keine Zugriffsrechte hat.
     \nopagebreak
@@ -501,6 +498,7 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
 \begin{samepage}
     \localauthor{Stefanie Gürster}\nopagebreak
+
     Für die Benutzerliste sind die folgenden Elemente vorgesehen, wobei diese in die Bereiche: Nutzerrolle, Name, E-Mail-Adresse, Arbeitgeber und Fachgebiete aufgegliedert ist.
 
     \ftable{
@@ -616,7 +614,7 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
         \fentry{reviewInstructions}{inputTextArea}{Angabe einer Anleitung für eine Begutachtung.}{A}
 
-        \fentry{specialty}{selectOnMenu}{Auswahl von Fachgebieten.}{A}
+        \fentry{specialty}{selectOneMenu}{Auswahl von Fachgebieten.}{A}
 
         \fentry{specialtyLabel}{outputLabel}{Label für Fachgebiete.}{A}
 
@@ -731,10 +729,8 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
     \textbf{imprint.xhtml} Das Impressum gibt die vom Administrator angegebenen Kontaktdaten des Betreibers wieder.\nopagebreak
 
     \ftable{
-
         \fentry{imprintHeading}{outputText}{Überschrift der Ansicht}{A}
 
         \fentry{imprint}{outputText}{Impressum des Betreibers.}{A}
-
     }
 \end{samepage}
