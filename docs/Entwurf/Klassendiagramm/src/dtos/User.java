@@ -4,8 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import model.Privilege;
-
 public class User {
 	
 	private List<Privilege> priveleges;

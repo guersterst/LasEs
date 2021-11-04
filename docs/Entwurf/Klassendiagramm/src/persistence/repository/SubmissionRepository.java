@@ -16,6 +16,10 @@ public class SubmissionRepository {
 	
 	public List<Submission> getList(ResultListParameters resultParams) throws InvalidQueryParamsException { return null; }
 	
+	public Submission getSubmission(int id) throws IllegalArgumentException { return null; }
+	
 	public void addSubmission(Submission submission) throws InvalidFieldsException { }
+	
+	public void changeSubmission(int submissionId, Submission edited) { }
 
 }

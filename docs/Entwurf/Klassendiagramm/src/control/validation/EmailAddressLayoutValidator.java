@@ -1,6 +1,6 @@
 package control.validation;
 
-import business.util.EmailService;
+import business.util.EmailUtil;
 
 public class EmailAddressLayoutValidator implements Validator<String> {
 

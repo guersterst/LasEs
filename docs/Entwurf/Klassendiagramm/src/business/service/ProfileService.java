@@ -3,11 +3,17 @@ package business.service;
 import java.util.List;
 
 import business.util.AvatarUtil;
+import business.util.EmailUtil;
+import control.validation.EmailAddressUnoccupiedValidator;
 import dtos.User;
 import global.util.ResultListParameters;
 import persistence.repository.UserRepository;
 
 public class ProfileService {
+	
+	private EmailAddressUnoccupiedValidator emailAddressUnoccupiedValidator;
+	
+	private EmailUtil emailUtil;
 	
 	private AvatarUtil avatarUtil;
 	
@@ -24,8 +30,11 @@ public class ProfileService {
 	
 	public void deleteAvatar(String email) { }
 	
+	public void updateEmail(String email, String newEmail) { }
+	
 	public List<User> getUsersSearch(String searchString) { return null; }
 	
 	public List<User> getUsers(String searchString, ResultListParameters resultListParams) { return null; }
+	
 
 }

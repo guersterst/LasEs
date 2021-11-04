@@ -2,9 +2,9 @@ package business.service;
 
 import java.util.List;
 
+import dtos.Privilege;
 import dtos.Submission;
 import global.util.ResultListParameters;
-import model.Privilege;
 import persistence.repository.SubmissionRepository;
 import persistence.repository.UserRepository;
 

@@ -3,8 +3,6 @@ package dtos;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import model.SubmissionState;
-
 public class Submission {
 	
 	private int id;

@@ -1,6 +1,6 @@
 package business.util;
 
-public class EmailService {
+public class EmailUtil {
 	
 	public void sendEmail(String sender, String recipient, String subject, String body) throws MessagingException { }
 	

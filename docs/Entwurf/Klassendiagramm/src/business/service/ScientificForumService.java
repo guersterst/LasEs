@@ -2,7 +2,7 @@ package business.service;
 
 import java.util.List;
 
-import business.util.EmailService;
+import business.util.EmailUtil;
 import dtos.ScientificForum;
 import dtos.Submission;
 import dtos.User;
@@ -12,6 +12,8 @@ import persistence.repository.ScientificForumRepository;
 public class ScientificForumService {
 	
 	private ScientificForumRepository scientificForumRepository;
+	
+	private EmailUtil emailUtil;
 	
 	public void addSubmission(Submission submission) { }
 	
