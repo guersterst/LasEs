@@ -16,6 +16,8 @@ Hier werden die einzelnen Entities nochmal im Detail beschrieben. Mit der Notati
 \begin{description}
 	\XXitem{User}{er:user} Ein Nutzer kann verschiedene Rollen wahrnehmen, diese werden durch die \emph{is-A}-Spezifizierung modelliert. Die Attribute entsprechen den in \texttt{\textbf{/D010/}} und \texttt{\textbf{/DW015/}} angegebenen Daten. Hierbei gilt zusätzlich die Einschränkung, dass E-Mail-Adressen im System einzigartig sein müssen. \\Zusätzlich werden auch noch der Passwort-Hash und das zugehörige Salt zum generieren des Hashes gespeichert.
 
+	\XXitem{Verification}{er:verification} Da jede E-Mailadressenänderung eine Verifizierung benötigt, werden hier die Daten, zu welchen geändert wird, gespeichert. Das \emph{validation-random} ist dabei der String, welcher im Verifizierungslink per E-Mail versendet wird.
+
 	\XXitem{Paper}{er:paper} Ein Paper ist das in einem Einreichungsprozess hochgeladene Paper. Es ist modelliert als eine schwache Entität, abhängig von einer Einreichung, da ein Paper nicht im System existieren kann, ohne zu einem Einreichungsprozess zugeordnet zu werden. Es speichert die in \texttt{\textbf{/D020/}} angegebenen Daten.
 
 	\XXitem{Submission}{er:submission} Eine Einreichung speichert alle zu einem Einreichungsprozess gehörenden Daten, inklusive der Metadaten, wie den Einreicher und Ko-Autor, also alle in \texttt{\textbf{/D025/}} und \texttt{\textbf{/DW021/}} angegebenen Daten.
