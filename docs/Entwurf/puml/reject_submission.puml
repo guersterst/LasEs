@@ -112,7 +112,7 @@ activate subBacking
     activate rscBundle
     return msg
 
-return submission.xhtml\nmit <font color=red><b>Fehlermeldung</b></font>\nals FacesMessage
+return submission.xhtml\nw/ <font color=red><b>Error</b></font>\nas FacesMessage
 note left
 Die Ablehnung war
 nicht erfolgreich
