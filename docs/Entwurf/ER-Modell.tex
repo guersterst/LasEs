@@ -2,7 +2,7 @@
 
 Im Entity-Relationship-Diagramm in Abbildung \ref{er:diagramm} sieht man die gesamte persistente Datenstruktur von LasEs. Die Kardinalität der \emph{Relationships} gibt die ganzzahligen Abhängigkeiten zwischen der einzelnen \emph{Entities} an. Die \emph{is-A} Spezialisierungen modellieren die unterschiedlichen Subtypen einer Entität. Ein im Diagramm doppelt umrandetes Entity ist ein \emph{schwaches} Entity. Das heißt, es existiert nur im Zusammenhang mit dem übergeordneten Entity. In unserem Fall kann beispielsweise kein Paper in der Datenbank existieren, ohne einer Einreichung zugeteilt zu sein.
 
-\begin{figure}[H]
+\begin{figure}
 	\centering
 	\includegraphics[width=\linewidth]{graphics/ER-Modell}
 	\caption{Übersicht über die Zusammenhänge zwischen den Entitys}
@@ -11,7 +11,7 @@ Im Entity-Relationship-Diagramm in Abbildung \ref{er:diagramm} sieht man die ges
 
 \subsection{Entities}
 
-Hier werden die einzelnen Entities nochmal im Detail beschrieben. Mit der Notation \texttt{/DXXX/} wird sich auf die im Pflichtenheft aufgeführten Produktdaten bezogen.
+In Abbildung \ref{er:diagramm} werden die einzelnen Entities nochmal im Detail beschrieben. Mit der Notation \texttt{/DXXX/} wird sich auf die im Pflichtenheft aufgeführten Produktdaten bezogen.
 
 \begin{description}
 	\XXitem{User}{er:user} Ein Nutzer kann verschiedene Rollen wahrnehmen, diese werden durch die \emph{is-A}-Spezifizierung modelliert. Die Attribute entsprechen den in \texttt{\textbf{/D010/}} und \texttt{\textbf{/DW015/}} angegebenen Daten. Hierbei gilt zusätzlich die Einschränkung, dass E-Mail-Adressen im System einzigartig sein müssen. \\Zusätzlich werden auch noch der Passwort-Hash und das zugehörige Salt zum generieren des Hashes gespeichert.
