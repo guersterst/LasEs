@@ -19,19 +19,7 @@ public class SubmissionService {
 	
 	public void removeSubmission(Submission submission) { }
 	
-	public void addReview(Submission submission, Review review) { }
-	
-	public void removeReview(Submission submission, int reviewId, int paperId) { }
-	
-	public List<Review> getReviews(Submission submission, int userId) { return null; }
-	
 	public void addRevision(Submission submission, Paper revision) {} 
-	
-	public void addReviewer(String email) { } // maybe user uebergeben?
-	
-	public void removeReviewer(User user) { }
-	
-	public List<User> getReviewers() { return null; }
 	
 	public void addEditor(User user) { }
 	
@@ -39,6 +27,10 @@ public class SubmissionService {
 	
 	public List<User> getEditors() { return null; }
 	
+	public void uploadPDF(byte[] pdf) { }
+	
 	public void unlockRevision(int paperId) { }
+	
+	public void changeSubmission(Submission submission, Submission newSubmission) { }
 
 }

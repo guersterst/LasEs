@@ -1,7 +1,10 @@
 package business.service;
 
+import java.util.List;
+
 import business.util.AvatarUtil;
 import dtos.User;
+import global.util.ResultListParameters;
 import persistence.repository.UserRepository;
 
 public class ProfileService {
@@ -20,5 +23,9 @@ public class ProfileService {
 	public void uploadAvatar(String email, byte[] avatar) { }
 	
 	public void deleteAvatar(String email) { }
+	
+	public List<User> getUsersSearch(String searchString) { return null; }
+	
+	public List<User> getUsers(String searchString, ResultListParameters resultListParams) { return null; }
 
 }
