@@ -1,0 +1,122 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+'!theme aws-orange
+skinparam sequenceMessageAlign center
+skinparam BoxPadding 10
+'autonumber
+'autoactivate on
+
+actor Editor as editor
+box "control.backing"
+    participant ":SubmissionBacking" as subBacking
+end box
+box "???"
+    participant ":ResourceBundle" as rscBundle
+end box
+box "business.service"
+    participant ":SubmissionService" as subService
+end box
+box "dtos"
+    participant "sub:Submission" as sub
+    participant "submitter:User" as submitter
+end box
+box "business.util"
+participant ":EmailService" as emailService
+end box
+box persistence.repository
+    participant ":SubmissionRepository" as subRepo
+end box
+box persistence.util
+    participant ":ConnectionPool" as connPool
+end box
+database "Database" as db
+
+editor -> subBacking ** : init()
+note left
+    ruft die
+    Submission-
+    Seite auf
+end note
+activate subBacking
+        subBacking -> subService : getSubmission(subId)
+        activate subService
+            subService -> subRepo : getSubmission(subId)
+            activate subRepo
+                subRepo -> connPool : getConnection()
+                activate connPool
+                return conn
+                subRepo -> db : SQL-req
+                activate db
+                return res
+                subRepo -> connPool : releaseConnection()
+                    activate connPool
+                    return
+                create submitter
+                subRepo -> submitter
+                create sub
+                subRepo -> sub
+            return sub : Submission
+        return sub : Submission
+return submission.xhtml
+
+editor -> subBacking : reject()
+note left
+    klickt auf "Reject"
+end note
+activate subBacking
+    subBacking -> subService : changeState(sub,REJECTED)
+    activate subService
+        subService -> sub : getSubmitter()
+        activate sub
+        return submitter
+'        subService -> sub : getAuthors()
+'        activate sub
+'        return addrs
+        subService -> submitter : getEmailAddress()
+        activate submitter
+        return recipient
+        subService -> rscBundle : getRejectionEmailSubject()
+        activate rscBundle
+        return subject
+        subService -> rscBundle : getRejectionEmailBody()
+        activate rscBundle
+        return body
+
+        subService -> emailService : generateMailto(user.getEmailAddress(),recipient,subject,body)
+        activate emailService
+        return mailtoLink
+
+        subService -> subRepo : changeSubmission(subId, sub)
+        activate subRepo
+            subRepo -> connPool : getConnection()
+            activate connPool
+            return conn
+            subRepo -> db : SQL-req
+            activate db
+            note right
+                Fehler bei
+                Datenbank-
+                zugriff
+                (Timeout)
+            end note
+== Anfang Fehlerbehandlung ==
+            return <font color=red><b>SQLException
+            subRepo -> connPool : releaseConnection()
+            activate connPool
+            return
+        return <font color=red><b>persistence.exception.DBTimeoutExeption
+    return <font color=red><b>persistence.exception.DBTimeoutExeption
+
+    subBacking -> rscBundle : getRejectSubmission\\\nUnsuccessfulMessage()
+    activate rscBundle
+    return msg
+
+return submission.xhtml\nw/ <font color=red><b>Error</b></font>\nas FacesMessage
+note left
+Die Ablehnung war
+nicht erfolgreich
+end note
+
+
+@enduml
