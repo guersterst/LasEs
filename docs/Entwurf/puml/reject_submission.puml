@@ -105,8 +105,8 @@ activate subBacking
             subRepo -> connPool : releaseConnection()
             activate connPool
             return
-        return <font color=red><b>irgende persistence-Exception
-    return <font color=red><b>irgendne business-Exception
+        return <font color=red><b>persistence.exception.DBTimeoutExeption
+    return <font color=red><b>persistence.exception.DBTimeoutExeption
 
     subBacking -> rscBundle : getRejectSubmission\\\nUnsuccessfulMessage()
     activate rscBundle
