@@ -1,23 +1,29 @@
 \localauthor{Sebastian Vogt, Johannes Garstenauer, Johann Schicho}
 
 \newcommand{\classtable}[1]{\begin{longtable}[H]{m{5cm}m{9cm}}
-		\hline
-		\textbf{Klassenname} & \textbf{Beschreibung} \\
-		\hline
-		\hline
-		#1
-	\end{longtable}
+                                \hline
+                                \textbf{Klassenname} & \textbf{Beschreibung} \\
+                                \hline
+                                \hline
+                                #1
+\end{longtable}
 }
 
 \newcommand{\classentry}[2]{\textbf{#1} & #2 \\
 }
-
 
 \subsection{Klassendiagramm}
 
 % Hier Klassendiagramm mal irgendwann einfügen.
 
 \subsection{Klassenbeschreibungen}
+
+\subsubsection{de.lasses.control.validation}
+\classtable{
+    \classentry{AvatarValidation}{Validates that a suitable avatar image has been uploaded.}
+\classentry{EmailAddressLayoutValidation}{Validates that the email regex pattern is ok.}
+\classentry{EmailAdressUnoccupiedValidator}{Validates that a given email is not already in use within the system.}
+}
 
 \subsubsection{de.lases.global.transport}
 
@@ -43,32 +49,32 @@
 \subsubsection{de.lases.persistence.repository}
 
 \classtable{
-	\classentry{PaperRepository}{This repository can get the list of papers for a submission or add new ones.}
+    \classentry{PaperRepository}{This repository can get the list of papers for a submission or add new ones.}
 
-	\classentry{ReviewRepository}{This repository can get the reviews for a certain submission and add new ones.}
+    \classentry{ReviewRepository}{This repository can get the reviews for a certain submission and add new ones.}
 
-	\classentry{ScienceFieldRepository}{This repository can get or add new fields of science from/to the database.}
+    \classentry{ScienceFieldRepository}{This repository can get or add new fields of science from/to the database.}
 
-	\classentry{ScientificForumRepository}{This repository can get a list of journals and conferences or add new ones.}
+    \classentry{ScientificForumRepository}{This repository can get a list of journals and conferences or add new ones.}
 
-	\classentry{SubmissionRepository}{This repository allows CRUD operations on submissions.}
+    \classentry{SubmissionRepository}{This repository allows CRUD operations on submissions.}
 
-	\classentry{SystemSettingsRepository}{This repository can read or update the system settings.}
+    \classentry{SystemSettingsRepository}{This repository can read or update the system settings.}
 
-	\classentry{UserRepository}{This repository allows CRUD operations on users.}
+    \classentry{UserRepository}{This repository allows CRUD operations on users.}
 }
 
 \subsubsection{de.lases.persistence.util}
 
 \classtable{
-\classentry{ConnectionPool}{Provides and manages connections to the database.}
+    \classentry{ConnectionPool}{Provides and manages connections to the database.}
 }
 
 \subsubsection{de.lases.persistence.exception}
 
 \classtable{
-\classentry{InvalidFieldsException}{Hints at an invalid field in a dto.}
-\classentry{InvalidQueryParamsException}{Hints at invalid filter or sort parameters given to the query.}
+    \classentry{InvalidFieldsException}{Hints at an invalid field in a dto.}
+    \classentry{InvalidQueryParamsException}{Hints at invalid filter or sort parameters given to the query.}
 }
 
 \subsubsection{de.lases.business.service}
