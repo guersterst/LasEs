@@ -5,12 +5,12 @@ import java.util.List;
 
 import dtos.ScientificForum;
 import dtos.User;
+import global.util.ResultListFilter;
+import global.util.ResultListParameters;
 import persistence.exception.InvalidFieldsException;
 import persistence.exception.InvalidQueryParamsException;
 import persistence.exception.MissingFieldsException;
 import persistence.util.ConnectionPool;
-import persistence.util.ResultListFilter;
-import persistence.util.ResultListParameters;
 
 public class ScientificForumRepository {
 	

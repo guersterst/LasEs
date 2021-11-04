@@ -3,11 +3,11 @@ package persistence.repository;
 import java.util.List;
 
 import dtos.User;
+import global.util.ResultListParameters;
 import persistence.exception.InvalidFieldsException;
 import persistence.exception.InvalidQueryParamsException;
 import persistence.exception.MissingFieldsException;
 import persistence.util.ConnectionPool;
-import persistence.util.ResultListParameters;
 
 public class UserRepository {
 	

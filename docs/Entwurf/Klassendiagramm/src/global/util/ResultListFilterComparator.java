@@ -1,4 +1,4 @@
-package persistence.util;
+package global.util;
 
 public enum ResultListFilterComparator {
 	EQ, GTE, LTE;

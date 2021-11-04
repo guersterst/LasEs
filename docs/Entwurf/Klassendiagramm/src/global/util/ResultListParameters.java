@@ -1,4 +1,4 @@
-package persistence.util;
+package global.util;
 
 import java.util.List;
 
@@ -9,9 +9,11 @@ public class ResultListParameters {
 	
 	private List<ResultListFilter> filters;
 	
-	private int resultOffset;
+	private int pageNo;
 	
-	private int resultLength;
+	// private int resultOffset; = pageNo * resultLength
+	
+	// private int resultLength; -> wird aus Konfigdatei eingelesen
 	
 	private String sortColumn;
 

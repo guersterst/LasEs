@@ -1,4 +1,4 @@
-package persistence.util;
+package global.util;
 
 import java.util.List;
 

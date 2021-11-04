@@ -3,10 +3,10 @@ package persistence.repository;
 import java.util.List;
 
 import dtos.Submission;
+import global.util.ResultListParameters;
 import persistence.exception.InvalidFieldsException;
 import persistence.exception.InvalidQueryParamsException;
 import persistence.util.ConnectionPool;
-import persistence.util.ResultListParameters;
 
 public class SubmissionRepository {
 	
