@@ -1,16 +1,17 @@
 \localauthor{Sebastian Vogt, Johannes Garstenauer, Johann Schicho}
 
 \newcommand{\classtable}[1]{\begin{longtable}[H]{m{5cm}m{9cm}}
-                                \hline
-                                \textbf{Klassenname} & \textbf{Beschreibung} \\
-                                \hline
-                                \hline
-                                #1
-\end{longtable}
+		\hline
+		\textbf{Klassenname} & \textbf{Beschreibung} \\
+		\hline
+		\hline
+		#1
+	\end{longtable}
 }
 
 \newcommand{\classentry}[2]{\textbf{#1} & #2 \\
 }
+
 
 \subsection{Klassendiagramm}
 
@@ -42,13 +43,19 @@
 \subsubsection{de.lases.persistence.repository}
 
 \classtable{
-    \classentry{PaperRepository}{This Repository can get the list of papers for a submission or add new ones.}
+	\classentry{PaperRepository}{This repository can get the list of papers for a submission or add new ones.}
 
-    \classentry{ScienceFieldRepository}{This Repository can get or add new fields of science from/to the database.}
+	\classentry{ReviewRepository}{This repository can get the reviews for a certain submission and add new ones.}
 
-    \classentry{ScientificForumRepository}{This Repository can get a list of Journals and Conferences or add new ones.}
+	\classentry{ScienceFieldRepository}{This repository can get or add new fields of science from/to the database.}
 
-    \classentry{SystemSettingsRepository}{This Repository can read or update the system settings.}
+	\classentry{ScientificForumRepository}{This repository can get a list of journals and conferences or add new ones.}
+
+	\classentry{SubmissionRepository}{This repository allows CRUD operations on submissions.}
+
+	\classentry{SystemSettingsRepository}{This repository can read or update the system settings.}
+
+	\classentry{UserRepository}{This repository allows CRUD operations on users.}
 }
 
 \subsubsection{de.lases.business.service}
