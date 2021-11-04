@@ -304,9 +304,44 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
 
 resultList.xhtml
 
-scientificForumList.xhtml
 
 \begin{samepage}
+	\localauthor{Johann Schicho}\nopagebreak
+
+	\textbf{scientificForumList.xhtml} HIer erhalten die Nutzer eine Übersicht über alle wissenschaftliche Foren.\nopagebreak
+
+	\ftable{
+
+		\fentry{filterLabel}{outputLabel}{Label für Filter}{Alle}
+
+		\fentry{sc-fields-label}{outputLabel}{Label für Filter der Themengebiete}{Alle}
+
+		\fentry{sc-field-select}{selectOnMenue}{Filtern der Themengebiete der Foren}{Alle}
+
+		\fentry{deadline-label}{outputLabel}{Label für Filtern nach Deadlines (Abgelaufen/Zukunft)}{Alle}
+
+		\fentry{deadline-select}{selectOnMenue}{Filtern der nach Deadlines}{Alle}
+
+		\fentry{apply}{commandButton}{Wende Filtereinstellungen an.}{Alle}
+
+		\fentry{nameUp}{commandButton}{Einreichungen werden aufsteigend nach Namen angezeigt.}{Alle}
+
+		\fentry{nameDown}{commandButton}{Einreichungen werden absteigend nach Namen angezeigt.}{E,A}
+
+		\fentry{deadlineUp}{commandButton}{Einreichungen werden aufsteigend nach Deadline angezeigt.}{Alle}
+
+		\fentry{deadlineDown}{commandButton}{Einreichungen werden absteigend nach Deadline angezeigt.}{Alle}
+
+		\fentry{forumsTable}{dataTable}{Liste aller Foren im System.}{Alle}
+
+		\fentry{pagination}{listPagination}{Die Tabelle enthält eine Paginierung.}{Alle}
+}
+\end{samepage}
+
+
+\begin{samepage}
+	\localauthor{Stefanie Gürster}\nopagebreak
+
     \textbf{profile.xhtml} Die Profilseite eines angemeldeten Nutzers ist nur vom Nutzer selbst und vom Administrator editierbar.
     Ein Editor besitzt nur Leserechte. Alle zuvor gespeicherten Angaben werden in den jeweiligen Feldern angezeigt.
     \nopagebreak
