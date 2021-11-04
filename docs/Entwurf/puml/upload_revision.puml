@@ -3,70 +3,90 @@
 
 '!theme aws-orange
 skinparam sequenceMessageAlign center
+skinparam BoxPadding 10
 'autonumber
 'autoactivate on
+'hide footbox
 
 actor User as user
-participant ":SubmissionBacking" as submissionBacking
-participant "sub:Submission" as sub
-participant ":ResourceBundle" as rscBundle
-participant ":SubmissionStorage" as subStorage
-participant ":ConnectionPool" as connPool
+
+box "control.backing"
+    participant ":SubmissionBacking" as subBacking
+end box
+box "service?"
+    participant ":SubmissionService" as subService
+end box
+box "dtos"
+    participant "sub:Submission" as sub
+end box
+box "???"
+    participant ":ResourceBundle" as rscBundle
+end box
+box persistence
+    participant ":SubmissionRepository" as subRepo
+    participant ":ConnectionPool" as connPool
+end box
 database "Database" as db
 
-user -> submissionBacking ** : init()
+user -> subBacking ** : init()
 note left
-ruft die
-Submission-
-Seite auf
+    ruft die
+    Submission-
+    Seite auf
 end note
-activate submissionBacking
-submissionBacking -> subStorage : getSubmission(subId)
-activate subStorage
-subStorage -> connPool : getConnection()
-activate connPool
-return conn
-subStorage -> db : ...
-activate db
-return ...
-subStorage -> connPool : releaseConnection()
-activate connPool
-deactivate connPool
-create sub
-subStorage -> sub
-return sub : Submission
+activate subBacking
+    subBacking -> subService : getSubmission(subId)
+    activate subService
+        subService -> subRepo : getSubmission(subId)
+        activate subRepo
+            subRepo -> connPool : getConnection()
+            activate connPool
+            return conn
+            subRepo -> db : ...
+            activate db
+                return ...
+                subRepo -> connPool : releaseConnection()
+                    activate connPool
+                    deactivate connPool
+                create sub
+                subRepo -> sub
+        return sub : Submission
+    return sub : Submission
 return submission.xhtml
 
-user -> submissionBacking : setRevisionPart()
-activate submissionBacking
-note left
-lädt die PDF-Datei hoch und
-klickt auf "Submit" revision
-end note
-user -> submissionBacking : addRevision()
-submissionBacking -> sub : getId()
-activate sub
-return id
+user -> subBacking : setRevisionPart()
+activate subBacking
+    note left
+        lädt die PDF-Datei hoch und
+        klickt auf "Submit" revision
+    end note
+    user -> subBacking : addRevision()
+    subBacking -> sub : getId()
+    activate sub
+    return id
 
-submissionBacking -> subStorage : addRevision(subId, revisionPdf)
-activate subStorage
-subStorage -> connPool : getConnection()
-activate connPool
-return conn
-subStorage -> db : get highest existing version
-activate db
-return maxV
-subStorage -> db : upload paper version v+1
-activate db
-deactivate db
-subStorage -> connPool : releaseConnection()
-activate connPool
-deactivate connPool
-return
+    subBacking -> subService : addRevision(subId, revisionPdf)
+    activate subService
+        subService -> subRepo : addRevision(subId, revisionPdf)
+        activate subRepo
+            subRepo -> connPool : getConnection()
+            activate connPool
+            return conn
+            subRepo -> db : get highest existing version
+            activate db
+            return maxV
+            subRepo -> db : upload paper version v+1
+            activate db
+            deactivate db
+            subRepo -> connPool : releaseConnection()
+            activate connPool
+            deactivate connPool
+        return
+    return
 
-submissionBacking -> rscBundle : getRevisionAddedConfirmationMsg()
-activate rscBundle
-return
+    subBacking -> rscBundle : getRevisionAddedConfirmationMsg()
+    activate rscBundle
+    return
 
 return submission.xhtml\nwith facesMessage
 
