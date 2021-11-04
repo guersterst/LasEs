@@ -1,16 +1,17 @@
 \localauthor{Sebastian Vogt, Johannes Garstenauer, Johann Schicho}
 
-\newcommand{\classtable}[1]{\begin{longtable}[H]{|m{5cm}|m{9cm}|}
-                                \hline
-                                \textbf{Klassenname} & \textbf{Beschreibung} \\
-                                \hline
-                                \hline
-                                #1
-\end{longtable}
+\newcommand{\classtable}[1]{\begin{longtable}[H]{m{5cm}m{9cm}}
+		\hline
+		\textbf{Klassenname} & \textbf{Beschreibung} \\
+		\hline
+		\hline
+		#1
+	\end{longtable}
 }
 
-\newcommand{\classentry}[2]{#1 & #2 \\
-\hline}
+\newcommand{\classentry}[2]{\textbf{#1} & #2 \\
+	}
+
 
 \subsection{Klassendiagramm}
 
@@ -36,7 +37,19 @@
 \subsubsection{de.lases.global.logging}
 
 \classtable{
-    \classentry{Logging}{This Logger allows logging in diffrent log-levels.}
+	\classentry{Logging}{This Logger allows logging in diffrent log-levels.}
+}
+
+\subsubsection{de.lases.persistence.repository}
+
+\classtable{
+	\classentry{PaperRepository}{This Repository can get the list of papers for a submission or add new ones.}
+
+	\classentry{ScienceFieldRepository}{This Repository can get or add new fields of science from/to the database.}
+
+	\classentry{ScientificForumRepository}{This Repository can get a list of Journals and Conferences or add new ones.}
+
+	\classentry{SystemSettingsRepository}{This Repository can read or update the system settings.}
 }
 
 \subsubsection{de.lases.business.service}
