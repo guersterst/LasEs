@@ -20,6 +20,9 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
 
 \todo{OutputText oder graphicimages für Bezeichnung hinzufügen}
 
+\todo{Suchleiste hinzufügen + Datefilter}
+\todo{Deadline in Toolbar setzen}
+
 \subsection{Templates}
 
 \localauthor{Johann Schicho}
@@ -237,21 +240,56 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
             \fentry{dateUp}{commandButton}{Einreichungen und Gutachten werden aufsteigend angezeigt.}{Alle}
             \fentry{dateDown}{commandButton}{Einreichungen und Gutachten werden absteigend angezeigt.}{Alle}
             \fentry{reviewStateLabel}{outputLabel}{Label für Filtern der Gutachtenfreischaltung.}{E, A}
-            \fentry{all}{checkbox}{Anzeigen aller Gutachten.}{E, A}
-            \fentry{allLabel}{outputLabel}{Label für all.}{E, A}
-            \fentry{locked}{checkbox}{Anzeigen nicht freigeschalteter Gutachten.}{E,A}
-            \fentry{lockedLabel}{ouputLabel}{Laberl für locked.}{E, A}
-            \fentry{unlocked}{checkbox}{Anzeigen freigeschalteter Gutachten.}{E, A}
-            \fentry{unlockedLabel}{ouputLabel}{Laberl für unlocked.}{E, A}
+            \fentry{all}{checkbox}{Anzeigen aller Gutachten.}{E, A, G}
+            \fentry{allLabel}{outputLabel}{Label für all.}{E, A, G}
+            \fentry{locked}{checkbox}{Anzeigen nicht freigeschalteter Gutachten.}{E, A, G}
+            \fentry{lockedLabel}{ouputLabel}{Laberl für locked.}{E, A, G}
+            \fentry{unlocked}{checkbox}{Anzeigen freigeschalteter Gutachten.}{E, A, G}
+            \fentry{unlockedLabel}{ouputLabel}{Laberl für unlocked.}{E, A, G}
             \fentry{reviewSubmitLabel}{outputLabel}{Label für Filter von eingereichten Gutachten.}{E, A}
             \fentry{submitted}{checkbox}{Anzeigen aller abgegebenen Gutachten.}{E,A}
             \fentry{submittedLabel}{outputLabel}{Label für submitted.}{E,A}
             \fentry{notSubmitted}{checkbox}{Anzeigen noch nicht abgegebener Gutachten.}{E, A}
-            \fentry{notSubmittedLabel}{ouputLabel}{Laberl für notSubmitted.}{E, A}
+            \fentry{notSubmittedLabel}{ouputLabel}{Label für notSubmitted.}{E, A}
+            \fentry{versionLabel}{outputLabel}{Label für Versionsfilter.}{Alle}
+            \fentry{version}{selectOneMenue}{Auswahl der Versionsnummern}{Alle}
+            \fentry{reviewerLabel}{outputLabel}{Label für Reviewerfilter.}{Alle}
+            \fentry{reviewer}{selectOneMenue}{Auswahl eines bestimmten Gutachters.}{E, A}
+            \fentry{recommendationLabel}{outputLabel}{Label für Empfehlungen.}{E, A, G}
+            \fentry{recommendation}{selectOneMenue}{Auswahl der Art von Empfehlungen.}{E, A, G}
+            \fentry{searchLabel}{outputLabel}{Label für Suche.}{Alle}
+            \fentry{search}{inputText}{Durchsuchen der Tabelle mit Matching-Words.}{Alle}
             \fentry{apply}{commandButton}{Wende Filtereinstellungen an.}{Alle}
+            \fentry{submissionTable}{dataTable}{Liste aller Versionen}{Alle}
+            \fentry{reviewTable}{dataTable}{Liste aller/der eigenen Gutachten.}{E, A, G}
         }
+
+    \emph{submissionTable} enthält die Spalten: Version, Datum, Deadline, Status und Download.
+    Die Elemente der Liste, der unterschiedlichen Versionen der Einrichtung, sieht wie folgt aus:
+
+    \ftable{
+        \fentry{version}{outputText}{Versionsnummer der Einreichung}{Alle}
+        \fentry{date}{outputText}{Datum der Einreichung}{Alle}
+        \fentry{deadline}{outputText}{Deadline der Revision}{Alle}
+        \fentry{state}{radioButton}{Status der Einreichung}{Alle}
+        \fentry{pdf}{inputFile}{Download der Einreichung}{Alle}
+    }
+
+    \emph{reviewTable} enthält die Spalten: Version, Gutachter, Datum, Deadline, Status, Empfehlung, Kommentar und Download.
+    Die Elemente der Liste von Gutachten ist wie folgt:
+
+    \ftable{
+        \fentry{version}{outputText}{Versionsnummer des Gutachtens.}{E, A, G}
+        \fentry{reviewer}{outputText}{Namen des Gutachters.}{E, A, G}
+        \fentry{date}{outputText}{Datum des Gutachtens.}{E, A, G}
+        \fentry{deadline}{outputText}{Deadline des Gutachtens.}{E, A, G}
+        \fentry{state}{commandButton}{Freigabe des Gutachtens}{E, A}
+        \fentry{stateText}{outputText}{Freigabestatus des Gutachtens}{G}
+        \fentry{recomendation}{checkbox}{Empfehlung eines Gutachters}{E, A, G}
+        \fentry{comment}{outputText}{Kommentar des Gutachters.}{E, A, G}
+        \fentry{pdf}{inputFile}{Download der Einreichung}{E, A, G}
+    }
 \end{samepage}
-\todo{co authoren verlinkung möglich? und was ist die E-Mail für ein typ?}
 
 \begin{samepage}
     \textbf{newSubmission.xhtml} Hier können neue Paper eingereicht werden.
