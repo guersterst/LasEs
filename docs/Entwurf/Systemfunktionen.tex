@@ -24,7 +24,7 @@ Da dies zentral in dieser Klasse passiert, entstehen weniger Fehler als bei der 
 Alle Anfragen und Antworten werden mit dem HTTPS-Protokoll mit TLS-Verschlüsselung durchgeführt.
 Dafür wird der Tomcat-Server, der diese Technologie unterstützt, entsprechend konfiguriert.
 \\
-Passwörter werden mit der modernen und sicheren PBKDF2-Funktion gehasht. Dabei wird für jedes Passwort ein eigener zufällig generierter Salt benutzt. Eingegebene Passwörter werden so früh wie möglich gehasht, damit die Klartextpasswörter eine minimale Lebenszeit auf dem Server haben.  Dafür wird die robuste \code{javax.crypto}-Bibliothek verwendet. \todo{Vogte bitte kurz schauen dass ich hier keinen bullshit schreibe}
+Passwörter werden mit der modernen und sicheren PBKDF2-Funktion gehasht. Dabei wird für jedes Passwort ein eigener zufällig generierter Salt benutzt. Eingegebene Passwörter werden so früh wie möglich gehasht, damit die Klartextpasswörter eine minimale Lebenszeit auf dem Server haben.  Dafür wird die robuste \code{javax.crypto}-Bibliothek verwendet.
 
 \item[Injection \& Cross-site-Scripting]
 Da JSF components für die HTML-Ausgabe verwendet werden, bereinigt JSF alle Nutzereingaben und macht Cross-site-Scripting unmöglich.
