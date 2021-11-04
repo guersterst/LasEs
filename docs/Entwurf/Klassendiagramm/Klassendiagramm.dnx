@@ -34,7 +34,7 @@
     <children xmi:type="notation:ListCompartment" xmi:id="_4PWUMDvbEeypu5KOTbHQZg" type="ANNOTATED_ATTRIBUTE_COMPARTMENT"/>
     <children xmi:type="notation:ListCompartment" xmi:id="_4PW7QDvbEeypu5KOTbHQZg" type="ANNOTATED_OPERATION_COMPARTMENT"/>
     <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=NewReviewBacking%5Bjcu%5Ename=NewReviewBacking.java%5Bjpack%5Ename=control.backing%5Bjsrcroot%5Esrcfolder=src%5Bproject%5Eid=Klassendiagramm%5D%5D%5D%5D$uml.Class"/>
-    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_4PTQ4zvbEeypu5KOTbHQZg" x="90948" y="12672"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_4PTQ4zvbEeypu5KOTbHQZg" x="171468" y="-660"/>
   </children>
   <children xmi:type="umlnotation:UMLShape" xmi:id="_4PW7QTvbEeypu5KOTbHQZg" fontName="Noto Sans" fontHeight="8" fillColor="5789921" transparency="0" lineColor="1316019" lineWidth="1" showStereotype="Label">
     <children xmi:type="notation:DecorationNode" xmi:id="_4PXiUDvbEeypu5KOTbHQZg" type="ImageCompartment">
@@ -2608,5 +2608,21 @@
     </children>
     <element xmi:type="uml:Property" href="mmi:///#jfield%5Ename=reviews%5Bjsrctype%5Ename=SubmissionBacking%5Bjcu%5Ename=SubmissionBacking.java%5Bjpack%5Ename=control.backing%5Bjsrcroot%5Esrcfolder=src%5Bproject%5Eid=Klassendiagramm%5D%5D%5D%5D%5D$uml.Property"/>
     <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_8gQuAT3DEeyuav_ZMYqhLQ" points="[-247, 140, 7873, -4460]$[-7947, 4502, 173, -98]"/>
+  </edges>
+  <edges xmi:type="umlnotation:UMLConnector" xmi:id="_xWdyQD3HEeyuav_ZMYqhLQ" source="_4P1cYTvbEeypu5KOTbHQZg" target="_St3tsDwZEeylsIpLoeS8tw" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
+    <children xmi:type="notation:DecorationNode" xmi:id="_xWeZUD3HEeyuav_ZMYqhLQ" type="FromMultiplicityLabel">
+      <children xmi:type="notation:BasicDecorationNode" xmi:id="_xWeZUj3HEeyuav_ZMYqhLQ" type="FromMultiplicity"/>
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_xWeZUT3HEeyuav_ZMYqhLQ" y="396"/>
+    </children>
+    <children xmi:type="notation:DecorationNode" xmi:id="_xWeZUz3HEeyuav_ZMYqhLQ" type="FromRoleLabel">
+      <children xmi:type="notation:BasicDecorationNode" xmi:id="_xWeZVT3HEeyuav_ZMYqhLQ" type="FromRole"/>
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_xWeZVD3HEeyuav_ZMYqhLQ" y="-397"/>
+    </children>
+    <children xmi:type="notation:DecorationNode" xmi:id="_xWeZVj3HEeyuav_ZMYqhLQ" type="associationTypeLabel">
+      <children xmi:id="_xWeZWD3HEeyuav_ZMYqhLQ" type="associationTypeCompartment"/>
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_xWeZVz3HEeyuav_ZMYqhLQ" y="-186"/>
+    </children>
+    <element xmi:type="uml:Property" href="mmi:///#jfield%5Ename=coAuthors%5Bjsrctype%5Ename=NewSubmissionBacking%5Bjcu%5Ename=NewSubmissionBacking.java%5Bjpack%5Ename=control.backing%5Bjsrcroot%5Esrcfolder=src%5Bproject%5Eid=Klassendiagramm%5D%5D%5D%5D%5D$uml.Property"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_xWdyQT3HEeyuav_ZMYqhLQ" points="[-852, 3142, 39368, -64930]$[-852, 34027, 39368, -34045]$[-37998, 34027, 2222, -34045]$[-37998, 64311, 2222, -3761]"/>
   </edges>
 </umlnotation:UMLDiagram>
