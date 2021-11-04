@@ -395,11 +395,17 @@ Sind Außerdem keine Labels für Komponenten angegeben, dann sind anstelle diese
     \nopagebreak
 
     \ftable{
+        \fentry{subNameLabel}{outputLabel}{Label für Papertitel.}{N
+        }
         \fentry{submissionName}{inputText}{Name des abzugebenden Papers.}{N}
+
+        \fentry{forumLabel}{outputLabel}{Label für Name des Forums.}{N}
 
         \fentry{forumName}{inputText}{Name des Forums, bei welchem abgegeben wird.}{N }
 
-        \fentry{editorSearch}{inputText}{Angabe eines Editors}{N}
+        \fentry{editorLabel}{outputLabel}{Label für Editor.}{N}
+
+        \fentry{editorSearch}{selectOneMenu}{Angabe eines Editors}{N}
 
         \fentry{pfdUpload}{inputFile}{Angabe der Abgabedatei.}{N}
 
@@ -541,7 +547,7 @@ Sind Außerdem keine Labels für Komponenten angegeben, dann sind anstelle diese
 
         \fentry{employer}{inputText}{Angabe des Arbeitgebers}{N,A,E}
 
-        \fentry{specialty}{}{Spezialgebiete des Nutzers}{N,A,E}
+        \fentry{scienceField}{}{Spezialgebiete des Nutzers}{N,A,E}
 
         \fentry{dateOfBirth}{inputText}{Angabe des Geburtstages}{Nutzer}
 
@@ -751,43 +757,43 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
     \nopagebreak
 
     \ftable{
-        \fentry{forumName}{inputText}{Angabe des Name des Forums.}{A}
+        \fentry{forumName}{inputText}{Angabe des Name des Forums.}{A,E}
 
-        \fentry{forumNameLabel}{outputLabel}{Label Name des Forums.}{A}
+        \fentry{forumNameLabel}{outputLabel}{Label Name des Forums.}{A,E}
 
-        \fentry{emailEditor}{inputText}{Angabe der E-Mail-Adresse eines Editor.}{A}
+        \fentry{emailEditor}{inputText}{Angabe der E-Mail-Adresse eines Editor.}{A,E}
 
-        \fentry{emailEditorLabel}{outputLabel}{Label für E-Mail-Adresse eines Editors.}{A}
+        \fentry{emailEditorLabel}{outputLabel}{Label für E-Mail-Adresse eines Editors.}{A,E}
 
-        \fentry{addEditor}{commandButton}{Hinzufügen eines Editors in eine Liste.}{A}
+        \fentry{addEditor}{commandButton}{Hinzufügen eines Editors in eine Liste.}{A,E}
 
-        \fentry{deleteEditor}{commandButton}{Löschen des zugehörigen Editors von der Liste.}{A}
+        \fentry{deleteEditor}{commandButton}{Löschen des zugehörigen Editors von der Liste.}{A,E}
 
-        \fentry{deadline}{inputText}{Hinzufügen einer Deadline des Forums.}{A}
+        \fentry{deadline}{inputText}{Hinzufügen einer Deadline des Forums.}{A,E}
 
-        \fentry{deadlineLabel}{outputLabel}{Label für Deadline des Forums.}{A}
+        \fentry{deadlineLabel}{outputLabel}{Label für Deadline des Forums.}{A,E}
 
-        \fentry{description}{inputTextArea}{Angabe einer Kurzbeschreibung.}{A}
+        \fentry{description}{inputTextArea}{Angabe einer Kurzbeschreibung.}{A,E}
 
-        \fentry{descriptionLabel}{outputLabel}{Label für Kurzbeschreibung.}{A}
+        \fentry{descriptionLabel}{outputLabel}{Label für Kurzbeschreibung.}{A,E}
 
-        \fentry{url}{inputText}{Link zur Konferenz oder zum Journal.}{A}
+        \fentry{url}{inputText}{Link zur Konferenz oder zum Journal.}{A,E}
 
-        \fentry{urlLabel}{outputLabel}{Label für URL des Forums.}{A}
+        \fentry{urlLabel}{outputLabel}{Label für URL des Forums.}{A,E}
 
-        \fentry{reviewInstructions}{inputTextArea}{Angabe einer Anleitung für eine Begutachtung.}{A}
+        \fentry{reviewInstructions}{inputTextArea}{Angabe einer Anleitung für eine Begutachtung.}{A,E}
 
-        \fentry{scienceField}{selectOneMenus}{Auswahl von Fachgebieten.}{A}
+        \fentry{scienceField}{selectOneMenu}{Auswahl von Fachgebieten.}{A,E}
 
-        \fentry{scienceFieldLabel}{outputLabel}{Label für Fachgebiete.}{A}
+        \fentry{scienceFieldLabel}{outputLabel}{Label für Fachgebiete.}{A,E}
 
         \fentry{newScienceField}{inputText}{Hinzufügen neuer Fachgebiete.}{A}
 
         \fentry{addScienceField}{commandButton}{Ausführen der Hinzufüge-Aktion.}{A}
 
-        \fentry{save}{commandButton}{Speichern des Änderungen.}{A}
+        \fentry{save}{commandButton}{Speichern des Änderungen.}{A,E}
 
-        \fentry{abort}{commandButton}{Abbruch des Bearbeitungsprozesses.}{A}
+        \fentry{abort}{commandButton}{Abbruch des Bearbeitungsprozesses.}{A,E}
 
         \fentry{delete}{commandButton}{Löscht das Forum.}{A}
     }
