@@ -14,10 +14,14 @@
     <children xmi:type="notation:BasicDecorationNode" xmi:id="_4PNKQzvbEeypu5KOTbHQZg" type="Name"/>
     <children xmi:type="notation:BasicDecorationNode" xmi:id="_4POYYDvbEeypu5KOTbHQZg" type="Parent"/>
     <children xmi:type="notation:ListCompartment" xmi:id="_4POYYTvbEeypu5KOTbHQZg" visible="false" type="ANNOTATION_COMPARTMENT"/>
-    <children xmi:type="notation:ListCompartment" xmi:id="_4PQNkDvbEeypu5KOTbHQZg" type="ANNOTATED_ATTRIBUTE_COMPARTMENT"/>
-    <children xmi:type="notation:ListCompartment" xmi:id="_4PQNkTvbEeypu5KOTbHQZg" type="ANNOTATED_OPERATION_COMPARTMENT"/>
+    <children xmi:type="notation:ListCompartment" xmi:id="_4PQNkDvbEeypu5KOTbHQZg" type="ANNOTATED_ATTRIBUTE_COMPARTMENT">
+      <layoutConstraint xmi:type="notation:Ratio" xmi:id="_acpAAD21Eeyuav_ZMYqhLQ" value="0.8206539333117514"/>
+    </children>
+    <children xmi:type="notation:ListCompartment" xmi:id="_4PQNkTvbEeypu5KOTbHQZg" type="ANNOTATED_OPERATION_COMPARTMENT">
+      <layoutConstraint xmi:type="notation:Ratio" xmi:id="_acpnED21Eeyuav_ZMYqhLQ" value="0.17934606668824862"/>
+    </children>
     <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=RegistrationBacking%5Bjcu%5Ename=RegistrationBacking.java%5Bjpack%5Ename=control.backing%5Bjsrcroot%5Esrcfolder=src%5Bproject%5Eid=Klassendiagramm%5D%5D%5D%5D$uml.Class"/>
-    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_4PL8ITvbEeypu5KOTbHQZg" x="121968" y="11484" height="8942"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_4PL8ITvbEeypu5KOTbHQZg" x="126984" y="-660" height="4196"/>
   </children>
   <children xmi:type="umlnotation:UMLShape" xmi:id="_4PTQ4jvbEeypu5KOTbHQZg" fontName="Noto Sans" fontHeight="8" fillColor="5789921" transparency="0" lineColor="1316019" lineWidth="1" showStereotype="Label">
     <children xmi:type="notation:DecorationNode" xmi:id="_4PUfADvbEeypu5KOTbHQZg" type="ImageCompartment">
@@ -134,7 +138,7 @@
     <children xmi:type="notation:ListCompartment" xmi:id="_4PrrYDvbEeypu5KOTbHQZg" type="ANNOTATED_ATTRIBUTE_COMPARTMENT"/>
     <children xmi:type="notation:ListCompartment" xmi:id="_4PrrYTvbEeypu5KOTbHQZg" type="ANNOTATED_OPERATION_COMPARTMENT"/>
     <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=WelcomeBacking%5Bjcu%5Ename=WelcomeBacking.java%5Bjpack%5Ename=control.backing%5Bjsrcroot%5Esrcfolder=src%5Bproject%5Eid=Klassendiagramm%5D%5D%5D%5D$uml.Class"/>
-    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_4Pp2MjvbEeypu5KOTbHQZg" x="114312" y="14388"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_4Pp2MjvbEeypu5KOTbHQZg" x="121836" y="-660"/>
   </children>
   <children xmi:type="umlnotation:UMLShape" xmi:id="_4PsScDvbEeypu5KOTbHQZg" fontName="Noto Sans" fontHeight="8" fillColor="5789921" transparency="0" lineColor="1316019" lineWidth="1" showStereotype="Label">
     <children xmi:type="notation:DecorationNode" xmi:id="_4PsScjvbEeypu5KOTbHQZg" type="ImageCompartment">

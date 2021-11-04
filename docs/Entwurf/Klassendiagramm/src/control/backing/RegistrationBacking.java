@@ -9,11 +9,11 @@ public class RegistrationBacking {
 	
 	private String passwordInput;
 	
+	private String titleInput;
+	
 	private String firstNameInput;
 	
 	private String lastNameInput;
-
-	private String titleInput;
 	
 	private String emailInput;
 
