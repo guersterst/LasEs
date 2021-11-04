@@ -2,6 +2,8 @@ package business.util;
 
 public final class AvatarUtil {
 	
-	public static byte[] generateAvatar() { return null; }
+	private AvatarUtil() { }
+	
+	public static byte[] generateThumbnail() { return null; }
 
 }

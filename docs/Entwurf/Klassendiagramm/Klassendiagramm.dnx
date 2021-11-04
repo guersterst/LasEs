@@ -774,6 +774,32 @@
     <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=AvatarUtil%5Bjcu%5Ename=AvatarUtil.java%5Bjpack%5Ename=business.util%5Bjsrcroot%5Esrcfolder=src%5Bproject%5Eid=Klassendiagramm%5D%5D%5D%5D$uml.Class"/>
     <layoutConstraint xmi:type="notation:Bounds" xmi:id="_RQUSoT1uEey5aNE2XkMFEQ" x="27984" y="35244"/>
   </children>
+  <children xmi:type="umlnotation:UMLShape" xmi:id="__qb5sD1wEey5aNE2XkMFEQ" fontName="Noto Sans" fontHeight="8" showListVisibility="Text" transparency="0" lineColor="14263149" lineWidth="1" showStereotype="Text">
+    <children xmi:type="notation:DecorationNode" xmi:id="__qdu4D1wEey5aNE2XkMFEQ" type="ImageCompartment">
+      <layoutConstraint xmi:type="notation:Size" xmi:id="__qdu4T1wEey5aNE2XkMFEQ" width="1320" height="1320"/>
+    </children>
+    <children xmi:type="notation:BasicDecorationNode" xmi:id="__qeV8D1wEey5aNE2XkMFEQ" type="Stereotype"/>
+    <children xmi:type="notation:BasicDecorationNode" xmi:id="__qeV8T1wEey5aNE2XkMFEQ" type="Name"/>
+    <children xmi:type="notation:BasicDecorationNode" xmi:id="__qeV8j1wEey5aNE2XkMFEQ" type="Parent"/>
+    <children xmi:type="notation:ListCompartment" xmi:id="__qeV8z1wEey5aNE2XkMFEQ" visible="false" type="ANNOTATION_COMPARTMENT"/>
+    <children xmi:type="notation:ListCompartment" xmi:id="__qfkED1wEey5aNE2XkMFEQ" type="ANNOTATED_ATTRIBUTE_COMPARTMENT" showTitle="true"/>
+    <children xmi:type="notation:ListCompartment" xmi:id="__qfkET1wEey5aNE2XkMFEQ" type="ANNOTATED_OPERATION_COMPARTMENT"/>
+    <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=AvatarValidator%5Bjcu%5Ename=AvatarValidator.java%5Bjpack%5Ename=control.validation%5Bjsrcroot%5Esrcfolder=src%5Bproject%5Eid=Klassendiagramm%5D%5D%5D%5D$uml.Class"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="__qb5sT1wEey5aNE2XkMFEQ" x="31776" y="9577"/>
+  </children>
+  <children xmi:type="umlnotation:UMLShape" xmi:id="_8A0x4D10Eey5aNE2XkMFEQ" fontName="Noto Sans" fontHeight="8" showListVisibility="Text" fillColor="2477946" transparency="0" lineColor="566615" lineWidth="1" showStereotype="Text">
+    <children xmi:type="notation:DecorationNode" xmi:id="_8A2nED10Eey5aNE2XkMFEQ" type="ImageCompartment">
+      <layoutConstraint xmi:type="notation:Size" xmi:id="_8A2nET10Eey5aNE2XkMFEQ" width="1320" height="1320"/>
+    </children>
+    <children xmi:type="notation:BasicDecorationNode" xmi:id="_8A3OID10Eey5aNE2XkMFEQ" type="Stereotype"/>
+    <children xmi:type="notation:BasicDecorationNode" xmi:id="_8A3OIT10Eey5aNE2XkMFEQ" type="Name"/>
+    <children xmi:type="notation:BasicDecorationNode" xmi:id="_8A3OIj10Eey5aNE2XkMFEQ" type="Parent"/>
+    <children xmi:type="notation:ListCompartment" xmi:id="_8A3OIz10Eey5aNE2XkMFEQ" visible="false" type="ANNOTATION_COMPARTMENT"/>
+    <children xmi:type="notation:ListCompartment" xmi:id="_8A4cQD10Eey5aNE2XkMFEQ" type="ANNOTATED_ATTRIBUTE_COMPARTMENT" showTitle="true"/>
+    <children xmi:type="notation:ListCompartment" xmi:id="_8A4cQT10Eey5aNE2XkMFEQ" type="ANNOTATED_OPERATION_COMPARTMENT"/>
+    <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=SubmissionLieferando%5Bjcu%5Ename=SubmissionLieferando.java%5Bjpack%5Ename=business.service%5Bjsrcroot%5Esrcfolder=src%5Bproject%5Eid=Klassendiagramm%5D%5D%5D%5D$uml.Class"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_8A0x4T10Eey5aNE2XkMFEQ" x="28908" y="39996"/>
+  </children>
   <element xsi:nil="true"/>
   <edges xmi:type="umlnotation:UMLConnector" xmi:id="_sC9ZYDvnEeypu5KOTbHQZg" source="_TrvtADveEeypu5KOTbHQZg" target="_3sYJADvmEeypu5KOTbHQZg" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
     <children xmi:type="notation:DecorationNode" xmi:id="_sC-AcDvnEeypu5KOTbHQZg" type="FromMultiplicityLabel">
@@ -1637,20 +1663,52 @@
     <element xmi:type="uml:Property" href="mmi:///#jfield%5Ename=userRepository%5Bjsrctype%5Ename=ProfileService%5Bjcu%5Ename=ProfileService.java%5Bjpack%5Ename=business.service%5Bjsrcroot%5Esrcfolder=src%5Bproject%5Eid=Klassendiagramm%5D%5D%5D%5D%5D$uml.Property"/>
     <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_QG7eIT1tEey5aNE2XkMFEQ" points="[-98, 91, 589, -541]$[-556, 512, 131, -120]"/>
   </edges>
-  <edges xmi:type="umlnotation:UMLConnector" xmi:id="_sugQoD1vEey5aNE2XkMFEQ" source="_7CnwID1nEey5aNE2XkMFEQ" target="_RQUSoD1uEey5aNE2XkMFEQ" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
-    <children xmi:type="notation:DecorationNode" xmi:id="_sug3sD1vEey5aNE2XkMFEQ" type="FromMultiplicityLabel">
-      <children xmi:type="notation:BasicDecorationNode" xmi:id="_sug3sj1vEey5aNE2XkMFEQ" type="FromMultiplicity"/>
-      <layoutConstraint xmi:type="notation:Location" xmi:id="_sug3sT1vEey5aNE2XkMFEQ" y="396"/>
+  <edges xmi:type="umlnotation:UMLConnector" xmi:id="_cABEoD1wEey5aNE2XkMFEQ" source="_7CnwID1nEey5aNE2XkMFEQ" target="_RQUSoD1uEey5aNE2XkMFEQ" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
+    <children xmi:type="notation:DecorationNode" xmi:id="_cABEoj1wEey5aNE2XkMFEQ" type="FromMultiplicityLabel">
+      <children xmi:type="notation:BasicDecorationNode" xmi:id="_cABEpD1wEey5aNE2XkMFEQ" type="FromMultiplicity"/>
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_cABEoz1wEey5aNE2XkMFEQ" y="396"/>
     </children>
-    <children xmi:type="notation:DecorationNode" xmi:id="_sug3sz1vEey5aNE2XkMFEQ" type="FromRoleLabel">
-      <children xmi:type="notation:BasicDecorationNode" xmi:id="_sug3tT1vEey5aNE2XkMFEQ" type="FromRole"/>
-      <layoutConstraint xmi:type="notation:Location" xmi:id="_sug3tD1vEey5aNE2XkMFEQ" y="-397"/>
+    <children xmi:type="notation:DecorationNode" xmi:id="_cABrsD1wEey5aNE2XkMFEQ" type="FromRoleLabel">
+      <children xmi:type="notation:BasicDecorationNode" xmi:id="_cABrsj1wEey5aNE2XkMFEQ" type="FromRole"/>
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_cABrsT1wEey5aNE2XkMFEQ" y="-397"/>
     </children>
-    <children xmi:type="notation:DecorationNode" xmi:id="_suhewD1vEey5aNE2XkMFEQ" type="associationTypeLabel">
-      <children xmi:id="_suhewj1vEey5aNE2XkMFEQ" type="associationTypeCompartment"/>
-      <layoutConstraint xmi:type="notation:Location" xmi:id="_suhewT1vEey5aNE2XkMFEQ" y="-186"/>
+    <children xmi:type="notation:DecorationNode" xmi:id="_cABrsz1wEey5aNE2XkMFEQ" type="associationTypeLabel">
+      <children xmi:id="_cABrtT1wEey5aNE2XkMFEQ" type="associationTypeCompartment"/>
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_cABrtD1wEey5aNE2XkMFEQ" y="-186"/>
     </children>
-    <element xmi:type="uml:Property" href="mmi:///#jfield%5Ename=avatar%5Bjsrctype%5Ename=ProfileService%5Bjcu%5Ename=ProfileService.java%5Bjpack%5Ename=business.service%5Bjsrcroot%5Esrcfolder=src%5Bproject%5Eid=Klassendiagramm%5D%5D%5D%5D%5D$uml.Property"/>
-    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_sugQoT1vEey5aNE2XkMFEQ" points="[109, -50, -260, 119]$[258, -118, -111, 51]"/>
+    <element xmi:type="uml:Property" href="mmi:///#jfield%5Ename=avatarUtil%5Bjsrctype%5Ename=ProfileService%5Bjcu%5Ename=ProfileService.java%5Bjpack%5Ename=business.service%5Bjsrcroot%5Esrcfolder=src%5Bproject%5Eid=Klassendiagramm%5D%5D%5D%5D%5D$uml.Property"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_cABEoT1wEey5aNE2XkMFEQ" points="[124, -63, -250, 126]$[242, -123, -132, 66]"/>
+  </edges>
+  <edges xmi:type="umlnotation:UMLConnector" xmi:id="_E9HXcD11Eey5aNE2XkMFEQ" source="_8A0x4D10Eey5aNE2XkMFEQ" target="_IoA0UD1TEeyqe7ggTHXcVA" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
+    <children xmi:type="notation:DecorationNode" xmi:id="_E9HXcj11Eey5aNE2XkMFEQ" type="FromMultiplicityLabel">
+      <children xmi:type="notation:BasicDecorationNode" xmi:id="_E9HXdD11Eey5aNE2XkMFEQ" type="FromMultiplicity"/>
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_E9HXcz11Eey5aNE2XkMFEQ" y="396"/>
+    </children>
+    <children xmi:type="notation:DecorationNode" xmi:id="_E9HXdT11Eey5aNE2XkMFEQ" type="FromRoleLabel">
+      <children xmi:type="notation:BasicDecorationNode" xmi:id="_E9H-gD11Eey5aNE2XkMFEQ" type="FromRole"/>
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_E9HXdj11Eey5aNE2XkMFEQ" y="-397"/>
+    </children>
+    <children xmi:type="notation:DecorationNode" xmi:id="_E9H-gT11Eey5aNE2XkMFEQ" type="associationTypeLabel">
+      <children xmi:id="_E9H-gz11Eey5aNE2XkMFEQ" type="associationTypeCompartment"/>
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_E9H-gj11Eey5aNE2XkMFEQ" y="-186"/>
+    </children>
+    <element xmi:type="uml:Property" href="mmi:///#jfield%5Ename=submissionRepository%5Bjsrctype%5Ename=SubmissionLieferando%5Bjcu%5Ename=SubmissionLieferando.java%5Bjpack%5Ename=business.service%5Bjsrcroot%5Esrcfolder=src%5Bproject%5Eid=Klassendiagramm%5D%5D%5D%5D%5D$uml.Property"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_E9HXcT11Eey5aNE2XkMFEQ" points="[-31, 50, 193, -307]$[-183, 292, 41, -65]"/>
+  </edges>
+  <edges xmi:type="umlnotation:UMLConnector" xmi:id="_9XB6YD11Eey5aNE2XkMFEQ" source="_8A0x4D10Eey5aNE2XkMFEQ" target="_0sgFYDzUEeypt8jOeQDN6g" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
+    <children xmi:type="notation:DecorationNode" xmi:id="_9XChcD11Eey5aNE2XkMFEQ" type="FromMultiplicityLabel">
+      <children xmi:type="notation:BasicDecorationNode" xmi:id="_9XDIgD11Eey5aNE2XkMFEQ" type="FromMultiplicity"/>
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_9XChcT11Eey5aNE2XkMFEQ" y="396"/>
+    </children>
+    <children xmi:type="notation:DecorationNode" xmi:id="_9XDIgT11Eey5aNE2XkMFEQ" type="FromRoleLabel">
+      <children xmi:type="notation:BasicDecorationNode" xmi:id="_9XDIgz11Eey5aNE2XkMFEQ" type="FromRole"/>
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_9XDIgj11Eey5aNE2XkMFEQ" y="-397"/>
+    </children>
+    <children xmi:type="notation:DecorationNode" xmi:id="_9XDIhD11Eey5aNE2XkMFEQ" type="associationTypeLabel">
+      <children xmi:id="_9XDIhj11Eey5aNE2XkMFEQ" type="associationTypeCompartment"/>
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_9XDIhT11Eey5aNE2XkMFEQ" y="-186"/>
+    </children>
+    <element xmi:type="uml:Property" href="mmi:///#jfield%5Ename=userRepository%5Bjsrctype%5Ename=SubmissionLieferando%5Bjcu%5Ename=SubmissionLieferando.java%5Bjpack%5Ename=business.service%5Bjsrcroot%5Esrcfolder=src%5Bproject%5Eid=Klassendiagramm%5D%5D%5D%5D%5D$uml.Property"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_9XB6YT11Eey5aNE2XkMFEQ" points="[-119, 55, 677, -308]$[-692, 315, 104, -48]"/>
   </edges>
 </umlnotation:UMLDiagram>

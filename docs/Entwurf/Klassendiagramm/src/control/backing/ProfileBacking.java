@@ -10,6 +10,8 @@ public class ProfileBacking {
 	
 	private SessionInformation sessionInformation;
 	
+	private byte[] avatarUpload;
+	
 	private ProfileService profileService;
 	
 	private User user;
@@ -20,6 +22,10 @@ public class ProfileBacking {
 	
 	public void submitChanges() { }
 	
+	public void uploadAvatar() { }
+	
 	public String deleteProfile() { return null; }
+	
+	public void deleteAvatar() { }
 
 }
