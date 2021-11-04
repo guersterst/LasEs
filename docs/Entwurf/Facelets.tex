@@ -18,10 +18,8 @@ Im Folgendem Abschnitt werden Abkürzungen für die verschiedenen Rollen eingef�
 \textbf{A} steht für Administrator, \textbf{N} für einen angemeldeten Nutzer, \textbf{E} für einen Editor und \textbf{G} steht für einen Gutachter.
 Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem Begriff \textbf{Alle} zusammengefasst.
 
-\todo{OutputText oder graphicimages für Bezeichnung hinzufügen}
 
 \todo{Suchleiste hinzufügen + Datefilter}
-\todo{Deadline in Toolbar setzen}
 
 \subsection{Templates}
 
@@ -78,17 +76,29 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
     \nopagebreak
 
     \ftable{
+        \fentry{reviewerLabel}{outputLabel}{Label für Gutachterangabe.}{A,E}
+
         \fentry{add-reviewer-field}{inputText}{Eingabefeld zur Angabe einer E-Mailadresse}{A,E}
+
+        \fentry{deadlineReviewer}{outputLabel}{Label für Deadline.}{A,E}
+
+        \fentry{addDeadlineReviewer}{inputText}{Eingabefeld zur Angabe einer Deadline.}{A,E}
 
         \fentry{add-reviewer-btn}{commandButton}{Knopf zum hinzufügen des Gutachters}{A,E}
 
         \fentry{reviewer-table}{dataTable}{Liste der Gutachter}{A,E}
 
-        \fentry{remove-reviewer}{commandButton}{Entferne einen bestimmten Gutacher}{A,E}
+        \fentry{remove-reviewer}{commandButton}{Entferne einen bestimmten Gutachter}{A,E}
+
+        \fentry{editorLabel}{outputLabel}{Label für Editorauswahl.}{A,E}
 
         \fentry{select-editor}{selectOneMenu}{Auswahländerung des verwaltenden Editors}{A,E}
 
-        \fentry{save-editor}{commandButton}{Speichern des geänderten Editors}{A,E}
+        \fentry{save-editor}{commandButton}{Speichern der Änderung}{A,E}
+
+        \fentry{deadlineRevision}{outputLabel}{Label für Deadline.}{A,E}
+
+        \fentry{revisionDeadline}{inputText}{Eingabe zur Angabe einer Deadline.}{A,E}
 
         \fentry{require-revision-btn}{commandButton}{Fordert den Einreicher auf, seine Einreichung zu überarbeiten}{A,E}
 
