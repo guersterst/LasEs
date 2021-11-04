@@ -84,9 +84,9 @@ activate subBacking
         return
     return
 
-    subBacking -> rscBundle : getRevisionAddedConfirmationMsg()
+    subBacking -> rscBundle : getAddRevisionConfirmationMsg()
     activate rscBundle
-    return
+    return msg
 
 return submission.xhtml\nwith facesMessage
 
