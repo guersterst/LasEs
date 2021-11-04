@@ -102,7 +102,7 @@ initialConfig.xhtml
 \textbf{welcome.xhtml} Auf der Login- bzw. Welcome-Seite wird \emph{LasEs} vorgestellt.
 Zusätzlich gibt es ein Login-Formular zur Anmeldung im System.
 Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{registration.xhtml} weitergeleitet.
-
+\nopagebreak
 
 \ftable{
 
@@ -151,6 +151,33 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 }
 
 \textbf{homepage.xhtml} Startseite die den Überblick über alle Einreichungen beinhaltet.
+\nopagebreak
+
+\ftable{
+        \fentry{yourSubmission}{commandLink}{Reiter zum Anzeigen der eigenen Einreichungen.}{Alle}
+        \fentry{yourReviews}{commandLink}{Reiter zum Anzeigen der zu begutachtenden Einreichungen}{G}
+        \fentry{editorialOverview}{commandLink}{Reiter zum Anzeigen aller Einreichungen, welche man editiert.}{E}
+        \fentry{filterLabel}{ouputText}{Label für Filter}{Alle}
+        \fentry{stateLabel}{outputText}{Label für Filter vom Status der Einreichung}{Alle}
+        \fentry{stateSelect}{selectOnMenue}{Filtern des Status von Einreichungen}{Alle}
+        \fentry{dateLabel}{outputText}{Label für Filter von Datum.}{Alle}
+        \fentry{dateUp}{commandButton}{Einreichungen werden aufsteigend angezeigt.}{Alle}
+        \fentry{dateDown}{commandButton}{Einreichungen werden absteigend angezeigt.}{Alle}
+        \fentry{submissionTable}{dataTable}{Liste aller eignen Einreichungen.}{Alle}
+        \fentry{reviewTable}{dataTable}{Liste aller Gutachten.}{G}
+        \fentry{editorTable}{dataTable}{Liste aller Einreichungen für einen Editor.}{E}
+        \fentry{pagination}{listPagination}{Jede Tabelle enthält eine Paginierung.}{Alle}
+}
+\todo{kann nach Forum gefiltert werden wenn ja wie?}
+
+Die einzelnen Tabellen \emph{submissionTable}, \emph{reviewTable} und \emph{editorTable} sind nach den gleichen Punkten gegliedert:
+
+\ftable{
+        \fentry{title}{outputLink}{Titel des Papers.}{Alle}
+        \fentry{date}{outputText}{Datum der Einreichung.}{Alle}
+        \fentry{state}{outputText}{Status der Einreichung.}{Alle}
+        \fentry{forum}{outputLink}{Name des zugehörigen Forums.}{Alle}
+}
 
 submission.xhtml
 
