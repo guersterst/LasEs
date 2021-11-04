@@ -14,7 +14,7 @@ end box
 box "???"
     participant ":ResourceBundle" as rscBundle
 end box
-box "business"
+box "business.service"
     participant ":SubmissionService" as subService
 end box
 box "dtos"
