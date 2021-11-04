@@ -4,8 +4,8 @@
 \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
 \hline
 \hline
-#1                            
-\end{tabular}                            
+#1
+\end{tabular}
 }
 
 \newcommand{\fentry}[4]{#1 & #2 & #3 & #4 \\
@@ -25,36 +25,37 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
 
 \ftable{
 	    \fentry{searchfield}{inputText}{Suchleiste}{N }
-	
+
 	    \fentry{user-list-link}{link}{Link zur Übersichtsseite aller Nutzer}{A, E }
-	
+
 	    \fentry{forum-list-link}{link}{Link zur Übersichtsseite alle Journale und Konferenzen}{N }
-	
+
 	    \fentry{logout-button}{commandButton}{Loggt den Nutzer aus dem System aus und leitet zur Loginseite weiter}{N }
-	
+
 	    \fentry{profile-link}{link}{Link zur Profilübersicht}{N }
-	
+
 }
 
 \textbf{main.xhtml} ist das Template, welches die Seiten zwischen Kopf- und Fußzeile einbettet.
 
 \ftable{
 	    \fentry{navigation-bar}{include}{Kopfzeile}{Alle}
-	
+
 	    \fentry{main-content}{insert}{Seiteninhalt}{Alle }
-	
+
 	    \fentry{footer-bar}{include}{Fußzeile}{Alle }
-	
+
 	    \fentry{tool-bar}{include}{Seitenleiste}{A, E }
-	
+
 }
 
 \textbf{footer.xhtml} ist die Fußzeile der Webanwendung und für alle sichtbar.
 
 \ftable{
 	    \fentry{imprint-link}{link}{Link zur Seite des Impressums}{Alle}
-	
+
 }
+
 
 \textbf{listPagination.xhtml} Composite Component zur paginierung von Listen.
 \emph{listPagination.xhtml} wird in jeder Tabelle oder Liste eingebunden.
@@ -68,7 +69,32 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
 
 \todo{Toolbar}
 
-toolbar.xhtml
+\begin{samepage} %https://stackoverflow.com/questions/4003473/make-an-unbreakable-block-in-tex
+
+\textbf{toolbar.xhtml} ist die Seitenleiste für Editoren und Administratoren auf der Einreichungsübersichtsseite. Hier wird die Einreichung verwaltet.
+\nopagebreak
+
+\ftable{
+	\fentry{add-reviewer-field}{inputText}{Eingabefeld zur Angabe einer E-Mailadresse}{A, E}
+
+	\fentry{add-reviewer-btn}{commandButton}{Knopf zum hinzufügen des Gutachters}{A, E}
+
+	\fentry{reviewer-table}{dataTable}{Liste der Gutachter}{A,E}
+
+	\fentry{remove-reviewer}{commandButton}{Entferne einen bestimmten Gutacher}{A, E}
+
+	\fentry{select-editor}{selectOneMenu}{Auswahländerung des verwaltenden Editors}{A, E}
+
+	\fentry{save-editor}{commandButton}{Speichern des geänderten Editors}{A, E}
+
+	\fentry{require-revision-btn}{commandButton}{Fordert den Einreicher auf, seine Einreichung zu überarbeiten}{A, E}
+
+	\fentry{accept-submission-btn}{commandButton}{Akzeptiere die Einreichung}{A, E}
+
+	\fentry{reject-submission-btn}{commandButton}{Lehne die Einreichung ab}{A, E}
+
+}
+\end{samepage}
 
 \subsection{Seiten}
 initialConfig.xhtml
@@ -79,49 +105,49 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 
 
 \ftable{
-    
+
         \fentry{welcomeHeading}{outputText}{Überschrift der Welcomepage.}{Alle}
-    
+
         \fentry{welcomeText}{outputText}{Bewerben der Applikation mithilfe einer Kurzbeschreibung.}{Alle }
-    
+
         \fentry{username}{inputText}{Textfeld für Username Eingabe.}{Alle }
-    
+
         \fentry{password}{inputSecret}{Textfeld für Passwort Eingabe.}{Alle }
-    
+
         \fentry{login}{commandButton}{Ausführen des Login-Prozesses.}{Alle }
-    
+
         \fentry{register}{link}{Weiterleitung zur Registrierung.}{Alle }
-    
+
 }
 
 \textbf{registration.xhtml} Seite zur Registrierung anonymer Nutzer.
 
 \ftable{
-    
+
         \fentry{title}{inputText}{Angabe eines Titels.}{Alle }
-    
+
         \fentry{firstName}{inputText}{Angabe des Vornamens.}{Alle }
-    
+
         \fentry{name}{inputText}{Angabe des Nachnamen.}{Alle }
-    
+
         \fentry{password}{inputSecret}{Angabe eines Passwortes.}{Alle }
-    
+
         \fentry{email}{inputText}{Angabe einer validen E-Mail.}{Alle }
-    
+
         \fentry{register}{commandButton}{Ausführen des Registrations-Prozesses.}{Alle }
-    
+
         \fentry{welcomepage}{link}{Weiterleitung zur Login Seite.}{Alle}
-    
+
 }
 
 \textbf{verification.xhtml} Wird bei erfolgreicher Verifikation der E-Mail angezeigt.
 
 \ftable{
-    
+
         \fentry{successText}{outputText}{Text zur erfolgreichen Verifizierung der E-Mail}{Alle}
-    
+
         \fentry{countdown}{timer}{Timer bis zur Weiterleitung auf die Homepage.}{Alle }
-    
+
 }
 
 \textbf{homepage.xhtml} Startseite die den Überblick über alle Einreichungen beinhaltet.
@@ -131,45 +157,45 @@ submission.xhtml
 \textbf{newSubmission.xhtml} Hier können neue Paper eingereicht werden.
 
 \ftable{
-    
+
         \fentry{submissionName}{inputText}{Name des abzugebenden Papers.}{N}
-    
+
         \fentry{forumName}{inputText}{Name des Forums, bei welchem abgegeben wird.}{N }
-    
+
         \fentry{editorSearch}{inputText}{Angabe eines Editors}{N}
-    
+
         \fentry{pfdUpload}{inputFile}{Angabe der Abgabedatei.}{N}
-    
+
         \fentry{titel}{inputText}{Angabe eines Titels.}{N}
-    
+
     coAuthorFirstName & inputText & Angabe des Vornamen eines Co-Autors.& N\\
-    
+
         \fentry{coAuthorName}{inputText}{Angabe des Namen eines Co-Autors.}{N}
-    
+
         \fentry{coAuthorEMail}{inputText}{Angabe der E-Mail eines Co-Autors.}{N}
-    
+
         \fentry{submitCoAuthor}{commandButton}{Ausgabe des Co-Autors in einer Liste.}{N}
-    
+
         \fentry{coAuthorList}{outputText}{Anzeige aller Co-Authoren in einer Liste.}{N}
-    
+
         \fentry{deleteCoAuthor}{commandButton}{Löschen des zugehörigen Co-Authors.}{N}
-    
+
         \fentry{submit}{commandButton}{Ausführen des Abgabe-Prozesses.}{N }
-    
+
 }
 
 \textbf{newReview.xhtml} Möchte ein Gutachter eines Papers seine Beurteilung abgeben, so ist dies auf dieser Seite möglich.
 
 \ftable{
-    
+
         \fentry{versionNumber}{outputText}{Versionsnummer des eingereichten Papers, zu welchem der Gutachter ein Gutachten abgeben kann.}{G,A}
-    
+
         \fentry{recommendation}{checkbox}{Empfehlung des Gutachters ein Paper freizuschalten.}{G,A}
-    
+
         \fentry{comment}{inputTextarea}{Kommentar eines Gutachters}{G,A}
-    
+
         \fentry{reviewPdf}{inputFile}{Einzureichendes Gutachten.}{G,A }
-    
+
 }
 
 
@@ -180,54 +206,54 @@ scientificForumList.xhtml
 Ein Editor besitzt nur Leserechte. Alle zuvor gespeicherten Angaben werden in den jeweiligen Feldern angezeigt.
 
 \ftable{
-    
+
         \fentry{avatar}{graphicImage}{Aktueller Avatar.}{N,A,E}
-    
+
         \fentry{newAvatar}{inputFile}{Hochladen eines neuen Avatars.}{N,A,E}
-    
+
         \fentry{deleteAvatar}{commandButton}{Löschen des Avatars.}{N,A,E}
-    
+
         \fentry{role}{outputText}{Angabe der Rolle eines Nutzers}{N,A,E}
-    
+
         \fentry{isAdmin}{checkbox}{Zuteilung der Rolle des Administrators.}{A}
-    
+
         \fentry{title}{inputText}{Titel des Nutzenden.}{N,A,E}
-    
+
         \fentry{firstName}{inputText}{Vorname des Nutzenden.}{N,A,E}
-    
+
         \fentry{name}{inputText}{Nachname des Nutzenden.}{N,A,E}
-    
+
         \fentry{password}{inputSecret}{Leeres Eingabefeld für ein neues Passwort.}{N,A}
-    
+
         \fentry{email}{inputText}{E-Mail des Nutzenden.}{N,A,E}
-    
+
         \fentry{submissionNumber}{outputText}{Anzahl der eigenen Einreichungen}{N,A,E}
-    
+
         \fentry{employer}{inputText}{Angabe des Arbeitgebers}{N,A,E}
-    
+
         \fentry{specialty}{}{Spezialgebiete des Nutzers}{N,A,E}
-    
+
         \fentry{dateOfBirth}{inputText}{Angabe des Geburtstages}{Nutzer}
-    
+
         \fentry{save}{commandButton}{Daten werden persistiert.}{N,A,E}
-    
+
         \fentry{delete}{commandButton}{Nutzer und alle damit verbundenen Daten werden gelöscht.}{N,A,E}
-    
+
 }
 
 Sollte ein Administrator einem Nutzer die Rolle des Admins zuweisen oder entziehen, so erscheint beim Auslösen des Save-Buttons ein Popup-Dialog.
 In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Passwort zu bestätigen.
 
 \ftable{
-    
+
         \fentry{password}{inputSecret}{Angabe eines Passworts.}{A}
-    
+
         \fentry{reference}{outputText}{Hinweis zur Veränderung der Adminrolle.}{A}
-    
+
         \fentry{abort}{commandButton}{Abbruch der Änderung.}{A}
-    
+
         \fentry{save}{commandButton}{Speichern aller Änderungen.}{A}
-    
+
 }
 
 \todo{bearbeiten kann es nur der Nutzer aber betrachten andere....+ was ist mit Passwort F200+ doch getrennte Profilseiten? + avatarbild}
@@ -235,9 +261,9 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 \textbf{errorPage.xhtml} Auf diese Seite wird navigiert, wenn auf eine nicht existierende URL oder auf eine URL zugegriffen wird, auf die man keine Zugriffsrechte hat.
 
 \ftable{
-    
+
         \fentry{errorMessage}{outputText}{Anzeige einer Fehlermeldung.}{Alle}
-    
+
 }
 
 userList.xhtml
@@ -245,199 +271,199 @@ userList.xhtml
 \textbf{newUser.xhtml} Der Administrator kann hier einen neuen Nutzer anlegen.
 
 \ftable{
-    
+
         \fentry{password}{inputSecret}{Angabe des Passworts.}{A}
-    
+
         \fentry{firstName}{inputText}{Angabe des Vornamen.}{A}
-    
+
         \fentry{name}{inputText}{Angabe des Nachnamen.}{A}
-    
+
         \fentry{titel}{inputText}{Angabe eines Titels.}{A}
-    
+
         \fentry{email}{inputText}{Angabe einer E-Mail-Adresse.}{A}
-    
+
         \fentry{isAdmin}{checkbox}{Zuordnung einer Administratorenrolle.}{A}
-    
+
         \fentry{abort}{commandButton}{Abbruch des Vorgangs: Nutzererstellen.}{A}
-    
+
         \fentry{save}{commandButton}{Speichern des neuen Nutzers.}{A }
-    
+
 }
 
 \textbf{administration.xhtml} Hier kann ein Administrator Konfigurationen vornehmen.
 
 \ftable{
-    
+
         \fentry{themeHeading}{outputText}{Überschrift für Farbthemes.}{A}
-    
+
         \fentry{orangeTheme}{outputText}{Standart Theme der Applikation.}{A}
-    
+
         \fentry{orange}{radioButton}{Auswahl des Standart Themes.}{A}
-    
+
         \fentry{darkTheme}{outputText}{Dark Theme der Applikation.}{A}
-    
+
         \fentry{dark}{radioButton}{Auswahl des Dark Themes.}{A}
-    
+
         \fentry{blueTheme}{outputText}{Blue Theme der Applikation}{A}
-    
+
         \fentry{blue}{radioButton}{Auswahl des Blue Themes.}{A}
-    
+
         \fentry{greenTheme}{outputText}{Green Theme der Applikation.}{A}
-    
+
         \fentry{green}{radioButton}{Auswahl des Green Themes.}{A}
-    
+
         \fentry{logoHeading}{outputText}{Überschrift für Logo-Bereich.}{A}
-    
+
         \fentry{logo}{graphicImage}{Logo des Systems.}{A}
-    
+
         \fentry{changeLogo}{inputFile}{Hochladen eines neuen Logos.}{A}
-    
+
         \fentry{institutionHeading}{outputText}{Überschrift für Einstellungen der Einrichtung.}{A}
-    
+
         \fentry{institution}{inputText}{Angabe des Namens der Einrichtung.}{A}
-    
+
         \fentry{imprint}{inputTextArea}{Angabe des Impressums der Einrichtung.}{A}
-    
+
         \fentry{abort}{commandButton}{Abbruch des Änderungsvorgangs.}{A }
-    
+
         \fentry{save}{commandButton}{Speichern der Änderungen.}{A}
-    
+
         \fentry{newUser}{link}{Weiterleitung zu \emph{newUser.xhtml}.}{A}
-    
+
         \fentry{newScientificForum}{link}{Weiterleitung zu \emph{newScientificForum.xhtml}.}{A}
-    
+
 }
 
 \textbf{newScientificForum.xhtml} Auf der Seite zum Erstellen eines wissenschaftlichen Forums kann ein Administrator dessen wesentlichen Daten festlegen.
 
 \ftable{
-    
+
         \fentry{forumName}{inputText}{Angabe des Name des Forums.}{A}
-    
+
         \fentry{fName}{outputLabel}{Label Name des Forums.}{A}
-    
+
         \fentry{emailEditor}{inputText}{Angabe der E-Mail-Adresse eines Editor.}{A}
-    
+
         \fentry{emailE}{outputLabel}{Label für E-Mail-Adresse eines Editors.}{A}
-    
+
         \fentry{addEditor}{commandButton}{Hinzufügen eines Editors in eine Liste.}{A}
-    
+
         \fentry{deleteEditor}{commandButton}{Löschen des zugehörigen Editors von der Liste.}{A}
-    
+
         \fentry{deadline}{inputText}{Hinzufügen einer Deadline des Forums.}{A}
-    
+
         \fentry{deadlineLabel}{outputLabel}{Label für Deadline des Forums.}{A}
-    
+
         \fentry{description}{inputTextArea}{Angabe einer Kurzbeschreibung.}{A}
-    
+
         \fentry{descriptionLabel}{outputLabel}{Label für Kurzbeschreibung.}{A}
-    
+
         \fentry{url}{inputText}{Link zur Konferenz oder zum Journal.}{A}
-    
+
         \fentry{urlLabel}{outputLabel}{Label für URL des Forums.}{A}
-    
+
         \fentry{reviewInstructions}{inputTextArea}{Angabe einer Anleitung für eine Begutachtung.}{A}
-    
+
         \fentry{specialty}{selectOnMenus}{Auswahl von Fachgebieten.}{A}
-    
+
         \fentry{specialtyLabel}{outputLabel}{Label für Fachgebiete.}{A}
-    
+
         \fentry{newSpecialty}{inputText}{Hinzufügen neuer Fachgebiete.}{A}
-    
+
         \fentry{addSpecialty}{commandButton}{Ausführen der Hinzufüge-Aktion.}{A}
-    
+
         \fentry{save}{commandButton}{Speichern des neuen Forums.}{A}
-    
+
         \fentry{abort}{commandButton}{Abbruch des Erstellungsprozesses.}{A}
-    
+
 }
 
 \textbf{editForum.xhtml} Hier kann der Administrator eine schon existierende Seite bearbeiten.
 
 \ftable{
-    
+
         \fentry{forumName}{inputText}{Angabe des Name des Forums.}{A}
-    
+
         \fentry{fName}{outputLabel}{Label Name des Forums.}{A}
-    
+
         \fentry{emailEditor}{inputText}{Angabe der E-Mail-Adresse eines Editor.}{A}
-    
+
         \fentry{emailE}{outputLabel}{Label für E-Mail-Adresse eines Editors.}{A}
-    
+
         \fentry{addEditor}{commandButton}{Hinzufügen eines Editors in eine Liste.}{A}
-    
+
         \fentry{deleteEditor}{commandButton}{Löschen des zugehörigen Editors von der Liste.}{A}
-    
+
         \fentry{deadline}{inputText}{Hinzufügen einer Deadline des Forums.}{A}
-    
+
         \fentry{deadlineLabel}{outputLabel}{Label für Deadline des Forums.}{A}
-    
+
         \fentry{description}{inputTextArea}{Angabe einer Kurzbeschreibung.}{A}
-    
+
         \fentry{descriptionLabel}{outputLabel}{Label für Kurzbeschreibung.}{A}
-    
+
         \fentry{url}{inputText}{Link zur Konferenz oder zum Journal.}{A}
-    
+
         \fentry{urlLabel}{outputLabel}{Label für URL des Forums.}{A}
-    
+
         \fentry{reviewInstructions}{inputTextArea}{Angabe einer Anleitung für eine Begutachtung.}{A}
-    
+
         \fentry{specialty}{selectOnMenus}{Auswahl von Fachgebieten.}{A}
-    
+
         \fentry{specialtyLabel}{outputLabel}{Label für Fachgebiete.}{A}
-    
+
         \fentry{newSpecialty}{inputText}{Hinzufügen neuer Fachgebiete.}{A}
-    
+
         \fentry{addSpecialty}{commandButton}{Ausführen der Hinzufüge-Aktion.}{A}
-    
+
         \fentry{save}{commandButton}{Speichern des Forums.}{A}
-    
+
         \fentry{abort}{commandButton}{Abbruch des Erstellungsprozesses.}{A}
-    
+
 }
 
 \textbf{scientificForum.xhtml} Die Ansicht eines Forums dient zur Ausgabe von Informationen über die jeweilige Konferenz oder das jeweilige Journal.
 
 \ftable{
-    
+
         \fentry{forumName}{outputText}{Name des Forums.}{Alle}
-    
+
         \fentry{fName}{outputLabel}{Label Name des Forums.}{Alle}
-    
+
         \fentry{editor}{outputText}{Liste der verantwortliche Editoren.}{Alle}
-    
+
         \fentry{deadline}{outputText}{Deadline des Forums.}{Alle}
-    
+
         \fentry{deadlineLabel}{outputLabel}{Label für Deadline des Forums.}{Alle}
-    
+
         \fentry{description}{outputText}{Kurzbeschreibung des Forums.}{Alle}
-    
+
         \fentry{descriptionLabel}{outputLabel}{Label für Kurzbeschreibung.}{Alle}
-    
+
         \fentry{url}{outputLink}{Link zur Konferenz oder zum Journal.}{Alle}
-    
+
         \fentry{urlLabel}{outputLabel}{Label für URL des Forums.}{Alle}
-    
+
         \fentry{reviewInstructions}{outputText}{Anleitung für eine Begutachtung.}{Alle}
-    
+
         \fentry{specialty}{outputText}{Fachgebiet des Forums.}{Alle}
-    
+
         \fentry{specialtyLabel}{outputLabel}{Label für Fachgebiete.}{Alle}
-    
+
         \fentry{save}{commandButton}{Speichern des Forums.}{Alle}
-    
+
         \fentry{abort}{commandButton}{Abbruch des Erstellungsprozesses.}{Alle}
-    
+
 }
 
 \textbf{imprint.xhtml} Das Impressum gibt die vom Administrator angegebenen Kontaktdaten des Betreibers wieder.
 
 \ftable{
-    
+
         \fentry{imprintHeading}{outputText}{Überschrift der Ansicht}{A}
-    
+
         \fentry{imprint}{outputText}{Impressum des Betreibers.}{A}
-    
+
 }
 
 \todo{Forum bearbeiten können ? Löschen?}
