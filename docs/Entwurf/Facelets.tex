@@ -73,39 +73,39 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
 \end{samepage}
 
 \begin{samepage}
-    \textbf{toolbar.xhtml} ist die Seitenleiste für Editoren und Administratoren auf der Einreichungsübersichtsseite. Hier wird die Einreichung verwaltet.
+    \textbf{toolbar.xhtml} ist die Seitenleiste für Editoren und Administratoren auf der Einreichungsübersicht. Hier wird die Einreichung verwaltet.
     \nopagebreak
 
     \ftable{
         \fentry{reviewerLabel}{outputLabel}{Label für Gutachterangabe.}{A,E}
 
-        \fentry{add-reviewer-field}{inputText}{Eingabefeld zur Angabe einer E-Mailadresse}{A,E}
+        \fentry{addReviewerField}{inputText}{Eingabefeld zur Angabe einer E-Mailadresse}{A,E}
 
         \fentry{deadlineReviewer}{outputLabel}{Label für Deadline.}{A,E}
 
         \fentry{addDeadlineReviewer}{inputText}{Eingabefeld zur Angabe einer Deadline.}{A,E}
 
-        \fentry{add-reviewer-btn}{commandButton}{Knopf zum hinzufügen des Gutachters}{A,E}
+        \fentry{addReviewerBtn}{commandButton}{Knopf zum hinzufügen des Gutachters}{A,E}
 
-        \fentry{reviewer-table}{dataTable}{Liste der Gutachter}{A,E}
+        \fentry{reviewerTable}{dataTable}{Liste der Gutachter}{A,E}
 
-        \fentry{remove-reviewer}{commandButton}{Entferne einen bestimmten Gutachter}{A,E}
+        \fentry{removeReviewer}{commandButton}{Entferne einen bestimmten Gutachter}{A,E}
 
         \fentry{editorLabel}{outputLabel}{Label für Editorauswahl.}{A,E}
 
-        \fentry{select-editor}{selectOneMenu}{Auswahländerung des verwaltenden Editors}{A,E}
+        \fentry{selectEditor}{selectOneMenu}{Auswahländerung des verwaltenden Editors}{A,E}
 
-        \fentry{save-editor}{commandButton}{Speichern der Änderung}{A,E}
+        \fentry{saveEditor}{commandButton}{Speichern der Änderung}{A,E}
 
         \fentry{deadlineRevision}{outputLabel}{Label für Deadline.}{A,E}
 
         \fentry{revisionDeadline}{inputText}{Eingabe zur Angabe einer Deadline.}{A,E}
 
-        \fentry{require-revision-btn}{commandButton}{Fordert den Einreicher auf, seine Einreichung zu überarbeiten}{A,E}
+        \fentry{requireRevisionBtn}{commandButton}{Fordert den Einreicher auf, seine Einreichung zu überarbeiten}{A,E}
 
-        \fentry{accept-submission-btn}{commandButton}{Akzeptiere die Einreichung}{A,E}
+        \fentry{acceptSubmissionBtn}{commandButton}{Akzeptiere die Einreichung}{A,E}
 
-        \fentry{reject-submission-btn}{commandButton}{Lehne die Einreichung ab}{A,E}
+        \fentry{rejectSubmissionBtn}{commandButton}{Lehne die Einreichung ab}{A,E}
 
     }
 \end{samepage}
@@ -120,7 +120,9 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
 
     \ftable{
         \fentry{back}{commandButton}{Laden der vorherigen Seite der Liste.}{Alle}
+
         \fentry{next}{commandButton}{Laden der nächsten Seite der Liste.}{Alle}
+        
         \fentry{page}{selectOneMenue}{Laden einer bestimmten Seite}{Alle}
     }
 \end{samepage}
