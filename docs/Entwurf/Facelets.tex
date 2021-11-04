@@ -102,16 +102,16 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
 \localauthor{Stefanie Gürster}
 
 \begin{samepage}
-\textbf{listPagination.xhtml} Composite Component zur paginierung von Listen.
-\emph{listPagination.xhtml} wird in jeder Tabelle oder Liste eingebunden.
-\todo{Beschreibung von ListPagination verändern.}
-\nopagebreak
+    \textbf{listPagination.xhtml} Composite Component zur paginierung von Listen.
+    \emph{listPagination.xhtml} wird in jeder Tabelle oder Liste eingebunden.
+    \todo{Beschreibung von ListPagination verändern.}
+    \nopagebreak
 
-\ftable{
+    \ftable{
         \fentry{back}{commandButton}{Laden der vorherigen Seite der Liste.}{Alle}
         \fentry{next}{commandButton}{Laden der nächsten Seite der Liste.}{Alle}
         \fentry{page}{selectOneMenue}{Laden einer bestimmten Seite}{Alle}
-}
+    }
 \end{samepage}
 
 \subsection{Seiten}
@@ -226,6 +226,7 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
     Für den \textbf{Editor} und den \textbf{Administrator} wird zusätzlich eine \emph{toolbar.xhtml} eingebunden.
     \nopagebreak
 
+<<<<<<< HEAD
         \ftable{
             \fentry{title}{outputText}{Titel des Papers.}{Alle}
             \fentry{forumLabel}{outputLabel}{Label für ein Forum.}{Alle}
@@ -264,6 +265,46 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
             \fentry{reviewTable}{dataTable}{Liste aller/der eigenen Gutachten.}{E,A,G}
             \fentry{pagination}{listPagination}{Jede Tabelle enthält eine Paginierung.}{Alle}
         }
+=======
+    \ftable{
+        \fentry{title}{outputText}{Titel des Papers.}{Alle}
+        \fentry{forumLabel}{outputLabel}{Label für ein Forum.}{Alle}
+        \fentry{forum}{Link}{Name des Forums und Weiterleitung zur Forumsübersicht.}{Alle}
+        \fentry{authorLabel}{outputLabel}{Label für Autor.}{Alle}
+        \fentry{author}{Link}{Name des Autors und Weiterleitung zum Profil.}{Alle}
+        \fentry{coAuthorLabel}{outputLabel}{Namen der Co-Autoren.}{Alle}
+        \fentry{emailLabel}{outputLabel}{Label für E-Mail-Adressen der Co-Authoren.}{Alle}
+        \fentry{email}{Link}{E-Mail-Adressen der Co-Authoren und Mailto-Link.}{Alle}
+        \fentry{filterLabel}{outputLabel}{Label für Filter}{Alle}
+        \fentry{dateLabel}{outputLabel}{Label für Filter von Datum.}{Alle}
+        \fentry{dateUp}{commandButton}{Einreichungen und Gutachten werden aufsteigend angezeigt.}{Alle}
+        \fentry{dateDown}{commandButton}{Einreichungen und Gutachten werden absteigend angezeigt.}{Alle}
+        \fentry{reviewStateLabel}{outputLabel}{Label für Filtern der Gutachtenfreischaltung.}{E, A}
+        \fentry{all}{checkbox}{Anzeigen aller Gutachten.}{E, A, G}
+        \fentry{allLabel}{outputLabel}{Label für all.}{E, A, G}
+        \fentry{locked}{checkbox}{Anzeigen nicht freigeschalteter Gutachten.}{E, A, G}
+        \fentry{lockedLabel}{ouputLabel}{Laberl für locked.}{E, A, G}
+        \fentry{unlocked}{checkbox}{Anzeigen freigeschalteter Gutachten.}{E, A, G}
+        \fentry{unlockedLabel}{ouputLabel}{Laberl für unlocked.}{E, A, G}
+        \fentry{reviewSubmitLabel}{outputLabel}{Label für Filter von eingereichten Gutachten.}{E, A}
+        \fentry{submitted}{checkbox}{Anzeigen aller abgegebenen Gutachten.}{E,A}
+        \fentry{submittedLabel}{outputLabel}{Label für submitted.}{E,A}
+        \fentry{notSubmitted}{checkbox}{Anzeigen noch nicht abgegebener Gutachten.}{E, A}
+        \fentry{notSubmittedLabel}{ouputLabel}{Label für notSubmitted.}{E, A}
+        \fentry{versionLabel}{outputLabel}{Label für Versionsfilter.}{Alle}
+        \fentry{version}{selectOneMenue}{Auswahl der Versionsnummern}{Alle}
+        \fentry{reviewerLabel}{outputLabel}{Label für Reviewerfilter.}{Alle}
+        \fentry{reviewer}{selectOneMenue}{Auswahl eines bestimmten Gutachters.}{E, A}
+        \fentry{recommendationLabel}{outputLabel}{Label für Empfehlungen.}{E, A, G}
+        \fentry{recommendation}{selectOneMenue}{Auswahl der Art von Empfehlungen.}{E, A, G}
+        \fentry{searchLabel}{outputLabel}{Label für Suche.}{Alle}
+        \fentry{search}{inputText}{Durchsuchen der Tabelle mit Matching-Words.}{Alle}
+        \fentry{apply}{commandButton}{Wende Filtereinstellungen an.}{Alle}
+        \fentry{submissionTable}{dataTable}{Liste aller Versionen}{Alle}
+        \fentry{reviewTable}{dataTable}{Liste aller/der eigenen Gutachten.}{E, A, G}
+        \fentry{pagination}{listPagination}{Jede Tabelle enthält eine Paginierung.}{Alle}
+    }
+>>>>>>> d150ba6147e10daceead6135ae8a74f193774ce0
 
     \emph{submissionTable} enthält die Spalten: Version, Datum, Deadline, Status und Download.
     Die Elemente der Liste, der unterschiedlichen Versionen der Einrichtung, sieht wie folgt aus:
@@ -356,41 +397,41 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
 
 
 \begin{samepage}
-	\localauthor{Johann Schicho}\nopagebreak
+    \localauthor{Johann Schicho}\nopagebreak
 
-	\textbf{scientificForumList.xhtml} HIer erhalten die Nutzer eine Übersicht über alle wissenschaftliche Foren.\nopagebreak
+    \textbf{scientificForumList.xhtml} HIer erhalten die Nutzer eine Übersicht über alle wissenschaftliche Foren.\nopagebreak
 
-	\ftable{
+    \ftable{
 
-		\fentry{filterLabel}{outputLabel}{Label für Filter}{Alle}
+        \fentry{filterLabel}{outputLabel}{Label für Filter}{Alle}
 
-		\fentry{sc-fields-label}{outputLabel}{Label für Filter der Themengebiete}{Alle}
+        \fentry{sc-fields-label}{outputLabel}{Label für Filter der Themengebiete}{Alle}
 
-		\fentry{sc-field-select}{selectOneMenu}{Filtern der Themengebiete der Foren}{Alle}
+        \fentry{sc-field-select}{selectOneMenu}{Filtern der Themengebiete der Foren}{Alle}
 
-		\fentry{deadline-label}{outputLabel}{Label für Filtern nach Deadlines (Abgelaufen/Zukunft)}{Alle}
+        \fentry{deadline-label}{outputLabel}{Label für Filtern nach Deadlines (Abgelaufen/Zukunft)}{Alle}
 
-		\fentry{deadline-select}{selectOneMenu}{Filtern der nach Deadlines}{Alle}
+        \fentry{deadline-select}{selectOneMenu}{Filtern der nach Deadlines}{Alle}
 
-		\fentry{apply}{commandButton}{Wende Filtereinstellungen an.}{Alle}
+        \fentry{apply}{commandButton}{Wende Filtereinstellungen an.}{Alle}
 
-		\fentry{nameUp}{commandButton}{Einreichungen werden aufsteigend nach Namen angezeigt.}{Alle}
+        \fentry{nameUp}{commandButton}{Einreichungen werden aufsteigend nach Namen angezeigt.}{Alle}
 
-		\fentry{nameDown}{commandButton}{Einreichungen werden absteigend nach Namen angezeigt.}{E,A}
+        \fentry{nameDown}{commandButton}{Einreichungen werden absteigend nach Namen angezeigt.}{E,A}
 
-		\fentry{deadlineUp}{commandButton}{Einreichungen werden aufsteigend nach Deadline angezeigt.}{Alle}
+        \fentry{deadlineUp}{commandButton}{Einreichungen werden aufsteigend nach Deadline angezeigt.}{Alle}
 
-		\fentry{deadlineDown}{commandButton}{Einreichungen werden absteigend nach Deadline angezeigt.}{Alle}
+        \fentry{deadlineDown}{commandButton}{Einreichungen werden absteigend nach Deadline angezeigt.}{Alle}
 
-		\fentry{forumsTable}{dataTable}{Liste aller Foren im System.}{Alle}
+        \fentry{forumsTable}{dataTable}{Liste aller Foren im System.}{Alle}
 
-		\fentry{pagination}{listPagination}{Die Tabelle enthält eine Paginierung.}{Alle}
-}
+        \fentry{pagination}{listPagination}{Die Tabelle enthält eine Paginierung.}{Alle}
+    }
 \end{samepage}
 
 
 \begin{samepage}
-	\localauthor{Stefanie Gürster}\nopagebreak
+    \localauthor{Stefanie Gürster}\nopagebreak
 
     \textbf{profile.xhtml} Die Profilseite eines angemeldeten Nutzers ist nur vom Nutzer selbst und vom Administrator editierbar.
     Ein Editor besitzt nur Leserechte. Alle zuvor gespeicherten Angaben werden in den jeweiligen Feldern angezeigt.
@@ -462,33 +503,35 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
 
 \begin{samepage}
-	\localauthor{Johann Schicho} \nopagebreak
+    \localauthor{Johann Schicho} \nopagebreak
 
-	\textbf{userList.xhtml} \label{flt:userList} Editoren und Administratoren erhalten hier einen Überblick über alle Nutzer. Die Seiten sind paginiert.
-	\nopagebreak
+    \textbf{userList.xhtml} \label{flt:userList} Editoren und Administratoren erhalten hier einen Überblick über alle Nutzer. Die Seiten sind paginiert.
+    \nopagebreak
 
-	\ftable{
+    \ftable{
 
-		\fentry{filterLabel}{outputLabel}{Label für Filter}{E,A}
+        \fentry{filterLabel}{outputLabel}{Label für Filter}{E,A}
 
-		\fentry{roleLabel}{outputLabel}{Label für Filter Rolle des Nutzers}{E,A}
+        \fentry{roleLabel}{outputLabel}{Label für Filter Rolle des Nutzers}{E,A}
 
-		\fentry{roleSelect}{selectOneMenu}{Filtern der Rolle des Nutzers}{E,A}
+        \fentry{roleSelect}{selectOneMenu}{Filtern der Rolle des Nutzers}{E,A}
 
-		\fentry{apply}{commandButton}{Wende Filtereinstellungen an.}{E,A}
+        \fentry{apply}{commandButton}{Wende Filtereinstellungen an.}{E,A}
 
-		\fentry{nameUp}{commandButton}{Nutzer werden nach Namen aufsteigend angezeigt.}{E,A}
+        \fentry{nameUp}{commandButton}{Nutzer werden nach Namen aufsteigend angezeigt.}{E,A}
 
-		\fentry{nameDown}{commandButton}{Nutzer werden absteigend nach Namen angezeigt.}{E,A}
+        \fentry{nameDown}{commandButton}{Nutzer werden absteigend nach Namen angezeigt.}{E,A}
 
-		\fentry{roleUp}{commandButton}{Nutzer werden nach Rolle aufsteigend angezeigt.}{E,A}
+        \fentry{roleUp}{commandButton}{Nutzer werden nach Rolle aufsteigend angezeigt.}{E,A}
 
-		\fentry{roleDown}{commandButton}{Nutzer werden absteigend nach Rolle angezeigt.}{E,A}
+        \fentry{roleDown}{commandButton}{Nutzer werden absteigend nach Rolle angezeigt.}{E,A}
 
-		\fentry{userTable}{dataTable}{Liste aller Nutzer im System.}{E,A}
+        \fentry{role}{selectOneMenu}{Auswahl der Rollen.}{E,A}
 
-		\fentry{pagination}{listPagination}{Die Tabelle enthält eine Paginierung.}{E,A}
-}
+        \fentry{userTable}{dataTable}{Liste aller Nutzer im System.}{E,A}
+
+        \fentry{pagination}{listPagination}{Die Tabelle enthält eine Paginierung.}{E,A}
+    }
 \end{samepage}
 
 \begin{samepage}
@@ -503,8 +546,6 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
         \fentry{scienceField}{outputText}{Fachgebiete des Nutzers.}{E,A}
     }
 \end{samepage}
-
-\todo{Dropdown für rollen.}
 
 \begin{samepage}
 
@@ -672,7 +713,7 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 \end{samepage}
 
 \begin{samepage}
-	\localauthor{Johann Schicho}\nopagebreak
+    \localauthor{Johann Schicho}\nopagebreak
 
     \textbf{scientificForum.xhtml} Die Ansicht eines Forums dient zur Ausgabe von Informationen über die jeweilige Konferenz oder das jeweilige Journal.
     \nopagebreak
