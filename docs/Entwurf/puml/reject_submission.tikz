@@ -9,6 +9,7 @@
 \definecolor{plantucolor0007}{RGB}{255,0,0}
 \scalebox{0.76}{
 \begin{tikzpicture}[yscale=-1
+,font=\Large
 ,pstyle0/.style={color=plantucolor0001,fill=plantucolor0000,line width=1.0pt}
 ,pstyle1/.style={color=plantucolor0001,fill=white,line width=1.0pt}
 ,pstyle2/.style={color=plantucolor0001,line width=1.0pt,dash pattern=on 5.0pt off 5.0pt}
