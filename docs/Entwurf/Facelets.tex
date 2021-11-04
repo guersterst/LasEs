@@ -12,7 +12,7 @@
 \hline}
 
 
-\localauthor{Stefanie Gürster}
+\localauthor{Stefanie Gürster, Johann Schicho}
 
 Im Folgendem Abschnitt werden Abkürzungen für die verschiedenen Rollen eingeführt:
 \textbf{A} steht für Administrator, \textbf{N} für einen angemeldeten Nutzer, \textbf{E} für einen Editor und \textbf{G} steht für einen Gutachter.
@@ -21,7 +21,13 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
 \todo{OutputText oder graphicimages für Bezeichnung hinzufügen}
 
 \subsection{Templates}
+
+% https://stackoverflow.com/questions/4003473/make-an-unbreakable-block-in-tex
+% Mit samepage bleiben überschrift und tabelle auf der glechen Seite
+
+\begin{samepage}
 \textbf{navigation.xhtml} ist die Kopfzeile der Webanwendung. Diese bietet die Suchfunktion an und Links zu verschiedenen Listen und dem Profil.
+\nopagebreak
 
 \ftable{
 	    \fentry{searchfield}{inputText}{Suchleiste}{N }
@@ -35,7 +41,9 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
 	    \fentry{profile-link}{link}{Link zur Profilübersicht}{N }
 
 }
+\end{samepage}
 
+\begin{samepage}
 \textbf{main.xhtml} ist das Template, welches die Seiten zwischen Kopf- und Fußzeile einbettet.
 
 \ftable{
@@ -48,29 +56,32 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
 	    \fentry{tool-bar}{include}{Seitenleiste}{A, E }
 
 }
+\end{samepage}
 
+\begin{samepage}
 \textbf{footer.xhtml} ist die Fußzeile der Webanwendung und für alle sichtbar.
+\nopagebreak
 
 \ftable{
 	    \fentry{imprint-link}{link}{Link zur Seite des Impressums}{Alle}
 
 }
+\end{samepage}
 
-
+\begin{samepage}
 \textbf{listPagination.xhtml} Composite Component zur paginierung von Listen.
 \emph{listPagination.xhtml} wird in jeder Tabelle oder Liste eingebunden.
 \todo{Beschreibung von ListPagination verändern.}
+\nopagebreak
 
 \ftable{
         \fentry{back}{commandButton}{Laden der vorherigen Seite der Liste.}{Alle}
         \fentry{next}{commandButton}{Laden der nächsten Seite der Liste.}{Alle}
         \fentry{page}{selectOneMenue}{Laden einer bestimmten Seite}{Alle}
 }
+\end{samepage}
 
-\todo{Toolbar}
-
-\begin{samepage} %https://stackoverflow.com/questions/4003473/make-an-unbreakable-block-in-tex
-
+\begin{samepage}
 \textbf{toolbar.xhtml} ist die Seitenleiste für Editoren und Administratoren auf der Einreichungsübersichtsseite. Hier wird die Einreichung verwaltet.
 \nopagebreak
 
@@ -97,8 +108,19 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
 \end{samepage}
 
 \subsection{Seiten}
-initialConfig.xhtml
 
+\begin{samepage}
+\textbf{initialConfig.xhtml} Auf dieser Seite landet man beim ersten Systemstart. Sie ist nur für Administratoren zugänglich. Hier kann der Administrator die Datenbankschemata erstellen lassen.
+\nopagebreak
+
+\ftable{
+	\fentry{db-connection-state}{outputText}{Information über die Verbindung mit der Datenbank}{A}
+
+	\fentry{create-db-btn}{commandButton}{Erstellt die Datenbankschemata}{A}
+}
+\end{samepage}
+
+\begin{samepage}
 \textbf{welcome.xhtml} Auf der Login- bzw. Welcome-Seite wird \emph{LasEs} vorgestellt.
 Zusätzlich gibt es ein Login-Formular zur Anmeldung im System.
 Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{registration.xhtml} weitergeleitet.
@@ -119,8 +141,11 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
         \fentry{register}{link}{Weiterleitung zur Registrierung.}{Alle }
 
 }
+\end{samepage}
 
+\begin{samepage}
 \textbf{registration.xhtml} Seite zur Registrierung anonymer Nutzer.
+\nopagebreak
 
 \ftable{
 
@@ -137,10 +162,12 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
         \fentry{register}{commandButton}{Ausführen des Registrations-Prozesses.}{Alle }
 
         \fentry{welcomepage}{link}{Weiterleitung zur Login Seite.}{Alle}
-
 }
+\end{samepage}
 
+\begin{samepage}
 \textbf{verification.xhtml} Wird bei erfolgreicher Verifikation der E-Mail angezeigt.
+\nopagebreak
 
 \ftable{
 
@@ -149,6 +176,7 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
         \fentry{countdown}{timer}{Timer bis zur Weiterleitung auf die Homepage.}{Alle }
 
 }
+\end{samepage}
 
 \textbf{homepage.xhtml} Startseite die den Überblick über alle Einreichungen beinhaltet.
 \nopagebreak
@@ -181,7 +209,9 @@ Die einzelnen Tabellen \emph{submissionTable}, \emph{reviewTable} und \emph{edit
 
 submission.xhtml
 
+\begin{samepage}
 \textbf{newSubmission.xhtml} Hier können neue Paper eingereicht werden.
+\nopagebreak
 
 \ftable{
 
@@ -208,10 +238,12 @@ submission.xhtml
         \fentry{deleteCoAuthor}{commandButton}{Löschen des zugehörigen Co-Authors.}{N}
 
         \fentry{submit}{commandButton}{Ausführen des Abgabe-Prozesses.}{N }
-
 }
+\end{samepage}
 
+\begin{samepage}
 \textbf{newReview.xhtml} Möchte ein Gutachter eines Papers seine Beurteilung abgeben, so ist dies auf dieser Seite möglich.
+\nopagebreak
 
 \ftable{
 
@@ -222,15 +254,18 @@ submission.xhtml
         \fentry{comment}{inputTextarea}{Kommentar eines Gutachters}{G,A}
 
         \fentry{reviewPdf}{inputFile}{Einzureichendes Gutachten.}{G,A }
-
 }
+\end{samepage}
 
 
 resultList.xhtml
+
 scientificForumList.xhtml
 
+\begin{samepage}
 \textbf{profile.xhtml} Die Profilseite eines angemeldeten Nutzers ist nur vom Nutzer selbst und vom Administrator editierbar.
 Ein Editor besitzt nur Leserechte. Alle zuvor gespeicherten Angaben werden in den jeweiligen Feldern angezeigt.
+\nopagebreak
 
 \ftable{
 
@@ -265,10 +300,10 @@ Ein Editor besitzt nur Leserechte. Alle zuvor gespeicherten Angaben werden in de
         \fentry{save}{commandButton}{Daten werden persistiert.}{N,A,E}
 
         \fentry{delete}{commandButton}{Nutzer und alle damit verbundenen Daten werden gelöscht.}{N,A,E}
-
 }
+\end{samepage}
 
-Sollte ein Administrator einem Nutzer die Rolle des Admins zuweisen oder entziehen, so erscheint beim Auslösen des Save-Buttons ein Popup-Dialog.
+Sollte ein Administrator einem anderen Nutzer die Rolle des Administrators zuweisen oder entziehen, so erscheint beim Auslösen des Save-Buttons ein Popup-Dialog.
 In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Passwort zu bestätigen.
 
 \ftable{
@@ -285,17 +320,22 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
 \todo{bearbeiten kann es nur der Nutzer aber betrachten andere....+ was ist mit Passwort F200+ doch getrennte Profilseiten? + avatarbild}
 
+\begin{samepage}
 \textbf{errorPage.xhtml} Auf diese Seite wird navigiert, wenn auf eine nicht existierende URL oder auf eine URL zugegriffen wird, auf die man keine Zugriffsrechte hat.
+\nopagebreak
 
 \ftable{
 
         \fentry{errorMessage}{outputText}{Anzeige einer Fehlermeldung.}{Alle}
 
 }
+\end{samepage}
 
 userList.xhtml
 
+\begin{samepage}
 \textbf{newUser.xhtml} Der Administrator kann hier einen neuen Nutzer anlegen.
+\nopagebreak
 
 \ftable{
 
@@ -316,8 +356,11 @@ userList.xhtml
         \fentry{save}{commandButton}{Speichern des neuen Nutzers.}{A }
 
 }
+\end{samepage}
 
+\begin{samepage}
 \textbf{administration.xhtml} Hier kann ein Administrator Konfigurationen vornehmen.
+\nopagebreak
 
 \ftable{
 
@@ -358,10 +401,12 @@ userList.xhtml
         \fentry{newUser}{link}{Weiterleitung zu \emph{newUser.xhtml}.}{A}
 
         \fentry{newScientificForum}{link}{Weiterleitung zu \emph{newScientificForum.xhtml}.}{A}
-
 }
+\end{samepage}
 
+\begin{samepage}
 \textbf{newScientificForum.xhtml} Auf der Seite zum Erstellen eines wissenschaftlichen Forums kann ein Administrator dessen wesentlichen Daten festlegen.
+\nopagebreak
 
 \ftable{
 
@@ -402,13 +447,14 @@ userList.xhtml
         \fentry{save}{commandButton}{Speichern des neuen Forums.}{A}
 
         \fentry{abort}{commandButton}{Abbruch des Erstellungsprozesses.}{A}
-
 }
+\end{samepage}
 
+\begin{samepage}
 \textbf{editForum.xhtml} Hier kann der Administrator eine schon existierende Seite bearbeiten.
+\nopagebreak
 
 \ftable{
-
         \fentry{forumName}{inputText}{Angabe des Name des Forums.}{A}
 
         \fentry{fName}{outputLabel}{Label Name des Forums.}{A}
@@ -446,10 +492,12 @@ userList.xhtml
         \fentry{save}{commandButton}{Speichern des Forums.}{A}
 
         \fentry{abort}{commandButton}{Abbruch des Erstellungsprozesses.}{A}
-
 }
+\end{samepage}
 
+\begin{samepage}
 \textbf{scientificForum.xhtml} Die Ansicht eines Forums dient zur Ausgabe von Informationen über die jeweilige Konferenz oder das jeweilige Journal.
+\nopagebreak
 
 \ftable{
 
@@ -480,10 +528,11 @@ userList.xhtml
         \fentry{save}{commandButton}{Speichern des Forums.}{Alle}
 
         \fentry{abort}{commandButton}{Abbruch des Erstellungsprozesses.}{Alle}
-
 }
+\end{samepage}
 
-\textbf{imprint.xhtml} Das Impressum gibt die vom Administrator angegebenen Kontaktdaten des Betreibers wieder.
+\begin{samepage}
+\textbf{imprint.xhtml} Das Impressum gibt die vom Administrator angegebenen Kontaktdaten des Betreibers wieder.\nopagebreak
 
 \ftable{
 
@@ -492,5 +541,6 @@ userList.xhtml
         \fentry{imprint}{outputText}{Impressum des Betreibers.}{A}
 
 }
+\end{samepage}
 
 \todo{Forum bearbeiten können ? Löschen?}
