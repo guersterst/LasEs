@@ -1,4 +1,19 @@
+%% Macros
+\newcommand{\ftable}[1]{\begin{tabular}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
+\hline
+\textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
+\hline
+\hline
+#1                            
+\end{tabular}                            
+}
+
+\newcommand{\fentry}[4]{#1 & #2 & #3 & #4 \\
+\hline}
+
+
 \localauthor{Stefanie Gürster}
+
 Im Folgendem Abschnitt werden Abkürzungen für die verschiedenen Rollen eingeführt:
 \textbf{A} steht für Administrator, \textbf{N} für einen angemeldeten Nutzer, \textbf{E} für einen Editor und \textbf{G} steht für einen Gutachter.
 Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem Begriff \textbf{Alle} zusammengefasst.
@@ -8,50 +23,38 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
 \subsection{Templates}
 \textbf{navigation.xhtml} ist die Kopfzeile der Webanwendung. Diese bietet die Suchfunktion an und Links zu verschiedenen Listen und dem Profil.
 
-\begin{tabular}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
-	\hline
-	\textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
-	\hline
-	\hline
-	searchfield & inputText & Suchleiste & N \\
-	\hline
-	user-list-link & link & Link zur Übersichtsseite aller Nutzer & A, E \\
-	\hline
-	forum-list-link & link & Link zur Übersichtsseite alle Journale und Konferenzen & N \\
-	\hline
-	logout-button & commandButton & Loggt den Nutzer aus dem System aus und leitet zur Loginseite weiter & N \\
-	\hline
-	profile-link & link & Link zur Profilübersicht & N \\
-	\hline
-\end{tabular}
+\ftable{
+	    \fentry{searchfield}{inputText}{Suchleiste}{N }
+	
+	    \fentry{user-list-link}{link}{Link zur Übersichtsseite aller Nutzer}{A, E }
+	
+	    \fentry{forum-list-link}{link}{Link zur Übersichtsseite alle Journale und Konferenzen}{N }
+	
+	    \fentry{logout-button}{commandButton}{Loggt den Nutzer aus dem System aus und leitet zur Loginseite weiter}{N }
+	
+	    \fentry{profile-link}{link}{Link zur Profilübersicht}{N }
+	
+}
 
 \textbf{main.xhtml} ist das Template, welches die Seiten zwischen Kopf- und Fußzeile einbettet.
 
-\begin{tabular}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
-	\hline
-	\textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
-	\hline
-	\hline
-	navigation-bar & include & Kopfzeile & Alle\\
-	\hline
-	main-content & insert & Seiteninhalt & Alle \\
-	\hline
-	footer-bar & include & Fußzeile & Alle \\
-	\hline
-	tool-bar & include & Seitenleiste & A, E \\
-	\hline
-\end{tabular}
+\ftable{
+	    \fentry{navigation-bar}{include}{Kopfzeile}{Alle}
+	
+	    \fentry{main-content}{insert}{Seiteninhalt}{Alle }
+	
+	    \fentry{footer-bar}{include}{Fußzeile}{Alle }
+	
+	    \fentry{tool-bar}{include}{Seitenleiste}{A, E }
+	
+}
 
 \textbf{footer.xhtml} ist die Fußzeile der Webanwendung und für alle sichtbar.
 
-\begin{tabular}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
-	\hline
-	\textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
-	\hline
-	\hline
-	imprint-link & link & Link zur Seite des Impressums & Alle\\
-	\hline
-\end{tabular}
+\ftable{
+	    \fentry{imprint-link}{link}{Link zur Seite des Impressums}{Alle}
+	
+}
 
 \begin{samepage} %https://stackoverflow.com/questions/4003473/make-an-unbreakable-block-in-tex
 
@@ -89,64 +92,55 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
 initialConfig.xhtml
 
 \textbf{welcome.xhtml} Auf der Login- bzw. Welcome-Seite wird \emph{LasEs} vorgestellt.
-Zusätzlich gibt ein Login-Formular zur Anmeldung im System.
-Für nicht registrierte Nutzer wird man über einem gegebenen Link zu \emph{registration.xhtml} weitergeleitet.
+Zusätzlich gibt es ein Login-Formular zur Anmeldung im System.
+Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{registration.xhtml} weitergeleitet.
 
 
-\begin{tabular}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
-    \hline
-    \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
-    \hline
-    \hline
-    welcomeHeading & outputText & Überschrift der Welcomepage. & Alle\\
-    \hline
-    welcomeText & outputText & Bewerben der Applikation mithilfe einer Kurzbeschreibung. & Alle \\
-    \hline
-    username & inputText & Textfeld für Username Eingabe. & Alle \\
-    \hline
-    password & inputSecret & Textfeld für Passwort Eingabe. & Alle \\
-    \hline
-    login & commandButton & Ausführen des Login-Prozesses. & Alle \\
-    \hline
-    register & link & Weiterleitung zur Registrierung. & Alle \\
-    \hline
-\end{tabular}
+\ftable{
+    
+        \fentry{welcomeHeading}{outputText}{Überschrift der Welcomepage.}{Alle}
+    
+        \fentry{welcomeText}{outputText}{Bewerben der Applikation mithilfe einer Kurzbeschreibung.}{Alle }
+    
+        \fentry{username}{inputText}{Textfeld für Username Eingabe.}{Alle }
+    
+        \fentry{password}{inputSecret}{Textfeld für Passwort Eingabe.}{Alle }
+    
+        \fentry{login}{commandButton}{Ausführen des Login-Prozesses.}{Alle }
+    
+        \fentry{register}{link}{Weiterleitung zur Registrierung.}{Alle }
+    
+}
 
 \textbf{registration.xhtml} Seite zur Registrierung anonymer Nutzer.
 
-\begin{tabular}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
-    \hline
-    \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
-    \hline
-    \hline
-    title & inputText & Angabe eines Titels. & Alle \\
-    \hline
-    firstName & inputText & Angabe des Vornamens. & Alle \\
-    \hline
-    name & inputText & Angabe des Nachnamen. & Alle \\
-    \hline
-    password & inputSecret & Angabe eines Passwortes. & Alle \\
-    \hline
-    email & inputText & Angabe einer validen E-Mail. & Alle \\
-    \hline
-    register & commandButton & Ausführen des Registrations-Prozesses. & Alle \\
-    \hline
-    welcomepage & link & Weiterleitung zur Login Seite. & Alle\\
-    \hline
-\end{tabular}
+\ftable{
+    
+        \fentry{title}{inputText}{Angabe eines Titels.}{Alle }
+    
+        \fentry{firstName}{inputText}{Angabe des Vornamens.}{Alle }
+    
+        \fentry{name}{inputText}{Angabe des Nachnamen.}{Alle }
+    
+        \fentry{password}{inputSecret}{Angabe eines Passwortes.}{Alle }
+    
+        \fentry{email}{inputText}{Angabe einer validen E-Mail.}{Alle }
+    
+        \fentry{register}{commandButton}{Ausführen des Registrations-Prozesses.}{Alle }
+    
+        \fentry{welcomepage}{link}{Weiterleitung zur Login Seite.}{Alle}
+    
+}
 
 \textbf{verification.xhtml} Wird bei erfolgreicher Verifikation der E-Mail angezeigt.
 
-\begin{tabular}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
-    \hline
-    \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
-    \hline
-    \hline
-    successText & outputText & Text zur erfolgreichen Verifizierung der E-Mail & Alle\\
-    \hline
-    countdown & timer & Timer bis zur Weiterleitung auf die Homepage. & Alle \\
-    \hline
-\end{tabular}
+\ftable{
+    
+        \fentry{successText}{outputText}{Text zur erfolgreichen Verifizierung der E-Mail}{Alle}
+    
+        \fentry{countdown}{timer}{Timer bis zur Weiterleitung auf die Homepage.}{Alle }
+    
+}
 
 \textbf{homepage.xhtml} Startseite die den Überblick über alle Einreichungen beinhaltet.
 
@@ -154,53 +148,47 @@ submission.xhtml
 
 \textbf{newSubmission.xhtml} Hier können neue Paper eingereicht werden.
 
-\begin{tabular}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
-    \hline
-    \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
-    \hline
-    \hline
-    submissionName & inputText & Name des abzugebenden Papers. & N\\
-    \hline
-    forumName & inputText & Name des Forums, bei welchem abgegeben wird. & N \\
-    \hline
-    editorSearch & inputText & Angabe eines Editors & N\\
-    \hline
-    pfdUpload & inputFile & Angabe der Abgabedatei. & N\\
-    \hline
-    titel & inputText & Angabe eines Titels. & N\\
-    \hline
+\ftable{
+    
+        \fentry{submissionName}{inputText}{Name des abzugebenden Papers.}{N}
+    
+        \fentry{forumName}{inputText}{Name des Forums, bei welchem abgegeben wird.}{N }
+    
+        \fentry{editorSearch}{inputText}{Angabe eines Editors}{N}
+    
+        \fentry{pfdUpload}{inputFile}{Angabe der Abgabedatei.}{N}
+    
+        \fentry{titel}{inputText}{Angabe eines Titels.}{N}
+    
     coAuthorFirstName & inputText & Angabe des Vornamen eines Co-Autors.& N\\
-    \hline
-    coAuthorName & inputText & Angabe des Namen eines Co-Autors. & N\\
-    \hline
-    coAuthorEMail & inputText & Angabe der E-Mail eines Co-Autors. & N\\
-    \hline
-    submitCoAuthor & commandButton & Ausgabe des Co-Autors in einer Liste. & N\\
-    \hline
-    coAuthorList & outputText & Anzeige aller Co-Authoren in einer Liste. & N\\
-    \hline
-    deleteCoAuthor & commandButton & Löschen des zugehörigen Co-Authors. & N\\
-    \hline
-    submit & commandButton & Ausführen des Abgabe-Prozesses. & N \\
-    \hline
-\end{tabular}
+    
+        \fentry{coAuthorName}{inputText}{Angabe des Namen eines Co-Autors.}{N}
+    
+        \fentry{coAuthorEMail}{inputText}{Angabe der E-Mail eines Co-Autors.}{N}
+    
+        \fentry{submitCoAuthor}{commandButton}{Ausgabe des Co-Autors in einer Liste.}{N}
+    
+        \fentry{coAuthorList}{outputText}{Anzeige aller Co-Authoren in einer Liste.}{N}
+    
+        \fentry{deleteCoAuthor}{commandButton}{Löschen des zugehörigen Co-Authors.}{N}
+    
+        \fentry{submit}{commandButton}{Ausführen des Abgabe-Prozesses.}{N }
+    
+}
 
 \textbf{newReview.xhtml} Möchte ein Gutachter eines Papers seine Beurteilung abgeben, so ist dies auf dieser Seite möglich.
 
-\begin{tabular}{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
-    \hline
-    \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
-    \hline
-    \hline
-    versionNumber & outputText & Versionsnummer des eingereichten Papers, zu welchem der Gutachter ein Gutachten abgeben kann. & G,A\\
-    \hline
-    recommendation & checkbox & Empfehlung des Gutachters ein Paper freizuschalten. & G,A\\
-    \hline
-    comment & inputTextarea & Kommentar eines Gutachters & G,A\\
-    \hline
-    reviewPdf & inputFile & Einzureichendes Gutachten. & G,A \\
-    \hline
-\end{tabular}
+\ftable{
+    
+        \fentry{versionNumber}{outputText}{Versionsnummer des eingereichten Papers, zu welchem der Gutachter ein Gutachten abgeben kann.}{G,A}
+    
+        \fentry{recommendation}{checkbox}{Empfehlung des Gutachters ein Paper freizuschalten.}{G,A}
+    
+        \fentry{comment}{inputTextarea}{Kommentar eines Gutachters}{G,A}
+    
+        \fentry{reviewPdf}{inputFile}{Einzureichendes Gutachten.}{G,A }
+    
+}
 
 
 resultList.xhtml
@@ -209,292 +197,265 @@ scientificForumList.xhtml
 \textbf{profile.xhtml} Die Profilseite eines angemeldeten Nutzers ist nur vom Nutzer selbst und vom Administrator editierbar.
 Ein Editor besitzt nur Leserechte. Alle zuvor gespeicherten Angaben werden in den jeweiligen Feldern angezeigt.
 
-\begin{tabular}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
-    \hline
-    \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
-    \hline
-    \hline
-    avatar & graphicImage & Aktueller Avatar. & N,A,E\\
-    \hline
-    newAvatar & inputFile & Hochladen eines neuen Avatars. & N,A,E\\
-    \hline
-    deleteAvatar & commandButton & Löschen des Avatars. & N,A,E\\
-    \hline
-    role & outputText & Angabe der Rolle eines Nutzers & N,A,E\\
-    \hline
-    isAdmin & checkbox & Zuteilung der Rolle des Administrators. & A\\
-    \hline
-    title & inputText & Titel des Nutzenden. & N,A,E\\
-    \hline
-    firstName & inputText & Vorname des Nutzenden. & N,A,E\\
-    \hline
-    name & inputText & Nachname des Nutzenden. & N,A,E\\
-    \hline
-    password & inputSecret & Leeres Eingabefeld für ein neues Passwort. & N,A\\
-    \hline
-    email & inputText & E-Mail des Nutzenden. & N,A,E\\
-    \hline
-    submissionNumber & outputText & Anzahl der eigenen Einreichungen & N,A,E\\
-    \hline
-    employer & inputText & Angabe des Arbeitgebers & N,A,E\\
-    \hline
-    specialty & & Spezialgebiete des Nutzers & N,A,E \\
-    \hline
-    dateOfBirth & inputText & Angabe des Geburtstages & Nutzer\\
-    \hline
-    save & commandButton & Daten werden persistiert. & N,A,E\\
-    \hline
-    delete & commandButton & Nutzer und alle damit verbundenen Daten werden gelöscht. & N,A,E\\
-    \hline
-\end{tabular}
+\ftable{
+    
+        \fentry{avatar}{graphicImage}{Aktueller Avatar.}{N,A,E}
+    
+        \fentry{newAvatar}{inputFile}{Hochladen eines neuen Avatars.}{N,A,E}
+    
+        \fentry{deleteAvatar}{commandButton}{Löschen des Avatars.}{N,A,E}
+    
+        \fentry{role}{outputText}{Angabe der Rolle eines Nutzers}{N,A,E}
+    
+        \fentry{isAdmin}{checkbox}{Zuteilung der Rolle des Administrators.}{A}
+    
+        \fentry{title}{inputText}{Titel des Nutzenden.}{N,A,E}
+    
+        \fentry{firstName}{inputText}{Vorname des Nutzenden.}{N,A,E}
+    
+        \fentry{name}{inputText}{Nachname des Nutzenden.}{N,A,E}
+    
+        \fentry{password}{inputSecret}{Leeres Eingabefeld für ein neues Passwort.}{N,A}
+    
+        \fentry{email}{inputText}{E-Mail des Nutzenden.}{N,A,E}
+    
+        \fentry{submissionNumber}{outputText}{Anzahl der eigenen Einreichungen}{N,A,E}
+    
+        \fentry{employer}{inputText}{Angabe des Arbeitgebers}{N,A,E}
+    
+        \fentry{specialty}{}{Spezialgebiete des Nutzers}{N,A,E}
+    
+        \fentry{dateOfBirth}{inputText}{Angabe des Geburtstages}{Nutzer}
+    
+        \fentry{save}{commandButton}{Daten werden persistiert.}{N,A,E}
+    
+        \fentry{delete}{commandButton}{Nutzer und alle damit verbundenen Daten werden gelöscht.}{N,A,E}
+    
+}
 
 Sollte ein Administrator einem Nutzer die Rolle des Admins zuweisen oder entziehen, so erscheint beim Auslösen des Save-Buttons ein Popup-Dialog.
-In diesem Fenster  wird der Administrator angewiesen die Änderung mit seinem Passwort zu bestätigen.
+In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Passwort zu bestätigen.
 
-\begin{tabular}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
-    \hline
-    \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
-    \hline
-    \hline
-    password & inputSecret & Angabe eines Passworts. & A\\
-    \hline
-    reference & outputText & Hinweis zur Veränderung der Adminrolle. & A\\
-    \hline
-    abort & commandButton & Abbruch der Änderung. & A\\
-    \hline
-    save & commandButton & Speichern aller Änderungen. & A\\
-    \hline
-\end{tabular}
+\ftable{
+    
+        \fentry{password}{inputSecret}{Angabe eines Passworts.}{A}
+    
+        \fentry{reference}{outputText}{Hinweis zur Veränderung der Adminrolle.}{A}
+    
+        \fentry{abort}{commandButton}{Abbruch der Änderung.}{A}
+    
+        \fentry{save}{commandButton}{Speichern aller Änderungen.}{A}
+    
+}
 
 \todo{bearbeiten kann es nur der Nutzer aber betrachten andere....+ was ist mit Passwort F200+ doch getrennte Profilseiten? + avatarbild}
 
 \textbf{errorPage.xhtml} Auf diese Seite wird navigiert, wenn auf eine nicht existierende URL oder auf eine URL zugegriffen wird, auf die man keine Zugriffsrechte hat.
 
-\begin{tabular}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
-    \hline
-    \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
-    \hline
-    \hline
-    errorMessage & outputText & Anzeige einer Fehlermeldung. & Alle\\
-    \hline
-\end{tabular}
+\ftable{
+    
+        \fentry{errorMessage}{outputText}{Anzeige einer Fehlermeldung.}{Alle}
+    
+}
 
 userList.xhtml
 
 \textbf{newUser.xhtml} Der Administrator kann hier einen neuen Nutzer anlegen.
 
-\begin{tabular}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
-    \hline
-    \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
-    \hline
-    \hline
-    password & inputSecret & Angabe des Passworts. & A\\
-    \hline
-    firstName & inputText & Angabe des Vornamen. & A\\
-    \hline
-    name & inputText & Angabe des Nachnamen. & A\\
-    \hline
-    titel & inputText & Angabe eines Titels. & A\\
-    \hline
-    email & inputText & Angabe einer E-Mail-Adresse. & A\\
-    \hline
-    isAdmin & checkbox & Zuordnung einer Administratorenrolle. & A\\
-    \hline
-    abrot & commandButton & Abbruch des Vorgangs: Nutzererstellen. & A\\
-    \hline
-    save & commandButton & Speichern des neuen Nutzers. & A \\
-    \hline
-\end{tabular}
+\ftable{
+    
+        \fentry{password}{inputSecret}{Angabe des Passworts.}{A}
+    
+        \fentry{firstName}{inputText}{Angabe des Vornamen.}{A}
+    
+        \fentry{name}{inputText}{Angabe des Nachnamen.}{A}
+    
+        \fentry{titel}{inputText}{Angabe eines Titels.}{A}
+    
+        \fentry{email}{inputText}{Angabe einer E-Mail-Adresse.}{A}
+    
+        \fentry{isAdmin}{checkbox}{Zuordnung einer Administratorenrolle.}{A}
+    
+        \fentry{abort}{commandButton}{Abbruch des Vorgangs: Nutzererstellen.}{A}
+    
+        \fentry{save}{commandButton}{Speichern des neuen Nutzers.}{A }
+    
+}
 
 \textbf{administration.xhtml} Hier kann ein Administrator Konfigurationen vornehmen.
 
-\begin{tabular}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
-    \hline
-    \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
-    \hline
-    \hline
-    themeHeading & outputText & Überschrift für Farbthemen. & A\\
-    \hline
-    orangeTheme & outputText & Standart Theme der Applikation. & A\\
-    \hline
-    orange & radioButton & Auswahl des Standart Themes. & A\\
-    \hline
-    darkTheme & outputText & Dark Theme der Applikation. & A\\
-    \hline
-    dark & radioButton & Auswahl des Dark Themes. & A\\
-    \hline
-    blueTheme & outputText & Blue Theme der Applikation & A\\
-    \hline
-    blue & radioButton & Auswahl des Blue Themes. & A\\
-    \hline
-    greenTheme & outputText & Green Theme der Applikation. & A\\
-    \hline
-    green & radioButton & Auswahl des Green Themes. & A\\
-    \hline
-    logoHeading & outputText & Überschrift für Logo-Bereich. & A\\
-    \hline
-    logo & graphicImage & Logo des Systems. & A\\
-    \hline
-    changeLogo & inputFile & Hochladen eines neuen Logos. & A\\
-    \hline
-    institutionHeading & outputText & Überschrift für Einstellungen der Einrichtung. & A\\
-    \hline
-    institution & inputText & Angabe des Namens der Einrichtung. & A\\
-    \hline
-    imprint & inputTextArea & Angabe des Impressums der Einrichtung. & A\\
-    \hline
-    abort & commandButton & Abbruch des Änderungsvorgangs. & A \\
-    \hline
-    save & commandButton & Speichern der Änderungen. & A\\
-    \hline
-    newUser & link & Weiterleitung zu \emph{newUser.xhtml}. & A\\
-    \hline
-    newScientificForum & link & Weiterleitung zu \emph{newScientificForum.xhtml}. & A\\
-    \hline
-\end{tabular}
+\ftable{
+    
+        \fentry{themeHeading}{outputText}{Überschrift für Farbthemes.}{A}
+    
+        \fentry{orangeTheme}{outputText}{Standart Theme der Applikation.}{A}
+    
+        \fentry{orange}{radioButton}{Auswahl des Standart Themes.}{A}
+    
+        \fentry{darkTheme}{outputText}{Dark Theme der Applikation.}{A}
+    
+        \fentry{dark}{radioButton}{Auswahl des Dark Themes.}{A}
+    
+        \fentry{blueTheme}{outputText}{Blue Theme der Applikation}{A}
+    
+        \fentry{blue}{radioButton}{Auswahl des Blue Themes.}{A}
+    
+        \fentry{greenTheme}{outputText}{Green Theme der Applikation.}{A}
+    
+        \fentry{green}{radioButton}{Auswahl des Green Themes.}{A}
+    
+        \fentry{logoHeading}{outputText}{Überschrift für Logo-Bereich.}{A}
+    
+        \fentry{logo}{graphicImage}{Logo des Systems.}{A}
+    
+        \fentry{changeLogo}{inputFile}{Hochladen eines neuen Logos.}{A}
+    
+        \fentry{institutionHeading}{outputText}{Überschrift für Einstellungen der Einrichtung.}{A}
+    
+        \fentry{institution}{inputText}{Angabe des Namens der Einrichtung.}{A}
+    
+        \fentry{imprint}{inputTextArea}{Angabe des Impressums der Einrichtung.}{A}
+    
+        \fentry{abort}{commandButton}{Abbruch des Änderungsvorgangs.}{A }
+    
+        \fentry{save}{commandButton}{Speichern der Änderungen.}{A}
+    
+        \fentry{newUser}{link}{Weiterleitung zu \emph{newUser.xhtml}.}{A}
+    
+        \fentry{newScientificForum}{link}{Weiterleitung zu \emph{newScientificForum.xhtml}.}{A}
+    
+}
 
-\textbf{newScientificForum.xhtml} Auf der Seite zum Erstellen eines wissenschaftlichen Forums kann ein Administrator dessen wesentlichen Daten festlege.
+\textbf{newScientificForum.xhtml} Auf der Seite zum Erstellen eines wissenschaftlichen Forums kann ein Administrator dessen wesentlichen Daten festlegen.
 
-\begin{tabular}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
-    \hline
-    \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
-    \hline
-    \hline
-    forumName & inputText & Angabe des Name des Forums. & A\\
-    \hline
-    fName & outputLabel & Label Name des Forums. & A\\
-    \hline
-    emailEditor & inputText & Angabe der E-Mail-Adresse eines Editor. & A\\
-    \hline
-    emailE & outputLabel & Label für E-Mail-Adresse eines Editors. & A\\
-    \hline
-    addEditor & commandButton & Hinzufügen eines Editors in eine Liste. & A\\
-    \hline
-    deleteEditor & commandButton & Löschen des zugehörigen Editors von der Liste. & A\\
-    \hline
-    deadline & inputText & Hinzufügen einer Deadline des Forums. & A\\
-    \hline
-    deadlineLabel & outputLabel & Label für Deadline des Forums. & A\\
-    \hline
-    description & inputTextArea & Angabe einer Kurzbeschreibung. & A\\
-    \hline
-    descriptionLabel & outputLabel & Label für Kurzbeschreibung. & A\\
-    \hline
-    url & inputText & Link zur Konferenz oder zum Journal. & A\\
-    \hline
-    urlLabel & outputLabel & Label für URL des Forums. & A\\
-    \hline
-    reviewInstructions  & inputTextArea & Angabe einer Anleitung für eine Begutachtung. & A\\
-    \hline
-    specialty & selectOnMenus & Auswahl von Fachgebieten. & A\\
-    \hline
-    specialtyLabel & outputLabel & Label für Fachgebiete. & A\\
-    \hline
-    newSpecialty & inputText & Hinzufügen neuer Fachgebiete. & A\\
-    \hline
-    addSpecialty & commandButton & Ausführen der Hinzufüge-Aktion. & A\\
-    \hline
-    save & commandButton & Speichern des neuen Forums. & A\\
-    \hline
-    abort & commandButton & Abbruch des Erstellungsprozesses. & A\\
-    \hline
-\end{tabular}
+\ftable{
+    
+        \fentry{forumName}{inputText}{Angabe des Name des Forums.}{A}
+    
+        \fentry{fName}{outputLabel}{Label Name des Forums.}{A}
+    
+        \fentry{emailEditor}{inputText}{Angabe der E-Mail-Adresse eines Editor.}{A}
+    
+        \fentry{emailE}{outputLabel}{Label für E-Mail-Adresse eines Editors.}{A}
+    
+        \fentry{addEditor}{commandButton}{Hinzufügen eines Editors in eine Liste.}{A}
+    
+        \fentry{deleteEditor}{commandButton}{Löschen des zugehörigen Editors von der Liste.}{A}
+    
+        \fentry{deadline}{inputText}{Hinzufügen einer Deadline des Forums.}{A}
+    
+        \fentry{deadlineLabel}{outputLabel}{Label für Deadline des Forums.}{A}
+    
+        \fentry{description}{inputTextArea}{Angabe einer Kurzbeschreibung.}{A}
+    
+        \fentry{descriptionLabel}{outputLabel}{Label für Kurzbeschreibung.}{A}
+    
+        \fentry{url}{inputText}{Link zur Konferenz oder zum Journal.}{A}
+    
+        \fentry{urlLabel}{outputLabel}{Label für URL des Forums.}{A}
+    
+        \fentry{reviewInstructions}{inputTextArea}{Angabe einer Anleitung für eine Begutachtung.}{A}
+    
+        \fentry{specialty}{selectOnMenus}{Auswahl von Fachgebieten.}{A}
+    
+        \fentry{specialtyLabel}{outputLabel}{Label für Fachgebiete.}{A}
+    
+        \fentry{newSpecialty}{inputText}{Hinzufügen neuer Fachgebiete.}{A}
+    
+        \fentry{addSpecialty}{commandButton}{Ausführen der Hinzufüge-Aktion.}{A}
+    
+        \fentry{save}{commandButton}{Speichern des neuen Forums.}{A}
+    
+        \fentry{abort}{commandButton}{Abbruch des Erstellungsprozesses.}{A}
+    
+}
 
 \textbf{editForum.xhtml} Hier kann der Administrator eine schon existierende Seite bearbeiten.
 
-\begin{tabular}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
-    \hline
-    \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
-    \hline
-    \hline
-    forumName & inputText & Angabe des Name des Forums. & A\\
-    \hline
-    fName & outputLabel & Label Name des Forums. & A\\
-    \hline
-    emailEditor & inputText & Angabe der E-Mail-Adresse eines Editor. & A\\
-    \hline
-    emailE & outputLabel & Label für E-Mail-Adresse eines Editors. & A\\
-    \hline
-    addEditor & commandButton & Hinzufügen eines Editors in eine Liste. & A\\
-    \hline
-    deleteEditor & commandButton & Löschen des zugehörigen Editors von der Liste. & A\\
-    \hline
-    deadline & inputText & Hinzufügen einer Deadline des Forums. & A\\
-    \hline
-    deadlineLabel & outputLabel & Label für Deadline des Forums. & A\\
-    \hline
-    description & inputTextArea & Angabe einer Kurzbeschreibung. & A\\
-    \hline
-    descriptionLabel & outputLabel & Label für Kurzbeschreibung. & A\\
-    \hline
-    url & inputText & Link zur Konferenz oder zum Journal. & A\\
-    \hline
-    urlLabel & outputLabel & Label für URL des Forums. & A\\
-    \hline
-    reviewInstructions  & inputTextArea & Angabe einer Anleitung für eine Begutachtung. & A\\
-    \hline
-    specialty & selectOnMenus & Auswahl von Fachgebieten. & A\\
-    \hline
-    specialtyLabel & outputLabel & Label für Fachgebiete. & A\\
-    \hline
-    newSpecialty & inputText & Hinzufügen neuer Fachgebiete. & A\\
-    \hline
-    addSpecialty & commandButton & Ausführen der Hinzufüge-Aktion. & A\\
-    \hline
-    save & commandButton & Speichern des Forums. & A\\
-    \hline
-    abort & commandButton & Abbruch des Erstellungsprozesses. & A\\
-    \hline
-\end{tabular}
+\ftable{
+    
+        \fentry{forumName}{inputText}{Angabe des Name des Forums.}{A}
+    
+        \fentry{fName}{outputLabel}{Label Name des Forums.}{A}
+    
+        \fentry{emailEditor}{inputText}{Angabe der E-Mail-Adresse eines Editor.}{A}
+    
+        \fentry{emailE}{outputLabel}{Label für E-Mail-Adresse eines Editors.}{A}
+    
+        \fentry{addEditor}{commandButton}{Hinzufügen eines Editors in eine Liste.}{A}
+    
+        \fentry{deleteEditor}{commandButton}{Löschen des zugehörigen Editors von der Liste.}{A}
+    
+        \fentry{deadline}{inputText}{Hinzufügen einer Deadline des Forums.}{A}
+    
+        \fentry{deadlineLabel}{outputLabel}{Label für Deadline des Forums.}{A}
+    
+        \fentry{description}{inputTextArea}{Angabe einer Kurzbeschreibung.}{A}
+    
+        \fentry{descriptionLabel}{outputLabel}{Label für Kurzbeschreibung.}{A}
+    
+        \fentry{url}{inputText}{Link zur Konferenz oder zum Journal.}{A}
+    
+        \fentry{urlLabel}{outputLabel}{Label für URL des Forums.}{A}
+    
+        \fentry{reviewInstructions}{inputTextArea}{Angabe einer Anleitung für eine Begutachtung.}{A}
+    
+        \fentry{specialty}{selectOnMenus}{Auswahl von Fachgebieten.}{A}
+    
+        \fentry{specialtyLabel}{outputLabel}{Label für Fachgebiete.}{A}
+    
+        \fentry{newSpecialty}{inputText}{Hinzufügen neuer Fachgebiete.}{A}
+    
+        \fentry{addSpecialty}{commandButton}{Ausführen der Hinzufüge-Aktion.}{A}
+    
+        \fentry{save}{commandButton}{Speichern des Forums.}{A}
+    
+        \fentry{abort}{commandButton}{Abbruch des Erstellungsprozesses.}{A}
+    
+}
 
 \textbf{scientificForum.xhtml} Die Ansicht eines Forums dient zur Ausgabe von Informationen über die jeweilige Konferenz oder das jeweilige Journal.
 
-\begin{tabular}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
-    \hline
-    \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
-    \hline
-    \hline
-    forumName & outputText & Name des Forums. & Alle\\
-    \hline
-    fName & outputLabel & Label Name des Forums. & Alle\\
-    \hline
-    editor & outputText & Liste der verantwortliche Editoren. & Alle\\
-    \hline
-    deadline & outputText & Deadline des Forums. & Alle\\
-    \hline
-    deadlineLabel & outputLabel & Label für Deadline des Forums. & Alle\\
-    \hline
-    description & outputText & Kurzbeschreibung des Forums. & Alle\\
-    \hline
-    descriptionLabel & outputLabel & Label für Kurzbeschreibung. & Alle\\
-    \hline
-    url & outputLink & Link zur Konferenz oder zum Journal. & Alle\\
-    \hline
-    urlLabel & outputLabel & Label für URL des Forums. & Alle\\
-    \hline
-    reviewInstructions  & outputText & Anleitung für eine Begutachtung. & Alle\\
-    \hline
-    specialty & outputText & Fachgebiet des Forums. & Alle\\
-    \hline
-    specialtyLabel & outputLabel & Label für Fachgebiete. & Alle\\
-    \hline
-    save & commandButton & Speichern des Forums. & Alle\\
-    \hline
-    abort & commandButton & Abbruch des Erstellungsprozesses. & Alle\\
-    \hline
-\end{tabular}
+\ftable{
+    
+        \fentry{forumName}{outputText}{Name des Forums.}{Alle}
+    
+        \fentry{fName}{outputLabel}{Label Name des Forums.}{Alle}
+    
+        \fentry{editor}{outputText}{Liste der verantwortliche Editoren.}{Alle}
+    
+        \fentry{deadline}{outputText}{Deadline des Forums.}{Alle}
+    
+        \fentry{deadlineLabel}{outputLabel}{Label für Deadline des Forums.}{Alle}
+    
+        \fentry{description}{outputText}{Kurzbeschreibung des Forums.}{Alle}
+    
+        \fentry{descriptionLabel}{outputLabel}{Label für Kurzbeschreibung.}{Alle}
+    
+        \fentry{url}{outputLink}{Link zur Konferenz oder zum Journal.}{Alle}
+    
+        \fentry{urlLabel}{outputLabel}{Label für URL des Forums.}{Alle}
+    
+        \fentry{reviewInstructions}{outputText}{Anleitung für eine Begutachtung.}{Alle}
+    
+        \fentry{specialty}{outputText}{Fachgebiet des Forums.}{Alle}
+    
+        \fentry{specialtyLabel}{outputLabel}{Label für Fachgebiete.}{Alle}
+    
+        \fentry{save}{commandButton}{Speichern des Forums.}{Alle}
+    
+        \fentry{abort}{commandButton}{Abbruch des Erstellungsprozesses.}{Alle}
+    
+}
 
 \textbf{imprint.xhtml} Das Impressum gibt die vom Administrator angegebenen Kontaktdaten des Betreibers wieder.
 
-\begin{tabular}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
-    \hline
-    \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
-    \hline
-    \hline
-    imprintHeading & outputText & Überschrift der Ansicht & A\\
-    \hline
-    imprint & outputText & Impressum des Betreibers. & A\\
-    \hline
-\end{tabular}
+\ftable{
+    
+        \fentry{imprintHeading}{outputText}{Überschrift der Ansicht}{A}
+    
+        \fentry{imprint}{outputText}{Impressum des Betreibers.}{A}
+    
+}
 
 \todo{Forum bearbeiten können ? Löschen?}
