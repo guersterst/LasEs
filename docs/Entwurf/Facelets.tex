@@ -1,11 +1,11 @@
 %% Macros
-\newcommand{\ftable}[1]{\begin{tabular}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
+\newcommand{\ftable}[1]{\begin{longtable}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
                             \hline
                             \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
                             \hline
                             \hline
                             #1
-\end{tabular}
+\end{longtable}
 }
 
 \newcommand{\fentry}[4]{#1 & #2 & #3 & #4 \\
@@ -340,7 +340,14 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
 \end{samepage}
 
 
-resultList.xhtml
+\begin{samepage}
+    \textbf{resultList.xhtml} zeigt alle Ergebnisse einer Suche an.
+    \nopagebreak
+
+    \ftable{
+        \fentry{}
+    }
+\end{samepage}
 
 
 \begin{samepage}
