@@ -187,10 +187,9 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
     }
 \end{samepage}
 
-\begin{samepage}
-    \textbf{homepage.xhtml} Startseite die den Überblick über alle Einreichungen beinhaltet.
-    \nopagebreak
+\textbf{homepage.xhtml}\label{flt:homepage} Startseite die den Überblick über alle Einreichungen beinhaltet.
 
+\begin{samepage}
     \ftable{
         \fentry{yourSubmission}{commandLink}{Reiter zum Anzeigen der eigenen Einreichungen.}{Alle}
         \fentry{yourReviews}{commandLink}{Reiter zum Anzeigen der zu begutachtenden Einreichungen}{G}
@@ -208,7 +207,8 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
         \fentry{pagination}{listPagination}{Jede Tabelle enthält eine Paginierung.}{Alle}
     }
     \todo{kann nach Forum gefiltert werden wenn ja wie?}
-
+\end{samepage}
+\begin{samepage}
     Die einzelnen Tabellen \emph{submissionTable}, \emph{reviewTable} und \emph{editorTable} sind nach den gleichen Punkten gegliedert:
 
     \ftable{
@@ -262,6 +262,7 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
             \fentry{apply}{commandButton}{Wende Filtereinstellungen an.}{Alle}
             \fentry{submissionTable}{dataTable}{Liste aller Versionen}{Alle}
             \fentry{reviewTable}{dataTable}{Liste aller/der eigenen Gutachten.}{E, A, G}
+            \fentry{pagination}{listPagination}{Jede Tabelle enthält eine Paginierung.}{Alle}
         }
 
     \emph{submissionTable} enthält die Spalten: Version, Datum, Deadline, Status und Download.
@@ -344,8 +345,12 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
     \textbf{resultList.xhtml} zeigt alle Ergebnisse einer Suche an.
     \nopagebreak
 
+    Wird nach den eigenen Einreichungen, Gutachten oder Einreichungen in eingener editorialen Verantwortung gesucht, so erscheint das gleiche Schema wie auch auf \hyperref[flt:homepage]{der Homepage}.
+    Ergibt die Suche eine Liste von User so wird 
+    \nopagebreak
+
     \ftable{
-        \fentry{}
+
     }
 \end{samepage}
 
@@ -459,7 +464,7 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 \begin{samepage}
 	\localauthor{Johann Schicho} \nopagebreak
 
-	\textbf{userList.xhtml} Editoren und Administratoren erhalten hier einen Überblick über alle Nutzer. Die Seiten sind paginiert.
+	\textbf{userList.xhtml} \label{flt:userList} Editoren und Administratoren erhalten hier einen Überblick über alle Nutzer. Die Seiten sind paginiert.
 	\nopagebreak
 
 	\ftable{
@@ -485,6 +490,7 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 		\fentry{pagination}{listPagination}{Die Tabelle enthält eine Paginierung.}{E,A}
 }
 \end{samepage}
+\todo{Dropdown für rollen.}
 
 \begin{samepage}
 	\localauthor{Stefanie Gürster}\nopagebreak
