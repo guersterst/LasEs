@@ -13,17 +13,20 @@ actor User as user
 box "control.backing"
     participant ":SubmissionBacking" as subBacking
 end box
-box "service?"
+box "???"
+    participant ":ResourceBundle" as rscBundle
+end box
+box "business.service"
     participant ":SubmissionService" as subService
 end box
 box "dtos"
     participant "sub:Submission" as sub
+    participant "paper:Paper" as paper
 end box
-box "???"
-    participant ":ResourceBundle" as rscBundle
-end box
-box persistence
+box persistence.repository
     participant ":SubmissionRepository" as subRepo
+end box
+box persistence.util
     participant ":ConnectionPool" as connPool
 end box
 database "Database" as db
@@ -42,14 +45,14 @@ activate subBacking
             subRepo -> connPool : getConnection()
             activate connPool
             return conn
-            subRepo -> db : ...
+            subRepo -> db : SQL-req
             activate db
-                return ...
-                subRepo -> connPool : releaseConnection()
-                    activate connPool
-                    deactivate connPool
-                create sub
-                subRepo -> sub
+            return res
+            subRepo -> connPool : releaseConnection()
+            activate connPool
+            return
+            create sub
+            subRepo -> sub
         return sub : Submission
     return sub : Submission
 return submission.xhtml
@@ -64,27 +67,29 @@ activate subBacking
     subBacking -> sub : getId()
     activate sub
     return id
+    subBacking -> sub : getPapers()
+    activate sub
+    return papers
 
-    subBacking -> subService : addRevision(subId, revisionPdf)
+    subBacking -> paper ** : new Paper(subId, papers.size())
+
+    subBacking -> subService : addRevision(sub, paper)
     activate subService
-        subService -> subRepo : addRevision(subId, revisionPdf)
+        subService -> subRepo : addPaper(paper)
         activate subRepo
             subRepo -> connPool : getConnection()
             activate connPool
             return conn
-            subRepo -> db : get highest existing version
+            subRepo -> db : SQL-req
             activate db
-            return maxV
-            subRepo -> db : upload paper version v+1
-            activate db
-            deactivate db
+            return
             subRepo -> connPool : releaseConnection()
             activate connPool
-            deactivate connPool
+            return
         return
     return
 
-    subBacking -> rscBundle : getAddRevisionConfirmationMsg()
+    subBacking -> rscBundle : getAddRevision\\\nConfirmationMsg()
     activate rscBundle
     return msg
 
