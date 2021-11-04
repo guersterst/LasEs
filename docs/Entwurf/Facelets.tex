@@ -492,17 +492,21 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 \end{samepage}
 
 \begin{samepage}
+    \localauthor{Stefanie Gürster}\nopagebreak
     Für die Benutzerliste sind die folgenden Elemente vorgesehen, wobei diese in die Bereiche: Nutzerrolle, Name, E-Mail-Adresse, Arbeitgeber und Fachgebiete aufgegliedert ist.
 
     \ftable{
-        \fentry{role}{outputText}{Rolle des Nutzers}{E, A}
+        \fentry{role}{outputText}{Rolle des Nutzers}{E,A}
+        \fentry{name}{link}{Name des Nutzers.}{E,A}
+        \fentry{email}{link}{E-Mail-Adresse des Nutzers.}{E,A}
+        \fentry{employee}{outputText}{Arbeitgeber des Nutzers.}{E,A}
+        \fentry{scienceField}{outputText}{Fachgebiete des Nutzers.}{E,A}
     }
 \end{samepage}
 
 \todo{Dropdown für rollen.}
 
 \begin{samepage}
-	\localauthor{Stefanie Gürster}\nopagebreak
 
     \textbf{newUser.xhtml} Der Administrator kann hier einen neuen Nutzer anlegen.
     \nopagebreak
