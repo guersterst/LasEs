@@ -9,7 +9,12 @@ Diese Anwendung folgt einer Schichtenarchitektur.
     \item Die \emph{business}-Schicht enthält die Komponenten, welche die Anwendungslogik umsetzen.
     \item Die \emph{persistence}-Schicht enthält die Komponenten zum Zugriff auf die Datenbasis.
 \end{itemize}
-Diese Schichten folgen der \emph{\hyperref[arch:mvc]{MVC-Architektur}} wie in \hyperref[arch:pakdia]{Abbildung 1} dargestellt.
+Diese Schichten folgen der \emph{\hyperref[arch:mvc]{MVC-Architektur}} wie in \textbf{\hyperref[arch:pakdia]{Abbildung 1}} dargestellt.
+Die \hyperref[arch:persistence]{Persistence-} und \hyperref[arch:business]{Businessschichten} gehören hierbei
+zum \emph{Model}. Die \hyperref[arch:control]{Controllschicht} stellt den \emph{Controller} dar und die
+\emph{Faceletschicht} %todo link
+die \emph{View}.
+
 \begin{figure}[H]
 \centering
     \includegraphics[width=\linewidth]{graphics/Paketdiagramm3.0}\label{arch:pakdia}
