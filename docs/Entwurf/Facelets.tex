@@ -30,30 +30,32 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
     \nopagebreak
 
     \ftable{
-        \fentry{searchfield}{inputText}{Suchleiste}{N }
+        \fentry{searchField}{inputText}{Suchleiste}{Alle}
 
-        \fentry{user-list-link}{link}{Link zur Übersichtsseite aller Nutzer}{A,E}
+        \fentry{search}{commandButton}{Suche ausführen.}{Alle}
 
-        \fentry{forum-list-link}{link}{Link zur Übersichtsseite alle Journale und Konferenzen}{N}
+        \fentry{userListLink}{link}{Link zur Übersichtsseite aller Nutzer}{A,E}
 
-        \fentry{logout-button}{commandButton}{Loggt den Nutzer aus dem System aus und leitet zur Loginseite weiter}{N}
+        \fentry{forumListLink}{link}{Link zur Übersichtsseite alle Journale und Konferenzen}{Alle}
 
-        \fentry{profile-link}{link}{Link zur Profilübersicht}{N}
+        \fentry{logoutButton}{commandButton}{Loggt den Nutzer aus dem System aus und leitet zur Loginseite weiter}{Alle}
+
+        \fentry{profileLink}{link}{Link zur Profilübersicht}{N}
 
     }
 \end{samepage}
 
 \begin{samepage}
-    \textbf{main.xhtml} ist das Template, welches die Seiten zwischen Kopf- und Fußzeile einbettet.
+    \textbf{main.xhtml} ist das Template, welches den Inhalt der Seiten zwischen Kopf- und Fußzeile einbettet.
 
     \ftable{
-        \fentry{navigation-bar}{include}{Kopfzeile}{Alle}
+        \fentry{navigationBar}{include}{Kopfzeile}{Alle}
 
-        \fentry{main-content}{insert}{Seiteninhalt}{Alle}
+        \fentry{mainContent}{insert}{Seiteninhalt}{Alle}
 
-        \fentry{footer-bar}{include}{Fußzeile}{Alle}
+        \fentry{footerBar}{include}{Fußzeile}{Alle}
 
-        \fentry{tool-bar}{include}{Seitenleiste}{A,E}
+        \fentry{toolBar}{include}{Seitenleiste}{A,E}
 
     }
 \end{samepage}
@@ -63,7 +65,9 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
     \nopagebreak
 
     \ftable{
-        \fentry{imprint-link}{link}{Link zur Seite des Impressums}{Alle}
+        \fentry{imprintLink}{link}{Link zur Seite des Impressums}{Alle}
+
+        \fentry{language}{outputText}{Anzeige der eingestellten Sprache.}{Alle}
 
     }
 \end{samepage}
