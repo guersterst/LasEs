@@ -1,6 +1,7 @@
 package persistence.repository;
 
 import dtos.User;
+import persistence.exception.InvalidFieldsException;
 import persistence.exception.MissingFieldsException;
 import persistence.util.ConnectionPool;
 
@@ -10,8 +11,8 @@ public class UserRepository {
 	
 	public User getUser(String emailAddress) { return null; }
 	
-	public void editUser(String emailAddress, User newUser) throws MissingFieldsException { }
+	public void editUser(String emailAddress, User newUser) throws InvalidFieldsException { }
 	
-	public void addUser(User user) throws MissingFieldsException { }
+	public void addUser(User user) throws InvalidFieldsException { }
 
 }
