@@ -9,8 +9,9 @@
 | JSF | Stefanie Gürster |
 | E-Mail-Versendung | Thomas oder Steffi 🤔 |
 | Modulare Listen | |
-| Datei-Upload | |
+| Datei-Upload | Johannes Garstenauer |
 | Parameterübergabe zw Facelets | |
 | JSF Templates | |
 | CSS & Bootstrap | |
-| Config file | |
+| Config file | Johann Schicho |
+| Fehlerbehandlung | Johannes Garstenauer |
