@@ -16,50 +16,50 @@ database "Database" as db
 
 editor -> submissionBacking ** : init()
 note left
-ruft die
-Submission-
-Seite auf
+    ruft die
+    Submission-
+    Seite auf
 end note
 activate submissionBacking
-submissionBacking -> subStorage : getSubmission(subId)
-activate subStorage
-subStorage -> db : ...
-activate db
-return ...
-create sub
-subStorage -> sub
-return sub : Submission
+    submissionBacking -> subStorage : getSubmission(subId)
+    activate subStorage
+        subStorage -> db : ...
+        activate db
+        return ...
+        create sub
+        subStorage -> sub
+    return sub : Submission
 deactivate submissionBacking
 
 editor -> submissionBacking : reject()
 note left
-klickt auf "Reject"
+    klickt auf "Reject"
 end note
 activate submissionBacking
-submissionBacking -> sub : reject()
-activate sub
-deactivate sub
+    submissionBacking -> sub : reject()
+    activate sub
+    deactivate sub
 
-submissionBacking -> sub : getAuthorEmailAddresses()
-activate sub
-return addrs
-submissionBacking -> rscBundle : getRejectionEmailSubject()
-activate rscBundle
-return subject
-submissionBacking -> rscBundle : getRejectionEmailBody()
-activate rscBundle
-return body
+    submissionBacking -> sub : getAuthorEmailAddresses()
+    activate sub
+    return addrs
+    submissionBacking -> rscBundle : getRejectionEmailSubject()
+    activate rscBundle
+    return subject
+    submissionBacking -> rscBundle : getRejectionEmailBody()
+    activate rscBundle
+    return body
 
-submissionBacking -> emailService : generateMailto(addrs, subject, body)
-activate emailService
-return mailtoLink
+    submissionBacking -> emailService : generateMailto(addrs, subject, body)
+    activate emailService
+    return mailtoLink
 
-submissionBacking -> subStorage : updateSubmission(subId, sub)
-activate subStorage
-subStorage -> db : ...
-activate db
-deactivate db
-deactivate subStorage
+    submissionBacking -> subStorage : updateSubmission(subId, sub)
+    activate subStorage
+        subStorage -> db : ...
+        activate db
+        deactivate db
+    deactivate subStorage
 
 return mailtoLink
 
