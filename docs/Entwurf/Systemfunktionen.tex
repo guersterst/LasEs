@@ -16,7 +16,7 @@ Für die häufigsten Sicherheitsschwachstellen bei Webanwendungen, die für LasE
 
 \begin{description}
 \item[Fehlerhafte Zugangskontrolle] 
-Um unerlaubten Zugriff auf Seiten, Informationen und Aktionen zu verhindern, werden Zugriffe auf nicht-öffentliche Ressourcen (das ist alles außer Start- und Registrierungsseite) standardmäßig zuerst abgelehnt.
+Um unerlaubten Zugriff auf Seiten, Informationen und Aktionen zu verhindern, werden Zugriffe auf nicht-öffentliche Ressourcen (das ist alles außer Start-, Registrierungs- und Verifikationsseite) standardmäßig zuerst abgelehnt.
 Die Klasse \code{TrespassListener} entscheidet dann, ob der Nutzer die nötigen Rechte hat und akzeptiert eine Anfrage nur dann, sonst wird auf eine Fehler-Seite weitergeleitet.
 Das hängt von der Rolle des Nutzers und von seiner Beziehung zur angefragten Ressource ab (ein normaler Nutzer kann z.B.\ nur sein \emph{eigenes} Profil oder eine \emph{eigene} Einreichung sehen).
 Da dies zentral in dieser Klasse passiert, entstehen weniger Fehler als bei der Prüfung an vielen verschiedenen Stellen des Programms.
@@ -45,4 +45,4 @@ Für das Versenden von E-Mails und für das periodische Aufräumen von nicht meh
 Beim Systemstart wird das Logging wird initialisiert und die Konfigurationsdatei gelesen. Die Threads aus Kapitel \ref{subsec:threads} und der \code{ConnectionPool} werden gestartet.
 
 \subsection{Systemstopp}\label{subsec:systemstopp}
-Der Server kann über den \emph{shutdown port} heruntergefahren werden. Dies stoppt auch den Connection Pool und alle bestehenden Datenbankverbindungen werden geschlossen.
+Der Server kann über den \emph{shutdown port} heruntergefahren werden. Dies stoppt auch den Connection Pool und alle bestehenden Datenbankverbindungen werden geschlossen. Damit wird ein geordneter Shutdown sichergestellt
