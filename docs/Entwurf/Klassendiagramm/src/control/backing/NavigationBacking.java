@@ -1,10 +1,13 @@
 package control.backing;
 
+import business.service.LoginService;
 import idk.SessionInformation;
 
 public class NavigationBacking {
 	
 	private String searchString;
+	
+	private LoginService loginService;
 
 	private SessionInformation sessionInformation;
 	

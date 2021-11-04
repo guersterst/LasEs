@@ -1,15 +1,23 @@
 package persistence.repository;
 
+import java.util.List;
+
 import dtos.User;
 import persistence.exception.InvalidFieldsException;
+import persistence.exception.InvalidQueryParamsException;
 import persistence.exception.MissingFieldsException;
 import persistence.util.ConnectionPool;
+import persistence.util.ResultListParameters;
 
 public class UserRepository {
 	
 	private ConnectionPool connectionPool;
 	
 	public User getUser(String emailAddress) { return null; }
+	
+	public boolean emailExists(String emailAddress) { return false; }
+	
+	public List<User> getListWithSearchword(String searchWord, ResultListParameters resultParams) throws InvalidQueryParamsException { return null; }
 	
 	public void editUser(String emailAddress, User newUser) throws InvalidFieldsException { }
 	

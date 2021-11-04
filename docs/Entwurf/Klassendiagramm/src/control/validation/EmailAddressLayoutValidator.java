@@ -2,7 +2,7 @@ package control.validation;
 
 import business.util.EmailService;
 
-public class EmailAddressValidator implements Validator<String> {
+public class EmailAddressLayoutValidator implements Validator<String> {
 
 
     @Override

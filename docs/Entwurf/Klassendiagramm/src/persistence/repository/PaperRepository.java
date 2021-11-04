@@ -13,7 +13,7 @@ public class PaperRepository {
 	
 	private ConnectionPool connectionPool;
 	
-	public List<Paper> getPapersForSubmission(int submissionId, ResultListParameters resultParams) throws InvalidQueryParamsException { return null; }
+	public List<Paper> getList(ResultListParameters resultParams) throws InvalidQueryParamsException { return null; }
 
 	public byte[] getPDFForPaper(int submissionId, int version) throws IllegalArgumentException { return null; }
 	

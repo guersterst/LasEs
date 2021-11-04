@@ -1,8 +1,11 @@
 package control.backing;
 
+import business.service.RegistrationService;
 import idk.SessionInformation;
 
 public class RegistrationBacking {
+	
+	private RegistrationService registrationService;
 	
 	private String passwordInput;
 	
