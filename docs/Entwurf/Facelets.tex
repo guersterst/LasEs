@@ -15,8 +15,10 @@
 \localauthor{Stefanie Gürster, Johann Schicho}
 
 Im Folgendem Abschnitt werden Abkürzungen für die verschiedenen Rollen eingeführt:
-\textbf{A} steht für Administrator, \textbf{N} für einen angemeldeten Nutzer, \textbf{E} für einen Editor und \textbf{G} steht für einen Gutachter.
+\textbf{A} steht für Administrator, \textbf{AN} für einen anonymen Nutzer, \textbf{N} für einen angemeldeten Nutzer, \textbf{E} für einen Editor und \textbf{G} steht für einen Gutachter.
 Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem Begriff \textbf{Alle} zusammengefasst.
+
+Sind Außerdem keine Labels für Komponenten angegeben, dann sind anstelle dieser Icons (Fontawesome) angedacht.
 
 \subsection{Templates}
 
@@ -113,8 +115,8 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
 \localauthor{Stefanie Gürster}
 
 \begin{samepage}
-    \textbf{listPagination.xhtml} Composite Component zur paginierung von Listen.
-    \emph{listPagination.xhtml} wird in jeder Tabelle oder Liste eingebunden.
+    \textbf{listPagination.xhtml} ist eine Composite Component zur Paginierung von Listen.
+    \emph{listPagination.xhtml} wird in jedem Footer einer Tabelle eingebunden.
     \todo{Beschreibung von ListPagination verändern.}
     \nopagebreak
 
@@ -122,8 +124,8 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
         \fentry{back}{commandButton}{Laden der vorherigen Seite der Liste.}{Alle}
 
         \fentry{next}{commandButton}{Laden der nächsten Seite der Liste.}{Alle}
-        
-        \fentry{page}{selectOneMenue}{Laden einer bestimmten Seite}{Alle}
+
+        \fentry{page}{selectOneMenu}{Laden einer bestimmten Seite}{Alle}
     }
 \end{samepage}
 
@@ -132,13 +134,14 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
 \localauthor{Stefanie Gürster}
 
 \begin{samepage}
-    \textbf{initialConfig.xhtml} Auf dieser Seite landet man beim ersten Systemstart. Sie ist nur für Administratoren zugänglich. Hier kann der Administrator die Datenbankschemata erstellen lassen.
+    \textbf{initialConfig.xhtml} Auf dieser Seite landet man beim ersten Systemstart. Sie ist nur für Administratoren zugänglich.
+    Hier kann der Administrator die Datenbankschemata erstellen lassen.
     \nopagebreak
 
     \ftable{
-        \fentry{db-connection-state}{outputText}{Information über die Verbindung mit der Datenbank}{A}
+        \fentry{dbConnectionState}{outputText}{Information über die Verbindung mit der Datenbank}{A}
 
-        \fentry{create-db-btn}{commandButton}{Erstellt die Datenbankschemata}{A}
+        \fentry{createDbBtn}{commandButton}{Erstellt die Datenbankschemata}{A}
     }
 \end{samepage}
 
@@ -154,7 +157,7 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
 
         \fentry{welcomeText}{outputText}{Bewerben der Applikation mithilfe einer Kurzbeschreibung.}{Alle}
 
-        \fentry{username}{inputText}{Textfeld für Username Eingabe.}{Alle}
+        \fentry{email}{inputText}{Textfeld für E-Mail Eingabe.}{Alle}
 
         \fentry{password}{inputSecret}{Textfeld für Passwort Eingabe.}{Alle}
 
@@ -170,20 +173,29 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
     \nopagebreak
 
     \ftable{
+        \fentry{titelLabel}{outputLabel}{Label für Titel.}{AN}
 
-        \fentry{title}{inputText}{Angabe eines Titels.}{Alle}
+        \fentry{title}{inputText}{Angabe eines Titels.}{AN}
 
-        \fentry{firstName}{inputText}{Angabe des Vornamens.}{Alle}
+        \fentry{firstNameLabel}{outputLabel}{Label für Vorname.}{AN}
 
-        \fentry{name}{inputText}{Angabe des Nachnamen.}{Alle}
+        \fentry{firstName}{inputText}{Angabe des Vornamens.}{AN}
 
-        \fentry{password}{inputSecret}{Angabe eines Passwortes.}{Alle}
+        \fentry{nameLabel}{outputLabel}{Label für Nachname.}{AN}
 
-        \fentry{email}{inputText}{Angabe einer validen E-Mail.}{Alle}
+        \fentry{name}{inputText}{Angabe des Nachnamen.}{AN}
 
-        \fentry{register}{commandButton}{Ausführen des Registrations-Prozesses.}{Alle}
+        \fentry{passwordLabel}{outputLabel}{Label für Passwort.}{AN}
 
-        \fentry{welcomepage}{link}{Weiterleitung zur Login Seite.}{Alle}
+        \fentry{password}{inputSecret}{Angabe eines Passwortes.}{AN}
+
+        \fentry{emailLabel}{outputLabel}{Label für E-Mail.}{AN}
+
+        \fentry{email}{inputText}{Angabe einer validen E-Mail.}{AN}
+
+        \fentry{register}{commandButton}{Ausführen des Registrations-Prozesses.}{AN}
+
+        \fentry{welcomepage}{link}{Weiterleitung zur Login Seite.}{AN}
     }
 \end{samepage}
 
@@ -205,10 +217,15 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
 \begin{samepage}
     \ftable{
         \fentry{yourSubmission}{commandLink}{Reiter zum Anzeigen der eigenen Einreichungen.}{Alle}
+
         \fentry{yourReviews}{commandLink}{Reiter zum Anzeigen der zu begutachtenden Einreichungen}{G}
+
         \fentry{editorialOverview}{commandLink}{Reiter zum Anzeigen aller Einreichungen, welche man editiert.}{E}
+
         \fentry{filterLabel}{outputLabel}{Label für Filter}{Alle}
+
         \fentry{stateLabel}{outputLabel}{Label für Filter vom Status der Einreichung}{Alle}
+        
         \fentry{stateSelect}{selectOneMenu}{Filtern des Status von Einreichungen}{Alle}
 
         \fentry{dateLabelBefore}{outputLabel}{Label für Filter nach einem Datum.}{Alle}
