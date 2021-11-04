@@ -10,7 +10,7 @@
 }
 
 \newcommand{\classentry}[2]{\textbf{#1} & #2 \\
-	}
+}
 
 
 \subsection{Klassendiagramm}
@@ -23,7 +23,7 @@
 
 \classtable{
     \classentry{Paper}{This DTO represents a paper.}
-    \classentry{Privilege}{This represents a user-privilige.}
+    \classentry{Privilege}{This represents a user privilege.}
     \classentry{Review}{This DTO represents a review.}
     \classentry{ScienceField}{This DTO represents a field of Science.}
     \classentry{ScientificForum}{This DTO represents a forum}
@@ -37,19 +37,38 @@
 \subsubsection{de.lases.global.logging}
 
 \classtable{
-	\classentry{Logging}{This Logger allows logging in different log-levels.}
+    \classentry{Logging}{This Logger allows logging in different log-levels.}
 }
 
 \subsubsection{de.lases.persistence.repository}
 
 \classtable{
-	\classentry{PaperRepository}{This Repository can get the list of papers for a submission or add new ones.}
+	\classentry{PaperRepository}{This repository can get the list of papers for a submission or add new ones.}
 
-	\classentry{ScienceFieldRepository}{This Repository can get or add new fields of science from/to the database.}
+	\classentry{ReviewRepository}{This repository can get the reviews for a certain submission and add new ones.}
 
-	\classentry{ScientificForumRepository}{This Repository can get a list of Journals and Conferences or add new ones.}
+	\classentry{ScienceFieldRepository}{This repository can get or add new fields of science from/to the database.}
 
-	\classentry{SystemSettingsRepository}{This Repository can read or update the system settings.}
+	\classentry{ScientificForumRepository}{This repository can get a list of journals and conferences or add new ones.}
+
+	\classentry{SubmissionRepository}{This repository allows CRUD operations on submissions.}
+
+	\classentry{SystemSettingsRepository}{This repository can read or update the system settings.}
+
+	\classentry{UserRepository}{This repository allows CRUD operations on users.}
+}
+
+\subsubsection{de.lases.persistence.util}
+
+\classtable{
+\classentry{ConnectionPool}{Provides and manages connections to the database.}
+}
+
+\subsubsection{de.lases.persistence.exception}
+
+\classtable{
+\classentry{InvalidFieldsException}{Hints at an invalid field in a dto.}
+\classentry{InvalidQueryParamsException}{Hints at invalid filter or sort parameters given to the query.}
 }
 
 \subsubsection{de.lases.business.service}
@@ -65,6 +84,25 @@
     \classentry{LoginService}{Provides methods for the login and logout operations.}
     \classentry{ReviewService}{Provides methods for the delivery, creation and removal of reviews.}
     \classentry{SubmissionService}{Provides methods for the delivery, creation, removal and manipulation of submissions.}
+}
+
+\subsubsection{de.lases.business.utils}
+
+\classtable{
+    \classentry{AvatarUtil}{Provides support in the generation of a thumbnail from an image.}
+    \classentry{Hashing}{Provides support in the hashing of passwords.}
+    \classentry{EmailUtil}{Provides support in the sending of emails and creation of mailto links.}
+}
+
+\subsubsection{de.lases.business.internals}
+
+\classtable{
+    \classentry{TrespassListener}{Manages user access to resources, most importantly webpages.}
+    \classentry{SessionInformation}{Wraps data saved in the session.}
+    \classentry{LifeTimeListener}{Takes care of system start and shutdown operations}
+    \classentry{PeriodicWorker}{Takes care of periodical database cleanup jobs.}
+    \classentry{SystemSettings}{Loads and updates the systems' configuration.}
+    \classentry{SystemConfiguration}{Wraps data used for the system configuration.}
 }
 
 \subsubsection{de.lases.control.backing}
