@@ -11,15 +11,14 @@ actor Editor as editor
 box "control.backing"
     participant ":SubmissionBacking" as subBacking
 end box
+box "???"
+    participant ":ResourceBundle" as rscBundle
+end box
 box "service?"
     participant ":SubmissionService" as subService
 end box
 box "dtos"
     participant "sub:Submission" as sub
-end box
-
-box "???"
-    participant ":ResourceBundle" as rscBundle
 end box
 box "business.util"
 participant ":EmailService" as emailService
@@ -44,9 +43,9 @@ activate subBacking
                 subRepo -> connPool : getConnection()
                 activate connPool
                 return conn
-                subRepo -> db : ...
+                subRepo -> db : SQL-req
                 activate db
-                return
+                return res
                 subRepo -> connPool : releaseConnection()
                     activate connPool
                     return
@@ -54,7 +53,7 @@ activate subBacking
                 subRepo -> sub
             return sub : Submission
         return sub : Submission
-deactivate subBacking
+return submission.xhtml
 
 editor -> subBacking : reject()
 note left
@@ -79,13 +78,27 @@ activate subBacking
 
         subService -> subRepo : updateSubmission(subId, sub)
         activate subRepo
-            subRepo -> db : ...
+            subRepo -> db : SQL-req
             activate db
-            return
-        return
-    return
+            note right
+                Fehler bei
+                Datenbank-
+                zugriff
+            end note
+== Anfang Fehlerbehandlung ==
+            return <font color=red><b>⚡
+        return <font color=red><b>irgende persistence-Exception
+    return <font color=red><b>irgendne business-Exception
 
-return mailtoLink
+    subBacking -> rscBundle : getRejectSubmission\\\nUnsuccessfulMessage()
+    activate rscBundle
+    return msg
+
+return submission.xhtml\nmit <font color=red><b>Fehlermeldung</b></font>\nals FacesMessage
+note left
+Die Ablehnung war
+nicht erfolgreich
+end note
 
 
 @enduml
