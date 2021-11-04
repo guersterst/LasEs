@@ -22,18 +22,18 @@ Diese Schichten folgen der \emph{\hyperref[arch:mvc]{MVC-Architektur}} wie in \h
 
 \subsection{Pakete}\label{arch:pakete}
 
-\subsubsection{edu.uni\_passau.lases.control} \label{arch:control}
+\subsubsection{de.lases.control} \label{arch:control}
 Dieses Paket enthält alle Klassen der Kontrollschicht.
 \newline\newline
-\textbf{\emph{edu.uni\_passau.lases.control.conversion}}
+\textbf{\emph{de.lases.control.conversion}}
 enthält alle Klassen, die zur Konvertierung von Nutzereingaben
 in Facelets verwendet werden.
 \newline\newline
-\textbf{\emph{edu.uni\_passau.lases.control.validiation}}
+\textbf{\emph{de.lases.control.validiation}}
 enthält alle Klassen, die zur Validierung von Nutzereingaben
 in Facelets verwendet werden.
 \newline\newline
-\textbf{\emph{edu.uni\_passau.lases.control.backing}}\label{arch:backing}
+\textbf{\emph{de.lases.control.backing}}\label{arch:backing}
 enthält alle Managed Beans welche zur Darstellung der Facelets aus der
 %todo link
 View Verwendung finden. Zu jedem Facelet [facelet] existiert genau ein
@@ -41,49 +41,49 @@ Backing-Bean, welches [facelet]Backing genannt wird.
 %todo
 %\subsubsection*{edu.uni_passau.lases.control.servlet}
 
-\subsubsection{edu.uni\_passau.lases.business}\label{arch:business}
+\subsubsection{de.lases.business}\label{arch:business}
 Dieses Paket enthält alle Klassen der Anwendungslogikschicht.
 \newline\newline
-\textbf{\emph{edu.uni\_passau.lases.business.service}}\label{arch:service}
+\textbf{\emph{de.lases.business.service}}\label{arch:service}
 enthält alle Klassen, die den Hauptteil der Anwendungslogik umsetzen.
 Das sind also alle Dienste welche den
 \hyperref[arch:backing]{Backing Beans} zur Verfügung
 gestellt werden und auf die auf die %todo link repos
 Repositories zugreifen.
 \newline\newline
-\textbf{\emph{edu.uni\_passau.lases.business.util}}
+\textbf{\emph{de.lases.business.util}}
 enthält die Hilfsklassen, welche Dienste zur Verfügung stellen,
 die von der Anwendungslogik selbst getrennt werden können.
 \newline\newline
-\textbf{\emph{edu.uni\_passau.lases.business.exception}} \label{arch:busex}
+\textbf{\emph{de.lases.business.exception}} \label{arch:busex}
 enthält die Exceptionklassen, die ein Fehlverhalten im System repräsentieren.
 \newline\newline
-\textbf{\emph{edu.uni\_passau.lases.business.internal}}
+\textbf{\emph{de.lases.business.internal}}
 enthält die Klassen, welche zur internen Verwaltung verwendet werden.
 Hierzugehört beispielsweise die Sessionverwaltung, sowie der Systemstart und -stop.
 
-\subsubsection{edu.uni\_passau.lases.persistence}\label{arch:persistence}
+\subsubsection{de.lases.persistence}\label{arch:persistence}
 Dieses Paket enthält alle Schichten der Persistenzschicht.
 \newline\newline
-\textbf{\emph{edu.uni\_passau.lases.persistence.repository}}\label{arch:repository}
+\textbf{\emph{de.lases.persistence.repository}}\label{arch:repository}
 enthält alle Klassen, die dem direkten Zugriff auf die Datenbank dienen.
 \newline\newline
-\textbf{\emph{edu.uni\_passau.lases.persistence.util}}
+\textbf{\emph{de.lases.persistence.util}}
 enthält die Hilfsklassen zur Datenbankverwaltung, wie einen
 Connection-Pool.
 \newline\newline
-\textbf{\emph{edu.uni\_passau.lases.persistence.exception}}
+\textbf{\emph{de.lases.persistence.exception}}
 enthält die Exceptionklassen, welche ein Fehlverhalten im Umgang mit der
 Datenbasis repräsentieren.
 
-\subsubsection{edu.uni\_passau.lases.global}
+\subsubsection{de.lases.global}
 Dieses Paket enthält alle Klassen welche über mehrere Schichten hinweg
 verwendet werden.
 \newline\newline
-\textbf{\emph{edu.uni\_passau.lases.global.logging}}
+\textbf{\emph{de.lases.global.logging}}
 enthält Hilfsklassen für schichtenübergreifende Loggingfunktionen.
 \newline\newline
-\textbf{\emph{edu.uni\_passau.lases.global.transport}}\label{arch:transport}
+\textbf{\emph{de.lases.global.transport}}\label{arch:transport}
 enthält alle POJO-Klassen, die Daten in der Anwendung repräsentieren und zu deren
 Transport verwendet werden.
 
