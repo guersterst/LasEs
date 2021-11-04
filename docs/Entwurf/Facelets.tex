@@ -18,9 +18,6 @@ Im Folgendem Abschnitt werden Abkürzungen für die verschiedenen Rollen eingef�
 \textbf{A} steht für Administrator, \textbf{N} für einen angemeldeten Nutzer, \textbf{E} für einen Editor und \textbf{G} steht für einen Gutachter.
 Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem Begriff \textbf{Alle} zusammengefasst.
 
-
-\todo{Suchleiste hinzufügen + Datefilter}
-
 \subsection{Templates}
 
 \localauthor{Johann Schicho}
@@ -207,12 +204,20 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
         \fentry{filterLabel}{outputLabel}{Label für Filter}{Alle}
         \fentry{stateLabel}{outputLabel}{Label für Filter vom Status der Einreichung}{Alle}
         \fentry{stateSelect}{selectOneMenu}{Filtern des Status von Einreichungen}{Alle}
-        \fentry{dateLabel}{outputLabel}{Label für Filter von Datum.}{Alle}
-        \fentry{dateUp}{commandButton}{Einreichungen werden aufsteigend angezeigt.}{Alle}
-        \fentry{dateDown}{commandButton}{Einreichungen werden absteigend angezeigt.}{Alle}
-        \fentry{apply}{commandButton}{Wende Filtereinstellungen an.}{Alle}
+
+        \fentry{dateLabelBefore}{outputLabel}{Label für Filter nach einem Datum.}{Alle}
+
+        \fentry{dateBefore}{inputText}{Eingabe eines \emph{spätestens} Datum}{Alle}
+
+        \fentry{dateLabelAfter}{outputLabel}{Label für Filter vor einem Datum.}{Alle}
+
+        \fentry{dateAfter}{inputText}{Eingabe eines \emph{frühestens} Datum}{Alle}
+
+        \fentry{dateUp}{commandButton}{Einreichungen werden dem Datum nach aufsteigend angezeigt.}{Alle}
+        \fentry{dateDown}{commandButton}{Einreichungen werden dem Datum nach absteigend angezeigt.}{Alle}
         \fentry{searchLabel}{outputLabel}{Label für Suche.}{Alle}
         \fentry{search}{inputText}{Durchsuchen der Tabellen mit Matching-Words.}{Alle}
+        \fentry{apply}{commandButton}{Wende Filtereinstellungen an.}{Alle}
         \fentry{submissionTable}{dataTable}{Liste aller eignen Einreichungen.}{Alle}
         \fentry{reviewTable}{dataTable}{Liste aller Gutachten.}{G}
         \fentry{editorTable}{dataTable}{Liste aller Einreichungen für einen Editor.}{E}
@@ -378,6 +383,14 @@ Ist eine Funktion für alle Benutzerrollen vorgesehen, so werden diese unter dem
         \fentry{deadline-label}{outputLabel}{Label für Filtern nach Deadlines (Abgelaufen/Zukunft)}{Alle}
 
         \fentry{deadline-select}{selectOneMenu}{Filtern der nach Deadlines}{Alle}
+
+        \fentry{dateLabelBefore}{outputLabel}{Label für Deadline nach einem Datum.}{Alle}
+
+        \fentry{dateBefore}{inputText}{Eingabe eines \emph{spätestens} Datum}{Alle}
+
+        \fentry{dateLabelAfter}{outputLabel}{Label für Deadline vor einem Datum.}{Alle}
+
+        \fentry{dateAfter}{inputText}{Eingabe eines \emph{frühestens} Datum}{Alle}
 
         \fentry{searchLabel}{outputLabel}{Label für Suche.}{Alle}
 
