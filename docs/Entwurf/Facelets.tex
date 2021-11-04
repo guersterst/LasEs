@@ -375,7 +375,30 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
     }
 \end{samepage}
 
-userList.xhtml
+
+\begin{samepage}
+	\textbf{userList.xhtml} Editoren und Administratoren erhalten hier einen Überblick über alle Nutzer. Die Seiten sind paginiert.
+	\nopagebreak
+
+	\ftable{
+
+		\fentry{filterLabel}{outputLabel}{Label für Filter}{E,A}
+
+		\fentry{stateLabel}{outputLabel}{Label für Filter Rolle des Nutzers}{E,A}
+
+		\fentry{stateSelect}{selectOnMenue}{Filtern der Rolle des Nutzers}{E,A}
+
+		\fentry{apply}{commandButton}{Wende Filtereinstellungen an.}{E,A}
+
+		\fentry{dateUp}{commandButton}{Einreichungen werden aufsteigend angezeigt.}{E,A}
+
+		\fentry{dateDown}{commandButton}{Einreichungen werden absteigend angezeigt.}{E,A}
+
+		\fentry{submissionTable}{dataTable}{Liste aller Nutzer im System.}{E,A}
+
+		\fentry{pagination}{listPagination}{Die Tabelle enthält eine Paginierung.}{E,A}
+}
+\end{samepage}
 
 \begin{samepage}
     \textbf{newUser.xhtml} Der Administrator kann hier einen neuen Nutzer anlegen.
