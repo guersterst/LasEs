@@ -1,4 +1,6 @@
-package idk;
+package business.internal;
+
+import idk.SessionInformation;
 
 public class TrespassListener {
 
