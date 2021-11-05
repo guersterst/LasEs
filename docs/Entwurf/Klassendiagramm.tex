@@ -93,9 +93,12 @@ Im folgenden Klassendiagramm wurden folgenden Konventionen verwendet:
 
 \subsubsection{de.lases.business.internal}
 
-
-
 \localauthor{Johann Schicho}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=3cm]{graphics/business_internal}
+\end{figure}
 
 \classtable{
 	\classentry{TrespassListener}{Manages user access to resources, most importantly webpages.}
@@ -110,6 +113,11 @@ Im folgenden Klassendiagramm wurden folgenden Konventionen verwendet:
 
 \localauthor{Sebastian Vogt, ff.}
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=3cm]{graphics/control_validation}
+\end{figure}
+
 \classtable{
     \classentry{AvatarValidation}{Validates that a suitable avatar image has been uploaded.}
 \classentry{EmailAddressLayoutValidation}{Validates that the email regex pattern is ok.}
@@ -117,6 +125,11 @@ Im folgenden Klassendiagramm wurden folgenden Konventionen verwendet:
 }
 
 \subsubsection{de.lases.global.transport}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=3cm]{graphics/global_transport}
+\end{figure}
 
 \classtable{
     \classentry{Paper}{This DTO represents a paper.}
@@ -132,6 +145,11 @@ Im folgenden Klassendiagramm wurden folgenden Konventionen verwendet:
 }
 
 \subsubsection{de.lases.persistence.repository}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\linewidth]{graphics/persistence_repository}
+\end{figure}
 
 \classtable{
     \classentry{PaperRepository}{This repository can get the list of papers for a submission or add new ones.}
@@ -151,11 +169,21 @@ Im folgenden Klassendiagramm wurden folgenden Konventionen verwendet:
 
 \subsubsection{de.lases.persistence.util}
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=2cm]{graphics/persistence_util}
+\end{figure}
+
 \classtable{
     \classentry{ConnectionPool}{Provides and manages connections to the database.}
 }
 
 \subsubsection{de.lases.persistence.exception}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=2cm]{graphics/persistence_exception}
+\end{figure}
 
 \classtable{
     \classentry{InvalidFieldsException}{Hints at an invalid field in a dto.}
@@ -163,6 +191,12 @@ Im folgenden Klassendiagramm wurden folgenden Konventionen verwendet:
 }
 
 \subsubsection{de.lases.control.backing}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\linewidth]{graphics/control_backing}
+\end{figure}
+
 \classtable{
 	\classentry{NewSubmissionBacking}{Backing bean for the page for creating a new submission.}
     \classentry{SubmissionBacking}{Backing bean for the submission page.}
