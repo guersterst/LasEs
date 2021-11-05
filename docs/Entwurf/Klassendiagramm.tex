@@ -18,6 +18,51 @@
 
 \subsection{Klassenbeschreibungen}
 
+\localauthor{Johannes Garstenauer}
+\subsubsection{de.lases.business.service}
+
+\classtable{
+	\classentry{CustomizationService}{Provides methods for the manipulation of system settings.}
+	\classentry{ScienceFieldService}{Provides methods for adding and removing scientific categories.}
+	\classentry{ProfileService}{Provides methods for the manipulation and removal of users.}
+	\classentry{ScientificForumService}{Provides methods for the manipulation and creation of scientific forums.}
+	\classentry{SubmissionLieferando}{Provides methods for delivering lists of submissions, taking into account
+		their filtering, sorting and calling user.}
+	\classentry{RegistrationService}{Provides methods for the creation of users.}
+	\classentry{LoginService}{Provides methods for the login and logout operations.}
+	\classentry{ReviewService}{Provides methods for the delivery, creation and removal of reviews.}
+	\classentry{SubmissionService}{Provides methods for the delivery, creation, removal and manipulation of submissions.}
+}
+
+\subsubsection{de.lases.business.utils}
+
+\classtable{
+	\classentry{AvatarUtil}{Provides support in the generation of a thumbnail from an image.}
+	\classentry{Hashing}{Provides support in the hashing of passwords.}
+	\classentry{EmailUtil}{Provides support in the sending of emails and creation of mailto links.}
+}
+
+\localauthor{Johann Schicho}
+
+\subsubsection{de.lases.global.logging}
+
+\classtable{
+	\classentry{Logging}{This Logger allows logging in different log-levels.}
+}
+
+\subsubsection{de.lases.business.internals}
+
+\classtable{
+	\classentry{TrespassListener}{Manages user access to resources, most importantly webpages.}
+	\classentry{SessionInformation}{Wraps data saved in the session.}
+	\classentry{LifeTimeListener}{Takes care of system start and shutdown operations}
+	\classentry{PeriodicWorker}{Takes care of periodical database cleanup jobs.}
+	\classentry{SystemSettings}{Loads and updates the systems' configuration.}
+	\classentry{SystemConfiguration}{Wraps data used for the system configuration.}
+}
+
+\localauthor{Sebastian Vogt}
+
 \subsubsection{de.lasses.control.validation}
 \classtable{
     \classentry{AvatarValidation}{Validates that a suitable avatar image has been uploaded.}
@@ -38,12 +83,6 @@
     \classentry{SubmissionState}{This represents a submissions state.}
     \classentry{SystemSettings}{This DTO represents the system settings.}
     \classentry{User}{This DTO represents a user.}
-}
-
-\subsubsection{de.lases.global.logging}
-
-\classtable{
-    \classentry{Logging}{This Logger allows logging in different log-levels.}
 }
 
 \subsubsection{de.lases.persistence.repository}
@@ -75,40 +114,6 @@
 \classtable{
     \classentry{InvalidFieldsException}{Hints at an invalid field in a dto.}
     \classentry{InvalidQueryParamsException}{Hints at invalid filter or sort parameters given to the query.}
-}
-
-\subsubsection{de.lases.business.service}
-
-\classtable{
-    \classentry{CustomizationService}{Provides methods for the manipulation of system settings.}
-    \classentry{ScienceFieldService}{Provides methods for adding and removing scientific categories.}
-    \classentry{ProfileService}{Provides methods for the manipulation and removal of users.}
-    \classentry{ScientificForumService}{Provides methods for the manipulation and creation of scientific forums.}
-    \classentry{SubmissionLieferando}{Provides methods for delivering lists of submissions, taking into account
-    their filtering, sorting and calling user.}
-    \classentry{RegistrationService}{Provides methods for the creation of users.}
-    \classentry{LoginService}{Provides methods for the login and logout operations.}
-    \classentry{ReviewService}{Provides methods for the delivery, creation and removal of reviews.}
-    \classentry{SubmissionService}{Provides methods for the delivery, creation, removal and manipulation of submissions.}
-}
-
-\subsubsection{de.lases.business.utils}
-
-\classtable{
-    \classentry{AvatarUtil}{Provides support in the generation of a thumbnail from an image.}
-    \classentry{Hashing}{Provides support in the hashing of passwords.}
-    \classentry{EmailUtil}{Provides support in the sending of emails and creation of mailto links.}
-}
-
-\subsubsection{de.lases.business.internals}
-
-\classtable{
-    \classentry{TrespassListener}{Manages user access to resources, most importantly webpages.}
-    \classentry{SessionInformation}{Wraps data saved in the session.}
-    \classentry{LifeTimeListener}{Takes care of system start and shutdown operations}
-    \classentry{PeriodicWorker}{Takes care of periodical database cleanup jobs.}
-    \classentry{SystemSettings}{Loads and updates the systems' configuration.}
-    \classentry{SystemConfiguration}{Wraps data used for the system configuration.}
 }
 
 \subsubsection{de.lases.control.backing}
