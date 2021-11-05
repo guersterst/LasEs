@@ -44,7 +44,7 @@ enthält alle Managed Beans welche zur Darstellung der Facelets aus der
 View Verwendung finden. Zu jedem Facelet [facelet] existiert genau ein
 Backing-Bean, welches [facelet]Backing genannt wird.
 %todo
-%\subsubsection*{edu.uni_passau.lases.control.servlet}
+%\subsubsection*{de.lases.control.servlet}
 
 \subsubsection{de.lases.business}\label{arch:business}
 Dieses Paket enthält alle Klassen der Anwendungslogikschicht.
@@ -152,11 +152,11 @@ verschieden Teile, welche jeweils eigene Aufgaben übernehmen:
     \item Die \emph{\textbf{Controller-Komponenten}} übernehmen alle Aufgaben,
     welche die Interaktion zwischen der View und dem Model betrifft. Sie behandeln
     Nutzereingaben, Validation und Konvertierung etc. In dieser Anwendung befinden sie
-    sich in den \hyperref[arch:control]{edu.uni\_passau.lases.control} Paketen.
+    sich in den \hyperref[arch:control]{de.lases.control} Paketen.
     \item Die \emph{\textbf{Model-Komponenten}} beinhalten die Modelldaten, sowie jene
     Klassen welche sich mit deren Beschaffung und Verarbeitung beschäftigen. In dieser
-    Anwendung befinden sie sich in den \hyperref[arch:business]{edu.uni\_passau.lases.business}
-    und \hyperref[arch:persistence]{edu.uni\_passau.lases.persistence} Paketen.
+    Anwendung befinden sie sich in den \hyperref[arch:business]{de.lases.business}
+    und \hyperref[arch:persistence]{de.lases.persistence} Paketen.
 \end{itemize}
 Die Verwendung dieses Patterns bietet viele Vorteile hinsichtlich der Modularität
 und Erweiterbarkeit der Anwendung.
@@ -178,7 +178,7 @@ Settermethoden haben.
 Der Vorteil der Verwendung dieses Entwurfsmusters liegt darin, dass eine
 einheitliche und übersichtliche Schnittstelle für Datenrepräsentation und Transport
 in der Anwendung besteht. Die zugehörigen Klassen lagern im
-\hyperref[arch:transport]{edu.uni\_passau.lases.transport} Paket.
+\hyperref[arch:transport]{de.lases.global.transport} Paket.
 
 \subsubsection{Repository}
 Beim \emph{Repository} Pattern wird für jedes Business-Objekt oder jede Entität
@@ -193,7 +193,7 @@ Für diesen Zugriff werden oft die \textit{CRUD}-Methoden, das heißt
 eines oder mehrerer Datenbankeinträge der zugehörigen Entität, angeboten.
 Weiterhin findet das Mapping auf die \hyperref[arch:transport]{DTO-Objekte} dieser Anwendung statt.
 In dieser Anwendung finden sich die \emph{Repository-Pattern} Klassen im Paket
-\hyperref[arch:repository]{edu.uni\_passau.lases.repository}. Durch die mit
+\hyperref[arch:repository]{de.lases.persistence.repository}. Durch die mit
 der Verwendung dieses Patterns gewonnenen Übersichtlichkeit erleichtern wir uns die
 Implementation und ermöglichen leichte Erweiterbarkeit der Datenschemas.
 
