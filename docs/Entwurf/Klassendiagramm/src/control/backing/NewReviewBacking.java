@@ -9,4 +9,12 @@ public class NewReviewBacking {
 
 	private SessionInformation sessionInformation;
 
+	boolean acceptRecommendation;
+	String reviewComment;
+	
+	public String addReview(){
+		return null;
+	}
+
+
 }
