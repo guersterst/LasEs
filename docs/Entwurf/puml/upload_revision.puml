@@ -13,9 +13,9 @@ actor User as user
 box "control.backing"
     participant ":SubmissionBacking" as subBacking
 end box
-box "???"
-    participant ":ResourceBundle" as rscBundle
-end box
+'box "???"
+'    participant ":ResourceBundle" as rscBundle
+'end box
 box "business.service"
     participant ":SubmissionService" as subService
 end box
@@ -89,9 +89,9 @@ activate subBacking
         return
     return
 
-    subBacking -> rscBundle : getAddRevision\\\nConfirmationMsg()
-    activate rscBundle
-    return msg
+'    subBacking -> rscBundle : getAddRevision\\\nConfirmationMsg()
+'    activate rscBundle
+'    return msg
 
 return submission.xhtml\nwith facesMessage
 
