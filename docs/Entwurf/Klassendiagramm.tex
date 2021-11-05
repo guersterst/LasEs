@@ -85,9 +85,14 @@ Im folgenden Klassendiagramm wurden folgenden Konventionen verwendet:
 
 \classtable{
 	\classentry{Logging}{This Logger allows logging in different log-levels.}
+    \classentry{ResultListParameters}{This class bundles parameters for requesting lists from the database. This includes page numner, sorting of the results and filtering of the results}
+    \classentry{SortOrder}{A List can be sorted in ascending or descending order}
+    \classentry{ResultListFilter}{A filter that can be applied on a column of a table}
+    \classentry{ResultListFilterOption}{A single comparison that can be used to construct a ResultListFilter}
+    \classentry{ResultListFilterComparator}{The three comparators equal to, less than or equal and greater than or equal}
 }
 
-\subsubsection{de.lases.business.internals}
+\subsubsection{de.lases.business.internal}
 
 \localauthor{Johann Schicho}
 
