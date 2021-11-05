@@ -10,5 +10,16 @@ public class NewScientificForumBacking {
 	
 	private ScientificForumService scientificForumService;
 
+	private ScientificForum newScientificForum;
+
+	public void addEditor() { }
+
+	public void removeEditor() { }
+
+	public void addScienceFieldToForum() { }
+
+	public void addScienceField() { }
+
+	public void create() { }
 
 }
