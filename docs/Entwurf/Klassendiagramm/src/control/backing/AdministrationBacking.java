@@ -7,4 +7,7 @@ public class AdministrationBacking {
 
 	private CustomizationService customizationService;
 
+	private SystemSettings systemSettings;
+
+	public void update(){ }
 }
