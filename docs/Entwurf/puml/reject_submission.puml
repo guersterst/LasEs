@@ -11,9 +11,9 @@ actor Editor as editor
 box "control.backing"
     participant ":SubmissionBacking" as subBacking
 end box
-box "???"
-    participant ":ResourceBundle" as rscBundle
-end box
+'box "???"
+'    participant ":ResourceBundle" as rscBundle
+'end box
 box "business.service"
     participant ":SubmissionService" as subService
 end box
@@ -76,12 +76,12 @@ activate subBacking
         subService -> submitter : getEmailAddress()
         activate submitter
         return recipient
-        subService -> rscBundle : getRejectionEmailSubject()
-        activate rscBundle
-        return subject
-        subService -> rscBundle : getRejectionEmailBody()
-        activate rscBundle
-        return body
+'        subService -> rscBundle : getRejectionEmailSubject()
+'        activate rscBundle
+'        return subject
+'        subService -> rscBundle : getRejectionEmailBody()
+'        activate rscBundle
+'        return body
 
         subService -> emailService : generateMailto(user.getEmailAddress(),recipient,subject,body)
         activate emailService
@@ -106,11 +106,7 @@ activate subBacking
             activate connPool
             return
         return <font color=red><b>persistence.exception.DBTimeoutExeption
-    return <font color=red><b>persistence.exception.DBTimeoutExeption
-
-    subBacking -> rscBundle : getRejectSubmission\\\nUnsuccessfulMessage()
-    activate rscBundle
-    return msg
+    return <font color=red><b>DBTimeoutExeption
 
 return submission.xhtml\nw/ <font color=red><b>Error</b></font>\nas FacesMessage
 note left
