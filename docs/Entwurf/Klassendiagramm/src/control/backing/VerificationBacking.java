@@ -1,8 +1,6 @@
 package control.backing;
 
-import java.time.LocalDateTime;
-
-import idk.SessionInformation;
+import business.internal.SessionInformation;
 
 public class VerificationBacking {
 	

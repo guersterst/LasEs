@@ -1,5 +1,7 @@
 package control.backing;
 
+import javax.enterprise.context.RequestScoped;
+
 import business.service.RegistrationService;
 
 @RequestScoped
@@ -20,7 +22,7 @@ public class NewUserBacking {
 	private boolean isAdmin;
 
 
-	public String abort(){ }
+	public String abort(){ return null; }
 
-	public String saveUser(){ }
+	public String saveUser(){ return null; }
 }

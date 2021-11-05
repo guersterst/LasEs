@@ -2,9 +2,9 @@ package control.backing;
 
 import java.util.List;
 
+import business.internal.SessionInformation;
 import business.service.SubmissionService;
 import dtos.User;
-import idk.SessionInformation;
 
 public class NewSubmissionBacking {
 

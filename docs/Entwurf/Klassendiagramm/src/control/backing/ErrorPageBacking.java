@@ -2,7 +2,7 @@ package control.backing;
 
 public class ErrorPageBacking {
 
-    private String errorMessage();
+    private String errorMessage() { return null; }
 
     public void setErrorMessage() { }
 

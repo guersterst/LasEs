@@ -1,6 +1,7 @@
 package business.internal;
 
-import idk.SessionInformation;
+import javax.faces.event.PhaseEvent;
+import javax.faces.event.PhaseId;
 
 public class TrespassListener {
 

@@ -8,7 +8,7 @@ import javax.enterprise.context.SessionScoped;
 import dtos.Privilege;
 
 @SessionScoped
-public class SessionInformation {
+public class SessionInformation extends Serializable {
 	private int userID;
 	private List<Privilege> roles;
 	private Locale locale;

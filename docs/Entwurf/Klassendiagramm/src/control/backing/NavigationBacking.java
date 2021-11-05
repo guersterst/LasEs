@@ -2,11 +2,11 @@ package control.backing;
 
 import java.util.List;
 
+import business.internal.SessionInformation;
 import business.service.LoginService;
 import dtos.ScientificForum;
 import dtos.Submission;
 import dtos.User;
-import idk.SessionInformation;
 
 public class NavigationBacking {
 	

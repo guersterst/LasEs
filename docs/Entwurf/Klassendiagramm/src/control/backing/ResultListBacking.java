@@ -1,9 +1,9 @@
 package control.backing;
 
+import business.internal.SessionInformation;
 import business.service.ProfileService;
 import business.service.ScientificForumService;
 import business.service.SubmissionLieferando;
-import idk.SessionInformation;
 
 public class ResultListBacking {
 	

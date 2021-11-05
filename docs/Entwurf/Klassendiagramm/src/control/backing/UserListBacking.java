@@ -1,7 +1,11 @@
 package control.backing;
 
+import java.util.List;
+
+import business.internal.SessionInformation;
 import business.service.ProfileService;
-import idk.SessionInformation;
+import dtos.Privilege;
+import dtos.User;
 
 public class UserListBacking {
 
@@ -14,7 +18,7 @@ public class UserListBacking {
 	private String searchText;
 
 
-	public String applyFilter(){ }
+	public String applyFilter(){ return null; }
 
 	public void nameUp(){ }
 

@@ -1,7 +1,7 @@
 package control.backing;
 
 import business.service.CustomizationService;
-import idk.SessionInformation;
+import dtos.SystemSettings;
 
 public class AdministrationBacking {
 

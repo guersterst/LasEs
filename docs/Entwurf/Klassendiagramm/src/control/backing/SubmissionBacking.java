@@ -3,12 +3,12 @@ package control.backing;
 import java.util.HashMap;
 import java.util.List;
 
+import business.internal.SessionInformation;
 import business.service.ReviewService;
 import business.service.SubmissionService;
 import dtos.Paper;
 import dtos.Review;
 import global.util.ResultListParameters;
-import idk.SessionInformation;
 
 public class SubmissionBacking {
 

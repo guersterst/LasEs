@@ -1,10 +1,14 @@
 package control.backing;
 
+import java.util.List;
+
+import business.internal.SessionInformation;
 import business.service.ScienceFieldService;
 import business.service.ScientificForumService;
 import business.service.SubmissionLieferando;
 import dtos.ScientificForum;
-import idk.SessionInformation;
+import dtos.Submission;
+import dtos.SubmissionState;
 
 public class ScientificForumBacking {
 
@@ -24,7 +28,7 @@ public class ScientificForumBacking {
 	
 	public ScientificForum getScientificForum() { return null; }
 
-    public void updateScientificForum(ScientificFourm scientificForum) { }
+    public void updateScientificForum(ScientificForum scientificForum) { }
 
     public void setState(SubmissionState submissionState) { }
 

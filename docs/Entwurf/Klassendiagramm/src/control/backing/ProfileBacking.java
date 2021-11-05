@@ -2,9 +2,9 @@ package control.backing;
 
 import com.sun.xml.internal.ws.wsdl.writer.document.Part;
 
+import business.internal.SessionInformation;
 import business.service.ProfileService;
 import dtos.User;
-import idk.SessionInformation;
 
 public class ProfileBacking {
 	

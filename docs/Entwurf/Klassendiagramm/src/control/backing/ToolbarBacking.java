@@ -2,8 +2,8 @@ package control.backing;
 
 import java.util.List;
 
+import business.internal.SessionInformation;
 import dtos.User;
-import idk.SessionInformation;
 
 /**
  * Backing bean for toolbar.xhtml. This view is the place where administrators and editors can administer a submission on the submission page.

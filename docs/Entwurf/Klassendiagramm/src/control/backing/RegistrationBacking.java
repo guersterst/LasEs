@@ -1,7 +1,7 @@
 package control.backing;
 
+import business.internal.SessionInformation;
 import business.service.RegistrationService;
-import idk.SessionInformation;
 
 public class RegistrationBacking {
 	

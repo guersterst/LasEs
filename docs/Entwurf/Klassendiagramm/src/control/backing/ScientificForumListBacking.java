@@ -1,12 +1,14 @@
 package control.backing;
 
-import java.time.LocalDate;
 import java.util.List;
 
+import javax.enterprise.context.RequestScoped;
+
+import business.internal.SessionInformation;
 import business.service.ScientificForumService;
+import dtos.LocalDate;
 import dtos.ScienceField;
 import dtos.ScientificForum;
-import idk.SessionInformation;
 
 @RequestScoped
 public class ScientificForumListBacking {

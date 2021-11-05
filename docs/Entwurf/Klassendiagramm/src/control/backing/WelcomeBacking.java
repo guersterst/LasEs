@@ -1,7 +1,7 @@
 package control.backing;
 
+import business.internal.SessionInformation;
 import business.service.LoginService;
-import idk.SessionInformation;
 
 /**
  * This is the backing bean for welcome.xhtml. On that page, registered users can log in.

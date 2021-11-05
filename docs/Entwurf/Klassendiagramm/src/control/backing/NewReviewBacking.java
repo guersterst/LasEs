@@ -1,7 +1,8 @@
 package control.backing;
 
+import business.internal.SessionInformation;
 import business.service.ReviewService;
-import idk.SessionInformation;
+
 
 public class NewReviewBacking {
 	
