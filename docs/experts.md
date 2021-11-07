@@ -10,7 +10,7 @@
 | E-Mail-Versendung | Thomas oder Steffi 🤔 |
 | Modulare Listen | |
 | Datei-Upload | Johannes Garstenauer |
-| Parameterübergabe zw Facelets | |
+| Parameterübergabe zw Facelets |  Johann Schicho |
 | JSF Templates | |
 | CSS & Bootstrap | |
 | Config file | Johann Schicho |
