@@ -79,11 +79,7 @@ Sind Außerdem keine Labels für Komponenten angegeben, dann sind anstelle diese
     \nopagebreak
 
     \ftable{
-        \fentry{reviewerLabel}{outputLabel}{Label für Gutachterangabe.}{A,E}
-
         \fentry{addReviewerField}{inputText}{Eingabefeld zur Angabe einer E-Mailadresse}{A,E}
-
-        \fentry{deadlineReviewer}{outputLabel}{Label für Deadline.}{A,E}
 
         \fentry{addDeadlineReviewer}{inputText}{Eingabefeld zur Angabe einer Deadline.}{A,E}
 
@@ -93,13 +89,9 @@ Sind Außerdem keine Labels für Komponenten angegeben, dann sind anstelle diese
 
         \fentry{removeReviewer}{commandButton}{Entferne einen bestimmten Gutachter}{A,E}
 
-        \fentry{editorLabel}{outputLabel}{Label für Editorauswahl.}{A,E}
-
         \fentry{selectEditor}{selectOneMenu}{Auswahländerung des verwaltenden Editors}{A,E}
 
         \fentry{saveEditor}{commandButton}{Speichern der Änderung}{A,E}
-
-        \fentry{deadlineRevision}{outputLabel}{Label für Deadline.}{A,E}
 
         \fentry{revisionDeadline}{inputText}{Eingabe zur Angabe einer Deadline.}{A,E}
 
@@ -161,23 +153,13 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
     \nopagebreak
 
     \ftable{
-        \fentry{titelLabel}{outputLabel}{Label für Titel.}{AN}
-
         \fentry{title}{inputText}{Angabe eines Titels.}{AN}
-
-        \fentry{firstNameLabel}{outputLabel}{Label für Vorname.}{AN}
 
         \fentry{firstName}{inputText}{Angabe des Vornamens.}{AN}
 
-        \fentry{nameLabel}{outputLabel}{Label für Nachname.}{AN}
-
         \fentry{name}{inputText}{Angabe des Nachnamen.}{AN}
 
-        \fentry{passwordLabel}{outputLabel}{Label für Passwort.}{AN}
-
         \fentry{password}{inputSecret}{Angabe eines Passwortes.}{AN}
-
-        \fentry{emailLabel}{outputLabel}{Label für E-Mail.}{AN}
 
         \fentry{email}{inputText}{Angabe einer validen E-Mail.}{AN}
 
@@ -235,25 +217,15 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 
         \fentry{editorialOverview}{commandLink}{Reiter zum Anzeigen aller Einreichungen, welche man editiert.}{E}
 
-        \fentry{filterLabel}{outputLabel}{Label für Filter}{Alle}
-
-        \fentry{stateLabel}{outputLabel}{Label für Filter vom Status der Einreichung}{Alle}
-
         \fentry{stateSelect}{selectOneMenu}{Filtern des Status von Einreichungen}{Alle}
 
-        \fentry{dateLabelBefore}{outputLabel}{Label für Filter nach einem Datum.}{Alle}
-
         \fentry{dateBefore}{inputText}{Eingabe eines \emph{spätestens} Datum}{Alle}
-
-        \fentry{dateLabelAfter}{outputLabel}{Label für Filter vor einem Datum.}{Alle}
 
         \fentry{dateAfter}{inputText}{Eingabe eines \emph{frühestens} Datum}{Alle}
 
         \fentry{dateUp}{commandButton}{Einreichungen werden dem Datum nach aufsteigend angezeigt.}{Alle}
 
         \fentry{dateDown}{commandButton}{Einreichungen werden dem Datum nach absteigend angezeigt.}{Alle}
-
-        \fentry{searchLabel}{outputLabel}{Label für Suche.}{Alle}
 
         \fentry{search}{inputText}{Durchsuchen der Tabellen mit Matching-Words.}{Alle}
 
@@ -293,65 +265,31 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
     \ftable{
         \fentry{title}{outputText}{Titel des Papers.}{Alle}
 
-        \fentry{forumLabel}{outputLabel}{Label für ein Forum.}{Alle}
-
         \fentry{forum}{Link}{Name des Forums und Weiterleitung zur Forumsübersicht.}{Alle}
-
-        \fentry{authorLabel}{outputLabel}{Label für Autor.}{Alle}
 
         \fentry{author}{Link}{Name des Autors und Weiterleitung zum Profil.}{Alle}
 
-        \fentry{coAuthorLabel}{outputLabel}{Namen der Co-Autoren.}{Alle}
-
-        \fentry{emailLabel}{outputLabel}{Label für E-Mail-Adressen der Co-Authoren.}{Alle}
-
         \fentry{email}{Link}{E-Mail-Adressen der Co-Authoren und Mailto-Link.}{Alle}
-
-        \fentry{filterLabel}{outputLabel}{Label für Filter}{Alle}
-
-        \fentry{dateLabel}{outputLabel}{Label für Filter von Datum.}{Alle}
 
         \fentry{dateUp}{commandButton}{Einreichungen werden aufsteigend angezeigt.}{Alle}
 
         \fentry{dateDown}{commandButton}{Einreichungen werden absteigend angezeigt.}{Alle}
 
-        \fentry{reviewStateLabel}{outputLabel}{Label für Filtern der Gutachtenfreischaltung.}{E,A}
-
         \fentry{all}{checkbox}{Anzeigen aller Gutachten.}{E,A,G}
-
-        \fentry{allLabel}{outputLabel}{Label für all.}{E,A,G}
 
         \fentry{locked}{checkbox}{Anzeigen nicht freigeschalteter Gutachten.}{E,A,G}
 
-        \fentry{lockedLabel}{outputLabel}{Label für locked.}{E,A,G}
-
         \fentry{unlocked}{checkbox}{Anzeigen freigeschalteter Gutachten.}{E,A,G}
-
-        \fentry{unlockedLabel}{outputLabel}{Label für unlocked.}{E,A,G}
-
-        \fentry{reviewSubmitLabel}{outputLabel}{Label für Filter von eingereichten Gutachten.}{E,A}
 
         \fentry{submitted}{checkbox}{Anzeigen aller abgegebenen Gutachten.}{E,A}
 
-        \fentry{submittedLabel}{outputLabel}{Label für submitted.}{E,A}
-
         \fentry{notSubmitted}{checkbox}{Anzeigen noch nicht abgegebener Gutachten.}{E,A}
-
-        \fentry{notSubmittedLabel}{outputLabel}{Label für notSubmitted.}{E,A}
-
-        \fentry{versionLabel}{outputLabel}{Label für Versionsfilter.}{Alle}
 
         \fentry{version}{selectOneMenu}{Auswahl der Versionsnummern}{Alle}
 
-        \fentry{reviewerLabel}{outputLabel}{Label für Reviewerfilter.}{Alle}
-
         \fentry{reviewer}{selectOneMenu}{Auswahl eines bestimmten Gutachters.}{E,A}
 
-        \fentry{recommendationLabel}{outputLabel}{Label für Empfehlungen.}{E,A,G}
-
         \fentry{recommendation}{selectOneMenu}{Auswahl der Art von Empfehlungen.}{E,A,G}
-
-        \fentry{searchLabel}{outputLabel}{Label für Suche.}{Alle}
 
         \fentry{search}{inputText}{Durchsuchen der Tabelle mit Matching-Words.}{Alle}
 
@@ -408,15 +346,9 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
     \nopagebreak
 
     \ftable{
-        \fentry{subNameLabel}{outputLabel}{Label für Papertitel.}{N
-        }
         \fentry{submissionName}{inputText}{Name des abzugebenden Papers.}{N}
 
-        \fentry{forumLabel}{outputLabel}{Label für Name des Forums.}{N}
-
         \fentry{forumName}{inputText}{Name des Forums, bei welchem abgegeben wird.}{N }
-
-        \fentry{editorLabel}{outputLabel}{Label für Editor.}{N}
 
         \fentry{editorSearch}{selectOneMenu}{Angabe eines Editors}{N}
 
@@ -424,27 +356,17 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 
         \fentry{pfdUpload}{inputFile}{Angabe der Abgabedatei.}{N}
 
-        \fentry{titleLabel}{outputLabel}{Label für Titel}{N}
-
         \fentry{titel}{inputText}{Angabe eines Titels.}{N}
-
-        \fentry{coAuthorLabel}{outputLabel}{Label für Co-Autor.}{N}
-
-        \fentry{coAuthorFirstLabel}{outputLabel}{Label für Vorname des Co-Autors.}{N}
 
         \fentry{coAuthorFirstName}{inputText}{Angabe des Vornamen eines Co-Autors.}{N}
 
-        \fentry{coAuthorLastLabel}{outputLabel}{Label für Nachname des Co-Autors.}{N}
-
         \fentry{coAuthorLastName}{inputText}{Angabe des Namen eines Co-Autors.}{N}
-
-        \fentry{coAuthorEmailLabel}{outputLabel}{Label für E-Mail des Co-Autors.}{N}
 
         \fentry{coAuthorEMail}{inputText}{Angabe der E-Mail eines Co-Autors.}{N}
 
         \fentry{submitCoAuthor}{commandButton}{Ausgabe des Co-Autors in einer Liste.}{N}
 
-        \fentry{coAuthorList}{outputText}{Anzeige aller Co-Authoren in einer Liste.}{N}
+        \fentry{coAuthorList}{outputText}{Anzeige aller Co-Autoren in einer Liste.}{N}
 
         \fentry{deleteCoAuthor}{commandButton}{Löschen des zugehörigen Co-Authors.}{N}
 
@@ -467,25 +389,13 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 
     \ftable{
 
-        \fentry{filterLabel}{outputLabel}{Label für Filter}{Alle}
-
-        \fentry{scFieldsLabel}{outputLabel}{Label für Filter der Themengebiete}{Alle}
-
         \fentry{scFieldSelect}{selectOneMenu}{Filtern der Themengebiete der Foren}{Alle}
-
-        \fentry{deadlineLabel}{outputLabel}{Label für Filtern nach Deadlines (Abgelaufen/Zukunft)}{Alle}
 
         \fentry{deadlineSelect}{selectOneMenu}{Filtern der nach Deadlines}{Alle}
 
-        \fentry{dateLabelBefore}{outputLabel}{Label für Deadline nach einem Datum.}{Alle}
-
         \fentry{dateBefore}{inputText}{Eingabe eines \emph{spätestens} Datum}{Alle}
 
-        \fentry{dateLabelAfter}{outputLabel}{Label für Deadline vor einem Datum.}{Alle}
-
         \fentry{dateAfter}{inputText}{Eingabe eines \emph{frühestens} Datum}{Alle}
-
-        \fentry{searchLabel}{outputLabel}{Label für Suche.}{Alle}
 
         \fentry{search}{inputText}{Durchsuchen der Tabelle mit Matching-Words.}{Alle}
 
@@ -533,51 +443,29 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 
         \fentry{deleteAvatar}{commandButton}{Löschen des Avatars.}{N,A,E}
 
-        \fentry{roleLabel}{outputLabel}{Label für Rolle.}{N,A,E}
-
         \fentry{role}{outputText}{Angabe der Rolle eines Nutzers}{N,A,E}
-
-        \fentry{isAdminLabel}{outputLabel}{Label für Adminrolle.}{A}
 
         \fentry{isAdmin}{checkbox}{Zuteilung der Rolle des Administrators.}{A}
 
-        \fentry{titleLabel}{outputLabel}{Label für Titel}{N,A,E}
-
         \fentry{title}{inputText}{Titel des Nutzenden.}{N,A,E}
-
-        \fentry{firstNameLabel}{outputLabel}{Label für Vorname}{N,A,E}
 
         \fentry{firstName}{inputText}{Vorname des Nutzenden.}{N,A,E}
 
-        \fentry{nameLabel}{outputLabel}{Label für Nachname}{N,A,E}
-
         \fentry{name}{inputText}{Nachname des Nutzenden.}{N,A,E}
-
-        \fentry{passwordLabel}{outputLabel}{Label für Passwort.}{N,A}
 
         \fentry{password}{inputSecret}{Leeres Eingabefeld für ein neues Passwort.}{N,A}
 
-        \fentry{emailLabel}{outputLabel}{Label für E-Mail.}{N,A,E}
-
         \fentry{email}{inputText}{E-Mail des Nutzenden.}{N,A,E}
-
-        \fentry{submissionNumberLabel}{outputLabel}{Label für Anzahl von Einreichungen.}{N,A,E}
 
         \fentry{submissionNumber}{outputText}{Anzahl der eigenen Einreichungen}{N,A,E}
 
-        \fentry{employerLabel}{outputLabel}{Label für Arbeitgeber}{N,A,E}
-
         \fentry{employer}{inputText}{Angabe des Arbeitgebers}{N,A,E}
-
-        \fentry{scienceFieldLabel}{outputLabel}{Label für Fachgebiet}{N,A,E}
 
         \fentry{scieneField}{outputText}{Liste aller Fachgebiete}{N,A,E}
 
         \fentry{addScienceField}{inputText}{Spezialgebiete des Nutzers}{N,A,E}
 
         \fentry{addFieldButton}{commandButton}{Füge Fachgebiet zur Liste hinzu.}{N,A,E}
-
-        \fentry{dateOfBirthLabel}{outputLabel}{Label für Geburtstag.}{N,A}
 
         \fentry{dateOfBirth}{inputText}{Angabe des Geburtstages}{N,A}
 
@@ -614,31 +502,15 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
         \fentry{deadline}{outputText}{Deadline des Forums.}{Alle}
 
-        \fentry{deadlineLabel}{outputLabel}{Label für Deadline des Forums.}{Alle}
-
         \fentry{description}{outputText}{Kurzbeschreibung des Forums.}{Alle}
 
-        \fentry{descriptionLabel}{outputLabel}{Label für Kurzbeschreibung.}{Alle}
-
         \fentry{url}{outputLink}{Link zur Konferenz oder zum Journal.}{Alle}
-
-        \fentry{urlLabel}{outputLabel}{Label für URL des Forums.}{Alle}
 
         \fentry{reviewInstructions}{outputText}{Anleitung für eine Begutachtung.}{G,E,A}
 
         \fentry{scienceField}{outputText}{Fachgebiet des Forums.}{Alle}
 
-        \fentry{scienceDieldLabel}{outputLabel}{Label für Fachgebiete.}{Alle}
-
-        \fentry{filterLabel}{outputLabel}{Label für Filter}{G,E,A}
-
-        \fentry{stateLabel}{outputLabel}{Label für Filter vom Status der Einreichung}{G,E,A}
-
         \fentry{stateSelect}{selectOneMenu}{Filtern des Status von Einreichungen}{G,E,A}
-
-        \fentry{dateLabel}{outputLabel}{Label für Filter von Datum.}{G,E,A}
-
-        \fentry{searchLabel}{outputLabel}{Label für Suche.}{Alle}
 
         \fentry{search}{inputText}{Durchsuchen der Tabelle mit Matching-Words.}{Alle}
 
@@ -662,19 +534,11 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
     \nopagebreak
 
     \ftable{
-        \fentry{versionLabel}{outputLabel}{Label für Versionsnummer}{G,A}
-
         \fentry{versionNumber}{outputText}{Versionsnummer des eingereichten Papers, zu welchem der Gutachter ein Gutachten abgeben kann.}{G,A}
-
-        \fentry{recommendationLabel}{outputLabel}{Label für eine Empfehlung.}{G,A}
 
         \fentry{recommendation}{checkbox}{Empfehlung des Gutachters ein Paper zu akzeptieren.}{G,A}
 
-        \fentry{commentLabel}{outputLabel}{Label für einen Kommentar}{G,A}
-
         \fentry{comment}{inputTextarea}{Kommentar eines Gutachters}{G,A}
-
-        \fentry{pdfLabel}{outputLabel}{Label für Datei}{G,A}
 
         \fentry{reviewPdf}{inputFile}{Einzureichendes Gutachten.}{G,A}
 
@@ -691,15 +555,8 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
     \nopagebreak
 
     \ftable{
-
-        \fentry{filterLabel}{outputLabel}{Label für Filter}{E,A}
-
-        \fentry{roleLabel}{outputLabel}{Label für Filter Rolle des Nutzers}{E,A}
-
         \fentry{roleSelect}{selectOneMenu}{Filtern der Rolle des Nutzers}{E,A}
-
-        \fentry{searchLabel}{outputLabel}{Label für Suche.}{Alle}
-
+        
         \fentry{search}{inputText}{Durchsuchen der Tabelle mit Matching-Words.}{Alle}
 
         \fentry{apply}{commandButton}{Wende Filtereinstellungen an.}{E,A}
