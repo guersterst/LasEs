@@ -8,7 +8,7 @@ import global.util.ResultListFilter;
 import global.util.ResultListParameters;
 import persistence.exception.InvalidFieldsException;
 import persistence.exception.InvalidQueryParamsException;
-import persistence.util.ConnectionPool;
+import persistence.repository.connection_pool.ConnectionPool;
 
 public class ScientificForumRepository {
 	

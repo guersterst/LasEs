@@ -6,7 +6,7 @@ import dtos.User;
 import global.util.ResultListParameters;
 import persistence.exception.InvalidFieldsException;
 import persistence.exception.InvalidQueryParamsException;
-import persistence.util.ConnectionPool;
+import persistence.repository.connection_pool.ConnectionPool;
 
 public class UserRepository {
 	

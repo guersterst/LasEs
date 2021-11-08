@@ -2,7 +2,7 @@ package persistence.repository;
 
 import dtos.Style;
 import dtos.SystemSettings;
-import persistence.util.ConnectionPool;
+import persistence.repository.connection_pool.ConnectionPool;
 
 public class SystemSettingsRepository {
 	
