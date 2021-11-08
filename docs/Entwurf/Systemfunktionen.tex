@@ -9,6 +9,7 @@ Es gibt folgende Loglevel, wobei jedes Level jeweils die Nachrichten des vorheri
     \item[\texttt{WARNING}] Wichtige Ereignisse, die zu Problemen führen können und für Administratoren und Endnutzer relevant sind.
     \item[\texttt{INFO}] Für den Administrator relevante Meldungen im normalen Betrieb. Diese sind auch fürs Entwickeln und Testen hilfreich.
 \end{description}
+Nachrichten können geloggt werden durch Aufruf der \code{severe()}-, \code{warning()}- oder \code{info()}-Methoden in \code{de.lases.global.logging}.
 
 \subsection{Sicherheit}\label{subsec:sicherheit}
 Für die häufigsten Sicherheitsschwachstellen bei Webanwendungen, die für LasEs relevant sind, wird im Folgenden erklärt, wie ausnutzende Angriffe verhindert werden.
@@ -17,14 +18,16 @@ Für die häufigsten Sicherheitsschwachstellen bei Webanwendungen, die für LasE
 \item[Fehlerhafte Zugangskontrolle] 
 Um unerlaubten Zugriff auf Seiten, Informationen und Aktionen zu verhindern, werden Zugriffe auf nicht-öffentliche Ressourcen (das ist alles außer Start-, Registrierungs- und Verifikationsseite) standardmäßig zuerst abgelehnt.
 Die Klasse \code{TrespassListener} entscheidet dann, ob der Nutzer die nötigen Rechte hat und akzeptiert eine Anfrage nur dann, sonst wird auf eine Fehler-Seite weitergeleitet.
-Das hängt von der Rolle des Nutzers und von seiner Beziehung zur angefragten Ressource ab (ein normaler Nutzer kann z.B.\ nur sein \emph{eigenes} Profil oder eine \emph{eigene} Einreichung sehen).
+Dazu wird über die angefragte URL das zugehörige Facelet bestimmt und geprüft, ob darauf mit der Rolle des Nutzers zugegriffen werden darf.
+Das hängt darüber hinaus auch von der Beziehung des Nutzers zur angefragten Ressource ab (ein normaler Nutzer kann z.B.\ nur sein \emph{eigenes} Profil oder eine \emph{eigene} Einreichung sehen).
 Da dies zentral in dieser Klasse passiert, entstehen weniger Fehler als bei der Prüfung an vielen verschiedenen Stellen des Programms.
 
 \item[Kryptographie-Probleme \& Verlust der Vertraulichkeit sensibler Daten]
 Alle Anfragen und Antworten werden mit dem HTTPS-Protokoll mit TLS-Verschlüsselung durchgeführt.
 Dafür wird der Tomcat-Server, der diese Technologie unterstützt, entsprechend konfiguriert.
 \\
-Passwörter werden mit der modernen und sicheren PBKDF2-Funktion gehasht. Dabei wird für jedes Passwort ein eigener zufällig generierter Salt benutzt. Eingegebene Passwörter werden so früh wie möglich gehasht, damit die Klartextpasswörter eine minimale Lebenszeit auf dem Server haben.  Dafür wird die robuste \code{javax.crypto}-Bibliothek verwendet.
+Passwörter werden mit der modernen und sicheren PBKDF2-Funktion gehasht. Dabei wird für jedes Passwort ein eigener zufällig generierter Salt benutzt. Eingegebene Passwörter werden so früh wie möglich gehasht, damit die Klartextpasswörter eine minimale Lebenszeit auf dem Server haben. Für das Generieren eins Salts und das Hashing bietet die Klasse \code{de.lases.business.util} Methoden an.
+Sie verwendet die robuste \code{javax.crypto}-Bibliothek.
 
 \item[Injection \& Cross-site-Scripting]
 Da JSF components für die HTML-Ausgabe verwendet werden, bereinigt JSF alle Nutzereingaben und macht Cross-site-Scripting unmöglich.
