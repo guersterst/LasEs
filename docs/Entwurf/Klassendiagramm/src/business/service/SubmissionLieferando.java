@@ -9,6 +9,8 @@ import persistence.repository.SubmissionRepository;
 import persistence.repository.UserRepository;
 
 public class SubmissionLieferando {
+
+	private ExceptionQueue exceptionQueue;
 	
 	public List<Submission> getSubmissionsForForum(int forumId, String userEmail, ResultListParameters resultParams) { return null; }
 	

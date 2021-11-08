@@ -6,6 +6,8 @@ import dtos.User;
 import persistence.repository.UserRepository;
 
 public class RegistrationService {
+
+	private ExceptionQueue exceptionQueue;
 	
 	private Hashing hashing;
 	

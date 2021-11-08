@@ -10,7 +10,9 @@ import global.util.ResultListParameters;
 import persistence.repository.UserRepository;
 
 public class ProfileService {
-	
+
+	private ExceptionQueue exceptionQueue;
+
 	private EmailAddressUnoccupiedValidator emailAddressUnoccupiedValidator;
 	
 	private EmailUtil emailUtil;

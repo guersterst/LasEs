@@ -6,6 +6,8 @@ import dtos.ScienceField;
 import persistence.repository.ScienceFieldRepository;
 
 public class ScienceFieldService {
+
+	private ExceptionQueue exceptionQueue;
 	
 	public void add(ScienceField field) { }
 	

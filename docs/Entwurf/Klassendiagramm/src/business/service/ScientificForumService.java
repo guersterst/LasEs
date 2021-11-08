@@ -10,7 +10,9 @@ import global.util.ResultListParameters;
 import persistence.repository.ScientificForumRepository;
 
 public class ScientificForumService {
-	
+
+	private ExceptionQueue exceptionQueue;
+
 	private EmailUtil emailUtil;
 	
 	public void addSubmission(Submission submission) { }
