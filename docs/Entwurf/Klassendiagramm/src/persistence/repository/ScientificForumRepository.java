@@ -12,13 +12,11 @@ import persistence.util.ConnectionPool;
 
 public class ScientificForumRepository {
 	
-	private ConnectionPool connectionPool;
+	public static List<ScientificForum> getList(ResultListParameters resultParams) throws InvalidQueryParamsException { return null; }
 	
-	public List<ScientificForum> getList(ResultListParameters resultParams) throws InvalidQueryParamsException { return null; }
+	public static List<ScientificForum> getListWithSearchword(String searchWord, ResultListParameters resultParams) throws InvalidQueryParamsException { return null; }
 	
-	public List<ScientificForum> getListWithSearchword(String searchWord, ResultListParameters resultParams) throws InvalidQueryParamsException { return null; }
-	
-	public void addScientificForum(ScientificForum newForum) throws InvalidFieldsException { }
+	public static void addScientificForum(ScientificForum newForum) throws InvalidFieldsException { }
 	
 
 }

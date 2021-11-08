@@ -7,12 +7,10 @@ import persistence.util.ConnectionPool;
 
 public class ScienceFieldRepository {
 	
-	private ConnectionPool connectionPool;
+	public static void addScienceField(String name) { }
 	
-	public void addScienceField(String name) { }
+	public static List<ScienceField> getScienceFields() { return null; }
 	
-	public List<ScienceField> getScienceFields() { return null; }
-	
-	public boolean isScienceField(String name) { return false; }
+	public static boolean isScienceField(String name) { return false; }
 
 }

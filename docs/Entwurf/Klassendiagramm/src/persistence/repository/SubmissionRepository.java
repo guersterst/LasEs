@@ -10,16 +10,14 @@ import persistence.util.ConnectionPool;
 
 public class SubmissionRepository {
 	
-	private ConnectionPool connectionPool;
+	public static List<Submission> getListWithSearchword(String searchword, ResultListParameters resultParams) throws InvalidQueryParamsException { return null; }
 	
-	public List<Submission> getListWithSearchword(String searchword, ResultListParameters resultParams) throws InvalidQueryParamsException { return null; }
+	public static List<Submission> getList(ResultListParameters resultParams) throws InvalidQueryParamsException { return null; }
 	
-	public List<Submission> getList(ResultListParameters resultParams) throws InvalidQueryParamsException { return null; }
+	public static Submission getSubmission(int id) throws IllegalArgumentException { return null; }
 	
-	public Submission getSubmission(int id) throws IllegalArgumentException { return null; }
+	public static void addSubmission(Submission submission) throws InvalidFieldsException { }
 	
-	public void addSubmission(Submission submission) throws InvalidFieldsException { }
-	
-	public void changeSubmission(int submissionId, Submission edited) { }
+	public static void changeSubmission(int submissionId, Submission edited) { }
 
 }

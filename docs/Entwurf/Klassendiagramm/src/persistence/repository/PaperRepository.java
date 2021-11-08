@@ -10,13 +10,11 @@ import persistence.util.ConnectionPool;
 
 public class PaperRepository {
 	
-	private ConnectionPool connectionPool;
-	
-	public List<Paper> getList(ResultListParameters resultParams) throws InvalidQueryParamsException { return null; }
+	public static List<Paper> getList(ResultListParameters resultParams) throws InvalidQueryParamsException { return null; }
 
-	public byte[] getPDFForPaper(int submissionId, int version) throws IllegalArgumentException { return null; }
+	public static byte[] getPDFForPaper(int submissionId, int version) throws IllegalArgumentException { return null; }
 	
-	public void addPaper(Paper paper, byte[] pdf) throws InvalidFieldsException {
+	public static void addPaper(Paper paper, byte[] pdf) throws InvalidFieldsException {
 		
 	}
 	

@@ -10,10 +10,8 @@ import persistence.util.ConnectionPool;
 
 public class ReviewRepository {
 	
-	private ConnectionPool connectionPool;
+	public static List<Review> getReviewsForSubmission(int submissionId, ResultListParameters resultParams) throws InvalidQueryParamsException { return null; }
 	
-	public List<Review> getReviewsForSubmission(int submissionId, ResultListParameters resultParams) throws InvalidQueryParamsException { return null; }
-	
-	public void addReview(Review review) throws InvalidFieldsException { }
+	public static void addReview(Review review) throws InvalidFieldsException { }
 
 }

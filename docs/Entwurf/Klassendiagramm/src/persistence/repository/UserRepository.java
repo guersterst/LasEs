@@ -10,16 +10,14 @@ import persistence.util.ConnectionPool;
 
 public class UserRepository {
 	
-	private ConnectionPool connectionPool;
+	public static User getUser(String emailAddress) { return null; }
 	
-	public User getUser(String emailAddress) { return null; }
+	public static boolean emailExists(String emailAddress) { return false; }
 	
-	public boolean emailExists(String emailAddress) { return false; }
+	public static List<User> getListWithSearchword(String searchWord, ResultListParameters resultParams) throws InvalidQueryParamsException { return null; }
 	
-	public List<User> getListWithSearchword(String searchWord, ResultListParameters resultParams) throws InvalidQueryParamsException { return null; }
+	public static void editUser(String emailAddress, User newUser) throws InvalidFieldsException { }
 	
-	public void editUser(String emailAddress, User newUser) throws InvalidFieldsException { }
-	
-	public void addUser(User user) throws InvalidFieldsException { }
+	public static void addUser(User user) throws InvalidFieldsException { }
 
 }

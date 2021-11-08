@@ -6,10 +6,8 @@ import persistence.util.ConnectionPool;
 
 public class SystemSettingsRepository {
 	
-	private ConnectionPool connectionPool;
+	public static void updateSettings(SystemSettings systemSettings) { }
 	
-	public void updateSettings(SystemSettings systemSettings) { }
-	
-	public SystemSettings getSettings() { return null; }
+	public static SystemSettings getSettings() { return null; }
 
 }
