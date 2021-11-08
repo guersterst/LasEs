@@ -14,7 +14,7 @@ Im Entity-Relationship-Diagramm in Abbildung \ref{er:diagramm} sieht man die ges
 In Abbildung \ref{er:diagramm} werden die einzelnen Entities nochmal im Detail beschrieben. Mit der Notation \texttt{/DXXX/} wird sich auf die im Pflichtenheft aufgeführten Produktdaten bezogen.
 
 \begin{description}
-	\XXitem{User}{er:user} Ein Nutzer kann verschiedene Rollen wahrnehmen, diese werden durch die \emph{is-A}-Spezifizierung modelliert. Die Attribute entsprechen den in \texttt{\textbf{/D010/}} und \texttt{\textbf{/DW015/}} angegebenen Daten. Hierbei gilt zusätzlich die Einschränkung, dass E-Mail-Adressen im System einzigartig sein müssen. \\Zusätzlich werden auch noch der Passwort-Hash und das zugehörige Salt zum generieren des Hashes gespeichert.
+	\XXitem{User}{er:user} Ein Nutzer kann verschiedene Rollen wahrnehmen, diese werden durch die \emph{is-A}-Spezifizierung modelliert. Die Attribute entsprechen den in \texttt{\textbf{/D010/}} und \texttt{\textbf{/DW015/}} angegebenen Daten.
 
 	\XXitem{Verification}{er:verification} Da jede E-Mailadressenänderung eine Verifizierung benötigt, werden hier die Daten, zu welchen geändert wird, gespeichert. Das \emph{validation-random} ist dabei der String, welcher im Verifizierungslink per E-Mail versendet wird.
 
@@ -22,7 +22,7 @@ In Abbildung \ref{er:diagramm} werden die einzelnen Entities nochmal im Detail b
 
 	\XXitem{Submission}{er:submission} Eine Einreichung speichert alle zu einem Einreichungsprozess gehörenden Daten, inklusive der Metadaten, wie den Einreicher und Ko-Autor, also alle in \texttt{\textbf{/D025/}} und \texttt{\textbf{/DW021/}} angegebenen Daten.
 
-	\XXitem{Review}{er:review} Ein Gutachten ist immer genau einem Paper zugeordnet, welches wiederum genau einer Einreichung zugeordnet ist. Es speichert die PDF Datei ab und alle zugehörigen Metadaten.
+	\XXitem{Review}{er:review} Ein Gutachten ist immer genau einem Paper zugeordnet, welches wiederum genau einer Einreichung zugeordnet ist. Es speichert die PDF als binäres Attribut in der Datenbank ab und alle zugehörigen Metadaten.
 	Damit spiegelt es \texttt{\textbf{/D040/}} wieder.
 
 	\XXitem{Scientific Forum}{er:forum} Ein wissenschaftliches Forum besitzt die Referenz auf alle zu diesem Journal/Konferenz eingereichten Papers. Zusätzlich sind allgemeine Metadaten abgespeichert. Damit erfüllt es \texttt{\textbf{/D030/}}
