@@ -18,4 +18,6 @@ public class ScientificForum {
 	
 	private LocalDateTime deadline;
 
+	private String name;
+
 }

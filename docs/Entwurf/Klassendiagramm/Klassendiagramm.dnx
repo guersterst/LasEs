@@ -394,6 +394,18 @@
       <children xmi:type="notation:BasicCompartment" xmi:id="_c42p1TyvEeyGfP7U6M8r8g" type="ATTRIBUTE_ITEM" collapsed="true">
         <element xmi:type="uml:Property" href="mmi:///#jfield%5Ename=url%5Bjsrctype%5Ename=ScientificForum%5Bjcu%5Ename=ScientificForum.java%5Bjpack%5Ename=dtos%5Bjsrcroot%5Esrcfolder=src%5Bproject%5Eid=Klassendiagramm%5D%5D%5D%5D%5D$uml.Property"/>
       </children>
+      <children xmi:type="notation:BasicCompartment" xmi:id="_a21oEEB7EeysC6_Iyw7dfQ" type="ATTRIBUTE_ITEM" collapsed="true">
+        <element xmi:type="uml:Property" href="mmi:///#jfield%5Ename=topics%5Bjsrctype%5Ename=ScientificForum%5Bjcu%5Ename=ScientificForum.java%5Bjpack%5Ename=dtos%5Bjsrcroot%5Esrcfolder=src%5Bproject%5Eid=Klassendiagramm%5D%5D%5D%5D%5D$uml.Property"/>
+      </children>
+      <children xmi:type="notation:BasicCompartment" xmi:id="_a22PIUB7EeysC6_Iyw7dfQ" type="ATTRIBUTE_ITEM" collapsed="true">
+        <element xmi:type="uml:Property" href="mmi:///#jfield%5Ename=editors%5Bjsrctype%5Ename=ScientificForum%5Bjcu%5Ename=ScientificForum.java%5Bjpack%5Ename=dtos%5Bjsrcroot%5Esrcfolder=src%5Bproject%5Eid=Klassendiagramm%5D%5D%5D%5D%5D$uml.Property"/>
+      </children>
+      <children xmi:type="notation:BasicCompartment" xmi:id="_a22PI0B7EeysC6_Iyw7dfQ" type="ATTRIBUTE_ITEM" collapsed="true">
+        <element xmi:type="uml:Property" href="mmi:///#jfield%5Ename=deadline%5Bjsrctype%5Ename=ScientificForum%5Bjcu%5Ename=ScientificForum.java%5Bjpack%5Ename=dtos%5Bjsrcroot%5Esrcfolder=src%5Bproject%5Eid=Klassendiagramm%5D%5D%5D%5D%5D$uml.Property"/>
+      </children>
+      <children xmi:type="notation:BasicCompartment" xmi:id="_ZVvW0EB9EeysC6_Iyw7dfQ" type="ATTRIBUTE_ITEM" collapsed="true">
+        <element xmi:type="uml:Property" href="mmi:///#jfield%5Ename=name%5Bjsrctype%5Ename=ScientificForum%5Bjcu%5Ename=ScientificForum.java%5Bjpack%5Ename=dtos%5Bjsrcroot%5Esrcfolder=src%5Bproject%5Eid=Klassendiagramm%5D%5D%5D%5D%5D$uml.Property"/>
+      </children>
     </children>
     <children xmi:type="notation:ListCompartment" xmi:id="_dY34kzytEeyGfP7U6M8r8g" type="ANNOTATED_OPERATION_COMPARTMENT"/>
     <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=ScientificForum%5Bjcu%5Ename=ScientificForum.java%5Bjpack%5Ename=dtos%5Bjsrcroot%5Esrcfolder=src%5Bproject%5Eid=Klassendiagramm%5D%5D%5D%5D$uml.Class"/>
