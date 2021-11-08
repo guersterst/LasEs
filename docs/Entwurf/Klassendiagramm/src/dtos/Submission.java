@@ -15,18 +15,16 @@ public class Submission {
 	
 	private LocalDateTime submissionTime;
 	
-	private List<Paper> papers;
+	private List<Integer> papers;
 	
-	private int submitterId;
+	private int submitter;
 	
-	private ScientificForum submittedIntoForum;
+	private int submittedIntoForum;
 	
-	private User editor;
+	private int editor;
 	
-	private User submitter;
+	private List<Integer> coAuthors;
 	
-	private List<User> coAuthors;
-	
-	private List<Integer> reviewerIds;
+	private List<Integer> reviewers;
 
 }

@@ -12,9 +12,9 @@ public class ScientificForum {
 	
 	private String url;
 	
-	private List<ScienceField> topics;
+	private List<Integer> topics;
 	
-	private List<User> editors;
+	private List<Integer> editors;
 	
 	private LocalDateTime deadline;
 

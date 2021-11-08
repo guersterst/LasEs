@@ -14,10 +14,10 @@ public class Review {
 	
 	private String comment;
 	
-	private int paperId;
+	private int paper;
 	
-	private int submissionId;
+	private int submission;
 	
-	private int reviewerId;
+	private int reviewer;
 
 }

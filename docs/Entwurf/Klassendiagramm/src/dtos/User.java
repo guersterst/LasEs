@@ -4,6 +4,8 @@ import java.util.List;
 
 public class User {
 	
+	private int id;
+	
 	private List<Privilege> priveleges;
 	
 	private String title;
@@ -18,11 +20,9 @@ public class User {
 	
 	private LocalDateTime emailValidationStarted;
 	
-	private int id;
-	
 	private LocalDate dateOfBirth;
 	
-	private List<ScienceField> interests;
+	private List<Integer> interests;
 	
 	private String employer;
 
