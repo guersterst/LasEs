@@ -1,7 +1,8 @@
 \localauthor{Johannes Garstenauer}
 
 \subsection{Schichten}\label{arch:schichten}
-Diese Anwendung folgt einer Schichtenarchitektur.
+Diese Anwendung folgt einer Schichtenarchitektur von drei Schichten. Dies bietet ein gutes Verhältnis zwischen dem Mehraufwand,
+welcher mit der Verwendung von mehr Schichten verbunden ist, und der dadurch gewonnen Modularität und Austauschbarkeit.
 \begin{itemize}
     \item Die \emph{view}-Schicht enthält die Komponenten zur grafischen Darstellung.
     \item Die \emph{control}-Schicht enthält die Komponenten zur Steuerung der grafischen Darstellung und Reaktion auf
@@ -75,7 +76,7 @@ enthält alle Klassen, die dem direkten Zugriff auf die Datenbank dienen.
 \newline\newline
 \textbf{\emph{de.lases.persistence.util}}
 enthält die Hilfsklassen zur Datenbankverwaltung, wie einen
-Connection-Pool.
+Connection\-Pool.
 \newline\newline
 \textbf{\emph{de.lases.persistence.exception}}
 enthält die Exceptionklassen, welche ein Fehlverhalten im Umgang mit der
@@ -90,7 +91,7 @@ enthält Hilfsklassen für schichtenübergreifende Loggingfunktionen.
 \newline\newline
 \textbf{\emph{de.lases.global.transport}}\label{arch:transport}
 enthält alle POJO-Klassen, die Daten in der Anwendung repräsentieren und zu deren
-Transport verwendet werden.
+Transport verwendet werden. Sie setzen keine Anwendungslogik um.
 
 %todo i18n resource bundles: info (tooltips), names (labels), messages (facesmsg)
 
@@ -101,22 +102,31 @@ immer geloggt. Daraufhin wird auf verschiedene Weisen verfahren.
 \subsubsection{Geprüfte Ausnahmen}
 Geprüfte Ausnahmen repräsentieren Ausnahmesituationen, mit
 denen gerechnet werden muss und auf die reagiert wird.
-Treten solche auf, dann werden sie mit einer
-\hyperref[arch:busex]{Ausnahmeklasse} und Fehlermeldung
-an den Aufrufer weiterpropagiert.
-In \hyperref[arch:service]{Service-Klassen} werden auftretende Ausnahmen weiter zu den
-\hyperref[arch:backing]{Backing-Beans} propagiert, wo FacesMessages %todo link
-generiert werden.
-Diese werden dann von den zugehörigen Facelets %todo link
+Treten solche in der \emph{\hyperref[arch:persistence]{Persistence-Schicht}}
+auf, dann werden sie in eine semantisch passende \hyperref[arch:busex]{Ausnahmeklasse}
+mit Fehlermeldung gekapselt und an den Aufrufer weiterpropagiert.
+Wenn in der \emph{\hyperref[arch:bus]{Business-}} oder
+\emph{\hyperref[arch:control]{Kontrollschicht}} solch eine
+\hyperref[arch:busex]{Ausnahmeklasse} ankommt oder entsteht, so
+wird sie in eine \emph{ExceptionQueue} %todo link
+gelegt. Diese wird von einem \emph{ExceptionObserver} beobachtet, welcher eine passende
+\emph{FacesMessage} daraus generiert.
+Diese werden dann von den zugehörigen \emph{Facelets} %todo link
 gerendert.
+Der Vorteil dieses Ansatzes ist, dass die Logik
+zum Abfangen der Ausnahmen und zur Generierung der
+\emph{FacesMessages} lokal an einer Stelle im System stattfindet.
 
 \subsubsection{Ungeprüfte Ausnahmen}
 Bei ungeprüften Ausnahmen handelt es sich um fatale Fehler, wie sie beispielsweise durch
-Programmierfehler entstehen können. Diesen werden vom anwendungsweiten
+Programmierfehler entstehen können. Teilweise werden geprüften Ausnahmen
+in ungeprüfte umgewandelt, wenn das System und der Nutzer bei deren Behandlung
+machtlos sind (z.B. Keine Datebank Verbindung vorhanden). %todo link real exception
+Ungeprüfte Ausnahmen gehören generell jeder Schicht an, das sie alle Schichten unbemerkt durchlaufen,
+bis sie vom anwendungsweiten
 ExceptionHandler %todo link
-aufgegriffen. Der User wird daraufhin auf die Fehlerseite %todo link
+aufgegriffen werden. Der Nutzer wird daraufhin auf die Fehlerseite %todo link
 weitergeleitet.
-%todo stacktrace wirklich drinnen lassen oder offensichtliche Kopie?
 
 \subsection{Frameworks}\label{arch:frameworks}
 
@@ -129,7 +139,7 @@ Es wird die Referenzimplementierung \emph{Mojarra} verwendet.
 Die \emph{Context and Dependency Injection} ist eine Technologie welche die
 Abhängigkeitsverwaltung zwischen Objekten vereinfacht. Im Sinne der
 \emph{Inversion of Control} werden dem Entwickler Werkzeuge an die Hand gelegt, mithilfe derer
-er Objektrefernzierung tätigen kann, ohne diese Objekte vorher explizit zu erstellen.
+er Objektreferenzierung tätigen kann, ohne diese Objekte vorher explizit zu erstellen.
 Diese referenzierten Objekte können in andere Objekte zur Laufzeit \emph{injiziert} werden.
 Somit können Objekte in dieser Anwendung ohne Initialisierung oder umständlichen Transport der Referenzierung
 verwendet werden.
@@ -165,8 +175,10 @@ und Erweiterbarkeit der Anwendung.
 Eine Klasse, welche nach dem Singleton-Entwurfsmuster implementiert wurde zeichnet
 sich dadurch aus, dass es nur genau eine Instanziierung von dieser Klasse geben
 kann und darf. Hierdurch werden vorrangig Ressourcen gespart, außerdem wird die
-Verwaltung der im Objekt gekapselten Funktionalität erleichtert.
-Ein Beispiel hierfür ist der Connection Pool, damit sichergestellt wird, dass
+Verwaltung der im Objekt gekapselten Funktionalität erleichtert. Dies ermöglicht ebenfalls einen
+leichten globalen oder paketweiten Zugriff auf jene Funktionalitäten.
+Ein Beispiel hierfür ist der Connection Pool. Er verwendet das \emph{Singleton}-Pattern
+damit sichergestellt wird, dass
 eine genau festgelegte Anzahl an Datenbankverbindungen existiert und nicht mehr.
 
 \subsubsection{Data Transfer Object}
@@ -177,37 +189,33 @@ Diese sind POJOs, welche private Felder zur Repräsentation der Daten mit Getter
 Settermethoden haben.
 Der Vorteil der Verwendung dieses Entwurfsmusters liegt darin, dass eine
 einheitliche und übersichtliche Schnittstelle für Datenrepräsentation und Transport
-in der Anwendung besteht. Die zugehörigen Klassen lagern im
+in der Anwendung besteht.
+Der interne Transport von Daten wird in diesem System fast ausschließlich mithilfe von \emph{DTOs}
+umgesetzt. Teilweise werden die \emph{DTOs} jedoch in \emph{Java Collections} gesammelt.
+Die zugehörigen Klassen lagern im
 \hyperref[arch:transport]{de.lases.global.transport} Paket.
 
 \subsubsection{Repository}
 Beim \emph{Repository} Pattern wird für jedes Business-Objekt oder jede Entität
 eine Klasse definiert welche den Datenbankzugriff auf die zugehörigen Daten steuert.
-Für diesen Zugriff werden oft die \textit{CRUD}-Methoden, das heißt
-\begin{itemize}
-    \item \textit{CREATE} zur Erstellung,
-    \item \textit{READ} zum Erhalten,
-    \item \textit{UPDATE} zum Updaten,
-    \item und \textit{DELETE} zum Löschen
-\end{itemize}
-eines oder mehrerer Datenbankeinträge der zugehörigen Entität, angeboten.
-Weiterhin findet das Mapping auf die \hyperref[arch:transport]{DTO-Objekte} dieser Anwendung statt.
+Weiterhin findet hier das Mapping auf die \hyperref[arch:transport]{DTO-Objekte} dieser Anwendung statt.
 In dieser Anwendung finden sich die \emph{Repository-Pattern} Klassen im Paket
 \hyperref[arch:repository]{de.lases.persistence.repository}. Durch die mit
 der Verwendung dieses Patterns gewonnenen Übersichtlichkeit erleichtern wir uns die
-Implementation und ermöglichen leichte Erweiterbarkeit der Datenschemas.
+Implementation und ermöglichen eine leichte Erweiterbarkeit der Datenschemas.
 
 \subsubsection{Object Pool}
 Das \emph{Object Pool} Erzeugungsmuster wird dazu verwendet, Objekte nach initialer Erzeugung
 vorzubehalten, da dies sinnvoller ist als sie bei jeder Verwendung neu zu erzeugen.
 Somit werden Ressourcen gespart. In dieser Anwendung findet dieses Entwurfsmuster
-beim Connection Pool %todo link
+beim \emph{ConnectionPool} %todo link
 Verwendung und bietet den zusätzlichen Vorteil, dass eine feste Maximalanzahl an
 Datenbankverbindungen festgelegt werden kann.
 
 \subsubsection{Observer}
 Das \emph{Observer} Verhaltensmuster beschreibt Methoden, welche auf
 Änderungen im Zustand eines Systems warten und daraufhin handeln.
-In unserem System findet das beispielsweise beim LifeTimeListener %todo link
-zur Reaktion auf das Herunterfahren oder Starten des Systems Verwendung.
+In unserem System findet das beispielsweise beim \emph{LifeTimeListener} %todo link
+zur Reaktion auf das Herunterfahren oder Starten des Systems und bei \emph{ExceptionOberserver} %todo link
+Verwendung.
 %todo propagation der messages aus service in backingbeans
