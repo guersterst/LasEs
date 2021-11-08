@@ -9,11 +9,11 @@ import persistence.exception.InvalidQueryParamsException;
 
 public class PaperRepository {
 	
-	public static List<Paper> getList(ResultListParameters resultParams) throws InvalidQueryParamsException { return null; }
+	public static List<Paper> getList(ResultListParameters resultParams, Transaction transaction) throws InvalidQueryParamsException { return null; }
 
-	public static byte[] getPDFForPaper(int submissionId, int version) throws IllegalArgumentException { return null; }
+	public static byte[] getPDFForPaper(int submissionId, int version, Transaction transaction) throws IllegalArgumentException { return null; }
 	
-	public static void addPaper(Paper paper, byte[] pdf) throws InvalidFieldsException {
+	public static void addPaper(Paper paper, byte[] pdf, Transaction transaction) throws InvalidFieldsException {
 		
 	}
 	

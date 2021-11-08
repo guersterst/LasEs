@@ -7,8 +7,6 @@ import persistence.repository.ScienceFieldRepository;
 
 public class ScienceFieldService {
 	
-	private ScienceFieldRepository scienceFieldRepository;
-	
 	public void add(ScienceField field) { }
 	
 	public void remove(ScienceField field) { }

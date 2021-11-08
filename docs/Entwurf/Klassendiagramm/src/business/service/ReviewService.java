@@ -10,8 +10,6 @@ import persistence.repository.ReviewRepository;
 
 public class ReviewService {
 	
-	private ReviewRepository reviewRepository;
-	
 	private EmailUtil emailUtil;
 	
 	public void addReview(Submission submission, Review review) { }

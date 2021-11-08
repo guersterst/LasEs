@@ -11,11 +11,11 @@ import persistence.exception.InvalidQueryParamsException;
 
 public class ScientificForumRepository {
 	
-	public static List<ScientificForum> getList(ResultListParameters resultParams) throws InvalidQueryParamsException { return null; }
+	public static List<ScientificForum> getList(ResultListParameters resultParams, Transaction transaction) throws InvalidQueryParamsException { return null; }
 	
-	public static List<ScientificForum> getListWithSearchword(String searchWord, ResultListParameters resultParams) throws InvalidQueryParamsException { return null; }
+	public static List<ScientificForum> getListWithSearchword(String searchWord, ResultListParameters resultParams, Transaction transaction) throws InvalidQueryParamsException { return null; }
 	
-	public static void addScientificForum(ScientificForum newForum) throws InvalidFieldsException { }
+	public static void addScientificForum(ScientificForum newForum, Transaction transaction) throws InvalidFieldsException { }
 	
 
 }
