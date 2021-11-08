@@ -145,8 +145,13 @@ Somit können Objekte in dieser Anwendung ohne Initialisierung oder umständlich
 verwendet werden.
 Dies ermöglicht eine losere Kupplung zwischen Klassen und somit Erweiterbarkeit
 und Austauschbarkeit.
-Die \emph{CDI} verwaltet in dieser Anwendung alle Objekte der \hyperref[arch:backing]{Backing-Beans}
-und \hyperref[arch:service]{Services}.
+Die \emph{CDI} verwaltet in dieser Anwendung alle Objekte der \emph{\hyperref[arch:backing]{Backing-Beans}}
+als \emph{@RequestScoped}
+und alle \emph{\hyperref[arch:service]{Services}} als \emph{@Dependent}.
+Weiterhin sind einige Klassen \emph{@SessionScoped} wie beispielsweise
+die \emph{ExceptionQueue, ExceptionObserver und SessionInformation}.
+Letzlich gibt es einige Klassen, welche
+\emph{@ApplicationScoped} wie der \emph{ConnectionPool} %todo link all
 Es wird die Referenzimplementierung \emph{Weld} von \emph{JBoss} verwendet.
 
 \subsection{Patterns}\label{arch:patterns}
