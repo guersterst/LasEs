@@ -7,8 +7,6 @@ import persistence.repository.UserRepository;
 
 public class RegistrationService {
 	
-	private UserRepository userRepository;
-	
 	private Hashing hashing;
 	
 	private EmailUtil emailUtil;

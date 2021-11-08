@@ -14,8 +14,6 @@ public class SubmissionService {
 	
 	private EmailUtil emailUtil;
 	
-	private SubmissionRepository submissionRepository;
-	
 	public Submission getSubmission(int submissionId) { return null; }
 	
 	public void removeSubmission(Submission submission) { }

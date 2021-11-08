@@ -17,8 +17,6 @@ public class ProfileService {
 	
 	private AvatarUtil avatarUtil;
 	
-	private UserRepository userRepository;
-	
 	public void editUser(User newUser) { } 
 	
 	public void deleteUser(String email) { }

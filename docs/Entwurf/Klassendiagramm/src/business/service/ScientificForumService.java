@@ -11,8 +11,6 @@ import persistence.repository.ScientificForumRepository;
 
 public class ScientificForumService {
 	
-	private ScientificForumRepository scientificForumRepository;
-	
 	private EmailUtil emailUtil;
 	
 	public void addSubmission(Submission submission) { }
