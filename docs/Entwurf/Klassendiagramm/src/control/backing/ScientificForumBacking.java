@@ -2,6 +2,8 @@ package control.backing;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import business.internal.SessionInformation;
 import business.service.ScienceFieldService;
 import business.service.ScientificForumService;
@@ -25,6 +27,9 @@ public class ScientificForumBacking {
 	private ScienceFieldService scienceFieldService;
 
     private List<Submission> submissions;
+    
+    @PostConstruct
+	public void init() { }
 	
 	public ScientificForum getScientificForum() { return null; }
 

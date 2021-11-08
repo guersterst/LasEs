@@ -1,5 +1,7 @@
 package control.backing;
 
+import javax.annotation.PostConstruct;
+
 import business.internal.SessionInformation;
 import business.service.RegistrationService;
 
@@ -18,6 +20,9 @@ public class RegistrationBacking {
 	private String emailInput;
 
 	private SessionInformation sessionInformation;
+	
+	@PostConstruct
+	public void init() { }
 	
 	public String register() { return null; }
 

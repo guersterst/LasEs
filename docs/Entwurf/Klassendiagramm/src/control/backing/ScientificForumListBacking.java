@@ -2,6 +2,7 @@ package control.backing;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 
 import business.internal.SessionInformation;
@@ -22,6 +23,9 @@ public class ScientificForumListBacking {
 	private LocalDate dateDeadlineAfterFilter;
 
 	private String searchString;
+	
+	@PostConstruct
+	public void init() { }
 
 	public void applyFilters(){}
 

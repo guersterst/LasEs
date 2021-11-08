@@ -1,5 +1,7 @@
 package control.backing;
 
+import javax.annotation.PostConstruct;
+
 import business.service.ScienceFieldService;
 import business.service.ScientificForumService;
 import dtos.ScientificForum;
@@ -10,6 +12,10 @@ public class NewScientificForumBacking {
 	private ScientificForumService scientificForumService;
 
 	private ScientificForum newScientificForum;
+	
+	
+	@PostConstruct
+	public void init() { }
 
 	public void addEditor() { }
 

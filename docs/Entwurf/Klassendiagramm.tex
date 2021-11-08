@@ -68,7 +68,7 @@ Folgende Informationen wurden hier aus Gründen der Übersichtlichkeit aus dem D
 	\classentry{SubmissionService}{Provides methods for the delivery, creation, removal and manipulation of submissions.}
 }
 
-\subsubsection{de.lases.business.utils}
+\subsubsection{de.lases.business.util}
 
 \begin{figure}[H]
 	\centering
@@ -78,7 +78,6 @@ Folgende Informationen wurden hier aus Gründen der Übersichtlichkeit aus dem D
 \classtable{
 	\classentry{AvatarUtil}{Provides support in the generation of a thumbnail from an image.}
 	\classentry{Hashing}{Provides support in the hashing of passwords.}
-	\classentry{EmailUtil}{Provides support in the sending of emails and creation of mailto links.}
 }
 
 \subsubsection{de.lases.global.util}
@@ -105,12 +104,23 @@ Folgende Informationen wurden hier aus Gründen der Übersichtlichkeit aus dem D
 \end{figure}
 
 \classtable{
-	\classentry{TrespassListener}{Manages user access to resources, most importantly webpages.}
-	\classentry{SessionInformation}{Wraps data saved in the session.}
-	\classentry{LifeTimeListener}{Takes care of system start and shutdown operations}
 	\classentry{PeriodicWorker}{Takes care of periodical database cleanup jobs.}
 	\classentry{SystemSettings}{Loads and updates the systems' configuration.}
 	\classentry{SystemConfiguration}{Wraps data used for the system configuration.}
+	\classentry{arg1}{arg2}
+}
+
+\subsubsection{de.lases.control.internal}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=3cm]{graphics/business_internal}
+\end{figure}
+
+\classtable{
+	\classentry{TrespassListener}{Manages user access to resources, most importantly webpages.}
+	\classentry{SessionInformation}{Wraps data saved in the session.}
+	\classentry{LifeTimeListener}{Takes care of system start and shutdown operations}
 }
 
 \subsubsection{de.lasses.control.validation}
@@ -187,6 +197,8 @@ Folgende Informationen wurden hier aus Gründen der Übersichtlichkeit aus dem D
     \classentry{ConnectionPool}{Provides and manages connections to the database.}
 
     \classentry{DButils}{Provides functions for general database services.}
+    
+    \classentry{EmailUtil}{Provides support in the sending of emails and creation of mailto links.}
 }
 
 \subsubsection{de.lases.persistence.exception}

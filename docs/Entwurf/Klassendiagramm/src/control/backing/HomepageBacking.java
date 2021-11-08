@@ -3,6 +3,8 @@ package control.backing;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import business.internal.SessionInformation;
 import business.service.SubmissionLieferando;
 import dtos.Review;
@@ -37,6 +39,9 @@ public class HomepageBacking {
 	private List<Submission> submissionList;
 	
 	private List<Review> reviewList;
+	
+	@PostConstruct
+	public void init() { }
 	
 	public void showOwnSubmissionsTab() { }
 	

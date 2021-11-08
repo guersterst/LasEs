@@ -2,6 +2,8 @@ package control.backing;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import business.internal.SessionInformation;
 import business.service.LoginService;
 import dtos.ScientificForum;
@@ -28,6 +30,9 @@ public class NavigationBacking {
 	
 	public List<Submission> getSubmissionSearchResults() { return null; }
 
+	
+	@PostConstruct
+	public void init() { }
 	
 	public String logout() { return null; }
 	

@@ -1,5 +1,7 @@
 package control.backing;
 
+import javax.annotation.PostConstruct;
+
 import business.internal.SessionInformation;
 import business.service.ProfileService;
 import business.service.ScientificForumService;
@@ -12,5 +14,8 @@ public class ResultListBacking {
 	private ProfileService profileService;
 
 	private SessionInformation sessionInformation;
+	
+	@PostConstruct
+	public void init() { }
 
 }

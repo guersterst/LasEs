@@ -2,6 +2,8 @@ package control.backing;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import business.internal.SessionInformation;
 import business.service.SubmissionService;
 import dtos.User;
@@ -34,6 +36,9 @@ public class NewSubmissionBacking {
 	private String coAuthorLastNameInput;
 	
 	private String coAuthorEmailInput;
+	
+	@PostConstruct
+	public void init() { }
 	
 	// Action methods.
 	

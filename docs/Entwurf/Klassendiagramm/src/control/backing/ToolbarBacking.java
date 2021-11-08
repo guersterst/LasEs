@@ -2,6 +2,8 @@ package control.backing;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import business.internal.SessionInformation;
 import dtos.User;
 
@@ -20,6 +22,8 @@ public class ToolbarBacking {
 
 	private SessionInformation sessionInformation;
 	
+	@PostConstruct
+	public void init() { }
 	
 	public void addReviewer() { }
 	

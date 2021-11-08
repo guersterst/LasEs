@@ -10,4 +10,8 @@ class ConnectionPool {
 	
 	void releaseConnection(Connection connection) { }
 
+	public static void init() {
+	
+	}
+
 }

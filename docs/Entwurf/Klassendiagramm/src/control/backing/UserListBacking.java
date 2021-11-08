@@ -2,6 +2,8 @@ package control.backing;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import business.internal.SessionInformation;
 import business.service.ProfileService;
 import dtos.Privilege;
@@ -16,7 +18,10 @@ public class UserListBacking {
 	private Privilege privilege;
 
 	private String searchText;
-
+	
+	
+	@PostConstruct
+	public void init() { }
 
 	public String applyFilter(){ return null; }
 

@@ -3,6 +3,8 @@ package control.backing;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import business.internal.SessionInformation;
 import business.service.ReviewService;
 import business.service.SubmissionService;
@@ -45,6 +47,9 @@ public class SubmissionBacking {
 	private List<Paper> papers; 
 	
 	private List<Review> reviews;
+	
+	@PostConstruct
+	public void init() { }
 	
 	public void sortDateAsc() { }
 	

@@ -1,5 +1,7 @@
 package control.backing;
 
+import javax.annotation.PostConstruct;
+
 import business.internal.SessionInformation;
 import business.service.LoginService;
 
@@ -15,6 +17,9 @@ public class WelcomeBacking {
 	private String passwordInput;
 
 	private SessionInformation sessionInformation;
+	
+	@PostConstruct
+	public void init() { }
 	
 	public String login() { }
 

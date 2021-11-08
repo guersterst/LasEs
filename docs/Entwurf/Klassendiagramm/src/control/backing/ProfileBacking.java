@@ -1,5 +1,7 @@
 package control.backing;
 
+import javax.annotation.PostConstruct;
+
 import com.sun.xml.internal.ws.wsdl.writer.document.Part;
 
 import business.internal.SessionInformation;
@@ -19,6 +21,9 @@ public class ProfileBacking {
 	private User newUser;
 	
 	private Part uploadedAvatar;
+	
+	@PostConstruct
+	public void init() { }
 	
 	public void submitChanges() { }
 	

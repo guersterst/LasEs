@@ -1,5 +1,6 @@
 package control.backing;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 
 import business.service.RegistrationService;
@@ -21,6 +22,9 @@ public class NewUserBacking {
 
 	private boolean isAdmin;
 
+	
+	@PostConstruct
+	public void init() { }
 
 	public String abort(){ return null; }
 
