@@ -6,7 +6,6 @@ import dtos.Review;
 import global.util.ResultListParameters;
 import persistence.exception.InvalidFieldsException;
 import persistence.exception.InvalidQueryParamsException;
-import persistence.repository.connection_pool.ConnectionPool;
 
 public class ReviewRepository {
 	

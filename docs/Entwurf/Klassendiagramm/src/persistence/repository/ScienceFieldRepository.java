@@ -3,7 +3,6 @@ package persistence.repository;
 import java.util.List;
 
 import dtos.ScienceField;
-import persistence.repository.connection_pool.ConnectionPool;
 
 public class ScienceFieldRepository {
 	
