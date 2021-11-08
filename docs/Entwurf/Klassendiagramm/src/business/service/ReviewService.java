@@ -9,6 +9,8 @@ import dtos.User;
 import persistence.repository.ReviewRepository;
 
 public class ReviewService {
+
+	private ExceptionQueue exceptionQueue;
 	
 	private EmailUtil emailUtil;
 	

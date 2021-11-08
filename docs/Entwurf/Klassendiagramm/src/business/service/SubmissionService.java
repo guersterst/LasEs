@@ -11,7 +11,9 @@ import dtos.User;
 import persistence.repository.SubmissionRepository;
 
 public class SubmissionService {
-	
+
+	private ExceptionQueue exceptionQueue;
+
 	private EmailUtil emailUtil;
 	
 	public Submission getSubmission(int submissionId) { return null; }
