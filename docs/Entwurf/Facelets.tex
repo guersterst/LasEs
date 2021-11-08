@@ -550,8 +550,7 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
     \localauthor{Johann Schicho} \nopagebreak
 
 \begin{samepage}
-    \textbf{userList.xhtml} \label{flt:userList} Editoren und Administratoren erhalten hier einen Überblick über alle Nutzer. Die Seiten sind paginiert.
-    \nopagebreak
+    \textbf{userList.xhtml} \label{flt:userList} Editoren und Administratoren erhalten hier einen Überblick über alle Nutzer. Die Seiten sind paginiert.\nopagebreak
 
     \ftable{
         \fentry{roleSelect}{selectOneMenu}{Filtern der Rolle des Nutzers}{E,A}
@@ -572,23 +571,26 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
         \fentry{pagination}{listPagination}{Die Tabelle enthält eine Paginierung.}{E,A}
     }
+	\todo{Hier das Pagination richtig einfügen}
 \end{samepage}
 
 \begin{samepage}
 
-    Für die Benutzerliste sind die folgenden Elemente vorgesehen, wobei diese in die Bereiche: Nutzerrolle, Name, E-Mail-Adresse, Arbeitgeber und Fachgebiete aufgegliedert ist.
+    Für die Benutzerliste sind die folgenden Spalten vorgesehen, wobei diese in die Bereiche: Nutzerrolle, Name, E-Mail-Adresse, Arbeitgeber und Fachgebiete aufgegliedert ist.
 
     \ftable{
         \fentry{role}{outputText}{Rolle des Nutzers}{E,A}
 
-        \fentry{name}{link}{Name des Nutzers.}{E,A}
+        \fentry{name}{link}{Name des Nutzers. Link mit URL-Parameter zur Weiterleitung auf die Profilseite des Nutzers.}{E,A}
 
-        \fentry{email}{link}{E-Mail-Adresse des Nutzers.}{E,A}
+        \fentry{email}{link}{Mailto-Link mit E-Mail-Adresse des Nutzers.}{E,A}
 
         \fentry{employee}{outputText}{Arbeitgeber des Nutzers.}{E,A}
 
         \fentry{scienceField}{outputText}{Fachgebiete des Nutzers.}{E,A}
     }
+
+	\todo{Hier richtige Definition der pagination inhalte}
 \end{samepage}
 
 
@@ -613,27 +615,15 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
     \nopagebreak
 
     \ftable{
-        \fentry{passwordLabel}{outputLabel}{Label für Passwort.}{A}
-
         \fentry{password}{inputSecret}{Angabe des Passworts.}{A}
-
-        \fentry{firstLabel}{outputLabel}{Label für Vorname.}{A}
 
         \fentry{firstName}{inputText}{Angabe des Vornamen.}{A}
 
-        \fentry{nameLabel}{outputLabel}{Label für Nachname}{A}
-
         \fentry{name}{inputText}{Angabe des Nachnamen.}{A}
-
-        \fentry{titleLabel}{outputLabel}{Label für Titel}{A}
 
         \fentry{titel}{inputText}{Angabe eines Titels.}{A}
 
-        \fentry{emailLabel}{outputLabel}{Label für E-Mail.}{A}
-
         \fentry{email}{inputText}{Angabe einer E-Mail-Adresse.}{A}
-
-        \fentry{isAdminLabel}{outputLabel}{Label für Adminrolle.}{A}
 
         \fentry{isAdmin}{checkbox}{Zuordnung einer Administratorenrolle.}{A}
 
@@ -652,19 +642,11 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
         \fentry{themeHeading}{outputText}{Überschrift für Farbthemes.}{A}
 
-        \fentry{orangeTheme}{outputLabel}{Standart Theme der Applikation.}{A}
-
         \fentry{orange}{radioButton}{Auswahl des Standart Themes.}{A}
-
-        \fentry{darkTheme}{outputLabel}{Dark Theme der Applikation.}{A}
 
         \fentry{dark}{radioButton}{Auswahl des Dark Themes.}{A}
 
-        \fentry{blueTheme}{outputLabel}{Blue Theme der Applikation}{A}
-
         \fentry{blue}{radioButton}{Auswahl des Blue Themes.}{A}
-
-        \fentry{greenTheme}{outputLabel}{Green Theme der Applikation.}{A}
 
         \fentry{green}{radioButton}{Auswahl des Green Themes.}{A}
 
@@ -698,13 +680,7 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
         \fentry{forumName}{inputText}{Angabe des Name des Forums.}{A}
 
-        \fentry{fName}{outputLabel}{Label Name des Forums.}{A}
-
-        \fentry{editorLabel}{outputLabel}{Label für Editorauswahl.}{A}
-
         \fentry{emailEditor}{inputText}{Angabe der E-Mail-Adresse eines Editor.}{A}
-
-        \fentry{emailEditorLabel}{outputLabel}{Label für E-Mail-Adresse eines Editors.}{A}
 
         \fentry{addEditor}{commandButton}{Hinzufügen eines Editors in eine Liste.}{A}
 
@@ -712,25 +688,13 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
         \fentry{deadline}{inputText}{Hinzufügen einer Deadline des Forums.}{A}
 
-        \fentry{deadlineLabel}{outputLabel}{Label für Deadline des Forums.}{A}
-
         \fentry{description}{inputTextArea}{Angabe einer Kurzbeschreibung.}{A}
-
-        \fentry{descriptionLabel}{outputLabel}{Label für Kurzbeschreibung.}{A}
 
         \fentry{url}{inputText}{Link zur Konferenz oder zum Journal.}{A}
 
-        \fentry{urlLabel}{outputLabel}{Label für URL des Forums.}{A}
-
-        \fentry{instructionLabel}{outputLabel}{Label für Anleitung}{A}
-
         \fentry{reviewInstructions}{inputTextArea}{Angabe einer Anleitung für eine Begutachtung.}{A}
 
-        \fentry{scienceFieldLabel}{outputLabel}{Label für Fachgebiete}{A}
-
         \fentry{scienceField}{selectOneMenu}{Auswahl von Fachgebieten.}{A}
-
-        \fentry{scienceFieldLabel}{outputLabel}{Label für Fachgebiete.}{A}
 
         \fentry{newScienceField}{inputText}{Hinzufügen neuer Fachgebiete.}{A}
 
@@ -749,13 +713,7 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
     \ftable{
         \fentry{forumName}{inputText}{Angabe des Name des Forums.}{A,E}
 
-        \fentry{forumNameLabel}{outputLabel}{Label Name des Forums.}{A,E}
-
-        \fentry{editorLabel}{outputLabel}{Label für Editorauswahl.}{A,E}
-
         \fentry{emailEditor}{inputText}{Angabe der E-Mail-Adresse eines Editor.}{A,E}
-
-        \fentry{emailEditorLabel}{outputLabel}{Label für E-Mail-Adresse eines Editors.}{A,E}
 
         \fentry{addEditor}{commandButton}{Hinzufügen eines Editors in eine Liste.}{A,E}
 
@@ -763,25 +721,15 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
         \fentry{deadline}{inputText}{Hinzufügen einer Deadline des Forums.}{A,E}
 
-        \fentry{deadlineLabel}{outputLabel}{Label für Deadline des Forums.}{A,E}
-
         \fentry{description}{inputTextArea}{Angabe einer Kurzbeschreibung.}{A,E}
 
-        \fentry{descriptionLabel}{outputLabel}{Label für Kurzbeschreibung.}{A,E}
-
         \fentry{url}{inputText}{Link zur Konferenz oder zum Journal.}{A,E}
-
-        \fentry{urlLabel}{outputLabel}{Label für URL des Forums.}{A,E}
-
-        \fentry{reviewInstructLabel}{outputLabel}{Label für Anleitung einer Begutachtung.}{A,E}
 
         \fentry{reviewInstructions}{inputTextArea}{Angabe einer Anleitung für eine Begutachtung.}{A,E}
 
         \fentry{scienceFieldOut}{outputText}{Liste der Fachgebiete.}{A,E}
 
         \fentry{scienceField}{selectOneMenu}{Auswahl von Fachgebieten.}{A,E}
-
-        \fentry{scienceFieldLabel}{outputLabel}{Label für Fachgebiete.}{A,E}
 
         \fentry{newScienceField}{inputText}{Hinzufügen neuer Fachgebiete.}{A}
 
