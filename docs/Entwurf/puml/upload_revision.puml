@@ -4,6 +4,7 @@
 '!theme aws-orange
 skinparam sequenceMessageAlign center
 skinparam BoxPadding 10
+skinparam LifelineStrategy nosolid
 'autonumber
 'autoactivate on
 'hide footbox
@@ -11,79 +12,111 @@ skinparam BoxPadding 10
 actor User as user
 
 box "control.backing"
-    participant ":SubmissionBacking" as subBacking
+    participant ":SubmissionBacking" as sb << @Named >>
 end box
 'box "???"
 '    participant ":ResourceBundle" as rscBundle
 'end box
 box "business.service"
-    participant ":SubmissionService" as subService
+    participant "ssvc:SubmissionService" as ssvc << @ApplicationScoped >>
 end box
-box "dtos"
-    participant "sub:Submission" as sub
+box "global.transfer"
+    participant "sub:Submission" as sub << @Named >>
     participant "paper:Paper" as paper
 end box
-box persistence.repository
-    participant ":SubmissionRepository" as subRepo
-end box
-box persistence.util
-    participant ":ConnectionPool" as connPool
+box persistence
+    participant "t:Transaction" as t
+    participant ":SubmissionRepository" as sr
+    participant "cp:ConnectionPool" as cp
 end box
 database "Database" as db
 
-user -> subBacking ** : init()
+create sb
+user -> sb
 note left
     ruft die
     Submission-
     Seite auf
 end note
-activate subBacking
-    subBacking -> subService : getSubmission(subId)
-    activate subService
-        subService -> subRepo : getSubmission(subId)
-        activate subRepo
-            subRepo -> connPool : getConnection()
-            activate connPool
-            return conn
-            subRepo -> db : SQL-req
-            activate db
-            return res
-            subRepo -> connPool : releaseConnection()
-            activate connPool
+sb --> ssvc : //injection//
+return //ssvc//
+user -> sb : init()
+activate sb
+    note right
+        int subId wird
+        gelesen von
+        requestParams
+        (URL-Parameter)
+    end note
+    sb -> sub ** : Submission()
+    sb -> sub : setId(subId)
+    activate sub
+    return
+    sb -> ssvc : getSubmission(sub)
+    activate ssvc
+        ssvc -> t ** : Transaction()
+        activate t
+            t -> cp : __getInstance()__
+            activate cp
+            return cp
+            t -> cp : getConnection
+            activate cp
             return
-            create sub
-            subRepo -> sub
-        return sub : Submission
+        return
+        ssvc -> sr : getSubmission(sub, t)
+        activate sr
+            sr -> sub : getId()
+            activate sub
+            return id
+            sr -> sub : setTitle()
+            activate sub
+            return
+            sr -> sub : setPapers()
+            activate sub
+            return
+            ...sub befüllen...
+        return
+        ssvc -> t ++ : commit()
+        return
+        destroy t
     return sub : Submission
 return submission.xhtml
 
-user -> subBacking : setRevisionPart()
-activate subBacking
+user -> sb : submitRevision()
+activate sb
     note left
-        lädt die PDF-Datei hoch und
-        klickt auf "Submit" revision
+        sucht die PDF-Datei mit
+        dem file picker aus und
+        klickt auf "Submit Revision"
     end note
-    user -> subBacking : addRevision()
-    subBacking -> sub : getId()
-    activate sub
-    return id
-    subBacking -> sub : getPapers()
-    activate sub
-    return papers
+    user -> sb : setRevisionPdfPart()
 
-    subBacking -> paper ** : new Paper(subId, papers.size())
-
-    subBacking -> subService : addRevision(sub, paper)
-    activate subService
-        subService -> subRepo : addPaper(paper)
-        activate subRepo
-            subRepo -> connPool : getConnection()
+    sb -> ssvc : addRevision(sub, revisionPdf)
+    activate ssvc
+        ssvc -> sr : getSubmission(sub)
+        activate sr
+            sr -> sub : getId()
+            activate sub
+            return id
+            sr -> sub : setTitle()
+            activate sub
+            return
+            sr -> sub : setPapers()
+            activate sub
+            return
+            ...sub befüllen...
+        return
+        ssvc -> paper : Paper()
+        ssvc -> sr : addPaper(paper)
+'updatesubmission not addpaper
+        activate sr
+            sr -> connPool : getConnection()
             activate connPool
             return conn
-            subRepo -> db : SQL-req
+            sr -> db : SQL-req
             activate db
             return
-            subRepo -> connPool : releaseConnection()
+            sr -> connPool : releaseConnection()
             activate connPool
             return
         return
