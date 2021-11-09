@@ -111,6 +111,8 @@ Sind Außerdem keine Labels für Komponenten angegeben, dann sind anstelle diese
     \ftable{
         \fentry{dataTable}{dataTable}{Hier werden die Spalten eingefügt. Durch Klicken auf die Spaltennamen werden die Einträge sortiert. Zusätzlich kann durch ein Textfeld die Liste gefiltert werden.}{Alle}
 
+        \fentry{apply}{commandButton}{Mit diesem Knopf können gewählte Sortierung und Filterung angewandt werden.}{Alle}
+
         \fentry{navButtons}{panelGrid}{Hier befinden sich die Knöpfe zur Navigation zwischen den Seiten der Paginierungen.}{Alle}
 
 		\fentry{firstPage}{commandButton}{Zurück zur ersten Seite.}{Alle}
@@ -559,25 +561,8 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
     \textbf{userList.xhtml} \label{flt:userList} Editoren und Administratoren erhalten hier einen Überblick über alle Nutzer. Die Seiten sind paginiert.\nopagebreak
 
     \ftable{
-        \fentry{roleSelect}{selectOneMenu}{Filtern der Rolle des Nutzers}{E,A}
-
-        \fentry{search}{inputText}{Durchsuchen der Tabelle mit Matching-Words.}{Alle}
-
-        \fentry{apply}{commandButton}{Wende Filtereinstellungen an.}{E,A}
-
-        \fentry{nameUp}{commandButton}{Nutzer werden nach Namen aufsteigend angezeigt.}{E,A}
-
-        \fentry{nameDown}{commandButton}{Nutzer werden absteigend nach Namen angezeigt.}{E,A}
-
-        \fentry{roleUp}{commandButton}{Nutzer werden nach Rolle aufsteigend angezeigt.}{E,A}
-
-        \fentry{roleDown}{commandButton}{Nutzer werden absteigend nach Rolle angezeigt.}{E,A}
-
-        \fentry{userTable}{dataTable}{Liste aller Nutzer im System.}{E,A}
-
-        \fentry{pagination}{listPagination}{Die Tabelle enthält eine Paginierung.}{E,A}
+        \fentry{user-pagination}{pagination}{Die Tabelle enthält eine Paginierung.}{E,A}
     }
-	\todo{Hier das Pagination richtig einfügen}
 \end{samepage}
 
 \begin{samepage}
@@ -591,12 +576,10 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
         \fentry{email}{link}{Mailto-Link mit E-Mail-Adresse des Nutzers.}{E,A}
 
-        \fentry{employee}{outputText}{Arbeitgeber des Nutzers.}{E,A}
+        \fentry{employer}{outputText}{Arbeitgeber des Nutzers.}{E,A}
 
         \fentry{scienceField}{outputText}{Fachgebiete des Nutzers.}{E,A}
     }
-
-	\todo{Hier richtige Definition der pagination inhalte}
 \end{samepage}
 
 
