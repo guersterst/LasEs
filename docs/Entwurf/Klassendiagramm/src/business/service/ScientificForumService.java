@@ -19,6 +19,8 @@ public class ScientificForumService {
 
 	private ScientificForumRepository scientificForumRepository;
 
+	private UserRepository userRepository;
+
 	public ScientificForum getForum() { }
 
 	public void updateForum(ScientificForum forum, ScientificForum newForum) { }

@@ -20,35 +20,21 @@ public class SubmissionService {
 
 	private SubmissionRepository submissionRepository;
 
-	public Submission getSubmission(int submissionId) {
-		return null;
-	}
+	public Submission getSubmission(int submissionId) { return null; }
 
-	public void removeSubmission(Submission submission) {
-	}
+	public void removeSubmission(Submission submission) { }
 
-	public void changeSubmission(Submission submission, Submission newSubmission) {
-	}
+	public void changeSubmission(Submission submission, Submission newSubmission) { }
 
-	public void setState(Submission submission, SubmissionState state) {
-	}
+	public void setState(Submission submission, SubmissionState state) { }
 
-	public void uploadPaper(byte[] pdf) {
-	}
+	public void uploadPaper(byte[] pdf) { }
 
-	public Paper downloadPaper() {
-		return null;
-	}
+	public Paper downloadPaper() { return null; }
 
-	public List<Submission> getSubmissions(int forumId, String userEmail, ResultListParameters resultParams) {
-		return null;
-	}
+	public List<Submission> getSubmissions(int forumId, String userEmail, ResultListParameters resultParams) { return null; }
 
-	public List<Submission> getSubmissions(String searchString, String userEmail, ResultListParameters resultParams) {
-		return null;
-	}
+	public List<Submission> getSubmissions(String searchString, String userEmail, ResultListParameters resultParams) { return null; }
 
-	public List<Submission> getSubmissions(String userEmail, Privilege role, ResultListParameters resultParams) {
-		return null;
-	}
+	public List<Submission> getSubmissions(String userEmail, Privilege role, ResultListParameters resultParams) { return null; }
 }

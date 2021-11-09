@@ -11,7 +11,9 @@ public class CustomizationService {
 	private ExceptionQueue exceptionQueue;
 
 	private SystemSettingsRepository systemSettingsRepository;
-	
+
+	private Transaction transaction;
+
 	public void setSystemSettings(Style style) { }
 
 	public SystemSettings get() { }

@@ -9,7 +9,7 @@ import dtos.User;
 import global.util.ResultListParameters;
 import persistence.repository.UserRepository;
 
-public class ProfileService {
+public class UserService {
 
 	private ExceptionQueue exceptionQueue;
 

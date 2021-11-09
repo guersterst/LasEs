@@ -12,8 +12,10 @@ public class ScienceFieldService {
 	private ScienceFieldRepository scienceFieldRepository;
 	
 	public void add(ScienceField field) { }
+
+	public boolean exists() { }
 	
 	public void remove(ScienceField field) { }
 	
-	public List<ScienceField> getFields() { return null; }
+	public List<ScienceField> getScienceFields() { return null; }
 }
