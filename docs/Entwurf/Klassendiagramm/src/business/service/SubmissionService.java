@@ -15,31 +15,26 @@ public class SubmissionService {
 	private ExceptionQueue exceptionQueue;
 
 	private EmailUtil emailUtil;
+
+	private PaperRepository paperRepository;
 	
 	public Submission getSubmission(int submissionId) { return null; }
 	
 	public void removeSubmission(Submission submission) { }
-	
-	public void addRevision(Submission submission, Paper revision) {} 
-	
-	public void addEditor(User user) { }
-	
-	public void removeEditor(User user) { }
-	
-	public List<User> getEditors() { return null; }
-	
-	public void uploadPDF(byte[] pdf) { }
-	
-	public void unlockRevision(int paperId) { }
-	
-	public void changeSubmission(int submissionId, Submission newSubmission) { }
+
+	public void changeSubmission(Submission submission, Submission newSubmission) { }
 	
 	public void setState(Submission submission, SubmissionState state) { }
 
-	public List<Submission> getSubmissionsForForum(int forumId, String userEmail, ResultListParameters resultParams) { return null; }
+	public void uploadPaper(byte[] pdf) { }
 
-	public List<Submission> getSubmissionsWithSearchword(String searchString, String userEmail, ResultListParameters resultParams) { return null; }
+	public Paper downloadPaper() { return null; }
 
-	public List<Submission> getSubmissionsForHomepage(String userEmail, Privilege role, ResultListParameters resultParams) { return null; }
+	public List<Submission> getSubmissions(int forumId, String userEmail, ResultListParameters resultParams) { return null; }
+
+	public List<Submission> getSubmissions(String searchString, String userEmail, ResultListParameters resultParams) { return null; }
+
+	public List<Submission> getSubmissions(String userEmail, Privilege role, ResultListParameters resultParams) { return null;
+
 
 }

@@ -13,19 +13,18 @@ public class ReviewService {
 	private ExceptionQueue exceptionQueue;
 	
 	private EmailUtil emailUtil;
+
+	public Review getReview() { }
 	
 	public void addReview(Submission submission, Review review) { }
+
+	public void changeReview() { }
 	
 	public void removeReview(Submission submission, int reviewId, int paperId) { }
-	
-	public List<Review> getReviews(Submission submission, int userId) { return null; }
-	
-	public void addReviewer(String email) { } // maybe user uebergeben?
-	
-	public void removeReviewer(User user) { }
-	
-	public List<User> getReviewers() { return null; }
-	
-	public void unlockReview() { }
 
+	public List<Review> getReviews(Submission submission, int userId) { return null; }
+
+	public void uploadPDF(byte[] pdf) { }
+
+	public byte[] downloadPDF() { return null; }
 }
