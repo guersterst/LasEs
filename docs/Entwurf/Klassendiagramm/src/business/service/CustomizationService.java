@@ -9,9 +9,12 @@ public class CustomizationService {
 	private AvatarUtil avatarUtil;
 
 	private ExceptionQueue exceptionQueue;
+
+	private SystemSettingsRepository systemSettingsRepository;
 	
 	public void setSystemSettings(Style style) { }
+
+	public SystemSettings get() { }
 	
 	public void createDbSchema () { }
-
 }
