@@ -37,8 +37,6 @@ public class ScientificForumBacking {
 
     public void updateScientificForum(ScientificForum scientificForum) { }
 
-    public void setState(SubmissionState submissionState) { }
-
     // Hier resultlistparams übergeben.
     public void getSubmissions() { }
 

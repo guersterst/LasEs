@@ -135,8 +135,11 @@ Die data transfer Objects, die eine Entity aus der Datenbank nachbilden sind unt
 
 \classtable{
     \classentry{AvatarValidation}{Validates that a suitable avatar image has been uploaded.}
-\classentry{EmailAddressLayoutValidation}{Validates that the email regex pattern is ok.}
+    \classentry{PDFValidator}{Validates that a suitable PDF file has been uploaded.}
+\classentry{EmailAddressLayoutValidation}{Validates that a given String is a valid E-Mail Address.}
 \classentry{EmailAdressUnoccupiedValidator}{Validates that a given email is not already in use within the system.}
+\classentry{URLValidator}{Validates that a given String is a valid URL.}
+
 }
 
 \subsubsection{de.lases.business.service}
@@ -176,6 +179,7 @@ Folgende Informationen wurden hier aus Gründen der Übersichtlichkeit aus dem D
 	\classentry{Hashing}{Provides support in the hashing of passwords.}
 	\classentry{Lifetime}{Provides a method that should be called on system startup.}
 	\classentry{EmailUtil}{Provides support in the sending of emails, creation of mailto links and checking of Email Addresses.}
+	\classentry{ConfigPropagator}{The sole purpose of this utility is to make the global configuration available to the control layer.}
 }
 
 \subsubsection{de.lases.business.internal}

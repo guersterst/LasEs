@@ -11,6 +11,7 @@ import business.service.SubmissionService;
 import control.internal.SessionInformation;
 import dtos.Paper;
 import dtos.Review;
+import dtos.SubmissionState;
 import global.util.ResultListParameters;
 
 @RequestScoped
@@ -54,6 +55,8 @@ public class SubmissionBacking {
 	public void init() { }
 	
 	public void sortDateAsc() { }
+	
+	public void setState(SubmissionState submissionState) { }
 	
 	public void sortDateDesc() { }
 	
