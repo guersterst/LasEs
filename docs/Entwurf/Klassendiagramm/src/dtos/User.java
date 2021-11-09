@@ -4,7 +4,24 @@ import java.util.List;
 
 public class User {
 	
+	private Verification verification;
+	
+	private List<Review> reviews;
+	
+	private List<ScienceField> scienceFields;
+	
+	private List<ScientificForum> edits;
+	
+	private List<Submission> edited;
+	
+	private List<Submission> coAuthored;
+	
+	private List<Submission> authored;
+	
+	private List<Submission> reviewed;
+	
 	private int id;
+	
 	
 	private List<Privilege> priveleges;
 	
@@ -16,13 +33,7 @@ public class User {
 	
 	private String emailAddress;
 	
-	private String unvalidatedEmailAddress;
-	
-	private LocalDateTime emailValidationStarted;
-	
 	private LocalDate dateOfBirth;
-	
-	private List<Integer> interests;
 	
 	private String employer;
 

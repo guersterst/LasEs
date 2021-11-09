@@ -4,17 +4,20 @@ import java.util.List;
 
 public class ScientificForum {
 	
+	private List<ScienceField> scienceFields;
+	
+	private List<Submission> submissions;
+	
+	private List<User> editors;
+	
 	private int id;
+	
 	
 	private String description;
 	
 	private String reviewManual;
 	
 	private String url;
-	
-	private List<Integer> topics;
-	
-	private List<Integer> editors;
 	
 	private LocalDateTime deadline;
 

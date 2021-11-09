@@ -3,7 +3,20 @@ import java.util.List;
 
 public class Submission {
 	
+	private List<Paper> papers;
+	
+	private ScientificForum scientificForum;
+	
 	private int id;
+	
+	private List<User> reviewers;
+	
+	private User author;
+	
+	private List<User> coAuthors;
+	
+	private User editor;
+	
 	
 	private String title;
 	
@@ -14,17 +27,5 @@ public class Submission {
 	private LocalDateTime deadlineRevision;
 	
 	private LocalDateTime submissionTime;
-	
-	private List<Integer> papers;
-	
-	private int submitter;
-	
-	private int submittedIntoForum;
-	
-	private int editor;
-	
-	private List<Integer> coAuthors;
-	
-	private List<Integer> reviewers;
 
 }

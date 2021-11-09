@@ -1,5 +1,7 @@
 package dtos;
 
+import java.util.List;
+
 public class Paper {
 	
 	/*
@@ -8,13 +10,16 @@ public class Paper {
 	 * Important: Reviews soist soiba lod'n
 	 */
 	
-	private int version;
+	private List<Review> reviews;
+	
+	private Submission submission;
+	
+	private int id;
+	
 	
 	private LocalDateTime uploadTime;
 	
 	private boolean visible;
-	
-	private int submissionId;
 
 
 }

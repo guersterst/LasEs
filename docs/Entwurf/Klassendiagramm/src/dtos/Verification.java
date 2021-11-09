@@ -2,7 +2,10 @@ package dtos;
 
 public class Verification {
 	
+	private User user;
+	
 	private int id;
+	
 	
 	private String validationRandom;
 	
@@ -11,7 +14,5 @@ public class Verification {
 	private LocalDateTime timestampValidationStarted;
 	
 	private String nonValidatedEmailAddress;
-	
-	private int userId;
 
 }
