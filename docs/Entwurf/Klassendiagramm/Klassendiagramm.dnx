@@ -721,7 +721,7 @@
     <children xmi:type="notation:ListCompartment" xmi:id="_RQXV8D1uEey5aNE2XkMFEQ" type="ANNOTATED_ATTRIBUTE_COMPARTMENT" showTitle="true"/>
     <children xmi:type="notation:ListCompartment" xmi:id="_RQXV8T1uEey5aNE2XkMFEQ" type="ANNOTATED_OPERATION_COMPARTMENT"/>
     <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=AvatarUtil%5Bjcu%5Ename=AvatarUtil.java%5Bjpack%5Ename=business.util%5Bjsrcroot%5Esrcfolder=src%5Bproject%5Eid=Klassendiagramm%5D%5D%5D%5D$uml.Class"/>
-    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_RQUSoT1uEey5aNE2XkMFEQ" x="152328" y="24552"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_RQUSoT1uEey5aNE2XkMFEQ" x="152988" y="24684"/>
   </children>
   <children xmi:type="umlnotation:UMLShape" xmi:id="__qb5sD1wEey5aNE2XkMFEQ" fontName="Noto Sans" fontHeight="8" showListVisibility="Text" fillColor="14768285" transparency="0" lineColor="11736165" lineWidth="1" showStereotype="Text">
     <children xmi:type="notation:DecorationNode" xmi:id="__qdu4D1wEey5aNE2XkMFEQ" type="ImageCompartment">
@@ -1092,7 +1092,7 @@
     <styles xmi:type="notation:RoundedCornersStyle" xmi:id="_L28QhEFbEeyP5oIJJ4YgXQ"/>
     <styles xmi:type="notation:TextStyle" xmi:id="_L28QhUFbEeyP5oIJJ4YgXQ" textAlignment="Center"/>
     <element xsi:nil="true"/>
-    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_L28QhkFbEeyP5oIJJ4YgXQ" x="170544" y="11484"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_L28QhkFbEeyP5oIJJ4YgXQ" x="171072" y="11484"/>
   </children>
   <children xmi:type="umlnotation:UMLShape" xmi:id="_btc2MEFbEeyP5oIJJ4YgXQ" fontName="Noto Sans" fontHeight="8" showListVisibility="Text" fillColor="14869218" transparency="0" lineColor="11842740" lineWidth="1" showStereotype="Text">
     <children xmi:type="notation:DecorationNode" xmi:id="_btddQEFbEeyP5oIJJ4YgXQ" type="ImageCompartment">
@@ -1149,6 +1149,25 @@
     <styles xmi:type="notation:LineTypeStyle" xmi:id="_EoaX0kFcEeyP5oIJJ4YgXQ"/>
     <element xsi:nil="true"/>
     <layoutConstraint xmi:type="notation:Bounds" xmi:id="_EoaX00FcEeyP5oIJJ4YgXQ" x="173976" y="17820" height="1719"/>
+  </children>
+  <children xmi:id="_gf9RAEFdEeyP5oIJJ4YgXQ" type="sktitle">
+    <children xmi:id="_gf9RB0FdEeyP5oIJJ4YgXQ" type="skshapes">
+      <styles xmi:type="notation:DrawerStyle" xmi:id="_gf9RCEFdEeyP5oIJJ4YgXQ"/>
+      <styles xmi:type="notation:TitleStyle" xmi:id="_gf9RCUFdEeyP5oIJJ4YgXQ"/>
+      <styles xmi:type="notation:DrawerStyle" xmi:id="_gf9RCkFdEeyP5oIJJ4YgXQ"/>
+      <styles xmi:type="notation:TitleStyle" xmi:id="_gf9RC0FdEeyP5oIJJ4YgXQ"/>
+      <element xsi:nil="true"/>
+    </children>
+    <children xmi:id="_gf9RDEFdEeyP5oIJJ4YgXQ" type="skdescription">
+      <element xsi:nil="true"/>
+    </children>
+    <styles xmi:type="notation:ShapeStyle" xmi:id="_gf9RAUFdEeyP5oIJJ4YgXQ" fontHeight="18" description="business.util" transparency="0" lineWidth="3" roundedBendpointsRadius="12"/>
+    <styles xmi:type="notation:LineTypeStyle" xmi:id="_gf9RAkFdEeyP5oIJJ4YgXQ"/>
+    <styles xmi:type="SketchNotation:SketchStyle" xmi:id="_gf9RA0FdEeyP5oIJJ4YgXQ"/>
+    <styles xmi:type="notation:RoundedCornersStyle" xmi:id="_gf9RBEFdEeyP5oIJJ4YgXQ"/>
+    <styles xmi:type="notation:TextStyle" xmi:id="_gf9RBUFdEeyP5oIJJ4YgXQ" textAlignment="Center"/>
+    <element xsi:nil="true"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_gf9RBkFdEeyP5oIJJ4YgXQ" x="155364" y="23760"/>
   </children>
   <element xsi:nil="true"/>
   <edges xmi:type="umlnotation:UMLConnector" xmi:id="_sC9ZYDvnEeypu5KOTbHQZg" source="_TrvtADveEeypu5KOTbHQZg" target="_3sYJADvmEeypu5KOTbHQZg" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
