@@ -4,8 +4,8 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import business.internal.SessionInformation;
 import business.service.SubmissionService;
+import control.internal.SessionInformation;
 import dtos.User;
 
 public class NewSubmissionBacking {

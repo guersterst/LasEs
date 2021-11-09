@@ -5,9 +5,9 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import business.internal.SessionInformation;
 import business.service.ReviewService;
 import business.service.SubmissionService;
+import control.internal.SessionInformation;
 import dtos.Paper;
 import dtos.Review;
 import global.util.ResultListParameters;

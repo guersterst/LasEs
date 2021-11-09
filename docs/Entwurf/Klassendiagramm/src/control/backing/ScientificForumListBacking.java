@@ -5,8 +5,8 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 
-import business.internal.SessionInformation;
 import business.service.ScientificForumService;
+import control.internal.SessionInformation;
 import dtos.LocalDate;
 import dtos.ScienceField;
 import dtos.ScientificForum;

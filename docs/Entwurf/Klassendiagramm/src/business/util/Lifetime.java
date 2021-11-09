@@ -1,4 +1,4 @@
-package business.internal;
+package business.util;
 
 public class Lifetime {
 

@@ -4,10 +4,10 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import business.internal.SessionInformation;
 import business.service.ScienceFieldService;
 import business.service.ScientificForumService;
 import business.service.SubmissionLieferando;
+import control.internal.SessionInformation;
 import dtos.ScientificForum;
 import dtos.Submission;
 import dtos.SubmissionState;

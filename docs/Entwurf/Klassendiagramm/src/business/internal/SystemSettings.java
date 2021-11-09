@@ -7,9 +7,4 @@ public class SystemSettings {
 
 	private ExceptionQueue exceptionQueue;
 
-	private SystemConfiguration config;
-	
-	public void load() { }
-	
-	public void write() { }
 }

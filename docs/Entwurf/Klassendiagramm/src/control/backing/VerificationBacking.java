@@ -2,7 +2,7 @@ package control.backing;
 
 import javax.annotation.PostConstruct;
 
-import business.internal.SessionInformation;
+import control.internal.SessionInformation;
 
 public class VerificationBacking {
 	

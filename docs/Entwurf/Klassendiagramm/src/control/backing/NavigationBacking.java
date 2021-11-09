@@ -4,8 +4,8 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import business.internal.SessionInformation;
 import business.service.LoginService;
+import control.internal.SessionInformation;
 import dtos.ScientificForum;
 import dtos.Submission;
 import dtos.User;

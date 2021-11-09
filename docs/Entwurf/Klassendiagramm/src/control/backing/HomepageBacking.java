@@ -5,8 +5,8 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import business.internal.SessionInformation;
 import business.service.SubmissionLieferando;
+import control.internal.SessionInformation;
 import dtos.Review;
 import dtos.Submission;
 import dtos.SubmissionState;

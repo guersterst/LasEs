@@ -2,8 +2,8 @@ package control.backing;
 
 import javax.annotation.PostConstruct;
 
-import business.internal.SessionInformation;
 import business.service.ReviewService;
+import control.internal.SessionInformation;
 
 
 public class NewReviewBacking {

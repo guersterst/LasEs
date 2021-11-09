@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import business.internal.SessionInformation;
+import control.internal.SessionInformation;
 import dtos.User;
 
 /**

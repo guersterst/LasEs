@@ -4,8 +4,8 @@ import javax.annotation.PostConstruct;
 
 import com.sun.xml.internal.ws.wsdl.writer.document.Part;
 
-import business.internal.SessionInformation;
 import business.service.ProfileService;
+import control.internal.SessionInformation;
 import dtos.User;
 
 public class ProfileBacking {
