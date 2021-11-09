@@ -9,7 +9,7 @@ Es gibt folgende Loglevel, wobei jedes Level jeweils die Nachrichten des vorheri
     \item[\texttt{WARNING}] Wichtige Ereignisse, die zu Problemen führen können und für Administratoren und Endnutzer relevant sind.
     \item[\texttt{INFO}] Für den Administrator relevante Meldungen im normalen Betrieb. Diese sind auch fürs Entwickeln und Testen hilfreich.
 \end{description}
-Nachrichten können geloggt werden durch Aufruf der \code{severe()}-, \code{warning()}- oder \code{info()}-Methoden in \code{de.lases.global.logging}.
+Nachrichten können geloggt werden durch Aufruf der \code{severe()}, \code{warning()} oder \code{info()} Methoden in \code{de.lases.global.logging}.
 
 \subsection{Sicherheit}\label{subsec:sicherheit}
 Für die häufigsten Sicherheitsschwachstellen bei Webanwendungen, die für LasEs relevant sind, wird im Folgenden erklärt, wie ausnutzende Angriffe verhindert werden.
@@ -22,11 +22,13 @@ Dazu wird über die angefragte URL das zugehörige Facelet bestimmt und geprüft
 Das hängt darüber hinaus auch von der Beziehung des Nutzers zur angefragten Ressource ab (ein normaler Nutzer kann z.B.\ nur sein \emph{eigenes} Profil oder eine \emph{eigene} Einreichung sehen).
 Da dies zentral in dieser Klasse passiert, entstehen weniger Fehler als bei der Prüfung an vielen verschiedenen Stellen des Programms.
 
-\item[Kryptographie-Probleme \& Verlust der Vertraulichkeit sensibler Daten]
+\item[Kryptographie \& Vertraulichkeit sensibler Daten]
 Alle Anfragen und Antworten werden mit dem HTTPS-Protokoll mit TLS-Verschlüsselung durchgeführt.
 Dafür wird der Tomcat-Server, der diese Technologie unterstützt, entsprechend konfiguriert.
 \\
-Passwörter werden mit der modernen und sicheren PBKDF2-Funktion gehasht. Dabei wird für jedes Passwort ein eigener zufällig generierter Salt benutzt. Eingegebene Passwörter werden so früh wie möglich gehasht, damit die Klartextpasswörter eine minimale Lebenszeit auf dem Server haben. Für das Generieren eins Salts und das Hashing bietet die Klasse \code{de.lases.business.util} Methoden an.
+Passwörter werden mit der modernen und sicheren PBKDF2-Funktion gehasht. Dabei wird für jedes Passwort ein eigener zufällig generierter Salt benutzt.
+Eingegebene Passwörter werden so früh wie möglich gehasht, damit die Klartextpasswörter eine minimale Lebenszeit auf dem Server haben.
+Für das Generieren eins Salts und das Hashing bietet die Klasse \code{de.lases.business.util} Methoden an.
 Sie verwendet die robuste \code{javax.crypto}-Bibliothek.
 
 \item[Injection \& Cross-site-Scripting]
@@ -37,20 +39,34 @@ Für SQL-Code werden \code{PreparedStatements} benutzt, um SQL-Injections zu ver
 \item[Session Hijacking]
 In der \code{web.xml}-Datei ist ein Timeout für Sessions konfigurierbar.
 Dieser wirkt Session Hijacking sowie unerwünschten physischen Zugriffen auf den Browser des Clients entgegen.
+JSF setzt für das Session-Cookie standardmäßig das \code{http-only}-Flag, damit kann darauf nicht mit JavaScript zugegriffen werden und Hijacking wird erschwert.
+Nach jeder Anmeldung wird die Session verworfen (mit \code{ExternalContext\#invalidateSession}) und neu generiert.
+Nach einer Authentifizierung bleibt also keine alten Session bestehen und \emph{Session-Fixation}-Attacken werden verhindert.
+
 
 \end{description}
 
 \subsection{Asynchrone Threads}\label{subsec:threads}
-Für das periodische Aufräumen von nicht mehr benötigten Datenbankeinträgen (abgelaufene E-Mail-Verifikationslinks) gibt es einen eigenen Thread.
-\\
-Dieser wird von \code{business.internal.DBCleaner} gestartet.
+Für das periodische Aufräumen von nicht mehr benötigten Datenbankeinträgen (abgelaufene E-Mail-Verifikationslinks) gibt es einen eigenen Thread \code{business.internal.DBCleaner}.
 
 \subsection{Systemstart}\label{subsec:systemstart}
-Beim Systemstart wird das Logging wird initialisiert und die Konfigurationsdatei gelesen. Die Threads aus Kapitel \ref{subsec:threads} und der \code{ConnectionPool} werden gestartet.
+Beim Systemstart wird das Logging (Kapitel \ref{subsec:logging}) initialisiert und die Konfigurationsdatei gelesen. Der \code{DBCleaner}-Thread aus Kapitel \ref{subsec:threads} und der \code{ConnectionPool} werden gestartet.
 
-Dies passiert, wenn das Servlet bereit ist, dazu hört der \code{LifetimeListener} aus dem Paket \code{business.internal} mit der \code{@WebListener}-Annotation auf das \code{contextInitialized}-Event.
+Dies passiert, wenn das Servlet bereit ist, dazu hört der \code{LifetimeListener} aus dem Paket \code{business.internal}\todo{verschieben} mit der \code{@WebListener}-Annotation auf das \code{contextInitialized}-Event.
 
 \subsection{Systemstopp}\label{subsec:systemstopp}
 Der Server kann über den \emph{shutdown port} heruntergefahren werden. Dies stoppt auch den Connection Pool und alle bestehenden Datenbankverbindungen werden geschlossen.
-Diese Aufgaben führt der \code{business.internal.LifetimeListener} aus.
-Damit wird ein geordneter Shutdown sichergestellt
+Der \code{DBCleaner}-Thread aus Kapitel \ref{subsec:threads} wird gestoppt.
+Diese Aufgaben führt der \code{business.internal.LifetimeListener}\todo{verschieben} aus.
+Damit wird ein geordneter Shutdown sichergestellt.
+
+\subsection{Lokalisierung}\label{subsec:lokalisierung}
+Ausgabestrings werden in \code{.properties}-Dateien gespeichert, getrennt für Deutsch und Englisch.
+JSF stellt Funktionalität bereit, um darauf von Facelets und Klassen aus über \code{ResourceBundle} aus der Java-Standardbibliothek einfach zugreifen zu können.
+Welche Sprache verwendet wird, hängt vom Header-Element \code{Accept-Language} der HTTP-Anfrage ab, falls die gewünschte Sprache nicht verfügbar ist, wird Englisch als Standardsprache verwendet.
+
+
+\subsection{Transaktionsverwaltung}\label{subsec:lokalisierung}
+Die Klasse \code{Transaction} im Paket \code{persistence.repository} repräsentiert eine Datenbanktransaktion.
+Sie kann mit \code{startTransaction()} und \code{stopTransaction()} gestartet bzw.\ beendet werden.
+Alle Datenbankzugriffe dazwischen, bei denen der \code{persistence}-Schicht diese \code{Transaction} übergeben wurde, werden von der Datenbank als atomare Operation durchgeführt.
