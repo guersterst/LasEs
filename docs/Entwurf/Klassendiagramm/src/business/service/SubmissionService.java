@@ -14,8 +14,6 @@ public class SubmissionService {
 
 	private ExceptionQueue exceptionQueue;
 
-	private EmailUtil emailUtil;
-	
 	public Submission getSubmission(int submissionId) { return null; }
 	
 	public void removeSubmission(Submission submission) { }
