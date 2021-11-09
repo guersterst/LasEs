@@ -11,7 +11,4 @@ public class LoginService {
 	private ExceptionQueue exceptionQueue;
 	
 	public User login(String email, String password) { return null; }
-	
-	public void logout() { }
-
 }

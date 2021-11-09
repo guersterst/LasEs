@@ -13,11 +13,13 @@ public class ProfileService {
 
 	private ExceptionQueue exceptionQueue;
 
-	private EmailAddressUnoccupiedValidator emailAddressUnoccupiedValidator;
-	
 	private EmailUtil emailUtil;
 	
 	private AvatarUtil avatarUtil;
+
+	private UserRepository userRepository;
+
+	private User getUser(int id) { }
 	
 	public void editUser(User newUser) { } 
 	
@@ -29,8 +31,6 @@ public class ProfileService {
 	public void uploadAvatar(String email, byte[] avatar) { }
 	
 	public void deleteAvatar(String email) { }
-	
-	public void updateEmail(String email, String newEmail) { }
 	
 	public List<User> getUsersSearch(String searchString) { return null; }
 	

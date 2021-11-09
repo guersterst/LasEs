@@ -14,22 +14,28 @@ public class ScientificForumService {
 	private ExceptionQueue exceptionQueue;
 
 	private EmailUtil emailUtil;
+
+	private SubmissionRepository submissionRepository;
+
+	private ScientificForumRepository scientificForumRepository;
 	
 	public void addSubmission(Submission submission) { }
 	
 	public void removeSubmission(Submission submission) { }
 	
-	public void updateForum(ScientificForum forum, ScientificForum newForum) { }
-	
 	public void addEditor(User user) { }
+
+	public void removeEditor(User user) { }
+
+	public int numberOfEditors() { }
 	
 	public List<User> getEditors() { return null; }
-	
-	public void addScientificForum(ScientificForum forum) { }
+
+	public void updateForum(ScientificForum forum, ScientificForum newForum) { }
+
+	public void addForum(ScientificForum forum) { }
 	
 	public List<ScientificForum> getAll(ResultListParameters resultListParams) { return null; }
 	
 	public List<ScientificForum> getAllSearch(String searchString, ResultListParameters resultListParams) { return null; }
-
-
 }
