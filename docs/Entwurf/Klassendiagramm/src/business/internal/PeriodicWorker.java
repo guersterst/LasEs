@@ -4,8 +4,6 @@ import persistence.util.DButils;
 
 public class PeriodicWorker implements Runnable {
 	
-	private DButils dbutils;
-	
 	@Override
 	public void run() { }
 	
