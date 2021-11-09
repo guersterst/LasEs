@@ -14,6 +14,8 @@ public class ReviewService {
 	
 	private EmailUtil emailUtil;
 
+	private ReviewRepository reviewRepository;
+
 	public Review getReview() { }
 	
 	public void addReview(Submission submission, Review review) { }

@@ -30,6 +30,8 @@ public class ScientificForumService {
 	public void addSubmission(Submission submission) { }
 	
 	public void removeSubmission(Submission submission) { }
+
+	public void getSubmissions() { }
 	
 	public void addEditor(User user) { }
 

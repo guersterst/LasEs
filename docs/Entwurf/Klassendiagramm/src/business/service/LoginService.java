@@ -9,6 +9,8 @@ public class LoginService {
 	private Hashing hashing;
 
 	private ExceptionQueue exceptionQueue;
+
+	private UserRepository userRepository;
 	
 	public User login(String email, String password) { return null; }
 }

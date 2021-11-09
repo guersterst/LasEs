@@ -6,6 +6,8 @@ public class RevisionService {
 
     private PaperRepository paperRepository;
 
+    private SubmissionRepository submissionRepository;
+
     public void getRevision() { }
 
     public void addRevision(Paper revision) { }

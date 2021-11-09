@@ -17,24 +17,38 @@ public class SubmissionService {
 	private EmailUtil emailUtil;
 
 	private PaperRepository paperRepository;
-	
-	public Submission getSubmission(int submissionId) { return null; }
-	
-	public void removeSubmission(Submission submission) { }
 
-	public void changeSubmission(Submission submission, Submission newSubmission) { }
-	
-	public void setState(Submission submission, SubmissionState state) { }
+	private SubmissionRepository submissionRepository;
 
-	public void uploadPaper(byte[] pdf) { }
+	public Submission getSubmission(int submissionId) {
+		return null;
+	}
 
-	public Paper downloadPaper() { return null; }
+	public void removeSubmission(Submission submission) {
+	}
 
-	public List<Submission> getSubmissions(int forumId, String userEmail, ResultListParameters resultParams) { return null; }
+	public void changeSubmission(Submission submission, Submission newSubmission) {
+	}
 
-	public List<Submission> getSubmissions(String searchString, String userEmail, ResultListParameters resultParams) { return null; }
+	public void setState(Submission submission, SubmissionState state) {
+	}
 
-	public List<Submission> getSubmissions(String userEmail, Privilege role, ResultListParameters resultParams) { return null;
+	public void uploadPaper(byte[] pdf) {
+	}
 
+	public Paper downloadPaper() {
+		return null;
+	}
 
+	public List<Submission> getSubmissions(int forumId, String userEmail, ResultListParameters resultParams) {
+		return null;
+	}
+
+	public List<Submission> getSubmissions(String searchString, String userEmail, ResultListParameters resultParams) {
+		return null;
+	}
+
+	public List<Submission> getSubmissions(String userEmail, Privilege role, ResultListParameters resultParams) {
+		return null;
+	}
 }
