@@ -9,6 +9,7 @@ import dtos.User;
 import global.util.ResultListParameters;
 import persistence.repository.ScientificForumRepository;
 
+@ApplicationScoped
 public class ScientificForumService {
 
 	private ExceptionQueue exceptionQueue;

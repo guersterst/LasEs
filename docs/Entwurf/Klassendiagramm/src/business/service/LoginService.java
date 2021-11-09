@@ -4,6 +4,7 @@ import business.util.Hashing;
 import dtos.User;
 import persistence.repository.UserRepository;
 
+@ApplicationScoped
 public class LoginService {
 	
 	private Hashing hashing;

@@ -10,6 +10,7 @@ import dtos.SubmissionState;
 import dtos.User;
 import persistence.repository.SubmissionRepository;
 
+@ApplicationScoped
 public class SubmissionService {
 
 	private ExceptionQueue exceptionQueue;

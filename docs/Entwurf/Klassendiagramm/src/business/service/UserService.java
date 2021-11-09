@@ -9,6 +9,7 @@ import dtos.User;
 import global.util.ResultListParameters;
 import persistence.repository.UserRepository;
 
+@ApplicationScoped
 public class UserService {
 
 	private ExceptionQueue exceptionQueue;

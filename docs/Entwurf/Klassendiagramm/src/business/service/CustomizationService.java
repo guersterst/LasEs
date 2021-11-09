@@ -4,6 +4,7 @@ import business.util.AvatarUtil;
 import dtos.Style;
 import persistence.repository.SystemSettingsRepository;
 
+@ApplicationScoped
 public class CustomizationService {
 	
 	private AvatarUtil avatarUtil;

@@ -5,6 +5,7 @@ import java.util.List;
 import dtos.ScienceField;
 import persistence.repository.ScienceFieldRepository;
 
+@ApplicationScoped
 public class ScienceFieldService {
 
 	private ExceptionQueue exceptionQueue;

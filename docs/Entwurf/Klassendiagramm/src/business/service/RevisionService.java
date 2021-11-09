@@ -1,5 +1,6 @@
 package business.service;
 
+@ApplicationScoped
 public class RevisionService {
 
     private ExceptionQueue exceptionQueue;

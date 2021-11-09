@@ -8,6 +8,7 @@ import dtos.Submission;
 import dtos.User;
 import persistence.repository.ReviewRepository;
 
+@ApplicationScoped
 public class ReviewService {
 
 	private ExceptionQueue exceptionQueue;
