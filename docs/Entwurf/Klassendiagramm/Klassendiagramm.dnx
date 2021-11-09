@@ -308,7 +308,7 @@
       <layoutConstraint xmi:type="notation:Ratio" xmi:id="_QAtNYEC6Eey1Eb3h79Uffg" value="0.7552123552123552"/>
     </children>
     <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=EmailUtil%5Bjcu%5Ename=EmailUtil.java%5Bjpack%5Ename=business.util%5Bjsrcroot%5Esrcfolder=src%5Bproject%5Eid=Klassendiagramm%5D%5D%5D%5D$uml.Class"/>
-    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_LeSMQTvyEey97IB042msgg" x="149028" y="24816"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_LeSMQTvyEey97IB042msgg" x="148236" y="24420" height="3152"/>
   </children>
   <children xmi:type="umlnotation:UMLShape" xmi:id="_St3tsDwZEeylsIpLoeS8tw" fontName="Noto Sans" fontHeight="8" fillColor="6085595" transparency="0" lineColor="1421231" lineWidth="1" showStereotype="Label">
     <children xmi:type="notation:DecorationNode" xmi:id="_St470DwZEeylsIpLoeS8tw" type="ImageCompartment">
