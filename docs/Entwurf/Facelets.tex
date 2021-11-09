@@ -104,19 +104,25 @@ Sind Außerdem keine Labels für Komponenten angegeben, dann sind anstelle diese
     }
 \end{samepage}
 
-\localauthor{Stefanie Gürster}
-
 \begin{samepage}
-    \textbf{listPagination.xhtml} ist eine Composite Component zur Paginierung von Listen.
-    \emph{listPagination.xhtml} wird in jedem Footer einer Tabelle eingebunden.
+    \textbf{pagination.xhtml} ist eine Composite Component zur Paginierung von Listen.
     \nopagebreak
 
     \ftable{
-        \fentry{back}{commandButton}{Laden der vorherigen Seite der Liste.}{Alle}
+        \fentry{dataTable}{dataTable}{Hier werden die Spalten eingefügt. Durch Klicken auf die Spaltennamen werden die Einträge sortiert. Zusätzlich kann durch ein Textfeld die Liste gefiltert werden.}{Alle}
 
-        \fentry{next}{commandButton}{Laden der nächsten Seite der Liste.}{Alle}
+        \fentry{navButtons}{panelGrid}{Hier befinden sich die Knöpfe zur Navigation zwischen den Seiten der Paginierungen.}{Alle}
 
-        \fentry{page}{selectOneMenu}{Laden einer bestimmten Seite}{Alle}
+		\fentry{firstPage}{commandButton}{Zurück zur ersten Seite.}{Alle}
+
+		\fentry{prevPage}{commandButton}{Eine Seite zurück.}{Alle}
+
+		\fentry{currentPage}{outputText}{Nummer der aktuellen Seite.}{Alle}
+
+		\fentry{nextPage}{commandButton}{Eine Seite weiter.}{Alle}
+
+		\fentry{lastPage}{commandButton}{Zur letzten Seite.}{Alle}
+
     }
 \end{samepage}
 
