@@ -1,5 +1,7 @@
 package business.internal;
 
+import javax.enterprise.context.SessionScoped;
+
 @SessionScoped
 public class ExceptionQueue {
 

@@ -1,11 +1,12 @@
 package control.backing;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.RequestScoped;
 
 import business.service.ReviewService;
 import control.internal.SessionInformation;
 
-
+@RequestScoped
 public class NewReviewBacking {
 	
 	private ReviewService reviewService;

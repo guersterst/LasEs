@@ -1,10 +1,13 @@
 package control.backing;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.RequestScoped;
 
 import business.service.ScienceFieldService;
 import business.service.ScientificForumService;
 import dtos.ScientificForum;
+
+@RequestScoped
 public class NewScientificForumBacking {
 	
 	private ScienceFieldService scienceFieldBacking;

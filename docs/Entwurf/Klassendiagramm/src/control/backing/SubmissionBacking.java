@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.RequestScoped;
 
 import business.service.ReviewService;
 import business.service.SubmissionService;
@@ -12,6 +13,7 @@ import dtos.Paper;
 import dtos.Review;
 import global.util.ResultListParameters;
 
+@RequestScoped
 public class SubmissionBacking {
 
 	private SessionInformation sessionInformation;

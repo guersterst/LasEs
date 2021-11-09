@@ -3,6 +3,7 @@ package control.backing;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.RequestScoped;
 
 import business.service.ScienceFieldService;
 import business.service.ScientificForumService;
@@ -12,6 +13,7 @@ import dtos.ScientificForum;
 import dtos.Submission;
 import dtos.SubmissionState;
 
+@RequestScoped
 public class ScientificForumBacking {
 
     private String searchString;

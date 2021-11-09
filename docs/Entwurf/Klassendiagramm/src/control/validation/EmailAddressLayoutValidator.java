@@ -6,6 +6,7 @@ import javax.faces.validator.Validator;
 
 import business.util.EmailUtil;
 
+@FacesValidator
 public class EmailAddressLayoutValidator implements Validator<String> {
 
 

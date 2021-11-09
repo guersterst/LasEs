@@ -3,6 +3,7 @@ package control.backing;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.RequestScoped;
 
 import business.service.LoginService;
 import control.internal.SessionInformation;
@@ -10,6 +11,8 @@ import dtos.ScientificForum;
 import dtos.Submission;
 import dtos.User;
 
+
+@RequestScoped
 public class NavigationBacking {
 	
 	private SessionInformation sessionInformation;

@@ -4,6 +4,7 @@ package control.backing;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.RequestScoped;
 
 import business.service.SubmissionLieferando;
 import control.internal.SessionInformation;
@@ -13,6 +14,7 @@ import dtos.SubmissionState;
 import global.util.ResultListFilter;
 import global.util.ResultListParameters;
 
+@RequestScoped
 public class HomepageBacking {
 	
 	

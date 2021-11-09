@@ -3,12 +3,14 @@ package control.backing;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.RequestScoped;
 
 import business.service.ProfileService;
 import control.internal.SessionInformation;
 import dtos.Privilege;
 import dtos.User;
 
+@RequestScoped
 public class UserListBacking {
 
 	private SessionInformation sessionInformation;

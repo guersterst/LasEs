@@ -3,6 +3,7 @@ package control.backing;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.RequestScoped;
 
 import control.internal.SessionInformation;
 import dtos.User;
@@ -10,6 +11,7 @@ import dtos.User;
 /**
  * Backing bean for toolbar.xhtml. This view is the place where administrators and editors can administer a submission on the submission page.
  */
+@RequestScoped
 public class ToolbarBacking {
 	
 	private List<User> reviewer;

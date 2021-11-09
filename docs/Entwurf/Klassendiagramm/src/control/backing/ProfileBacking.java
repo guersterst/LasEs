@@ -1,6 +1,7 @@
 package control.backing;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.RequestScoped;
 
 import com.sun.xml.internal.ws.wsdl.writer.document.Part;
 
@@ -8,6 +9,7 @@ import business.service.ProfileService;
 import control.internal.SessionInformation;
 import dtos.User;
 
+@RequestScoped
 public class ProfileBacking {
 	
 	private SessionInformation sessionInformation;

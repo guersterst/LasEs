@@ -3,11 +3,13 @@ package control.backing;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.RequestScoped;
 
 import business.service.SubmissionService;
 import control.internal.SessionInformation;
 import dtos.User;
 
+@RequestScoped
 public class NewSubmissionBacking {
 
 	
