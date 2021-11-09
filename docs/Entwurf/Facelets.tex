@@ -104,19 +104,27 @@ Sind Außerdem keine Labels für Komponenten angegeben, dann sind anstelle diese
     }
 \end{samepage}
 
-\localauthor{Stefanie Gürster}
-
 \begin{samepage}
-    \textbf{listPagination.xhtml} ist eine Composite Component zur Paginierung von Listen.
-    \emph{listPagination.xhtml} wird in jedem Footer einer Tabelle eingebunden.
+    \textbf{pagination.xhtml} ist ein Composite Component zur Paginierung von Listen.
     \nopagebreak
 
     \ftable{
-        \fentry{back}{commandButton}{Laden der vorherigen Seite der Liste.}{Alle}
+        \fentry{dataTable}{dataTable}{Hier werden die Spalten eingefügt. Durch Klicken auf die Spaltennamen werden die Einträge sortiert. Zusätzlich kann durch ein Textfeld die Liste gefiltert werden.}{Alle}
 
-        \fentry{next}{commandButton}{Laden der nächsten Seite der Liste.}{Alle}
+        \fentry{apply}{commandButton}{Mit diesem Knopf können gewählte Sortierung und Filterung angewandt werden.}{Alle}
 
-        \fentry{page}{selectOneMenu}{Laden einer bestimmten Seite}{Alle}
+        \fentry{navButtons}{panelGrid}{Hier befinden sich die Knöpfe zur Navigation zwischen den Seiten der Paginierungen.}{Alle}
+
+		\fentry{firstPage}{commandButton}{Zurück zur ersten Seite.}{Alle}
+
+		\fentry{prevPage}{commandButton}{Eine Seite zurück.}{Alle}
+
+		\fentry{currentPage}{outputText}{Nummer der aktuellen Seite.}{Alle}
+
+		\fentry{nextPage}{commandButton}{Eine Seite weiter.}{Alle}
+
+		\fentry{lastPage}{commandButton}{Zur letzten Seite.}{Alle}
+
     }
 \end{samepage}
 
@@ -482,19 +490,11 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
         \fentry{scienceField}{outputText}{Fachgebiet des Forums.}{Alle}
 
-        \fentry{stateSelect}{selectOneMenu}{Filtern des Status von Einreichungen}{G,E,A}
+        \fentry{editorialPagination}{pagination}{Paginierte Liste aller Einreichungen, die der Editor verwaltet.}{A, E}
 
-        \fentry{search}{inputText}{Durchsuchen der Tabelle mit Matching-Words.}{Alle}
+        \fentry{reviewesPagination}{pagination}{Paginierte Liste aller Einreichungen, die der Gutachter bearbeitet.}{A,E,G}
 
-        \fentry{apply}{commandButton}{Wende Filtereinstellungen an.}{G,E,A}
-
-        \fentry{dateUp}{commandButton}{Einreichungen werden aufsteigend angezeigt.}{G,E,A}
-
-        \fentry{dateDown}{commandButton}{Einreichungen werden absteigend angezeigt.}{G,E,A}
-
-        \fentry{submissionTable}{dataTable}{Liste aller Einreichungen, welche der Nutzer bearbeitet.}{Alle}
-
-        \fentry{pagination}{listPagination}{Die Tabelle enthält eine Paginierung.}{Alle}
+        \fentry{submissionPagination}{pagination}{Paginierte Liste aller Einreichungen, die der Nutzer eingereicht hat.}{Alle}
     }
 \end{samepage}
 
@@ -525,25 +525,8 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
     \textbf{userList.xhtml} \label{flt:userList} Editoren und Administratoren erhalten hier einen Überblick über alle Nutzer. Die Seiten sind paginiert.\nopagebreak
 
     \ftable{
-        \fentry{roleSelect}{selectOneMenu}{Filtern der Rolle des Nutzers}{E,A}
-
-        \fentry{search}{inputText}{Durchsuchen der Tabelle mit Matching-Words.}{Alle}
-
-        \fentry{apply}{commandButton}{Wende Filtereinstellungen an.}{E,A}
-
-        \fentry{nameUp}{commandButton}{Nutzer werden nach Namen aufsteigend angezeigt.}{E,A}
-
-        \fentry{nameDown}{commandButton}{Nutzer werden absteigend nach Namen angezeigt.}{E,A}
-
-        \fentry{roleUp}{commandButton}{Nutzer werden nach Rolle aufsteigend angezeigt.}{E,A}
-
-        \fentry{roleDown}{commandButton}{Nutzer werden absteigend nach Rolle angezeigt.}{E,A}
-
-        \fentry{userTable}{dataTable}{Liste aller Nutzer im System.}{E,A}
-
-        \fentry{pagination}{listPagination}{Die Tabelle enthält eine Paginierung.}{E,A}
+        \fentry{user-pagination}{pagination}{Die Tabelle enthält eine Paginierung.}{E,A}
     }
-	\todo{Hier das Pagination richtig einfügen}
 \end{samepage}
 
 \begin{samepage}
@@ -557,12 +540,10 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
         \fentry{email}{link}{Mailto-Link mit E-Mail-Adresse des Nutzers.}{E,A}
 
-        \fentry{employee}{outputText}{Arbeitgeber des Nutzers.}{E,A}
+        \fentry{employer}{outputText}{Arbeitgeber des Nutzers.}{E,A}
 
         \fentry{scienceField}{outputText}{Fachgebiete des Nutzers.}{E,A}
     }
-
-	\todo{Hier richtige Definition der pagination inhalte}
 \end{samepage}
 
 
