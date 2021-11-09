@@ -18,7 +18,15 @@ public class ScientificForumService {
 	private SubmissionRepository submissionRepository;
 
 	private ScientificForumRepository scientificForumRepository;
-	
+
+	public ScientificForum getForum() { }
+
+	public void updateForum(ScientificForum forum, ScientificForum newForum) { }
+
+	public void addForum(ScientificForum forum) { }
+
+	public void removeForum() { }
+
 	public void addSubmission(Submission submission) { }
 	
 	public void removeSubmission(Submission submission) { }
@@ -26,16 +34,10 @@ public class ScientificForumService {
 	public void addEditor(User user) { }
 
 	public void removeEditor(User user) { }
-
-	public int numberOfEditors() { }
 	
 	public List<User> getEditors() { return null; }
-
-	public void updateForum(ScientificForum forum, ScientificForum newForum) { }
-
-	public void addForum(ScientificForum forum) { }
 	
-	public List<ScientificForum> getAll(ResultListParameters resultListParams) { return null; }
+	public List<ScientificForum> getForums(ResultListParameters resultListParams) { return null; }
 	
-	public List<ScientificForum> getAllSearch(String searchString, ResultListParameters resultListParams) { return null; }
+	public List<ScientificForum> getForums(String searchString, ResultListParameters resultListParams) { return null; }
 }

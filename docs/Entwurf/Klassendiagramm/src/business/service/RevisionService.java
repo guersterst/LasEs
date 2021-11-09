@@ -15,4 +15,6 @@ public class RevisionService {
     public void uploadPaper(byte[] pdf) { }
 
     public Paper downloadPaper() { return null; }
+
+    public void getRevisions() { }
 }

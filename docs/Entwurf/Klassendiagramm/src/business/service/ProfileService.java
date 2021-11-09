@@ -32,7 +32,7 @@ public class ProfileService {
 	
 	public void deleteAvatar(String email) { }
 	
-	public List<User> getUsersSearch(String searchString) { return null; }
+	public List<User> getUsers(String searchString) { return null; }
 	
 	public List<User> getUsers(String searchString, ResultListParameters resultListParams) { return null; }
 	
