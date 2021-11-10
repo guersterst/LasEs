@@ -3,18 +3,22 @@ package persistence.repository;
 import java.util.List;
 
 import dtos.Paper;
+import dtos.Review;
 import global.util.ResultListParameters;
 import persistence.exception.InvalidFieldsException;
 import persistence.exception.InvalidQueryParamsException;
 
 public class PaperRepository {
 	
-	public static List<Paper> getList(ResultListParameters resultParams, Transaction transaction) throws InvalidQueryParamsException { return null; }
+	// get, add, change, remove
+	public static Paper get() { return null; }
+	public static void add() {}
+	public static void change() {}
+	public static void remove() {}
+	
+	// get lists for
+	public static List<Paper> getListForSubmission() throws InvalidQueryParamsException { return null; }
 
 	public static byte[] getPDFForPaper(int submissionId, int version, Transaction transaction) throws IllegalArgumentException { return null; }
-	
-	public static void addPaper(Paper paper, byte[] pdf, Transaction transaction) throws InvalidFieldsException {
-		
-	}
 	
 }

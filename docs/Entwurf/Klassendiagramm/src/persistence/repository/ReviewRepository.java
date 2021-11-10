@@ -9,8 +9,14 @@ import persistence.exception.InvalidQueryParamsException;
 
 public class ReviewRepository {
 	
-	public static List<Review> getReviewsForSubmission(int submissionId, ResultListParameters resultParams, Transaction transaction) throws InvalidQueryParamsException { return null; }
+	// get, add, change, remove
+	public static Review get(Review review, Transaction transaction) throws InvalidFieldsException { return null; }
+	public static void add() {}
+	public static void change() {}
+	public static void remove() {}
 	
-	public static void addReview(Review review, Transaction transaction) throws InvalidFieldsException { }
+	// get lists for
+	public static List<Review> getListForPaper(int submissionId, ResultListParameters resultParams, Transaction transaction) throws InvalidQueryParamsException { return null; }
+	public static List<Review> getListForReviewer() { return null; }
 
 }

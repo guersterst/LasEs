@@ -9,10 +9,11 @@ import persistence.exception.InvalidQueryParamsException;
 
 public class SubmissionRepository {
 	
-	// get, add, change by id
-	public static Submission getSubmission(Submission submission, Transaction transaction) throws InvalidFieldsException { return null; }
-	public static void addSubmission(Submission submission, Transaction transaction) throws InvalidFieldsException { }
-	public static void changeSubmission(Submission old, Submission edited, Transaction transaction) throws InvalidFieldsException { }
+	// get, add, change, remove by id
+	public static Submission get(Submission submission, Transaction transaction) throws InvalidFieldsException { return null; }
+	public static void add(Submission submission, Transaction transaction) throws InvalidFieldsException { }
+	public static void change(Submission old, Submission edited, Transaction transaction) throws InvalidFieldsException { }
+	public static void remove(Submission submission, Transaction transaction) throws InvalidFieldsException { }
 	
 	
 	// get lists
