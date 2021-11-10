@@ -43,6 +43,4 @@ public class ScientificForumService {
 	public List<User> getEditors() { return null; }
 	
 	public List<ScientificForum> getForums(ResultListParameters resultListParams) { return null; }
-	
-	public List<ScientificForum> getForums(String searchString, ResultListParameters resultListParams) { return null; }
 }

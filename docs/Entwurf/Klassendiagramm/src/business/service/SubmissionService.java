@@ -33,9 +33,7 @@ public class SubmissionService {
 
 	public Paper downloadPaper() { return null; }
 
-	public List<Submission> getSubmissions(int forumId, String userEmail, ResultListParameters resultParams) { return null; }
+	public List<Submission> getSubmissions(ScientificForum scientificForum, User role, ResultListParameters resultParams) { return null; }
 
-	public List<Submission> getSubmissions(String searchString, String userEmail, ResultListParameters resultParams) { return null; }
-
-	public List<Submission> getSubmissions(String userEmail, Privilege role, ResultListParameters resultParams) { return null; }
+	public List<Submission> getSubmissions(User role, ResultListParameters resultParams) { return null; }
 }

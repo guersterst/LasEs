@@ -33,9 +33,7 @@ public class UserService {
 	
 	public void deleteAvatar(String email) { }
 	
-	public List<User> getUsers(String searchString) { return null; }
-	
-	public List<User> getUsers(String searchString, ResultListParameters resultListParams) { return null; }
+	public List<User> getUsers(User user, ResultListParameters resultListParams) { return null; }
 	
 
 }
