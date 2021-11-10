@@ -57,9 +57,6 @@ Die Vollständigkeit der einzelnen Facelets wurde anhand der DTO's und dem ER-Di
         \fentry{mainContent}{insert}{\hyperref[flt:pages]{Seiteninhalt}}{Alle}
 
         \fentry{footerBar}{include}{\hyperref[flt:footer]{Fußzeile}}{Alle}
-
-        \fentry{toolBar}{include}{\hyperref[flt:toolbar]{Seitenleiste}}{E}
-
     }
 \end{samepage}
 
@@ -249,7 +246,7 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 \subsubsection{Angemeldeter Nutzer}
 \localauthor{Stefanie Gürster}
 
-\textbf{homepage.xhtml}\label{flt:homepage} Startseite die den Überblick über alle Einreichungen beinhaltet.
+\textbf{homepage.xhtml}\label{flt:homepage} Startseite die den Überblick über alle Einreichungen, aufgeteilt in Reiter, beinhaltet.
 
 \begin{samepage}
     \ftable{
@@ -292,10 +289,11 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 
     \textbf{submission.xhtml} ist die Übersichtsseite einer Abgabe.
     Hier werden alle mit der Einreichung verbundenen Aktivitäten abgebildet.
-    Für den \textbf{Editor} und den \textbf{Administrator} wird zusätzlich eine \emph{toolbar.xhtml} eingebunden.
     \nopagebreak
 
     \ftable{
+        \fentry{toolBar}{include}{\hyperref[flt:toolbar]{Seitenleiste mit Tools.}}{E}
+
         \fentry{newReview}{commandLink}{Weiterleitung zur Einreichung eines neuen Gutachtens.}{G}
 
         \fentry{title}{outputText}{Titel des Papers.}{Alle}
