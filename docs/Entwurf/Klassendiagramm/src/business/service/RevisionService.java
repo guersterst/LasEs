@@ -11,7 +11,7 @@ public class RevisionService {
 
     public void getRevision() { }
 
-    public void addRevision(Paper revision) { }
+    public void requireRevision(Submission submission) { }
 
     public void unlockRevision(int paperId) { }
 

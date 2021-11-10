@@ -15,25 +15,23 @@ public class UserService {
 	private ExceptionQueue exceptionQueue;
 
 	private EmailUtil emailUtil;
-	
+
 	private AvatarUtil avatarUtil;
 
 	private UserRepository userRepository;
 
 	private User getUser(int id) { }
-	
-	public void editUser(User newUser) { } 
-	
+
+	public void editUser(User newUser) { }
+
 	public void deleteUser(String email) { }
-	
+
 	public boolean emailExists(String email) { return false; }
-	
+
 	// byte[] gut?
 	public void uploadAvatar(String email, byte[] avatar) { }
-	
-	public void deleteAvatar(String email) { }
-	
-	public List<User> getUsers(User user, ResultListParameters resultListParams) { return null; }
-	
 
+	public void deleteAvatar(String email) { }
+
+	public List<User> getUsers(User user, ResultListParameters resultListParams) { return null; }
 }

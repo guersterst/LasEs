@@ -16,12 +16,8 @@ public class ReviewService {
 	private EmailUtil emailUtil;
 
 	private ReviewRepository reviewRepository;
-
-	public Review getReview() { }
 	
 	public void addReview(Submission submission, Review review) { }
-
-	public void changeReview() { }
 	
 	public void removeReview(Submission submission, int reviewId, int paperId) { }
 

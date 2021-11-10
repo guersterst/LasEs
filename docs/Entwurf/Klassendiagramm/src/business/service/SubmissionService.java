@@ -29,9 +29,29 @@ public class SubmissionService {
 
 	public void setState(Submission submission, SubmissionState state) { }
 
+	public void setEditor() { }
+
+	public void addReviewer() { }
+
+	public void removeReviewer() { }
+
+	public void realeaseReview(Review review, Submission submission) { }
+
+	public void addCoAuthor() { }
+
 	public void uploadPaper(byte[] pdf) { }
 
 	public Paper downloadPaper() { return null; }
+
+	/*
+	Repo?
+	 */
+
+	public void acceptSubmission() { }
+
+	public void rejectSubmission() { }
+
+	//
 
 	public List<Submission> getSubmissions(ScientificForum scientificForum, User role, ResultListParameters resultParams) { return null; }
 

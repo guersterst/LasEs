@@ -14,7 +14,7 @@ public class ScienceFieldService {
 	
 	public void add(ScienceField field) { }
 
-	public boolean exists() { }
+	public boolean exists(ScienceField scienceField) { }
 	
 	public void remove(ScienceField field) { }
 	

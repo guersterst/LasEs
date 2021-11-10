@@ -39,6 +39,8 @@ public class ScientificForumService {
 	public void addEditor(User user) { }
 
 	public void removeEditor(User user) { }
+
+	public void addScienceField() { }
 	
 	public List<User> getEditors() { return null; }
 	
