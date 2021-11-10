@@ -5,9 +5,12 @@ import business.util.Hashing;
 import dtos.User;
 import persistence.repository.UserRepository;
 
+@ApplicationScoped
 public class RegistrationService {
 
 	private ExceptionQueue exceptionQueue;
+
+	private UserRepository userRepository;
 	
 	private Hashing hashing;
 	
