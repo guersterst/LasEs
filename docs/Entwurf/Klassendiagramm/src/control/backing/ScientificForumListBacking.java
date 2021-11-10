@@ -9,6 +9,7 @@ import javax.faces.bean.ViewScoped;
 import business.service.ScientificForumService;
 import control.internal.SessionInformation;
 import dtos.LocalDate;
+import dtos.Pagination;
 import dtos.ScienceField;
 import dtos.ScientificForum;
 
@@ -16,6 +17,8 @@ import dtos.ScientificForum;
 public class ScientificForumListBacking {
 
 	private SessionInformation sessionInformation;
+	
+	private Pagination<ScientificForum> scientificForumPagination;
 	
 	private ScientificForumService scientificService;
 

@@ -10,6 +10,7 @@ import business.service.ScienceFieldService;
 import business.service.ScientificForumService;
 import business.service.SubmissionLieferando;
 import control.internal.SessionInformation;
+import dtos.Pagination;
 import dtos.ScientificForum;
 import dtos.Submission;
 import dtos.SubmissionState;
@@ -18,6 +19,12 @@ import dtos.SubmissionState;
 public class ScientificForumBacking {
 
     private String searchString;
+    
+    private Pagination<Submission> submissionPagination;
+	
+	private Pagination<Submission> reviewerPagination;
+	
+	private Pagination<Submission> editedPagination;
 
 	private SessionInformation sessionInformation;
 	

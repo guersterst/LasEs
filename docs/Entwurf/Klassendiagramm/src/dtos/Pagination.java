@@ -5,12 +5,10 @@ import java.util.List;
 public abstract class Pagination<T> {
 	
     private List<T> entries;
-    Integer currentPage;
+    private Integer currentPage;
     private String[] searchWords;
-    boolean ascending;
-    String sortedBy;
-    Integer numberItemsPage;
-
+    private boolean ascending;
+    private String sortedBy;
     public Pagination(String sortedBy, Integer numberItemsPage, Integer numberColumns) {
         this.numberItemsPage = numberItemsPage;
         this.sortedBy = sortedBy;

@@ -8,6 +8,7 @@ import javax.faces.bean.ViewScoped;
 
 import business.service.ProfileService;
 import control.internal.SessionInformation;
+import dtos.Pagination;
 import dtos.Privilege;
 import dtos.User;
 
@@ -15,12 +16,10 @@ import dtos.User;
 public class UserListBacking {
 
 	private SessionInformation sessionInformation;
+	
+	private Pagination<User> userPagination;
 
 	private ProfileService profileService;
-
-	private Privilege privilege;
-
-	private String searchText;
 	
 	
 	@PostConstruct
