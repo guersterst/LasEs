@@ -17,7 +17,7 @@
 Im Folgendem Abschnitt werden Abkürzungen für die verschiedenen Rollen eingeführt:
 \textbf{A} steht für Administrator, \textbf{AN} für einen anonymen Nutzer, \textbf{N} für einen angemeldeten Nutzer, \textbf{E} für einen Editor und \textbf{G} steht für einen Gutachter.
 Ist eine Funktion für alle Benutzerrollen außer dem anonymen Nutzer vorgesehen, so werden diese unter dem Begriff \textbf{Alle} zusammengefasst.
-Außerdem verfügt ein Administrator über alle Rechte der anderen Rollen.
+Außerdem verfügt ein Administrator über alle Rechte der anderen Rollen und wird daher nur bei Schlüsselfunktionen genannt.
 
 \subsection{Templates}
 
@@ -35,7 +35,7 @@ Außerdem verfügt ein Administrator über alle Rechte der anderen Rollen.
 
         \fentry{search}{commandButton}{Suche ausführen.}{Alle}
 
-        \fentry{userListLink}{link}{Link zur Übersichtsseite aller Nutzer}{A,E}
+        \fentry{userListLink}{link}{Link zur Übersichtsseite aller Nutzer}{E}
 
         \fentry{forumListLink}{link}{Link zur Übersichtsseite alle Journale und Konferenzen}{Alle}
 
@@ -56,7 +56,7 @@ Außerdem verfügt ein Administrator über alle Rechte der anderen Rollen.
 
         \fentry{footerBar}{include}{\hyperref[flt:footer]{Fußzeile}}{Alle}
 
-        \fentry{toolBar}{include}{\hyperref[flt:toolbar]{Seitenleiste}}{A,E}
+        \fentry{toolBar}{include}{\hyperref[flt:toolbar]{Seitenleiste}}{E}
 
     }
 \end{samepage}
@@ -78,27 +78,27 @@ Außerdem verfügt ein Administrator über alle Rechte der anderen Rollen.
     \nopagebreak
 
     \ftable{
-        \fentry{addReviewerField}{inputText}{Eingabefeld zur Angabe einer E-Mailadresse}{A,E}
+        \fentry{addReviewerField}{inputText}{Eingabefeld zur Angabe einer E-Mailadresse}{E}
 
-        \fentry{addDeadlineReviewer}{inputText}{Eingabefeld zur Angabe einer Deadline.}{A,E}
+        \fentry{addDeadlineReviewer}{inputText}{Eingabefeld zur Angabe einer Deadline.}{E}
 
-        \fentry{addReviewerBtn}{commandButton}{Knopf zum hinzufügen des Gutachters}{A,E}
+        \fentry{addReviewerBtn}{commandButton}{Knopf zum hinzufügen des Gutachters}{E}
 
-        \fentry{reviewerTable}{dataTable}{Liste der Gutachter}{A,E}
+        \fentry{reviewerTable}{dataTable}{Liste der Gutachter}{E}
 
-        \fentry{removeReviewer}{commandButton}{Entferne einen bestimmten Gutachter}{A,E}
+        \fentry{removeReviewer}{commandButton}{Entferne einen bestimmten Gutachter}{E}
 
-        \fentry{selectEditor}{selectOneMenu}{Auswahländerung des verwaltenden Editors}{A,E}
+        \fentry{selectEditor}{selectOneMenu}{Auswahländerung des verwaltenden Editors}{E}
 
-        \fentry{saveEditor}{commandButton}{Speichern der Änderung}{A,E}
+        \fentry{saveEditor}{commandButton}{Speichern der Änderung}{E}
 
-        \fentry{revisionDeadline}{inputText}{Eingabe zur Angabe einer Deadline.}{A,E}
+        \fentry{revisionDeadline}{inputText}{Eingabe zur Angabe einer Deadline.}{E}
 
-        \fentry{requireRevisionBtn}{commandButton}{Fordert den Einreicher auf, seine Einreichung zu überarbeiten}{A,E}
+        \fentry{requireRevisionBtn}{commandButton}{Fordert den Einreicher auf, seine Einreichung zu überarbeiten}{E}
 
-        \fentry{acceptSubmissionBtn}{commandButton}{Akzeptiere die Einreichung}{A,E}
+        \fentry{acceptSubmissionBtn}{commandButton}{Akzeptiere die Einreichung}{E}
 
-        \fentry{rejectSubmissionBtn}{commandButton}{Lehne die Einreichung ab}{A,E}
+        \fentry{rejectSubmissionBtn}{commandButton}{Lehne die Einreichung ab}{E}
 
     }
 \end{samepage}
@@ -265,31 +265,33 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
     \nopagebreak
 
     \ftable{
+        \fentry{newReview}{commandLink}{Weiterleitung zur Einreichung eines neuen Gutachtens.}{G}
+
         \fentry{title}{outputText}{Titel des Papers.}{Alle}
 
         \fentry{forum}{Link}{Name des Forums und Weiterleitung zur Forumsübersicht.}{Alle}
 
         \fentry{author}{Link}{Name des Autors und Weiterleitung zum Profil.}{Alle}
 
-        \fentry{email}{Link}{E-Mail-Adressen der Co-Authoren und Mailto-Link.}{Alle}
+        \fentry{email}{Link}{E-Mail-Adressen der Co-Autoren und Mailto-Link.}{Alle}
 
         \fentry{dateUp}{commandButton}{Einreichungen werden aufsteigend angezeigt.}{Alle}
 
         \fentry{dateDown}{commandButton}{Einreichungen werden absteigend angezeigt.}{Alle}
 
-        \fentry{reviewState}{selectOneMenu}{Filtern der Gutachten nach ihrem Status.}{E,A,G}
+        \fentry{reviewState}{selectOneMenu}{Filtern der Gutachten nach ihrem Status.}{E,G}
 
-        \fentry{submitted}{checkbox}{Anzeigen aller abgegebenen Gutachten.}{E,A}
+        \fentry{submitted}{checkbox}{Anzeigen aller abgegebenen Gutachten.}{E}
 
-        \fentry{notSubmitted}{checkbox}{Anzeigen noch nicht abgegebener Gutachten.}{E,A}
+        \fentry{notSubmitted}{checkbox}{Anzeigen noch nicht abgegebener Gutachten.}{E}
 
         \fentry{version}{selectOneMenu}{Auswahl der Versionsnummern}{Alle}
 
-        \fentry{recommendation}{selectOneMenu}{Auswahl der Art von Empfehlungen.}{E,A,G}
+        \fentry{recommendation}{selectOneMenu}{Auswahl der Art von Empfehlungen.}{E,G}
 
         \fentry{submissionTable}{dataTable}{Liste aller Versionen}{Alle}
 
-        \fentry{reviewTable}{dataTable}{Liste aller/der eigenen Gutachten.}{E,A,G}
+        \fentry{reviewTable}{dataTable}{Liste aller/der eigenen Gutachten.}{E,G}
 
         \fentry{pagination}{listPagination}{Jede Tabelle enthält eine Paginierung.}{Alle}
     }
@@ -313,23 +315,23 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
     Die Elemente der Liste von Gutachten ist wie folgt:
 
     \ftable{
-        \fentry{version}{outputText}{Versionsnummer des Gutachtens.}{E,A,G}
+        \fentry{version}{outputText}{Versionsnummer des Gutachtens.}{E,G}
 
-        \fentry{reviewer}{outputText}{Namen des Gutachters.}{E,A,G}
+        \fentry{reviewer}{outputText}{Namen des Gutachters.}{E,G}
 
-        \fentry{date}{outputText}{Datum des Gutachtens.}{E,A,G}
+        \fentry{date}{outputText}{Datum des Gutachtens.}{E,G}
 
-        \fentry{deadline}{outputText}{Deadline des Gutachtens.}{E,A,G}
+        \fentry{deadline}{outputText}{Deadline des Gutachtens.}{E,G}
 
-        \fentry{state}{commandButton}{Freigabe des Gutachtens}{E,A}
+        \fentry{state}{commandButton}{Freigabe des Gutachtens}{E}
 
         \fentry{stateText}{outputText}{Freigabestatus des Gutachtens}{G}
 
-        \fentry{recomendation}{checkbox}{Empfehlung eines Gutachters}{E,A,G}
+        \fentry{recomendation}{checkbox}{Empfehlung eines Gutachters}{E,G}
 
-        \fentry{comment}{outputText}{Kommentar des Gutachters.}{E,A,G}
+        \fentry{comment}{outputText}{Kommentar des Gutachters.}{E,G}
 
-        \fentry{pdf}{commandButton}{Download der Einreichung.}{E,A,G}
+        \fentry{pdf}{commandButton}{Download der Einreichung.}{E,G}
     }
 \end{samepage}
 
@@ -340,7 +342,7 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
     \ftable{
         \fentry{submissionName}{inputText}{Name des abzugebenden Papers.}{N}
 
-        \fentry{forumName}{inputText}{Name des Forums, bei welchem abgegeben wird.}{N }
+        \fentry{forumName}{inputText}{Name des Forums, bei welchem abgegeben wird.}{N}
 
         \fentry{editorSearch}{selectOneMenu}{Angabe eines Editors}{N}
 
@@ -419,41 +421,41 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 
     \ftable{
 
-        \fentry{avatar}{graphicImage}{Aktueller Avatar.}{N,A,E}
+        \fentry{avatar}{graphicImage}{Aktueller Avatar.}{N,E}
 
-        \fentry{newAvatar}{inputFile}{Hochladen eines neuen Avatars.}{N,A,E}
+        \fentry{newAvatar}{inputFile}{Hochladen eines neuen Avatars.}{N,E}
 
-        \fentry{deleteAvatar}{commandButton}{Löschen des Avatars.}{N,A,E}
+        \fentry{deleteAvatar}{commandButton}{Löschen des Avatars.}{N,E}
 
-        \fentry{role}{outputText}{Angabe der Rolle eines Nutzers}{N,A,E}
+        \fentry{role}{outputText}{Angabe der Rolle eines Nutzers}{N,E}
 
         \fentry{isAdmin}{checkbox}{Zuteilung der Rolle des Administrators.}{A}
 
-        \fentry{title}{inputText}{Titel des Nutzenden.}{N,A,E}
+        \fentry{title}{inputText}{Titel des Nutzenden.}{N,E}
 
-        \fentry{firstName}{inputText}{Vorname des Nutzenden.}{N,A,E}
+        \fentry{firstName}{inputText}{Vorname des Nutzenden.}{N,E}
 
-        \fentry{name}{inputText}{Nachname des Nutzenden.}{N,A,E}
+        \fentry{name}{inputText}{Nachname des Nutzenden.}{N,E}
 
-        \fentry{password}{inputSecret}{Leeres Eingabefeld für ein neues Passwort.}{N,A}
+        \fentry{password}{inputSecret}{Leeres Eingabefeld für ein neues Passwort.}{N}
 
-        \fentry{email}{inputText}{E-Mail des Nutzenden.}{N,A,E}
+        \fentry{email}{inputText}{E-Mail des Nutzenden.}{N,E}
 
-        \fentry{submissionNumber}{outputText}{Anzahl der eigenen Einreichungen}{N,A,E}
+        \fentry{submissionNumber}{outputText}{Anzahl der eigenen Einreichungen}{N,E}
 
-        \fentry{employer}{inputText}{Angabe des Arbeitgebers}{N,A,E}
+        \fentry{employer}{inputText}{Angabe des Arbeitgebers}{N,E}
 
-        \fentry{scieneField}{outputText}{Liste aller Fachgebiete}{N,A,E}
+        \fentry{scieneField}{outputText}{Liste aller Fachgebiete}{N,E}
 
-        \fentry{addScienceField}{inputText}{Spezialgebiete des Nutzers}{N,A,E}
+        \fentry{addScienceField}{inputText}{Spezialgebiete des Nutzers}{N,E}
 
-        \fentry{addFieldButton}{commandButton}{Füge Fachgebiet zur Liste hinzu.}{N,A,E}
+        \fentry{addFieldButton}{commandButton}{Füge Fachgebiet zur Liste hinzu.}{N,E}
 
-        \fentry{dateOfBirth}{inputText}{Angabe des Geburtstages}{N,A}
+        \fentry{dateOfBirth}{inputText}{Angabe des Geburtstages}{N}
 
-        \fentry{save}{commandButton}{Daten werden persistiert.}{N,A,E}
+        \fentry{save}{commandButton}{Daten werden persistiert.}{N,E}
 
-        \fentry{delete}{commandButton}{Nutzer und alle damit verbundenen Daten werden gelöscht.}{N,A,E}
+        \fentry{delete}{commandButton}{Nutzer und alle damit verbundenen Daten werden gelöscht.}{N,E}
     }
 \end{samepage}
 
@@ -488,13 +490,13 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
         \fentry{url}{outputLink}{Link zur Konferenz oder zum Journal.}{Alle}
 
-        \fentry{reviewInstructions}{outputText}{Anleitung für eine Begutachtung.}{G,E,A}
+        \fentry{reviewInstructions}{outputText}{Anleitung für eine Begutachtung.}{G,E}
 
         \fentry{scienceField}{outputText}{Fachgebiet des Forums.}{Alle}
 
-        \fentry{editorialPagination}{pagination}{Paginierte Liste aller Einreichungen, die der Editor verwaltet.}{A, E}
+        \fentry{editorialPagination}{pagination}{Paginierte Liste aller Einreichungen, die der Editor verwaltet.}{E}
 
-        \fentry{reviewesPagination}{pagination}{Paginierte Liste aller Einreichungen, die der Gutachter bearbeitet.}{A,E,G}
+        \fentry{reviewesPagination}{pagination}{Paginierte Liste aller Einreichungen, die der Gutachter bearbeitet.}{E,G}
 
         \fentry{submissionPagination}{pagination}{Paginierte Liste aller Einreichungen, die der Nutzer eingereicht hat.}{Alle}
     }
@@ -508,15 +510,15 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
     \nopagebreak
 
     \ftable{
-        \fentry{versionNumber}{outputText}{Versionsnummer des eingereichten Papers, zu welchem der Gutachter ein Gutachten abgeben kann.}{G,A}
+        \fentry{versionNumber}{outputText}{Versionsnummer des eingereichten Papers, zu welchem der Gutachter ein Gutachten abgeben kann.}{G}
 
-        \fentry{recommendation}{checkbox}{Empfehlung des Gutachters ein Paper zu akzeptieren.}{G,A}
+        \fentry{recommendation}{checkbox}{Empfehlung des Gutachters ein Paper zu akzeptieren.}{G}
 
-        \fentry{comment}{inputTextarea}{Kommentar eines Gutachters}{G,A}
+        \fentry{comment}{inputTextarea}{Kommentar eines Gutachters}{G}
 
-        \fentry{reviewPdf}{inputFile}{Einzureichendes Gutachten.}{G,A}
+        \fentry{reviewPdf}{inputFile}{Einzureichendes Gutachten.}{G}
 
-        \fentry{submitReview}{commandButton}{Gutachten einreichen.}{G,A}
+        \fentry{submitReview}{commandButton}{Gutachten einreichen.}{G}
     }
 \end{samepage}
 
@@ -527,7 +529,7 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
     \textbf{userList.xhtml} \label{flt:userList} Editoren und Administratoren erhalten hier einen Überblick über alle Nutzer. Die Seiten sind paginiert.\nopagebreak
 
     \ftable{
-        \fentry{user-pagination}{pagination}{Die Tabelle enthält eine Paginierung.}{E,A}
+        \fentry{user-pagination}{pagination}{Die Tabelle enthält eine Paginierung.}{E}
     }
 \end{samepage}
 
@@ -536,15 +538,15 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
     Für die Benutzerliste sind die folgenden Spalten vorgesehen, wobei diese in die Bereiche: Nutzerrolle, Name, E-Mail-Adresse, Arbeitgeber und Fachgebiete aufgegliedert ist.
 
     \ftable{
-        \fentry{role}{outputText}{Rolle des Nutzers}{E,A}
+        \fentry{role}{outputText}{Rolle des Nutzers}{E}
 
-        \fentry{name}{link}{Name des Nutzers. Link mit URL-Parameter zur Weiterleitung auf die Profilseite des Nutzers.}{E,A}
+        \fentry{name}{link}{Name des Nutzers. Link mit URL-Parameter zur Weiterleitung auf die Profilseite des Nutzers.}{E}
 
-        \fentry{email}{link}{Mailto-Link mit E-Mail-Adresse des Nutzers.}{E,A}
+        \fentry{email}{link}{Mailto-Link mit E-Mail-Adresse des Nutzers.}{E}
 
-        \fentry{employer}{outputText}{Arbeitgeber des Nutzers.}{E,A}
+        \fentry{employer}{outputText}{Arbeitgeber des Nutzers.}{E}
 
-        \fentry{scienceField}{outputText}{Fachgebiete des Nutzers.}{E,A}
+        \fentry{scienceField}{outputText}{Fachgebiete des Nutzers.}{E}
     }
 \end{samepage}
 
@@ -666,33 +668,33 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
     \nopagebreak
 
     \ftable{
-        \fentry{forumName}{inputText}{Angabe des Name des Forums.}{A,E}
+        \fentry{forumName}{inputText}{Angabe des Name des Forums.}{E}
 
-        \fentry{emailEditor}{inputText}{Angabe der E-Mail-Adresse eines Editor.}{A,E}
+        \fentry{emailEditor}{inputText}{Angabe der E-Mail-Adresse eines Editor.}{E}
 
-        \fentry{addEditor}{commandButton}{Hinzufügen eines Editors in eine Liste.}{A,E}
+        \fentry{addEditor}{commandButton}{Hinzufügen eines Editors in eine Liste.}{E}
 
-        \fentry{deleteEditor}{commandButton}{Löschen des zugehörigen Editors von der Liste.}{A,E}
+        \fentry{deleteEditor}{commandButton}{Löschen des zugehörigen Editors von der Liste.}{E}
 
-        \fentry{deadline}{inputText}{Hinzufügen einer Deadline des Forums.}{A,E}
+        \fentry{deadline}{inputText}{Hinzufügen einer Deadline des Forums.}{E}
 
-        \fentry{description}{inputTextArea}{Angabe einer Kurzbeschreibung.}{A,E}
+        \fentry{description}{inputTextArea}{Angabe einer Kurzbeschreibung.}{E}
 
-        \fentry{url}{inputText}{Link zur Konferenz oder zum Journal.}{A,E}
+        \fentry{url}{inputText}{Link zur Konferenz oder zum Journal.}{E}
 
-        \fentry{reviewInstructions}{inputTextArea}{Angabe einer Anleitung für eine Begutachtung.}{A,E}
+        \fentry{reviewInstructions}{inputTextArea}{Angabe einer Anleitung für eine Begutachtung.}{E}
 
-        \fentry{scienceFieldOut}{outputText}{Liste der Fachgebiete.}{A,E}
+        \fentry{scienceFieldOut}{outputText}{Liste der Fachgebiete.}{E}
 
-        \fentry{scienceField}{selectOneMenu}{Auswahl von Fachgebieten.}{A,E}
+        \fentry{scienceField}{selectOneMenu}{Auswahl von Fachgebieten.}{E}
 
         \fentry{newScienceField}{inputText}{Hinzufügen neuer Fachgebiete.}{A}
 
         \fentry{addScienceField}{commandButton}{Ausführen der Hinzufüge-Aktion.}{A}
 
-        \fentry{save}{commandButton}{Speichern des Änderungen.}{A,E}
+        \fentry{save}{commandButton}{Speichern des Änderungen.}{E}
 
-        \fentry{abort}{commandButton}{Abbruch des Bearbeitungsprozesses.}{A,E}
+        \fentry{abort}{commandButton}{Abbruch des Bearbeitungsprozesses.}{E}
 
         \fentry{delete}{commandButton}{Löscht das Forum.}{A}
     }
