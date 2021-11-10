@@ -146,6 +146,8 @@ Im folgenden Diagramm gilt für die Klassen mit dickem schwarzem Rand folgende K
 \classentry{EmailAddressLayoutValidation}{Validates that a given String is a valid E-Mail Address.}
 \classentry{EmailAdressUnoccupiedValidator}{Validates that a given email is not already in use within the system.}
 \classentry{URLValidator}{Validates that a given String is a valid URL.}
+	\classentry{PasswordValidator}{Checks if a password meets the minimum requirements for a password.}
+	\classentry{NotEmptyValidator}{Checks if a free text imput is empty.}
 
 }
 
@@ -254,7 +256,18 @@ Folgende Informationen wurden hier aus Gründen der Übersichtlichkeit aus dem D
 \end{figure}
 
 \classtable{
-    \classentry{InvalidFieldsException}{Hints at an invalid field in a dto.}
-    \classentry{InvalidQueryParamsException}{Hints at invalid filter or sort parameters given to the query.}
+    \classentry{InvalidFieldsException}{Hints at an invalid field in a dto given to the persistence layer.}
+    \classentry{InvalidQueryParamsException}{Hints at invalid field in the ResulstListParameters object given to the persistence layer.}
+    \classentry{DBConnectionFailedException}{Is thrown when the database connection cannot be established or times out.}
+    \classentry{DBConfigurationException}{Is thrown when bad configuration of the database leads to a failure to establish a connection.}
+    \classentry{DBQueryFailedException}{Is thrown when a query to the database fails and will probably fail again.}
+    \caption{Unchecked Exceptions}
+}
+
+\classtable{
+	\classentry{EmailAddressExistsException}{Is thrown when the repository tries to save an email-address to the databse that already exists in the database.}
+	\classentry{DataNotWrittenException}{Is thrown when the writing of data fails but a retry has a high probability of succeeding.}
+	\classentry{DataNotCompleteException}{Is thrown when the reading of data yields an incomplete result but a retry has a high probability of succeeding.}
+	\caption{Checked Exceptions}
 }
 
