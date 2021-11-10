@@ -8,10 +8,10 @@
 | SQL | Johann Schicho |
 | JSF | Stefanie Gürster |
 | E-Mail-Versendung | Thomas oder Steffi 🤔 |
-| Modulare Listen | |
+| Modulare Listen | Johann Schicho |
 | Datei-Upload | Johannes Garstenauer |
 | Parameterübergabe zw Facelets |  Johann Schicho |
 | JSF Templates | Johann Schicho |
-| CSS & Bootstrap | |
+| CSS & Bootstrap | Stefanie Gürster |
 | Config file | Johann Schicho |
 | Fehlerbehandlung | Johannes Garstenauer |
