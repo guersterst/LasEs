@@ -1,51 +1,46 @@
 \localauthor{Johannes Garstenauer}
 
 \subsection{Schichten}\label{arch:schichten}
-Diese Anwendung folgt einer Schichtenarchitektur von drei Schichten. Dies bietet ein gutes Verhältnis zwischen dem Mehraufwand,
-welcher mit der Verwendung von mehr Schichten verbunden ist, und der dadurch gewonnen Modularität und Austauschbarkeit.
+Diese Anwendung folgt einer Schichtenarchitektur von vier Schichten. Dies bietet ein gutes Verhältnis zwischen dem Mehraufwand,
+welcher mit der Verwendung von zusätzlichen Schichten verbunden ist, und der dadurch gewonnen Modularität und Austauschbarkeit.
 \begin{itemize}
     \item Die \emph{view}-Schicht enthält die Komponenten zur grafischen Darstellung.
     \item Die \emph{control}-Schicht enthält die Komponenten zur Steuerung der grafischen Darstellung und Reaktion auf
     Nutzereingaben.
     \item Die \emph{business}-Schicht enthält die Komponenten, welche die Anwendungslogik umsetzen.
-    \item Die \emph{persistence}-Schicht enthält die Komponenten zum Zugriff auf die Datenbasis.
+    \item Die \emph{persistence}-Schicht enthält die Komponenten zum Zugriff auf den Datenbankserver.
 \end{itemize}
 Diese Schichten folgen der \emph{\hyperref[arch:mvc]{MVC-Architektur}} wie in \textbf{\hyperref[arch:pakdia]{Abbildung 1}} dargestellt.
-Die \hyperref[arch:persistence]{Persistence-} und \hyperref[arch:business]{Businessschichten} gehören hierbei
-zum \emph{Model}. Die \hyperref[arch:control]{Controllschicht} stellt den \emph{Controller} dar und die
+Die \hyperref[arch:persistence]{Persistenz-} und \hyperref[arch:business]{Businessschichten} gehören hierbei
+zum \emph{Model}. Die \hyperref[arch:control]{Kontrollschicht} stellt den \emph{Controller} dar und die
 \emph{Faceletschicht} %todo link
 die \emph{View}.
 
 \begin{figure}[H]
 \centering
-    \includegraphics[width=0.8\linewidth]{graphics/Paketdiagramm5.0}\label{arch:pakdia}
+    \includegraphics[width=0.8\linewidth]{graphics/Paketdiagramm6.0}\label{arch:pakdia}
     \caption{Das Schichtenmodell der LasEs-Anwendung.}
 \end{figure}
 
-%todo mvc sichtbar machen.
-%todo view einfügen
-%todo servlets?
 
 \subsection{Pakete}\label{arch:pakete}
 
 \subsubsection{de.lases.control} \label{arch:control}
 Dieses Paket enthält alle Klassen der Kontrollschicht.
 \newline\newline
-\textbf{\emph{de.lases.control.conversion}}
-enthält alle Klassen, die zur Konvertierung von Nutzereingaben
-in Facelets verwendet werden.
+\textbf{\emph{de.lases.control.internal}}
+enthält die Klassen, welche zur internen Verwaltung verwendet werden.
+Hierzugehört beispielsweise die Sessionverwaltung, sowie der Systemstart und -stop.
 \newline\newline
 \textbf{\emph{de.lases.control.validiation}}
 enthält alle Klassen, die zur Validierung von Nutzereingaben
 in Facelets verwendet werden.
 \newline\newline
 \textbf{\emph{de.lases.control.backing}}\label{arch:backing}
-enthält alle Managed Beans welche zur Darstellung der Facelets aus der
+enthält alle \emph{Managed Beans} welche zur Darstellung der \emph{Facelets} aus der
 %todo link
-View Verwendung finden. Zu jedem Facelet [facelet] existiert genau ein
-Backing-Bean, welches [facelet]Backing genannt wird.
-%todo
-%\subsubsection*{de.lases.control.servlet}
+\emph{View} Verwendung finden. Zu jedem \emph{Facelet} [facelet] existiert genau ein
+\emph{Backing\-Bean}, welches [facelet]Backing genannt wird.
 
 \subsubsection{de.lases.business}\label{arch:business}
 Dieses Paket enthält alle Klassen der Anwendungslogikschicht.
@@ -58,7 +53,7 @@ gestellt werden und auf die auf die %todo link repos
 Repositories zugreifen.
 \newline\newline
 \textbf{\emph{de.lases.business.util}}
-enthält die Hilfsklassen, welche Dienste zur Verfügung stellen,
+enthält statische Hilfsklassen, welche Dienste zur Verfügung stellen,
 die von der Anwendungslogik selbst getrennt werden können.
 \newline\newline
 \textbf{\emph{de.lases.business.exception}} \label{arch:busex}
@@ -66,7 +61,8 @@ enthält die Exceptionklassen, die ein Fehlverhalten im System repräsentieren.
 \newline\newline
 \textbf{\emph{de.lases.business.internal}}
 enthält die Klassen, welche zur internen Verwaltung verwendet werden.
-Hierzugehört beispielsweise die Sessionverwaltung, sowie der Systemstart und -stop.
+Hierzu gehören Dienste, welche periodische Aufräumaufarbeiten in der Datenbank anstoßen,
+oder bei der Ausnahmebehandlung helfen.
 
 \subsubsection{de.lases.persistence}\label{arch:persistence}
 Dieses Paket enthält alle Schichten der Persistenzschicht.
@@ -75,7 +71,7 @@ Dieses Paket enthält alle Schichten der Persistenzschicht.
 enthält alle Klassen, die dem direkten Zugriff auf die Datenbank dienen.
 \newline\newline
 \textbf{\emph{de.lases.persistence.util}}
-enthält die Hilfsklassen zur Datenbankverwaltung, wie einen
+enthält statische Hilfsklassen zur Datenbankverwaltung, wie einen
 Connection\-Pool.
 \newline\newline
 \textbf{\emph{de.lases.persistence.exception}}
@@ -93,8 +89,6 @@ enthält Hilfsklassen für schichtenübergreifende Loggingfunktionen.
 enthält alle POJO-Klassen, die Daten in der Anwendung repräsentieren und zu deren
 Transport verwendet werden. Sie setzen keine Anwendungslogik um.
 
-%todo i18n resource bundles: info (tooltips), names (labels), messages (facesmsg)
-
 \subsection{Fehlerbehandlung}
 Bei Verwendung der Anwendung können Fehler auftreten. Diese werden zur Nachvollziehbarkeit
 immer geloggt. Daraufhin wird auf verschiedene Weisen verfahren.
@@ -102,14 +96,14 @@ immer geloggt. Daraufhin wird auf verschiedene Weisen verfahren.
 \subsubsection{Geprüfte Ausnahmen}
 Geprüfte Ausnahmen repräsentieren Ausnahmesituationen, mit
 denen gerechnet werden muss und auf die reagiert wird.
-Treten solche in der \emph{\hyperref[arch:persistence]{Persistence-Schicht}}
+Treten solche in der \emph{\hyperref[arch:persistence]{Persistenzschicht}}
 auf, dann werden sie in eine semantisch passende \hyperref[arch:busex]{Ausnahmeklasse}
 mit Fehlermeldung gekapselt und an den Aufrufer weiterpropagiert.
 Wenn in der \emph{\hyperref[arch:bus]{Business-}} oder
 \emph{\hyperref[arch:control]{Kontrollschicht}} solch eine
 \hyperref[arch:busex]{Ausnahmeklasse} ankommt oder entsteht, so
 wird sie in eine \emph{ExceptionQueue} %todo link
-gelegt. Diese wird von einem \emph{ExceptionObserver} beobachtet, welcher eine passende
+gelegt. Diese wird von einem \emph{ExceptionHandler} beobachtet, welcher eine passende
 \emph{FacesMessage} daraus generiert.
 Diese werden dann von den zugehörigen \emph{Facelets} %todo link
 gerendert.
@@ -147,11 +141,11 @@ Dies ermöglicht eine losere Kupplung zwischen Klassen und somit Erweiterbarkeit
 und Austauschbarkeit.
 Die \emph{CDI} verwaltet in dieser Anwendung alle Objekte der \emph{\hyperref[arch:backing]{Backing-Beans}}
 als \emph{@RequestScoped}
-und alle \emph{\hyperref[arch:service]{Services}} als \emph{@Dependent}.
+und alle \emph{\hyperref[arch:service]{Services}} als \emph{@ApplicationScoped}.
 Weiterhin sind einige Klassen \emph{@SessionScoped} wie beispielsweise
-die \emph{ExceptionQueue, ExceptionObserver und SessionInformation}.
+die \emph{ExceptionQueue, ExceptionHandler und SessionInformation}.
 Letzlich gibt es einige Klassen, welche
-\emph{@ApplicationScoped} wie der \emph{ConnectionPool} %todo link all
+\emph{@ApplicationScoped} wie der \emph{ConnectionPool}, \emph{PeriodicWorker} oder \emph{Logger}%todo link all
 Es wird die Referenzimplementierung \emph{Weld} von \emph{JBoss} verwendet.
 
 \subsection{Patterns}\label{arch:patterns}
