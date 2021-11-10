@@ -10,6 +10,7 @@ import javax.faces.bean.ViewScoped;
 import business.service.ReviewService;
 import business.service.SubmissionService;
 import control.internal.SessionInformation;
+import dtos.Pagination;
 import dtos.Paper;
 import dtos.Review;
 import dtos.SubmissionState;
@@ -19,6 +20,10 @@ import global.util.ResultListParameters;
 public class SubmissionBacking {
 
 	private SessionInformation sessionInformation;
+	
+	private Pagination<Paper> paperPagination;
+	
+	private Pagination<Review> reviewPagination;
 	
 	// Get these value directly from the view:
 	
@@ -55,13 +60,7 @@ public class SubmissionBacking {
 	@PostConstruct
 	public void init() { }
 	
-	public void sortDateAsc() { }
-	
 	public void setState(SubmissionState submissionState) { }
-	
-	public void sortDateDesc() { }
-	
-	public void applyFilters() { }
 	
 	public void download(int paperId) { }
 	

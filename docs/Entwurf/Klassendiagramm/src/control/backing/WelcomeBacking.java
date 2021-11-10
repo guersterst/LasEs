@@ -23,6 +23,6 @@ public class WelcomeBacking {
 	@PostConstruct
 	public void init() { }
 	
-	public String login() { }
+	public String login() { return null; }
 
 }

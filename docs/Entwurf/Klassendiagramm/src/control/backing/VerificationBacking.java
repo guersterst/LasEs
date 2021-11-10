@@ -14,9 +14,7 @@ public class VerificationBacking {
 	
 	@PostConstruct
 	public void init() { }
-	
-	public int secondsRemaining() { return 0; }
 
-	public String redirect() { return null; }
+	public String goToHome() { return null; }
 
 }

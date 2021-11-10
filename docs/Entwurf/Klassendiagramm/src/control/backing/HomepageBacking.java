@@ -9,6 +9,7 @@ import javax.faces.bean.ViewScoped;
 
 import business.service.SubmissionLieferando;
 import control.internal.SessionInformation;
+import dtos.Pagination;
 import dtos.Review;
 import dtos.Submission;
 import dtos.SubmissionState;
@@ -24,6 +25,14 @@ public class HomepageBacking {
 	}
 	
 	private Tab tab;
+	
+	private Pagination<Submission> submissionPagination;
+	
+	private Pagination<Submission> reviewerPagination;
+	
+	private Pagination<Submission> editedPagination;
+	
+	
 	
 	private ResultListParameters resultListParameters;
 
