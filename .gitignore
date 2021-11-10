@@ -9,4 +9,5 @@ Main.pdf
 *.snm
 .idea/
 *.iml
-
+*.synctex(busy)
+out/
