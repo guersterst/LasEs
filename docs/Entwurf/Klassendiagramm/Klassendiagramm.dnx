@@ -577,7 +577,7 @@
     <children xmi:type="notation:ListCompartment" xmi:id="_IoCCcD1TEeyqe7ggTHXcVA" type="ANNOTATED_ATTRIBUTE_COMPARTMENT" showTitle="true"/>
     <children xmi:type="notation:ListCompartment" xmi:id="_IoCCcT1TEeyqe7ggTHXcVA" type="ANNOTATED_OPERATION_COMPARTMENT"/>
     <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=SubmissionRepository%5Bjcu%5Ename=SubmissionRepository.java%5Bjpack%5Ename=persistence.repository%5Bjsrcroot%5Esrcfolder=src%5Bproject%5Eid=Klassendiagramm%5D%5D%5D%5D$uml.Class"/>
-    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_IoA0UT1TEeyqe7ggTHXcVA" x="51348" y="67980"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_IoA0UT1TEeyqe7ggTHXcVA" x="51348" y="66660"/>
   </children>
   <children xmi:type="umlnotation:UMLShape" xmi:id="_EOB_gD1XEeyqe7ggTHXcVA" fontName="Noto Sans" fontHeight="8" showListVisibility="Text" fillColor="6085595" transparency="0" lineColor="1421231" lineWidth="1" showStereotype="Text">
     <children xmi:type="notation:DecorationNode" xmi:id="_EOCmkD1XEeyqe7ggTHXcVA" type="ImageCompartment">
