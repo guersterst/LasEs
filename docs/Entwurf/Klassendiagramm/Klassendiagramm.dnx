@@ -310,7 +310,7 @@
     <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=EmailUtil%5Bjcu%5Ename=EmailUtil.java%5Bjpack%5Ename=business.util%5Bjsrcroot%5Esrcfolder=src%5Bproject%5Eid=Klassendiagramm%5D%5D%5D%5D$uml.Class"/>
     <layoutConstraint xmi:type="notation:Bounds" xmi:id="_LeSMQTvyEey97IB042msgg" x="148236" y="24420" height="3152"/>
   </children>
-  <children xmi:type="umlnotation:UMLShape" xmi:id="_St3tsDwZEeylsIpLoeS8tw" fontName="Noto Sans" fontHeight="8" fillColor="6085595" transparency="0" lineColor="1421231" lineWidth="1" showStereotype="Label">
+  <children xmi:type="umlnotation:UMLShape" xmi:id="_St3tsDwZEeylsIpLoeS8tw" fontName="Noto Sans" fontHeight="8" fillColor="6085595" transparency="0" lineColor="0" lineWidth="4" showStereotype="Label">
     <children xmi:type="notation:DecorationNode" xmi:id="_St470DwZEeylsIpLoeS8tw" type="ImageCompartment">
       <layoutConstraint xmi:type="notation:Size" xmi:id="_St470TwZEeylsIpLoeS8tw" width="1320" height="1320"/>
     </children>
@@ -337,7 +337,7 @@
     <element xmi:type="uml:Enumeration" href="mmi:///#jsrctype%5Ename=Privilege%5Bjcu%5Ename=Privilege.java%5Bjpack%5Ename=dtos%5Bjsrcroot%5Esrcfolder=src%5Bproject%5Eid=Klassendiagramm%5D%5D%5D%5D$uml.Enumeration"/>
     <layoutConstraint xmi:type="notation:Bounds" xmi:id="_lKMpoTwaEeylsIpLoeS8tw" x="202752" y="73128"/>
   </children>
-  <children xmi:type="umlnotation:UMLShape" xmi:id="_koo5oDynEeyGfP7U6M8r8g" fontName="Noto Sans" fontHeight="8" fillColor="6085595" transparency="0" lineColor="1421231" lineWidth="1" showStereotype="Label">
+  <children xmi:type="umlnotation:UMLShape" xmi:id="_koo5oDynEeyGfP7U6M8r8g" fontName="Noto Sans" fontHeight="8" fillColor="6085595" transparency="0" lineColor="0" lineWidth="4" showStereotype="Label">
     <children xmi:type="notation:DecorationNode" xmi:id="_kopgsDynEeyGfP7U6M8r8g" type="ImageCompartment">
       <layoutConstraint xmi:type="notation:Size" xmi:id="_kopgsTynEeyGfP7U6M8r8g" width="1320" height="1320"/>
     </children>
@@ -350,7 +350,7 @@
     <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=ScienceField%5Bjcu%5Ename=ScienceField.java%5Bjpack%5Ename=dtos%5Bjsrcroot%5Esrcfolder=src%5Bproject%5Eid=Klassendiagramm%5D%5D%5D%5D$uml.Class"/>
     <layoutConstraint xmi:type="notation:Bounds" xmi:id="_koo5oTynEeyGfP7U6M8r8g" x="197340" y="58212"/>
   </children>
-  <children xmi:type="umlnotation:UMLShape" xmi:id="_RtO4MDyqEeyGfP7U6M8r8g" fontName="Noto Sans" fontHeight="8" fillColor="6085595" transparency="0" lineColor="1421231" lineWidth="1" showStereotype="Label">
+  <children xmi:type="umlnotation:UMLShape" xmi:id="_RtO4MDyqEeyGfP7U6M8r8g" fontName="Noto Sans" fontHeight="8" fillColor="6085595" transparency="0" lineColor="0" lineWidth="4" showStereotype="Label">
     <children xmi:type="notation:DecorationNode" xmi:id="_RtPfQDyqEeyGfP7U6M8r8g" type="ImageCompartment">
       <layoutConstraint xmi:type="notation:Size" xmi:id="_RtPfQTyqEeyGfP7U6M8r8g" width="1320" height="1320"/>
     </children>
@@ -377,7 +377,7 @@
     <element xmi:type="uml:Enumeration" href="mmi:///#jsrctype%5Ename=SubmissionState%5Bjcu%5Ename=SubmissionState.java%5Bjpack%5Ename=dtos%5Bjsrcroot%5Esrcfolder=src%5Bproject%5Eid=Klassendiagramm%5D%5D%5D%5D$uml.Enumeration"/>
     <layoutConstraint xmi:type="notation:Bounds" xmi:id="_iejgUTyqEeyGfP7U6M8r8g" x="225324" y="57948"/>
   </children>
-  <children xmi:type="umlnotation:UMLShape" xmi:id="_dY3RgDytEeyGfP7U6M8r8g" fontName="Noto Sans" fontHeight="8" fillColor="6085595" transparency="0" lineColor="1421231" lineWidth="1" showStereotype="Label">
+  <children xmi:type="umlnotation:UMLShape" xmi:id="_dY3RgDytEeyGfP7U6M8r8g" fontName="Noto Sans" fontHeight="8" fillColor="6085595" transparency="0" lineColor="0" lineWidth="4" showStereotype="Label">
     <children xmi:type="notation:DecorationNode" xmi:id="_dY3RgjytEeyGfP7U6M8r8g" type="ImageCompartment">
       <layoutConstraint xmi:type="notation:Size" xmi:id="_dY3RgzytEeyGfP7U6M8r8g" width="1320" height="1320"/>
     </children>
@@ -409,7 +409,7 @@
     <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=ScientificForum%5Bjcu%5Ename=ScientificForum.java%5Bjpack%5Ename=dtos%5Bjsrcroot%5Esrcfolder=src%5Bproject%5Eid=Klassendiagramm%5D%5D%5D%5D$uml.Class"/>
     <layoutConstraint xmi:type="notation:Bounds" xmi:id="_dY3RgTytEeyGfP7U6M8r8g" x="202356" y="57420"/>
   </children>
-  <children xmi:type="umlnotation:UMLShape" xmi:id="_nQC7kDy5EeyGfP7U6M8r8g" fontName="Noto Sans" fontHeight="8" showListVisibility="Text" fillColor="6085595" transparency="0" lineColor="1421231" lineWidth="1" showStereotype="Text">
+  <children xmi:type="umlnotation:UMLShape" xmi:id="_nQC7kDy5EeyGfP7U6M8r8g" fontName="Noto Sans" fontHeight="8" showListVisibility="Text" fillColor="6085595" transparency="0" lineColor="0" lineWidth="4" showStereotype="Text">
     <children xmi:type="notation:DecorationNode" xmi:id="_nQC7kjy5EeyGfP7U6M8r8g" type="ImageCompartment">
       <layoutConstraint xmi:type="notation:Size" xmi:id="_nQC7kzy5EeyGfP7U6M8r8g" width="1320" height="1320"/>
     </children>
@@ -422,7 +422,7 @@
     <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=Paper%5Bjcu%5Ename=Paper.java%5Bjpack%5Ename=dtos%5Bjsrcroot%5Esrcfolder=src%5Bproject%5Eid=Klassendiagramm%5D%5D%5D%5D$uml.Class"/>
     <layoutConstraint xmi:type="notation:Bounds" xmi:id="_nQC7kTy5EeyGfP7U6M8r8g" x="219252" y="57420"/>
   </children>
-  <children xmi:type="umlnotation:UMLShape" xmi:id="_jRqvkDy7EeyGfP7U6M8r8g" fontName="Noto Sans" fontHeight="8" showListVisibility="Text" fillColor="6085595" transparency="0" lineColor="1421231" lineWidth="1" showStereotype="Text">
+  <children xmi:type="umlnotation:UMLShape" xmi:id="_jRqvkDy7EeyGfP7U6M8r8g" fontName="Noto Sans" fontHeight="8" showListVisibility="Text" fillColor="6085595" transparency="0" lineColor="0" lineWidth="4" showStereotype="Text">
     <children xmi:type="notation:DecorationNode" xmi:id="_jRrWoDy7EeyGfP7U6M8r8g" type="ImageCompartment">
       <layoutConstraint xmi:type="notation:Size" xmi:id="_jRrWoTy7EeyGfP7U6M8r8g" width="1320" height="1320"/>
     </children>
@@ -1291,7 +1291,7 @@
     <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=ConfigPropagator%5Bjcu%5Ename=ConfigPropagator.java%5Bjpack%5Ename=business.util%5Bjsrcroot%5Esrcfolder=src%5Bproject%5Eid=Klassendiagramm%5D%5D%5D%5D$uml.Class"/>
     <layoutConstraint xmi:type="notation:Bounds" xmi:id="_fTi_4UFrEeyP5oIJJ4YgXQ" x="144144" y="25344"/>
   </children>
-  <children xmi:type="umlnotation:UMLShape" xmi:id="_yk7iQEFxEeyv1uUWYj9qmw" fontName="Noto Sans" fontHeight="8" showListVisibility="Text" fillColor="6085595" transparency="0" lineColor="1421231" lineWidth="1" showStereotype="Text">
+  <children xmi:type="umlnotation:UMLShape" xmi:id="_yk7iQEFxEeyv1uUWYj9qmw" fontName="Noto Sans" fontHeight="8" showListVisibility="Text" fillColor="6085595" transparency="0" lineColor="0" lineWidth="4" showStereotype="Text">
     <children xmi:type="notation:DecorationNode" xmi:id="_ylCP8EFxEeyv1uUWYj9qmw" type="ImageCompartment">
       <layoutConstraint xmi:type="notation:Size" xmi:id="_ylCP8UFxEeyv1uUWYj9qmw" width="1320" height="1320"/>
     </children>

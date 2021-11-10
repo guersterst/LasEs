@@ -58,7 +58,12 @@ Weitere Informationen zur Interpretation des Diagramms finden sich in den jeweil
 
 \subsubsection{de.lases.global.transport}
 
-Die data transfer Objects, die eine Entity aus der Datenbank nachbilden sind untereinander nicht verzeigert und kennen nur die id ihrer Relationships.
+Im folgenden Diagramm gilt für die Klassen mit dickem schwarzem Rand folgende Konvention:
+\begin{itemize}
+	\item Die Zuordnungen zwischen den Klassen werden nicht durch Java Zeiger realisiert, sondern durch Speichern der Id des jeweiligen Objekts.
+	\item Bei einer $x \rightarrow 1$ Beziehung (mit $x \in \{1, *\}$) merkt sich das Objekt auf der Linken Seite die Id des zugeordneten Objektes
+	\item Bei einer $x \rightarrow *$ Beziehung merkt sich das Objekt auf der Linken Seite \emph{keine} Liste der zugehörigen Ids. Zuordnungen sind in diese Richtung also nicht unmittelbar traversierbar.
+\end{itemize}
 
 \begin{figure}[H]
 	\centering
