@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.bean.ViewScoped;
 
 import business.service.ReviewService;
 import business.service.SubmissionService;
@@ -14,7 +15,7 @@ import dtos.Review;
 import dtos.SubmissionState;
 import global.util.ResultListParameters;
 
-@RequestScoped
+@ViewScoped
 public class SubmissionBacking {
 
 	private SessionInformation sessionInformation;

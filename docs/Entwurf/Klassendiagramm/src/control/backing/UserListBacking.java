@@ -4,13 +4,14 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.bean.ViewScoped;
 
 import business.service.ProfileService;
 import control.internal.SessionInformation;
 import dtos.Privilege;
 import dtos.User;
 
-@RequestScoped
+@ViewScoped
 public class UserListBacking {
 
 	private SessionInformation sessionInformation;

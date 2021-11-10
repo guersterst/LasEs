@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.bean.ViewScoped;
 
 import business.service.SubmissionLieferando;
 import control.internal.SessionInformation;
@@ -14,7 +15,7 @@ import dtos.SubmissionState;
 import global.util.ResultListFilter;
 import global.util.ResultListParameters;
 
-@RequestScoped
+@ViewScoped
 public class HomepageBacking {
 	
 	

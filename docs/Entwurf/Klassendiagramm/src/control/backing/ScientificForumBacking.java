@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.bean.ViewScoped;
 
 import business.service.ScienceFieldService;
 import business.service.ScientificForumService;
@@ -13,7 +14,7 @@ import dtos.ScientificForum;
 import dtos.Submission;
 import dtos.SubmissionState;
 
-@RequestScoped
+@ViewScoped
 public class ScientificForumBacking {
 
     private String searchString;

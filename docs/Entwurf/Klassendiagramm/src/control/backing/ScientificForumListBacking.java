@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.bean.ViewScoped;
 
 import business.service.ScientificForumService;
 import control.internal.SessionInformation;
@@ -11,7 +12,7 @@ import dtos.LocalDate;
 import dtos.ScienceField;
 import dtos.ScientificForum;
 
-@RequestScoped
+@ViewScoped
 public class ScientificForumListBacking {
 
 	private SessionInformation sessionInformation;
