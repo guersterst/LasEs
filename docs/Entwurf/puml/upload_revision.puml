@@ -25,7 +25,8 @@ box "global.transfer"
     participant "paper:Paper" as paper
 end box
 box persistence
-    participant "t:Transaction" as t
+    participant "t1:Transaction" as t1
+    participant "t2:Transaction" as t2
     participant ":SubmissionRepository" as sr
     participant "cp:ConnectionPool" as cp
 end box
@@ -52,18 +53,18 @@ activate sb
     sb -> sub : setId(subId)
     activate sub
     return
-    sb -> ssvc : getSubmission(sub)
+    sb -> ssvc : __getSubmission(sub)__
     activate ssvc
-        ssvc -> t ** : Transaction()
-        activate t
-            t -> cp : __getInstance()__
+        ssvc -> t1 ** : Transaction()
+        activate t1
+            t1 -> cp : __getInstance()__
             activate cp
             return cp
-            t -> cp : getConnection
+            t1 -> cp : getConnection
             activate cp
             return
         return
-        ssvc -> sr : getSubmission(sub, t)
+        ssvc -> sr : __getSubmission(sub, t1)__
         activate sr
             sr -> sub : getId()
             activate sub
@@ -76,9 +77,9 @@ activate sb
             return
             ...sub befüllen...
         return
-        ssvc -> t ++ : commit()
+        ssvc -> t1 ++ : commit()
         return
-        destroy t
+        destroy t1
     return sub : Submission
 return submission.xhtml
 
@@ -93,7 +94,16 @@ activate sb
 
     sb -> ssvc : addRevision(sub, revisionPdf)
     activate ssvc
-        ssvc -> sr : getSubmission(sub)
+        ssvc -> t2 ** : Transaction()
+        activate t2
+            t2 -> cp : __getInstance()__
+            activate cp
+            return cp
+            t2 -> cp : getConnection
+            activate cp
+            return
+        return
+        ssvc -> sr : __getSubmission(sub,t2)__
         activate sr
             sr -> sub : getId()
             activate sub
@@ -106,7 +116,19 @@ activate sb
             return
             ...sub befüllen...
         return
-        ssvc -> paper : Paper()
+        ssvc -> sub : getPapers()
+        activate sub
+        return papers
+        ssvc -> paper ** : Paper()
+        ssvc -> paper : setSubmissionId(subId)
+        activate paper
+        return
+        ssvc -> paper : setVersion(papers.size())
+        activate paper
+        return paper
+        ssvc -> sub : addPaper(paper)
+        activate sub
+        return
         ssvc -> sr : addPaper(paper)
 'updatesubmission not addpaper
         activate sr
