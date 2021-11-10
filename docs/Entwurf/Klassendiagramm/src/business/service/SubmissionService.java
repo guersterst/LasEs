@@ -10,28 +10,50 @@ import dtos.SubmissionState;
 import dtos.User;
 import persistence.repository.SubmissionRepository;
 
+@ApplicationScoped
 public class SubmissionService {
 
 	private ExceptionQueue exceptionQueue;
 
+	private EmailUtil emailUtil;
+
+	private PaperRepository paperRepository;
+
+	private SubmissionRepository submissionRepository;
+
 	public Submission getSubmission(int submissionId) { return null; }
-	
+
 	public void removeSubmission(Submission submission) { }
-	
-	public void addRevision(Submission submission, Paper revision) {} 
-	
-	public void addEditor(User user) { }
-	
-	public void removeEditor(User user) { }
-	
-	public List<User> getEditors() { return null; }
-	
-	public void uploadPDF(byte[] pdf) { }
-	
-	public void unlockRevision(int paperId) { }
-	
-	public void changeSubmission(int submissionId, Submission newSubmission) { }
-	
+
+	public void changeSubmission(Submission submission, Submission newSubmission) { }
+
 	public void setState(Submission submission, SubmissionState state) { }
 
+	public void setEditor() { }
+
+	public void addReviewer() { }
+
+	public void removeReviewer() { }
+
+	public void realeaseReview(Review review, Submission submission) { }
+
+	public void addCoAuthor() { }
+
+	public void uploadPaper(byte[] pdf) { }
+
+	public Paper downloadPaper() { return null; }
+
+	/*
+	Repo?
+	 */
+
+	public void acceptSubmission() { }
+
+	public void rejectSubmission() { }
+
+	//
+
+	public List<Submission> getSubmissions(ScientificForum scientificForum, User role, ResultListParameters resultParams) { return null; }
+
+	public List<Submission> getSubmissions(User role, ResultListParameters resultParams) { return null; }
 }
