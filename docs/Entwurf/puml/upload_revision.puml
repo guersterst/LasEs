@@ -4,7 +4,7 @@
 '!theme aws-orange
 skinparam sequenceMessageAlign center
 skinparam BoxPadding 10
-skinparam LifelineStrategy nosolid
+'skinparam LifelineStrategy nosolid
 'autonumber
 'autoactivate on
 'hide footbox
@@ -30,7 +30,6 @@ box persistence
     participant ":SubmissionRepository" as sr
     participant "cp:ConnectionPool" as cp
 end box
-database "Database" as db
 
 create sb
 user -> sb
@@ -66,6 +65,8 @@ activate sb
         return
         ssvc -> sr : __getSubmission(sub, t1)__
         activate sr
+            sr -> t1 ++ : getConnection()
+            return
             sr -> sub : getId()
             activate sub
             return id
@@ -78,11 +79,12 @@ activate sb
             ...sub befüllen...
         return
         ssvc -> t1 ++ : commit()
+            t1 -> cp ++ : releaseConnection()
+            return
         return
         destroy t1
     return sub : Submission
 return submission.xhtml
-
 user -> sb : submitRevision()
 activate sb
     note left
@@ -99,12 +101,14 @@ activate sb
             t2 -> cp : __getInstance()__
             activate cp
             return cp
-            t2 -> cp : getConnection
+            t2 -> cp : getConnection()
             activate cp
             return
         return
         ssvc -> sr : __getSubmission(sub,t2)__
         activate sr
+            sr -> t2 ++ : getConnection()
+            return
             sr -> sub : getId()
             activate sub
             return id
@@ -129,19 +133,25 @@ activate sb
         ssvc -> sub : addPaper(paper)
         activate sub
         return
-        ssvc -> sr : addPaper(paper)
-'updatesubmission not addpaper
+
+        ssvc -> sr : __changeSubmission(paper, t2)__
         activate sr
-            sr -> connPool : getConnection()
-            activate connPool
-            return conn
-            sr -> db : SQL-req
-            activate db
+            sr -> sub ++ : getId()
             return
-            sr -> connPool : releaseConnection()
-            activate connPool
+            sr -> sub ++ : getTitle()
+            return
+            sr -> sub ++ : getPapers()
+            return
+            ......sub auslesen......
+            sr -> t1 ++ : getConnection()
             return
         return
+
+        ssvc -> t2 ++ : commit()
+            t2 -> cp ++ : releaseConnection()
+            return
+        return
+        destroy t2
     return
 
 '    subBacking -> rscBundle : getAddRevision\\\nConfirmationMsg()
