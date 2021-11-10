@@ -1,7 +1,7 @@
 %% Macros
 \newcommand{\ftable}[1]{\begin{longtable}[H]{|m{2cm}|m{3cm}|m{6cm}|m{2.5cm}|}
                             \hline
-                            \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Sichtbarkeit} \\
+                            \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Rechte} \\
                             \hline
                             \hline
                             #1
@@ -17,8 +17,7 @@
 Im Folgendem Abschnitt werden Abkürzungen für die verschiedenen Rollen eingeführt:
 \textbf{A} steht für Administrator, \textbf{AN} für einen anonymen Nutzer, \textbf{N} für einen angemeldeten Nutzer, \textbf{E} für einen Editor und \textbf{G} steht für einen Gutachter.
 Ist eine Funktion für alle Benutzerrollen außer dem anonymen Nutzer vorgesehen, so werden diese unter dem Begriff \textbf{Alle} zusammengefasst.
-
-Sind Außerdem keine Labels für Komponenten angegeben, dann sind anstelle dieser Icons (Fontawesome) angedacht.
+Außerdem verfügt ein Administrator über alle Rechte der anderen Rollen.
 
 \subsection{Templates}
 
@@ -28,7 +27,7 @@ Sind Außerdem keine Labels für Komponenten angegeben, dann sind anstelle diese
 % Mit samepage bleiben überschrift und tabelle auf der glechen Seite
 
 \begin{samepage}
-    \textbf{navigation.xhtml} ist die Kopfzeile der Webanwendung. Diese bietet die Suchfunktion an und Links zu verschiedenen Listen und dem Profil.
+    \textbf{navigation.xhtml} \label{flt:navbar} ist die Kopfzeile der Webanwendung. Diese bietet die Suchfunktion an und Links zu verschiedenen Listen und dem Profil.
     \nopagebreak
 
     \ftable{
@@ -51,19 +50,19 @@ Sind Außerdem keine Labels für Komponenten angegeben, dann sind anstelle diese
     \textbf{main.xhtml} ist das Template, welches den Inhalt der Seiten zwischen Kopf- und Fußzeile einbettet.
 
     \ftable{
-        \fentry{navigationBar}{include}{Kopfzeile}{Alle}
+        \fentry{navigationBar}{include}{\hyperref[flt:navbar]{Kopfzeile}}{Alle}
 
-        \fentry{mainContent}{insert}{Seiteninhalt}{Alle}
+        \fentry{mainContent}{insert}{\hyperref[flt:pages]{Seiteninhalt}}{Alle}
 
-        \fentry{footerBar}{include}{Fußzeile}{Alle}
+        \fentry{footerBar}{include}{\hyperref[flt:footer]{Fußzeile}}{Alle}
 
-        \fentry{toolBar}{include}{Seitenleiste}{A,E}
+        \fentry{toolBar}{include}{\hyperref[flt:toolbar]{Seitenleiste}}{A,E}
 
     }
 \end{samepage}
 
 \begin{samepage}
-    \textbf{footer.xhtml} ist die Fußzeile der Webanwendung und für alle sichtbar.
+    \textbf{footer.xhtml} \label{flt:footer} ist die Fußzeile der Webanwendung und für alle sichtbar.
     \nopagebreak
 
     \ftable{
@@ -75,7 +74,7 @@ Sind Außerdem keine Labels für Komponenten angegeben, dann sind anstelle diese
 \end{samepage}
 
 \begin{samepage}
-    \textbf{toolbar.xhtml} ist die Seitenleiste für Editoren und Administratoren auf der Einreichungsübersicht. Hier wird die Einreichung verwaltet.
+    \textbf{toolbar.xhtml} \label{flt:toolbar} ist die Seitenleiste für Editoren und Administratoren auf der Einreichungsübersicht. Hier wird die Einreichung verwaltet.
     \nopagebreak
 
     \ftable{
@@ -128,10 +127,13 @@ Sind Außerdem keine Labels für Komponenten angegeben, dann sind anstelle diese
     }
 \end{samepage}
 
-\subsection{Seiten}
+\subsection{Seiten} \label{flt:pages}
 
 \subsubsection{Anonymer Nutzer}
 \localauthor{Stefanie Gürster}
+
+Für jedes Facelet ist ein Bereich, für Anzeigen von Fehlern oder positiven Benachrichtigungen, vom Typ \emph{messages} angedacht.
+Um Duplikation zu vermeiden, wird dies als Konvention für alle Facelets festgelegt.
 
 \begin{samepage}
 \textbf{welcome.xhtml} Auf der Login- bzw. Welcome-Seite wird \emph{LasEs} vorgestellt.
