@@ -141,8 +141,10 @@ activate sb
         ssvc -> sub : addPaper(paper)
         activate sub
         return
+        ssvc -> sub ++ : setSubmissionState(SUBMITTED)
+        return
 
-        ssvc -> sr : __changeSubmission(paper, t2)__
+        ssvc -> sr : __changeSubmission(sub, t2)__
         activate sr
             sr -> sub ++ : getId()
             return
