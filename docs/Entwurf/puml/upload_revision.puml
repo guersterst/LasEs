@@ -59,7 +59,7 @@ activate sb
             t1 -> cp : __getInstance()__
             activate cp
             return cp
-            t1 -> cp : getConnection
+            t1 -> cp : getConnection()
             activate cp
             return
         return
@@ -76,7 +76,7 @@ activate sb
             sr -> sub : setPapers()
             activate sub
             return
-            ...sub befüllen...
+            ......sub befüllen......
         return
         ssvc -> t1 ++ : commit()
             t1 -> cp ++ : releaseConnection()
@@ -84,6 +84,14 @@ activate sb
         return
         destroy t1
     return sub : Submission
+    sb -> sub ++ : getTitle()
+    return
+    sb -> sub ++ : getPapers()
+    return
+    sb -> sub ++ : getCoAuthors()
+    return
+    sb -> sub ++ : getSubmitter()
+    return
 return submission.xhtml
 user -> sb : submitRevision()
 activate sb
