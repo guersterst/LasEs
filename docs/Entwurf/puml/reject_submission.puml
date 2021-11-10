@@ -171,7 +171,7 @@ activate sb
         end note
 
 == Anfang Fehlerbehandlung ==
-        return <font color=red><b>eine Exception
+        return <font color=red><b>SQLException
 
         sr -> eq ++ : add(eine Exception)
             eq -> eh ++ : propertyChange()
@@ -181,7 +181,7 @@ activate sb
         ssvc -> t2 ++ : close()
         return
 
-    return <font color=red><b>eine Exception
+    return <font color=red><b>SQLException
 
 return <font color=red><b>Error page</font> aber ka\nwie das funktioniert
 note left
