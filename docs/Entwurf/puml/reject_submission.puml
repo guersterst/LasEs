@@ -14,11 +14,17 @@ actor Editor as editor
 box "control.backing"
     participant ":SubmissionBacking" as sb << @Named >>
 end box
+box "control.internal"
+    participant ":ExceptionHandler" as eh << @SessionScoped >>
+end box
 'box "???"
 '    participant ":ResourceBundle" as rscBundle
 'end box
 box "business.service"
     participant "ssvc:SubmissionService" as ssvc << @ApplicationScoped >>
+end box
+box "business.internal"
+    participant ":ExceptionQueue" as eq << @SessionScoped >>
 end box
 box "business.util"
     participant "eu:EmailUtil" as eu
@@ -165,13 +171,17 @@ activate sb
         end note
 
 == Anfang Fehlerbehandlung ==
+        return <font color=red><b>eine Exception
 
-        return <font color=red><b> eine Exception
+        sr -> eq ++ : add(eine Exception)
+            eq -> eh ++ : propertyChange()
+            return
+        deactivate sr
 
         ssvc -> t2 ++ : close()
         return
 
-    return <font color=red><b> andere Exception
+    return <font color=red><b>eine Exception
 
 return <font color=red><b>Error page</font> aber ka\nwie das funktioniert
 note left
