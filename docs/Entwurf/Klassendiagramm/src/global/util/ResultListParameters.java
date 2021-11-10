@@ -18,6 +18,8 @@ public class ResultListParameters {
 	private String sortColumn;
 
 	private SortOrder sortOrder;
+	
+	private String globalSearchWord;
 
 
 }

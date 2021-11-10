@@ -15,8 +15,7 @@ public class ReviewRepository {
 	public static void change() {}
 	public static void remove() {}
 	
-	// get lists for
-	public static List<Review> getListForPaper(int submissionId, ResultListParameters resultParams, Transaction transaction) throws InvalidQueryParamsException { return null; }
-	public static List<Review> getListForReviewer() { return null; }
+	// ueberladen fuer user und paper
+	public static List<Review> getList() { return null; }
 
 }

@@ -18,9 +18,5 @@ public class ScienceFieldRepository {
 	
 	public static List<ScienceField> getList(Transaction transaction) { return null; }
 	public static boolean isScienceField(String name, Transaction transaction) { return false; }
-	
-	// get lists for
-	public static List<ScienceField> getListForScientificForum() { return null; }
-	public static List<ScienceField> getListForUser() { return null; }
 
 }

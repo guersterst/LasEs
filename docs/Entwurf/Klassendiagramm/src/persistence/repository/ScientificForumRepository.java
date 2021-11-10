@@ -19,12 +19,13 @@ public class ScientificForumRepository {
 	public static void remove(Submission submission, Transaction transaction) throws InvalidFieldsException { }
 	
 	// get lists
-	public static List<ScientificForum> getListWithSearchword(String searchword, ResultListParameters resultParams, Transaction transaction) throws InvalidQueryParamsException { return null; }
 	public static List<ScientificForum> getList(ResultListParameters resultParams, Transaction transaction) throws InvalidQueryParamsException { return null; }
 	
-	// get lists for
-	public static List<ScientificForum> getListForEditor() { return null; }
-	public static List<ScientificForum> getListForScienceField() { return null; }
+	// specific adders for n to m
+	public static void addEditor() { }
+	public static void addScienceField() { }
+	public static void removeEditor() { }
+	public static void removeScienceField() { }
 	
 
 }

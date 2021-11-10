@@ -16,13 +16,12 @@ public class UserRepository {
 	public static void change(Submission old, Submission edited, Transaction transaction) throws InvalidFieldsException { }
 	public static void remove(Submission submission, Transaction transaction) throws InvalidFieldsException { }
 	
-	public static List<User> getListWithSearchword(String searchWord, ResultListParameters resultParams, Transaction transaction) throws InvalidQueryParamsException { return null; }
-	
 	// get list for
-	public static List<User> getListForScienceField() { return null; }
-	public static List<User> getListForScientificForum() { return null; }
-	public static List<User> getCoAuthorListForSubmission() { return null; }
-	public static List<User> getReviewerListForSubmission() { return null; }
+	public static List<User> getList() { return null; }
+	
+	// specific adders for n to m
+	public static void addScienceField() { }
+	public static void removeScienceField() { }
 	
 	
 	
