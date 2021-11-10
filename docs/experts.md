@@ -11,7 +11,7 @@
 | Modulare Listen | |
 | Datei-Upload | Johannes Garstenauer |
 | Parameterübergabe zw Facelets |  Johann Schicho |
-| JSF Templates | |
+| JSF Templates | Johann Schicho |
 | CSS & Bootstrap | |
 | Config file | Johann Schicho |
 | Fehlerbehandlung | Johannes Garstenauer |
