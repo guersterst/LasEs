@@ -107,6 +107,12 @@ Außerdem verfügt ein Administrator über alle Rechte der anderen Rollen und wi
     \textbf{pagination.xhtml} ist ein Composite Component zur Paginierung von Listen.
     \nopagebreak
 
+    Dazu wird folgendes Attribut übergeben:
+
+    \begin{description}
+    	\XXitem{paginator}{fac:pagi} Implementation der abstrakten Klasse \emph{Paginator.java}. \todo{hyperref zu Klasse}
+    \end{description}
+
     \ftable{
         \fentry{dataTable}{dataTable}{Hier werden die Spalten eingefügt. Durch Klicken auf die Spaltennamen werden die Einträge sortiert. Zusätzlich kann durch ein Textfeld die Liste gefiltert werden.}{Alle}
 
@@ -130,6 +136,18 @@ Außerdem verfügt ein Administrator über alle Rechte der anderen Rollen und wi
 \begin{samepage}
     \textbf{sortfiltercolumn.xhtml} ist ein Composite Component, das eine sortierbare und filterbare Spalte einer Liste modelliert.
 \nopagebreak
+
+Dazu werden folgende Attribute übergeben:
+
+\begin{description}
+	\XXitem{paginator}{fac:pagi} Implementation der abstrakten Klasse \emph{Paginator.java}. \todo{hyperref zu Klasse}
+
+	\XXitem{columnNamei18n}{fac:coli18n} Anzeigename im Spaltenkopf.
+
+	\XXitem{columnIdent}{fac:colIdent} \emph{String Identifier} der Spalte.
+
+	\XXitem{columnNo}{fac:colNo} Spaltennummer, Null indiziert.
+\end{description}
 
 \ftable{
 	\fentry{columnName}{commandLink}{Durch Klicken auf den Spaltennamen wird nach dieser Spalte aufsteigend, bzw. absteigend sortiert.}{Alle}
