@@ -307,16 +307,20 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 
         \fentry{email}{Link}{E-Mail-Adressen der Co-Autoren und Mailto-Link.}{Alle}
 
-        \fentry{dateUp}{commandButton}{Einreichungen werden aufsteigend angezeigt.}{Alle}
+        \fentry{dateBefore}{inputText}{Eingabe eines \emph{spätestens} Datum.}{Alle}
 
-        \fentry{dateDown}{commandButton}{Einreichungen werden absteigend angezeigt.}{Alle}
+        \fentry{dateAfter}{inputText}{Eingabe eines \emph{frühestens} Datum.}{Alle}
+
+        \fentry{dateBefore}{inputText}{Eingabe einer \emph{spätesten} Deadline.}{Alle}
+
+        \fentry{dateAfter}{inputText}{Eingabe einer \emph{frühesten} Deadline.}{Alle}
 
         \fentry{reviewState}{selectOneMenu}{Filtern der Gutachten nach ihrem Status.}{E,G}
 
         \fentry{submitted}{checkbox}{Anzeigen aller abgegebenen Gutachten.}{E}
 
         \fentry{notSubmitted}{checkbox}{Anzeigen noch nicht abgegebener Gutachten.}{E}
-        
+
         \fentry{recommendation}{selectOneMenu}{Auswahl der Art von Empfehlungen.}{E,G}
 
         \fentry{submissionPagination}{pagination}{Liste aller Versionen}{Alle}
@@ -336,7 +340,7 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 
         \fentry{state}{radioButton}{Status der Einreichung}{Alle}
 
-        \fentry{pdf}{inputFile}{Download der Einreichung}{Alle}
+        \fentry{pdf}{commandButton}{Download der Einreichung}{Alle}
     }
 
     \emph{reviewTable} enthält die Spalten: Version, Gutachter, Datum, Deadline, Status, Empfehlung, Kommentar und Download.
