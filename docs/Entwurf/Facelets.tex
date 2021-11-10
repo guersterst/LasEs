@@ -159,12 +159,15 @@ Dazu werden folgende Attribute übergeben:
 \end{samepage}
 
 \subsection{Seiten} \label{flt:pages}
-
-\subsubsection{Anonymer Nutzer}
 \localauthor{Stefanie Gürster}
 
 Für jedes Facelet ist ein Bereich, für Anzeigen von Fehlern oder positiven Benachrichtigungen, vom Typ \emph{messages} angedacht.
 Um Duplikation zu vermeiden, wird dies als Konvention für alle Facelets festgelegt.
+
+Außerdem wird auf jeder Seite, welche eine Liste enthält, eine \emph{viewAction} implementiert.
+Diese lädt die Daten aus der Datenbank bei der ersten Betrachtung der Seite.
+
+\subsubsection{Anonymer Nutzer}
 
 \begin{samepage}
 \textbf{welcome.xhtml} Auf der Login- bzw. Welcome-Seite wird \emph{LasEs} vorgestellt.
@@ -410,7 +413,7 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 
     Wird nach den eigenen Einreichungen, nach denen die man begutachtet oder nach Einreichungen in eingener editorialen Verantwortung gesucht, so erscheinen die Listen im gleiche Schema wie auch auf \hyperref[flt:homepage]{der Homepage}.
     Ergibt die Suche eine Liste von User, so wird diese wie in \hyperref[flt:userList]{der Userliste} für den Administrator und dem Editor angezeigt.
-    Ist das Ziel der Suche, wissenschaftliche Foren zu finden so erhält man bei passender Eingabe eine Liste im selben Format wie diejenige auf der \hyperref[flt:forumList]{Seite der Forumsliste.}
+    Ist das Ziel der Suche, wissenschaftliche Foren zu finden, so erhält man bei passender Eingabe eine Liste im selben Format wie diejenige auf der \hyperref[flt:forumList]{Seite der Forumsliste.}
 \end{samepage}
 
 \begin{samepage}
