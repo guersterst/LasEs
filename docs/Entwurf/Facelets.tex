@@ -19,6 +19,9 @@ Im Folgendem Abschnitt werden Abkürzungen für die verschiedenen Rollen eingef�
 Ist eine Funktion für alle Benutzerrollen außer dem anonymen Nutzer vorgesehen, so werden diese unter dem Begriff \textbf{Alle} zusammengefasst.
 Außerdem verfügt ein Administrator über alle Rechte der anderen Rollen und wird daher nur bei Schlüsselfunktionen genannt.
 
+Labels werden in diesem Abschnitt nicht aufgelistet.
+Diese sind jedoch in Form eines \emph{outputLabels} oder eines Fontawesome-Icon vorgesehen.
+
 Die Vollständigkeit der einzelnen Facelets wurde anhand der DTO's und dem ER-Diagramm gegengeprüft.
 
 \subsection{Templates}
@@ -57,9 +60,6 @@ Die Vollständigkeit der einzelnen Facelets wurde anhand der DTO's und dem ER-Di
         \fentry{mainContent}{insert}{\hyperref[flt:pages]{Seiteninhalt}}{Alle}
 
         \fentry{footerBar}{include}{\hyperref[flt:footer]{Fußzeile}}{Alle}
-
-        \fentry{toolBar}{include}{\hyperref[flt:toolbar]{Seitenleiste}}{E}
-
     }
 \end{samepage}
 
@@ -159,12 +159,15 @@ Dazu werden folgende Attribute übergeben:
 \end{samepage}
 
 \subsection{Seiten} \label{flt:pages}
-
-\subsubsection{Anonymer Nutzer}
 \localauthor{Stefanie Gürster}
 
 Für jedes Facelet ist ein Bereich, für Anzeigen von Fehlern oder positiven Benachrichtigungen, vom Typ \emph{messages} angedacht.
 Um Duplikation zu vermeiden, wird dies als Konvention für alle Facelets festgelegt.
+
+Außerdem wird auf jeder Seite, welche eine Liste enthält, eine \emph{viewAction} implementiert.
+Diese lädt die Daten aus der Datenbank bei der ersten Betrachtung der Seite.
+
+\subsubsection{Anonymer Nutzer}
 
 \begin{samepage}
 \textbf{welcome.xhtml} Auf der Login- bzw. Welcome-Seite wird \emph{LasEs} vorgestellt.
@@ -247,9 +250,8 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 \end{samepage}
 
 \subsubsection{Angemeldeter Nutzer}
-\localauthor{Stefanie Gürster}
 
-\textbf{homepage.xhtml}\label{flt:homepage} Startseite die den Überblick über alle Einreichungen beinhaltet.
+\textbf{homepage.xhtml}\label{flt:homepage} Startseite die den Überblick über alle Einreichungen, aufgeteilt in Reiter, beinhaltet.
 
 \begin{samepage}
     \ftable{
@@ -292,11 +294,16 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 
     \textbf{submission.xhtml} ist die Übersichtsseite einer Abgabe.
     Hier werden alle mit der Einreichung verbundenen Aktivitäten abgebildet.
-    Für den \textbf{Editor} und den \textbf{Administrator} wird zusätzlich eine \emph{toolbar.xhtml} eingebunden.
     \nopagebreak
 
     \ftable{
+        \fentry{toolBar}{include}{\hyperref[flt:toolbar]{Seitenleiste mit Tools.}}{E}
+
         \fentry{newReview}{commandLink}{Weiterleitung zur Einreichung eines neuen Gutachtens.}{G}
+
+        \fentry{acceptReviewing}{commandButton}{Annahme der Rolle eines Gutachters für diese Einreichung.}{G}
+
+        \fentry{declineReviewing}{commandButton}{Ablehnen der Rolle eines Gutachters für diese Einreichung.}{G}
 
         \fentry{title}{outputText}{Titel des Papers.}{Alle}
 
@@ -306,9 +313,13 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 
         \fentry{email}{Link}{E-Mail-Adressen der Co-Autoren und Mailto-Link.}{Alle}
 
-        \fentry{dateUp}{commandButton}{Einreichungen werden aufsteigend angezeigt.}{Alle}
+        \fentry{dateBefore}{inputText}{Eingabe eines \emph{spätestens} Datum.}{Alle}
 
-        \fentry{dateDown}{commandButton}{Einreichungen werden absteigend angezeigt.}{Alle}
+        \fentry{dateAfter}{inputText}{Eingabe eines \emph{frühestens} Datum.}{Alle}
+
+        \fentry{dateBefore}{inputText}{Eingabe einer \emph{spätesten} Deadline.}{Alle}
+
+        \fentry{dateAfter}{inputText}{Eingabe einer \emph{frühesten} Deadline.}{Alle}
 
         \fentry{reviewState}{selectOneMenu}{Filtern der Gutachten nach ihrem Status.}{E,G}
 
@@ -316,11 +327,9 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 
         \fentry{notSubmitted}{checkbox}{Anzeigen noch nicht abgegebener Gutachten.}{E}
 
-        \fentry{version}{selectOneMenu}{Auswahl der Versionsnummern}{Alle}
-
         \fentry{recommendation}{selectOneMenu}{Auswahl der Art von Empfehlungen.}{E,G}
 
-        \fentry{submissionPagination}{pagination}{Liste aller Versionen}{Alle}
+        \fentry{paperPagination}{pagination}{Liste aller Versionen}{Alle}
 
         \fentry{reviewPagination}{pagination}{Liste aller/der eigenen Gutachten.}{E,G}
     }
@@ -337,7 +346,7 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 
         \fentry{state}{radioButton}{Status der Einreichung}{Alle}
 
-        \fentry{pdf}{inputFile}{Download der Einreichung}{Alle}
+        \fentry{pdf}{commandButton}{Download der Einreichung}{Alle}
     }
 
     \emph{reviewTable} enthält die Spalten: Version, Gutachter, Datum, Deadline, Status, Empfehlung, Kommentar und Download.
@@ -403,7 +412,7 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 
     Wird nach den eigenen Einreichungen, nach denen die man begutachtet oder nach Einreichungen in eingener editorialen Verantwortung gesucht, so erscheinen die Listen im gleiche Schema wie auch auf \hyperref[flt:homepage]{der Homepage}.
     Ergibt die Suche eine Liste von User, so wird diese wie in \hyperref[flt:userList]{der Userliste} für den Administrator und dem Editor angezeigt.
-    Ist das Ziel der Suche, wissenschaftliche Foren zu finden so erhält man bei passender Eingabe eine Liste im selben Format wie diejenige auf der \hyperref[flt:forumList]{Seite der Forumsliste.}
+    Ist das Ziel der Suche, wissenschaftliche Foren zu finden, so erhält man bei passender Eingabe eine Liste im selben Format wie diejenige auf der \hyperref[flt:forumList]{Seite der Forumsliste.}
 \end{samepage}
 
 \begin{samepage}
@@ -534,7 +543,6 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 \end{samepage}
 
 \subsubsection{Gutachter}
-\localauthor{Stefanie Gürster}
 
 \begin{samepage}
     \textbf{newReview.xhtml} Möchte ein Gutachter eines Papers seine Beurteilung abgeben, so ist dies auf dieser Seite möglich.
@@ -554,7 +562,6 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 \end{samepage}
 
 \subsubsection{Editor}
-    \localauthor{Johann Schicho} \nopagebreak
 
 \begin{samepage}
     \textbf{userList.xhtml} \label{flt:userList} Editoren und Administratoren erhalten hier einen Überblick über alle Nutzer. Die Seiten sind paginiert.\nopagebreak
@@ -584,7 +591,7 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
 \subsubsection{Admin}
 
-\begin{samepage}\localauthor{Stefanie Gürster}
+\begin{samepage}
 
     \textbf{initialConfig.xhtml} Auf dieser Seite landet man beim ersten Systemstart. Sie ist nur für Administratoren zugänglich.
     Hier kann der Administrator die Datenbankschemata erstellen lassen.
@@ -630,13 +637,7 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
         \fentry{themeHeading}{outputText}{Überschrift für Farbthemes.}{A}
 
-        \fentry{orange}{radioButton}{Auswahl des Standart Themes.}{A}
-
-        \fentry{dark}{radioButton}{Auswahl des Dark Themes.}{A}
-
-        \fentry{blue}{radioButton}{Auswahl des Blue Themes.}{A}
-
-        \fentry{green}{radioButton}{Auswahl des Green Themes.}{A}
+        \fentry{selectTheme}{selectOneMenu}{Auswahl eines Farbthemas.}{A}
 
         \fentry{logoHeading}{outputText}{Überschrift für Logo-Bereich.}{A}
 
