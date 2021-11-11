@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ViewScoped;
+import javax.servlet.http.Part;
 
 import business.service.ReviewService;
 import business.service.SubmissionService;
@@ -57,16 +58,20 @@ public class SubmissionBacking {
 	
 	private List<Review> reviews;
 	
+	private Part uploadedPDF;
+	
 	@PostConstruct
 	public void init() { }
 	
 	public void setState(SubmissionState submissionState) { }
 	
-	public void download(int paperId) { }
+	public void downloadReview(int paperId) { }
 	
 	public void releaseReview(int reviewId, int paperId) { }
 	
 	public void downloadPaper(int paperId) { }
+	
+	public void uploadPDF() { }
 	
 	
 

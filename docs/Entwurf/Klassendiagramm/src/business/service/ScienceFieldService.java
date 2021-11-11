@@ -10,8 +10,6 @@ public class ScienceFieldService {
 
 	private ExceptionQueue exceptionQueue;
 
-	private ScienceFieldRepository scienceFieldRepository;
-	
 	public void add(ScienceField field) { }
 
 	public boolean exists(ScienceField scienceField) { }

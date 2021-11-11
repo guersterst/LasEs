@@ -2,6 +2,7 @@ package control.backing;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
+import javax.servlet.http.Part;
 
 import business.service.ReviewService;
 import control.internal.SessionInformation;
@@ -12,8 +13,10 @@ public class NewReviewBacking {
 	private ReviewService reviewService;
 
 	private SessionInformation sessionInformation;
+	
+	private Part uploadedPDF;
 
-	boolean acceptRecommendation;
+	private boolean acceptRecommendation;
 	String reviewComment;
 	
 	@PostConstruct
@@ -22,6 +25,8 @@ public class NewReviewBacking {
 	public String addReview(){
 		return null;
 	}
+	
+	public void uploadPDF() { }
 
 
 }
