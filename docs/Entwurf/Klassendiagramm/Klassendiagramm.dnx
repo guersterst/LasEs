@@ -716,7 +716,7 @@
     <children xmi:type="notation:ListCompartment" xmi:id="_8kFGkD2NEey-QcSWZ0T-Dg" type="ANNOTATED_ATTRIBUTE_COMPARTMENT" showTitle="true"/>
     <children xmi:type="notation:ListCompartment" xmi:id="_8kFtoD2NEey-QcSWZ0T-Dg" type="ANNOTATED_OPERATION_COMPARTMENT"/>
     <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=ScientificForumService%5Bjcu%5Ename=ScientificForumService.java%5Bjpack%5Ename=business.service%5Bjsrcroot%5Esrcfolder=src%5Bproject%5Eid=Klassendiagramm%5D%5D%5D%5D$uml.Class"/>
-    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_8kCDQT2NEey-QcSWZ0T-Dg" x="78936" y="49632"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_8kCDQT2NEey-QcSWZ0T-Dg" x="79728" y="49500"/>
   </children>
   <children xmi:type="umlnotation:UMLShape" xmi:id="_EuoQsD2PEey-QcSWZ0T-Dg" fontName="Noto Sans" fontHeight="8" showListVisibility="Text" fillColor="2477946" transparency="0" lineColor="566615" lineWidth="1" showStereotype="Text">
     <children xmi:type="notation:DecorationNode" xmi:id="_Euo3wT2PEey-QcSWZ0T-Dg" type="ImageCompartment">
@@ -1301,7 +1301,7 @@
     <children xmi:type="notation:ListCompartment" xmi:id="_gP3PIELUEeyxb8uRhdxMBA" type="ANNOTATED_ATTRIBUTE_COMPARTMENT" showTitle="true"/>
     <children xmi:type="notation:ListCompartment" xmi:id="_gP32MELUEeyxb8uRhdxMBA" type="ANNOTATED_OPERATION_COMPARTMENT"/>
     <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=UserService%5Bjcu%5Ename=UserService.java%5Bjpack%5Ename=business.service%5Bjsrcroot%5Esrcfolder=src%5Bproject%5Eid=Klassendiagramm%5D%5D%5D%5D$uml.Class"/>
-    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_gPusQULUEeyxb8uRhdxMBA" x="73788" y="49368"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_gPusQULUEeyxb8uRhdxMBA" x="73392" y="49500"/>
   </children>
   <children xmi:type="umlnotation:UMLShape" xmi:id="_oJfL4ELWEeyxb8uRhdxMBA" fontName="Noto Sans" fontHeight="8" showListVisibility="Text" fillColor="9880818" transparency="0" lineColor="2323137" lineWidth="1" showStereotype="Text">
     <children xmi:type="notation:DecorationNode" xmi:id="_oJfy8ELWEeyxb8uRhdxMBA" type="ImageCompartment">

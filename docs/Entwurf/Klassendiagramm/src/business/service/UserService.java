@@ -2,11 +2,14 @@ package business.service;
 
 import java.util.List;
 
+import javax.enterprise.event.Event;
 import javax.faces.bean.ApplicationScoped;
+import javax.transaction.Transaction;
 
 import business.util.AvatarUtil;
 import business.util.EmailUtil;
 import control.validation.EmailAddressUnoccupiedValidator;
+import de.uni_passau.fim.einfuehrung.einfuehrungsaufgabe_garstenauer_2.model.UIMessage;
 import dtos.User;
 import global.util.ResultListParameters;
 import persistence.repository.UserRepository;
