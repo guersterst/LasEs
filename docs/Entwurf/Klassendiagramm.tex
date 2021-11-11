@@ -89,9 +89,16 @@ Im folgenden Diagramm gilt für die Klassen mit dickem schwarzem Rand folgende K
 	\classentry{GlobalConfig}{Holds all data that is read from the config file.}
 	\classentry{Verification}{Bundles information about the verification process is somebody is newly registered or has just changed theirq email.}
 	\classentry{File}{Encapsulates a file that is passed between the layers.}
+	\classentry{ReviewedBy}{Stores Information about the relationship of a Submission and a User (the reviewer).}
+	\classentry{AcceptanceStatus}{Holds the information wheather a requested reviewer has accepted or rejected the request or has yet to decide.}
 }
 
 \subsubsection{de.lases.control.backing}
+
+Im Diagramm dieses Pakets sind folgende Punkte zu beachten
+\begin{itemize}
+	\item Pfeile, die zur SessionInformation führen wurden aus Gründen der Übersichtlichkeit ausgespart und lediglich als Attribut dargestellt. Die SessionInformation hat natürlich trotzdem keine Getter und Setter.
+\end{itemize}
 
 \begin{figure}[H]
 	\centering
@@ -116,6 +123,7 @@ Im folgenden Diagramm gilt für die Klassen mit dickem schwarzem Rand folgende K
 	\classentry{NewScientificForumBacking}{Backing bean for the page for adding a new forum.}
 	\classentry{ProfileBacking}{Backing bean for the profile page.}
 	\classentry{AdministrationBacking}{Backing bean for the administration page.}
+	\classentry{FooterBacking}{Backing bean for the footer template.}
 }
 
 
@@ -132,6 +140,7 @@ Im folgenden Diagramm gilt für die Klassen mit dickem schwarzem Rand folgende K
 	\classentry{LifeTimeListener}{Takes care of system start and shutdown operations}
 	\classentry{ExceptionHandler}{Handles all Exceptions that leave the business layer by either showing a faces message or an error page.}
 	\classentry{Pagination}{}
+	\classentry{ImageServlet}{Serves avatars and logos.}
 }
 \todo{erklaerung schreiben Pagination}
 \subsubsection{de.lasses.control.validation}
@@ -149,7 +158,20 @@ Im folgenden Diagramm gilt für die Klassen mit dickem schwarzem Rand folgende K
 	\classentry{URLValidator}{Validates that a given String is a valid URL.}
 	\classentry{PasswordValidator}{Checks if a password meets the minimum requirements for a password.}
 	\classentry{NotEmptyValidator}{Checks if a free text imput is empty.}
+	\classentry{EmailAddressExistsValidator}{Checks whether a given email address is a verified address in the system.}
+	\classentry{DateTimeInFutureValidator}{Checks if a date input lies in the future.}
+}
 
+\subsubsection{de.lasses.control.util}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=3cm]{graphics/control_validation}
+\end{figure}
+
+\classtable{
+	\classentry{URLGenerator}{Generates URLs with URL params.}
+	
 }
 
 \subsubsection{de.lases.business.service}
@@ -224,6 +246,8 @@ Im Folgenden Klassendiagramm gilt:
     \classentry{SystemSettingsRepository}{This repository can read or update the system settings.}
 
     \classentry{UserRepository}{This repository allows CRUD operations on users.}
+    
+    \classentry{ReviewedByRepository}{This respository allows to get and change information about the relationship of a submission and a reviewer.}
 }
 
 \subsubsection{de.lases.persistence.util}
@@ -261,8 +285,10 @@ Im Folgenden Klassendiagramm gilt:
 
 \classtable{
 	\classentry{EmailAddressExistsException}{Is thrown when the repository tries to save an email-address to the databse that already exists in the database.}
+	\classentry{UserDoesNotExistException}{Is thrown when the repository tries to query a User from the database that does not exist in the database.}
 	\classentry{DataNotWrittenException}{Is thrown when the writing of data fails but a retry has a high probability of succeeding.}
 	\classentry{DataNotCompleteException}{Is thrown when the reading of data yields an incomplete result but a retry has a high probability of succeeding.}
+	\classentry{NoPermissionException}{Is thrown when a user does not have the correct role to complete a certain operation.}
 	\caption{Checked Exceptions}
 }
 

@@ -17,8 +17,6 @@ public class SubmissionService {
 
 	private PaperRepository paperRepository;
 
-	private SubmissionRepository submissionRepository;
-
 	public Submission getSubmission(int submissionId) { return null; }
 
 	public void removeSubmission(Submission submission) { }

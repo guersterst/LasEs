@@ -8,6 +8,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ViewScoped;
 
 import business.service.SubmissionLieferando;
+import business.service.SubmissionService;
 import control.internal.SessionInformation;
 import dtos.Pagination;
 import dtos.Review;
@@ -38,7 +39,7 @@ public class HomepageBacking {
 
 	private SessionInformation sessionInformation;
 	
-	private SubmissionLieferando submissionListService;
+	private SubmissionService submissionListService;
 	
 	private SubmissionState stateFilterSelect;
 	

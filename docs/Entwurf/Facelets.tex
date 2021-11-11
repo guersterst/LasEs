@@ -19,6 +19,9 @@ Im Folgendem Abschnitt werden Abkürzungen für die verschiedenen Rollen eingef�
 Ist eine Funktion für alle Benutzerrollen außer dem anonymen Nutzer vorgesehen, so werden diese unter dem Begriff \textbf{Alle} zusammengefasst.
 Außerdem verfügt ein Administrator über alle Rechte der anderen Rollen und wird daher nur bei Schlüsselfunktionen genannt.
 
+Labels werden in diesem Abschnitt nicht aufgelistet.
+Diese sind jedoch in Form eines \emph{outputLabels} oder eines Fontawesome-Icon vorgesehen.
+
 Die Vollständigkeit der einzelnen Facelets wurde anhand der DTO's und dem ER-Diagramm gegengeprüft.
 
 \subsection{Templates}
@@ -29,10 +32,14 @@ Die Vollständigkeit der einzelnen Facelets wurde anhand der DTO's und dem ER-Di
 % Mit samepage bleiben überschrift und tabelle auf der glechen Seite
 
 \begin{samepage}
-    \textbf{navigation.xhtml} \label{flt:navbar} ist die Kopfzeile der Webanwendung. Diese bietet die Suchfunktion an und Links zu verschiedenen Listen und dem Profil.
+    \textbf{navigation.xhtml} \phantomsection \label{flt:navbar} ist die Kopfzeile der Webanwendung. Diese bietet die Suchfunktion an und Links zu verschiedenen Listen und dem Profil.
     \nopagebreak
 
     \ftable{
+        \fentry{logo}{graphicImage}{Logo der Applikation}{Alle}
+
+        \fentry{directToHome}{link}{Weiterleitung zur Homepage.}{Alle}
+
         \fentry{searchField}{inputText}{Suchleiste}{Alle}
 
         \fentry{search}{commandButton}{Suche ausführen.}{Alle}
@@ -57,14 +64,11 @@ Die Vollständigkeit der einzelnen Facelets wurde anhand der DTO's und dem ER-Di
         \fentry{mainContent}{insert}{\hyperref[flt:pages]{Seiteninhalt}}{Alle}
 
         \fentry{footerBar}{include}{\hyperref[flt:footer]{Fußzeile}}{Alle}
-
-        \fentry{toolBar}{include}{\hyperref[flt:toolbar]{Seitenleiste}}{E}
-
     }
 \end{samepage}
 
 \begin{samepage}
-    \textbf{footer.xhtml} \label{flt:footer} ist die Fußzeile der Webanwendung und für alle sichtbar.
+    \textbf{footer.xhtml} \phantomsection \label{flt:footer} ist die Fußzeile der Webanwendung und für alle sichtbar.
     \nopagebreak
 
     \ftable{
@@ -76,7 +80,7 @@ Die Vollständigkeit der einzelnen Facelets wurde anhand der DTO's und dem ER-Di
 \end{samepage}
 
 \begin{samepage}
-    \textbf{toolbar.xhtml} \label{flt:toolbar} ist die Seitenleiste für Editoren und Administratoren auf der Einreichungsübersicht. Hier wird die Einreichung verwaltet.
+    \textbf{toolbar.xhtml} \phantomsection \label{flt:toolbar} ist die Seitenleiste für Editoren und Administratoren auf der Einreichungsübersicht. Hier wird die Einreichung verwaltet.
     \nopagebreak
 
     \ftable{
@@ -111,9 +115,9 @@ Die Vollständigkeit der einzelnen Facelets wurde anhand der DTO's und dem ER-Di
 
     Dazu wird folgendes Attribut übergeben:
 
-    \begin{description}
-    	\XXitem{paginator}{fac:pagi} Implementation der abstrakten Klasse \emph{Paginator.java}. \todo{hyperref zu Klasse}
-    \end{description}
+    \begin{itemize}
+    	\item \textbf{paginator} Implementation der abstrakten Klasse \emph{Paginator.java}. \todo{hyperref zu Klasse}
+    \end{itemize}
 
     \ftable{
         \fentry{dataTable}{dataTable}{Hier werden die Spalten eingefügt. Durch Klicken auf die Spaltennamen werden die Einträge sortiert. Zusätzlich kann durch ein Textfeld die Liste gefiltert werden.}{Alle}
@@ -141,15 +145,15 @@ Die Vollständigkeit der einzelnen Facelets wurde anhand der DTO's und dem ER-Di
 
 Dazu werden folgende Attribute übergeben:
 
-\begin{description}
-	\XXitem{paginator}{fac:pagi} Implementation der abstrakten Klasse \emph{Paginator.java}. \todo{hyperref zu Klasse}
+\begin{itemize}
+	\item \textbf{paginator} Implementation der abstrakten Klasse \emph{Paginator.java}. \todo{hyperref zu Klasse}
 
-	\XXitem{columnNamei18n}{fac:coli18n} Anzeigename im Spaltenkopf.
+	\item \textbf{columnNamei18n} Anzeigename im Spaltenkopf.
 
-	\XXitem{columnIdent}{fac:colIdent} \emph{String Identifier} der Spalte.
+	\item \textbf{columnIdent} \emph{String Identifier} der Spalte.
 
-	\XXitem{columnNo}{fac:colNo} Spaltennummer, Null indiziert.
-\end{description}
+	\item \textbf{columnNo} Spaltennummer, Null indiziert.
+\end{itemize}
 
 \ftable{
 	\fentry{columnName}{commandLink}{Durch Klicken auf den Spaltennamen wird nach dieser Spalte aufsteigend, bzw. absteigend sortiert.}{Alle}
@@ -158,13 +162,16 @@ Dazu werden folgende Attribute übergeben:
 
 \end{samepage}
 
-\subsection{Seiten} \label{flt:pages}
-
-\subsubsection{Anonymer Nutzer}
+\subsection{Seiten} \phantomsection \label{flt:pages}
 \localauthor{Stefanie Gürster}
 
 Für jedes Facelet ist ein Bereich, für Anzeigen von Fehlern oder positiven Benachrichtigungen, vom Typ \emph{messages} angedacht.
 Um Duplikation zu vermeiden, wird dies als Konvention für alle Facelets festgelegt.
+
+Außerdem wird auf jeder Seite, welche eine Liste enthält, eine \emph{viewAction} implementiert.
+Diese lädt die Daten aus der Datenbank bei der ersten Betrachtung der Seite.
+
+\subsubsection{Anonymer Nutzer}
 
 \begin{samepage}
 \textbf{welcome.xhtml} Auf der Login- bzw. Welcome-Seite wird \emph{LasEs} vorgestellt.
@@ -247,9 +254,8 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 \end{samepage}
 
 \subsubsection{Angemeldeter Nutzer}
-\localauthor{Stefanie Gürster}
 
-\textbf{homepage.xhtml}\label{flt:homepage} Startseite die den Überblick über alle Einreichungen beinhaltet.
+\textbf{homepage.xhtml} \phantomsection \label{flt:homepage} Startseite die den Überblick über alle Einreichungen, aufgeteilt in Reiter, beinhaltet.
 
 \begin{samepage}
     \ftable{
@@ -292,11 +298,20 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 
     \textbf{submission.xhtml} ist die Übersichtsseite einer Abgabe.
     Hier werden alle mit der Einreichung verbundenen Aktivitäten abgebildet.
-    Für den \textbf{Editor} und den \textbf{Administrator} wird zusätzlich eine \emph{toolbar.xhtml} eingebunden.
     \nopagebreak
 
     \ftable{
+        \fentry{toolBar}{include}{\hyperref[flt:toolbar]{Seitenleiste mit Tools.}}{E}
+
+        \fentry{uploadRevision}{inputFile}{Upload einer Revision.}{N}
+
+        \fentry{upload}{commandButton}{Ausführen des Uploads.}{N}
+
         \fentry{newReview}{commandLink}{Weiterleitung zur Einreichung eines neuen Gutachtens.}{G}
+
+        \fentry{acceptReviewing}{commandButton}{Annahme der Rolle eines Gutachters für diese Einreichung.}{G}
+
+        \fentry{declineReviewing}{commandButton}{Ablehnen der Rolle eines Gutachters für diese Einreichung.}{G}
 
         \fentry{title}{outputText}{Titel des Papers.}{Alle}
 
@@ -306,9 +321,13 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 
         \fentry{email}{Link}{E-Mail-Adressen der Co-Autoren und Mailto-Link.}{Alle}
 
-        \fentry{dateUp}{commandButton}{Einreichungen werden aufsteigend angezeigt.}{Alle}
+        \fentry{dateBefore}{inputText}{Eingabe eines \emph{spätestens} Datum.}{Alle}
 
-        \fentry{dateDown}{commandButton}{Einreichungen werden absteigend angezeigt.}{Alle}
+        \fentry{dateAfter}{inputText}{Eingabe eines \emph{frühestens} Datum.}{Alle}
+
+        \fentry{dateBefore}{inputText}{Eingabe einer \emph{spätesten} Deadline.}{Alle}
+
+        \fentry{dateAfter}{inputText}{Eingabe einer \emph{frühesten} Deadline.}{Alle}
 
         \fentry{reviewState}{selectOneMenu}{Filtern der Gutachten nach ihrem Status.}{E,G}
 
@@ -316,16 +335,14 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 
         \fentry{notSubmitted}{checkbox}{Anzeigen noch nicht abgegebener Gutachten.}{E}
 
-        \fentry{version}{selectOneMenu}{Auswahl der Versionsnummern}{Alle}
-
         \fentry{recommendation}{selectOneMenu}{Auswahl der Art von Empfehlungen.}{E,G}
 
-        \fentry{submissionPagination}{pagination}{Liste aller Versionen}{Alle}
+        \fentry{paperPagination}{pagination}{Liste aller Versionen}{Alle}
 
         \fentry{reviewPagination}{pagination}{Liste aller/der eigenen Gutachten.}{E,G}
     }
 
-    \emph{submissionTable} enthält die Spalten: Version, Datum, Deadline, Status und Download.
+    \emph{paperPagination} enthält die Spalten: Version, Datum, Deadline, Sichtbarkeit, Status und Download.
     Die Elemente der Liste, der unterschiedlichen Versionen der Einrichtung, sieht wie folgt aus:
 
     \ftable{
@@ -335,12 +352,14 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 
         \fentry{deadline}{outputText}{Deadline der Revision}{Alle}
 
+        \fentry{unlockRevision}{commandButton}{Freischalten einer Revision.}{E}
+
         \fentry{state}{radioButton}{Status der Einreichung}{Alle}
 
-        \fentry{pdf}{inputFile}{Download der Einreichung}{Alle}
+        \fentry{pdf}{commandButton}{Download der Einreichung}{Alle}
     }
 
-    \emph{reviewTable} enthält die Spalten: Version, Gutachter, Datum, Deadline, Status, Empfehlung, Kommentar und Download.
+    \emph{reviewPagination} enthält die Spalten: Version, Gutachter, Datum, Deadline, Status, Empfehlung, Kommentar und Download.
     Die Elemente der Liste von Gutachten ist wie folgt:
 
     \ftable{
@@ -403,12 +422,12 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 
     Wird nach den eigenen Einreichungen, nach denen die man begutachtet oder nach Einreichungen in eingener editorialen Verantwortung gesucht, so erscheinen die Listen im gleiche Schema wie auch auf \hyperref[flt:homepage]{der Homepage}.
     Ergibt die Suche eine Liste von User, so wird diese wie in \hyperref[flt:userList]{der Userliste} für den Administrator und dem Editor angezeigt.
-    Ist das Ziel der Suche, wissenschaftliche Foren zu finden so erhält man bei passender Eingabe eine Liste im selben Format wie diejenige auf der \hyperref[flt:forumList]{Seite der Forumsliste.}
+    Ist das Ziel der Suche, wissenschaftliche Foren zu finden, so erhält man bei passender Eingabe eine Liste im selben Format wie diejenige auf der \hyperref[flt:forumList]{Seite der Forumsliste.}
 \end{samepage}
 
 \begin{samepage}
 
-    \textbf{scientificForumList.xhtml} \label{flt:forumList} Hier erhalten die Nutzer eine Übersicht über alle wissenschaftliche Foren.\nopagebreak
+    \textbf{scientificForumList.xhtml} \phantomsection \label{flt:forumList} Hier erhalten die Nutzer eine Übersicht über alle wissenschaftliche Foren.\nopagebreak
 
     \ftable{
 
@@ -534,7 +553,6 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 \end{samepage}
 
 \subsubsection{Gutachter}
-\localauthor{Stefanie Gürster}
 
 \begin{samepage}
     \textbf{newReview.xhtml} Möchte ein Gutachter eines Papers seine Beurteilung abgeben, so ist dies auf dieser Seite möglich.
@@ -554,10 +572,9 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 \end{samepage}
 
 \subsubsection{Editor}
-    \localauthor{Johann Schicho} \nopagebreak
 
 \begin{samepage}
-    \textbf{userList.xhtml} \label{flt:userList} Editoren und Administratoren erhalten hier einen Überblick über alle Nutzer. Die Seiten sind paginiert.\nopagebreak
+    \textbf{userList.xhtml} \phantomsection \label{flt:userList} Editoren und Administratoren erhalten hier einen Überblick über alle Nutzer. Die Seiten sind paginiert.\nopagebreak
 
     \ftable{
         \fentry{user-pagination}{pagination}{Die Tabelle enthält eine Paginierung.}{E}
@@ -584,7 +601,7 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
 \subsubsection{Admin}
 
-\begin{samepage}\localauthor{Stefanie Gürster}
+\begin{samepage}
 
     \textbf{initialConfig.xhtml} Auf dieser Seite landet man beim ersten Systemstart. Sie ist nur für Administratoren zugänglich.
     Hier kann der Administrator die Datenbankschemata erstellen lassen.
@@ -630,13 +647,7 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
         \fentry{themeHeading}{outputText}{Überschrift für Farbthemes.}{A}
 
-        \fentry{orange}{radioButton}{Auswahl des Standart Themes.}{A}
-
-        \fentry{dark}{radioButton}{Auswahl des Dark Themes.}{A}
-
-        \fentry{blue}{radioButton}{Auswahl des Blue Themes.}{A}
-
-        \fentry{green}{radioButton}{Auswahl des Green Themes.}{A}
+        \fentry{selectTheme}{selectOneMenu}{Auswahl eines Farbthemas.}{A}
 
         \fentry{logoHeading}{outputText}{Überschrift für Logo-Bereich.}{A}
 

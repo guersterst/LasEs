@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ViewScoped;
+import javax.servlet.http.Part;
 
 import business.service.ReviewService;
 import business.service.SubmissionService;
@@ -13,6 +14,7 @@ import control.internal.SessionInformation;
 import dtos.Pagination;
 import dtos.Paper;
 import dtos.Review;
+import dtos.Submission;
 import dtos.SubmissionState;
 import global.util.ResultListParameters;
 
@@ -20,6 +22,8 @@ import global.util.ResultListParameters;
 public class SubmissionBacking {
 
 	private SessionInformation sessionInformation;
+	
+	private Submission submission;
 	
 	private Pagination<Paper> paperPagination;
 	
@@ -57,16 +61,20 @@ public class SubmissionBacking {
 	
 	private List<Review> reviews;
 	
+	private Part uploadedPDF;
+	
 	@PostConstruct
 	public void init() { }
 	
 	public void setState(SubmissionState submissionState) { }
 	
-	public void download(int paperId) { }
+	public void downloadReview(int paperId) { }
 	
 	public void releaseReview(int reviewId, int paperId) { }
 	
 	public void downloadPaper(int paperId) { }
+	
+	public void uploadPDF() { }
 	
 	
 

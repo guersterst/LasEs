@@ -17,7 +17,7 @@ public class NavigationBacking {
 	
 	private SessionInformation sessionInformation;
 	
-	private String searchString;
+	private String searchString; // y
 	
 	private LoginService loginService;
 	
@@ -37,8 +37,8 @@ public class NavigationBacking {
 	@PostConstruct
 	public void init() { }
 	
-	public String logout() { return null; }
+	public String logout() { return null; } // y
 	
-	public String search() { return null; }
+	public String search() { return null; } // y
 
 }

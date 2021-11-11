@@ -26,13 +26,13 @@ public class ResultListBacking {
 	
 	private Pagination<ScientificForum> scientificForumPagination;
 	
-	private SubmissionLieferando submissionListService;
+	private SubmissionService submissionListService;
 	private ScientificForumService scientificForumService;
-	private ProfileService profileService;
+	private UserService profileService;
 
 	private SessionInformation sessionInformation;
 	
 	@PostConstruct
-	public void init() { }
+	public void init() {  }
 
 }

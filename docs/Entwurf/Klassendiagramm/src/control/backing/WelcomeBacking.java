@@ -14,15 +14,15 @@ public class WelcomeBacking {
 	
 	private LoginService loginService;
 	
-	private String emailInput;
+	private String emailInput; // y
 	
-	private String passwordInput;
+	private String passwordInput; // y
 
 	private SessionInformation sessionInformation;
 	
 	@PostConstruct
 	public void init() { }
 	
-	public String login() { return null; }
+	public String login() { return null; } // y
 
 }

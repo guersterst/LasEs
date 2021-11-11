@@ -9,6 +9,7 @@ Es gibt folgende Loglevel, wobei jedes Level jeweils die Nachrichten des vorheri
     \item[\texttt{WARNING}] Wichtige Ereignisse, die zu Problemen führen können und für Administratoren und Endnutzer relevant sind.
     \item[\texttt{INFO}] Für den Administrator relevante Meldungen im normalen Betrieb. Diese sind auch fürs Entwickeln und Testen hilfreich.
 \end{description}
+Nachrichten können geloggt werden durch Aufruf der \code{severe()}, \code{warning()} oder \code{info()} Methoden in \code{de.lases.global.logging}.
 
 \subsection{Sicherheit}\label{subsec:sicherheit}
 Für die häufigsten Sicherheitsschwachstellen bei Webanwendungen, die für LasEs relevant sind, wird im Folgenden erklärt, wie ausnutzende Angriffe verhindert werden.
@@ -17,14 +18,19 @@ Für die häufigsten Sicherheitsschwachstellen bei Webanwendungen, die für LasE
 \item[Fehlerhafte Zugangskontrolle] 
 Um unerlaubten Zugriff auf Seiten, Informationen und Aktionen zu verhindern, werden Zugriffe auf nicht-öffentliche Ressourcen (das ist alles außer Start-, Registrierungs- und Verifikationsseite) standardmäßig zuerst abgelehnt.
 Die Klasse \code{TrespassListener} entscheidet dann, ob der Nutzer die nötigen Rechte hat und akzeptiert eine Anfrage nur dann, sonst wird auf eine Fehler-Seite weitergeleitet.
-Das hängt von der Rolle des Nutzers und von seiner Beziehung zur angefragten Ressource ab (ein normaler Nutzer kann z.B.\ nur sein \emph{eigenes} Profil oder eine \emph{eigene} Einreichung sehen).
-Da dies zentral in dieser Klasse passiert, entstehen weniger Fehler als bei der Prüfung an vielen verschiedenen Stellen des Programms.
+Dazu wird über die angefragte URL das zugehörige Facelet bestimmt und geprüft, ob darauf mit der Rolle des Nutzers zugegriffen werden darf.
+Auf die Rolle kann der \code{TrespassListener} über die SessionInformation zugreifen.
+Der Zugriff hängt darüber hinaus auch von der Beziehung des Nutzers zur angefragten Ressource ab (ein normaler Nutzer kann z.B.\ nur sein \emph{eigenes} Profil oder eine \emph{eigene} Einreichung sehen).
+Deshalb prüft für die relevanten Seiten das jeweilige Backing Bean diese Beziehung und leitet ggf.\ auf eine Fehlerseite weiter.
 
-\item[Kryptographie-Probleme \& Verlust der Vertraulichkeit sensibler Daten]
+\item[Kryptographie \& Vertraulichkeit sensibler Daten]
 Alle Anfragen und Antworten werden mit dem HTTPS-Protokoll mit TLS-Verschlüsselung durchgeführt.
 Dafür wird der Tomcat-Server, der diese Technologie unterstützt, entsprechend konfiguriert.
 \\
-Passwörter werden mit der modernen und sicheren PBKDF2-Funktion gehasht. Dabei wird für jedes Passwort ein eigener zufällig generierter Salt benutzt. Eingegebene Passwörter werden so früh wie möglich gehasht, damit die Klartextpasswörter eine minimale Lebenszeit auf dem Server haben.  Dafür wird die robuste \code{javax.crypto}-Bibliothek verwendet.
+Passwörter werden mit der modernen und sicheren PBKDF2-Funktion gehasht. Dabei wird für jedes Passwort ein eigener zufällig generierter Salt benutzt.
+Eingegebene Passwörter werden so früh wie möglich gehasht, damit die Klartextpasswörter eine minimale Lebenszeit auf dem Server haben.
+Für das Generieren eins Salts und das Hashing bietet die Klasse \code{de.lases.business.util} Methoden an.
+Sie verwendet die robuste \code{javax.crypto}-Bibliothek.
 
 \item[Injection \& Cross-site-Scripting]
 Da JSF components für die HTML-Ausgabe verwendet werden, bereinigt JSF alle Nutzereingaben und macht Cross-site-Scripting unmöglich.
@@ -34,20 +40,39 @@ Für SQL-Code werden \code{PreparedStatements} benutzt, um SQL-Injections zu ver
 \item[Session Hijacking]
 In der \code{web.xml}-Datei ist ein Timeout für Sessions konfigurierbar.
 Dieser wirkt Session Hijacking sowie unerwünschten physischen Zugriffen auf den Browser des Clients entgegen.
-
+JSF setzt für das Session-Cookie standardmäßig das \code{http-only}-Flag, damit kann darauf nicht mit JavaScript zugegriffen werden und Hijacking wird erschwert.
+Nach jeder Anmeldung wird die Session verworfen (mit \code{ExternalContext\#invalidateSession}) und neu generiert.
+Nach einer Authentifizierung bleibt also keine alten Session bestehen und \emph{Session-Fixation}-Attacken werden verhindert.
 \end{description}
 
 \subsection{Asynchrone Threads}\label{subsec:threads}
-Für das periodische Aufräumen von nicht mehr benötigten Datenbankeinträgen (abgelaufene E-Mail-Verifikationslinks) gibt es einen eigenen Thread.
+Für das periodische Aufräumen von nicht mehr benötigten Datenbankeinträgen (abgelaufene E-Mail-Verifikationslinks) gibt es einen eigenen Thread \code{DBCleaner}.
+
+\subsection{Systemstart und -stopp}\label{subsec:systemstart}
+Die Klasse \code{LifetimeListener} aus dem Paket \code{control.internal} implementiert die Methode \code{ServletContextListener\#contextDestroyed}, welche aufgerufen wird, sobald das Servlet bereit ist.
 \\
-Dieser wird von \code{business.internal.DBCleaner} gestartet.
+Diese ruft dann die \code{startup()}-Methode in \code{business.internal.Lifetime} auf, welche
+ das \hyperref[subsec:logging]{Logging} initialisiert und die Konfigurationsdatei liest.
+\\
+Außerdem wird der \code{DBCleaner}-Thread aus Kapitel \ref{subsec:threads} gestartet und im \code{ConnectionPool} \code{init()} aufgerufen, um die Datenbankverbindungen aufzubauen.
 
-\subsection{Systemstart}\label{subsec:systemstart}
-Beim Systemstart wird das Logging wird initialisiert und die Konfigurationsdatei gelesen. Die Threads aus Kapitel \ref{subsec:threads} und der \code{ConnectionPool} werden gestartet.
+Der Server kann über den \emph{shutdown port} heruntergefahren werden.
+Dann, aber auch wenn der Server unerwartet gestoppt wird, werden \code{ShutdownHook}s ausgeführt.
+\\
+Einer wird von \code{Lifetime} bei der Ausführung von \code{init()} hinzugefügt zum Beenden des \code{DBCleaner}-Threads.
+In der \code{init()}-Methode von \code{ConnectionPool} wird einer hinzugefügt für das Schließen der Datenbankverbindungen.
+Damit wird ein geordneter Shutdown sichergestellt.
 
-Dies passiert, wenn das Servlet bereit ist, dazu hört der \code{LifetimeListener} aus dem Paket \code{business.internal} mit der \code{@WebListener}-Annotation auf das \code{contextInitialized}-Event.
+\subsection{Lokalisierung}\label{subsec:lokalisierung}
+Ausgabestrings werden in \code{.properties}-Dateien gespeichert, getrennt für Deutsch und Englisch und diese bilden \code{ResourceBundle}s.
+Die Bundles und die verfügbaren Sprachen werden in \code{faces-config.xml} registiert.
+Dadurch ist es möglich, von Facelets aus mit der Expression Language auf die Strings zuzugreifen und von den Backing Beans mit \code{Application\#getResourceBundle(FacesContext c, String name)}.
+\\
+Um Standard-JSF-Meldungen (z.B. bei vorgegebenen Validatoen) zu überschreiben, werden \code{MessageBundle}s verwendet.
+Welche Sprache verwendet wird, hängt vom Header-Element \code{Accept-Language} der HTTP-Anfrage ab, falls die gewünschte Sprache nicht verfügbar ist, wird Englisch als Standardsprache verwendet.
+Die Sprache wird von JSF automatisch ausgewählt.
 
-\subsection{Systemstopp}\label{subsec:systemstopp}
-Der Server kann über den \emph{shutdown port} heruntergefahren werden. Dies stoppt auch den Connection Pool und alle bestehenden Datenbankverbindungen werden geschlossen.
-Diese Aufgaben führt der \code{business.internal.LifetimeListener} aus.
-Damit wird ein geordneter Shutdown sichergestellt
+\subsection{Transaktionsverwaltung}\label{subsec:transactions}
+Die Klasse \code{Transaction} im Paket \code{persistence.repository} repräsentiert eine Datenbanktransaktion.
+Sie kann mit \code{startTransaction()} und \code{stopTransaction()} gestartet bzw.\ beendet werden.
+Alle Datenbankzugriffe dazwischen, bei denen der \code{persistence}-Schicht diese \code{Transaction} übergeben wurde, werden von der Datenbank als atomare Operation durchgeführt.

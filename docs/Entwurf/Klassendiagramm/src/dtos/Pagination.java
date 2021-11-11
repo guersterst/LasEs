@@ -2,13 +2,14 @@ package dtos;
 
 import java.util.List;
 
+import global.util.ResultListParameters;
+
 public abstract class Pagination<T> {
 	
     private List<T> entries;
-    private Integer currentPage;
-    private String[] searchWords;
-    private boolean ascending;
-    private String sortedBy;
+    
+    private ResultListParameters resultListParameters;
+    
     public Pagination(String sortedBy, Integer numberItemsPage, Integer numberColumns) {
         this.numberItemsPage = numberItemsPage;
         this.sortedBy = sortedBy;
@@ -60,4 +61,6 @@ public abstract class Pagination<T> {
         loadData();
     }
 
+    public ResultListParameters getResultListParameters() { return null; }
+    
 }

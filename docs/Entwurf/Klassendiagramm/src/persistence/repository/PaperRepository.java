@@ -2,6 +2,7 @@ package persistence.repository;
 
 import java.util.List;
 
+import dtos.File;
 import dtos.Paper;
 import dtos.Review;
 import global.util.ResultListParameters;
@@ -19,7 +20,7 @@ public class PaperRepository {
 	// get lists for
 	public static List<Paper> getList() throws InvalidQueryParamsException { return null; }
 
-	public static byte[] getPDF() throws IllegalArgumentException { return null; }
+	public static File getPDF() throws IllegalArgumentException { return null; }
 	public static void setPDF() throws IllegalArgumentException {}
 	
 }

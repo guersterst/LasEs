@@ -16,8 +16,6 @@ public class ScientificForumService {
 
 	private SubmissionRepository submissionRepository;
 
-	private ScientificForumRepository scientificForumRepository;
-
 	private UserRepository userRepository;
 
 	public ScientificForum getForum() { }

@@ -18,6 +18,8 @@ public class CustomizationService {
 	// TODO welches Repo hierfür?
 	public void createDbSchema () { }
 
+	public void getConnectionState() { }
+
 	public void setLogo() { }
 
 	public void getLogo() { }

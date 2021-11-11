@@ -14,30 +14,39 @@ import dtos.User;
 @RequestScoped
 public class ToolbarBacking {
 	
-	private List<User> reviewer;
+	private String reviewerEmailInput; // y
 	
-	private List<User> editors;
+	private LocalDateTime reviewerDeadlineInput; // y
 	
-	private String reviewerEmailInput;
+	private User editorInput; // y
 	
-	private String managingEditorSelection;
+	private User currentEditor; //y
+	
+	private LocalDateTime revisionDeadlineInput; //y
+	
 
 	private SessionInformation sessionInformation;
+	
+	private List<User> reviewer; // y
+	
+	private List<User> editors; // y
+	
+	
 	
 	@PostConstruct
 	public void init() { }
 	
-	public void addReviewer() { }
+	public void addReviewer() { } // y
 	
-	public void removeReviewer(int id) { }
+	public String removeReviewer(int id) { return null; } // y
 	
-	public void chooseNewManagingEditor() { }
+	public void chooseNewManagingEditor() { } // y
 	
-	public void requireRevision() { }
+	public void requireRevision() { } // y
 	
-	public void acceptSubmission() { }
+	public void acceptSubmission() { } // y
 	
-	public void rejectSubmission() { }
+	public void rejectSubmission() { } // y
 	
 	public List<User> getReviewer() { return null; }
 	
