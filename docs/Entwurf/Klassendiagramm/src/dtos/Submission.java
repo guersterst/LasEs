@@ -22,8 +22,6 @@ public class Submission {
 	
 	private SubmissionState state;
 	
-	private LocalDateTime deadlineReviews;
-	
 	private LocalDateTime deadlineRevision;
 	
 	private LocalDateTime submissionTime;

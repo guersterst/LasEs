@@ -324,7 +324,7 @@
     <children xmi:type="notation:SemanticListCompartment" xmi:id="_lKasEDwaEeylsIpLoeS8tw" visible="false" type="AttributeCompartment"/>
     <children xmi:type="notation:SemanticListCompartment" xmi:id="_lKbTIDwaEeylsIpLoeS8tw" visible="false" type="OperationCompartment"/>
     <element xmi:type="uml:Enumeration" href="mmi:///#jsrctype%5Ename=Privilege%5Bjcu%5Ename=Privilege.java%5Bjpack%5Ename=dtos%5Bjsrcroot%5Esrcfolder=src%5Bproject%5Eid=Klassendiagramm%5D%5D%5D%5D$uml.Enumeration"/>
-    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_lKMpoTwaEeylsIpLoeS8tw" x="202752" y="73128"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_lKMpoTwaEeylsIpLoeS8tw" x="202752" y="73920"/>
   </children>
   <children xmi:type="umlnotation:UMLShape" xmi:id="_koo5oDynEeyGfP7U6M8r8g" fontName="Noto Sans" fontHeight="8" fillColor="6085595" transparency="0" lineColor="0" lineWidth="4" showStereotype="Label">
     <children xmi:type="notation:DecorationNode" xmi:id="_kopgsDynEeyGfP7U6M8r8g" type="ImageCompartment">

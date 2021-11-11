@@ -45,5 +45,7 @@ public class User {
 	
 	private String passwordSalt;
 	
+	private boolean isNotRegistered;
+	
 
 }
