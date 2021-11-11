@@ -9,5 +9,9 @@ import persistence.repository.UserRepository;
 @ApplicationScoped
 public class LoginService {
 
+	private Event<UIMessage> uiMessageEvent;
+
+	private Transaction transaction;
+
 	public User login(String email, String password) { return null; }
 }

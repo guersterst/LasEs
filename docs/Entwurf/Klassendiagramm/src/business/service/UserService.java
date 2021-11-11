@@ -14,6 +14,10 @@ import persistence.repository.UserRepository;
 @ApplicationScoped
 public class UserService {
 
+	private Event<UIMessage> uiMessageEvent;
+
+	private Transaction transaction;
+
 	public User getUser(User user) { }
 
 	public void editUser(User newUser) { }

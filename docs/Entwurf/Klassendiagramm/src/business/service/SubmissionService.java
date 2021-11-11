@@ -15,6 +15,10 @@ import persistence.repository.SubmissionRepository;
 @ApplicationScoped
 public class SubmissionService {
 
+	private Event<UIMessage> uiMessageEvent;
+
+	private Transaction transaction;
+
 	public Submission getSubmission(int submissionId) { return null; }
 
 	public void removeSubmission(Submission submission) { }

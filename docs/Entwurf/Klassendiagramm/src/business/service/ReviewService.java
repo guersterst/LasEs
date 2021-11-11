@@ -13,6 +13,10 @@ import persistence.repository.ReviewRepository;
 @ApplicationScoped
 public class ReviewService {
 
+	private Event<UIMessage> uiMessageEvent;
+
+	private Transaction transaction;
+
 	public void addReview(Submission submission, Review review) { }
 	
 	public void removeReview(Submission submission, int reviewId, int paperId) { }

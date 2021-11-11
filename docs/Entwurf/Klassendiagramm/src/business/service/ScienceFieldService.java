@@ -9,6 +9,10 @@ import persistence.repository.ScienceFieldRepository;
 
 @ApplicationScoped
 public class ScienceFieldService {
+
+	private Event<UIMessage> uiMessageEvent;
+
+	private Transaction transaction;
 	
 	public void add(ScienceField field) { }
 

@@ -9,7 +9,10 @@ import persistence.repository.SystemSettingsRepository;
 
 @ApplicationScoped
 public class CustomizationService {
-	
+
+	private Event<UIMessage> uiMessageEvent;
+
+	private Transaction transaction;
 
 	public void setSystemSettings(Style style) { }
 

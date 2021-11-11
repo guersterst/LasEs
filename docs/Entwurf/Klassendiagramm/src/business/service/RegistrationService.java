@@ -9,6 +9,10 @@ import persistence.repository.UserRepository;
 
 @ApplicationScoped
 public class RegistrationService {
+
+	private Event<UIMessage> uiMessageEvent;
+
+	private Transaction transaction;
 	
 	public User selfRegister(User user) { return null; }
 	

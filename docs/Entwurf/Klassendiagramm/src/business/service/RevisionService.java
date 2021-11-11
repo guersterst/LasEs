@@ -5,6 +5,10 @@ import javax.faces.bean.ApplicationScoped;
 @ApplicationScoped
 public class RevisionService {
 
+    private Event<UIMessage> uiMessageEvent;
+
+    private Transaction transaction;
+
     public void getRevision() { }
 
     public void requireRevision(Submission submission) { }

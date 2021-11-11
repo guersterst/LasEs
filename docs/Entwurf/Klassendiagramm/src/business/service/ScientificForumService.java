@@ -14,6 +14,10 @@ import persistence.repository.ScientificForumRepository;
 @ApplicationScoped
 public class ScientificForumService {
 
+	private Event<UIMessage> uiMessageEvent;
+
+	private Transaction transaction;
+
 	public ScientificForum getForum() { }
 
 	public void updateForum(ScientificForum forum, ScientificForum newForum) { }
