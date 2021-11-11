@@ -91,6 +91,7 @@ Im folgenden Diagramm gilt für die Klassen mit dickem schwarzem Rand folgende K
 	\classentry{File}{Encapsulates a file that is passed between the layers.}
 	\classentry{ReviewedBy}{Stores Information about the relationship of a Submission and a User (the reviewer).}
 	\classentry{AcceptanceStatus}{Holds the information wheather a requested reviewer has accepted or rejected the request or has yet to decide.}
+	\classentry{LoggerConfig}{Holds configuration information about the logger.}
 }
 
 \subsubsection{de.lases.control.backing}
@@ -286,6 +287,7 @@ Im Folgenden Klassendiagramm gilt:
     \classentry{DBQueryFailedException}{Is thrown when a query to the database fails and will probably fail again.}
     \classentry{EmailServiceFailedException}{Fires when the email service used by the application fails unrecoverably.}
     \classentry{ConfigNotReadableException}{Fires when the config file of the application can definitively not be read.}
+    \classentry{LogsNotWritableException}{Is thrown when the logger cannot write log files.}
     \caption{Unchecked Exceptions}
 }
 
