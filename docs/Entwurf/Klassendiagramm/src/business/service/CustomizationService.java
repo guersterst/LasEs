@@ -21,6 +21,8 @@ public class CustomizationService {
 	
 	public void createDbSchema () { }
 
+	public void getConnectionState() { }
+
 	public void setLogo() { }
 
 	public void getLogo() { }

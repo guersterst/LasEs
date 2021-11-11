@@ -14,5 +14,4 @@ public class ExceptionHandler extends PropertyChangeListenerProxy implements Pro
 		// TODO Automatisch erstellter Methoden-Stub
 		
 	}
-
 }
