@@ -18,7 +18,7 @@ die \emph{View}.
 
 \begin{figure}[H]
 \centering
-    \includegraphics[width=0.8\linewidth]{graphics/Paketdiagramm6.0}\label{arch:pakdia}
+    \includegraphics[width=0.8\linewidth]{graphics/Paketdiagramm7.0}\label{arch:pakdia}
     \caption{Das Schichtenmodell der LasEs-Anwendung.}
 \end{figure}
 
@@ -41,6 +41,10 @@ enthält alle \emph{Managed Beans} welche zur Darstellung der \emph{Facelets} au
 %todo link
 \emph{View} Verwendung finden. Zu jedem \emph{Facelet} [facelet] existiert genau ein
 \emph{Backing\-Bean}, welches [facelet]Backing genannt wird.
+\textbf{\emph{de.lases.control.util}}
+enthält statische Hilfsklassen, welche Dienste zur Verfügung stellen,
+die von der Kontrolllogik selbst getrennt werden können.
+\newline\newline
 
 \subsubsection{de.lases.business}\label{arch:business}
 Dieses Paket enthält alle Klassen der Anwendungslogikschicht.
