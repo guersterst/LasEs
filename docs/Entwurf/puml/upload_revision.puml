@@ -117,12 +117,12 @@ note left
     dem file picker aus und
     klickt auf "Submit Revision"
 end note
-user -> sb : submitRevision()
+user -> sb : releaseRevision()
 activate sb
 
     user -> pdfv ++ : validate()
     return
-    user -> sb : setRevisionPdfPart()
+    user -> sb : setUploadedRevisionPDF()
 
     sb -> rsvc : uploadFile(sub, revisionPdf)
     activate rsvc
