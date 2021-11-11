@@ -12,9 +12,9 @@ welcher mit der Verwendung von zusätzlichen Schichten verbunden ist, und der da
 \end{itemize}
 Diese Schichten folgen der \emph{\hyperref[arch:mvc]{MVC-Architektur}} wie in \textbf{\hyperref[arch:pakdia]{Abbildung 1}} dargestellt.
 Die \hyperref[arch:persistence]{Persistenz-} und \hyperref[arch:business]{Businessschichten} gehören hierbei
-zum \emph{Model}. Die \hyperref[arch:control]{Kontrollschicht} stellt den \emph{Controller} dar und die
+zum \emph{Model}. Die \hyperref[arch:control]{Kontrollschicht} stellt den \emph{Controller} und die
 \emph{Faceletschicht} %todo link
-die \emph{View}.
+die \emph{View} dar.
 
 \begin{figure}[H]
 \centering
@@ -34,13 +34,14 @@ Hierzugehört beispielsweise die Sessionverwaltung und das Generieren von \emph{
 \newline\newline
 \textbf{\emph{de.lases.control.validation}}
 enthält alle Klassen, die zur Validierung von Nutzereingaben
-in Facelets verwendet werden.
+in \emph{Facelets} verwendet werden.
 \newline\newline
 \textbf{\emph{de.lases.control.backing}}\label{arch:backing}
 enthält alle \emph{Managed Beans} welche zur Darstellung der \emph{Facelets} aus der
 %todo link
 \emph{View} Verwendung finden. Zu jedem \emph{Facelet} [facelet] existiert genau ein
 \emph{Backing\-Bean}, welches [facelet]Backing genannt wird.
+\newline\newline
 \textbf{\emph{de.lases.control.util}}
 enthält statische Hilfsklassen, welche Dienste zur Verfügung stellen,
 die von der Kontrolllogik selbst getrennt werden können.
@@ -52,7 +53,7 @@ Dieses Paket enthält alle Klassen der Anwendungslogikschicht.
 \textbf{\emph{de.lases.business.service}}\label{arch:service}
 enthält alle Klassen, die den Hauptteil der Anwendungslogik umsetzen.
 Das sind also alle Dienste welche den
-\hyperref[arch:backing]{Backing Beans} zur Verfügung
+\emph{\hyperref[arch:backing]{Backing Beans}} zur Verfügung
 gestellt werden und auf die %todo link repos
 Repositories zugreifen.
 \newline\newline
@@ -65,8 +66,7 @@ enthält die Exceptionklassen, die ein Fehlverhalten im System repräsentieren.
 \newline\newline
 \textbf{\emph{de.lases.business.internal}}
 enthält die Klassen, welche zur internen Verwaltung verwendet werden.
-Hierzu gehören Dienste, welche periodische Aufräumaufarbeiten in der Datenbank anstoßen,
-oder bei der Ausnahmebehandlung helfen.
+Beispielsweise Dienste, welche periodische Aufräumaufarbeiten in der Datenbank anstoßen.
 
 \subsubsection{de.lases.persistence}\label{arch:persistence}
 Dieses Paket enthält alle Klassen der Persistenzschicht.
@@ -75,12 +75,11 @@ Dieses Paket enthält alle Klassen der Persistenzschicht.
 enthält alle Klassen, die dem direkten Zugriff auf die Datenbank dienen.
 \newline\newline
 \textbf{\emph{de.lases.persistence.util}}
-enthält statische Hilfsklassen zur Datenbankverwaltung, wie einen
-Connection\-Pool.
+enthält statische Hilfsklassen zur Datenbankverwaltung, wie Dienste zum Einlesen der Konfiguration.
 \newline\newline
 \textbf{\emph{de.lases.persistence.exception}}
 enthält die Exceptionklassen, welche ein Fehlverhalten im Umgang mit der
-Datenbasis repräsentieren.
+Datenbank repräsentieren.
 
 \subsubsection{de.lases.global}
 Dieses Paket enthält alle Klassen welche über mehrere Schichten hinweg
@@ -106,8 +105,8 @@ mit Fehlermeldung gekapselt und an den Aufrufer weiterpropagiert.
 Wenn in der \emph{\hyperref[arch:bus]{Business-}} oder
 \emph{\hyperref[arch:control]{Kontrollschicht}} solch eine
 \hyperref[arch:busex]{Ausnahmeklasse} ankommt oder entsteht, so
-wird ein \emph{Event} ausgelöst, welches eine beschreibende \emph{UIMessage} enthählt.
-Dieses wird vom \emph{CheckedExceptionHandler} gefangen, woraufhin eine passende
+wird ein \emph{Event} ausgelöst, welches eine beschreibende \emph{UIMessage} enthält.
+Dieses wird vom \emph{UIMessageGenerator} gefangen, woraufhin eine passende
 \emph{FacesMessage} generiert wird.
 Diese werden dann von den zugehörigen \emph{Facelets} %todo link
 gerendert.
@@ -124,7 +123,7 @@ Ungeprüfte Ausnahmen gehören generell jeder Schicht an, da sie alle Schichten 
 bis sie vom anwendungsweiten
 \emph{UncheckedExceptionHandler} %todo link
 aufgegriffen werden. Der Nutzer wird daraufhin auf die Fehlerseite %todo link
-weitergeleitet.
+weitergeleitet, wo ihm eine informative \emph{FacesMessage} angezeigt wird.
 
 \subsection{Frameworks}\label{arch:frameworks}
 
@@ -160,7 +159,7 @@ verschieden Teile, welche jeweils eigene Aufgaben übernehmen:
 \begin{itemize}
     \item Die \emph{\textbf{View-Komponenten}} übernehmen alle Aufgaben,
     welche mit der grafischen Darstellung der Anwendung zusammenhängen.
-    In dieser Anwendung sind dies die Facelets. %todo link facelets
+    In dieser Anwendung sind dies die \emph{Facelets}. %todo link facelets
     \item Die \emph{\textbf{Controller-Komponenten}} übernehmen alle Aufgaben,
     welche die Interaktion zwischen der View und dem Model betrifft. Sie behandeln
     Nutzereingaben, Validation und Konvertierung etc. In dieser Anwendung befinden sie
@@ -217,7 +216,7 @@ Datenbankverbindungen festgelegt werden kann.
 \subsubsection{Observer}
 Das \emph{Observer} Verhaltensmuster beschreibt Methoden, welche auf
 Änderungen im Zustand eines Systems warten, darüber benachrichtigt werden und daraufhin handeln.
-In unserem System findet das beispielsweise beim \emph{ExceptionHandler} %todo link
-Verwendung, welcher eine \emph{ExceptionQueue} beobachtet und auf das Hinzufügen neuer Elemente
-reagiert.
-Hierzu verwenden wir in unserem System den von Java definierten \emph{PropertyChangeListener}.
+In unserem System findet das beispielsweise beim \emph{UIMessageGenerator} %todo link
+Verwendung, welcher eine \emph{Event<UIMessage>}\-Events beobachtet und auf diese mit
+der Generierung von \emph{FacesMessages} reagiert.
+Somit herrscht eine größere Entkoppelung und es gibt einen geringeren Programmieraufwand.
