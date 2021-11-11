@@ -36,10 +36,6 @@ public class User {
 	private LocalDate dateOfBirth;
 	
 	private String employer;
-
-	private byte[] avatar;
-	
-	private byte[] avatarThumbnail;
 	
 	private String passwordHashed;
 	

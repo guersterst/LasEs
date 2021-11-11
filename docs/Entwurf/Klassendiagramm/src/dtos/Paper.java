@@ -16,7 +16,6 @@ public class Paper {
 	
 	private int id;
 	
-	
 	private LocalDateTime uploadTime;
 	
 	private boolean visible;

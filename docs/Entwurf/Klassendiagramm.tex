@@ -88,6 +88,7 @@ Im folgenden Diagramm gilt für die Klassen mit dickem schwarzem Rand folgende K
 	\classentry{ResultListFilterComparator}{The three comparators equal to, less than or equal and greater than or equal}
 	\classentry{GlobalConfig}{Holds all data that is read from the config file.}
 	\classentry{Verification}{Bundles information about the verification process is somebody is newly registered or has just changed theirq email.}
+	\classentry{File}{Encapsulates a file that is passed between the layers.}
 }
 
 \subsubsection{de.lases.control.backing}
@@ -205,9 +206,11 @@ Folgende Informationen wurden hier aus Gründen der Übersichtlichkeit aus dem D
 
 \subsubsection{de.lases.persistence.repository}
 
-Folgende Informationen wurden hier aus Gründen der Übersichtlichkeit aus dem Diagramm ausgespart:
+Im Folgenden Klassendiagramm gilt:
 \begin{itemize}
-	\item jedes Repository benutzt die Transaction Klasse
+	\item Jedes Repository ist für genau eine Entität im ER-Diagramm bzw.´ für genau ein DTO zuständig.
+	\item Die Methode \emph{getList()} ist jeweils überladen. Falls man eine Liste von Objekten will, die mit einem bestimmten anderen Objekt \emph{a} direkt einer Relationship stehen (siehe ER-Diagramm), dann kann man \emph{a} an die Methode übergeben. Dies ist auch mit mehreren Relationships zugleich möglich.
+	\item Spezifische \emph{addObject/removeObject} Methoden sind von der jeweils vorhandenen \emph{change} Methode insofern abzugrenzen, dass sie je Listen von zugeordneten Objekten bearbeiten. Die \emph{change} Methode kann nur Attribute mit Kardinalität 1 bearbeiten. Eine Ausnahme hierbei sind natürlich die \emph{get/set} Methoden für PDFs und Bilder.
 \end{itemize}
 
 \begin{figure}[H]

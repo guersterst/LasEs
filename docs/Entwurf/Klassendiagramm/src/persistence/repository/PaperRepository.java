@@ -19,6 +19,7 @@ public class PaperRepository {
 	// get lists for
 	public static List<Paper> getList() throws InvalidQueryParamsException { return null; }
 
-	public static byte[] getPDFForPaper(int submissionId, int version, Transaction transaction) throws IllegalArgumentException { return null; }
+	public static byte[] getPDF() throws IllegalArgumentException { return null; }
+	public static void setPDF() throws IllegalArgumentException {}
 	
 }

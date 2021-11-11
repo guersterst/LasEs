@@ -17,5 +17,8 @@ public class ReviewRepository {
 	
 	// ueberladen fuer user und paper
 	public static List<Review> getList() { return null; }
+	
+	public static byte[] getPDF() throws IllegalArgumentException { return null; }
+	public static void setPDF() throws IllegalArgumentException {}
 
 }

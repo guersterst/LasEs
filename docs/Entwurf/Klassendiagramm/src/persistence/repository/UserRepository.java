@@ -27,5 +27,10 @@ public class UserRepository {
 	
 	public static boolean emailExists(String emailAddress, Transaction transaction) { return false; }
 	public static boolean isVerified() { return false; }
+	
+	public static byte[] getAvatar() throws IllegalArgumentException { return null; }
+	public static void setAvatar() throws IllegalArgumentException {}
+	public static byte[] getAvatarThumbnail() throws IllegalArgumentException { return null; }
+	public static void setAvatarThumbnail() throws IllegalArgumentException {}
 
 }
