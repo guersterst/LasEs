@@ -70,7 +70,7 @@ activate sb
     sb -> ssvc ++ : canView(sub, usr)
     return true
 
-    sb -> ssvc : __getSubmission(sub)__
+    sb -> ssvc : getSubmission(sub)
     activate ssvc
         ssvc -> t1 ** : Transaction()
         activate t1
