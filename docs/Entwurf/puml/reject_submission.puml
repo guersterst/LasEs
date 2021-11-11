@@ -13,10 +13,11 @@ actor Editor as editor
 
 box "control.backing"
     participant ":SubmissionBacking" as sb << @Named >>
+    participant ":ErrorPageBacking" as epb << @Named >>
 end box
 box "control.internal"
     participant "si:SessionInformation" as si << @SessionScoped >>
-    participant ":ExceptionHandler" as eh << @SessionScoped >>
+    participant ":UncheckedExceptionHandler" as eh << @SessionScoped >>
 end box
 'box "???"
 '    participant ":ResourceBundle" as rscBundle
@@ -188,10 +189,14 @@ activate sb
     return <font color=red><b>DBConnectionFailedException e
 deactivate sb
 
-sb -> eh ++ : methodenname(e)
-'todo methodenname
+sb -> eh ++ : handle(<font color=red><b>e</b></font>)
+note right of eh
+add error message
+to FacesContext
+end note
 
-eh --> editor : <font color=red><b>Error page</font> aber ka\nwie das funktioniert
+eh -> epb **
+eh --> editor : errorPage.xhtml displaying <font color=red><b>FacesMessage</b></font>
 
 'note left
 'Die Ablehnung war
