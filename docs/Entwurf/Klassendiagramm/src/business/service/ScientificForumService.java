@@ -12,8 +12,6 @@ import persistence.repository.ScientificForumRepository;
 @ApplicationScoped
 public class ScientificForumService {
 
-	private ExceptionQueue exceptionQueue;
-
 	private EmailUtil emailUtil;
 
 	private SubmissionRepository submissionRepository;

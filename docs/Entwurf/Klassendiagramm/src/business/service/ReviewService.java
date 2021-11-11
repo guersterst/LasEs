@@ -10,8 +10,6 @@ import persistence.repository.ReviewRepository;
 
 @ApplicationScoped
 public class ReviewService {
-
-	private ExceptionQueue exceptionQueue;
 	
 	private EmailUtil emailUtil;
 

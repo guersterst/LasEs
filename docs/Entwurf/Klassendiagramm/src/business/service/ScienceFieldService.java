@@ -7,9 +7,7 @@ import persistence.repository.ScienceFieldRepository;
 
 @ApplicationScoped
 public class ScienceFieldService {
-
-	private ExceptionQueue exceptionQueue;
-
+	
 	public void add(ScienceField field) { }
 
 	public boolean exists(ScienceField scienceField) { }
