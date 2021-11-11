@@ -13,8 +13,6 @@ import persistence.repository.SubmissionRepository;
 @ApplicationScoped
 public class SubmissionService {
 
-	private ExceptionQueue exceptionQueue;
-
 	private EmailUtil emailUtil;
 
 	private PaperRepository paperRepository;
@@ -48,7 +46,7 @@ public class SubmissionService {
 
 	public void rejectSubmission() { }
 
-	boolean canView(Submission sub, User user)
+	public boolean canView(Submission sub, User user) { }
 
 	public List<Submission> getSubmissions(ScientificForum scientificForum, User role, ResultListParameters resultParams) { return null; }
 

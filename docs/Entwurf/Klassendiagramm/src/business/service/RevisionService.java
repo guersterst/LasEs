@@ -3,8 +3,6 @@ package business.service;
 @ApplicationScoped
 public class RevisionService {
 
-    private ExceptionQueue exceptionQueue;
-
     private PaperRepository paperRepository;
 
     private SubmissionRepository submissionRepository;

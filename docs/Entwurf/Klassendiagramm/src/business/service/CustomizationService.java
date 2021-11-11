@@ -9,14 +9,10 @@ public class CustomizationService {
 	
 	private AvatarUtil avatarUtil;
 
-	private ExceptionQueue exceptionQueue;
-
-	private Transaction transaction;
-
 	public void setSystemSettings(Style style) { }
 
 	public SystemSettings get() { }
-	
+
 	public void createDbSchema () { }
 
 	public void getConnectionState() { }
