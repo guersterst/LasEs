@@ -11,21 +11,21 @@ public class RegistrationBacking {
 	
 	private RegistrationService registrationService;
 	
-	private String passwordInput;
+	private String passwordInput; // y
 	
-	private String titleInput;
+	private String titleInput; // y
 	
-	private String firstNameInput;
+	private String firstNameInput; // 7
 	
-	private String lastNameInput;
+	private String lastNameInput; // 7
 	
-	private String emailInput;
+	private String emailInput; // y
 
 	private SessionInformation sessionInformation;
 	
 	@PostConstruct
 	public void init() { }
 	
-	public String register() { return null; }
+	public String register() { return null; } // y
 
 }

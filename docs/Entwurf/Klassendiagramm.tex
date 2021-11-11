@@ -123,6 +123,7 @@ Im Diagramm dieses Pakets sind folgende Punkte zu beachten
 	\classentry{NewScientificForumBacking}{Backing bean for the page for adding a new forum.}
 	\classentry{ProfileBacking}{Backing bean for the profile page.}
 	\classentry{AdministrationBacking}{Backing bean for the administration page.}
+	\classentry{FooterBacking}{Backing bean for the footer template.}
 }
 
 
@@ -157,7 +158,8 @@ Im Diagramm dieses Pakets sind folgende Punkte zu beachten
 \classentry{URLValidator}{Validates that a given String is a valid URL.}
 	\classentry{PasswordValidator}{Checks if a password meets the minimum requirements for a password.}
 	\classentry{NotEmptyValidator}{Checks if a free text imput is empty.}
-
+	\classentry{EmailAddressExistsValidator}{Checks whether a given email address is a verified address in the system.}
+	\classentry{DateTimeInFutureValidator}{Checks if a date input lies in the future.}
 }
 
 \subsubsection{de.lasses.control.util}
@@ -291,8 +293,10 @@ Im Folgenden Klassendiagramm gilt:
 
 \classtable{
 	\classentry{EmailAddressExistsException}{Is thrown when the repository tries to save an email-address to the databse that already exists in the database.}
+	\classentry{UserDoesNotExistException}{Is thrown when the repository tries to query a User from the database that does not exist in the database.}
 	\classentry{DataNotWrittenException}{Is thrown when the writing of data fails but a retry has a high probability of succeeding.}
 	\classentry{DataNotCompleteException}{Is thrown when the reading of data yields an incomplete result but a retry has a high probability of succeeding.}
+	\classentry{NoPermissionException}{Is thrown when a user does not have the correct role to complete a certain operation.}
 	\caption{Checked Exceptions}
 }
 
