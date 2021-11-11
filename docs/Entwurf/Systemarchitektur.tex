@@ -102,9 +102,9 @@ mit Fehlermeldung gekapselt und an den Aufrufer weiterpropagiert.
 Wenn in der \emph{\hyperref[arch:bus]{Business-}} oder
 \emph{\hyperref[arch:control]{Kontrollschicht}} solch eine
 \hyperref[arch:busex]{Ausnahmeklasse} ankommt oder entsteht, so
-wird sie in eine \emph{ExceptionQueue} %todo link
-gelegt. Diese wird von einem \emph{ExceptionHandler} beobachtet, welcher eine passende
-\emph{FacesMessage} daraus generiert.
+wird ein \emph{Event} ausgelöst, welches eine beschreibende \emph{UIMessage} enthählt.
+Dieses wird vom \emph{CheckedExceptionHandler} gefangen, woraufhin eine passende
+\emph{FacesMessage} generiert wird.
 Diese werden dann von den zugehörigen \emph{Facelets} %todo link
 gerendert.
 Der Vorteil dieses Ansatzes ist, dass die Logik
@@ -118,7 +118,7 @@ in ungeprüfte umgewandelt, wenn das System und der Nutzer bei deren Behandlung
 machtlos sind (z.B. Keine Datebank Verbindung vorhanden). %todo link real exception
 Ungeprüfte Ausnahmen gehören generell jeder Schicht an, das sie alle Schichten unbemerkt durchlaufen,
 bis sie vom anwendungsweiten
-ExceptionHandler %todo link
+\emph{UncheckedExceptionHandler} %todo link
 aufgegriffen werden. Der Nutzer wird daraufhin auf die Fehlerseite %todo link
 weitergeleitet.
 
