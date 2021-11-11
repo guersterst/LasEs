@@ -144,20 +144,15 @@ Im folgenden Diagramm gilt für die Klassen mit dickem schwarzem Rand folgende K
 \classtable{
     \classentry{AvatarValidation}{Validates that a suitable avatar image has been uploaded.}
     \classentry{PDFValidator}{Validates that a suitable PDF file has been uploaded.}
-\classentry{EmailAddressLayoutValidation}{Validates that a given String is a valid E-Mail Address.}
-\classentry{EmailAdressUnoccupiedValidator}{Validates that a given email is not already in use within the system.}
-\classentry{URLValidator}{Validates that a given String is a valid URL.}
+	\classentry{EmailAddressLayoutValidation}{Validates that a given String is a valid E-Mail Address.}
+	\classentry{EmailAdressUnoccupiedValidator}{Validates that a given email is not already in use within the system.}
+	\classentry{URLValidator}{Validates that a given String is a valid URL.}
 	\classentry{PasswordValidator}{Checks if a password meets the minimum requirements for a password.}
 	\classentry{NotEmptyValidator}{Checks if a free text imput is empty.}
 
 }
 
 \subsubsection{de.lases.business.service}
-
-Folgende Informationen wurden hier aus Gründen der Übersichtlichkeit aus dem Diagramm ausgespart:
-\begin{itemize}
-	\item jeder Service benutzt die Transaction Klasse aus dem persistence Package
-\end{itemize}
 
 \begin{figure}[H]
 	\centering
@@ -171,7 +166,7 @@ Folgende Informationen wurden hier aus Gründen der Übersichtlichkeit aus dem D
 	\classentry{ScientificForumService}{Provides methods for the manipulation and creation of scientific forums.}
 	\classentry{RegistrationService}{Provides methods for the creation of users.}
 	\classentry{LoginService}{Provides methods for the login and logout operations.}
-	\classentry{RevisionService}{Provides methods for th}
+	\classentry{RevisionService}{Provides methods for the creation and manipulation of revisions for submissions.}
 	\classentry{ReviewService}{Provides methods for the delivery, creation and removal of reviews.}
 	\classentry{SubmissionService}{Provides methods for the delivery, creation, removal and manipulation of submissions.}
 }
@@ -186,9 +181,8 @@ Folgende Informationen wurden hier aus Gründen der Übersichtlichkeit aus dem D
 \classtable{
 	\classentry{AvatarUtil}{Provides support in the generation of a thumbnail from an image.}
 	\classentry{Hashing}{Provides support in the hashing of passwords.}
-	\classentry{Lifetime}{Provides a method that should be called on system startup.}
-	\classentry{EmailUtil}{Provides support in the sending of emails, creation of mailto links and checking of Email Addresses.}
-	\classentry{ConfigPropagator}{The sole purpose of this utility is to make the global configuration available to the control layer.}
+	\classentry{EmailUtil}{Provides support in the sending of emails, creation of \emph{mailto links} and checking of E-mail addresses.}
+	\classentry{ConfigPropagator}{The purpose of this utility is to propagate the configuration data to the control layer.}
 }
 
 \subsubsection{de.lases.business.internal}
@@ -200,14 +194,13 @@ Folgende Informationen wurden hier aus Gründen der Übersichtlichkeit aus dem D
 
 \classtable{
 	\classentry{PeriodicWorker}{Takes care of periodical database cleanup jobs.}
-	\classentry{ExceptionQueue}{All exceptions that exit the business layer are put in this queue.}
 }
 
 \subsubsection{de.lases.persistence.repository}
 
 Im Folgenden Klassendiagramm gilt:
 \begin{itemize}
-	\item Jedes Repository ist für genau eine Entität im ER-Diagramm bzw.´ für genau ein DTO zuständig.
+	\item Jedes Repository ist für genau eine Entität im ER\-Diagramm bzw. für genau ein DTO zuständig.
 	\item Die Methode \emph{getList()} ist jeweils überladen. Falls man eine Liste von Objekten will, die mit einem bestimmten anderen Objekt \emph{a} direkt einer Relationship stehen (siehe ER-Diagramm), dann kann man \emph{a} an die Methode übergeben. Dies ist auch mit mehreren Relationships zugleich möglich.
 	\item Spezifische \emph{addObject/removeObject} Methoden sind von der jeweils vorhandenen \emph{change} Methode insofern abzugrenzen, dass sie je Listen von zugeordneten Objekten bearbeiten. Die \emph{change} Methode kann nur Attribute mit Kardinalität 1 bearbeiten. Eine Ausnahme hierbei sind natürlich die \emph{get/set} Methoden für PDFs und Bilder.
 \end{itemize}
