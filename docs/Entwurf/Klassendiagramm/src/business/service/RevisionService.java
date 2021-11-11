@@ -15,9 +15,9 @@ public class RevisionService {
 
     public void unlockRevision(int paperId) { }
 
-    public void uploadPaper(byte[] pdf) { }
+    public void uploadFile(byte[] pdf) { }
 
-    public Paper downloadPaper() { return null; }
+    public Paper downloadFile() { return null; }
 
     public void getRevisions() { }
 }

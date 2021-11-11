@@ -39,9 +39,9 @@ public class SubmissionService {
 
 	public void addCoAuthor() { }
 
-	public void uploadPaper(byte[] pdf) { }
+	public void uploadFile(byte[] pdf) { }
 
-	public Paper downloadPaper() { return null; }
+	public Paper downloadFile() { return null; }
 
 	/*
 	Repo?

@@ -20,4 +20,8 @@ public class CustomizationService {
 	public SystemSettings get() { }
 	
 	public void createDbSchema () { }
+
+	public void setLogo() { }
+
+	public void getLogo() { }
 }

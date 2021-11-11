@@ -23,7 +23,7 @@ public class ReviewService {
 
 	public List<Review> getReviews(Submission submission, User user) { return null; }
 
-	public void uploadPDF(byte[] pdf) { }
+	public void uploadFile(byte[] pdf) { }
 
-	public byte[] downloadPDF() { return null; }
+	public byte[] downloadFile() { return null; }
 }
