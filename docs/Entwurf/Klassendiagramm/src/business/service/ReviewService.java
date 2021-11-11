@@ -13,8 +13,6 @@ public class ReviewService {
 	
 	private EmailUtil emailUtil;
 
-	private ReviewRepository reviewRepository;
-
 	public void addReview(Submission submission, Review review) { }
 	
 	public void removeReview(Submission submission, int reviewId, int paperId) { }

@@ -7,8 +7,6 @@ import persistence.repository.ScienceFieldRepository;
 
 @ApplicationScoped
 public class ScienceFieldService {
-
-	private ScienceFieldRepository scienceFieldRepository;
 	
 	public void add(ScienceField field) { }
 

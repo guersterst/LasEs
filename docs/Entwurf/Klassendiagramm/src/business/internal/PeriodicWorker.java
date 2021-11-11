@@ -7,8 +7,6 @@ import persistence.util.DButils;
 @ApplicationScoped
 public class PeriodicWorker implements Runnable {
 
-	private Logger logger;
-
 	@Override
 	public void run() { }
 	
