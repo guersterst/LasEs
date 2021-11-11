@@ -24,6 +24,7 @@ box "control.validation"
     participant ":PDFValidator" as pdfv << @FacesValidator >>
 end box
 box "business.service"
+    participant "rsvc:RevisionService" as rsvc << @ApplicationScoped >>
     participant "ssvc:SubmissionService" as ssvc << @ApplicationScoped >>
 end box
 box "global.transfer"
@@ -35,6 +36,7 @@ box persistence
     participant "t1:Transaction" as t1
     participant "t2:Transaction" as t2
     participant ":SubmissionRepository" as sr
+    participant ":PaperRepository" as pr
     participant "cp:ConnectionPool" as cp
 end box
 
@@ -122,9 +124,9 @@ activate sb
     return
     user -> sb : setRevisionPdfPart()
 
-    sb -> ssvc : addRevision(sub, revisionPdf)
-    activate ssvc
-        ssvc -> t2 ** : Transaction()
+    sb -> rsvc : uploadFile(sub, revisionPdf)
+    activate rsvc
+        rsvc -> t2 ** : Transaction()
         activate t2
             t2 -> cp : __getInstance()__
             activate cp
@@ -133,7 +135,7 @@ activate sb
             activate cp
             return
         return
-        ssvc -> sr : __get(sub,t2)__
+        rsvc -> sr : __get(sub,t2)__
         activate sr
             sr -> t2 ++ : getConnection()
             return
@@ -148,23 +150,34 @@ activate sb
             return
             ...sub befüllen...
         return
-        ssvc -> sub : getPapers()
+        rsvc -> sub : getPapers()
         activate sub
         return papers
-        ssvc -> paper ** : Paper()
-        ssvc -> paper : setSubmissionId(subId)
+        rsvc -> paper ** : Paper()
+        rsvc -> paper : setSubmissionId(subId)
         activate paper
         return
-        ssvc -> paper : setVersion(papers.size())
+        rsvc -> paper : setVersion(papers.size())
         activate paper
         return paper
-        ssvc -> sub : addPaper(paper)
+        rsvc -> sub : addPaper(paper)
         activate sub
         return
-        ssvc -> sub ++ : setSubmissionState(SUBMITTED)
+        rsvc -> sub ++ : setSubmissionState(SUBMITTED)
         return
 
-        ssvc -> sr : __changeSubmission(sub, t2)__
+        rsvc -> pr ++ : __addPaper(paper, t2)__
+            pr -> paper ++ : getId()
+            return
+            pr -> paper ++ : getUploadTime()
+            return
+            pr -> paper ++ : getVisible()
+            return
+            pr -> t1 ++ : getConnection()
+            return
+        return
+
+        rsvc -> sr : __changeSubmission(sub, t2)__
         activate sr
             sr -> sub ++ : getId()
             return
@@ -177,7 +190,7 @@ activate sb
             return
         return
 
-        ssvc -> t2 ++ : commit()
+        rsvc -> t2 ++ : commit()
             t2 -> cp ++ : releaseConnection()
             return
         return
