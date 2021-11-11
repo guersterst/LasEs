@@ -3,7 +3,7 @@ package business.internal;
 import javax.enterprise.context.SessionScoped;
 
 @SessionScoped
-public class ExceptionQueue {
+public class ExceptionQueue implements Serializable {
 
     @Inject
     private PropertyChangeSupport changeSupport;
