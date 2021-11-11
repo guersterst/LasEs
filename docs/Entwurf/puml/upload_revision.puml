@@ -97,11 +97,18 @@ activate sb
             return
             ......sub befüllen......
         return
+        note right of ssvc
+            analoge DB-Zugriffe über die Repos:
+            UserRepository.__get(sub.getAuthor(),t1)__
+            UserRepository.__getList(sub,t1)__
+            PaperRepository.__getList(sub,t1)__
+        end note
         ssvc -> t1 ++ : commit()
             t1 -> cp ++ : releaseConnection()
             return
         return
 '        destroy t1
+        ......
     return sub
     sb -> sub ++ : getTitle()
     return
@@ -150,8 +157,11 @@ activate sb
             return
             ...sub befüllen...
         return
-        rsvc -> sub : getPapers()
-        activate sub
+        rsvc -> pr ++ : __getPapers(sub, t2)__
+            pr -> sub ++ : getId()
+            return id
+            pr -> t1 ++ : getConnection()
+            return
         return papers
         rsvc -> paper ** : Paper()
         rsvc -> paper : setSubmissionId(subId)
@@ -176,6 +186,9 @@ activate sb
             pr -> t1 ++ : getConnection()
             return
         return
+        note right of rsvc
+            analog: PaperRepository.__setPdf(paper,revisionPdf)__
+        end note
 
         rsvc -> sr : __changeSubmission(sub, t2)__
         activate sr
