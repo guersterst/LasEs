@@ -1,6 +1,7 @@
 package business.util;
 
 import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
+import javax.enterprise.event.Event;
 
 public class EmailUtil {
 

@@ -2,10 +2,9 @@ package business.service;
 
 import java.util.List;
 
-import javax.enterprise.event.Event;
 import javax.faces.bean.ApplicationScoped;
 import javax.transaction.Transaction;
-
+import javax.enterprise.event.Event;
 import business.util.AvatarUtil;
 import business.util.EmailUtil;
 import control.validation.EmailAddressUnoccupiedValidator;

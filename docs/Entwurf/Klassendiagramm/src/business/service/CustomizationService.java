@@ -1,7 +1,8 @@
 package business.service;
 
 import javax.faces.bean.ApplicationScoped;
-
+import javax.transaction.Transaction;
+import javax.enterprise.event.Event;
 import business.util.AvatarUtil;
 import dtos.Style;
 import dtos.SystemSettings;

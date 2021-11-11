@@ -29,8 +29,6 @@ Im folgenden Klassendiagramm wurden folgende Konventionen verwendet:
     Konstruktoren sind ausgespart.
     \item Referenzattribute auf andere Klassen des Diagramms sind als Pfeile dargestellt.
     Diese haben standardmäßig keine Getter und Setter, außer anders angegeben.
-    \item Konstruktoren sind ausgespart, außer dieser ist privat.
-    \item In den Backingbeans sind Attribute, die lediglich einen Anzeigetext aus einem Ressourcebundle laden, nicht angegeben.
     \item Gestrichelte Pfeile sind \emph{use-Pfeile}, egal ob diese mit \emph{<<use>>} versehen sind oder nicht.
 \end{itemize}
 
@@ -64,7 +62,8 @@ Im folgenden Diagramm gilt für die Klassen mit dickem schwarzem Rand folgende K
 	\item Bei einer $x \rightarrow 1$ Beziehung (mit $x \in \{1, *\}$) merkt sich das Objekt auf der Linken Seite die Id des zugeordneten Objektes
 	\item Bei einer $x \rightarrow *$ Beziehung merkt sich das Objekt auf der Linken Seite \emph{keine} Liste der zugehörigen Ids. Zuordnungen sind in diese Richtung also nicht unmittelbar traversierbar.
 \end{itemize}
-
+Die Vollständigkeit der DTOs wurde gegen das ER-Diagramm gegengeprüft.
+natürlich gibt es aber auch DTOs, die nicht direkt aus dem ER-Diagramm kommen.
 \begin{figure}[H]
 	\centering
 	\includegraphics[height=3cm]{graphics/global_transport}
@@ -76,9 +75,9 @@ Im folgenden Diagramm gilt für die Klassen mit dickem schwarzem Rand folgende K
 	\classentry{Review}{This DTO represents a review.}
 	\classentry{ScienceField}{This DTO represents a field of Science.}
 	\classentry{ScientificForum}{This DTO represents a forum}
-	\classentry{Style}{This represents a user interface style.}
+	\classentry{Style}{This DTO represents a user interface style.}
 	\classentry{Submission}{This DTO represents a submission.}
-	\classentry{SubmissionState}{This represents a submissions state.}
+	\classentry{SubmissionState}{This DTO represents a submissions state.}
 	\classentry{SystemSettings}{This DTO represents the system settings.}
 	\classentry{User}{This DTO represents a user.}
 	\classentry{ResultListParameters}{This class bundles parameters for requesting lists from the database. This includes page numner, sorting of the results and filtering of the results}
@@ -96,9 +95,11 @@ Im folgenden Diagramm gilt für die Klassen mit dickem schwarzem Rand folgende K
 
 \subsubsection{de.lases.control.backing}
 
-Im Diagramm dieses Pakets sind folgende Punkte zu beachten
+Im Diagramm dieses Pakets sind folgende Punkte zu beachten:
 \begin{itemize}
-	\item Pfeile, die zur SessionInformation führen wurden aus Gründen der Übersichtlichkeit ausgespart und lediglich als Attribut dargestellt. Die SessionInformation hat natürlich trotzdem keine Getter und Setter.
+	\item Pfeile, die zur SessionInformation führen wurden aus Gründen der Übersichtlichkeit ausgespart und lediglich als Attribut dargestellt.
+	Die SessionInformation hat natürlich trotzdem keine Getter und Setter.
+	\item Alle backing Beans sind managed Beans.
 \end{itemize}
 
 \begin{figure}[H]
@@ -140,13 +141,13 @@ Im Diagramm dieses Pakets sind folgende Punkte zu beachten
 	\classentry{SessionInformation}{Wraps data saved in the session.}
 	\classentry{LifeTimeListener}{Takes care of system start and shutdown operations}
 	\classentry{ExceptionHandler}{Handles all Exceptions that leave the business layer by either showing a faces message or an error page.}
-	\classentry{Pagination}{}
-	\classentry{ImageServlet}{Serves avatars and logos.
+	\classentry{\phantomLabel{class:pagination}Pagination}{Generic class to implement a paginated list of items of a certain type.}
+	\classentry{ImageServlet}{Serves avatars and logos.}
 	\classentry{UIMessageGenerator}{}
 	\classentry{UncheckedExceptionHandler}{arg2}
 	\classentry{UncheckedExceptionHandlerFactory}{arg2}
 }
-\todo{erklaerung schreiben Pagination}
+
 \subsubsection{de.lasses.control.validation}
 
 \begin{figure}[H]
@@ -176,7 +177,7 @@ Im Diagramm dieses Pakets sind folgende Punkte zu beachten
 
 \classtable{
 	\classentry{URLGenerator}{Generates URLs with URL params.}
-	
+
 }
 
 \subsubsection{de.lases.business.service}
@@ -251,7 +252,7 @@ Im Folgenden Klassendiagramm gilt:
     \classentry{SystemSettingsRepository}{This repository can read or update the system settings.}
 
     \classentry{UserRepository}{This repository allows CRUD operations on users.}
-    
+
     \classentry{ReviewedByRepository}{This respository allows to get and change information about the relationship of a submission and a reviewer.}
 }
 
@@ -266,9 +267,9 @@ Im Folgenden Klassendiagramm gilt:
     \classentry{ConnectionPool}{Provides and manages connections to the database.}
 
     \classentry{DButils}{Provides functions for general database services.}
-    
+
     \classentry{EmailSender}{Talks to the SMTP server.}
-    
+
     \classentry{ConfigReader}{Reads the global configuration file from the disk.}
 }
 
