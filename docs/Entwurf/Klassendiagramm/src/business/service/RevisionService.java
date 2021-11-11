@@ -1,6 +1,8 @@
 package business.service;
 
 import javax.faces.bean.ApplicationScoped;
+import javax.transaction.Transaction;
+import javax.enterprise.event.Event;
 
 @ApplicationScoped
 public class RevisionService {
