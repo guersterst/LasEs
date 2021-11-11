@@ -16,7 +16,6 @@ box "control.backing"
 end box
 box "control.internal"
     participant ":ExceptionHandler" as eh << @SessionScoped >>
-    participant ":ResourceBundleHelper" as rh << @???Scoped >>
 end box
 'box "???"
 '    participant ":ResourceBundle" as rscBundle
@@ -180,7 +179,6 @@ deactivate sb
 sb -> eh ++ : methodenname(e)
 'todo methodenname
 
-eh -> rh ++ : getResource()
 return <font color=red><b>Error page</font> aber ka\nwie das funktioniert
 
 'note left
