@@ -189,19 +189,20 @@ activate sb
     return <font color=red><b>DBConnectionFailedException e
 deactivate sb
 
-sb -> eh ++ : handle(<font color=red><b>e</b></font>)
-note right of eh
-generate <font color=red><b>error</b></font>
-<font color=red><b>message</b></font> and add
-to FacesContext
-end note
-note right of eh
-redirect to
-errorPage.xhtml
-end note
+sb -> eh ++ : handle(e)
+    note right of eh
+    generate <font color=red><b>error</b></font>
+    <font color=red><b>message</b></font> and add
+    to FacesContext
+    end note
+    note right of eh
+    redirect to
+    errorPage.xhtml
+    end note
 
-eh -> epb **
-eh --> editor : errorPage.xhtml displaying <font color=red><b>FacesMessage</b></font>
+    eh -> epb **
+    eh --> editor : errorPage.xhtml displaying <font color=red><b>FacesMessage</b></font>
+deactivate eh
 
 'note left
 'Die Ablehnung war
