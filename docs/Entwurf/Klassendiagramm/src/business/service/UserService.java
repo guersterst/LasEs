@@ -18,8 +18,6 @@ public class UserService {
 
 	private AvatarUtil avatarUtil;
 
-	private UserRepository userRepository;
-
 	private User getUser(int id) { }
 
 	public void editUser(User newUser) { }

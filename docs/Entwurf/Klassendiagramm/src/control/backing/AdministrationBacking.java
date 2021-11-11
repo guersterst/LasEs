@@ -2,6 +2,7 @@ package control.backing;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
+import javax.servlet.http.Part;
 
 import business.service.CustomizationService;
 import dtos.SystemSettings;
@@ -13,8 +14,12 @@ public class AdministrationBacking {
 
 	private SystemSettings systemSettings;
 	
+	private Part uploadedLogo;
+	
 	@PostConstruct
 	public void init() { }
 
 	public void update(){ }
+	
+	public void uploadLogo() { }
 }

@@ -6,6 +6,7 @@ import javax.enterprise.context.RequestScoped;
 import com.sun.xml.internal.ws.wsdl.writer.document.Part;
 
 import business.service.ProfileService;
+import business.service.UserService;
 import control.internal.SessionInformation;
 import dtos.User;
 
@@ -14,15 +15,13 @@ public class ProfileBacking {
 	
 	private SessionInformation sessionInformation;
 	
-	private byte[] avatarUpload;
+	private Part uploadedAvatar;
 	
-	private ProfileService profileService;
+	private UserService userService;
 	
 	private User user;
 	
 	private User newUser;
-	
-	private Part uploadedAvatar;
 	
 	@PostConstruct
 	public void init() { }
@@ -30,9 +29,8 @@ public class ProfileBacking {
 	public void submitChanges() { }
 	
 	public void uploadAvatar() { }
+	public void deleteAvatar() { }
 	
 	public String deleteProfile() { return null; }
-	
-	public void deleteAvatar() { }
 
 }

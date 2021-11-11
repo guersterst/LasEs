@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
+import javax.servlet.http.Part;
 
 import business.service.SubmissionService;
 import control.internal.SessionInformation;
@@ -29,7 +30,7 @@ public class NewSubmissionBacking {
 	
 	private int editorSelectionInput;
 	
-	private byte[] pdfUpload;
+	private Part uploadedPDF;
 	
 	private String titleInput;
 	
