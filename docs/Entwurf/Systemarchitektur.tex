@@ -30,7 +30,7 @@ Dieses Paket enthält alle Klassen der Kontrollschicht.
 \newline\newline
 \textbf{\emph{de.lases.control.internal}}
 enthält die Klassen, welche zur internen Verwaltung verwendet werden.
-Hierzugehört beispielsweise die Sessionverwaltung, sowie der Systemstart und -stop.
+Hierzugehört beispielsweise die Sessionverwaltung und das Generieren von \emph{FacesMeessages}.
 \newline\newline
 \textbf{\emph{de.lases.control.validation}}
 enthält alle Klassen, die zur Validierung von Nutzereingaben
@@ -147,13 +147,12 @@ Die \emph{CDI} verwaltet in dieser Anwendung alle Objekte der \emph{\hyperref[ar
 als \emph{@RequestScoped}
 und alle \emph{\hyperref[arch:service]{Services}} als \emph{@ApplicationScoped}.
 Weiterhin sind einige Klassen \emph{@SessionScoped} wie beispielsweise
-die \emph{ExceptionQueue, ExceptionHandler und SessionInformation}.
+die \emph{SessionInformation}.
 Letzlich gibt es einige Klassen, welche
-\emph{@ApplicationScoped} sind wie der \emph{ConnectionPool}, \emph{PeriodicWorker} oder \emph{Logger}.%todo link all
+\emph{@ApplicationScoped} wie der \emph{ConnectionPool} oder \emph{PeriodicWorker}.%todo link all
 Es wird die Referenzimplementierung \emph{Weld} von \emph{JBoss} verwendet.
 
 \subsection{Patterns}\label{arch:patterns}
-%todo konkret auf unser System abstimmen. (Keine allg. erklärung der patterns)
 
 \subsubsection{Model View Controller}\label{arch:mvc}
 Dieses Entwurfsmuster trennt die Klassen und Komponenten der Anwendung in drei
