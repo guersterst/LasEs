@@ -1,6 +1,7 @@
 \localauthor{Johann Schicho}
 
-Im Entity-Relationship-Diagramm in Abbildung \ref{er:diagramm} sieht man die gesamte persistente Datenstruktur von LasEs. Die Kardinalität der \emph{Relationships} gibt die ganzzahligen Abhängigkeiten zwischen der einzelnen \emph{Entities} an. Die \emph{is-A} Spezialisierungen modellieren die unterschiedlichen Subtypen einer Entität. Ein im Diagramm doppelt umrandetes Entity ist ein \emph{schwaches} Entity. Das heißt, es existiert nur im Zusammenhang mit dem übergeordneten Entity. In unserem Fall kann beispielsweise kein Paper in der Datenbank existieren, ohne einer Einreichung zugeteilt zu sein.
+Im Entity-Relationship-Diagramm in Abbildung \ref{er:diagramm} sieht man die gesamte persistente Datenstruktur von LasEs. Die Kardinalität der \emph{Relationships} gibt die ganzzahligen Abhängigkeiten zwischen der einzelnen \emph{Entities} an. Die \emph{is-A} Spezialisierungen modellieren die unterschiedlichen Subtypen einer Entität. Ein im Diagramm doppelt umrandetes Entity ist ein \emph{schwaches} Entity. Fette unterstrichene Attribute sind die
+Primärschlüssel einer Relation, kursive unterstrichene Attribute sind \emph{Uniques} in der Relation.
 
 \begin{figure}
 	\centering
