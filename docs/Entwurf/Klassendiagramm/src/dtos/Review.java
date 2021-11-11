@@ -16,8 +16,6 @@ public class Review {
 	
 	private LocalDateTime timestampUpdloaded;
 	
-	private LocalDateTime timestampDeadline;
-	
 	private boolean visible;
 	
 	private boolean acceptPaper;

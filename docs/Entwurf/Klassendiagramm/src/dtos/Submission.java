@@ -9,6 +9,8 @@ public class Submission {
 	
 	private int id;
 	
+	private boolean revisionRequired;
+	
 	private List<User> reviewers;
 	
 	private User author;

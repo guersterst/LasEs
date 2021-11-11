@@ -10,8 +10,6 @@ public class RegistrationService {
 
 	private ExceptionQueue exceptionQueue;
 
-	private UserRepository userRepository;
-	
 	private Hashing hashing;
 	
 	private EmailUtil emailUtil;

@@ -13,8 +13,6 @@ public class InitialConfigBacking {
 	@PostConstruct
 	public void init() { }
 	
-	public String getConnectionState() { return null; }
-	
 	public void createDb() { }
 
 }

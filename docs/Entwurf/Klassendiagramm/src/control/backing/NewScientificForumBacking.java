@@ -5,6 +5,7 @@ import javax.enterprise.context.RequestScoped;
 
 import business.service.ScienceFieldService;
 import business.service.ScientificForumService;
+import control.internal.SessionInformation;
 import dtos.ScientificForum;
 
 @RequestScoped
@@ -15,6 +16,8 @@ public class NewScientificForumBacking {
 	private ScientificForumService scientificForumService;
 
 	private ScientificForum newScientificForum;
+	
+	private SessionInformation sessionInformation;
 	
 	
 	@PostConstruct

@@ -14,6 +14,7 @@ import control.internal.SessionInformation;
 import dtos.Pagination;
 import dtos.Paper;
 import dtos.Review;
+import dtos.Submission;
 import dtos.SubmissionState;
 import global.util.ResultListParameters;
 
@@ -21,6 +22,8 @@ import global.util.ResultListParameters;
 public class SubmissionBacking {
 
 	private SessionInformation sessionInformation;
+	
+	private Submission submission;
 	
 	private Pagination<Paper> paperPagination;
 	
