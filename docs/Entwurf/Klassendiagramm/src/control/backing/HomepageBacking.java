@@ -29,7 +29,7 @@ public class HomepageBacking {
 	
 	private Pagination<Submission> submissionPagination;
 	
-	private Pagination<Submission> reviewerPagination;
+	private Pagination<Submission> reviewedPagination;
 	
 	private Pagination<Submission> editedPagination;
 	
@@ -41,17 +41,41 @@ public class HomepageBacking {
 	
 	private SubmissionService submissionListService;
 	
-	private SubmissionState stateFilterSelect;
+	private SubmissionState stateFilterSelectSub;
 	
-	private LocalDateTime dateFilterUpperInput;
+	private SubmissionState stateFilterSelectEdit;
 	
-	private LocalDateTime dateFilterLowerInput;
+	private SubmissionState stateFilterSelectReview;
 	
-	private String searchInput;
+	private LocalDateTime dateFilterUpperInputSub;
+	
+	private LocalDateTime dateFilterUpperInputEdit;
+	
+	private LocalDateTime dateFilterUpperInputReview;
+	
+	private LocalDateTime dateFilterLowerInputSub;
+	
+	private LocalDateTime dateFilterLowerInputEdit;
+	
+	private LocalDateTime dateFilterLowerInputReview;
+	
+	private LocalDateTime dateFilterDeadlineUpperInputSub;
+	
+	private LocalDateTime dateFilterDeadlineUpperInputEdit;
+	
+	private LocalDateTime dateFilterDeadlineUpperInputReview;
+	
+	private LocalDateTime dateFilterDeadlineLowerInputSub;
+	
+	private LocalDateTime dateFilterDeadlineLowerInputEdit;
+	
+	private LocalDateTime dateFilterDeadlineLowerInputReview;
 	
 	private List<Submission> submissionList;
 	
-	private List<Review> reviewList;
+	private List<Submission> reviewedList;
+	
+	private List<Submission> editedList;
 	
 	@PostConstruct
 	public void init() { }
@@ -61,10 +85,6 @@ public class HomepageBacking {
 	public void showSubmissionsToEditTab() { }
 	
 	public void showSubmissionsToReviewTab() { }
-	
-	public void sortDateAsc() { }
-	
-	public void sortDateDesc() { }
 	
 	public void applyFilters() { }
 

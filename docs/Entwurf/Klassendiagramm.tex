@@ -160,6 +160,7 @@ Im Diagramm dieses Pakets sind folgende Punkte zu beachten
 	\classentry{NotEmptyValidator}{Checks if a free text imput is empty.}
 	\classentry{EmailAddressExistsValidator}{Checks whether a given email address is a verified address in the system.}
 	\classentry{DateTimeInFutureValidator}{Checks if a date input lies in the future.}
+	\classentry{ForumNameExistsValidator}{Checks if a given input exists as a forum in the system.}
 }
 
 \subsubsection{de.lasses.control.util}
@@ -297,6 +298,7 @@ Im Folgenden Klassendiagramm gilt:
 	\classentry{DataNotWrittenException}{Is thrown when the writing of data fails but a retry has a high probability of succeeding.}
 	\classentry{DataNotCompleteException}{Is thrown when the reading of data yields an incomplete result but a retry has a high probability of succeeding.}
 	\classentry{NoPermissionException}{Is thrown when a user does not have the correct role to complete a certain operation.}
+	\classentry{ForumNameDoesNotExistException}{Is thrown when a ScientificForum is queried from the database by name that does not exist.}
 	\caption{Checked Exceptions}
 }
 

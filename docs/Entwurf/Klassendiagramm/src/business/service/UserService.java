@@ -18,7 +18,7 @@ public class UserService {
 
 	private AvatarUtil avatarUtil;
 
-	private User getUser(int id) { }
+	public User getUser(User user) { }
 
 	public void editUser(User newUser) { }
 

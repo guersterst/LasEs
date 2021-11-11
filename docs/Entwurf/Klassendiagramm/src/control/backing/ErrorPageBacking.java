@@ -6,11 +6,12 @@ import javax.enterprise.context.RequestScoped;
 @RequestScoped
 public class ErrorPageBacking {
 	
+	private String errorMessage;
+	
+	private String stackTrace;
+	
 	@PostConstruct
 	public void init() { }
-
-    private String errorMessage() { return null; }
-
-    public void setErrorMessage() { }
+	
 
 }

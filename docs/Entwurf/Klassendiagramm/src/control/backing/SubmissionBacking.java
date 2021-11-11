@@ -10,18 +10,22 @@ import javax.servlet.http.Part;
 
 import business.service.ReviewService;
 import business.service.SubmissionService;
+import business.service.UserService;
 import control.internal.SessionInformation;
 import dtos.Pagination;
 import dtos.Paper;
 import dtos.Review;
 import dtos.Submission;
 import dtos.SubmissionState;
+import dtos.User;
 import global.util.ResultListParameters;
 
 @ViewScoped
 public class SubmissionBacking {
 
 	private SessionInformation sessionInformation;
+	
+	private UserService userService;
 	
 	private Submission submission;
 	
@@ -31,37 +35,34 @@ public class SubmissionBacking {
 	
 	// Get these value directly from the view:
 	
-	private boolean allReviewsInput;
-	
-	private boolean notReleasedReviewsInput;
-	
-	private boolean releasedReviewsInput;
-	
-	private boolean allSubmittedReviewsInput;
-	
-	private boolean notSubmittedReviewsInput;
-	
-	private int versionNumberSelectInput;
-	
-	private int reviewerSelectInput;
-	
-	private boolean reviewerProposalSelectInput;
-	
-	private String searchTextInput;
-	
-	private HashMap<Integer, Boolean> recommendationPerPaper;
-	
 	private SubmissionService submissionService;
 	
 	private ReviewService reviewService;
 	
-	private ResultListParameters resultListParameters;
+	private Part uploadedRevisionPDF;
 	
-	private List<Paper> papers; 
+	private String forumName;
 	
-	private List<Review> reviews;
+	private User author;
 	
-	private Part uploadedPDF;
+	private List<User> coAuthors;
+	
+	private LocalDateTime dateLowerInputPaper;
+	private LocalDateTime dateLowerInputreview;
+	
+	private LocalDateTime dateUpperInputPaper;
+	private LocalDateTime dateUpperInputReview;
+	
+	private LocalDateTime deadlineLowerInputPaper;
+	private LocalDateTime deadlineLowerInputReview;
+	
+	private LocalDateTime deadlineUpperInputPaper;
+	private LocalDateTime deadlineUpperInputReview;
+	
+	private boolean visibleFilterInputPaper;
+	private boolean visibleFilterInputReview;
+	
+	private boolean recommendationFilterInputReview;
 	
 	@PostConstruct
 	public void init() { }
@@ -74,7 +75,19 @@ public class SubmissionBacking {
 	
 	public void downloadPaper(int paperId) { }
 	
-	public void uploadPDF() { }
+	public void uploadReview() { }
+	
+	public void acceptReviewing() { }
+	
+	public void declineReviewing() { }
+	
+	public void applyFilters() { }
+	
+	public void releaseRevision(int revisionId, int paperId) { }
+	
+	public void getReviewerForReview(Submission submission) { }
+	
+	public void getAuthorForPaper(Paper paper) { }
 	
 	
 

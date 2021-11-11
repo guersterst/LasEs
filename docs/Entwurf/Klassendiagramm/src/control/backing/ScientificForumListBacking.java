@@ -22,9 +22,9 @@ public class ScientificForumListBacking {
 	
 	private ScientificForumService scientificService;
 
-	private LocalDate dateDeadlineBeforeFilter;
+	private LocalDate dateDeadlineLowerFilter;
 
-	private LocalDate dateDeadlineAfterFilter;
+	private LocalDate dateDeadlineUpperFilter;
 
 	private String searchString;
 	
@@ -32,21 +32,6 @@ public class ScientificForumListBacking {
 	public void init() { }
 
 	public void applyFilters(){}
-
-	public void sortNameUp(){}
-
-	public void sortNameDown(){}
-
-	public void sortDeadlineUp(){}
-
-	public void sortDealineDown(){}
-
-	public List<ScienceField> getScienceFields() {return null; }
-	
-	public List<ScientificForum> getScientificForums() { return null; }
-
-
-
 
 
 }

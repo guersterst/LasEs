@@ -6,9 +6,7 @@ import javax.enterprise.context.RequestScoped;
 import control.internal.SessionInformation;
 
 @RequestScoped
-public class VerificationBacking {
-	
-	private LocalDateTime timerStart;
+public class VerificationBacking { // y
 	
 	private SessionInformation sessionInformation;
 	
