@@ -140,7 +140,10 @@ Im Diagramm dieses Pakets sind folgende Punkte zu beachten
 	\classentry{LifeTimeListener}{Takes care of system start and shutdown operations}
 	\classentry{ExceptionHandler}{Handles all Exceptions that leave the business layer by either showing a faces message or an error page.}
 	\classentry{Pagination}{}
-	\classentry{ImageServlet}{Serves avatars and logos.}
+	\classentry{ImageServlet}{Serves avatars and logos.
+	\classentry{UIMessageGenerator}{}
+	\classentry{UncheckedExceptionHandler}{arg2}
+	\classentry{UncheckedExceptionHandlerFactory}{arg2}
 }
 \todo{erklaerung schreiben Pagination}
 \subsubsection{de.lasses.control.validation}
@@ -223,7 +226,7 @@ Im Diagramm dieses Pakets sind folgende Punkte zu beachten
 
 Im Folgenden Klassendiagramm gilt:
 \begin{itemize}
-	\item Jedes Repository ist für genau eine Entität im ER\-Diagramm bzw. für genau ein DTO zuständig.
+	\item Jedes Repository ist für genau eine Entität im ER-Diagramm bzw. für genau ein DTO zuständig.
 	\item Die Methode \emph{getList()} ist jeweils überladen. Falls man eine Liste von Objekten will, die mit einem bestimmten anderen Objekt \emph{a} direkt einer Relationship stehen (siehe ER-Diagramm), dann kann man \emph{a} an die Methode übergeben. Dies ist auch mit mehreren Relationships zugleich möglich.
 	\item Spezifische \emph{addObject/removeObject} Methoden sind von der jeweils vorhandenen \emph{change} Methode insofern abzugrenzen, dass sie je Listen von zugeordneten Objekten bearbeiten. Die \emph{change} Methode kann nur Attribute mit Kardinalität 1 bearbeiten. Eine Ausnahme hierbei sind natürlich die \emph{get/set} Methoden für PDFs und Bilder.
 \end{itemize}
@@ -281,16 +284,18 @@ Im Folgenden Klassendiagramm gilt:
     \classentry{DBConnectionFailedException}{Is thrown when the database connection cannot be established or times out.}
     \classentry{DBConfigurationException}{Is thrown when bad configuration of the database leads to a failure to establish a connection.}
     \classentry{DBQueryFailedException}{Is thrown when a query to the database fails and will probably fail again.}
+    \classentry{EmailServiceFailedException}{Fires when the email service used by the application fails unrecoverably.}
+    \classentry{ConfigNotReadableException}{Fires when the config file of the application can definitively not be read.}
     \caption{Unchecked Exceptions}
 }
 
 \classtable{
 	\classentry{EmailAddressExistsException}{Is thrown when the repository tries to save an email-address to the databse that already exists in the database.}
-	\classentry{UserDoesNotExistException}{Is thrown when the repository tries to query a User from the database that does not exist in the database.}
-	\classentry{DataNotWrittenException}{Is thrown when the writing of data fails but a retry has a high probability of succeeding.}
-	\classentry{DataNotCompleteException}{Is thrown when the reading of data yields an incomplete result but a retry has a high probability of succeeding.}
-	\classentry{NoPermissionException}{Is thrown when a user does not have the correct role to complete a certain operation.}
-	\classentry{ForumNameDoesNotExistException}{Is thrown when a ScientificForum is queried from the database by name that does not exist.}
+	\classentry{DataNotWrittenException}{Is thrown when the writing of data fails but a retry has a high probability of succeeding, for example when a DataTruncationException occurs.}
+	\classentry{DataNotCompleteException}{Is thrown when the reading of data yields an incomplete result but a retry has a high probability of succeeding, for example when a DataTruncation warning occurs.}
+	\classentry{NoPermissionException}{Is thrown when a user does not have the correct role to complete a certain operation. This was most likely caused by a race condition where someone lost a role during completion of an operation.}
+	\classentry{NotFoundException}{Is thrown when a queried object is not found in the database. In the common case this is caused by a race condition where an object was removed while being selected.}
+	\classentry{EmailTransmissionFailed}{Fires whenever the transmission of an email (to a specific list of senders) fails but the email service of this system is intact.}
 	\caption{Checked Exceptions}
 }
 

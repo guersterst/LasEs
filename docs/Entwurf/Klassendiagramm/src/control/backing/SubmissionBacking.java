@@ -89,6 +89,8 @@ public class SubmissionBacking {
 	
 	public void getAuthorForPaper(Paper paper) { }
 	
+	public void uploadPDF() { }
+	
 	
 
 }
