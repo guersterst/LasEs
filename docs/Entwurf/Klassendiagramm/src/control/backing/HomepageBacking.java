@@ -39,7 +39,7 @@ public class HomepageBacking {
 
 	private SessionInformation sessionInformation;
 	
-	private SubmissionService submissionListService;
+	private SubmissionService submissionService;
 	
 	private SubmissionState stateFilterSelectSub;
 	
@@ -70,12 +70,6 @@ public class HomepageBacking {
 	private LocalDateTime dateFilterDeadlineLowerInputEdit;
 	
 	private LocalDateTime dateFilterDeadlineLowerInputReview;
-	
-	private List<Submission> submissionList;
-	
-	private List<Submission> reviewedList;
-	
-	private List<Submission> editedList;
 	
 	@PostConstruct
 	public void init() { }

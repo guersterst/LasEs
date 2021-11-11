@@ -10,6 +10,8 @@ public class InitialConfigBacking {
 	
 	private CustomizationService customizationService;
 	
+	private String dbConnectionState;
+	
 	@PostConstruct
 	public void init() { }
 	

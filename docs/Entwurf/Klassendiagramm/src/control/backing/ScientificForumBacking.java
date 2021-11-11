@@ -45,6 +45,38 @@ public class ScientificForumBacking {
     
     private List<ScienceField> scieneFields;
     
+    private ScienceField selectedScienceFieldInput;
+    
+    private SubmissionState stateFilterSelectSub;
+	
+	private SubmissionState stateFilterSelectEdit;
+	
+	private SubmissionState stateFilterSelectReview;
+	
+	private LocalDateTime dateFilterUpperInputSub;
+	
+	private LocalDateTime dateFilterUpperInputEdit;
+	
+	private LocalDateTime dateFilterUpperInputReview;
+	
+	private LocalDateTime dateFilterLowerInputSub;
+	
+	private LocalDateTime dateFilterLowerInputEdit;
+	
+	private LocalDateTime dateFilterLowerInputReview;
+	
+	private LocalDateTime dateFilterDeadlineUpperInputSub;
+	
+	private LocalDateTime dateFilterDeadlineUpperInputEdit;
+	
+	private LocalDateTime dateFilterDeadlineUpperInputReview;
+	
+	private LocalDateTime dateFilterDeadlineLowerInputSub;
+	
+	private LocalDateTime dateFilterDeadlineLowerInputEdit;
+	
+	private LocalDateTime dateFilterDeadlineLowerInputReview;
+    
     @PostConstruct
 	public void init() { }
 	
@@ -58,7 +90,13 @@ public class ScientificForumBacking {
     public void deleteForum() { }
 
     public void addEditor() { }
+    
+    public void addScienceField() { }
 
     public void removeEditor() { }
+    
+    public void removeScienceField() { }
+    
+    public void submitChanges() { }
   
 }

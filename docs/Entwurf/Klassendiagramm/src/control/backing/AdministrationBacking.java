@@ -19,7 +19,8 @@ public class AdministrationBacking {
 	@PostConstruct
 	public void init() { }
 
-	public void update(){ }
+	public void save(){ }
 	
-	public void uploadLogo() { }
+	public void abort() { }
+
 }

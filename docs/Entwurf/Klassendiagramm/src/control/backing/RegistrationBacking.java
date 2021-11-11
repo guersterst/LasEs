@@ -11,15 +11,7 @@ public class RegistrationBacking {
 	
 	private RegistrationService registrationService;
 	
-	private String passwordInput; // y
-	
-	private String titleInput; // y
-	
-	private String firstNameInput; // 7
-	
-	private String lastNameInput; // 7
-	
-	private String emailInput; // y
+	private User newUser;
 
 	private SessionInformation sessionInformation;
 	

@@ -7,6 +7,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ViewScoped;
 
 import business.service.ProfileService;
+import business.service.UserService;
 import control.internal.SessionInformation;
 import dtos.Pagination;
 import dtos.Privilege;
@@ -19,7 +20,7 @@ public class UserListBacking {
 	
 	private Pagination<User> userPagination;
 
-	private ProfileService profileService;
+	private UserService userService;
 	
 	
 	@PostConstruct

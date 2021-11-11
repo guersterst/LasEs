@@ -6,6 +6,7 @@ import javax.servlet.http.Part;
 
 import business.service.ReviewService;
 import control.internal.SessionInformation;
+import dtos.Review;
 
 @RequestScoped
 public class NewReviewBacking {
@@ -15,9 +16,8 @@ public class NewReviewBacking {
 	private SessionInformation sessionInformation;
 	
 	private Part uploadedPDF;
-
-	private boolean acceptRecommendation;
-	String reviewComment;
+	
+	private Review review;
 	
 	@PostConstruct
 	public void init() { }
@@ -25,8 +25,5 @@ public class NewReviewBacking {
 	public String addReview(){
 		return null;
 	}
-	
-	public void uploadPDF() { }
-
 
 }
