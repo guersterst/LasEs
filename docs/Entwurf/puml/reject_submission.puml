@@ -30,7 +30,7 @@ end box
 box "global.transfer"
     participant "sub:Submission" as sub << @Named >>
     participant "user:User" as usr
-    participant "paper:Paper" as paper
+'    participant "paper:Paper" as paper
     participant "submitter:User" as submitter
 end box
 box persistence
@@ -68,7 +68,7 @@ activate sb
     sb -> usr ** : User()
     sb -> usr ++ : setId(userId)
     return
-    sb -> ssvc ++ : canView(sub, usr)
+    sb -> ssvc ++ : canView(sub, user)
     return true
 
     sb -> ssvc : getSubmission(sub)
@@ -82,7 +82,7 @@ activate sb
             activate cp
             return
         return
-        ssvc -> sr : __getSubmission(sub, t1)__
+        ssvc -> sr : __get(sub, t1)__
         activate sr
             sr -> t1 ++ : getConnection()
             return
@@ -96,7 +96,7 @@ activate sb
             activate sub
             return
             sr -> submitter ** : User()
-            sr -> sub : setSubmitter(submitter)
+            sr -> sub : setAuthor(submitter)
             activate sub
             return
             ......sub befüllen......
@@ -113,12 +113,12 @@ activate sb
     return
     sb -> sub ++ : getCoAuthors()
     return
-    sb -> sub ++ : getSubmitter()
+    sb -> sub ++ : getAuthor()
     return
 return submission.xhtml
 
 
-editor -> sb : reject()
+editor -> sb : setState(REJECTED)
 note left
     klickt auf "Reject"
 end note
@@ -127,7 +127,7 @@ activate sb
     activate ssvc
         ssvc -> sub ++ : setSubmissionState(REJECTED)
         return
-        ssvc -> sub : getSubmitter()
+        ssvc -> sub : getAuthor()
         activate sub
         return submitter
         ssvc -> sub : getAuthors()
@@ -180,18 +180,18 @@ activate sb
         end note
 
 == Anfang Fehlerbehandlung ==
-        return <font color=red><b>SQLException e
+        return <font color=red><b>DBConnectionFailedException e
 
         ssvc -> t2 ++ : close()
         return
 
-    return <font color=red><b>SQLException e
+    return <font color=red><b>DBConnectionFailedException e
 deactivate sb
 
 sb -> eh ++ : methodenname(e)
 'todo methodenname
 
-return <font color=red><b>Error page</font> aber ka\nwie das funktioniert
+eh --> editor : <font color=red><b>Error page</font> aber ka\nwie das funktioniert
 
 'note left
 'Die Ablehnung war
