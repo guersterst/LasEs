@@ -148,7 +148,7 @@ activate sb
 '        activate rscBundle
 '        return body
 
-        ssvc -> eu : generateMailto(editor.getEmailAddress(),\nrecipient,cc,subject,body)
+        ssvc -> eu : generateMailto(\neditor.getEmailAddress(),\nrecipient,cc,subject,body)
         activate eu
         return mailtoLink
 
