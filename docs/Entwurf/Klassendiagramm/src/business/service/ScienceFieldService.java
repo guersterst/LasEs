@@ -2,6 +2,8 @@ package business.service;
 
 import java.util.List;
 
+import javax.faces.bean.ApplicationScoped;
+
 import dtos.ScienceField;
 import persistence.repository.ScienceFieldRepository;
 

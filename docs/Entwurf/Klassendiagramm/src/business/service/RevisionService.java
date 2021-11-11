@@ -1,11 +1,9 @@
 package business.service;
 
+import javax.faces.bean.ApplicationScoped;
+
 @ApplicationScoped
 public class RevisionService {
-
-    private PaperRepository paperRepository;
-
-    private SubmissionRepository submissionRepository;
 
     public void getRevision() { }
 

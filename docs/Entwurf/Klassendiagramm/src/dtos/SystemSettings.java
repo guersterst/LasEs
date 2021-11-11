@@ -8,6 +8,10 @@ public class SystemSettings {
 	
 	private String companyName;
 	
+	private String headlineWelcomePage;
+	
+	private String shortMessageWelcomePage;
+	
 	private Style style;
 
 }

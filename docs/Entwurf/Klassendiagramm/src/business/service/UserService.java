@@ -2,6 +2,8 @@ package business.service;
 
 import java.util.List;
 
+import javax.faces.bean.ApplicationScoped;
+
 import business.util.AvatarUtil;
 import business.util.EmailUtil;
 import control.validation.EmailAddressUnoccupiedValidator;
@@ -11,10 +13,6 @@ import persistence.repository.UserRepository;
 
 @ApplicationScoped
 public class UserService {
-
-	private EmailUtil emailUtil;
-
-	private AvatarUtil avatarUtil;
 
 	public User getUser(User user) { }
 

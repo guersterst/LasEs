@@ -2,6 +2,8 @@ package business.service;
 
 import java.util.List;
 
+import javax.faces.bean.ApplicationScoped;
+
 import business.util.EmailUtil;
 import dtos.ScientificForum;
 import dtos.Submission;
@@ -11,12 +13,6 @@ import persistence.repository.ScientificForumRepository;
 
 @ApplicationScoped
 public class ScientificForumService {
-
-	private EmailUtil emailUtil;
-
-	private SubmissionRepository submissionRepository;
-
-	private UserRepository userRepository;
 
 	public ScientificForum getForum() { }
 

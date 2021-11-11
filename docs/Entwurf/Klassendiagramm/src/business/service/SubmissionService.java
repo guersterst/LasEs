@@ -2,6 +2,8 @@ package business.service;
 
 import java.util.List;
 
+import javax.faces.bean.ApplicationScoped;
+
 import business.util.EmailUtil;
 import dtos.Paper;
 import dtos.Review;
@@ -12,10 +14,6 @@ import persistence.repository.SubmissionRepository;
 
 @ApplicationScoped
 public class SubmissionService {
-
-	private EmailUtil emailUtil;
-
-	private PaperRepository paperRepository;
 
 	public Submission getSubmission(int submissionId) { return null; }
 

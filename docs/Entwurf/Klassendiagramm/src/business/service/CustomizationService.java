@@ -1,17 +1,19 @@
 package business.service;
 
+import javax.faces.bean.ApplicationScoped;
+
 import business.util.AvatarUtil;
 import dtos.Style;
+import dtos.SystemSettings;
 import persistence.repository.SystemSettingsRepository;
 
 @ApplicationScoped
 public class CustomizationService {
 	
-	private AvatarUtil avatarUtil;
 
 	public void setSystemSettings(Style style) { }
 
-	public SystemSettings get() { }
+	public void get() { }
 
 	public void createDbSchema () { }
 

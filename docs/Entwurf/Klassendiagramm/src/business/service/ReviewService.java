@@ -2,6 +2,8 @@ package business.service;
 
 import java.util.List;
 
+import javax.faces.bean.ApplicationScoped;
+
 import business.util.EmailUtil;
 import dtos.Review;
 import dtos.Submission;
@@ -10,8 +12,6 @@ import persistence.repository.ReviewRepository;
 
 @ApplicationScoped
 public class ReviewService {
-	
-	private EmailUtil emailUtil;
 
 	public void addReview(Submission submission, Review review) { }
 	
