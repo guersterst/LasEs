@@ -124,7 +124,7 @@ note left
     klickt auf "Reject"
 end note
 activate sb
-    sb -> ssvc : changeState(sub,REJECTED)
+    sb -> ssvc : setState(sub,REJECTED)
     activate ssvc
         ssvc -> sub ++ : setSubmissionState(REJECTED)
         return
