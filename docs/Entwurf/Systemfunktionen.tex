@@ -63,9 +63,13 @@ In der \code{init()}-Methode von \code{ConnectionPool} wird einer hinzugefügt f
 Damit wird ein geordneter Shutdown sichergestellt.
 
 \subsection{Lokalisierung}\label{subsec:lokalisierung}
-Ausgabestrings werden in \code{.properties}-Dateien gespeichert, getrennt für Deutsch und Englisch.
-JSF stellt Funktionalität bereit, um darauf von Facelets und Klassen aus über \code{ResourceBundle} aus der Java-Standardbibliothek einfach zugreifen zu können.
+Ausgabestrings werden in \code{.properties}-Dateien gespeichert, getrennt für Deutsch und Englisch und diese bilden \code{ResourceBundle}s.
+Die Bundles und die verfügbaren Sprachen werden in \code{faces-config.xml} registiert.
+Dadurch ist es möglich, von Facelets aus mit der Expression Language auf die Strings zuzugreifen und von den Backing Beans mit \code{Application\#getResourceBundle(FacesContext c, String name)}.
+\\
+Um Standard-JSF-Meldungen (z.B. bei vorgegebenen Validatoen) zu überschreiben, werden \code{MessageBundle}s verwendet.
 Welche Sprache verwendet wird, hängt vom Header-Element \code{Accept-Language} der HTTP-Anfrage ab, falls die gewünschte Sprache nicht verfügbar ist, wird Englisch als Standardsprache verwendet.
+Die Sprache wird von JSF automatisch ausgewählt.
 
 \subsection{Transaktionsverwaltung}\label{subsec:lokalisierung}
 Die Klasse \code{Transaction} im Paket \code{persistence.repository} repräsentiert eine Datenbanktransaktion.
