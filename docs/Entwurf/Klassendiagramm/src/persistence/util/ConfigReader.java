@@ -6,8 +6,12 @@ public class ConfigReader {
 	
 	private static GlobalConfig config;
 	
-	public static void loadConfig() { }
+	private static LoggerConfig loggerConfig;
 	
-	public static GlobalConfig getConfig() { return null; }
+	public static void loadConfigs() { }
+	
+	public static GlobalConfig getGlobalConfig() { return null; }
+	
+	public static LoggerConfig getLoggerConfig() { return null; }
 
 }
