@@ -20,8 +20,8 @@ Um unerlaubten Zugriff auf Seiten, Informationen und Aktionen zu verhindern, wer
 Die Klasse \code{TrespassListener} entscheidet dann, ob der Nutzer die nötigen Rechte hat und akzeptiert eine Anfrage nur dann, sonst wird auf eine Fehler-Seite weitergeleitet.
 Dazu wird über die angefragte URL das zugehörige Facelet bestimmt und geprüft, ob darauf mit der Rolle des Nutzers zugegriffen werden darf.
 Auf die Rolle kann der \code{TrespassListener} über die SessionInformation zugreifen.
-Das hängt darüber hinaus auch von der Beziehung des Nutzers zur angefragten Ressource ab (ein normaler Nutzer kann z.B.\ nur sein \emph{eigenes} Profil oder eine \emph{eigene} Einreichung sehen).
-Da dies zentral in dieser Klasse passiert, entstehen weniger Fehler als bei der Prüfung an vielen verschiedenen Stellen des Programms.
+Der Zugriff hängt darüber hinaus auch von der Beziehung des Nutzers zur angefragten Ressource ab (ein normaler Nutzer kann z.B.\ nur sein \emph{eigenes} Profil oder eine \emph{eigene} Einreichung sehen).
+Deshalb prüft für die relevanten Seiten das jeweilige Backing Bean diese Beziehung und leitet ggf.\ auf eine Fehlerseite weiter.
 
 \item[Kryptographie \& Vertraulichkeit sensibler Daten]
 Alle Anfragen und Antworten werden mit dem HTTPS-Protokoll mit TLS-Verschlüsselung durchgeführt.
