@@ -177,7 +177,7 @@ Diese lädt die Daten aus der Datenbank bei der ersten Betrachtung der Seite.
 \subsubsection{Anonymer Nutzer}
 
 \begin{samepage}
-\textbf{welcome.xhtml} Auf der Login- bzw. Welcome-Seite wird \emph{LasEs} vorgestellt.
+\textbf{welcome.xhtml} \phantomLabel{flt:welcome} Auf der Login- bzw. Welcome-Seite wird das System vorgestellt.
 Zusätzlich gibt es ein Login-Formular zur Anmeldung im System.
 Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{registration.xhtml} weitergeleitet.
 \nopagebreak
@@ -652,18 +652,15 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
     \nopagebreak
 
     \ftable{
-
-        \fentry{themeHeading}{outputText}{Überschrift für Farbthemes.}{A}
-
         \fentry{selectTheme}{selectOneMenu}{Auswahl eines Farbthemas.}{A}
-
-        \fentry{logoHeading}{outputText}{Überschrift für Logo-Bereich.}{A}
 
         \fentry{logo}{graphicImage}{Logo des Systems.}{A}
 
         \fentry{changeLogo}{inputFile}{Hochladen eines neuen Logos.}{A}
 
-        \fentry{institutionHeading}{outputText}{Überschrift für Einstellungen der Einrichtung.}{A}
+        \fentry{welcomeHeading}{inputText}{Angabe einer Überschrift auf der \hyperref[flt:welcome]{\emph{welcomepage}}}{A}
+
+        \fentry{welcomeText}{inputTextArea}{Angabe eines Textes auf der \hyperref[flt:welcome]{\emph{welcomepage}}}{A}
 
         \fentry{institution}{inputText}{Angabe des Namens der Einrichtung.}{A}
 
