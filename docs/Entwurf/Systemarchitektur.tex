@@ -32,7 +32,7 @@ Dieses Paket enthält alle Klassen der Kontrollschicht.
 enthält die Klassen, welche zur internen Verwaltung verwendet werden.
 Hierzugehört beispielsweise die Sessionverwaltung, sowie der Systemstart und -stop.
 \newline\newline
-\textbf{\emph{de.lases.control.validiation}}
+\textbf{\emph{de.lases.control.validation}}
 enthält alle Klassen, die zur Validierung von Nutzereingaben
 in Facelets verwendet werden.
 \newline\newline
@@ -53,7 +53,7 @@ Dieses Paket enthält alle Klassen der Anwendungslogikschicht.
 enthält alle Klassen, die den Hauptteil der Anwendungslogik umsetzen.
 Das sind also alle Dienste welche den
 \hyperref[arch:backing]{Backing Beans} zur Verfügung
-gestellt werden und auf die auf die %todo link repos
+gestellt werden und auf die %todo link repos
 Repositories zugreifen.
 \newline\newline
 \textbf{\emph{de.lases.business.util}}
@@ -69,7 +69,7 @@ Hierzu gehören Dienste, welche periodische Aufräumaufarbeiten in der Datenbank
 oder bei der Ausnahmebehandlung helfen.
 
 \subsubsection{de.lases.persistence}\label{arch:persistence}
-Dieses Paket enthält alle Schichten der Persistenzschicht.
+Dieses Paket enthält alle Klassen der Persistenzschicht.
 \newline\newline
 \textbf{\emph{de.lases.persistence.repository}}\label{arch:repository}
 enthält alle Klassen, die dem direkten Zugriff auf die Datenbank dienen.
@@ -117,10 +117,10 @@ zum Abfangen der Ausnahmen und zur Generierung der
 
 \subsubsection{Ungeprüfte Ausnahmen}
 Bei ungeprüften Ausnahmen handelt es sich um fatale Fehler, wie sie beispielsweise durch
-Programmierfehler entstehen können. Teilweise werden geprüften Ausnahmen
+Programmierfehler entstehen können. Teilweise werden geprüfte Ausnahmen
 in ungeprüfte umgewandelt, wenn das System und der Nutzer bei deren Behandlung
-machtlos sind (z.B. Keine Datebank Verbindung vorhanden). %todo link real exception
-Ungeprüfte Ausnahmen gehören generell jeder Schicht an, das sie alle Schichten unbemerkt durchlaufen,
+machtlos sind (z.B. keine Datenbankverbindung vorhanden). %todo link real exception
+Ungeprüfte Ausnahmen gehören generell jeder Schicht an, da sie alle Schichten unbemerkt durchlaufen,
 bis sie vom anwendungsweiten
 \emph{UncheckedExceptionHandler} %todo link
 aufgegriffen werden. Der Nutzer wird daraufhin auf die Fehlerseite %todo link
@@ -141,7 +141,7 @@ er Objektreferenzierung tätigen kann, ohne diese Objekte vorher explizit zu ers
 Diese referenzierten Objekte können in andere Objekte zur Laufzeit \emph{injiziert} werden.
 Somit können Objekte in dieser Anwendung ohne Initialisierung oder umständlichen Transport der Referenzierung
 verwendet werden.
-Dies ermöglicht eine losere Kupplung zwischen Klassen und somit Erweiterbarkeit
+Dies ermöglicht eine losere Kopplung zwischen Klassen und somit Erweiterbarkeit
 und Austauschbarkeit.
 Die \emph{CDI} verwaltet in dieser Anwendung alle Objekte der \emph{\hyperref[arch:backing]{Backing-Beans}}
 als \emph{@RequestScoped}
@@ -149,7 +149,7 @@ und alle \emph{\hyperref[arch:service]{Services}} als \emph{@ApplicationScoped}.
 Weiterhin sind einige Klassen \emph{@SessionScoped} wie beispielsweise
 die \emph{ExceptionQueue, ExceptionHandler und SessionInformation}.
 Letzlich gibt es einige Klassen, welche
-\emph{@ApplicationScoped} wie der \emph{ConnectionPool}, \emph{PeriodicWorker} oder \emph{Logger}%todo link all
+\emph{@ApplicationScoped} sind wie der \emph{ConnectionPool}, \emph{PeriodicWorker} oder \emph{Logger}.%todo link all
 Es wird die Referenzimplementierung \emph{Weld} von \emph{JBoss} verwendet.
 
 \subsection{Patterns}\label{arch:patterns}
@@ -217,7 +217,7 @@ Datenbankverbindungen festgelegt werden kann.
 
 \subsubsection{Observer}
 Das \emph{Observer} Verhaltensmuster beschreibt Methoden, welche auf
-Änderungen im Zustand eines Systems warten und daraufhin handeln.
+Änderungen im Zustand eines Systems warten, darüber benachrichtigt werden und daraufhin handeln.
 In unserem System findet das beispielsweise beim \emph{ExceptionHandler} %todo link
 Verwendung, welcher eine \emph{ExceptionQueue} beobachtet und auf das Hinzufügen neuer Elemente
 reagiert.
