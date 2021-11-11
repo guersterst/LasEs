@@ -20,6 +20,9 @@ end box
 box "control.internal"
     participant "si:SessionInformation" as si << @SessionScoped >>
 end box
+box "control.validation"
+    participant ":PDFValidator" as pdfv << @FacesValidator >>
+end box
 box "business.service"
     participant "ssvc:SubmissionService" as ssvc << @ApplicationScoped >>
 end box
@@ -108,13 +111,16 @@ activate sb
     sb -> sub ++ : getSubmitter()
     return
 return submission.xhtml
+note left
+    sucht die PDF-Datei mit
+    dem file picker aus und
+    klickt auf "Submit Revision"
+end note
 user -> sb : submitRevision()
 activate sb
-    note left
-        sucht die PDF-Datei mit
-        dem file picker aus und
-        klickt auf "Submit Revision"
-    end note
+
+    user -> pdfv ++ : validate()
+    return
     user -> sb : setRevisionPdfPart()
 
     sb -> ssvc : addRevision(sub, revisionPdf)
