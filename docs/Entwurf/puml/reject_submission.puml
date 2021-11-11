@@ -15,6 +15,7 @@ box "control.backing"
     participant ":SubmissionBacking" as sb << @Named >>
 end box
 box "control.internal"
+    participant "si:SessionInformation" as si << @SessionScoped >>
     participant ":ExceptionHandler" as eh << @SessionScoped >>
 end box
 'box "???"
@@ -28,6 +29,7 @@ box "business.util"
 end box
 box "global.transfer"
     participant "sub:Submission" as sub << @Named >>
+    participant "user:User" as usr
     participant "paper:Paper" as paper
     participant "submitter:User" as submitter
 end box
@@ -47,6 +49,8 @@ note left
 end note
 sb --> ssvc : //injection//
 return //ssvc//
+sb --> si : //injection//
+return //si//
 editor -> sb : init()
 activate sb
     note right
@@ -55,10 +59,19 @@ activate sb
         requestParams
         (URL-Parameter)
     end note
+    sb -> si ++ : getUserId()
+    return userId
     sb -> sub ** : Submission()
     sb -> sub : setId(subId)
     activate sub
     return
+    sb -> usr ** : User()
+    sb -> usr ++ : setId(userId)
+    return
+    return
+    sb -> ssvc ++ : canView(sub, usr)
+    return true
+
     sb -> ssvc : __getSubmission(sub)__
     activate ssvc
         ssvc -> t1 ** : Transaction()
