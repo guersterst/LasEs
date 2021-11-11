@@ -29,7 +29,9 @@ public class UserService {
 	public boolean emailExists(String email) { return false; }
 
 	// byte[] gut?
-	public void uploadAvatar(String email, byte[] avatar) { }
+	public void setAvatar() { }
+
+	public File getAvatar() { }
 
 	public void deleteAvatar(String email) { }
 
