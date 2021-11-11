@@ -50,7 +50,7 @@ public class SubmissionService {
 
 	public void rejectSubmission() { }
 
-	boolean canView(Submission sub, User user)
+	public boolean canView(Submission sub, User user) { }
 
 	public List<Submission> getSubmissions(ScientificForum scientificForum, User role, ResultListParameters resultParams) { return null; }
 
