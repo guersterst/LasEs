@@ -102,6 +102,18 @@ activate sb
             return
             ......sub befüllen......
         return
+        note right of ssvc
+            analoge DB-Zugriffe über die Repos:
+            UserRepository.__get(sub.getAuthor(),t1)__
+            UserRepository.__getList(sub,t1)__
+            PaperRepository.__getList(sub,t1)__
+        end note
+        ssvc -> sub ++ : setAuthor()
+                return
+                ssvc -> sub ++ : setCoAuthors()
+                return
+                ssvc -> sub ++ : setPapers()
+                return
         ssvc -> t1 ++ : commit()
             t1 -> cp ++ : releaseConnection()
             return

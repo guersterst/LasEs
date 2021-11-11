@@ -103,6 +103,12 @@ activate sb
             UserRepository.__getList(sub,t1)__
             PaperRepository.__getList(sub,t1)__
         end note
+        ssvc -> sub ++ : setAuthor()
+        return
+        ssvc -> sub ++ : setCoAuthors()
+        return
+        ssvc -> sub ++ : setPapers()
+        return
         ssvc -> t1 ++ : commit()
             t1 -> cp ++ : releaseConnection()
             return
@@ -116,7 +122,7 @@ activate sb
     return
     sb -> sub ++ : getCoAuthors()
     return
-    sb -> sub ++ : getSubmitter()
+    sb -> sub ++ : getAuthor()
     return
 return submission.xhtml
 note left
