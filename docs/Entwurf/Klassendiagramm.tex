@@ -91,6 +91,8 @@ Im folgenden Diagramm gilt für die Klassen mit dickem schwarzem Rand folgende K
 	\classentry{File}{Encapsulates a file that is passed between the layers.}
 	\classentry{ReviewedBy}{Stores Information about the relationship of a Submission and a User (the reviewer).}
 	\classentry{AcceptanceStatus}{Holds the information wheather a requested reviewer has accepted or rejected the request or has yet to decide.}
+	\classentry{UIMessage}{This DTO holds the information necessary for constructing a \emph{FacesMessage}.
+	It is contained in events used for displaying a message to the user.}
 }
 
 \subsubsection{de.lases.control.backing}
@@ -137,13 +139,12 @@ Im Diagramm dieses Pakets sind folgende Punkte zu beachten
 \classtable{
 	\classentry{TrespassListener}{Manages user access to resources, most importantly webpages.}
 	\classentry{SessionInformation}{Wraps data saved in the session.}
-	\classentry{LifeTimeListener}{Takes care of system start and shutdown operations}
-	\classentry{ExceptionHandler}{Handles all Exceptions that leave the business layer by either showing a faces message or an error page.}
+	\classentry{LifeTimeListener}{Takes care of system start and shutdown operations.}
 	\classentry{Pagination}{}
 	\classentry{ImageServlet}{Serves avatars and logos.
-	\classentry{UIMessageGenerator}{}
-	\classentry{UncheckedExceptionHandler}{arg2}
-	\classentry{UncheckedExceptionHandlerFactory}{arg2}
+	\classentry{UIMessageGenerator}{Observes all events concerning \emph{UIMessage}s and creates \emph{FacesMessage}s from them.}
+	\classentry{UncheckedExceptionHandler}{Catches all unchecked exceptions and redirects the user to an error page.}
+	\classentry{UncheckedExceptionHandlerFactory}{A factory for the \emph{UncheckedExceptionHandler}.}
 }
 \todo{erklaerung schreiben Pagination}
 \subsubsection{de.lasses.control.validation}
