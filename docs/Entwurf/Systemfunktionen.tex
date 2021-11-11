@@ -72,7 +72,7 @@ Um Standard-JSF-Meldungen (z.B. bei vorgegebenen Validatoen) zu überschreiben, 
 Welche Sprache verwendet wird, hängt vom Header-Element \code{Accept-Language} der HTTP-Anfrage ab, falls die gewünschte Sprache nicht verfügbar ist, wird Englisch als Standardsprache verwendet.
 Die Sprache wird von JSF automatisch ausgewählt.
 
-\subsection{Transaktionsverwaltung}\label{subsec:lokalisierung}
+\subsection{Transaktionsverwaltung}\label{subsec:transactions}
 Die Klasse \code{Transaction} im Paket \code{persistence.repository} repräsentiert eine Datenbanktransaktion.
 Sie kann mit \code{startTransaction()} und \code{stopTransaction()} gestartet bzw.\ beendet werden.
 Alle Datenbankzugriffe dazwischen, bei denen der \code{persistence}-Schicht diese \code{Transaction} übergeben wurde, werden von der Datenbank als atomare Operation durchgeführt.
