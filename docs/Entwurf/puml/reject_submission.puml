@@ -191,7 +191,8 @@ deactivate sb
 
 sb -> eh ++ : handle(<font color=red><b>e</b></font>)
 note right of eh
-add error message
+generate <font color=red><b>error</b></font>
+<font color=red><b>message</b></font> and add
 to FacesContext
 end note
 
