@@ -47,29 +47,11 @@ public class HomepageBacking {
 	
 	private SubmissionState stateFilterSelectReview;
 	
-	private LocalDateTime dateFilterUpperInputSub;
+	private DateSelect submission;
 	
-	private LocalDateTime dateFilterUpperInputEdit;
+	private DateSelect reviewing;
 	
-	private LocalDateTime dateFilterUpperInputReview;
-	
-	private LocalDateTime dateFilterLowerInputSub;
-	
-	private LocalDateTime dateFilterLowerInputEdit;
-	
-	private LocalDateTime dateFilterLowerInputReview;
-	
-	private LocalDateTime dateFilterDeadlineUpperInputSub;
-	
-	private LocalDateTime dateFilterDeadlineUpperInputEdit;
-	
-	private LocalDateTime dateFilterDeadlineUpperInputReview;
-	
-	private LocalDateTime dateFilterDeadlineLowerInputSub;
-	
-	private LocalDateTime dateFilterDeadlineLowerInputEdit;
-	
-	private LocalDateTime dateFilterDeadlineLowerInputReview;
+	private DateSelect editorial;
 	
 	@PostConstruct
 	public void init() { }

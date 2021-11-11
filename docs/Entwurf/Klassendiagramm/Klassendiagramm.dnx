@@ -1687,6 +1687,20 @@
     <element xsi:nil="true"/>
     <layoutConstraint xmi:type="notation:Bounds" xmi:id="_G7SFs0NGEeyl78XsUVYfug" x="186912" y="-6996" width="9115" height="2151"/>
   </children>
+  <children xmi:type="umlnotation:UMLShape" xmi:id="_EdZcEENIEeyl78XsUVYfug" fontName="Noto Sans" fontHeight="8" showListVisibility="Text" fillColor="5789921" transparency="0" lineColor="1316019" lineWidth="1" showStereotype="Text">
+    <children xmi:type="notation:DecorationNode" xmi:id="_EdaqMENIEeyl78XsUVYfug" type="ImageCompartment">
+      <layoutConstraint xmi:type="notation:Size" xmi:id="_EdaqMUNIEeyl78XsUVYfug" width="1320" height="1320"/>
+    </children>
+    <children xmi:type="notation:BasicDecorationNode" xmi:id="_EdaqMkNIEeyl78XsUVYfug" type="Stereotype"/>
+    <children xmi:type="notation:BasicDecorationNode" xmi:id="_EdaqM0NIEeyl78XsUVYfug" type="Kind"/>
+    <children xmi:type="notation:BasicDecorationNode" xmi:id="_EdaqNENIEeyl78XsUVYfug" type="Name"/>
+    <children xmi:type="notation:BasicDecorationNode" xmi:id="_EdaqNUNIEeyl78XsUVYfug" type="Parent"/>
+    <children xmi:type="notation:SemanticListCompartment" xmi:id="_EdbRQENIEeyl78XsUVYfug" type="EnumerationCompartment"/>
+    <children xmi:type="notation:SemanticListCompartment" xmi:id="_EdbRQUNIEeyl78XsUVYfug" visible="false" type="AttributeCompartment" showTitle="true"/>
+    <children xmi:type="notation:SemanticListCompartment" xmi:id="_EdbRQkNIEeyl78XsUVYfug" visible="false" type="OperationCompartment"/>
+    <element xmi:type="uml:Enumeration" href="mmi:///#jsrctype%5Ename=DateSelect%5Bjcu%5Ename=DateSelect.java%5Bjpack%5Ename=control.backing%5Bjsrcroot%5Esrcfolder=src%5Bproject%5Eid=Klassendiagramm%5D%5D%5D%5D$uml.Enumeration"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_EdZcEUNIEeyl78XsUVYfug" x="90513" y="-6800"/>
+  </children>
   <element xsi:nil="true"/>
   <edges xmi:type="umlnotation:UMLConnector" xmi:id="_sC9ZYDvnEeypu5KOTbHQZg" source="_TrvtADveEeypu5KOTbHQZg" target="_3sYJADvmEeypu5KOTbHQZg" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
     <children xmi:type="notation:DecorationNode" xmi:id="_sC-AcDvnEeypu5KOTbHQZg" type="FromMultiplicityLabel">

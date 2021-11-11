@@ -22,9 +22,7 @@ public class ScientificForumListBacking {
 	
 	private ScientificForumService scientificService;
 
-	private LocalDate dateDeadlineLowerFilter;
-
-	private LocalDate dateDeadlineUpperFilter;
+	private DateSelect deadline;
 
 	private String searchString;
 	

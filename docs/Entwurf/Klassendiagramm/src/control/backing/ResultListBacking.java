@@ -42,29 +42,13 @@ public class ResultListBacking {
 	
 	private SubmissionState stateFilterSelectReview;
 	
-	private LocalDateTime dateFilterUpperInputSub;
+	private DateSelect submission;
 	
-	private LocalDateTime dateFilterUpperInputEdit;
+	private DateSelect editorial;
 	
-	private LocalDateTime dateFilterUpperInputReview;
+	private DateSelect reviewing;
 	
-	private LocalDateTime dateFilterLowerInputSub;
-	
-	private LocalDateTime dateFilterLowerInputEdit;
-	
-	private LocalDateTime dateFilterLowerInputReview;
-	
-	private LocalDateTime dateFilterDeadlineUpperInputSub;
-	
-	private LocalDateTime dateFilterDeadlineUpperInputEdit;
-	
-	private LocalDateTime dateFilterDeadlineUpperInputReview;
-	
-	private LocalDateTime dateFilterDeadlineLowerInputSub;
-	
-	private LocalDateTime dateFilterDeadlineLowerInputEdit;
-	
-	private LocalDateTime dateFilterDeadlineLowerInputReview;
+	private DateSelect forum;
 	
 	private LocalDate dateDeadlineLowerFilterSciForum;
 

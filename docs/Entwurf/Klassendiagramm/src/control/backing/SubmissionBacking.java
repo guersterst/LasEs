@@ -47,17 +47,9 @@ public class SubmissionBacking {
 	
 	private List<User> coAuthors;
 	
-	private LocalDateTime dateLowerInputPaper;
-	private LocalDateTime dateLowerInputreview;
+	private DateSelect paper;
 	
-	private LocalDateTime dateUpperInputPaper;
-	private LocalDateTime dateUpperInputReview;
-	
-	private LocalDateTime deadlineLowerInputPaper;
-	private LocalDateTime deadlineLowerInputReview;
-	
-	private LocalDateTime deadlineUpperInputPaper;
-	private LocalDateTime deadlineUpperInputReview;
+	private DateSelect review;
 	
 	private boolean visibleFilterInputPaper;
 	private boolean visibleFilterInputReview;
