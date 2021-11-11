@@ -85,10 +85,10 @@ activate sb
         return
         ssvc -> sr : __get(sub, t1)__
         activate sr
-            sr -> t1 ++ : getConnection()
-            return
             sr -> sub : getId()
             activate sub
+            return
+            sr -> t1 ++ : getConnection()
             return
             sr -> sub : setTitle()
             activate sub
@@ -106,8 +106,8 @@ activate sb
             t1 -> cp ++ : releaseConnection()
             return
         return
-        destroy t1
-    return sub : Submission
+'        destroy t1
+    return sub
     sb -> sub ++ : getTitle()
     return
     sb -> sub ++ : getPapers()
@@ -131,15 +131,15 @@ activate sb
         ssvc -> sub : getAuthor()
         activate sub
         return submitter
-        ssvc -> sub : getAuthors()
+        ssvc -> sub : getCoAuthors()
         activate sub
         return authors
         ssvc -> submitter : getEmailAddress()
         activate submitter
         return recipient
         note right of ssvc
-            cc = Liste der
-            E-Mail-Addressen aller author
+            cc = Liste der E-Mail-
+            Addressen aller coAuthor
         end note
 '        subService -> rscBundle : getRejectionEmailSubject()
 '        activate rscBundle
@@ -168,8 +168,8 @@ activate sb
             return
             sr -> sub ++ : getTitle()
             return
-            sr -> sub ++ : getPapers()
-            return
+'            sr -> sub ++ : getPapers()
+'            return
             ......sub auslesen......
             sr -> t2 ++ : getConnection()
             return

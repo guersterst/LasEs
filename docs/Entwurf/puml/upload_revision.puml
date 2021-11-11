@@ -84,11 +84,11 @@ activate sb
         return
         ssvc -> sr : __get(sub, t1)__
         activate sr
-            sr -> t1 ++ : getConnection()
-            return
             sr -> sub : getId()
             activate sub
             return id
+            sr -> t1 ++ : getConnection()
+            return
             sr -> sub : setTitle()
             activate sub
             return
@@ -102,7 +102,7 @@ activate sb
             return
         return
 '        destroy t1
-    return sub : Submission
+    return sub
     sb -> sub ++ : getTitle()
     return
     sb -> sub ++ : getPapers()
@@ -137,11 +137,11 @@ activate sb
         return
         rsvc -> sr : __get(sub,t2)__
         activate sr
-            sr -> t2 ++ : getConnection()
-            return
             sr -> sub : getId()
             activate sub
             return id
+            sr -> t2 ++ : getConnection()
+            return
             sr -> sub : setTitle()
             activate sub
             return
