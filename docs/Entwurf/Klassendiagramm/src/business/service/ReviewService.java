@@ -10,13 +10,11 @@ import persistence.repository.ReviewRepository;
 
 @ApplicationScoped
 public class ReviewService {
-
-	private ExceptionQueue exceptionQueue;
 	
 	private EmailUtil emailUtil;
 
 	private ReviewRepository reviewRepository;
-	
+
 	public void addReview(Submission submission, Review review) { }
 	
 	public void removeReview(Submission submission, int reviewId, int paperId) { }

@@ -12,8 +12,6 @@ import persistence.repository.UserRepository;
 @ApplicationScoped
 public class UserService {
 
-	private ExceptionQueue exceptionQueue;
-
 	private EmailUtil emailUtil;
 
 	private AvatarUtil avatarUtil;

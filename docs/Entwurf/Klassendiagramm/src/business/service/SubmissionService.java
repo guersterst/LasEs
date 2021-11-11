@@ -13,8 +13,6 @@ import persistence.repository.SubmissionRepository;
 @ApplicationScoped
 public class SubmissionService {
 
-	private ExceptionQueue exceptionQueue;
-
 	private EmailUtil emailUtil;
 
 	private PaperRepository paperRepository;
