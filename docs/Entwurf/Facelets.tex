@@ -22,7 +22,7 @@ Außerdem verfügt ein Administrator über alle Rechte der anderen Rollen und wi
 Labels werden in diesem Abschnitt nicht aufgelistet.
 Diese sind jedoch in Form eines \emph{outputLabels} oder eines Fontawesome-Icon vorgesehen.
 
-Die Vollständigkeit der einzelnen Facelets wurde anhand der DTO's und dem ER-Diagramm gegengeprüft.
+Die Vollständigkeit der einzelnen Facelets wurde anhand der Backing Beans und dem ER-Diagramm gegengeprüft.
 
 \subsection{Templates}
 
@@ -84,7 +84,7 @@ Die Vollständigkeit der einzelnen Facelets wurde anhand der DTO's und dem ER-Di
     \nopagebreak
 
     \ftable{
-        \fentry{addReviewerField}{inputText}{Eingabefeld zur Angabe einer E-Mailadresse}{E}
+        \fentry{addReviewerField}{inputText}{Eingabefeld zur Angabe einer E-Mail-Adresse}{E}
 
         \fentry{addDeadlineReviewer}{inputText}{Eingabefeld zur Angabe einer Deadline.}{E}
 
@@ -97,6 +97,8 @@ Die Vollständigkeit der einzelnen Facelets wurde anhand der DTO's und dem ER-Di
         \fentry{selectEditor}{selectOneMenu}{Auswahländerung des verwaltenden Editors}{E}
 
         \fentry{saveEditor}{commandButton}{Speichern der Änderung}{E}
+
+        \fentry{showEditor}{outputText}{Anzeige des aktuellen Editors.}{E}
 
         \fentry{revisionDeadline}{inputText}{Eingabe zur Angabe einer Deadline.}{E}
 
@@ -181,17 +183,17 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 
 \ftable{
 
-    \fentry{welcomeHeading}{outputText}{Überschrift der Welcomepage.}{Alle}
+    \fentry{welcomeHeading}{outputText}{Überschrift der Welcomepage.}{AN}
 
-    \fentry{welcomeText}{outputText}{Bewerben der Applikation mithilfe einer Kurzbeschreibung.}{Alle}
+    \fentry{welcomeText}{outputText}{Bewerben der Anwendung mithilfe einer Kurzbeschreibung.}{AN}
 
-    \fentry{email}{inputText}{Textfeld für E-Mail Eingabe.}{Alle}
+    \fentry{email}{inputText}{Textfeld für E-Mail Eingabe.}{AN}
 
-    \fentry{password}{inputSecret}{Textfeld für Passwort Eingabe.}{Alle}
+    \fentry{password}{inputSecret}{Textfeld für Passwort Eingabe.}{AN}
 
-    \fentry{login}{commandButton}{Ausführen des Login-Prozesses.}{Alle}
+    \fentry{login}{commandButton}{Ausführen des Login-Prozesses.}{AN}
 
-    \fentry{register}{link}{Weiterleitung zur Registrierung.}{Alle}
+    \fentry{register}{link}{Weiterleitung zur Registrierung.}{AN}
 
 }
 \end{samepage}
@@ -223,9 +225,9 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 
     \ftable{
 
-        \fentry{successText}{outputText}{Text zur erfolgreichen Verifizierung der E-Mail}{Alle}
+        \fentry{successText}{outputText}{Text zur erfolgreichen Verifizierung der E-Mail}{AN}
 
-        \fentry{goToHome}{commandButton}{Button zur Weiterleitung auf die Homepage.}{Alle}
+        \fentry{goToHome}{commandButton}{Button zur Weiterleitung auf die Homepage.}{AN}
 
     }
 \end{samepage}
@@ -267,9 +269,13 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 
         \fentry{stateSelect}{selectOneMenu}{Filtern des Status von Einreichungen}{Alle}
 
-        \fentry{dateBefore}{inputText}{Eingabe eines \emph{spätestens} Datum}{Alle}
+        \fentry{dateBefore}{inputText}{Eingabe eines \emph{spätestens} Datum.}{Alle}
 
-        \fentry{dateAfter}{inputText}{Eingabe eines \emph{frühestens} Datum}{Alle}
+        \fentry{dateAfter}{inputText}{Eingabe eines \emph{frühestens} Datum.}{Alle}
+
+        \fentry{deadlineBefore}{inputText}{Eingabe eines \emph{spätestens} Deadline.}{Alle}
+
+        \fentry{deadlineAfter}{inputText}{Eingabe eines \emph{frühestens} Deadline.}{Alle}
 
         \fentry{submissionPagination}{pagination}{Liste aller eignen Einreichungen.}{Alle}
 
@@ -280,13 +286,16 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
     }
 \end{samepage}
 
+
 \begin{samepage}
-    Die einzelnen Tabellen \emph{submissionPagination}, \emph{reviewPagination} und \emph{editorPagination} sind nach den gleichen Punkten gegliedert: Titel des Papers, Datum und Status der Einreichung und Name des zugehörigen Forums.
+    Die einzelnen Tabellen \emph{paperPagination}, \emph{reviewPagination} und \emph{editorPagination} sind nach den gleichen Punkten gegliedert: Titel des Papers, Datum, Deadline und Status der Einreichung und Name des zugehörigen Forums.
 
     \ftable{
-        \fentry{title}{Link}{Titel des Papers und Weiterleitung zur Einreichung}{Alle}
+        \fentry{title}{Link}{Titel des Papers und Weiterleitung zur Einreichung.}{Alle}
 
         \fentry{date}{outputText}{Datum der Einreichung.}{Alle}
+
+        \fentry{deadline}{outputText}{Deadline.}{Alle}
 
         \fentry{state}{outputText}{Status der Einreichung.}{Alle}
 
@@ -317,23 +326,19 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 
         \fentry{forum}{Link}{Name des Forums und Weiterleitung zur Forumsübersicht.}{Alle}
 
-        \fentry{author}{Link}{Name des Autors und Weiterleitung zum Profil.}{Alle}
+        \fentry{author}{Link}{Name des Autors und Weiterleitung zum Profil.}{E}
 
-        \fentry{email}{Link}{E-Mail-Adressen der Co-Autoren und Mailto-Link.}{Alle}
+        \fentry{email}{Link}{E-Mail-Adressen der Co-Autoren und Mailto-Link.}{E}
 
         \fentry{dateBefore}{inputText}{Eingabe eines \emph{spätestens} Datum.}{Alle}
 
         \fentry{dateAfter}{inputText}{Eingabe eines \emph{frühestens} Datum.}{Alle}
 
-        \fentry{dateBefore}{inputText}{Eingabe einer \emph{spätesten} Deadline.}{Alle}
+        \fentry{deadlineBefore}{inputText}{Eingabe einer \emph{spätesten} Deadline.}{Alle}
 
-        \fentry{dateAfter}{inputText}{Eingabe einer \emph{frühesten} Deadline.}{Alle}
+        \fentry{deadlineAfter}{inputText}{Eingabe einer \emph{frühesten} Deadline.}{Alle}
 
         \fentry{reviewState}{selectOneMenu}{Filtern der Gutachten nach ihrem Status.}{E,G}
-
-        \fentry{submitted}{checkbox}{Anzeigen aller abgegebenen Gutachten.}{E}
-
-        \fentry{notSubmitted}{checkbox}{Anzeigen noch nicht abgegebener Gutachten.}{E}
 
         \fentry{recommendation}{selectOneMenu}{Auswahl der Art von Empfehlungen.}{E,G}
 
@@ -360,6 +365,7 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
     }
 
     \emph{reviewPagination} enthält die Spalten: Version, Gutachter, Datum, Deadline, Status, Empfehlung, Kommentar und Download.
+    Ist ein Gutachten freigeschaltet, so erhält auch ein Nutzer Leserechte.
     Die Elemente der Liste von Gutachten ist wie folgt:
 
     \ftable{
@@ -375,7 +381,7 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 
         \fentry{stateText}{outputText}{Freigabestatus des Gutachtens}{G}
 
-        \fentry{recomendation}{checkbox}{Empfehlung eines Gutachters}{E,G}
+        \fentry{recommendation}{checkbox}{Empfehlung eines Gutachters}{E,G}
 
         \fentry{comment}{outputText}{Kommentar des Gutachters.}{E,G}
 
@@ -393,8 +399,6 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
         \fentry{forumName}{inputText}{Name des Forums, bei welchem abgegeben wird.}{N}
 
         \fentry{editorSearch}{selectOneMenu}{Angabe eines Editors}{N}
-
-        \fentry{pdfOutput}{outputText}{Angabe des ausgewählten Dateinamens.}{N}
 
         \fentry{pfdUpload}{inputFile}{Angabe der Abgabedatei.}{N}
 
@@ -431,17 +435,9 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 
     \ftable{
 
-        \fentry{scFieldSelect}{selectOneMenu}{Filtern der Themengebiete der Foren}{Alle}
-
-        \fentry{deadlineSelect}{selectOneMenu}{Filtern der nach Deadlines}{Alle}
-
         \fentry{dateBefore}{inputText}{Eingabe eines \emph{zukünftigen} Deadlines}{Alle}
 
         \fentry{dateAfter}{inputText}{Eingabe eines \emph{vergangenen} Deadlines}{Alle}
-
-        \fentry{dateBefore}{inputText}{Eingabe eines \emph{spätestens} Datum}{Alle}
-
-        \fentry{dateAfter}{inputText}{Eingabe eines \emph{frühestens} Datum}{Alle}
 
         \fentry{forumsPagination}{pagination}{Liste aller Foren im System.}{Alle}
     }
@@ -456,8 +452,6 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
         \fentry{name}{link}{Name des Forums.}{Alle}
 
         \fentry{deadline}{outputText}{Abgabefrist des jeweiligen Forums.}{Alle}
-
-        \fentry{scienceField}{outputText}{Kategorie des Forums.}{Alle}
     }
 \end{samepage}
 
@@ -473,7 +467,9 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 
         \fentry{newAvatar}{inputFile}{Hochladen eines neuen Avatars.}{N,E}
 
-        \fentry{deleteAvatar}{commandButton}{Löschen des Avatars.}{N,E}
+        \fentry{submitAvatar}{commandButton}{Lade neuen Avatar hoch.}{N}
+
+        \fentry{deleteAvatar}{commandButton}{Löschen des Avatars.}{N}
 
         \fentry{role}{outputText}{Angabe der Rolle eines Nutzers}{N,E}
 
@@ -493,17 +489,19 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 
         \fentry{employer}{inputText}{Angabe des Arbeitgebers}{N,E}
 
-        \fentry{scieneField}{outputText}{Liste aller Fachgebiete}{N,E}
+        \fentry{scienceField}{outputText}{Liste aller Fachgebiete}{N,E}
 
-        \fentry{addScienceField}{inputText}{Spezialgebiete des Nutzers}{N,E}
+        \fentry{addScienceField}{selectOneMenu}{Spezialgebiete des Nutzers}{N}
 
-        \fentry{addFieldButton}{commandButton}{Füge Fachgebiet zur Liste hinzu.}{N,E}
+        \fentry{deleteScienceField}{commandButton}{Löschen des ausgewählten Fachgebietes.}{N}
+
+        \fentry{addFieldButton}{commandButton}{Füge Fachgebiet zur Liste hinzu.}{N}
 
         \fentry{dateOfBirth}{inputText}{Angabe des Geburtstages}{N}
 
-        \fentry{save}{commandButton}{Daten werden persistiert.}{N,E}
+        \fentry{save}{commandButton}{Daten werden persistiert.}{N}
 
-        \fentry{delete}{commandButton}{Nutzer und alle damit verbundenen Daten werden gelöscht.}{N,E}
+        \fentry{delete}{commandButton}{Nutzer und alle damit verbundenen Daten werden gelöscht.}{N}
     }
 \end{samepage}
 
@@ -530,19 +528,35 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
     \ftable{
 
-        \fentry{forumName}{outputText}{Name des Forums.}{Alle}
+        \fentry{forumName}{inputText}{Name des Forums.}{Alle}
 
         \fentry{editor}{outputText}{Liste der verantwortliche Editoren.}{Alle}
 
-        \fentry{deadline}{outputText}{Deadline des Forums.}{Alle}
+        \fentry{newEditor}{inputText}{Angabe der E-Mail eines Editors.}{E}
 
-        \fentry{description}{outputText}{Kurzbeschreibung des Forums.}{Alle}
+        \fentry{addEditor}{commandButton}{Füge Editor zur Liste hinzu.}{E}
+
+        \fentry{removeEditor}{commandButton}{Lösche ausgewählten Editor.}{E}
+
+        \fentry{deadline}{inputText}{Deadline des Forums.}{Alle}
+
+        \fentry{description}{inputTextArea}{Kurzbeschreibung des Forums.}{Alle}
 
         \fentry{url}{outputLink}{Link zur Konferenz oder zum Journal.}{Alle}
 
-        \fentry{reviewInstructions}{outputText}{Anleitung für eine Begutachtung.}{G,E}
+        \fentry{changeUrl}{inputText}{Angabe einer neuen URL.}{E}
+
+        \fentry{reviewInstructions}{inputTextArea}{Anleitung für eine Begutachtung.}{G,E}
 
         \fentry{scienceField}{outputText}{Fachgebiet des Forums.}{Alle}
+
+        \fentry{newScienceField}{selectOneMenu}{Hinzufügen eines neuen Fachgebietes.}{E}
+
+        \fentry{addScienceField}{commandButton}{Speichern des neuen Fachgebietes.}{E}
+
+        \fentry{deleteScienceField}{commandButton}{Löschen eines Fachgebietes.}{E}
+
+        \fentry{save}{commandLink}{Speichere Veränderungen.}{E}
 
         \fentry{editorialPagination}{pagination}{Paginierte Liste aller Einreichungen, die der Editor verwaltet.}{E}
 
@@ -593,8 +607,6 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
         \fentry{email}{link}{Mailto-Link mit E-Mail-Adresse des Nutzers.}{E}
 
         \fentry{employer}{outputText}{Arbeitgeber des Nutzers.}{E}
-
-        \fentry{scienceField}{outputText}{Fachgebiete des Nutzers.}{E}
     }
 \end{samepage}
 
@@ -679,6 +691,8 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
         \fentry{forumName}{inputText}{Angabe des Name des Forums.}{A}
 
+        \fentry{editors}{outputText}{Liste der Editoren}{A}
+
         \fentry{emailEditor}{inputText}{Angabe der E-Mail-Adresse eines Editor.}{A}
 
         \fentry{addEditor}{commandButton}{Hinzufügen eines Editors in eine Liste.}{A}
@@ -693,6 +707,8 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
         \fentry{reviewInstructions}{inputTextArea}{Angabe einer Anleitung für eine Begutachtung.}{A}
 
+        \fentry{scienceFieldList}{outputText}{Liste der ausgewählten Fachgebiete.}{A}
+
         \fentry{scienceField}{selectOneMenu}{Auswahl von Fachgebieten.}{A}
 
         \fentry{newScienceField}{inputText}{Hinzufügen neuer Fachgebiete.}{A}
@@ -702,42 +718,5 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
         \fentry{save}{commandButton}{Speichern des neuen Forums.}{A}
 
         \fentry{abort}{commandButton}{Abbruch des Erstellungsprozesses.}{A}
-    }
-\end{samepage}
-
-\begin{samepage}
-    \textbf{editForum.xhtml} Hier kann der Administrator eine schon existierende Seite bearbeiten.
-    \nopagebreak
-
-    \ftable{
-        \fentry{forumName}{inputText}{Angabe des Name des Forums.}{E}
-
-        \fentry{emailEditor}{inputText}{Angabe der E-Mail-Adresse eines Editor.}{E}
-
-        \fentry{addEditor}{commandButton}{Hinzufügen eines Editors in eine Liste.}{E}
-
-        \fentry{deleteEditor}{commandButton}{Löschen des zugehörigen Editors von der Liste.}{E}
-
-        \fentry{deadline}{inputText}{Hinzufügen einer Deadline des Forums.}{E}
-
-        \fentry{description}{inputTextArea}{Angabe einer Kurzbeschreibung.}{E}
-
-        \fentry{url}{inputText}{Link zur Konferenz oder zum Journal.}{E}
-
-        \fentry{reviewInstructions}{inputTextArea}{Angabe einer Anleitung für eine Begutachtung.}{E}
-
-        \fentry{scienceFieldOut}{outputText}{Liste der Fachgebiete.}{E}
-
-        \fentry{scienceField}{selectOneMenu}{Auswahl von Fachgebieten.}{E}
-
-        \fentry{newScienceField}{inputText}{Hinzufügen neuer Fachgebiete.}{A}
-
-        \fentry{addScienceField}{commandButton}{Ausführen der Hinzufüge-Aktion.}{A}
-
-        \fentry{save}{commandButton}{Speichern des Änderungen.}{E}
-
-        \fentry{abort}{commandButton}{Abbruch des Bearbeitungsprozesses.}{E}
-
-        \fentry{delete}{commandButton}{Löscht das Forum.}{A}
     }
 \end{samepage}
