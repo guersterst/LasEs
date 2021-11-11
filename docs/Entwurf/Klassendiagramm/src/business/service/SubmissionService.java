@@ -53,4 +53,8 @@ public class SubmissionService {
 	public List<Submission> getSubmissions(ScientificForum scientificForum, User role, ResultListParameters resultParams) { return null; }
 
 	public List<Submission> getSubmissions(User role, ResultListParameters resultParams) { return null; }
+
+	public int countSubmissions() {
+		return 0;
+	}
 }

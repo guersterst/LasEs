@@ -9,16 +9,19 @@ import javax.faces.bean.ViewScoped;
 import business.service.ScienceFieldService;
 import business.service.ScientificForumService;
 import business.service.SubmissionLieferando;
+import business.service.SubmissionService;
 import control.internal.SessionInformation;
 import dtos.Pagination;
+import dtos.ScienceField;
 import dtos.ScientificForum;
 import dtos.Submission;
 import dtos.SubmissionState;
+import dtos.User;
 
 @ViewScoped
 public class ScientificForumBacking {
 
-    private String searchString;
+    private String newEditorInput;
     
     private Pagination<Submission> submissionPagination;
 	
@@ -28,7 +31,7 @@ public class ScientificForumBacking {
 
 	private SessionInformation sessionInformation;
 	
-	private SubmissionLieferando submissionListService;
+	private SubmissionService submissionListService;
 	
 	private ScientificForumService scientificForumService;
 	
@@ -37,6 +40,10 @@ public class ScientificForumBacking {
 	private ScienceFieldService scienceFieldService;
 
     private List<Submission> submissions;
+    
+    private List<User> editors;
+    
+    private List<ScienceField> scieneFields;
     
     @PostConstruct
 	public void init() { }
@@ -53,4 +60,5 @@ public class ScientificForumBacking {
     public void addEditor() { }
 
     public void removeEditor() { }
+  
 }

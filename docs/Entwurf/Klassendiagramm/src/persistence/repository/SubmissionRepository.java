@@ -23,5 +23,8 @@ public class SubmissionRepository {
 	public static void addReviewer() { }
 	public static void removeCoAuthor() { }
 	public static void removeReviewer() { }
+	public static int countSubmissions() {
+		return 0;
+	}
 
 }
