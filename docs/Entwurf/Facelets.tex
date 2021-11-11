@@ -36,6 +36,10 @@ Die Vollständigkeit der einzelnen Facelets wurde anhand der DTO's und dem ER-Di
     \nopagebreak
 
     \ftable{
+        \fentry{logo}{graphicImage}{Logo der Applikation}{Alle}
+
+        \fentry{directToHome}{link}{Weiterleitung zur Homepage.}{Alle}
+
         \fentry{searchField}{inputText}{Suchleiste}{Alle}
 
         \fentry{search}{commandButton}{Suche ausführen.}{Alle}
@@ -299,6 +303,10 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
     \ftable{
         \fentry{toolBar}{include}{\hyperref[flt:toolbar]{Seitenleiste mit Tools.}}{E}
 
+        \fentry{uploadRevision}{inputFile}{Upload einer Revision.}{N}
+
+        \fentry{upload}{commandButton}{Ausführen des Uploads.}{N}
+
         \fentry{newReview}{commandLink}{Weiterleitung zur Einreichung eines neuen Gutachtens.}{G}
 
         \fentry{acceptReviewing}{commandButton}{Annahme der Rolle eines Gutachters für diese Einreichung.}{G}
@@ -334,7 +342,7 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
         \fentry{reviewPagination}{pagination}{Liste aller/der eigenen Gutachten.}{E,G}
     }
 
-    \emph{submissionTable} enthält die Spalten: Version, Datum, Deadline, Status und Download.
+    \emph{paperPagination} enthält die Spalten: Version, Datum, Deadline, Sichtbarkeit, Status und Download.
     Die Elemente der Liste, der unterschiedlichen Versionen der Einrichtung, sieht wie folgt aus:
 
     \ftable{
@@ -344,12 +352,14 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 
         \fentry{deadline}{outputText}{Deadline der Revision}{Alle}
 
+        \fentry{unlockRevision}{commandButton}{Freischalten einer Revision.}{E}
+
         \fentry{state}{radioButton}{Status der Einreichung}{Alle}
 
         \fentry{pdf}{commandButton}{Download der Einreichung}{Alle}
     }
 
-    \emph{reviewTable} enthält die Spalten: Version, Gutachter, Datum, Deadline, Status, Empfehlung, Kommentar und Download.
+    \emph{reviewPagination} enthält die Spalten: Version, Gutachter, Datum, Deadline, Status, Empfehlung, Kommentar und Download.
     Die Elemente der Liste von Gutachten ist wie folgt:
 
     \ftable{
