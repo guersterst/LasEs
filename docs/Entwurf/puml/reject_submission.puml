@@ -195,6 +195,10 @@ generate <font color=red><b>error</b></font>
 <font color=red><b>message</b></font> and add
 to FacesContext
 end note
+note right of eh
+redirect to
+errorPage.xhtml
+end note
 
 eh -> epb **
 eh --> editor : errorPage.xhtml displaying <font color=red><b>FacesMessage</b></font>
