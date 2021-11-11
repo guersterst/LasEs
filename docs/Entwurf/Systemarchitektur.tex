@@ -18,7 +18,7 @@ die \emph{View} dar.
 
 \begin{figure}[H]
 \centering
-    \includegraphics[width=0.8\linewidth]{graphics/Paketdiagramm7.0}\label{arch:pakdia}
+    \includegraphics[width=0.8\linewidth]{graphics/Paketdiagramm8.0}\label{arch:pakdia}
     \caption{Das Schichtenmodell der LasEs-Anwendung.}
 \end{figure}
 
@@ -80,6 +80,9 @@ enthält statische Hilfsklassen zur Datenbankverwaltung, wie Dienste zum Einlese
 \textbf{\emph{de.lases.persistence.exception}}
 enthält die Exceptionklassen, welche ein Fehlverhalten im Umgang mit der
 Datenbank repräsentieren.
+Sie repräsentieren ebenfalls Fehler, die durch die Verwendung der \emph{Repository}-Methoden
+entstehen. Somit können sie auch in der \emph{Businessschicht} verwendet werden.
+Das bedeutet, dass sich die beiden Schichten die \emph{Exception}-Klassen teilen.
 
 \subsubsection{de.lases.global}
 Dieses Paket enthält alle Klassen welche über mehrere Schichten hinweg
