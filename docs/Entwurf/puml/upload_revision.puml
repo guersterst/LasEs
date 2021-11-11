@@ -101,7 +101,7 @@ activate sb
             t1 -> cp ++ : releaseConnection()
             return
         return
-        destroy t1
+'        destroy t1
     return sub : Submission
     sb -> sub ++ : getTitle()
     return
@@ -194,7 +194,7 @@ activate sb
             t2 -> cp ++ : releaseConnection()
             return
         return
-        destroy t2
+'        destroy t2
     return
 
 '    subBacking -> rscBundle : getAddRevision\\\nConfirmationMsg()
