@@ -68,7 +68,6 @@ activate sb
     sb -> usr ** : User()
     sb -> usr ++ : setId(userId)
     return
-    return
     sb -> ssvc ++ : canView(sub, usr)
     return true
 
