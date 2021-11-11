@@ -17,6 +17,8 @@ public class Transaction extends aw4r {
 	
 	}
 
+	public void close() { }
+
 	Connection getConnection() {
 		return null;
 	}
