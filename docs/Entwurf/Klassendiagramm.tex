@@ -47,7 +47,7 @@ Weitere Informationen zur Interpretation des Diagramms finden sich in den jeweil
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[height=3cm]{graphics/global_util}
+	\includegraphics[height=2cm]{graphics/global_logging}
 \end{figure}
 
 \classtable{
@@ -65,7 +65,7 @@ Die Vollständigkeit der DTOs wurde gegen das ER-Diagramm gegengeprüft.
 natürlich gibt es aber auch DTOs, die nicht direkt aus dem ER-Diagramm kommen.
 \begin{figure}[H]
 	\centering
-	\includegraphics[height=3cm]{graphics/global_transport}
+	\includegraphics[height=4cm]{graphics/global_transport}
 \end{figure}
 
 \classtable{
@@ -134,7 +134,7 @@ Im Diagramm dieses Pakets sind folgende Punkte zu beachten:
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[height=3cm]{graphics/business_internal}
+	\includegraphics[height=3cm]{graphics/control_internal}
 \end{figure}
 
 \classtable{
@@ -154,7 +154,7 @@ Im Diagramm dieses Pakets sind folgende Punkte zu beachten:
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[height=3cm]{graphics/control_validation}
+	\includegraphics[width=\linewidth]{graphics/control_validation}
 \end{figure}
 
 \classtable{
@@ -174,7 +174,7 @@ Im Diagramm dieses Pakets sind folgende Punkte zu beachten:
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[height=3cm]{graphics/control_validation}
+	\includegraphics[height=2cm]{graphics/control_util}
 \end{figure}
 
 \classtable{
@@ -186,7 +186,7 @@ Im Diagramm dieses Pakets sind folgende Punkte zu beachten:
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.9\linewidth]{graphics/business_service}
+	\includegraphics[width=\linewidth]{graphics/business_service}
 \end{figure}
 
 \classtable{
@@ -205,7 +205,7 @@ Im Diagramm dieses Pakets sind folgende Punkte zu beachten:
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[height=3cm]{graphics/business_util}
+	\includegraphics[width=\linewidth]{graphics/business_util}
 \end{figure}
 
 \classtable{
@@ -237,7 +237,7 @@ Im Folgenden Klassendiagramm gilt:
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.9\linewidth]{graphics/persistence_repository}
+	\includegraphics[width=\linewidth]{graphics/persistence_repository}
 \end{figure}
 
 \classtable{
@@ -256,6 +256,8 @@ Im Folgenden Klassendiagramm gilt:
     \classentry{UserRepository}{This repository allows CRUD operations on users.}
 
     \classentry{ReviewedByRepository}{This respository allows to get and change information about the relationship of a submission and a reviewer.}
+
+    \classentry{ConnectionPool}{Provides and manages connections to the database.}
 }
 
 \subsubsection{de.lases.persistence.util}
@@ -266,7 +268,6 @@ Im Folgenden Klassendiagramm gilt:
 \end{figure}
 
 \classtable{
-    \classentry{ConnectionPool}{Provides and manages connections to the database.}
 
     \classentry{DButils}{Provides functions for general database services.}
 
