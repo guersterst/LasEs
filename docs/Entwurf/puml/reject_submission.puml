@@ -4,78 +4,155 @@
 '!theme aws-orange
 skinparam sequenceMessageAlign center
 skinparam BoxPadding 10
+'skinparam LifelineStrategy nosolid
 'autonumber
 'autoactivate on
+'hide footbox
 
 actor Editor as editor
+
 box "control.backing"
-    participant ":SubmissionBacking" as subBacking
+    participant ":SubmissionBacking" as sb << @Named >>
+    participant ":ErrorPageBacking" as epb << @Named >>
+end box
+box "control.internal"
+    participant "si:SessionInformation" as si << @SessionScoped >>
+    participant ":UncheckedExceptionHandler" as eh << @SessionScoped >>
 end box
 'box "???"
 '    participant ":ResourceBundle" as rscBundle
 'end box
 box "business.service"
-    participant ":SubmissionService" as subService
-end box
-box "dtos"
-    participant "sub:Submission" as sub
-    participant "submitter:User" as submitter
+    participant "ssvc:SubmissionService" as ssvc << @ApplicationScoped >>
 end box
 box "business.util"
-participant ":EmailService" as emailService
+    participant "eu:EmailUtil" as eu
 end box
-box persistence.repository
-    participant ":SubmissionRepository" as subRepo
+box "global.transfer"
+    participant "sub:Submission" as sub << @Named >>
+    participant "user:User" as usr
+'    participant "paper:Paper" as paper
+    participant "submitter:User" as submitter
 end box
-box persistence.util
-    participant ":ConnectionPool" as connPool
+box persistence
+    participant "t1:Transaction" as t1
+    participant "t2:Transaction" as t2
+    participant ":SubmissionRepository" as sr
+    participant "cp:ConnectionPool" as cp
 end box
-database "Database" as db
 
-editor -> subBacking ** : init()
+create sb
+editor -> sb
 note left
     ruft die
     Submission-
     Seite auf
 end note
-activate subBacking
-        subBacking -> subService : getSubmission(subId)
-        activate subService
-            subService -> subRepo : getSubmission(subId)
-            activate subRepo
-                subRepo -> connPool : getConnection()
-                activate connPool
-                return conn
-                subRepo -> db : SQL-req
-                activate db
-                return res
-                subRepo -> connPool : releaseConnection()
-                    activate connPool
-                    return
-                create submitter
-                subRepo -> submitter
-                create sub
-                subRepo -> sub
-            return sub : Submission
-        return sub : Submission
+sb --> ssvc : //injection//
+return //ssvc//
+sb --> si : //injection//
+return //si//
+editor -> sb : init()
+activate sb
+    note right
+        int subId wird
+        gelesen von
+        requestParams
+        (URL-Parameter)
+    end note
+    sb -> si ++ : getUserId()
+    return userId
+    sb -> sub ** : Submission()
+    sb -> sub : setId(subId)
+    activate sub
+    return
+    sb -> usr ** : User()
+    sb -> usr ++ : setId(userId)
+    return
+    sb -> ssvc ++ : canView(sub, user)
+    return true
+
+    sb -> ssvc : getSubmission(sub)
+    activate ssvc
+        ssvc -> t1 ** : Transaction()
+        activate t1
+            t1 -> cp : __getInstance()__
+            activate cp
+            return cp
+            t1 -> cp : getConnection()
+            activate cp
+            return
+        return
+        ssvc -> sr : __get(sub, t1)__
+        activate sr
+            sr -> sub : getId()
+            activate sub
+            return
+            sr -> t1 ++ : getConnection()
+            return
+            sr -> sub : setTitle()
+            activate sub
+            return
+            sr -> sub : setPapers()
+            activate sub
+            return
+            sr -> submitter ** : User()
+            sr -> sub : setAuthor(submitter)
+            activate sub
+            return
+            ......sub befüllen......
+        return
+        note right of ssvc
+            analoge DB-Zugriffe über die Repos:
+            UserRepository.__get(sub.getAuthor(),t1)__
+            UserRepository.__getList(sub,t1)__
+            PaperRepository.__getList(sub,t1)__
+        end note
+        ssvc -> sub ++ : setAuthor()
+                return
+                ssvc -> sub ++ : setCoAuthors()
+                return
+                ssvc -> sub ++ : setPapers()
+                return
+        ssvc -> t1 ++ : commit()
+            t1 -> cp ++ : releaseConnection()
+            return
+        return
+'        destroy t1
+    return sub
+    sb -> sub ++ : getTitle()
+    return
+    sb -> sub ++ : getPapers()
+    return
+    sb -> sub ++ : getCoAuthors()
+    return
+    sb -> sub ++ : getAuthor()
+    return
 return submission.xhtml
 
-editor -> subBacking : reject()
+
+editor -> sb : setState(REJECTED)
 note left
     klickt auf "Reject"
 end note
-activate subBacking
-    subBacking -> subService : changeState(sub,REJECTED)
-    activate subService
-        subService -> sub : getSubmitter()
+activate sb
+    sb -> ssvc : setState(sub,REJECTED)
+    activate ssvc
+        ssvc -> sub ++ : setSubmissionState(REJECTED)
+        return
+        ssvc -> sub : getAuthor()
         activate sub
         return submitter
-'        subService -> sub : getAuthors()
-'        activate sub
-'        return addrs
-        subService -> submitter : getEmailAddress()
+        ssvc -> sub : getCoAuthors()
+        activate sub
+        return authors
+        ssvc -> submitter : getEmailAddress()
         activate submitter
         return recipient
+        note right of ssvc
+            cc = Liste der E-Mail-
+            Addressen aller coAuthor
+        end note
 '        subService -> rscBundle : getRejectionEmailSubject()
 '        activate rscBundle
 '        return subject
@@ -83,36 +160,66 @@ activate subBacking
 '        activate rscBundle
 '        return body
 
-        subService -> emailService : generateMailto(user.getEmailAddress(),recipient,subject,body)
-        activate emailService
+        ssvc -> eu : generateMailto(\neditor.getEmailAddress(),\nrecipient,cc,subject,body)
+        activate eu
         return mailtoLink
 
-        subService -> subRepo : changeSubmission(subId, sub)
-        activate subRepo
-            subRepo -> connPool : getConnection()
-            activate connPool
-            return conn
-            subRepo -> db : SQL-req
-            activate db
-            note right
-                Fehler bei
-                Datenbank-
-                zugriff
-                (Timeout)
-            end note
-== Anfang Fehlerbehandlung ==
-            return <font color=red><b>SQLException
-            subRepo -> connPool : releaseConnection()
-            activate connPool
+        ssvc -> t2 ** : Transaction()
+        activate t2
+            t2 -> cp : __getInstance()__
+            activate cp
+            return cp
+            t2 -> cp : getConnection()
+            activate cp
             return
-        return <font color=red><b>persistence.exception.DBTimeoutExeption
-    return <font color=red><b>DBTimeoutExeption
+        return
 
-return submission.xhtml\nw/ <font color=red><b>Error</b></font>\nas FacesMessage
-note left
-Die Ablehnung war
-nicht erfolgreich
-end note
+        ssvc -> sr : __changeSubmission(sub, t2)__
+        activate sr
+            sr -> sub ++ : getId()
+            return
+            sr -> sub ++ : getTitle()
+            return
+'            sr -> sub ++ : getPapers()
+'            return
+            ......sub auslesen......
+            sr -> t2 ++ : getConnection()
+            return
+
+        note right of sr
+        == ↯ ==
+        Timeout bei DB-Zugriff
+        ====
+        end note
+
+== Anfang Fehlerbehandlung ==
+        return <font color=red><b>DBConnectionFailedException e
+
+        ssvc -> t2 ++ : close()
+        return
+
+    return <font color=red><b>DBConnectionFailedException e
+deactivate sb
+
+sb -> eh ++ : handle(e)
+    note right of eh
+    generate <font color=red><b>error</b></font>
+    <font color=red><b>message</b></font> and add
+    to FacesContext
+    end note
+    note right of eh
+    redirect to
+    errorPage.xhtml
+    end note
+
+    eh -> epb **
+    eh --> editor : errorPage.xhtml displaying <font color=red><b>FacesMessage</b></font>
+deactivate eh
+
+'note left
+'Die Ablehnung war
+'nicht erfolgreich
+'end note
 
 
 @enduml

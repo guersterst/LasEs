@@ -4,6 +4,7 @@
 '!theme aws-orange
 skinparam sequenceMessageAlign center
 skinparam BoxPadding 10
+'skinparam LifelineStrategy nosolid
 'autonumber
 'autoactivate on
 'hide footbox
@@ -11,82 +12,208 @@ skinparam BoxPadding 10
 actor User as user
 
 box "control.backing"
-    participant ":SubmissionBacking" as subBacking
+    participant ":SubmissionBacking" as sb << @Named >>
 end box
 'box "???"
 '    participant ":ResourceBundle" as rscBundle
 'end box
-box "business.service"
-    participant ":SubmissionService" as subService
+box "control.internal"
+    participant "si:SessionInformation" as si << @SessionScoped >>
 end box
-box "dtos"
-    participant "sub:Submission" as sub
+box "control.validation"
+    participant ":PDFValidator" as pdfv << @FacesValidator >>
+end box
+box "business.service"
+    participant "rsvc:RevisionService" as rsvc << @ApplicationScoped >>
+    participant "ssvc:SubmissionService" as ssvc << @ApplicationScoped >>
+end box
+box "global.transfer"
+    participant "sub:Submission" as sub << @Named >>
+    participant "user:User" as usr
     participant "paper:Paper" as paper
 end box
-box persistence.repository
-    participant ":SubmissionRepository" as subRepo
+box persistence
+    participant "t1:Transaction" as t1
+    participant "t2:Transaction" as t2
+    participant ":SubmissionRepository" as sr
+    participant ":PaperRepository" as pr
+    participant "cp:ConnectionPool" as cp
 end box
-box persistence.util
-    participant ":ConnectionPool" as connPool
-end box
-database "Database" as db
 
-user -> subBacking ** : init()
+create sb
+user -> sb
 note left
     ruft die
     Submission-
     Seite auf
 end note
-activate subBacking
-    subBacking -> subService : getSubmission(subId)
-    activate subService
-        subService -> subRepo : getSubmission(subId)
-        activate subRepo
-            subRepo -> connPool : getConnection()
-            activate connPool
-            return conn
-            subRepo -> db : SQL-req
-            activate db
-            return res
-            subRepo -> connPool : releaseConnection()
-            activate connPool
-            return
-            create sub
-            subRepo -> sub
-        return sub : Submission
-    return sub : Submission
-return submission.xhtml
-
-user -> subBacking : setRevisionPart()
-activate subBacking
-    note left
-        lädt die PDF-Datei hoch und
-        klickt auf "Submit" revision
+sb --> ssvc : //injection//
+return //ssvc//
+sb --> si : //injection//
+return //si//
+user -> sb : init()
+activate sb
+    note right
+        int subId wird
+        gelesen von
+        requestParams
+        (URL-Parameter)
     end note
-    user -> subBacking : addRevision()
-    subBacking -> sub : getId()
+    sb -> si ++ : getUserId()
+    return userId
+    sb -> sub ** : Submission()
+    sb -> sub : setId(subId)
     activate sub
-    return id
-    subBacking -> sub : getPapers()
-    activate sub
-    return papers
+    return
+    sb -> usr ** : User()
+    sb -> usr ++ : setId(userId)
+    return
+    sb -> ssvc ++ : canView(sub, usr)
+    return true
 
-    subBacking -> paper ** : new Paper(subId, papers.size())
-
-    subBacking -> subService : addRevision(sub, paper)
-    activate subService
-        subService -> subRepo : addPaper(paper)
-        activate subRepo
-            subRepo -> connPool : getConnection()
-            activate connPool
-            return conn
-            subRepo -> db : SQL-req
-            activate db
-            return
-            subRepo -> connPool : releaseConnection()
-            activate connPool
+    sb -> ssvc : getSubmission(sub)
+    activate ssvc
+        ssvc -> t1 ** : Transaction()
+        activate t1
+            t1 -> cp : __getInstance()__
+            activate cp
+            return cp
+            t1 -> cp : getConnection()
+            activate cp
             return
         return
+        ssvc -> sr : __get(sub, t1)__
+        activate sr
+            sr -> sub : getId()
+            activate sub
+            return id
+            sr -> t1 ++ : getConnection()
+            return
+            sr -> sub : setTitle()
+            activate sub
+            return
+            sr -> sub : setPapers()
+            activate sub
+            return
+            ......sub befüllen......
+        return
+        note right of ssvc
+            analoge DB-Zugriffe über die Repos:
+            UserRepository.__get(sub.getAuthor(),t1)__
+            UserRepository.__getList(sub,t1)__
+            PaperRepository.__getList(sub,t1)__
+        end note
+        ssvc -> sub ++ : setAuthor()
+        return
+        ssvc -> sub ++ : setCoAuthors()
+        return
+        ssvc -> sub ++ : setPapers()
+        return
+        ssvc -> t1 ++ : commit()
+            t1 -> cp ++ : releaseConnection()
+            return
+        return
+'        destroy t1
+        ......
+    return sub
+    sb -> sub ++ : getTitle()
+    return
+    sb -> sub ++ : getPapers()
+    return
+    sb -> sub ++ : getCoAuthors()
+    return
+    sb -> sub ++ : getAuthor()
+    return
+return submission.xhtml
+note left
+    sucht die PDF-Datei mit
+    dem file picker aus und
+    klickt auf "Submit Revision"
+end note
+user -> sb : releaseRevision()
+activate sb
+
+    user -> pdfv ++ : validate()
+    return
+    user -> sb : setUploadedRevisionPDF()
+
+    sb -> rsvc : uploadFile(sub, revisionPdf)
+    activate rsvc
+        rsvc -> t2 ** : Transaction()
+        activate t2
+            t2 -> cp : __getInstance()__
+            activate cp
+            return cp
+            t2 -> cp : getConnection()
+            activate cp
+            return
+        return
+        rsvc -> sr : __get(sub,t2)__
+        activate sr
+            sr -> sub : getId()
+            activate sub
+            return id
+            sr -> t2 ++ : getConnection()
+            return
+            sr -> sub : setTitle()
+            activate sub
+            return
+            sr -> sub : setPapers()
+            activate sub
+            return
+            ...sub befüllen...
+        return
+        rsvc -> pr ++ : __getPapers(sub, t2)__
+            pr -> sub ++ : getId()
+            return id
+            pr -> t1 ++ : getConnection()
+            return
+        return papers
+        rsvc -> paper ** : Paper()
+        rsvc -> paper : setSubmissionId(subId)
+        activate paper
+        return
+        rsvc -> paper : setVersion(papers.size())
+        activate paper
+        return paper
+        rsvc -> sub : addPaper(paper)
+        activate sub
+        return
+        rsvc -> sub ++ : setSubmissionState(SUBMITTED)
+        return
+
+        rsvc -> pr ++ : __addPaper(paper, t2)__
+            pr -> paper ++ : getId()
+            return
+            pr -> paper ++ : getUploadTime()
+            return
+            pr -> paper ++ : getVisible()
+            return
+            pr -> t1 ++ : getConnection()
+            return
+        return
+        note right of rsvc
+            analog: PaperRepository.__setPdf(paper,revisionPdf)__
+        end note
+
+        rsvc -> sr : __changeSubmission(sub, t2)__
+        activate sr
+            sr -> sub ++ : getId()
+            return
+            sr -> sub ++ : getTitle()
+            return
+            sr -> sub ++ : getPapers()
+            return
+            ......sub auslesen......
+            sr -> t1 ++ : getConnection()
+            return
+        return
+
+        rsvc -> t2 ++ : commit()
+            t2 -> cp ++ : releaseConnection()
+            return
+        return
+'        destroy t2
     return
 
 '    subBacking -> rscBundle : getAddRevision\\\nConfirmationMsg()
