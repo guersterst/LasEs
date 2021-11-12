@@ -1,15 +1,18 @@
 package control.backing;
 
-import business.internal.SessionInformation;
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.RequestScoped;
 
-public class VerificationBacking {
-	
-	private LocalDateTime timerStart;
+import control.internal.SessionInformation;
+
+@RequestScoped
+public class VerificationBacking { // y
 	
 	private SessionInformation sessionInformation;
 	
-	public int secondsRemaining() { return 0; }
+	@PostConstruct
+	public void init() { }
 
-	public String redirect() { return null; }
+	public String goToHome() { return null; }
 
 }

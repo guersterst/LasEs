@@ -1,5 +1,6 @@
 package control.validation;
 
+@FacesValidator
 public class AvatarValidator implements Validator <String> {
 	
 	@Override

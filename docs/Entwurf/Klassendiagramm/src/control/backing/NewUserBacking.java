@@ -1,26 +1,21 @@
 package control.backing;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 
 import business.service.RegistrationService;
+import dtos.User;
 
 @RequestScoped
 public class NewUserBacking {
 	
 	private RegistrationService registrationService;
 
-	private String password;
+	private User newUser;
 
-	private String firstName;
-
-	private String lastName;
-
-	private String title;
-
-	private String email;
-
-	private boolean isAdmin;
-
+	
+	@PostConstruct
+	public void init() { }
 
 	public String abort(){ return null; }
 

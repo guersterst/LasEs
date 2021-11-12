@@ -2,24 +2,36 @@ package persistence.repository;
 
 import java.util.List;
 
+import dtos.File;
+import dtos.Submission;
 import dtos.User;
 import global.util.ResultListParameters;
 import persistence.exception.InvalidFieldsException;
 import persistence.exception.InvalidQueryParamsException;
-import persistence.util.ConnectionPool;
 
 public class UserRepository {
 	
-	private ConnectionPool connectionPool;
+	// get, add, change, remove by id
+	public static User get(Submission submission, Transaction transaction) throws InvalidFieldsException { return null; }
+	public static void add(Submission submission, Transaction transaction) throws InvalidFieldsException { }
+	public static void change(Submission old, Submission edited, Transaction transaction) throws InvalidFieldsException { }
+	public static void remove(Submission submission, Transaction transaction) throws InvalidFieldsException { }
 	
-	public User getUser(String emailAddress) { return null; }
+	// get list for
+	public static List<User> getList() { return null; }
 	
-	public boolean emailExists(String emailAddress) { return false; }
+	// specific adders for n to m
+	public static void addScienceField() { }
+	public static void removeScienceField() { }
 	
-	public List<User> getListWithSearchword(String searchWord, ResultListParameters resultParams) throws InvalidQueryParamsException { return null; }
 	
-	public void editUser(String emailAddress, User newUser) throws InvalidFieldsException { }
 	
-	public void addUser(User user) throws InvalidFieldsException { }
+	public static boolean emailExists(String emailAddress, Transaction transaction) { return false; }
+	public static boolean isVerified() { return false; }
+	
+	public static File getAvatar() throws IllegalArgumentException { return null; }
+	public static void setAvatar() throws IllegalArgumentException {}
+	public static File getAvatarThumbnail() throws IllegalArgumentException { return null; }
+	public static void setAvatarThumbnail() throws IllegalArgumentException {}
 
 }

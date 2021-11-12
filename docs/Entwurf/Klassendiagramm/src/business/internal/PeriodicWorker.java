@@ -1,11 +1,12 @@
 package business.internal;
 
+import javax.faces.bean.ApplicationScoped;
+
 import persistence.util.DButils;
 
+@ApplicationScoped
 public class PeriodicWorker implements Runnable {
-	
-	private DButils dbutils;
-	
+
 	@Override
 	public void run() { }
 	

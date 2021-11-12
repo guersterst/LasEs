@@ -1,7 +1,9 @@
-package business.internal;
+package control.internal;
 
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
+
+import business.internal.CDI;
 
 public class TrespassListener {
 

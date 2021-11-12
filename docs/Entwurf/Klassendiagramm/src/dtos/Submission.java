@@ -3,30 +3,29 @@ import java.util.List;
 
 public class Submission {
 	
+	private List<Paper> papers;
+	
+	private ScientificForum scientificForum;
+	
 	private int id;
+	
+	private boolean revisionRequired;
+	
+	private List<User> reviewers;
+	
+	private User author;
+	
+	private List<User> coAuthors;
+	
+	private User editor;
+	
 	
 	private String title;
 	
 	private SubmissionState state;
 	
-	private LocalDateTime deadlineReviews;
-	
 	private LocalDateTime deadlineRevision;
 	
 	private LocalDateTime submissionTime;
-	
-	private List<Paper> papers;
-	
-	private int submitterId;
-	
-	private ScientificForum submittedIntoForum;
-	
-	private User editor;
-	
-	private User submitter;
-	
-	private List<User> coAuthors;
-	
-	private List<Integer> reviewerIds;
 
 }
