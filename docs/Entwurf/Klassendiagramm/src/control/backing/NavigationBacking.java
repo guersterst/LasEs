@@ -15,11 +15,11 @@ import dtos.User;
 @RequestScoped
 public class NavigationBacking {
 	
-	private SessionInformation sessionInformation;
-	
 	private String searchString; // y
 	
 	private LoginService loginService;
+	
+	private SessionInformation sessionInformation;
 	
 	private List<User> userSearchResults;
 	
