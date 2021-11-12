@@ -46,7 +46,7 @@ Nach einer Authentifizierung bleibt also keine alten Session bestehen und \emph{
 \end{description}
 
 \subsection{Asynchrone Threads}\label{subsec:threads}
-Für das periodische Aufräumen von nicht mehr benötigten Datenbankeinträgen (abgelaufene E-Mail-Verifikationslinks) gibt es einen eigenen Thread \code{DBCleaner}.
+Für das periodische Aufräumen von nicht mehr benötigten Datenbankeinträgen (abgelaufene E-Mail-Verifikationslinks) gibt es einen eigenen Thread \code{PeriodicWorker}.
 
 \subsection{Systemstart und -stopp}\label{subsec:systemstart}
 Die Klasse \code{LifetimeListener} aus dem Paket \code{control.internal} implementiert die Methode \code{ServletContextListener\#contextDestroyed}, welche aufgerufen wird, sobald das Servlet bereit ist.
@@ -54,12 +54,12 @@ Die Klasse \code{LifetimeListener} aus dem Paket \code{control.internal} impleme
 Diese ruft dann die \code{startup()}-Methode in \code{business.internal.Lifetime} auf, welche
  das \hyperref[subsec:logging]{Logging} initialisiert und die Konfigurationsdatei liest.
 \\
-Außerdem wird der \code{DBCleaner}-Thread aus Kapitel \ref{subsec:threads} gestartet und im \code{ConnectionPool} \code{init()} aufgerufen, um die Datenbankverbindungen aufzubauen.
+Außerdem wird der \code{PeriodicWorker}-Thread aus Kapitel \ref{subsec:threads} gestartet und im \code{ConnectionPool} \code{init()} aufgerufen, um die Datenbankverbindungen aufzubauen.
 
 Der Server kann über den \emph{shutdown port} heruntergefahren werden.
 Dann, aber auch wenn der Server unerwartet gestoppt wird, werden \code{ShutdownHook}s ausgeführt.
 \\
-Einer wird von \code{Lifetime} bei der Ausführung von \code{init()} hinzugefügt zum Beenden des \code{DBCleaner}-Threads.
+Einer wird von \code{Lifetime} bei der Ausführung von \code{init()} hinzugefügt zum Beenden des \code{PeriodicWorker}-Threads.
 In der \code{init()}-Methode von \code{ConnectionPool} wird einer hinzugefügt für das Schließen der Datenbankverbindungen.
 Damit wird ein geordneter Shutdown sichergestellt.
 
