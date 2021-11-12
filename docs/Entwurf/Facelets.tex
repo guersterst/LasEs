@@ -19,8 +19,9 @@ Im Folgendem Abschnitt werden Abkürzungen für die verschiedenen Rollen eingef�
 Ist eine Funktion für alle Benutzerrollen außer dem anonymen Nutzer vorgesehen, so werden diese unter dem Begriff \textbf{Alle} zusammengefasst.
 Außerdem verfügt ein Administrator über alle Rechte der anderen Rollen und wird daher nur bei Schlüsselfunktionen genannt.
 
-Labels werden in diesem Abschnitt nicht aufgelistet.
+Labels werden in diesem Abschnitt nicht aufgelistet, sind aber angedacht.
 Diese sind jedoch in Form eines \emph{outputLabels} oder eines Fontawesome-Icon vorgesehen.
+Des Weiteren wird \emph{selectOneListbox} von Primefaces verwendet, um lange Dropdown-Menüs benutzerfreundlich zu gestalten.
 
 Die Vollständigkeit der einzelnen Facelets wurde anhand der Backing Beans und dem ER-Diagramm gegengeprüft.
 
@@ -88,7 +89,7 @@ Die Vollständigkeit der einzelnen Facelets wurde anhand der Backing Beans und d
 
         \fentry{addDeadlineReviewer}{inputText}{Eingabefeld zur Angabe einer Deadline.}{E}
 
-        \fentry{addReviewerBtn}{commandButton}{Knopf zum hinzufügen des Gutachters}{E}
+        \fentry{addReviewerBtn}{commandButton}{Knopf zum Hinzufügen des Gutachters}{E}
 
         \fentry{reviewerTable}{dataTable}{Liste der Gutachter}{E}
 
@@ -118,7 +119,7 @@ Die Vollständigkeit der einzelnen Facelets wurde anhand der Backing Beans und d
     Dazu wird folgendes Attribut übergeben:
 
     \begin{itemize}
-    	\item \textbf{paginator} Implementation der abstrakten Klasse \emph{Paginator.java}. \todo{hyperref zu Klasse}
+    	\item \textbf{pagination} Implementation der abstrakten Klasse \emph{Pagination.java}. \todo{hyperref zu Klasse}
     \end{itemize}
 
     \ftable{
@@ -148,7 +149,7 @@ Die Vollständigkeit der einzelnen Facelets wurde anhand der Backing Beans und d
 Dazu werden folgende Attribute übergeben:
 
 \begin{itemize}
-	\item \textbf{paginator} Implementation der abstrakten Klasse \emph{Paginator.java}. \todo{hyperref zu Klasse}
+	\item \textbf{pagination} Implementation der abstrakten Klasse \emph{Pagination.java}. \todo{hyperref zu Klasse}
 
 	\item \textbf{columnNamei18n} Anzeigename im Spaltenkopf.
 
@@ -176,7 +177,7 @@ Diese lädt die Daten aus der Datenbank bei der ersten Betrachtung der Seite.
 \subsubsection{Anonymer Nutzer}
 
 \begin{samepage}
-\textbf{welcome.xhtml} Auf der Login- bzw. Welcome-Seite wird \emph{LasEs} vorgestellt.
+\textbf{welcome.xhtml} \phantomLabel{flt:welcome} Auf der Login- bzw. Welcome-Seite wird das System vorgestellt.
 Zusätzlich gibt es ein Login-Formular zur Anmeldung im System.
 Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{registration.xhtml} weitergeleitet.
 \nopagebreak
@@ -267,15 +268,17 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 
         \fentry{editorialOverview}{commandLink}{Reiter zum Anzeigen aller Einreichungen, welche man editiert.}{E}
 
+        \fentry{stateSelectEditor}{selectOneMenu}{Filtern des Status von Einreichungen}{E}
+
+        \fentry{stateSelectReview}{selectOneMenu}{Filtern des Status von Einreichungen}{G}
+
         \fentry{stateSelect}{selectOneMenu}{Filtern des Status von Einreichungen}{Alle}
 
-        \fentry{dateBefore}{inputText}{Eingabe eines \emph{spätestens} Datum.}{Alle}
+        \fentry{dateSelectEdit}{selectOneMenu}{Auswahl der Filtermöglichkeit eines Datums.}{E}
 
-        \fentry{dateAfter}{inputText}{Eingabe eines \emph{frühestens} Datum.}{Alle}
+        \fentry{dateSelectReview}{selectOneMenu}{Auswahl der Filtermöglichkeit eines Datums.}{G}
 
-        \fentry{deadlineBefore}{inputText}{Eingabe eines \emph{spätestens} Deadline.}{Alle}
-
-        \fentry{deadlineAfter}{inputText}{Eingabe eines \emph{frühestens} Deadline.}{Alle}
+        \fentry{dateSelect}{selectOneMenu}{Auswahl der Filtermöglichkeit eines Datums.}{Alle}
 
         \fentry{submissionPagination}{pagination}{Liste aller eignen Einreichungen.}{Alle}
 
@@ -330,17 +333,13 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 
         \fentry{email}{Link}{E-Mail-Adressen der Co-Autoren und Mailto-Link.}{E}
 
-        \fentry{dateBefore}{inputText}{Eingabe eines \emph{spätestens} Datum.}{Alle}
+        \fentry{dateSelect}{selectOneMenu}{Auswahl der Filtermöglichkeit eines Datums.}{Alle}
 
-        \fentry{dateAfter}{inputText}{Eingabe eines \emph{frühestens} Datum.}{Alle}
-
-        \fentry{deadlineBefore}{inputText}{Eingabe einer \emph{spätesten} Deadline.}{Alle}
-
-        \fentry{deadlineAfter}{inputText}{Eingabe einer \emph{frühesten} Deadline.}{Alle}
+        \fentry{dateSelectReview}{selectOneMenu}{Auswahl der Filtermöglichkeit eines Datums.}{Alle}
 
         \fentry{reviewState}{selectOneMenu}{Filtern der Gutachten nach ihrem Status.}{E,G}
 
-        \fentry{recommendation}{selectOneMenu}{Auswahl der Art von Empfehlungen.}{E,G}
+        \fentry{recommendation}{selectOneMenu}{Auswahl der Art von Empfehlungen.}{Alle}
 
         \fentry{paperPagination}{pagination}{Liste aller Versionen}{Alle}
 
@@ -366,7 +365,7 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 
     \emph{reviewPagination} enthält die Spalten: Version, Gutachter, Datum, Deadline, Status, Empfehlung, Kommentar und Download.
     Ist ein Gutachten freigeschaltet, so erhält auch ein Nutzer Leserechte.
-    Die Elemente der Liste von Gutachten ist wie folgt:
+    Die Elemente der Liste von Gutachten sind folgende:
 
     \ftable{
         \fentry{version}{outputText}{Versionsnummer des Gutachtens.}{E,G}
@@ -424,7 +423,7 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
     \textbf{resultList.xhtml} zeigt alle Ergebnisse einer Suche an.
     \nopagebreak
 
-    Wird nach den eigenen Einreichungen, nach denen die man begutachtet oder nach Einreichungen in eingener editorialen Verantwortung gesucht, so erscheinen die Listen im gleiche Schema wie auch auf \hyperref[flt:homepage]{der Homepage}.
+    Wird nach den eigenen Einreichungen, nach denen, die man begutachtet oder nach Einreichungen in eigener editorialer Verantwortung gesucht, so erscheinen die Listen im gleichen Schema wie auch auf \hyperref[flt:homepage]{der Homepage}.
     Ergibt die Suche eine Liste von User, so wird diese wie in \hyperref[flt:userList]{der Userliste} für den Administrator und dem Editor angezeigt.
     Ist das Ziel der Suche, wissenschaftliche Foren zu finden, so erhält man bei passender Eingabe eine Liste im selben Format wie diejenige auf der \hyperref[flt:forumList]{Seite der Forumsliste.}
 \end{samepage}
@@ -434,10 +433,7 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
     \textbf{scientificForumList.xhtml} \phantomsection \label{flt:forumList} Hier erhalten die Nutzer eine Übersicht über alle wissenschaftliche Foren.\nopagebreak
 
     \ftable{
-
-        \fentry{dateBefore}{inputText}{Eingabe eines \emph{zukünftigen} Deadlines}{Alle}
-
-        \fentry{dateAfter}{inputText}{Eingabe eines \emph{vergangenen} Deadlines}{Alle}
+        \fentry{dateSelect}{selectOneMenu}{Auswahl der Filtermöglichkeit eines Datums.}{Alle}
 
         \fentry{forumsPagination}{pagination}{Liste aller Foren im System.}{Alle}
     }
@@ -445,7 +441,7 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 
 \begin{samepage}
 
-    Die Liste aller Foren im System wird in folgende Bereiche unterteilt: Name des Forums, Deadline und Kategorie.
+    Die Liste aller Foren im System wird in folgende Bereiche unterteilt: Name des Forums und Deadline.
     Dabei beinhaltet jede Zeile dieser Liste folgende Elemente:
 
     \ftable{
@@ -491,7 +487,7 @@ Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{regi
 
         \fentry{scienceField}{outputText}{Liste aller Fachgebiete}{N,E}
 
-        \fentry{addScienceField}{selectOneMenu}{Spezialgebiete des Nutzers}{N}
+        \fentry{addScienceField}{selectOneListbox}{Spezialgebiete des Nutzers}{N}
 
         \fentry{deleteScienceField}{commandButton}{Löschen des ausgewählten Fachgebietes.}{N}
 
@@ -522,7 +518,7 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
 \begin{samepage}
     \textbf{scientificForum.xhtml} Die Ansicht eines Forums dient zur Ausgabe von Informationen über die jeweilige Konferenz oder das jeweilige Journal.
-    Das Anzeigen der Tabellen \emph{editorialPagination}, \emph{reviewPagination} und \emph{submissionPagination} wird genauso gehandhabt, wie auf \hyperref[flt:homepage]{\emph{homepage.xhtml}}.
+    Das Anzeigen und Filtern der Tabellen \emph{editorialPagination}, \emph{reviewPagination} und \emph{submissionPagination} wird genauso gehandhabt, wie auf \hyperref[flt:homepage]{\emph{homepage.xhtml}}.
     Ausnahme dabei ist die Spalte Forum, welche hier nicht angezeigt wird.
     \nopagebreak
 
@@ -550,7 +546,7 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
         \fentry{scienceField}{outputText}{Fachgebiet des Forums.}{Alle}
 
-        \fentry{newScienceField}{selectOneMenu}{Hinzufügen eines neuen Fachgebietes.}{E}
+        \fentry{newScienceField}{selectOneListbox}{Hinzufügen eines neuen Fachgebietes.}{E}
 
         \fentry{addScienceField}{commandButton}{Speichern des neuen Fachgebietes.}{E}
 
@@ -656,18 +652,15 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
     \nopagebreak
 
     \ftable{
-
-        \fentry{themeHeading}{outputText}{Überschrift für Farbthemes.}{A}
-
         \fentry{selectTheme}{selectOneMenu}{Auswahl eines Farbthemas.}{A}
-
-        \fentry{logoHeading}{outputText}{Überschrift für Logo-Bereich.}{A}
 
         \fentry{logo}{graphicImage}{Logo des Systems.}{A}
 
         \fentry{changeLogo}{inputFile}{Hochladen eines neuen Logos.}{A}
 
-        \fentry{institutionHeading}{outputText}{Überschrift für Einstellungen der Einrichtung.}{A}
+        \fentry{welcomeHeading}{inputText}{Angabe einer Überschrift auf der \hyperref[flt:welcome]{\emph{welcomepage}}}{A}
+
+        \fentry{welcomeText}{inputTextArea}{Angabe eines Textes auf der \hyperref[flt:welcome]{\emph{welcomepage}}}{A}
 
         \fentry{institution}{inputText}{Angabe des Namens der Einrichtung.}{A}
 
@@ -709,7 +702,7 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
         \fentry{scienceFieldList}{outputText}{Liste der ausgewählten Fachgebiete.}{A}
 
-        \fentry{scienceField}{selectOneMenu}{Auswahl von Fachgebieten.}{A}
+        \fentry{scienceField}{selectOneListbox}{Auswahl von Fachgebieten.}{A}
 
         \fentry{newScienceField}{inputText}{Hinzufügen neuer Fachgebiete.}{A}
 
