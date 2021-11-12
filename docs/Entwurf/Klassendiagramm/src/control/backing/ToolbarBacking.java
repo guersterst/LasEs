@@ -2,36 +2,51 @@ package control.backing;
 
 import java.util.List;
 
-import business.internal.SessionInformation;
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.RequestScoped;
+
+import control.internal.SessionInformation;
 import dtos.User;
 
 /**
  * Backing bean for toolbar.xhtml. This view is the place where administrators and editors can administer a submission on the submission page.
  */
+@RequestScoped
 public class ToolbarBacking {
 	
-	private List<User> reviewer;
+	private String reviewerEmailInput; // y
 	
-	private List<User> editors;
+	private LocalDateTime reviewerDeadlineInput; // y
 	
-	private String reviewerEmailInput;
+	private User editorInput; // y
 	
-	private String managingEditorSelection;
+	private User currentEditor; //y
+	
+	private LocalDateTime revisionDeadlineInput; //y
+	
 
 	private SessionInformation sessionInformation;
 	
+	private List<User> reviewer; // y
 	
-	public void addReviewer() { }
+	private List<User> editors; // y
 	
-	public void removeReviewer(int id) { }
 	
-	public void chooseNewManagingEditor() { }
 	
-	public void requireRevision() { }
+	@PostConstruct
+	public void init() { }
 	
-	public void acceptSubmission() { }
+	public void addReviewer() { } // y
 	
-	public void rejectSubmission() { }
+	public String removeReviewer(int id) { return null; } // y
+	
+	public void chooseNewManagingEditor() { } // y
+	
+	public void requireRevision() { } // y
+	
+	public void acceptSubmission() { } // y
+	
+	public void rejectSubmission() { } // y
 	
 	public List<User> getReviewer() { return null; }
 	

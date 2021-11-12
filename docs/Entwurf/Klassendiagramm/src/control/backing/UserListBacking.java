@@ -2,21 +2,29 @@ package control.backing;
 
 import java.util.List;
 
-import business.internal.SessionInformation;
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.RequestScoped;
+import javax.faces.bean.ViewScoped;
+
 import business.service.ProfileService;
+import business.service.UserService;
+import control.internal.SessionInformation;
+import dtos.Pagination;
 import dtos.Privilege;
 import dtos.User;
 
+@ViewScoped
 public class UserListBacking {
 
 	private SessionInformation sessionInformation;
+	
+	private Pagination<User> userPagination;
 
-	private ProfileService profileService;
-
-	private Privilege privilege;
-
-	private String searchText;
-
+	private UserService userService;
+	
+	
+	@PostConstruct
+	public void init() { }
 
 	public String applyFilter(){ return null; }
 

@@ -2,18 +2,24 @@ package persistence.repository;
 
 import java.util.List;
 
+import dtos.File;
 import dtos.Review;
 import global.util.ResultListParameters;
 import persistence.exception.InvalidFieldsException;
 import persistence.exception.InvalidQueryParamsException;
-import persistence.util.ConnectionPool;
 
 public class ReviewRepository {
 	
-	private ConnectionPool connectionPool;
+	// get, add, change, remove
+	public static Review get(Review review, Transaction transaction) throws InvalidFieldsException { return null; }
+	public static void add() {}
+	public static void change() {}
+	public static void remove() {}
 	
-	public List<Review> getReviewsForSubmission(int submissionId, ResultListParameters resultParams) throws InvalidQueryParamsException { return null; }
+	// ueberladen fuer user und paper
+	public static List<Review> getList() { return null; }
 	
-	public void addReview(Review review) throws InvalidFieldsException { }
+	public static File getPDF() throws IllegalArgumentException { return null; }
+	public static void setPDF() throws IllegalArgumentException {}
 
 }

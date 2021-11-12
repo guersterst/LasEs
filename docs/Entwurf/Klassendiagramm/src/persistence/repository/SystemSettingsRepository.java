@@ -1,15 +1,16 @@
 package persistence.repository;
 
+import dtos.File;
 import dtos.Style;
 import dtos.SystemSettings;
-import persistence.util.ConnectionPool;
 
 public class SystemSettingsRepository {
 	
-	private ConnectionPool connectionPool;
+	public static void updateSettings(SystemSettings systemSettings, Transaction transaction) { }
 	
-	public void updateSettings(SystemSettings systemSettings) { }
+	public static SystemSettings getSettings(Transaction transaction) { return null; }
 	
-	public SystemSettings getSettings() { return null; }
+	public static File getLogo() { return null; }
+	public static void setLogo() { }
 
 }

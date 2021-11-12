@@ -2,19 +2,24 @@ package control.backing;
 
 import java.util.List;
 
-import business.internal.SessionInformation;
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.RequestScoped;
+
 import business.service.LoginService;
+import control.internal.SessionInformation;
 import dtos.ScientificForum;
 import dtos.Submission;
 import dtos.User;
 
+
+@RequestScoped
 public class NavigationBacking {
 	
-	private SessionInformation sessionInformation;
-	
-	private String searchString;
+	private String searchString; // y
 	
 	private LoginService loginService;
+	
+	private SessionInformation sessionInformation;
 	
 	private List<User> userSearchResults;
 	
@@ -29,8 +34,11 @@ public class NavigationBacking {
 	public List<Submission> getSubmissionSearchResults() { return null; }
 
 	
-	public String logout() { return null; }
+	@PostConstruct
+	public void init() { }
 	
-	public String search() { return null; }
+	public String logout() { return null; } // y
+	
+	public String search() { return null; } // y
 
 }

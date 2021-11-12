@@ -6,6 +6,14 @@ public class Review {
 	 * PDF muast soiba lod'n.
 	 */
 	
+	private Paper paper;
+	
+	private User reviewer;
+	
+	private int id;
+	
+	
+	
 	private LocalDateTime timestampUpdloaded;
 	
 	private boolean visible;
@@ -14,10 +22,5 @@ public class Review {
 	
 	private String comment;
 	
-	private int paperId;
-	
-	private int submissionId;
-	
-	private int reviewerId;
 
 }

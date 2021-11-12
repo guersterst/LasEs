@@ -4,6 +4,25 @@ import java.util.List;
 
 public class User {
 	
+	private Verification verification;
+	
+	private List<Review> reviews;
+	
+	private List<ScienceField> scienceFields;
+	
+	private List<ScientificForum> edits;
+	
+	private List<Submission> edited;
+	
+	private List<Submission> coAuthored;
+	
+	private List<Submission> authored;
+	
+	private List<Submission> reviewed;
+	
+	private int id;
+	
+	
 	private List<Privilege> priveleges;
 	
 	private String title;
@@ -14,25 +33,15 @@ public class User {
 	
 	private String emailAddress;
 	
-	private String unvalidatedEmailAddress;
-	
-	private LocalDateTime emailValidationStarted;
-	
-	private int id;
-	
 	private LocalDate dateOfBirth;
 	
-	private List<ScienceField> interests;
-	
 	private String employer;
-
-	private byte[] avatar;
-	
-	private byte[] avatarThumbnail;
 	
 	private String passwordHashed;
 	
 	private String passwordSalt;
+	
+	private boolean isNotRegistered;
 	
 
 }

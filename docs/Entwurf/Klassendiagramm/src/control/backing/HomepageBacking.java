@@ -3,14 +3,21 @@ package control.backing;
 
 import java.util.List;
 
-import business.internal.SessionInformation;
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.RequestScoped;
+import javax.faces.bean.ViewScoped;
+
 import business.service.SubmissionLieferando;
+import business.service.SubmissionService;
+import control.internal.SessionInformation;
+import dtos.Pagination;
 import dtos.Review;
 import dtos.Submission;
 import dtos.SubmissionState;
 import global.util.ResultListFilter;
 import global.util.ResultListParameters;
 
+@ViewScoped
 public class HomepageBacking {
 	
 	
@@ -20,33 +27,40 @@ public class HomepageBacking {
 	
 	private Tab tab;
 	
+	private Pagination<Submission> submissionPagination;
+	
+	private Pagination<Submission> reviewedPagination;
+	
+	private Pagination<Submission> editedPagination;
+	
+	
+	
 	private ResultListParameters resultListParameters;
 
 	private SessionInformation sessionInformation;
 	
-	private SubmissionLieferando submissionListService;
+	private SubmissionService submissionService;
 	
-	private SubmissionState stateFilterSelect;
+	private SubmissionState stateFilterSelectSub;
 	
-	private LocalDateTime dateFilterUpperInput;
+	private SubmissionState stateFilterSelectEdit;
 	
-	private LocalDateTime dateFilterLowerInput;
+	private SubmissionState stateFilterSelectReview;
 	
-	private String searchInput;
+	private DateSelect submission;
 	
-	private List<Submission> submissionList;
+	private DateSelect reviewing;
 	
-	private List<Review> reviewList;
+	private DateSelect editorial;
+	
+	@PostConstruct
+	public void init() { }
 	
 	public void showOwnSubmissionsTab() { }
 	
 	public void showSubmissionsToEditTab() { }
 	
 	public void showSubmissionsToReviewTab() { }
-	
-	public void sortDateAsc() { }
-	
-	public void sortDateDesc() { }
 	
 	public void applyFilters() { }
 

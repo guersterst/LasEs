@@ -1,5 +1,5 @@
 package global.util;
 
 public enum ResultListFilterComparator {
-	EQ, GTE, LTE;
+	EQ, GTE, LTE, LIKE;
 }

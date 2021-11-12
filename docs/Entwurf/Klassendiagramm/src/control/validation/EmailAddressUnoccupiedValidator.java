@@ -8,6 +8,7 @@ import com.ibm.security.validator.ValidatorException;
 
 import business.service.ProfileService;
 
+@FacesValidator
 public class EmailAddressUnoccupiedValidator implements Validator<String> {
 	
 	private ProfileService profileService;
