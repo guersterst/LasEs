@@ -1,0 +1,183 @@
+%! Author = guerster
+%! Date = 13.11.21
+
+\documentclass{beamer}
+
+\usepackage[ngerman]{babel}
+\usepackage{graphicx}
+
+
+% Example here:
+% https://github.com/josephwright/beamer/blob/main/doc/solutions/conference-talks/conference-ornate-20min.de.tex
+
+\mode<presentation>
+{
+    \usetheme{Singapore}
+%\usetheme{AnnArbor}
+%\usecolortheme{beaver}
+}
+
+\title{Kolloquium Entwurf}
+\subtitle{SEP WS 2021/2022}
+
+%\titlegraphic{\includegraphics[width=5cm]{../../docs/Pflichtenheft/graphics/LasEs-logo}}
+
+\date{\small 16. November 2021}
+\logo{\includegraphics[width=1.5cm]{../../docs/Pflichtenheft/graphics/LasEs-logo}}
+
+\author{\textbf{Team 2} \\ \small {Johannes Garstenauer, Stefanie Gürster, Thomas Kirz,\\ Johann Schicho, Sebastian Vogt} \\ \vspace{0.5cm}\emph{Phasenleiter: Stefanie Gürster}\normalsize}
+
+
+\begin{document}
+
+    \begin{frame}
+        \titlepage
+    \end{frame}
+
+    \begin{frame}{Gliederung}
+        \tableofcontents
+    \end{frame}
+
+    \section{Systemarchitektur}
+
+    \subsubsection{Schichtenarchitektur}
+    \begin{frame}{Schichtenarchitektur}
+        \begin{itemize}
+
+            \item Aufteilung in vier Schichten
+            \pause
+            \begin{itemize}
+                \item View
+                \item Control
+                \item Business
+                \item Persistence
+            \end{itemize}
+
+        \end{itemize}
+    \end{frame}
+
+    \subsubsection{Paketstruktur}
+    \begin{frame}{Paketstruktur}
+        \centering
+        \includegraphics[width=0.9\textwidth]{../../docs/Entwurf/graphics/Paketdiagramm9.0.png}
+    \end{frame}
+
+    \section{Klassendiagramm}
+    \begin{frame}{Klassendiagramm}
+        \centering
+        \includegraphics[width=0.9\textwidth]{../../docs/Entwurf/graphics/klassendiagramm_png.png}
+    \end{frame}
+
+
+    \subsection{Lücken und Unklarheiten}
+    \begin{frame}{Lücken und Unklarheiten}
+
+        Fragen beim ersten Gespräch:
+        \pause
+
+        \begin{itemize}
+            \item Benachrichtigungen per E-Mail. Automatisch vs. \emph{Mailto}
+            \pause
+            \item Löschen eines Nutzers, kaskadierendes Löschen
+            \pause
+            \item Ansicht von Papers anderer Nutzer möglich?
+        \end{itemize}
+
+    \end{frame}
+
+    \subsection{Indirekte Forderungen}
+    \begin{frame}{Indirekte Forderungen}
+        \begin{itemize}
+            \item Produktdaten
+            \begin{itemize}
+                \item Nutzerdaten
+                \item Einreichungen
+            \end{itemize}
+            \pause
+            \item Usability
+            \begin{itemize}
+                \item Gewünschte Funktionen vs. Design
+                \item Suche und paginierte Listen
+            \end{itemize}
+        \end{itemize}
+    \end{frame}
+
+    \section{Aussehen}
+    \begin{frame}{Look and Feel 1}
+        \centering
+        \includegraphics[height=0.75\textheight]{../../docs/Pflichtenheft/graphics/Homepage-png}
+    \end{frame}
+
+    \begin{frame}{Look and Feel 2}
+        \centering
+        \includegraphics[height=0.75\textheight]{../../docs/Pflichtenheft/graphics/Submission-png}
+    \end{frame}
+
+    \section{Killer Feature}
+    \begin{frame}{Wieso LasEs?}
+        \centering
+        \pause
+        \huge Benutzerfreundlichkeit
+    \end{frame}
+
+    \begin{frame}{Wieso LasEs?}
+        \centering
+        \includegraphics[height=0.8\textheight]{graphics/windowsxp}
+    \end{frame}
+
+    \begin{frame}{Wieso LasEs}
+        \centering
+        \includegraphics[height=0.75\textheight]{../../docs/Pflichtenheft/graphics/Homepage-png}
+    \end{frame}
+
+    \section{Navigationsstruktur}
+    \begin{frame}{Navigationsgraph}
+        \centering
+        \includegraphics[height=0.8\textheight]{../../docs/Pflichtenheft/graphics/benutzerFlussyEd-png}
+    \end{frame}
+
+    \section{Erweiterbarkeit}
+
+    \begin{frame}{Erweiterbarkeit}
+        \pause
+        \begin{itemize}
+            \item Anforderung von Revisionen
+            \pause
+            \item Mehrsprachige Anwendung
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Abgrenzungskriterien}
+        \pause
+        \begin{itemize}
+            \item Eigene Anwendung zur Betrachtung der Paper
+            \pause
+            \item Keine Publikationssoftware oder Lizenzierung
+        \end{itemize}
+    \end{frame}
+
+    \section{Testing}
+    \begin{frame}{Testabläufe}
+        \pause
+        Setup:
+        \begin{itemize}
+            \item mehrere Nutzer
+            \item Testmodus (für E-Mailbestätigungen)
+        \end{itemize}
+
+        \pause
+
+        Ablauf:
+        \begin{itemize}
+            \item Anlegen einer Konferenz \textbf{(Administrator)}
+            \item Einreichung von Paper mit Ko-Autor \textbf{(Nutzer)}
+            \item Editor kümmert sich um Gutachteraquirierung \textbf{(Editor \& Gutachter)}
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Diskussion}
+        \centering
+        \includegraphics[width=0.7\linewidth]{../../docs/Pflichtenheft/graphics/LasEs-logo}
+    \end{frame}
+
+\end{document}
