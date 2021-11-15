@@ -1,6 +1,3 @@
-\localauthor{Johann Schicho}
-
-\begin{lstlisting}[language=SQL, caption={DDL von Einreichungen},captionpos=below,frame=tb,numbers=left, tabsize=4]
 CREATE TYPE submission_state AS ENUM (
 	'SUBMITTED',
 	'REVISION_REQUIRED',
@@ -15,9 +12,8 @@ CREATE TABLE submission (
 	timestamp_submission TIMESTAMP,
 	requires_revision BOOLEAN NOT NULL DEFAULT FALSE,
 	timestamp_deadline_revision TIMESTAMP,
-
+	
 	author_id SERIAL REFERENCES user(id) NOT NULL,
 	editor_id SERIAL REFERENCES user(id) NOT NULL,
 	forum_id SERIAL REFERENCES scientificForum(id) NOT NULL
 );
-\end{lstlisting}
