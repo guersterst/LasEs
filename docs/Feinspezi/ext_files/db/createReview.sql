@@ -1,7 +1,7 @@
 CREATE TABLE paper (
-	reviewer_id SERIAL REFERENCES user(id) NOT NULL,
+	reviewer_id INTEGER REFERENCES reviewer(id) NOT NULL ON DELETE CASCADE,
 	version INTEGER NOT NULL,
-	submission_id SERIAL NOT NULL,
+	submission_id INTEGER NOT NULL,
 	
 	timestamp_upload TIMESTAMP NOT NULL DEFAULT NOW(),
 	is_visible BOOLEAN NOT NULL,
@@ -10,6 +10,6 @@ CREATE TABLE paper (
 	pdf_file BYTEA,
 	
 	PRIMARY KEY (submission_id, version, reviewer_id),
-	FOREIGN KEY (submission_id) REFERENCES submission(id),
-	FOREIGN KEY (version) REFERENCES paper(version)
+	FOREIGN KEY (submission_id) REFERENCES submission(id) ON DELETE CASCADE,
+	FOREIGN KEY (version) REFERENCES paper(version) ON DELETE CASCADE
 );

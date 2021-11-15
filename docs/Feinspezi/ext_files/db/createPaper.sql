@@ -6,5 +6,5 @@ CREATE TABLE paper (
 	pdf_file BYTEA NOT NULL,
 	
 	PRIMARY KEY (submission_id, version),
-	FOREIGN KEY (submission_id) REFERENCES submission(id)
+	FOREIGN KEY (submission_id) REFERENCES submission(id) ON DELETE CASCADE
 );

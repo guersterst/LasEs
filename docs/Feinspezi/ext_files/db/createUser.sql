@@ -1,0 +1,28 @@
+CREATE TABLE "user" (
+	id SERIAL PRIMARY KEY NOT NULL,
+	email_address VARCHAR UNIQUE NOT NULL,
+	firstname VARCHAR,
+	lastname VARCHAR,
+	title VARCHAR,
+	employer VARCHAR,
+	birthdate DATE,
+	avatar_thumbnail BYTEA,
+	is_registered BOOLEAN NOT NULL,
+	password_hash VARCHAR,
+	password_salt VARCHAR
+);
+
+CREATE TABLE reviewer(
+	id INTEGER PRIMARY KEY NOT NULL,
+	FOREIGN KEY (id) REFERENCES "user"(id) ON DELETE CASCADE
+);
+
+CREATE TABLE editor(
+	id INTEGER PRIMARY KEY NOT NULL,
+	FOREIGN KEY (id) REFERENCES "user"(id) ON DELETE CASCADE
+);
+
+CREATE TABLE administrator(
+	id INTEGER PRIMARY KEY NOT NULL,
+	FOREIGN KEY (id) REFERENCES "user"(id) ON DELETE CASCADE
+);
