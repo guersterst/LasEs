@@ -1,8 +1,10 @@
 package de.lases.control.internal;
 
-import java.util.List;
-
+import de.lases.global.transport.ResultListParameters;
 import de.lases.global.transport.*;
+import de.lases.global.transport.SortOrder;
+
+import java.util.List;
 
 public abstract class Pagination<T> {
 

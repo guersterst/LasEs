@@ -4,9 +4,11 @@ import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Named;
 
+import java.io.Serializable;
+
 @RequestScoped
 @Named
-public class ImprintBacking {
+public class ImprintBacking implements Serializable {
 
     private String imprint;
 

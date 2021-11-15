@@ -1,8 +1,6 @@
 package de.lases.control.backing;
 
-import de.lases.business.service.ScienceFieldService;
-import de.lases.business.service.SubmissionService;
-import de.lases.business.service.UserService;
+import de.lases.business.service.*;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
@@ -10,11 +8,12 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Named;
 import jakarta.servlet.http.Part;
 
+import java.io.Serializable;
 import java.util.List;
 
 @RequestScoped
 @Named
-public class ProfileBacking {
+public class ProfileBacking implements Serializable {
 
     private SessionInformation sessionInformation;
 

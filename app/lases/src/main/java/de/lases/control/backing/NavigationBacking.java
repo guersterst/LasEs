@@ -1,18 +1,19 @@
 package de.lases.control.backing;
 
-import de.lases.business.service.LoginService;
+import de.lases.business.service.*;
 import de.lases.global.transport.*;
 import de.lases.control.internal.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Named;
 
+import java.io.Serializable;
 import java.util.List;
 
 
 @RequestScoped
 @Named
-public class NavigationBacking {
+public class NavigationBacking implements Serializable {
 
     private String searchString; // y
 

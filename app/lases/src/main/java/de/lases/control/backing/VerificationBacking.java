@@ -5,9 +5,11 @@ import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Named;
 
+import java.io.Serializable;
+
 @RequestScoped
 @Named
-public class VerificationBacking { // y
+public class VerificationBacking implements Serializable { // y
 
     private SessionInformation sessionInformation;
 

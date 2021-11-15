@@ -32,14 +32,6 @@
         <welcome-file>facelets/anonymous/welcome.xhtml</welcome-file>
     </welcome-file-list>
 
-    <security-constraint>
-        <web-resource-collection>
-            <web-resource-name>downloadProtectedArea</web-resource-name>
-            <url-pattern>/view/*</url-pattern>
-        </web-resource-collection>
-        <auth-constraint/>
-    </security-constraint>
-
     <resource-env-ref>
         <description>Object factory for the CDI Bean Manager.</description>
         <resource-env-ref-name>BeanManager</resource-env-ref-name>

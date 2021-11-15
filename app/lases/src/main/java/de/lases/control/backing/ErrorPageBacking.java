@@ -4,9 +4,11 @@ import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Named;
 
+import java.io.Serializable;
+
 @RequestScoped
 @Named
-public class ErrorPageBacking {
+public class ErrorPageBacking implements Serializable {
 
     private String errorMessage;
 
