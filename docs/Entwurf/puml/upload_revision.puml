@@ -116,21 +116,23 @@ activate sb
 '        destroy t1
         ......
     return sub
-    sb -> sub ++ : getTitle()
-    return
-    sb -> sub ++ : getPapers()
-    return
-    sb -> sub ++ : getCoAuthors()
-    return
-    sb -> sub ++ : getAuthor()
-    return
-return submission.xhtml
+return "submission"
+
+user -> sub ++ : getTitle()
+return
+user -> sub ++ : getPapers()
+return
+user -> sub ++ : getCoAuthors()
+return
+user -> sub ++ : getAuthor()
+return
+
+user -> sb : releaseRevision()
 note left
     sucht die PDF-Datei mit
     dem file picker aus und
     klickt auf "Submit Revision"
 end note
-user -> sb : releaseRevision()
 activate sb
 
     user -> pdfv ++ : validate()
