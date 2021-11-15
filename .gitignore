@@ -10,3 +10,4 @@ Main.pdf
 .idea/
 *.synctex(busy)
 out/
+target/
