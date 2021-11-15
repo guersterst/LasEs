@@ -127,7 +127,6 @@ return
 user -> sub ++ : getAuthor()
 return
 
-'return submission.xhtml
 user -> pdfv ++ : validate()
 note left
     sucht die PDF-Datei mit
