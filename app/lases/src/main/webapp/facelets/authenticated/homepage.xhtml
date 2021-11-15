@@ -23,12 +23,12 @@
 
             <div class="list-body">
                 <h:form>
-                    <pg:pagination paginator="">
+                    <pg:pagination paginator="#{homepageBacking.submissionPagination}">
                         <h:column>
                             <f:facet name="header">
-                                <col:sortsearchcolumn paginator="" columnIdent="paper-title" columnNo="0" columnNamei18n="Title"/>
+                                <col:sortsearchcolumn paginator="#{homepageBacking.submissionPagination}" columnIdent="paper-title" columnNo="0" columnNamei18n="Title"/>
                             </f:facet>
-                            <h:outputText value=""/>
+                            <h:outputText value="#{var.}"/>
                         </h:column>
                         <h:column>
                             <f:facet name="header">

@@ -60,5 +60,5 @@ public class HomepageBacking implements Serializable {
 
     public void applyFilters() {
     }
-
+    
 }
