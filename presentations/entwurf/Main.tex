@@ -42,8 +42,6 @@
     \end{frame}
 
 
-
-
     \section{Architektur}
 
     \begin{frame}{Schichtenarchitektur}
@@ -76,72 +74,113 @@
 
 
 
-    \begin{frame}{Singleton und Object Pool}
+    \section{Szenario}
+    \begin{frame}{Aufruf einer Submission}
         \centering
-        \includegraphics[width=\textwidth]{../../docs/Entwurf/graphics/persistence_repository.png}
+        \includegraphics[width=\textwidth]{../../docs/Pflichtenheft/graphics/Submission-png.png}
     \end{frame}
 
-    \begin{frame}{Repository Pattern}
+    \begin{frame}{Sequenzdiagramm}
         \centering
-        \includegraphics[width=\textwidth]{../../docs/Entwurf/graphics/persistence_repository.png}
+        Sequenzdaigramm 1
     \end{frame}
 
-    \begin{frame}{Observer}
+    \begin{frame}{control.backing}
         \centering
-        \includegraphics[width=\textwidth]{../../docs/Entwurf/graphics/control_internal.png}
+        SubmissionBacking anzeigen
     \end{frame}
 
-    \begin{frame}{Data Transfer Objects}
+    \begin{frame}{global.transport}
         \centering
-        \includegraphics[width=\textwidth]{../../docs/Entwurf/graphics/global_transport.png}
+        UserDTO und SubmissionDTO
     \end{frame}
 
-    \section{ER-Diagramm}
+    \begin{frame}{business.service}
+        \centering
+        SubmissionService
+    \end{frame}
+
+    \section{Rechteprüfung}
+
+    \begin{frame}{Rechteprüfung}
+        \begin{itemize}
+            \item Trespasslistener \pause
+            \item Schaltflächen abhängig von Nutzerrollen \pause
+            \item Exception
+        \end{itemize}
+    \end{frame}
+
+    \section{Szenario}
+    \begin{frame}{persistence.repository}
+        \centering
+        Transactions mit Connection Pool
+    \end{frame}
+
+    \begin{frame}{persistence.repository}
+        \centering
+        SubmissionRepository
+    \end{frame}
+
+    \begin{frame}{Sequenzdiagramm}
+        \centering
+        Sequenzdiagramm 2
+    \end{frame}
+
     \begin{frame}{ER-Diagramm}
         \centering
         \includegraphics[height=0.9\textheight]{../../docs/Entwurf/graphics/ER-Modell.png}
     \end{frame}
 
+    \begin{frame}{Sequenzdiagramm}
+        \centering
+        Sequenzdiagramm 2
+    \end{frame}
 
-    \section{Prinzipien}
-
-    \begin{frame}{Abstraktion}
+    \begin{frame}{Facelet}
         \begin{itemize}
-            \item Transaction Objects
-            \item Repositories
+            \item Templates
+            \item Content
+            \item Composite Components
         \end{itemize}
     \end{frame}
 
-    \begin{frame}{Schwache Kopplung}
-        \begin{itemize}
-            \item MVC-Pattern \pause
-            \item Persistenzschicht
-        \end{itemize}
-        Technologien werden austauschbar.
-    \end{frame}
-
-    \begin{frame}{Hohe Kohäsion}
-        \begin{itemize}
-            \item Jeder Service hat eine Aufgabe
-            \pause
-            \item Jedes Repository kümmert sich um ein DTO
-            \pause
-            \item Jedes Backing Bean hat ein Facelet \pause
-            \item Ein DTO speichert Daten von genau einer Entität
-        \end{itemize}
-    \end{frame}
-
-    \begin{frame}{Lokalisierung}
-        \begin{itemize}
-            \item Internationalisierung
-        \end{itemize}
-    \end{frame}
-
-    \begin{frame}{Demeter Prinzip}
-        \begin{itemize}
-            \item Kommunikation nur mit eigener oder angrenzender Schicht
-        \end{itemize}
-    \end{frame}
+%    \begin{frame}{Abstraktion}
+%        \begin{itemize}
+%            \item Transaction Objects
+%            \item Repositories
+%        \end{itemize}
+%    \end{frame}
+%
+%    \begin{frame}{Schwache Kopplung}
+%        \begin{itemize}
+%            \item MVC-Pattern \pause
+%            \item Persistenzschicht
+%        \end{itemize}
+%        Technologien werden austauschbar.
+%    \end{frame}
+%
+%    \begin{frame}{Hohe Kohäsion}
+%        \begin{itemize}
+%            \item Jeder Service hat eine Aufgabe
+%            \pause
+%            \item Jedes Repository kümmert sich um ein DTO
+%            \pause
+%            \item Jedes Backing Bean hat ein Facelet \pause
+%            \item Ein DTO speichert Daten von genau einer Entität
+%        \end{itemize}
+%    \end{frame}
+%
+%    \begin{frame}{Lokalisierung}
+%        \begin{itemize}
+%            \item Internationalisierung
+%        \end{itemize}
+%    \end{frame}
+%
+%    \begin{frame}{Demeter Prinzip}
+%        \begin{itemize}
+%            \item Kommunikation nur mit eigener oder angrenzender Schicht
+%        \end{itemize}
+%    \end{frame}
 
 
     \begin{frame}{Sequenzdiagramm}
@@ -177,15 +216,17 @@
             \item UncheckedExceptionHandler
         \end{itemize}
     \end{frame}
+    
 
+    \section{Prinzipien}
 
-    \section{Rechteprüfung}
-
-    \begin{frame}{Rechteprüfung}
+    \begin{frame}{Prinzipien}
         \begin{itemize}
-            \item Trespasslistener \pause
-            \item Schaltflächen abhängig von Nutzerrollen \pause
-            \item Exception
+            \item Abstraktion \pause
+            \item Schwache Kopplung \pause
+            \item Hohe Kohäsion \pause
+            \item Lokalisierung \pause
+            \item Demeter Prinzip
         \end{itemize}
     \end{frame}
 
@@ -203,19 +244,6 @@
     \end{frame}
 
 
-    \section{Facelets}
-    \begin{frame}{Facelets}
-        \includegraphics[width=0.9\textwidth]{../../docs/Pflichtenheft/graphics/Wireframe-png.png}
-    \end{frame}
-
-    \begin{frame}{Facelets}
-        \begin{itemize}
-            \item Templates \pause
-            \item Content \pause
-            \item Composite Components
-        \end{itemize}
-    \end{frame}
-
 
     \section{Evolution}
     \begin{frame}{Evolutionsfähigkeit}
@@ -224,6 +252,11 @@
             \item Internationalisierung
             \item Einfache Erweiterung
         \end{itemize}
+    \end{frame}
+
+    \section{Diskussion}
+    \begin{frame}{Diskussion}
+        \includegraphics[width=\textwidth]{../../docs/Pflichtenheft/graphics/LasEs-logo}
     \end{frame}
 
 \end{document}
