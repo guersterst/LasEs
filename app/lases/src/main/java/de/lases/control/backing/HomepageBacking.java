@@ -168,7 +168,7 @@ public class HomepageBacking {
      * Set the selected filter option for filtering reviewed submissions after
      * the submission status.
      *
-     * @param stateFilterSelectEdit The selected filter option for filtering
+     * @param stateFilterSelectReview The selected filter option for filtering
      *                              reviewed submissions after submission
      *                              status.
      */
