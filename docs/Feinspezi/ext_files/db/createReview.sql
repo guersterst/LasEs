@@ -1,5 +1,5 @@
-CREATE TABLE paper (
-	reviewer_id INTEGER REFERENCES reviewer(id) NOT NULL ON DELETE CASCADE,
+CREATE TABLE review (
+	reviewer_id INTEGER REFERENCES reviewer(id) ON DELETE CASCADE,
 	version INTEGER NOT NULL,
 	submission_id INTEGER NOT NULL,
 	
@@ -10,6 +10,5 @@ CREATE TABLE paper (
 	pdf_file BYTEA,
 	
 	PRIMARY KEY (submission_id, version, reviewer_id),
-	FOREIGN KEY (submission_id) REFERENCES submission(id) ON DELETE CASCADE,
-	FOREIGN KEY (version) REFERENCES paper(version) ON DELETE CASCADE
+	FOREIGN KEY (submission_id, version) REFERENCES paper(submission_id, version) ON DELETE CASCADE
 );

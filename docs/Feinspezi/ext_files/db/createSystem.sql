@@ -3,6 +3,6 @@ CREATE TABLE system(
 	company_name VARCHAR,
 	welcome_heading VARCHAR,
 	welcome_description VARCHAR,
-	imprint VARCHAR
+	imprint VARCHAR,
 	logo_image BYTEA
 );
