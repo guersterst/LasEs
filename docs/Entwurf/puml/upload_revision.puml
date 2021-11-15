@@ -47,10 +47,6 @@ note left
     Submission-
     Seite auf
 end note
-sb --> ssvc : //injection//
-return //ssvc//
-sb --> si : //injection//
-return //si//
 user -> sb : init()
 activate sb
     sb -> si ++ : getUserId()
