@@ -1,0 +1,45 @@
+package business.service;
+
+import java.util.List;
+
+import javax.faces.bean.ApplicationScoped;
+import javax.transaction.Transaction;
+import javax.enterprise.event.Event;
+import business.util.EmailUtil;
+import dtos.ScientificForum;
+import dtos.Submission;
+import dtos.User;
+import global.util.ResultListParameters;
+import persistence.repository.ScientificForumRepository;
+
+@ApplicationScoped
+public class ScientificForumService {
+
+	private Event<UIMessage> uiMessageEvent;
+
+	private Transaction transaction;
+
+	public ScientificForum getForum() { }
+
+	public void updateForum(ScientificForum forum, ScientificForum newForum) { }
+
+	public void addForum(ScientificForum forum) { }
+
+	public void removeForum() { }
+
+	public void addSubmission(Submission submission) { }
+	
+	public void removeSubmission(Submission submission) { }
+
+	public void getSubmissions() { }
+	
+	public void addEditor(User user) { }
+
+	public void removeEditor(User user) { }
+
+	public void addScienceField() { }
+	
+	public List<User> getEditors() { return null; }
+	
+	public List<ScientificForum> getForums(ResultListParameters resultListParams) { return null; }
+}
