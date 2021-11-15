@@ -8,6 +8,5 @@ Main.pdf
 *.nav
 *.snm
 .idea/
-*.iml
 *.synctex(busy)
 out/
