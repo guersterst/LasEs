@@ -128,18 +128,18 @@ user -> sub ++ : getAuthor()
 return
 
 'return submission.xhtml
+user -> pdfv ++ : validate()
 note left
     sucht die PDF-Datei mit
     dem file picker aus und
     klickt auf "Submit Revision"
 end note
+return
+user -> sb ++ : setUploadedRevisionPDF()
+return
+
 user -> sb : releaseRevision()
 activate sb
-
-    user -> pdfv ++ : validate()
-    return
-    user -> sb : setUploadedRevisionPDF()
-
     sb -> rsvc : uploadFile(sub, revisionPdf)
     activate rsvc
         rsvc -> t2 ** : Transaction()
