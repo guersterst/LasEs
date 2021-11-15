@@ -5,6 +5,9 @@
 
 \usepackage[ngerman]{babel}
 \usepackage{graphicx}
+\usepackage{wasysym}
+\usepackage{textcomp}
+\usepackage{todonotes}
 
 
 % Example here:
@@ -38,13 +41,16 @@
         \tableofcontents
     \end{frame}
 
-    \section{Systemarchitektur}
 
-    \subsubsection{Schichtenarchitektur}
+
+
+    \section{Architektur}
+
     \begin{frame}{Schichtenarchitektur}
         \begin{itemize}
 
-            \item Aufteilung in vier Schichten
+            \item Aufteilung in vier Schichten \pause
+            \item Model View Controller
             \pause
             \begin{itemize}
                 \item View
@@ -56,11 +62,11 @@
         \end{itemize}
     \end{frame}
 
-    \subsubsection{Paketstruktur}
     \begin{frame}{Paketstruktur}
         \centering
         \includegraphics[width=0.9\textwidth]{../../docs/Entwurf/graphics/Paketdiagramm9.0.png}
     \end{frame}
+
 
     \section{Klassendiagramm}
     \begin{frame}{Klassendiagramm}
@@ -69,115 +75,155 @@
     \end{frame}
 
 
-    \subsection{Lücken und Unklarheiten}
-    \begin{frame}{Lücken und Unklarheiten}
 
-        Fragen beim ersten Gespräch:
-        \pause
+    \begin{frame}{Singleton und Object Pool}
+        \centering
+        \includegraphics[width=\textwidth]{../../docs/Entwurf/graphics/persistence_repository.png}
+    \end{frame}
 
+    \begin{frame}{Repository Pattern}
+        \centering
+        \includegraphics[width=\textwidth]{../../docs/Entwurf/graphics/persistence_repository.png}
+    \end{frame}
+
+    \begin{frame}{Observer}
+        \centering
+        \includegraphics[width=\textwidth]{../../docs/Entwurf/graphics/control_internal.png}
+    \end{frame}
+
+    \begin{frame}{Data Transfer Objects}
+        \centering
+        \includegraphics[width=\textwidth]{../../docs/Entwurf/graphics/global_transport.png}
+    \end{frame}
+
+    \section{ER-Diagramm}
+    \begin{frame}{ER-Diagramm}
+        \centering
+        \includegraphics[height=0.9\textheight]{../../docs/Entwurf/graphics/ER-Modell.png}
+    \end{frame}
+
+
+    \section{Prinzipien}
+
+    \begin{frame}{Abstraktion}
         \begin{itemize}
-            \item Benachrichtigungen per E-Mail. Automatisch vs. \emph{Mailto}
+            \item Transaction Objects
+            \item Repositories
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Schwache Kopplung}
+        \begin{itemize}
+            \item MVC-Pattern \pause
+            \item Persistenzschicht
+        \end{itemize}
+        Technologien werden austauschbar.
+    \end{frame}
+
+    \begin{frame}{Hohe Kohäsion}
+        \begin{itemize}
+            \item Jeder Service hat eine Aufgabe
             \pause
-            \item Löschen eines Nutzers, kaskadierendes Löschen
+            \item Jedes Repository kümmert sich um ein DTO
             \pause
-            \item Ansicht von Papers anderer Nutzer möglich?
+            \item Jedes Backing Bean hat ein Facelet \pause
+            \item Ein DTO speichert Daten von genau einer Entität
         \end{itemize}
-
     \end{frame}
 
-    \subsection{Indirekte Forderungen}
-    \begin{frame}{Indirekte Forderungen}
+    \begin{frame}{Lokalisierung}
         \begin{itemize}
-            \item Produktdaten
-            \begin{itemize}
-                \item Nutzerdaten
-                \item Einreichungen
-            \end{itemize}
+            \item Internationalisierung
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Demeter Prinzip}
+        \begin{itemize}
+            \item Kommunikation nur mit eigener oder angrenzender Schicht
+        \end{itemize}
+    \end{frame}
+
+
+    \begin{frame}{Sequenzdiagramm}
+        \centering
+        \includegraphics[height=0.9\textheight]{../../docs/Entwurf/graphics/reject_submission.pdf}
+    \end{frame}
+
+
+    \section{Fehlerbehandlung}
+
+    \begin{frame}{Geprüfte Ausnahmen}
+        \pause
+        \begin{columns}
+            \begin{column}{.48\textwidth}
+                Persistenz Schicht
+                \begin{itemize}
+                    \item Kapselung in semantisch passende Ausnahmeklassen
+                \end{itemize}
+            \end{column}
             \pause
-            \item Usability
-            \begin{itemize}
-                \item Gewünschte Funktionen vs. Design
-                \item Suche und paginierte Listen
-            \end{itemize}
+            \begin{column}{.48\textwidth}
+                Business- und Kontrollschicht
+                \begin{itemize}
+                    \item Auslösen eines Events
+                    \item Fangen durch UIGenerator
+                \end{itemize}
+            \end{column}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}{Ungeprüfte Ausnahmen}
+        \begin{itemize}
+            \item UncheckedExceptionHandler
         \end{itemize}
     \end{frame}
 
-    \section{Aussehen}
-    \begin{frame}{Look and Feel 1}
-        \centering
-        \includegraphics[height=0.75\textheight]{../../docs/Pflichtenheft/graphics/Homepage-png}
+
+    \section{Rechteprüfung}
+
+    \begin{frame}{Rechteprüfung}
+        \begin{itemize}
+            \item Trespasslistener \pause
+            \item Schaltflächen abhängig von Nutzerrollen \pause
+            \item Exception
+        \end{itemize}
     \end{frame}
 
-    \begin{frame}{Look and Feel 2}
-        \centering
-        \includegraphics[height=0.75\textheight]{../../docs/Pflichtenheft/graphics/Submission-png}
-    \end{frame}
 
-    \section{Killer Feature}
-    \begin{frame}{Wieso LasEs?}
-        \centering
-        \pause
-        \huge Benutzerfreundlichkeit
-    \end{frame}
-
-    \begin{frame}{Wieso LasEs?}
-        \centering
-        \includegraphics[height=0.8\textheight]{graphics/windowsxp}
-    \end{frame}
-
-    \begin{frame}{Wieso LasEs}
-        \centering
-        \includegraphics[height=0.75\textheight]{../../docs/Pflichtenheft/graphics/Homepage-png}
-    \end{frame}
-
-    \section{Navigationsstruktur}
-    \begin{frame}{Navigationsgraph}
-        \centering
-        \includegraphics[height=0.8\textheight]{../../docs/Pflichtenheft/graphics/benutzerFlussyEd-png}
-    \end{frame}
-
-    \section{Erweiterbarkeit}
-
-    \begin{frame}{Erweiterbarkeit}
+    \section{Konventionen}
+    \begin{frame}{Konventionen}
         \pause
         \begin{itemize}
-            \item Anforderung von Revisionen
-            \pause
-            \item Mehrsprachige Anwendung
+            \item Zuordnung durch ID's
+            \item x \textrightarrow 1
+            \item x \textrightarrow * \pause
+            \item Jedes Backing Bean genau ein Facelet \pause
+            \item Methoden \emph{getList()} und \emph{change()}
         \end{itemize}
     \end{frame}
 
-    \begin{frame}{Abgrenzungskriterien}
-        \pause
+
+    \section{Facelets}
+    \begin{frame}{Facelets}
+        \includegraphics[width=0.9\textwidth]{../../docs/Pflichtenheft/graphics/Wireframe-png.png}
+    \end{frame}
+
+    \begin{frame}{Facelets}
         \begin{itemize}
-            \item Eigene Anwendung zur Betrachtung der Paper
-            \pause
-            \item Keine Publikationssoftware oder Lizenzierung
+            \item Templates \pause
+            \item Content \pause
+            \item Composite Components
         \end{itemize}
     \end{frame}
 
-    \section{Testing}
-    \begin{frame}{Testabläufe}
-        \pause
-        Setup:
+
+    \section{Evolution}
+    \begin{frame}{Evolutionsfähigkeit}
         \begin{itemize}
-            \item mehrere Nutzer
-            \item Testmodus (für E-Mailbestätigungen)
+            \item Schichtenarchitektur
+            \item Internationalisierung
+            \item Einfache Erweiterung
         \end{itemize}
-
-        \pause
-
-        Ablauf:
-        \begin{itemize}
-            \item Anlegen einer Konferenz \textbf{(Administrator)}
-            \item Einreichung von Paper mit Ko-Autor \textbf{(Nutzer)}
-            \item Editor kümmert sich um Gutachteraquirierung \textbf{(Editor \& Gutachter)}
-        \end{itemize}
-    \end{frame}
-
-    \begin{frame}{Diskussion}
-        \centering
-        \includegraphics[width=0.7\linewidth]{../../docs/Pflichtenheft/graphics/LasEs-logo}
     \end{frame}
 
 \end{document}
