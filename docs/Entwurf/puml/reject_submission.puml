@@ -49,27 +49,26 @@ note left
     Submission-
     Seite auf
 end note
-sb --> ssvc : //injection//
-return //ssvc//
-sb --> si : //injection//
-return //si//
 editor -> sb : init()
 activate sb
-    note right
-        int subId wird
-        gelesen von
-        requestParams
-        (URL-Parameter)
-    end note
     sb -> si ++ : getUserId()
     return userId
-    sb -> sub ** : Submission()
-    sb -> sub : setId(subId)
-    activate sub
-    return
     sb -> usr ** : User()
     sb -> usr ++ : setId(userId)
     return
+    sb -> sub ** : Submission()
+return
+
+note right
+    int subId wird
+    gelesen von
+    requestParams
+    (URL-Parameter)
+end note
+sb -> sub ++ : setId(subId)
+return
+
+editor -> sb ++ : load() //[via viewAction]//
     sb -> ssvc ++ : canView(sub, user)
     return true
 
@@ -121,15 +120,16 @@ activate sb
         return
 '        destroy t1
     return sub
-    sb -> sub ++ : getTitle()
-    return
-    sb -> sub ++ : getPapers()
-    return
-    sb -> sub ++ : getCoAuthors()
-    return
-    sb -> sub ++ : getAuthor()
-    return
-return submission.xhtml
+return "submission"
+
+editor -> sub ++ : getTitle()
+return
+editor -> sub ++ : getPapers()
+return
+editor -> sub ++ : getCoAuthors()
+return
+editor -> sub ++ : getAuthor()
+return
 
 
 editor -> sb : setState(REJECTED)
