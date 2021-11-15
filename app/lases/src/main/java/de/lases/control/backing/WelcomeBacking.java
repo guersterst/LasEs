@@ -1,10 +1,12 @@
 package de.lases.control.backing;
 
-import de.lases.business.service.*;
+import de.lases.business.service.CustomizationService;
+import de.lases.business.service.LoginService;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.annotation.FacesConfig;
 import jakarta.inject.Named;
 
 import java.io.Serializable;
@@ -12,9 +14,10 @@ import java.io.Serializable;
 /**
  * This is the backing bean for welcome.xhtml. On that page, registered users can log in.
  */
+@FacesConfig
 @Named
 @RequestScoped
-public class WelcomeBacking implements Serializable {
+public class WelcomeBacking {
 
     private LoginService loginService;
 

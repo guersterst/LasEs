@@ -1,6 +1,6 @@
 package de.lases.control.validation;
 
-import de.lases.business.service.*;
+import de.lases.business.service.UserService;
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.validator.FacesValidator;

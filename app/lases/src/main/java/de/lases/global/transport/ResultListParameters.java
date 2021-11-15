@@ -57,8 +57,8 @@ public class ResultListParameters {
         return sortOrder;
     }
 
-    public void setSortOrder(SortOrder n_sortOrder) {
-        sortOrder = n_sortOrder;
+    public void setSortOrder(SortOrder sortOrder) {
+        this.sortOrder = sortOrder;
     }
 
     public String getGlobalSearchWord() {

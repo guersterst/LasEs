@@ -1,9 +1,9 @@
 package de.lases.control.backing;
 
-import java.io.Serializable;
 import java.util.List;
 
-import de.lases.business.service.*;
+import de.lases.business.service.ScienceFieldService;
+import de.lases.business.service.ScientificForumService;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
@@ -12,7 +12,7 @@ import jakarta.inject.Named;
 
 @RequestScoped
 @Named
-public class NewScientificForumBacking implements Serializable {
+public class NewScientificForumBacking {
 
     private ScienceFieldService scienceFieldService;
 

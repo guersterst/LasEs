@@ -1,16 +1,14 @@
 package de.lases.control.backing;
 
-import de.lases.business.service.*;
+import de.lases.business.service.RegistrationService;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Named;
 
-import java.io.Serializable;
-
 @RequestScoped
 @Named
-public class NewUserBacking implements Serializable {
+public class NewUserBacking {
 
     private RegistrationService registrationService;
 

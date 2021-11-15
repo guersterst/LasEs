@@ -1,18 +1,19 @@
 package de.lases.control.backing;
 
-import de.lases.business.service.*;
+import de.lases.business.service.ScientificForumService;
+import de.lases.business.service.SubmissionService;
+import de.lases.business.service.UserService;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 
 @ViewScoped
 @Named
-public class ResultListBacking implements Serializable {
+public class ResultListBacking {
 
     private Pagination<Submission> submissionPagination;
 

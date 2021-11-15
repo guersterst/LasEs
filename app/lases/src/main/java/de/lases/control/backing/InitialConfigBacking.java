@@ -1,15 +1,13 @@
 package de.lases.control.backing;
 
-import de.lases.business.service.*;
+import de.lases.business.service.CustomizationService;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Named;
 
-import java.io.Serializable;
-
 @RequestScoped
 @Named
-public class InitialConfigBacking implements Serializable {
+public class InitialConfigBacking {
 
     private CustomizationService customizationService;
 

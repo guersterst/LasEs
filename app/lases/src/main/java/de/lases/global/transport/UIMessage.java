@@ -6,9 +6,9 @@ public class UIMessage {
 
     private final Category category;
 
-    public UIMessage(String message, Category n_category) {
+    public UIMessage(String message, Category category) {
         this.message = message;
-        category = n_category;
+        this.category = category;
     }
 
     public String getMessage() {

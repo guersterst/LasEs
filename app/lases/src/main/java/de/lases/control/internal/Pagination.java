@@ -1,9 +1,8 @@
 package de.lases.control.internal;
 
-import de.lases.global.transport.*;
-
-
 import java.util.List;
+
+import de.lases.global.transport.*;
 
 public abstract class Pagination<T> {
 
