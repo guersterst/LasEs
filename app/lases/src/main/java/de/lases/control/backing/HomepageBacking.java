@@ -29,11 +29,11 @@ public class HomepageBacking implements Serializable {
 
 
 
-    private DateSelect submission;
+    private DateSelect dateFilterSelectSub;
 
-    private DateSelect reviewing;
+    private DateSelect dateFilterSelectReview;
 
-    private DateSelect editorial;
+    private DateSelect dateFilterSelectEdit;
 
     private SubmissionState stateFilterSelectSub;
 
@@ -51,51 +51,97 @@ public class HomepageBacking implements Serializable {
 
     private ResultListParameters resultListParameters;
 
+    /**
+     * Load submissions from the database for the first time to fill the first
+     * page of the submission lists.
+     */
     @PostConstruct
     public void init() {
     }
 
+    /**
+     * Switch to the tab that shows the user's own submissions.
+     */
     public void showOwnSubmissionsTab() {
     }
 
+    /**
+     * Switch to the tab that shows the submissions where the user is an
+     * editor.
+     */
     public void showSubmissionsToEditTab() {
     }
 
+    /**
+     * Switch to the tab that shows the submissions where the user is a
+     * reviewer.
+     */
     public void showSubmissionsToReviewTab() {
     }
 
+    /**
+     * Apply the selected date and state filters.
+     */
     public void applyFilters() {
     }
 
 
-    public DateSelect getSubmission() {
-        return submission;
+    public DateSelect getDateFilterSelectSub() {
+        return dateFilterSelectSub;
     }
 
-    public void setSubmission(DateSelect submission) {
-        this.submission = submission;
+    /**
+     * Set the selected filter option for filtering own submissions after
+     * date.
+     *
+     * @param dateFilterSelectSub The selected filter option for filtering
+     *                            own submissions after date.
+     */
+    public void setDateFilterSelectSub(DateSelect dateFilterSelectSub) {
+        this.dateFilterSelectSub = dateFilterSelectSub;
     }
 
-    public DateSelect getReviewing() {
-        return reviewing;
+    public DateSelect getDateFilterSelectReview() {
+        return dateFilterSelectReview;
     }
 
-    public void setReviewing(DateSelect reviewing) {
-        this.reviewing = reviewing;
+    /**
+     * Set the selected filter option for filtering reviewed submissions after
+     * date.
+     *
+     * @param dateFilterSelectReview The selected filter option for filtering
+     *                               reviewed submissions after date.
+     */
+    public void setDateFilterSelectReview(DateSelect dateFilterSelectReview) {
+        this.dateFilterSelectReview = dateFilterSelectReview;
     }
 
-    public DateSelect getEditorial() {
-        return editorial;
+    public DateSelect getDateFilterSelectEdit() {
+        return dateFilterSelectEdit;
     }
 
-    public void setEditorial(DateSelect editorial) {
-        this.editorial = editorial;
+    /**
+     * Set the selected filter option for filtering edited submissions after
+     * date.
+     *
+     * @param dateFilterSelectEdit The selected filter option for filtering
+     *                             edited submissions after date.
+     */
+    public void setDateFilterSelectEdit(DateSelect dateFilterSelectEdit) {
+        this.dateFilterSelectEdit = dateFilterSelectEdit;
     }
 
     public SubmissionState getStateFilterSelectSub() {
         return stateFilterSelectSub;
     }
 
+    /**
+     * Set the selected filter option for filtering own submissions after
+     * the submission status.
+     *
+     * @param stateFilterSelectSub The selected filter option for filtering
+     *                             own submissions after submission status.
+     */
     public void setStateFilterSelectSub(SubmissionState stateFilterSelectSub) {
         this.stateFilterSelectSub = stateFilterSelectSub;
     }
@@ -104,7 +150,15 @@ public class HomepageBacking implements Serializable {
         return stateFilterSelectEdit;
     }
 
-    public void setStateFilterSelectEdit(SubmissionState stateFilterSelectEdit) {
+    /**
+     * Set the selected filter option for filtering edited submissions after
+     * the submission status.
+     *
+     * @param stateFilterSelectEdit The selected filter option for filtering
+     *                              edited submissions after submission status.
+     */
+    public void setStateFilterSelectEdit(
+            SubmissionState stateFilterSelectEdit) {
         this.stateFilterSelectEdit = stateFilterSelectEdit;
     }
 
@@ -112,7 +166,16 @@ public class HomepageBacking implements Serializable {
         return stateFilterSelectReview;
     }
 
-    public void setStateFilterSelectReview(SubmissionState stateFilterSelectReview) {
+    /**
+     * Set the selected filter option for filtering reviewed submissions after
+     * the submission status.
+     *
+     * @param stateFilterSelectReview The selected filter option for filtering
+     *                              reviewed submissions after submission
+     *                              status.
+     */
+    public void setStateFilterSelectReview(
+            SubmissionState stateFilterSelectReview) {
         this.stateFilterSelectReview = stateFilterSelectReview;
     }
 
