@@ -194,13 +194,13 @@ activate sb
         end note
 
 == Anfang Fehlerbehandlung ==
-        return <font color=red><b>DataStoreException e</b></font> (unchecked)
+        return <font color=red><b>DataSourceNotFoundException e</b></font> (unchecked)
 
         ssvc -> t2 ++ : close()
         return
 
-    return <font color=red><b>DataStoreException e
-return <font color=red><b>DataStoreException e
+    return <font color=red><b>DataSourceNotFoundException e
+return <font color=red><b>DataSourceNotFoundException e
 
 editor -> eh ++ : handle(e)
     note right of eh
