@@ -53,21 +53,25 @@ sb --> si : //injection//
 return //si//
 user -> sb : init()
 activate sb
-    note right
-        int subId wird
-        gelesen von
-        requestParams
-        (URL-Parameter)
-    end note
     sb -> si ++ : getUserId()
     return userId
-    sb -> sub ** : Submission()
-    sb -> sub : setId(subId)
-    activate sub
-    return
     sb -> usr ** : User()
     sb -> usr ++ : setId(userId)
     return
+    sb -> sub ** : Submission()
+return
+
+note left of sb
+    int subId wird
+    gelesen von
+    requestParams
+    (URL-Parameter)
+end note
+user -> sub ++ : setId(subId)
+return
+
+
+user -> sb ++ : load() //[via viewAction]//
     sb -> ssvc ++ : canView(sub, usr)
     return true
 
@@ -116,15 +120,18 @@ activate sb
 '        destroy t1
         ......
     return sub
-    sb -> sub ++ : getTitle()
-    return
-    sb -> sub ++ : getPapers()
-    return
-    sb -> sub ++ : getCoAuthors()
-    return
-    sb -> sub ++ : getAuthor()
-    return
-return submission.xhtml
+return "submission"
+
+user -> sub ++ : getTitle()
+return
+user -> sub ++ : getPapers()
+return
+user -> sub ++ : getCoAuthors()
+return
+user -> sub ++ : getAuthor()
+return
+
+'return submission.xhtml
 note left
     sucht die PDF-Datei mit
     dem file picker aus und
