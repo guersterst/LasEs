@@ -171,3 +171,82 @@ CREATE TABLE system(
 \end{lstlisting}
 
 \subsection{Indizes}
+
+Um die E-Mail-Adressen unabhängig von der Groß- oder Kleinschreibung in der Datenbank tatsächlich \emph{UNIQUE} zu halten benötigt es in PostgreSQL einen eigenen Index, da das \emph{UNIQUE} Schlüsselwort selbst \emph{case-sensitive} ist.\\
+
+\begin{lstlisting}[caption={DDL des UNIQUE Index auf E-Mail-Adressen}]
+CREATE UNIQUE INDEX email_unique_case_insensitive
+	ON "user" (LOWER(email_address));
+\end{lstlisting}
+
+\subsection{Relationships}
+
+n : m Relationships benötigen eigenen Relationen.\\
+
+\begin{lstlisting}[caption={DDL der Ko-Autoren}]
+CREATE TABLE co_authored(
+	user_id INTEGER NOT NULL,
+	submission_id INTEGER NOT NULL,
+
+	PRIMARY KEY (user_id, submission_id),
+	FOREIGN KEY (user_id) REFERENCES "user"(id) ON DELETE CASCADE,
+	FOREIGN KEY (submission_id) REFERENCES submission(id) ON DELETE CASCADE
+);
+\end{lstlisting}
+
+\begin{lstlisting}[caption={DDL der Interessensgebiete}]
+CREATE TABLE interests (
+	user_id INTEGER NOT NULL,
+	science_field_name VARCHAR NOT NULL,
+
+	PRIMARY KEY (user_id, science_field_name),
+	FOREIGN KEY (user_id) REFERENCES "user"(id) ON DELETE CASCADE,
+	FOREIGN KEY (science_field_name) REFERENCES science_field(name)
+	ON DELETE CASCADE
+);
+\end{lstlisting}
+
+\begin{lstlisting}[caption={DDL der verwaltenden Editoren}]
+CREATE TABLE member_of(
+	editor_id INTEGER NOT NULL,
+	scientific_forum_id INTEGER NOT NULL,
+
+	PRIMARY KEY (editor_id, scientific_forum_id),
+	FOREIGN KEY (editor_id) REFERENCES editor(id) ON DELETE CASCADE,
+	FOREIGN KEY (scientific_forum_id) REFERENCES scientific_forum(id)
+	ON DELETE CASCADE
+);
+\end{lstlisting}
+
+\todo{Wie heißt der bims in JAva?}
+\begin{lstlisting}[caption={DDL der begutachtenden Gutachter}]
+CREATE TYPE review_task_state AS ENUM (
+	'NO_DECISION',
+	'ACCEPTED',
+	'REJECTED'
+);
+
+CREATE TABLE reviewed_by(
+	reviewer_id INTEGER NOT NULL,
+	submission_id INTEGER NOT NULL,
+	has_accepted review_task_state,
+	timestamp_deadline TIMESTAMP,
+
+	PRIMARY KEY (reviewer_id, submission_id),
+	FOREIGN KEY (reviewer_id) REFERENCES reviewer(id) ON DELETE CASCADE,
+	FOREIGN KEY (submission_id) REFERENCES submission(id) ON DELETE CASCADE
+);
+\end{lstlisting}
+
+\begin{lstlisting}[caption={DDL der Themengebiete eines Forums}]
+CREATE TABLE topics(
+	science_field_name VARCHAR NOT NULL,
+	scientific_forum_id INTEGER NOT NULL,
+
+	PRIMARY KEY (science_field_name, scientific_forum_id),
+	FOREIGN KEY (science_field_name) REFERENCES science_field(name)
+	ON DELETE CASCADE,
+	FOREIGN KEY (scientific_forum_id) REFERENCES scientific_forum(id)
+	ON DELETE CASCADE
+);
+\end{lstlisting}

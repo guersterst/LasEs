@@ -31,4 +31,4 @@ CREATE TABLE administrator(
 	FOREIGN KEY (id) REFERENCES "user"(id) ON DELETE CASCADE
 );
 
-CREATE UNIQUE INDEX email_unique_case_insensitive on "user" (LOWER(email_address));
+CREATE UNIQUE INDEX email_unique_case_insensitive ON "user" (LOWER(email_address));
