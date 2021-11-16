@@ -15,7 +15,7 @@
 
 <h:body>
     <h:outputText value="#{navigationBacking.resultListParameters.globalSearchWord}" title="Hallo"/>
-    <h:commandButton action="#{navigationBacking.search}" rendered="#{}"/>
+    <h:commandButton action="#{navigationBacking.search}" rendered="#{navigationBacking.logout}"/>
     <div class="list-container">
         <div class="list-form">
             <div class="list-header">

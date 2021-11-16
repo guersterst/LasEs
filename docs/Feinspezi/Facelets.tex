@@ -41,13 +41,13 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	
 	\fentry{search-cbtn}{<h:commandButton>}{Suche ausführen.}{action="#{navigationBacking.search}"}{/}{/}
 	
-	\fentry{user-list-lnk}{<h:link>}{Link zur Übersichtsseite aller Nutzer}{outcome="/editor/userList}{render="#{}"}{/}
+	\fentry{user-list-lnk}{<h:link>}{Link zur Übersichtsseite aller Nutzer}{outcome="/editor/userList}{render="#{navigationBacking.sessionInformation.user.editor}"}{/}
 	
-	\fentry{forum-list-lnk}{<h:link>}{Link zur Übersichtsseite alle Journale und Konferenzen}{outcome="/authenticated/scientificForumList"}{/}
+	\fentry{forum-list-lnk}{<h:link>}{Link zur Übersichtsseite alle Journale und Konferenzen}{outcome="/authenticated/scientificForumList"}{/}{/}
 	
-	\fentry{logoutButton}{commandButton}{Loggt den Nutzer aus dem System aus und leitet zur Loginseite weiter}{Alle}
+	\fentry{logout-cbtn}{<h:commandButton>}{Loggt den Nutzer aus dem System aus und leitet zur Loginseite weiter.}{action="{navigationBacking.logout}"}{/}{/}
 	
-	\fentry{profileLink}{link}{Link zur Profilübersicht}{N}
+	\fentry{profile-lnk}{<h:link>}{Link zur Profilübersicht}{outcome="/authenticated/profile"}{N}
 
 
 \end{samepage}
