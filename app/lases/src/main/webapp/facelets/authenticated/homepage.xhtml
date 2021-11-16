@@ -14,28 +14,28 @@
 </h:head>
 
 <h:body>
-    <h:outputText value="#{navigationBacking.resultListParameters.globalSearchWord}" title="Hallo"/>
-    <h:commandButton action="#{navigationBacking.search}" rendered="#{navigationBacking.logout}"/>
+    <h:form>
+        <h:outputText value="Test" title="Hallo"/>
+    </h:form>
     <div class="list-container">
         <div class="list-form">
-            <div class="list-header">
-                <h:commandLink value="" id="cl-yourSubmissions"  rendered="true"/>
-                <h:commandLink value="" id="cl-yourReviews"  rendered="true"/>
-                <h:commandLink value="" id="cl-editorialOverview"  rendered="true"/>
-            </div>
+            
 
             <div class="list-body">
                 <h:form>
                     <pg:pagination paginator="#{homepageBacking.submissionPagination}">
                         <h:column>
                             <f:facet name="header">
-                                <col:sortsearchcolumn paginator="#{homepageBacking.submissionPagination}" columnIdent="paper-title" columnNo="0" columnNamei18n="Title"/>
+                                <col:sortsearchcolumn paginator="#{homepageBacking.submissionPagination}"
+                                                      columnIdent="paper-title" columnNo="0" columnNamei18n="Title"/>
                             </f:facet>
                             <h:outputText value="#{var.forumName}"/>
                         </h:column>
                         <h:column>
                             <f:facet name="header">
-                                <col:sortsearchcolumn columnNamei18n="Date" paginator="#{homepageBacking.submissionPagination}" columnIdent="submit-date" columnNo="2"/>
+                                <col:sortsearchcolumn columnNamei18n="Date"
+                                                      paginator="#{homepageBacking.submissionPagination}"
+                                                      columnIdent="submit-date" columnNo="2"/>
                                 <h:selectOneMenu value="Alle">
                                     <f:selectItem itemValue="Future" itemLabel="Future"/>
                                     <f:selectItem itemValue="Past" itemLabel="Past"/>

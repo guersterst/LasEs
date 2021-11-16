@@ -30,6 +30,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \nopagebreak
 
 \todo{Absprechen mit Sebastian und BB nicht vollstäandig}
+\todo{outcome von links ist immer noch im ordner facelets. mit Johannes abklären und ausprobieren.}
 \ftable{
 	\fentry{logo-gimg}{<h:graphicImage>}{Logo der Applikation.}{value="\#{}"}{/}{/}
 	
@@ -41,13 +42,13 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	
 	\fentry{search-cbtn}{<h:commandButton>}{Suche ausführen.}{action="\#{navigationBacking.search}"}{/}{/}
 	
-	\fentry{user-list-lnk}{<h:link>}{Link zur Übersichtsseite aller Nutzer}{outcome="/editor/userList}{render="\#{navigationBacking.sessionInformation.user.editor}"}{/}
+	\fentry{user-list-lnk}{<h:link>}{Link zur Übersichtsseite aller Nutzer}{value="\#{label.nav.userList}" \newline outcome="/editor/userList}{render="\#{navigationBacking.sessionInformation.user.editor}"}{/}
 	
-	\fentry{forum-list-lnk}{<h:link>}{Link zur Übersichtsseite alle Journale und Konferenzen}{outcome="/authenticated/scientificForumList"}{/}{/}
+	\fentry{forum-list-lnk}{<h:link>}{Link zur Übersichtsseite alle Journale und Konferenzen}{value="\#{label.nav.forumList}" \newline outcome="/authenticated/scientificForumList"}{/}{/}
 	
 	\fentry{logout-cbtn}{<h:commandButton>}{Loggt den Nutzer aus dem System aus und leitet zur Loginseite weiter.}{action="\#{navigationBacking.logout}"}{/}{/}
 	
-	\fentry{profile-lnk}{<h:link>}{Link zur Profilübersicht}{outcome="/authenticated/profile"}{/}{/}
+	\fentry{profile-lnk}{<h:link>}{Link zur Profilübersicht}{value="\#{label.nav.profile}" \newline outcome="/authenticated/profile"}{/}{/}
 	}
 	
 \end{samepage}
@@ -65,6 +66,19 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 		\fentry{/}{<ui:insert>}{\hyperref[flt:pages]{Seiteninhalt}}{name="main-content"}{/}{/}
 		
 		\fentry{/}{<ui:include>}{\hyperref[flt:footer]{Fußzeile}}{src="footer.xhtml"}{/}{/}
+	}
+\end{samepage}
+
+\todo{language bearbeiten}
+\begin{samepage}
+	\textbf{footer.xhtml} \phantomsection \label{flt:footer} ist die Fußzeile der Webanwendung und für alle sichtbar.
+	\nopagebreak
+	
+	\ftable{
+		\fentry{imprint-lnk}{<h:link>}{Link zur Seite des Impressums}{value="\#{label.footer.imprint}"outcome="/anonymous/imprint"}{/}{/}
+		
+		\fentry{language-otxt}{<h:outputText>}{Anzeige der eingestellten Sprache.}{value="\#{}"}{/}{/}
+		
 	}
 \end{samepage}
 
