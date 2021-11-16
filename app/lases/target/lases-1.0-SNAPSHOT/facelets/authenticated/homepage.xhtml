@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:pg="http://xmlns.jcp.org/jsf/composite/pagination"
+      xmlns:col="http://xmlns.jcp.org/jsf/composite/sortsearchcolumn"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>LasEs - Homepage</title>
+</h:head>
+
+<h:body>
+    <div class="list-container">
+        <div class="list-form">
+            <div class="list-header">
+                <h:commandLink value="" id="cl-yourSubmissions"  rendered="true"/>
+                <h:commandLink value="" id="cl-yourReviews"  rendered="true"/>
+                <h:commandLink value="" id="cl-editorialOverview"  rendered="true"/>
+            </div>
+
+            <div class="list-body">
+                <h:form>
+                    <pg:pagination paginator="#{homepageBacking.submissionPagination}">
+                        <h:column>
+                            <f:facet name="header">
+                                <col:sortsearchcolumn paginator="#{homepageBacking.submissionPagination}" columnIdent="paper-title" columnNo="0" columnNamei18n="Title"/>
+                            </f:facet>
+                            <h:outputText value="#{var.forumName}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <col:sortsearchcolumn columnNamei18n="Date" paginator="#{homepageBacking.submissionPagination}" columnIdent="submit-date" columnNo="2"/>
+                                <h:selectOneMenu value="Alle">
+                                    <f:selectItem itemValue="Future" itemLabel="Future"/>
+                                    <f:selectItem itemValue="Past" itemLabel="Past"/>
+                                    <f:selectItem itemValue="All" itemLabel="All"/>
+                                </h:selectOneMenu>
+                            </f:facet>
+                            <h:outputText value=""/>
+                        </h:column>
+                    </pg:pagination>
+                </h:form>
+            </div>
+        </div>
+    </div>
+</h:body>
+
+</html>
