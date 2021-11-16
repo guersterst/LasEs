@@ -18,25 +18,29 @@
 
 Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren wir nach dem \emph{kebab-case} Prinzip. Um den genauen Typ in die ID mit aufzunehmen, wird das entsprechende Suffix angehängt.
 
-\todo{Suffix: graphicImage = gIm}
+\todo{Suffix:}
+ graphicImage = gIm link =lnk inputText =itext commandButton = cbtn
 
 \subsection{Templates}
 
 \begin{samepage}
+	\todo{Serachfield needs view param?}
 \textbf{navigation.xhtml} \phantomsection \label{flt:navbar} ist die Kopfzeile der Webanwendung. Diese bietet die Suchfunktion, Links zu verschiedenen Listen und dem Profil an.
 \nopagebreak
 
 \todo{Absprechen mit Sebastian und BB nicht vollstäandig}
 \ftable{
-	\fentry{logo-gimg}{<h:graphicImage>}{Logo der Applikation.}{value="#{}"}{/}
+	\fentry{logo-gimg}{<h:graphicImage>}{Logo der Applikation.}{value="#{}"}{/}{/}
 	
-	\fentry{direct-to-home-lnk}{<h:link>}{Weiterleitung zur Homepage.}{outcome="/authenticated/homepage" \newline title="#{tooltip.toHome}"}{/}
+	\fentry{direct-to-home-lnk}{<h:link>}{Weiterleitung zur Homepage.}{outcome="/authenticated/homepage" \newline title="#{tooltip.toHome}"}{/}{/}
 	
-	\fentry{search-Field-itxt}{<h:inputText>}{Suchleiste}{Alle}
+	\fentry{search-frm}{<h:form>}{Formular zur Suche.}{/}{/}{/}
 	
-	\fentry{search}{commandButton}{Suche ausführen.}{Alle}
+	\fentry{search-Field-itxt}{<h:inputText>}{Suchleiste}{value="#{navigationBacking.resultListParameters.globalSearchWord}"}{/}{/}
 	
-	\fentry{userListLink}{link}{Link zur Übersichtsseite aller Nutzer}{E}
+	\fentry{search-cbtn}{<h:commandButton>}{Suche ausführen.}{action="#{navigationBacking.search}"}{/}{/}
+	
+	\fentry{user-list-lnk}{<h:link>}{Link zur Übersichtsseite aller Nutzer}{outcome="/editor/userList}{render=""}
 	
 	\fentry{forumListLink}{link}{Link zur Übersichtsseite alle Journale und Konferenzen}{Alle}
 	
