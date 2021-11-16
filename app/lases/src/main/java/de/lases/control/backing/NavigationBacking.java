@@ -29,7 +29,7 @@ public class NavigationBacking {
     private ResultListParameters resultListParameters;
 
     /**
-     * Log the user out of the system and return the welcome page.
+     * Log the user out of the system and got to the welcome page.
      *
      * @return Show the welcome page.
      */
@@ -38,7 +38,7 @@ public class NavigationBacking {
     }
 
     /**
-     * Submit the entered search word and return the result list page.
+     * Submit the entered search word and go to the result list page.
      *
      * @return Show the result list page.
      */
