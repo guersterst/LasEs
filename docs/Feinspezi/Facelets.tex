@@ -28,11 +28,11 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 \todo{Absprechen mit Sebastian und BB nicht vollstäandig}
 \ftable{
-	\fentry{logo-gIm}{<h:graphicImage>}{Logo der Applikation.}{value="#{}"}{/}
+	\fentry{logo-gimg}{<h:graphicImage>}{Logo der Applikation.}{value="#{}"}{/}
 	
-	\fentry{direct-to-home}{h:link}{Weiterleitung zur Homepage.}{outcome="/authenticated/homepage"}{}
+	\fentry{direct-to-home-lnk}{<h:link>}{Weiterleitung zur Homepage.}{outcome="/authenticated/homepage" \newline title="#{tooltip.toHome}"}{/}
 	
-	\fentry{searchField}{inputText}{Suchleiste}{Alle}
+	\fentry{search-Field-itxt}{<h:inputText>}{Suchleiste}{Alle}
 	
 	\fentry{search}{commandButton}{Suche ausführen.}{Alle}
 	
