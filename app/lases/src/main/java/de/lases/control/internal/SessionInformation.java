@@ -15,4 +15,28 @@ public class SessionInformation implements Serializable {
 
     public void invalidateSession() {
     }
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+
+    public List<Privilege> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Privilege> roles) {
+        this.roles = roles;
+    }
+
+    public Locale getLocale() {
+        return locale;
+    }
+
+    public void setLocale(Locale locale) {
+        this.locale = locale;
+    }
 }
