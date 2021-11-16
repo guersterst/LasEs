@@ -63,4 +63,13 @@ public class NavigationBacking {
             ResultListParameters resultListParameters) {
         this.resultListParameters = resultListParameters;
     }
+
+    /**
+     * Get session information.
+     *
+     * @return The session information.
+     */
+    public SessionInformation getSessionInformation() {
+        return sessionInformation;
+    }
 }
