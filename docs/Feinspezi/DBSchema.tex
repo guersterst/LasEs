@@ -105,13 +105,12 @@ CREATE TABLE science_field(
 	name VARCHAR PRIMARY KEY NOT NULL
 );
 \end{lstlisting}
-\todo{Wie heißt das Enum in Java?}
 \begin{lstlisting}[caption={DDL von Einreichungen}]
 CREATE TYPE submission_state AS ENUM (
 	'SUBMITTED',
 	'REVISION_REQUIRED',
-	'ACCEPTED',
 	'REJECTED'
+	'ACCEPTED',
 );
 
 CREATE TABLE submission (
@@ -218,10 +217,9 @@ CREATE TABLE member_of(
 );
 \end{lstlisting}
 
-\todo{Wie heißt der bims in JAva?}
 \begin{lstlisting}[caption={DDL der begutachtenden Gutachter}]
 CREATE TYPE review_task_state AS ENUM (
-	'NO_DECISION',
+	'PENDING',
 	'ACCEPTED',
 	'REJECTED'
 );
