@@ -26,10 +26,11 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \textbf{navigation.xhtml} \phantomsection \label{flt:navbar} ist die Kopfzeile der Webanwendung. Diese bietet die Suchfunktion, Links zu verschiedenen Listen und dem Profil an.
 \nopagebreak
 
+\todo{Absprechen mit Sebastian und BB nicht vollstäandig}
 \ftable{
-	\fentry{logo-gIm}{<h:graphicImage>}{Logo der Applikation.}{value="#{Alle}}
+	\fentry{logo-gIm}{<h:graphicImage>}{Logo der Applikation.}{value="#{}"}{/}
 	
-	\fentry{directToHome}{link}{Weiterleitung zur Homepage.}{Alle}
+	\fentry{direct-to-home}{h:link}{Weiterleitung zur Homepage.}{outcome="/authenticated/homepage"}{}
 	
 	\fentry{searchField}{inputText}{Suchleiste}{Alle}
 	
