@@ -44,5 +44,10 @@ public class User {
 
     private boolean isNotRegistered;
 
+    private boolean isEditor() { return false; }
+
+    private boolean isReviewer() { return false; }
+
+    private boolean isAdmin() { return false; }
 
 }
