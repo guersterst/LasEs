@@ -25,6 +25,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 \begin{samepage}
 	\todo{Serachfield needs view param?}
+	\todo{Sebastians Rollenprüfung}
 \textbf{navigation.xhtml} \phantomsection \label{flt:navbar} ist die Kopfzeile der Webanwendung. Diese bietet die Suchfunktion, Links zu verschiedenen Listen und dem Profil an.
 \nopagebreak
 
@@ -40,9 +41,9 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	
 	\fentry{search-cbtn}{<h:commandButton>}{Suche ausführen.}{action="#{navigationBacking.search}"}{/}{/}
 	
-	\fentry{user-list-lnk}{<h:link>}{Link zur Übersichtsseite aller Nutzer}{outcome="/editor/userList}{render=""}
+	\fentry{user-list-lnk}{<h:link>}{Link zur Übersichtsseite aller Nutzer}{outcome="/editor/userList}{render="#{}"}{/}
 	
-	\fentry{forumListLink}{link}{Link zur Übersichtsseite alle Journale und Konferenzen}{Alle}
+	\fentry{forum-list-lnk}{<h:link>}{Link zur Übersichtsseite alle Journale und Konferenzen}{outcome="/authenticated/scientificForumList"}{/}
 	
 	\fentry{logoutButton}{commandButton}{Loggt den Nutzer aus dem System aus und leitet zur Loginseite weiter}{Alle}
 	
