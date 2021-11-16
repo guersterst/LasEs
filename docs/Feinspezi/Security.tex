@@ -1,0 +1,15 @@
+\localauthor{Thomas Kirz}
+
+Im Folgenden wird erklärt, wie verschiedene Sicherheitsangriffe verhindert und Sicherheitsrisiken ausgeschlossen werden.
+
+\subsection{Cross Site Scripting (XSS)}
+Da JSF components für die HTML-Ausgabe verwendet werden, bereinigt JSF alle Nutzereingaben.
+Zum Beispiel werden also \code{'<'} und \code{'>'} durch \code{'\&lt;'} und \code{'\&gt;'} ersetzt und Nutzereingaben können keine HTML-Tags in der Ausgabe erstellen.
+Dadurch wird XSS bzw.\ HTML-Injection unmöglich.
+Auch JavaScript kann so nicht injected werden, da sich JavaScript-Code in einem HTML-Tag (\code{<script>}) befinden müsste.
+
+\subsection{SQL-Injection}
+Für SQL-Code werden \code{PreparedStatements} benutzt, damit die SQL-Statements ohne von Nutzereingaben abhängige Parameter vorkompiliert werden.
+Die Parameter werden dann an die Datenbank gesendet und von ihr getrennt vom Code als Daten betrachtet.
+Die Ausführung des Statements kann also nicht durch die Nutzereingaben modifiziert werden und eine SQL-Injection wird verhindert
+
