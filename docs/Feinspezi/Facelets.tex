@@ -1,0 +1,49 @@
+%% Macros
+\newcommand{\ftable}[1]{\begin{sidewaystable}
+\begin{tabular}[H]{ m{2cm} m{3cm} m{6cm} m{2.5cm} m{2cm} m{2cm} }
+    \toprule
+    \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Binding} & \textbf{Constraints} & \textbf{Validator \newline Converter} \\
+    \midrule
+    #1
+    \bottomrule
+\end{tabular}
+\end{sidewaystable}
+}
+
+\newcommand{\fentry}[6]{#1 & #2 & #3 & #4 & #5 & #6\\}
+
+\localauthor{Stefanie Gürster}
+
+\subsection{Namenskonvention}
+
+Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren wir nach dem \emph{kebab-case} Prinzip. Um den genauen Typ in die ID mit aufzunehmen, wird das entsprechende Suffix angehängt.
+
+\todo{Suffix: graphicImage = gIm}
+
+\subsection{Templates}
+
+\begin{samepage}
+\textbf{navigation.xhtml} \phantomsection \label{flt:navbar} ist die Kopfzeile der Webanwendung. Diese bietet die Suchfunktion, Links zu verschiedenen Listen und dem Profil an.
+\nopagebreak
+
+\ftable{
+	\fentry{logo-gIm}{<h:graphicImage>}{Logo der Applikation.}{value="#{Alle}}
+	
+	\fentry{directToHome}{link}{Weiterleitung zur Homepage.}{Alle}
+	
+	\fentry{searchField}{inputText}{Suchleiste}{Alle}
+	
+	\fentry{search}{commandButton}{Suche ausführen.}{Alle}
+	
+	\fentry{userListLink}{link}{Link zur Übersichtsseite aller Nutzer}{E}
+	
+	\fentry{forumListLink}{link}{Link zur Übersichtsseite alle Journale und Konferenzen}{Alle}
+	
+	\fentry{logoutButton}{commandButton}{Loggt den Nutzer aus dem System aus und leitet zur Loginseite weiter}{Alle}
+	
+	\fentry{profileLink}{link}{Link zur Profilübersicht}{N}
+
+
+\end{samepage}
+
+\subsection{Seiten}
