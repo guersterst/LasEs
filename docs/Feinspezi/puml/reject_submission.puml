@@ -1,0 +1,240 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+'!theme aws-orange
+skinparam sequenceMessageAlign center
+skinparam BoxPadding 10
+'skinparam LifelineStrategy nosolid
+'autonumber
+'autoactivate on
+'hide footbox
+
+actor Editor as editor
+
+box "control.backing"
+    participant ":SubmissionBacking" as sb << @Named >>
+    participant ":ErrorPageBacking" as epb << @Named >>
+end box
+box "control.internal"
+    participant "si:SessionInformation" as si << @SessionScoped >>
+    participant ":UncheckedExceptionHandler" as eh << @SessionScoped >>
+end box
+'box "???"
+'    participant ":ResourceBundle" as rscBundle
+'end box
+box "business.service"
+    participant "ssvc:SubmissionService" as ssvc << @ApplicationScoped >>
+end box
+box "business.util"
+    participant "eu:EmailUtil" as eu
+end box
+box "global.transfer"
+    participant "msg:UIMessage" as msg
+    participant "sub:Submission" as sub << @Named >>
+    participant "user:User" as usr
+'    participant "paper:Paper" as paper
+    participant "submitter:User" as submitter
+end box
+box persistence
+    participant "t1:Transaction" as t1
+    participant "t2:Transaction" as t2
+    participant ":SubmissionRepository" as sr
+    participant "cp:ConnectionPool" as cp
+end box
+
+create sb
+editor -> sb
+note left
+    ruft die
+    Submission-
+    Seite auf
+end note
+editor -> sb : init()
+activate sb
+    sb -> si ++ : getUserId()
+    return userId
+    sb -> usr ** : User()
+    sb -> usr ++ : setId(userId)
+    return
+    sb -> sub ** : Submission()
+return
+
+note right of editor
+    int subId wird
+    gelesen von
+    viewParams
+    (URL-Parameter)
+end note
+editor -> sub ++ : setId(subId)
+return
+
+editor -> sb ++ : load() //[via viewAction]//
+    sb -> ssvc ++ : canView(sub, user)
+    return true
+
+    sb -> ssvc : getSubmission(sub)
+    activate ssvc
+        ssvc -> t1 ** : Transaction()
+        activate t1
+            t1 -> cp : __getInstance()__
+            activate cp
+            return cp
+            t1 -> cp : getConnection()
+            activate cp
+            return
+        return
+        ssvc -> sr : __get(sub, t1)__
+        activate sr
+            sr -> sub : getId()
+            activate sub
+            return
+            sr -> t1 ++ : getConnection()
+            return
+            sr -> sub : setTitle()
+            activate sub
+            return
+            sr -> sub : setPapers()
+            activate sub
+            return
+            sr -> submitter ** : User()
+            sr -> sub : setAuthor(submitter)
+            activate sub
+            return
+            ......sub befüllen......
+        return
+        note right of ssvc
+            analoge DB-Zugriffe über die Repos:
+            UserRepository.__get(sub.getAuthor(),t1)__
+            UserRepository.__getList(sub,t1)__
+            PaperRepository.__getList(sub,t1)__
+        end note
+        ssvc -> sub ++ : setAuthor()
+                return
+                ssvc -> sub ++ : setCoAuthors()
+                return
+                ssvc -> sub ++ : setPapers()
+                return
+        ssvc -> t1 ++ : commit()
+            t1 -> cp ++ : releaseConnection()
+            return
+        return
+'        destroy t1
+    return sub
+return "submission"
+
+editor -> sub ++ : getTitle()
+return
+editor -> sub ++ : getPapers()
+return
+editor -> sub ++ : getCoAuthors()
+return
+editor -> sub ++ : getAuthor()
+return
+
+
+editor -> sb : setState(REJECTED)
+note left
+    klickt auf "Reject"
+end note
+activate sb
+    sb -> ssvc : setState(sub,REJECTED)
+    activate ssvc
+        ssvc -> sub ++ : setSubmissionState(REJECTED)
+        return
+        ssvc -> sub : getAuthor()
+        activate sub
+        return submitter
+        ssvc -> sub : getCoAuthors()
+        activate sub
+        return authors
+        ssvc -> submitter : getEmailAddress()
+        activate submitter
+        return recipient
+        note right of ssvc
+            cc = Liste der E-Mail-
+            Addressen aller coAuthor
+        end note
+'        subService -> rscBundle : getRejectionEmailSubject()
+'        activate rscBundle
+'        return subject
+'        subService -> rscBundle : getRejectionEmailBody()
+'        activate rscBundle
+'        return body
+
+        ssvc -> eu : generateMailto(\neditor.getEmailAddress(),\nrecipient,cc,subject,body)
+        activate eu
+        return mailtoLink
+
+        ssvc -> t2 ** : Transaction()
+        activate t2
+            t2 -> cp : __getInstance()__
+            activate cp
+            return cp
+            t2 -> cp : getConnection()
+            activate cp
+            return
+        return
+
+        ssvc -> sr : __changeSubmission(sub, t2)__
+        activate sr
+            sr -> sub ++ : getId()
+            return
+            sr -> sub ++ : getTitle()
+            return
+'            sr -> sub ++ : getPapers()
+'            return
+            ......sub auslesen......
+            sr -> t2 ++ : getConnection()
+            return
+
+        note right of sr
+        == ↯ ==
+        Timeout bei DB-Zugriff
+        ====
+        end note
+
+== Anfang Fehlerbehandlung ==
+        return <font color=red><b>DataSourceNotFoundException e</b></font> (unchecked)
+
+        ssvc -> t2 ++ : close()
+        return
+
+    return <font color=red><b>DataSourceNotFoundException e
+return <font color=red><b>DataSourceNotFoundException e
+
+editor -> eh ++ : handle()
+    note right of eh
+    get <font color=red><b>error</b></font>
+    <font color=red><b>message</b></font> from
+    resource bundle
+    end note
+
+    eh -> msg ** : UIMessage(e)
+    eh -> msg ++ : setErrorMessage()
+    return
+    eh -> msg ++ : setStacktrace()
+    return
+
+    eh -> epb **
+    eh -> epb ++ : setUIMessage(msg)
+    return
+
+    note right of eh
+    redirect to
+    errorPage.xhtml
+    end note
+
+return "errorPage"
+
+editor -> epb ++ : getUIMessage()
+return msg
+editor -> msg ++ : getMessage()
+return "<font color=red>Error: ...</font>"
+
+'note left
+'Die Ablehnung war
+'nicht erfolgreich
+'end note
+
+
+@enduml

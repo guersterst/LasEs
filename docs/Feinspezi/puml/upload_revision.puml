@@ -1,0 +1,230 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+'!theme aws-orange
+skinparam sequenceMessageAlign center
+skinparam BoxPadding 10
+'skinparam LifelineStrategy nosolid
+'autonumber
+'autoactivate on
+'hide footbox
+
+actor User as user
+
+box "control.backing"
+    participant ":SubmissionBacking" as sb << @Named >>
+end box
+'box "???"
+'    participant ":ResourceBundle" as rscBundle
+'end box
+box "control.internal"
+    participant "si:SessionInformation" as si << @SessionScoped >>
+end box
+box "control.validation"
+    participant ":PDFValidator" as pdfv << @FacesValidator >>
+end box
+box "business.service"
+    participant "rsvc:RevisionService" as rsvc << @ApplicationScoped >>
+    participant "ssvc:SubmissionService" as ssvc << @ApplicationScoped >>
+end box
+box "global.transfer"
+    participant "sub:Submission" as sub << @Named >>
+    participant "user:User" as usr
+    participant "paper:Paper" as paper
+end box
+box persistence
+    participant "t1:Transaction" as t1
+    participant "t2:Transaction" as t2
+    participant ":SubmissionRepository" as sr
+    participant ":PaperRepository" as pr
+    participant "cp:ConnectionPool" as cp
+end box
+
+create sb
+user -> sb
+note left
+    ruft die
+    Submission-
+    Seite auf
+end note
+user -> sb : init()
+activate sb
+    sb -> si ++ : getUserId()
+    return userId
+    sb -> usr ** : User()
+    sb -> usr ++ : setId(userId)
+    return
+    sb -> sub ** : Submission()
+return
+
+note right of user
+    int subId wird
+    gelesen von
+    requestParams
+    (URL-Parameter)
+end note
+user -> sub ++ : setId(subId)
+return
+
+
+user -> sb ++ : load() //[via viewAction]//
+    sb -> ssvc ++ : canView(sub, usr)
+    return true
+
+    sb -> ssvc : getSubmission(sub)
+    activate ssvc
+        ssvc -> t1 ** : Transaction()
+        activate t1
+            t1 -> cp : __getInstance()__
+            activate cp
+            return cp
+            t1 -> cp : getConnection()
+            activate cp
+            return
+        return
+        ssvc -> sr : __get(sub, t1)__
+        activate sr
+            sr -> sub : getId()
+            activate sub
+            return id
+            sr -> t1 ++ : getConnection()
+            return
+            sr -> sub : setTitle()
+            activate sub
+            return
+            sr -> sub : setPapers()
+            activate sub
+            return
+            ......sub befüllen......
+        return
+        note right of ssvc
+            analoge DB-Zugriffe über die Repos:
+            UserRepository.__get(sub.getAuthor(),t1)__
+            UserRepository.__getList(sub,t1)__
+            PaperRepository.__getList(sub,t1)__
+        end note
+        ssvc -> sub ++ : setAuthor()
+        return
+        ssvc -> sub ++ : setCoAuthors()
+        return
+        ssvc -> sub ++ : setPapers()
+        return
+        ssvc -> t1 ++ : commit()
+            t1 -> cp ++ : releaseConnection()
+            return
+        return
+'        destroy t1
+        ......
+    return sub
+return "submission"
+
+user -> sub ++ : getTitle()
+return
+user -> sub ++ : getPapers()
+return
+user -> sub ++ : getCoAuthors()
+return
+user -> sub ++ : getAuthor()
+return
+
+user -> pdfv ++ : validate()
+note left
+    sucht die PDF-Datei mit
+    dem file picker aus und
+    klickt auf "Submit Revision"
+end note
+return
+user -> sb ++ : setUploadedRevisionPDF()
+return
+
+user -> sb : releaseRevision()
+activate sb
+    sb -> rsvc : uploadFile(sub, revisionPdf)
+    activate rsvc
+        rsvc -> t2 ** : Transaction()
+        activate t2
+            t2 -> cp : __getInstance()__
+            activate cp
+            return cp
+            t2 -> cp : getConnection()
+            activate cp
+            return
+        return
+        rsvc -> sr : __get(sub,t2)__
+        activate sr
+            sr -> sub : getId()
+            activate sub
+            return id
+            sr -> t2 ++ : getConnection()
+            return
+            sr -> sub : setTitle()
+            activate sub
+            return
+            sr -> sub : setPapers()
+            activate sub
+            return
+            ...sub befüllen...
+        return
+        rsvc -> pr ++ : __getPapers(sub, t2)__
+            pr -> sub ++ : getId()
+            return id
+            pr -> t1 ++ : getConnection()
+            return
+        return papers
+        rsvc -> paper ** : Paper()
+        rsvc -> paper : setSubmissionId(subId)
+        activate paper
+        return
+        rsvc -> paper : setVersion(papers.size())
+        activate paper
+        return paper
+        rsvc -> sub : addPaper(paper)
+        activate sub
+        return
+        rsvc -> sub ++ : setSubmissionState(SUBMITTED)
+        return
+
+        rsvc -> pr ++ : __addPaper(paper, t2)__
+            pr -> paper ++ : getId()
+            return
+            pr -> paper ++ : getUploadTime()
+            return
+            pr -> paper ++ : getVisible()
+            return
+            pr -> t1 ++ : getConnection()
+            return
+        return
+        note right of rsvc
+            analog: PaperRepository.__setPdf(paper,revisionPdf)__
+        end note
+
+        rsvc -> sr : __changeSubmission(sub, t2)__
+        activate sr
+            sr -> sub ++ : getId()
+            return
+            sr -> sub ++ : getTitle()
+            return
+            sr -> sub ++ : getPapers()
+            return
+            ......sub auslesen......
+            sr -> t1 ++ : getConnection()
+            return
+        return
+
+        rsvc -> t2 ++ : commit()
+            t2 -> cp ++ : releaseConnection()
+            return
+        return
+'        destroy t2
+    return
+
+'    subBacking -> rscBundle : getAddRevision\\\nConfirmationMsg()
+'    activate rscBundle
+'    return msg
+
+return submission.xhtml\nwith facesMessage
+
+
+
+
+@enduml
