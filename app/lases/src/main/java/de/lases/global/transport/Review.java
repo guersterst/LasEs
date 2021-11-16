@@ -8,7 +8,13 @@ public class Review {
      * PDF muast soiba lod'n.
      */
 
+    // TODO @Sebastian: Das hier alles zu einer id aendern...
+    // TODO @Sebastian: Submission hier benoetigt? ... ich muss auf alle fälle
+    // wissen, zu welcher submission ich zurueck muss bei der newSubmission
+    // Seite
     private Paper paper;
+
+    private Submission submission;
 
     private User reviewer;
 
