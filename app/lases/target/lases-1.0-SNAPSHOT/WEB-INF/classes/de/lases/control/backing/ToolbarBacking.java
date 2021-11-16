@@ -6,6 +6,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Named;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
  */
 @RequestScoped
 @Named
-public class ToolbarBacking {
+public class ToolbarBacking implements Serializable {
 
     private String reviewerEmailInput; // y
 

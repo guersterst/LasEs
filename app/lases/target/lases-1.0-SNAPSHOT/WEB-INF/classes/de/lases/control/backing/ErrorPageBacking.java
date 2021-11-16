@@ -1,35 +1,22 @@
 package de.lases.control.backing;
 
-import de.lases.global.transport.ErrorMessage;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Named;
 
-/**
- * Backing bean for the error page.
- */
+import java.io.Serializable;
+
 @RequestScoped
 @Named
-public class ErrorPageBacking {
+public class ErrorPageBacking implements Serializable {
 
-    private ErrorMessage errorMessage;
+    private String errorMessage;
+
+    private String stackTrace;
 
     @PostConstruct
     public void init() {
     }
 
-    public ErrorMessage getErrorMessage() {
-        return errorMessage;
-    }
 
-    /**
-     * Set the full error message, including a stacktrace for the developer
-     * and an error message for the use.
-     *
-     * @param errorMessage Stacktrace and error message for the user
-     *                     encapsulated in one object.
-     */
-    public void setErrorMessage(ErrorMessage errorMessage) {
-        this.errorMessage = errorMessage;
-    }
 }
