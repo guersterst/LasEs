@@ -179,14 +179,29 @@ public class HomepageBacking implements Serializable {
         this.stateFilterSelectReview = stateFilterSelectReview;
     }
 
+    /**
+     * Get the pagination for the submissions edited by the user.
+     *
+     * @return The pagination for the submission edited by the user.
+     */
     public Pagination<Submission> getEditedPagination() {
         return editedPagination;
     }
 
+    /**
+     * Get the pagination for the submissions submitted by the user.
+     *
+     * @return The pagination for the submissions submitted by the user.
+     */
     public Pagination<Submission> getSubmissionPagination() {
         return submissionPagination;
     }
 
+    /**
+     * Get the pagination for the submissions reviewed by the user.
+     *
+     * @return The pagination for the submissions reviewed by the user.
+     */
     public Pagination<Submission> getReviewedPagination() {
         return reviewedPagination;
     }
