@@ -31,24 +31,8 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 \todo{Absprechen mit Sebastian und BB nicht vollstäandig}
 \ftable{
-	\fentry{logo-gimg}{<h:graphicImage>}{Logo der Applikation.}{value="#{}"}{/}{/}
+	\fentry{logo-gimg}{<h:graphicImage>}{Logo der Applikation.}{value="\{\}"}{/}{/}
 	
-	\fentry{direct-to-home-lnk}{<h:link>}{Weiterleitung zur Homepage.}{outcome="/authenticated/homepage" \newline title="#{tooltip.toHome}"}{/}{/}
-	
-	\fentry{search-frm}{<h:form>}{Formular zur Suche.}{/}{/}{/}
-	
-	\fentry{search-Field-itxt}{<h:inputText>}{Suchleiste}{value="#{navigationBacking.resultListParameters.globalSearchWord}"}{/}{/}
-	
-	\fentry{search-cbtn}{<h:commandButton>}{Suche ausführen.}{action="#{navigationBacking.search}"}{/}{/}
-	
-	\fentry{user-list-lnk}{<h:link>}{Link zur Übersichtsseite aller Nutzer}{outcome="/editor/userList}{render="#{navigationBacking.sessionInformation.user.editor}"}{/}
-	
-	\fentry{forum-list-lnk}{<h:link>}{Link zur Übersichtsseite alle Journale und Konferenzen}{outcome="/authenticated/scientificForumList"}{/}{/}
-	
-	\fentry{logout-cbtn}{<h:commandButton>}{Loggt den Nutzer aus dem System aus und leitet zur Loginseite weiter.}{action="{navigationBacking.logout}"}{/}{/}
-	
-	\fentry{profile-lnk}{<h:link>}{Link zur Profilübersicht}{outcome="/authenticated/profile"}{N}
-
 
 \end{samepage}
 
