@@ -1,16 +1,16 @@
 %% Macros
 \newcommand{\ftable}[1]{\begin{sidewaystable}
-\begin{tabular}[H]{ m{2cm} m{3cm} m{6cm} m{2.5cm} m{2cm} m{2cm} }
+\begin{tabular}[H]{ |m{2cm}| m{3cm}| m{4cm}| m{6cm} |m{4cm}| m{2cm}| }
     \toprule
     \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Binding} & \textbf{Constraints} & \textbf{Validator \newline Converter} \\
     \midrule
     #1
-    \bottomrule
+    %\bottomrule
 \end{tabular}
 \end{sidewaystable}
 }
 
-\newcommand{\fentry}[6]{#1 & #2 & #3 & #4 & #5 & #6\\}
+\newcommand{\fentry}[6]{#1 & #2 & #3 & #4 & #5 & #6\\\hline}
 
 \localauthor{Stefanie Gürster}
 
@@ -31,9 +31,39 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 \todo{Absprechen mit Sebastian und BB nicht vollstäandig}
 \ftable{
-	\fentry{logo-gimg}{<h:graphicImage>}{Logo der Applikation.}{value="\{\}"}{/}{/}
+	\fentry{logo-gimg}{<h:graphicImage>}{Logo der Applikation.}{value="\#{}"}{/}{/}
 	
+	\fentry{direct-to-home-lnk}{<h:link>}{Weiterleitung zur Homepage.}{outcome="/authenticated/homepage" \newline title="\#{tooltip.toHome}"}{/}{/}
+	
+	\fentry{search-frm}{<h:form>}{Formular zur Suche.}{/}{/}{/}
+	
+	\fentry{search-Field-itxt}{<h:inputText>}{Suchleiste}{value="\#{navigationBacking.resultListParameters.globalSearchWord}"}{/}{/}
+	
+	\fentry{search-cbtn}{<h:commandButton>}{Suche ausführen.}{action="\#{navigationBacking.search}"}{/}{/}
+	
+	\fentry{user-list-lnk}{<h:link>}{Link zur Übersichtsseite aller Nutzer}{outcome="/editor/userList}{render="\#{navigationBacking.sessionInformation.user.editor}"}{/}
+	
+	\fentry{forum-list-lnk}{<h:link>}{Link zur Übersichtsseite alle Journale und Konferenzen}{outcome="/authenticated/scientificForumList"}{/}{/}
+	
+	\fentry{logout-cbtn}{<h:commandButton>}{Loggt den Nutzer aus dem System aus und leitet zur Loginseite weiter.}{action="\#{navigationBacking.logout}"}{/}{/}
+	
+	\fentry{profile-lnk}{<h:link>}{Link zur Profilübersicht}{outcome="/authenticated/profile"}{/}{/}
+	}
+	
+\end{samepage}
 
+\todo{wo css einbidnen?}
+
+\begin{samepage}
+	\textbf{main.xhtml} ist das Template, welches den Inhalt der Seiten zwischen Kopf- und Fußzeile einbettet.
+	
+	\ftable{
+		\fentry{/}{<ui:include>}{\hyperref[flt:navbar]{Kopfzeile}}{src="navigation.xhtml"}{/}{/}
+		
+		\fentry{/}{<ui:insert>}{\hyperref[flt:pages]{Seiteninhalt}}{name="main-content"}{/}{/}
+		
+		\fentry{/}{<ui:include>}{\hyperref[flt:footer]{Fußzeile}}{src="footer.xhtml"}{/}{/}
+	}
 \end{samepage}
 
 \subsection{Seiten}
