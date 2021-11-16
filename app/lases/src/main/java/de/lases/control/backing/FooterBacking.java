@@ -19,6 +19,11 @@ public class FooterBacking {
         return sessionInformation;
     }
 
+    /**
+     * Set the bean about the session information.
+     *
+     * @param sessionInformation
+     */
     public void setSessionInformation(SessionInformation sessionInformation) {
         this.sessionInformation = sessionInformation;
     }
