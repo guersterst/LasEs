@@ -20,9 +20,6 @@ public class NavigationBacking {
 
     //TODO:Bild des logos braucht man für Navigationsleiste.
 
-    private String searchString; // y
-
-
     @Inject
     private LoginService loginService;
 
