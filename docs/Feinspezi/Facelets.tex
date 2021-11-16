@@ -19,7 +19,7 @@
 Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren wir nach dem \emph{kebab-case} Prinzip. Um den genauen Typ in die ID mit aufzunehmen, wird das entsprechende Suffix angehängt.
 
 \todo{Suffix:}
- graphicImage = gIm link =lnk inputText =itext commandButton = cbtn
+ graphicImage = gIm link =lnk inputText =itext commandButton = cbtn messages = msgs
 
 \subsection{Templates}
 
@@ -59,6 +59,8 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	
 	\ftable{
 		\fentry{/}{<ui:include>}{\hyperref[flt:navbar]{Kopfzeile}}{src="navigation.xhtml"}{/}{/}
+		
+		\fentry{global-msgs}{<h:messages>}{Anzeigen globaler Nachrichten.}{/}{/}{/}		
 		
 		\fentry{/}{<ui:insert>}{\hyperref[flt:pages]{Seiteninhalt}}{name="main-content"}{/}{/}
 		
