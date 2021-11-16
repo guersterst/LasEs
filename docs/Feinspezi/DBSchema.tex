@@ -10,14 +10,103 @@ Das ER-Diagramm aus dem Entwurf wird hier in \emph{Data Definition Language} üb
 
 Abweichungen vom ISO SQL Standard sind Enumerationen, \texttt{TIMESTAMP} Zeitpunkte, \texttt{BYTEA} als binärer Datentyp und einzelne Unterschiede im Syntax.
 
+\subsubsection{Normalform}
+
+Das Datenbankschema befindet sich in \emph{Boyce-Codd-Normalform} (BCNF).
+
+Durch die Verwendung von Surrogatschlüsseln in den Entities sind die vorkommenden funktionalen Abhängigkeiten offensichtlich. Für all diese gilt, dass die Surrogatschlüssel Superschlüssel der Relation sind. Die \emph{UNIQUE}s bilden ebenfalls funktionale Abhängigkeiten und sind auch Superschlüssel der jeweiligen Relation.
+
 \subsubsection{Namenskonventionen}
 
-Die Tabellennamen sind immer im Singular. Also beispielsweise \texttt{submission} anstatt \texttt{submissions}.
+Die Tabellennamen sind immer im Englischen Singular. Also beispielsweise \texttt{submission} anstatt \texttt{submissions}.
 Alle Bezeichner in SQL werden in \texttt{snake\_case} geschrieben. Damit ist eine eindeutige optische Trennung zu Java's \texttt{camelCase} möglich. Die Werte von Enumerationen werden in \texttt{UPPER\_CASE} geschrieben.
 
 \subsubsection{Relationship-Typen}
 
-\begin{lstlisting}[language=SQL, caption={DDL von Einreichungen},captionpos=below,frame=tb,numbers=left, tabsize=4]
+1 : n Relationships benötigen keine extra Tabellen in der Datenbank, da diese durch Referenz des Primärschlüssels der 1-Relation als Fremdschlüssel in der n-Relation abgespeichert werden können.
+
+n : m Relationships benötigen dahingegen eine eigene Relation in der die Schlüsselpaare abgespeichert werden.
+
+Abhängigkeiten, wie zum Beispiel Einreichungen, die zu einem Nutzer gehören, werden durch \texttt{ON DELETE CASCADE} modelliert. Wird der referenzierte Beziehungspartner (\emph{User}) gelöscht, so werden auch kaskadierend alle abhängigen weiteren Daten (\emph{Submissions}) automatisch gelöscht.
+
+\subsubsection{Vererbung}
+
+Durch \emph{IS-A} werden in ER-Diagrammen verschiedene Arten eines Typs definiert. Diese können dann in der \emph{DDL} unterschiedlich übersetzt werden.
+
+In unserem Fall wird die Rechtezuordnung der registrierten Nutzer durch jeweils eigene Entities \texttt{Administrator, Editor} und \texttt{Reviewer} anstatt einer Enumeration modelliert, da ein Nutzer mehrere Aufgaben in LasEs wahrnehmen kann.
+
+Die Unterscheidung zwischen Journalen und Konferenzen findet nur durch eine gesetzte oder \emph{NULL} Deadline statt, da sich beide funktional nicht weiter unterscheiden.
+
+\subsection{Entities}
+
+Hier werden die einzelnen Entities in der \emph{Data Definition Language} beschrieben. Durch die Verwendung von \emph{SERIAL} werden die Surrogatschlüssel der Relationen automatisch von PostgreSQL erstellt und die Primärschlüsseleigenschaft sichergestellt.\\
+
+\begin{lstlisting}[caption={DDL von Nutzern}]
+CREATE TABLE "user" (
+	id SERIAL PRIMARY KEY NOT NULL,
+	email_address VARCHAR UNIQUE NOT NULL,
+	firstname VARCHAR NOT NULL,
+	lastname VARCHAR NOT NULL,
+	title VARCHAR,
+	employer VARCHAR,
+	birthdate DATE,
+	avatar_thumbnail BYTEA,
+	is_registered BOOLEAN NOT NULL,
+	password_hash VARCHAR,
+	password_salt VARCHAR,
+
+	CONSTRAINT valid_name CHECK (length(firstname) >= 1 AND length(lastname) >= 1),
+	CONSTRAINT valid_birthdate CHECK (birthdate < CURRENT_DATE),
+	CONSTRAINT email_address_pattern CHECK (email_address LIKE '_%@_%._%')
+);
+
+CREATE TABLE reviewer(
+	id INTEGER PRIMARY KEY NOT NULL,
+	FOREIGN KEY (id) REFERENCES "user"(id) ON DELETE CASCADE
+);
+
+CREATE TABLE editor(
+	id INTEGER PRIMARY KEY NOT NULL,
+	FOREIGN KEY (id) REFERENCES "user"(id) ON DELETE CASCADE
+);
+
+CREATE TABLE administrator(
+	id INTEGER PRIMARY KEY NOT NULL,
+	FOREIGN KEY (id) REFERENCES "user"(id) ON DELETE CASCADE
+);
+\end{lstlisting}
+
+\begin{lstlisting}[caption={DDL von Verifizierung}]
+CREATE TABLE verification (
+	id INTEGER NOT NULL,
+	validation_random VARCHAR,
+	verified BOOLEAN,
+	timestamp_validation_started TIMESTAMP,
+	unvalidated_email_address VARCHAR,
+
+	PRIMARY KEY (id),
+	FOREIGN KEY (id) REFERENCES "user"(id)
+);
+\end{lstlisting}
+
+\begin{lstlisting}[caption={DDL von wissenschaftlichen Foren}]
+CREATE TABLE scientific_forum(
+	id SERIAL PRIMARY KEY NOT NULL,
+	name VARCHAR UNIQUE NOT NULL,
+	description VARCHAR,
+	url VARCHAR,
+	review_manual VARCHAR,
+	timestamp_deadline TIMESTAMP
+);
+\end{lstlisting}
+
+\begin{lstlisting}[caption={DDL von Fachgebieten}]
+CREATE TABLE science_field(
+	name VARCHAR PRIMARY KEY NOT NULL
+);
+\end{lstlisting}
+\todo{Wie heißt das Enum in Java?}
+\begin{lstlisting}[caption={DDL von Einreichungen}]
 CREATE TYPE submission_state AS ENUM (
 	'SUBMITTED',
 	'REVISION_REQUIRED',
@@ -26,15 +115,59 @@ CREATE TYPE submission_state AS ENUM (
 );
 
 CREATE TABLE submission (
-	id SERIAL PRIMARY KEY,
+	id SERIAL PRIMARY KEY NOT NULL,
 	title VARCHAR NOT NULL,
 	state submission_state NOT NULL,
 	timestamp_submission TIMESTAMP,
 	requires_revision BOOLEAN NOT NULL DEFAULT FALSE,
 	timestamp_deadline_revision TIMESTAMP,
 
-	author_id SERIAL REFERENCES user(id) NOT NULL,
-	editor_id SERIAL REFERENCES user(id) NOT NULL,
-	forum_id SERIAL REFERENCES scientificForum(id) NOT NULL
+	author_id INTEGER REFERENCES "user"(id) ON DELETE CASCADE,
+	editor_id INTEGER REFERENCES editor(id) ON DELETE SET NULL,
+	forum_id INTEGER REFERENCES scientific_forum(id) ON DELETE CASCADE
 );
 \end{lstlisting}
+
+\begin{lstlisting}[caption={DDL von Papers}]
+CREATE TABLE paper (
+	version INTEGER NOT NULL,
+	submission_id SERIAL NOT NULL,
+	timestamp_upload TIMESTAMP NOT NULL DEFAULT NOW(),
+	is_visible BOOLEAN NOT NULL,
+	pdf_file BYTEA NOT NULL,
+
+	PRIMARY KEY (submission_id, version),
+	FOREIGN KEY (submission_id) REFERENCES submission(id) ON DELETE CASCADE
+);
+\end{lstlisting}
+
+\begin{lstlisting}[caption={DDL von Gutachten}]
+CREATE TABLE review (
+	reviewer_id INTEGER REFERENCES reviewer(id) ON DELETE CASCADE,
+	version INTEGER NOT NULL,
+	submission_id INTEGER NOT NULL,
+
+	timestamp_upload TIMESTAMP NOT NULL DEFAULT NOW(),
+	is_visible BOOLEAN NOT NULL,
+	is_recommended BOOLEAN NOT NULL,
+	comment VARCHAR,
+	pdf_file BYTEA,
+
+	PRIMARY KEY (submission_id, version, reviewer_id),
+	FOREIGN KEY (submission_id, version)
+	REFERENCES paper(submission_id, version) ON DELETE CASCADE
+);
+\end{lstlisting}
+
+\begin{lstlisting}[caption={DDL von den Systemeinstellungen}]
+CREATE TABLE system(
+	id INTEGER PRIMARY KEY,
+	company_name VARCHAR,
+	welcome_heading VARCHAR,
+	welcome_description VARCHAR,
+	imprint VARCHAR,
+	logo_image BYTEA
+);
+\end{lstlisting}
+
+\subsection{Indizes}
