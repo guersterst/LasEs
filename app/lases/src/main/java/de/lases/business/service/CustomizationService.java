@@ -18,13 +18,17 @@ public class CustomizationService {
     public void setSystemSettings(Style style) {
     }
 
-    public void get() {
+    // TODO @Johannes: hier habe ich gemacht, dass das SystemSettings returned
+    public SystemSettings get() {
+        return null;
     }
 
     public void createDbSchema() {
     }
 
-    public void getConnectionState() {
+    // TODO @Johannes: returnd jetzt connectionState
+    public ConnectionState getConnectionState() {
+        return null;
     }
 
     public void setLogo() {

@@ -34,16 +34,16 @@ public class AdministrationBacking {
      * invalid field or saves the changes with a confirmation message if none
      * are invalid.
      *
-     * @return Redirect to this page again.
+     * @return Show this page again.
      */
     public String save() {
         return null;
     }
 
     /**
-     * Aborts all changes and redirects to the homepage.
+     * Aborts all changes and returns the homepage.
      *
-     * @return Redirect to the homepage.
+     * @return Show the homepage.
      */
     public String abort() {
         return null;
