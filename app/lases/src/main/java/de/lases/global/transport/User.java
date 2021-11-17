@@ -51,9 +51,15 @@ public class User {
 
     public boolean isEditor() { return false; }
 
+    public void setEditor(boolean isEditor) { }
+
     public boolean isReviewer() { return false; }
 
+    public void setReviewer(boolean reviewer) { }
+
     public boolean isAdmin() { return false; }
+
+    public void setAdmin() { }
 
     public int getVerificationId() {
         return verificationId;
