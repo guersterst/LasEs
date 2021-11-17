@@ -314,4 +314,13 @@ public class ScientificForumBacking implements Serializable {
     public List<ScienceField> getScienceFields() {
         return scienceFields;
     }
+
+    /**
+     * Get session information.
+     *
+     * @return The session information.
+     */
+    public SessionInformation getSessionInformation() {
+        return sessionInformation;
+    }
 }
