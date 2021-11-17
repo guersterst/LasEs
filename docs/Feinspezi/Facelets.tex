@@ -29,10 +29,10 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \textbf{navigation.xhtml} \phantomsection \label{flt:navbar} ist die Kopfzeile der Webanwendung. Diese bietet die Suchfunktion, Links zu verschiedenen Listen und dem Profil an.
 \nopagebreak
 
-\todo{Absprechen mit Sebastian und BB nicht vollstäandig}
+\todo{Absprechen mit Sebastian und BB nicht vollstäandig + Systemsettign fehlt}
 \todo{outcome von links ist immer noch im ordner facelets. mit Johannes abklären und ausprobieren.}
 \ftable{
-	\fentry{logo-gimg}{<h:graphicImage>}{Logo der Applikation.}{value="\#\{\}"}{/}{/}
+	\fentry{logo-gimg}{<h:graphicImage>}{Logo der Applikation.}{value="\#\{value="\#\{navigationBacking.systemSettings.logoImage\}"\}"}{/}{/}
 
 	\fentry{direct-to-home-lnk}{<h:link>}{Weiterleitung zur Homepage.}{outcome="/authenticated/homepage" \newline title="\#\{help.toHome\}"}{/}{/}
 
@@ -246,6 +246,19 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 		
 	}
 \end{samepage}
+
+\begin{samepage}
+	\textbf{imprint.xhtml} Das Impressum gibt die vom Administrator angegebenen Kontaktdaten des Betreibers wieder.\nopagebreak
+	
+	\ftable{
+		\fentry{logo-gimg}{<h:graphicImage>}{Logo des Betreibers.}{value="\#\{imprintBacking.systemSettings.logoImage\}"}{/}{/}
+		
+		\fentry{imprint-heading-otxt}{<h:outputText>}{Überschrift der Ansicht}{value="\#{imprintBacking.systemSetting.companyName}"}{/}{/}
+		
+		\fentry{imprint-otxt}{<h:outputText>}{Impressum des Betreibers.}{value="\#{imprintBacking.systemSetting.imprint}"}{/}{/}
+	}
+\end{samepage}
+
 
 
 %% Ab hier sind Bastis hinzugefügte Änderungen
