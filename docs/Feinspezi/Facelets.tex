@@ -198,6 +198,27 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	}
 \end{samepage}
 
+\begin{samepage}
+	\textbf{registration.xhtml} Seite zur Registrierung anonymer Nutzer.
+	\nopagebreak
+	
+	\ftable{
+		\fentry{title-itxt}{<h:inputText>}{Angabe eines Titels.}{value="\#\{registrationBacking.newUser.title\}" \newline title="\#\{help.title\}"}{/}{/}
+		
+		\fentry{first-name-itxt}{<h:inputText>}{Angabe des Vornamens.}{value="\#\{registrationBacking.newUser.firstName\}" \newline title="\#\{help.firstName\}"}{required="true"}{/}
+		
+		\fentry{last-name-itxt}{<h:inputText>}{Angabe des Nachnamen.}{value="\#\{registrationBacking.newUser.lastName\}" \newline title="\#\{help.lastName\}"}{required="true"}{/}
+		
+		\fentry{password-iscrt}{<h:inputSecret>}{Angabe eines Passwortes.}{value="\#\{registrationBacking.newUser.passwordNotHashed\}" \newline title="\#\{help.password\}"}{/}{passwordValidator \newline required="true"}
+		
+		\fentry{email-itxt}{<h:inputText>}{Angabe einer validen E-Mail.}{value="\#\{registrationBacking.newUser.emailAddress\}" \newline title="\#\{help.email\}"}{/}{emailAddressExistsValidator \newline emailAddressLayoutValidator \newline required=true"}
+		
+		\fentry{register-cbtn}{<h:commandButton>}{Ausführen des Registrations-Prozesses.}{value="\#\{label.register\}"\newline action="\#\{registrationBacking.register\}"}{/}{/}
+		
+		\fentry{welcomepage-lnk}{<h:link>}{Weiterleitung zur Login Seite.}{value="\#\{label.welcomeLink\}" \newline outcome="/anonymous/welcome" \newline title="\#\{help.welcomepage\}"}{/}{/}
+	}
+\end{samepage}
+
 
 %% Ab hier sind Bastis hinzugefügte Änderungen
 
