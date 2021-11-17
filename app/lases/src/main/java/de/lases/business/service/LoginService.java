@@ -8,7 +8,7 @@ import jakarta.enterprise.event.Event;
 import de.lases.persistence.repository.*;
 
 /**
- * Provides functionality regarding the authentication of auser.
+ * Provides functionality regarding the authentication of a user.
  */
 @Dependent
 public class LoginService {
@@ -17,7 +17,13 @@ public class LoginService {
 
     private Transaction transaction;
 
-    public User login(String email, String password) {
+    /**
+     * Authenticates a user.
+     *
+     * @param user A {@link User}-DTO containing an email-adress and a non-hashed password.
+     * @return If succesful the user with all their data, null otherwise.
+     */
+    public User login(User user) {
         return null;
     }
 }
