@@ -127,6 +127,15 @@ public class ScientificForumBacking implements Serializable {
     public void submitChanges() {
     }
 
+    /**
+     * Check if the current viewer of the page is an editor of this forum.
+     * Based on users being compared by ids. (Might be different objects).
+     * @return true if viewer is a managing editor.
+     */
+    public boolean isViewerEditor() {
+        return editors.contains(sessionInformation.getUser());
+    }
+
     public ScientificForum getScientificForum() {
         return scientificForum;
     }

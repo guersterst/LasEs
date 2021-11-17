@@ -156,4 +156,18 @@ public class User {
     public void setNotRegistered(boolean notRegistered) {
         isNotRegistered = notRegistered;
     }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        if (!super.equals(object)) return false;
+        User user = (User) object;
+        return id == user.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(id);
+    }
 }
