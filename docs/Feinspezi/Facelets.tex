@@ -19,7 +19,7 @@
 Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren wir nach dem \emph{kebab-case} Prinzip. Um den genauen Typ in die ID mit aufzunehmen, wird das entsprechende Suffix angehängt.
 
 \todo{Suffix:}
- graphicImage = gIm link =lnk inputText =itext commandButton = cbtn messages = msgs dataTable = dtbl selectOneMenu = slctom panelGrid = pgrd
+ graphicImage = gIm link =lnk inputText =itext commandButton = cbtn messages = msgs dataTable = dtbl selectOneMenu = slctom panelGrid = pgrd commandLink = clnk
 
 \subsection{Templates}
 
@@ -125,12 +125,6 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	\textbf{pagination.xhtml} ist ein Composite Component zur Paginierung von Listen.
 	\nopagebreak
 	
-	Dazu wird folgendes Attribut übergeben:
-	
-	\begin{itemize}
-		\item \textbf{pagination} Implementation der abstrakten Klasse \emph{\hyperref[class:pagination]{Pagination.java}}.
-	\end{itemize}
-	
 	\ftable{
 		\fentry{/}{<composite:attribute>}{Paginator Attribut.}{name="paginator" \newline type="de.lases.control.internal.Pagination"}{required="true"}{/}
 		
@@ -153,6 +147,26 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 		\fentry{last-page-cbtn}{<h:commandButton>}{Zur letzten Seite.}{value="\#{label.lastPage}" \newline action="\#{cc.attrs.paginator.lastPage}" \newline title="\#{help.lastPage}"}{/}{/}
 		
 	}
+\end{samepage}
+
+\begin{samepage}
+	\textbf{sortfiltercolumn.xhtml} ist ein Composite Component, das eine sortierbare und filterbare Spalte einer Liste modelliert.
+	\nopagebreak
+	
+	\ftable{
+		\fentry{/}{<composite:attribute>}{Implementation der abstrakten Klasse.}{name="paginator" \newline type="de.lases.control.internal.Pagination"}{required="true"}{/}
+		
+		\fentry{/}{<composite:attribute>}{Anzeigename im Spaltenkopf.}{name="columnIdent" \newline type="java.lang.String"}{required="true"}{/}
+		
+		\fentry{/}{<composite:attribute>}{String Identifier der Spalte.}{name="columnName" \newline type="java.lang.String"}{required="true"}{/}
+		
+		\fentry{/}{<composite:attribute>}{Spaltennummer, null indiziert.}{name="coulumnNo" \newline type="java.lang.String"}{required="true"}{/}
+		
+		\fentry{column-name-clnk}{<h:commandLink>}{Durch Klicken auf den Spaltennamen wird nach dieser Spalte aufsteigend, bzw. absteigend sortiert.}{value="\#\{cc.attrs.columnNamei18n\}" \newline action="\#\{cc.attrs.paginator.sortBy[cc.attrs.columnNo]\}"}{/}{/}
+		
+		\fentry{column-filter-itxt}{<h:inputText>}{Hier kann ein Wert eingegeben werden, nach dem die Spalte dann gefiltert wird.}{value="\#\{cc.attrs.paginator.searchWords[cc.attrs.columnNo]\}"}{/}{/}
+	}
+	
 \end{samepage}
 
 \subsection{Seiten}
