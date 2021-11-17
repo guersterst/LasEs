@@ -338,41 +338,46 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{forum-name-itxt}{inputText}{Name des Forums.}{value="\#\{scientificForumBacking.scientificForum.name\}"}{readonly="\#\{!scientificForumBacking.isViewerEditor\}"}{required="true"}
 
-		\fentry{editor-list}{<h:dataTable>}{Liste der verantwortliche Editoren.}{value="\#\{scientificForumBacking.editors\}"}{/}{/}
+		\fentry{editor-lst}{<h:dataTable>}{Liste der verantwortliche Editoren.}{value="\#\{scientificForumBacking.editors\}"\newline title="\#\{help.managingEditors\}"}{/}{/}
 
-		\fentry{new-editor-itxt}{inputText}{Angabe der E-Mail eines Editors.}{E}{}{required="true"\newline }
+		\fentry{new-editor-itxt}{<h:inputText>}{Angabe der E-Mail eines Editors.}{value="\#\{scientificForumBacking.newEditorInput.emailAddress\}"}{rendered="\#\{scientificForumBacking.sessionInformation.user.editor\}"}{emailAddressExistsValidator, emailAddressLayoutValidator, required="true"\newline }
 
-		\fentry{addEditor}{commandButton}{Füge Editor zur Liste hinzu.}{E}{}{}
+		\fentry{add-editor-cbtn}{<h:commandButton>}{Füge Editor zur Liste hinzu.}{value="\#\{label.add\}"\newline action="\#\{scientificForumBacking.addEditor\}"}{rendered="\#\{scientificForumBacking.sessionInformation.user.editor\}"}{/}
 
-		\fentry{removeEditor}{commandButton}{Lösche ausgewählten Editor.}{E}{}{}
+		\fentry{remove-editor-cbtn}{<h:commandButton>}{Lösche ausgewählten Editor.}{value="\#\{label.remove\}"\newline action="\#\{scientificForumBacking.removeEditor\}"}{rendered="\#\{scientificForumBacking.sessionInformation.user.editor\}"}{/}
 
-		\fentry{deadline}{inputText}{Deadline des Forums.}{Alle}{}{}
+		\fentry{deadline-itxt}{<h:inputText>}{Deadline des Forums.}{value="\#\{scientificForumBacking.scientificForum.deadline\}"}{readonly="\#\{!scientificForumBacking.isViewerEditor\}"}{required="true"}
 
-		\fentry{description}{inputTextArea}{Kurzbeschreibung des Forums.}{Alle}{}{}
+		\fentry{description-itxt}{inputTextArea}{Kurzbeschreibung des Forums.}{value="\#\{scientificForumBacking.scientificForum.description\}"}{readonly="\#\{!scientificForumBacking.isViewerEditor\}"}{required="true"}
 
-		\fentry{url}{outputLink}{Link zur Konferenz oder zum Journal.}{Alle}{}{}
+		\fentry{url-lnk}{<h:outputLink>}{Link zur Konferenz oder zum Journal.}{value="\#\{scientificForumBacking.scientificForum.url\}"}{/}{/}
 
-		\fentry{changeUrl}{inputText}{Angabe einer neuen URL.}{E}{}{}
+		\fentry{change-url-itxt}{inputText}{Angabe einer neuen URL.}{value="\#\{scientificForumBacking.scientificForum.url\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{required="true"}
 
-		\fentry{reviewInstructions}{inputTextArea}{Anleitung für eine Begutachtung.}{G,E}{}{}
+		\fentry{review-instructions-itxt}{<h:inputTextArea>}{Anleitung für eine Begutachtung.}{value="\#\{scientificForumBacking.scientificForum.reviewManual\}"}{readonly="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
 
-		\fentry{scienceField}{outputText}{Fachgebiet des Forums.}{Alle}{}{}
+		\fentry{science-field-dtbl}{<h:dataTable>}{Fachgebiet des Forums.}{value="\#\{scientificForumBacking.selectedScienceFields\}"}{/}{/}
 
-		\fentry{newScienceField}{selectOneListbox}{Hinzufügen eines neuen Fachgebietes.}{E}{}{}
+		\fentry{new-science-field}{<p:selectOneListbox>}{Hinzufügen eines neuen Fachgebietes.}{value="\#\{scientificForumBacking.scienceFields\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
 
-		\fentry{addScienceField}{commandButton}{Speichern des neuen Fachgebietes.}{E}{}{}
+		\fentry{add-science-field-cbtn}{<h:commandButton>}{Speichern des neuen Fachgebietes.}{value="\#\{label.add\}"\newline action="\#\{scientificForumBacking.\newline
+		addScienceField\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
 
-		\fentry{deleteScienceField}{commandButton}{Löschen eines Fachgebietes.}{E}{}{}
+		\fentry{remove-science-field-cbtn}{commandButton}{Löschen eines Fachgebietes.}{value="\#\{label.remove\}"\newline action="\#\{scientificForumBacking.\newline
+		removeScienceField\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
 
-		\fentry{save}{commandLink}{Speichere Veränderungen.}{E}{}{}
-
-		\fentry{editorialPagination}{pagination}{Paginierte Liste aller Einreichungen, die der Editor verwaltet.}{E}{}{}
-
-		\fentry{reviewPagination}{pagination}{Paginierte Liste aller Einreichungen, die der Gutachter bearbeitet.}{E,G}{}{}
-
-		\fentry{submissionPagination}{pagination}{Paginierte Liste aller Einreichungen, die der Nutzer eingereicht hat.}{Alle}{}{}
+		\fentry{save-cbtn}{<h:commandButton>}{Speichere Veränderungen.}{value="\#\{label.save\}"\newline action="\#\{scientificForumBacking.submitChanges\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
 	}
 \end{samepage}
+
+\ftable{
+
+	\fentry{editorialPagination}{pagination}{Paginierte Liste aller Einreichungen, die der Editor verwaltet.}{E}{}{}
+
+	\fentry{reviewPagination}{pagination}{Paginierte Liste aller Einreichungen, die der Gutachter bearbeitet.}{E,G}{}{}
+
+	\fentry{submissionPagination}{pagination}{Paginierte Liste aller Einreichungen, die der Nutzer eingereicht hat.}{Alle}{}{}
+}
 
 \subsubsection{Gutachter}
 
