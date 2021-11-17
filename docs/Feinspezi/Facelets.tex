@@ -224,10 +224,10 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \begin{samepage}
 	\textbf{verification.xhtml} Wird bei erfolgreicher Verifikation der E-Mail angezeigt.
 	\nopagebreak
-	
-	\ftable{		
+
+	\ftable{
 		\fentry{go-to-home-cbtn}{<h:commandButton>}{Button zur Weiterleitung auf die Homepage bei erfolgreicher Verifizierung. Ansonsten wird auf \emph{welcome.xhtml} weiter geleitet.}{/}{/}
-		
+
 	}
 \end{samepage}
 
@@ -305,6 +305,33 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 
 %% Ab hier sind Bastis hinzugefügte Änderungen
+
+
+\subsubsection{Editor}
+
+\begin{samepage}
+	\textbf{userList.xhtml} \phantomsection \label{flt:userList} Editoren und Administratoren erhalten hier einen Überblick über alle Nutzer. Die Seiten sind paginiert.\nopagebreak
+
+	\ftable{
+		\fentry{user-pg}{<pg:pagination>}{Die Tabelle enthält eine Paginierung.}{paginator="\#\{userListBacking.userPagination\}"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
+
+		\fentry{rol-ssc}{<ssc:sortsearchcolumn>}{Spalte für die Nutzerrolle}{paginator="\#\{userListBacking.userPagination\}"\newline columnNamei18n="\#\{label.role\}"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
+
+		\fentry{role-otxt}{<h:outputText>}{Rolle des Nutzers}{value="\#\{var.role\}"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
+
+		\fentry{name-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Namen des Nutzers}{paginator="\#\{userListBacking.userPagination\}"\newline columnNamei18n="\#\{label.name\}"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
+
+		\fentry{name-link}{<h:link>}{Name des Nutzers. Link mit URL-Parameter zur Weiterleitung auf Profilseite.}{value="\#\{var.firstName .concat( ).concat(var.lastName)\}"\newline outcome= ?????}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
+
+		\fentry{email-ssc}{<ssc:sortsearchcolumn>}{Spalte für die E-Mail des Nutzers}{paginator="\#\{userListBacking.userPagination\}"\newline columnNamei18n="\#\{label.email\}"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
+
+		\fentry{email-link}{<h:link>}{Mailto-Link mit E-Mail-Adresse des Nutzers.}{value="\#\{var.emailAddress\}"\newline  outcome="\#\{'mailto:'.concat(var.emailAddress)\}"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
+
+		\fentry{employer-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Arbeitsgeber des Nutzers}{paginator="\#\{userListBacking.userPagination\}"\newline columnNamei18n="\#\{label.employer\}"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
+
+		\fentry{employer-otxt}{<h:outputText>}{Arbeitgeber des Nutzers.}{value="\#\{var.employer\}"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
+	}
+\end{samepage}
 
 \subsubsection{Admin}
 
