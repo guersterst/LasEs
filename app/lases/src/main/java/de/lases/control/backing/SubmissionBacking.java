@@ -331,4 +331,13 @@ public class SubmissionBacking implements Serializable {
         return sessionInformation;
     }
 
+    /**
+     * Checks whether the viewer is the submitter.
+     *
+     * @return true if the viewer is the submitter of this submission.
+     */
+    public boolean isViewerSubmitter() {
+        return submission.getAuthorId() == sessionInformation.getUser().getId();
+    }
+
 }

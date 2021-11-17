@@ -19,11 +19,7 @@
 Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren wir nach dem \emph{kebab-case} Prinzip. Um den genauen Typ in die ID mit aufzunehmen, wird das entsprechende Suffix angehängt.
 
 \todo{Suffix:}
-<<<<<<< HEAD
- graphicImage = gIm link =lnk inputText =itext commandButton = cbtn messages = msgs dataTable = dtbl selectOneMenu = slctom panelGrid = pgrd commandLink = clnk inputSecret = iscrt pagination = pg
-=======
- graphicImage = gim, link = lnk, inputText = itxt, outputText = otxt, commandButton = cbtn, messages = msgs, dataTable = dtbl, selectOneMenu = slctom, panelGrid = pgrd, commandLink = clnk, inputSecret = iscrt
->>>>>>> 3d4771ebfc8ffad5c117a8fa52300523d8d6be98
+ graphicImage = gim, link = lnk, inputText = itxt, outputText = otxt, commandButton = cbtn, messages = msgs, dataTable = dtbl, selectOneMenu = slctom, panelGrid = pgrd, commandLink = clnk, inputSecret = iscrt, inputFile = ifile
 
 \subsection{Templates}
 
@@ -322,6 +318,9 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	}
 \end{samepage}
 
+\todo{uploadFile ist noch nicht vollständig}
+\todo{id von Scientific forum wietergeben? für link + profile}
+
 \begin{samepage}
 	
 	\textbf{submission.xhtml} ist die Übersichtsseite einer Abgabe.
@@ -331,35 +330,35 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	\ftable{
 		\fentry{/}{<ui:include>}{\hyperref[flt:toolbar]{Seitenleiste mit Tools.}}{rendered="\#\{submissionBacking.sessionInformation.user.editor\}"}{/}
 		
-		\fentry{uploadRevision}{inputFile}{Upload einer Revision.}{N}
+		\fentry{upload-revision-ifile}{<h:inputFile>}{Upload einer Revision.}{value="\#\{\}" \newline requiered="true" \newline requieredMessage="\#\{requiered.inputFile\}"}{rendered="\#\{submissionBacking.isViewerSubmitter\}"}{/}
 		
-		\fentry{upload}{commandButton}{Ausführen des Uploads.}{N}
+		\fentry{upload-cbtn}{<h:commandButton>}{Ausführen des Uploads.}{value="\#\{label.uploadFile\}" \newline action="\#\{submissionBacking.uploadPDF\}" \newline title="\#\{help.uploadRevision\}"}{rendered="\#\{submissionBacking.isViewerSubmitter\}"}{/}
 		
-		\fentry{newReview}{commandLink}{Weiterleitung zur Einreichung eines neuen Gutachtens.}{G}
+		\fentry{new-review-cbtn}{<h:commandButton>}{Weiterleitung zur Einreichung eines neuen Gutachtens.}{value="\#\{label.uploadReview\}" \newline action="\#\{submissionBacking.uploadReview\}" \newline title="\#\{help.uploadRevision\}"}{rendered="\#\{submissionBacking.sessionInformation.user.reviewer\}"}{/}
 		
-		\fentry{acceptReviewing}{commandButton}{Annahme der Rolle eines Gutachters für diese Einreichung.}{G}
+		\fentry{accept-reviewing-cbtn}{<h:commandButton>}{Annahme der Rolle eines Gutachters für diese Einreichung.}{value="\#\{label.acceptReviewing\}" \newline action="\#\{submissionBacking.acceptReviewing\}" \newline title="\#\{help.acceptReviewing\}"}{rendered="\#\{submissionBacking.sessionInformation.user.reviewer\}"}{/}
 		
-		\fentry{declineReviewing}{commandButton}{Ablehnen der Rolle eines Gutachters für diese Einreichung.}{G}
+		\fentry{decline-reviewing-cbtn}{<h:command>}{Ablehnen der Rolle eines Gutachters für diese Einreichung.}{value="\#\{label.declineReviewing\}" \newline action="\#\{submissionBacking.declineReviewing\}" \newline title="\#\{help.declineReviewing\}"}{rendered="\#\{submissionBacking.sessionInformation.user.reviewer\}"}{/}
 		
-		\fentry{title}{outputText}{Titel des Papers.}{Alle}
+		\fentry{title-otxt}{<h:outputText>}{Titel des Papers.}{value="\#\{submissionBacking.submission.title\}"}{/}{/}
 		
-		\fentry{forum}{Link}{Name des Forums und Weiterleitung zur Forumsübersicht.}{Alle}
+		\fentry{forum-lnk}{<h:link>}{Name des Forums und Weiterleitung zur Forumsübersicht.}{value="\#\{submissionBacking.scientificForum.name\}" \newline outcome="/facelets/authenticated/scientificForum" \newline title="\#\{help.directToForum\}"}{disabled="\#\{not submissionBacking.sessionInformation.user.editor\}"}{/}
 		
-		\fentry{author}{Link}{Name des Autors und Weiterleitung zum Profil.}{E}
+		\fentry{author-lnk}{<h:link>}{Name des Autors und Weiterleitung zum Profil.}{value="\#\{submissionBacking.authorForPaper\}" \newline outcome="/facelets/authenticated/profile" \newline title="\#\{help.directProfile\}"}{disabled="\#\{not submissionBacking.sessionInformation.user.editor\}"}{/}
 		
-		\fentry{email}{Link}{E-Mail-Adressen der Co-Autoren und Mailto-Link.}{E}
+		\fentry{email-lnk}{<h:link>}{E-Mail-Adressen der Co-Autoren und Mailto-Link.}{value="\#\{submissionBacking.author.emailAddress\}"\newline  outcome="\#\{'mailto:'.concat(submissionBacking.author.emailAddress)\}"}{disabled="\#\{not submissionBacking.sessionInformation.user.editor\}"}
 		
-		\fentry{dateSelect}{selectOneMenu}{Auswahl der Filtermöglichkeit eines Datums.}{Alle}
+		\fentry{dateSelect}{selectOneMenu}{Auswahl der Filtermöglichkeit eines Datums.}{Alle}{}{}
 		
-		\fentry{dateSelectReview}{selectOneMenu}{Auswahl der Filtermöglichkeit eines Datums.}{Alle}
+		\fentry{dateSelectReview}{selectOneMenu}{Auswahl der Filtermöglichkeit eines Datums.}{Alle}{}{}
 		
-		\fentry{reviewState}{selectOneMenu}{Filtern der Gutachten nach ihrem Status.}{E,G}
+		\fentry{reviewState}{selectOneMenu}{Filtern der Gutachten nach ihrem Status.}{E,G}{}{}
 		
-		\fentry{recommendation}{selectOneMenu}{Auswahl der Art von Empfehlungen.}{Alle}
+		\fentry{recommendation}{selectOneMenu}{Auswahl der Art von Empfehlungen.}{Alle}{}{}
 		
-		\fentry{paperPagination}{pagination}{Liste aller Versionen}{Alle}
+		\fentry{paperPagination}{pagination}{Liste aller Versionen}{Alle}{}{}
 		
-		\fentry{reviewPagination}{pagination}{Liste aller/der eigenen Gutachten.}{E,G}
+		\fentry{reviewPagination}{pagination}{Liste aller/der eigenen Gutachten.}{E,G}{}{}
 	}
 \end{samepage}
 
@@ -369,17 +368,17 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	Die Elemente der Liste, der unterschiedlichen Versionen der Einrichtung, sieht wie folgt aus:
 	
 	\ftable{
-		\fentry{version}{outputText}{Versionsnummer der Einreichung}{Alle}
+		\fentry{version}{outputText}{Versionsnummer der Einreichung}{Alle}{}{}
 		
-		\fentry{date}{outputText}{Datum der Einreichung}{Alle}
+		\fentry{date}{outputText}{Datum der Einreichung}{Alle}{}{}
 		
-		\fentry{deadline}{outputText}{Deadline der Revision}{Alle}
+		\fentry{deadline}{outputText}{Deadline der Revision}{Alle}{}{}
 		
-		\fentry{unlockRevision}{commandButton}{Freischalten einer Revision.}{E}
+		\fentry{unlockRevision}{commandButton}{Freischalten einer Revision.}{E}{}{}
 		
-		\fentry{state}{radioButton}{Status der Einreichung}{Alle}
+		\fentry{state}{radioButton}{Status der Einreichung}{Alle}{}{}
 		
-		\fentry{pdf}{commandButton}{Download der Einreichung}{Alle}
+		\fentry{pdf}{commandButton}{Download der Einreichung}{Alle}{}{}
 	}
 \end{samepage}
 
@@ -390,23 +389,23 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	Die Elemente der Liste von Gutachten sind folgende:
 	
 	\ftable{
-		\fentry{version}{outputText}{Versionsnummer des Gutachtens.}{E,G}
+		\fentry{version}{outputText}{Versionsnummer des Gutachtens.}{E,G}{}{}
 		
-		\fentry{reviewer}{outputText}{Namen des Gutachters.}{E,G}
+		\fentry{reviewer}{outputText}{Namen des Gutachters.}{E,G}{}{}
 		
-		\fentry{date}{outputText}{Datum des Gutachtens.}{E,G}
+		\fentry{date}{outputText}{Datum des Gutachtens.}{E,G}{}{}
 		
-		\fentry{deadline}{outputText}{Deadline des Gutachtens.}{E,G}
+		\fentry{deadline}{outputText}{Deadline des Gutachtens.}{E,G}{}{}
 		
-		\fentry{state}{commandButton}{Freigabe des Gutachtens}{E}
+		\fentry{state}{commandButton}{Freigabe des Gutachtens}{E}{}{}
 		
-		\fentry{stateText}{outputText}{Freigabestatus des Gutachtens}{G}
+		\fentry{stateText}{outputText}{Freigabestatus des Gutachtens}{G}{}{}
 		
-		\fentry{recommendation}{checkbox}{Empfehlung eines Gutachters}{E,G}
+		\fentry{recommendation}{checkbox}{Empfehlung eines Gutachters}{E,G}{}{}
 		
-		\fentry{comment}{outputText}{Kommentar des Gutachters.}{E,G}
+		\fentry{comment}{outputText}{Kommentar des Gutachters.}{E,G}{}{}
 		
-		\fentry{pdf}{commandButton}{Download der Einreichung.}{E,G}
+		\fentry{pdf}{commandButton}{Download der Einreichung.}{E,G}{}{}
 	}
 \end{samepage}
 
