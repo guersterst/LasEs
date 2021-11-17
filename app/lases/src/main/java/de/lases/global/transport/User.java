@@ -168,6 +168,6 @@ public class User {
 
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(super.hashCode(), id);
+        return java.util.Objects.hash(id);
     }
 }
