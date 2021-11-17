@@ -23,6 +23,9 @@ public class RegistrationService {
 
     /**
      * Registers and creates a regular user in the database.
+     * <p></p>
+     * The email verification process is initiated using the
+     * {@code EmailUtil} utility.
      *
      * @param user The user's data.
      */

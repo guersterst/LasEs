@@ -55,7 +55,7 @@ public class SubmissionService {
     /**
      * Sets the state of a submission.
      * <p></p>
-     * The submitter and co-authors are informed about an accept or reject decision
+     * The submitter and all co-authors are informed about an accept or reject decision
      * by email using the {@link EmailUtil} utility.
      *
      * @param submission The {@link Submission}-DTO with a valid state.
@@ -67,7 +67,7 @@ public class SubmissionService {
     /**
      * Sets the editor of a submission.
      * <p></p>
-     * When changed the new editor is informed
+     * When changed, the new editor is informed
      * by email using the {@link EmailUtil} utility.
      *
      * @param submission The {@link Submission}-DTO with a valid editor.

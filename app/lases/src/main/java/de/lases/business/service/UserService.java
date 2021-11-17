@@ -35,9 +35,12 @@ public class UserService {
      * Manipulates a user.
      *
      * @param newUser A {@link User}-DTO filled with the fields that are desired to be changed.
-     *                <p>
+     *                <p></p>
      * All fields filled with legal values will be overwritten, the rest are ignored.
      * It should contain an existing id value.
+     *                <p></p>
+     * When the email address is changed the verification process is initiated
+     * using the {@code EmailUtil} utility.
      */
     public void editUser(User newUser) throws IllegalArgumentException {
     }
@@ -71,16 +74,16 @@ public class UserService {
     }
 
     /**
-     * Gets the users avatar.
+     * Gets the users' avatar.
      *
-     * @return The users avatar as a byte-array, wrapped by a {@code File}.
+     * @return The users' avatar as a byte-array, wrapped by a {@code File}.
      */
     public File getAvatar() {
         return null;
     }
 
     /**
-     * Deletes a users avatar.
+     * Deletes a users' avatar.
      *
      * @param user A {@link User}-DTO containing a valid id.
      */
@@ -99,7 +102,7 @@ public class UserService {
     }
 
     /**
-     * Verifies a user's email-adress.
+     * Verifies a user's email-address using the {@code EmailUtil} utility.
      *
      * @param verification A {@code Verification}-DTO. Must conatain a valid id and a validationRandom.
      * @return {@code true} if the verification process was succesful. {@code false} otherwise.
@@ -109,7 +112,8 @@ public class UserService {
     }
 
     /**
-     * Determines whether a users email-adress is already verified.
+     * Determines whether a users email-address is already verified.
+     *
      * @param user A {@link User}-DTO which should contain a valid id.
      * @return {@true} if the user is verified. {@code false otherwise}.
      */
