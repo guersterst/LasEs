@@ -1,9 +1,9 @@
 %% Macros
 \newcommand{\ftable}[1]{\begin{sidewaystable}
 \begin{tabular}[H]{ |m{1.5cm}| m{1.5cm}| m{3cm}| m{7cm} |m{4cm}| m{4cm}| }
-    \toprule
+    \hline
     \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Binding} & \textbf{Constraints} & \textbf{Validator \newline Converter} \\
-    \midrule
+    \hline\hline
     #1
     %\bottomrule
 \end{tabular}
@@ -265,13 +265,13 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 \begin{samepage}
 	\textbf{homepage.xhtml} \phantomsection \label{flt:homepage} Startseite die den Überblick über alle Einreichungen, aufgeteilt in Reiter, beinhaltet.
-	
+
 	\ftable{
 		\fentry{your-submission-clnk}{<h:commandLink>}{Reiter zum Anzeigen der eigenen Einreichungen.}{value="\#\{label.yourSubmission\}" \newline action="\#\{homepageBacking.showOwnSubmissionsTab\}" \newline title="\#\{help.yourSubmissions\}"}{/}{/}
-		
+
 		\fentry{your-reviews-clnk}{<h:commandLink>}{Reiter zum Anzeigen der zu begutachtenden Einreichungen}{value="\#\{label.yourReviews\}" \newline action="\#\{homepageBacking.showSubmissionToReviewTab\}" \newline title="\#\{help.yourReviews\}"}{render="\#\{homepageBacking.sessionInformation.user.reviewer\}"}{/}
-		
-		\fentry{editorial-overview-clnk}{<h:commandLink>}{Reiter zum Anzeigen aller Einreichungen, welche man editiert.}{value="\#\{label.editorialOverview\}" \newline action="\#\{homepageBacking.showSubmissionToEditTab\}" \newline title="\#\{help.editorialOverview\}"}{render="\#\{homepageBacking.sessionInformation.editor\}"}{/}		
+
+		\fentry{editorial-overview-clnk}{<h:commandLink>}{Reiter zum Anzeigen aller Einreichungen, welche man editiert.}{value="\#\{label.editorialOverview\}" \newline action="\#\{homepageBacking.showSubmissionToEditTab\}" \newline title="\#\{help.editorialOverview\}"}{render="\#\{homepageBacking.sessionInformation.editor\}"}{/}
 	}
 \end{samepage}
 
@@ -279,42 +279,42 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 \begin{samepage}
 	Die Tabellen \emph{submissionPagination}, \emph{reviewPagination} und \emph{editorPagination} sind nach den gleichen Punkten gegliedert und daher nur einmal ausführlich aufgegliedert: Titel des Papers, Datum, Deadline und Status der Einreichung und Name des zugehörigen Forums.
-	
+
 	\ftable{
 		\fentry{submission-pg}{<pg:pagination>}{Liste aller eignen Einreichungen.}{paginator="\#\{homepageBacking.submissionPagination\}"}{/}{/}
-		
+
 		\fentry{title-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Titel des Papers.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.paperTitle\}"}{/}{/}
-		
+
 		\fentry{title-otxt}{<h:outputText>}{Titel des Papers.}{value="\#\{var.title\}"}{/}{/}
-		
+
 		\fentry{date-ssc}{<ssc:sortsearchcolumn>}{Spalte für das Abgabedatum des Papers.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.date\}"}{/}{/}
-		
+
 		\fentry{date-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{\}" title="\#\{help.dateSelect\}"}{/}{/}
-		
+
 		\fentry{/}{<f:selectItems>}{Mögliche Filterung des Datums.}{value="\#\{\}"}{/}{/}
-		
+
 		\fentry{date-otxt}{<h:outputText>}{Abgabedatum des Papers.}{value="\#\{var.submissionTime\}"}{/}{convertDateTime \newline pattern=""yyyy-MM-dd"}
-		
+
 		\fentry{deadline-ssc}{<ssc:sortsearchcolumn>}{Spalte für die Deadline der Revision.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.deadline\}"}{/}{/}
-		
+
 		\fentry{deadline-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit einer Deadline.}{value="\#\{\}" title="\#\{help.deadlineSelect\}"}{/}{/}
-		
+
 		\fentry{/}{<f:selectItems>}{Mögliche Filterung der Deadline.}{value="\#\{\}"}{/}{/}
-		
+
 		\fentry{deadline-otxt}{<h:outputText>}{Deadline des Papers.}{value="\#\{var.deadlineRevision\}"}{/}{convertDateTime \newline pattern=""yyyy-MM-dd"}
-		
+
 		\fentry{state-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Status der Einreichung.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.stateSub\}"}{/}{/}
-		
+
 		\fentry{state-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Status.}{value="\#\{\}" title="\#\{help.stateSubSelect\}"}{/}{/}
-		
+
 		\fentry{/}{<f:selectItems>}{Mögliche Filterung des Status.}{value="\#\{\}"}{/}{/}
-		
+
 		\fentry{state-otxt}{<h:outputText>}{Status der Einreichung.}{value="\#\{var.state\}"}{/}{/}
-		
+
 		\fentry{forum-ssc}{<ssc:sortsearchcolumn>}{Spalte für zugehöriges Forum.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.forumSub\}"}{/}{/}
-		
+
 		\fentry{forum-otxt}{<h:outputText>}{Zugehöriges Forum der Einreichung.}{value="\#\{var.scientificForum\}"}{/}{/}
-		
+
 	}
 \end{samepage}
 
@@ -424,41 +424,79 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{forum-name-itxt}{inputText}{Name des Forums.}{value="\#\{scientificForumBacking.scientificForum.name\}"}{readonly="\#\{!scientificForumBacking.isViewerEditor\}"}{required="true"}
 
-		\fentry{editor-list}{<h:dataTable>}{Liste der verantwortliche Editoren.}{value="\#\{scientificForumBacking.editors\}"}{/}{/}
+		\fentry{editor-lst}{<h:dataTable>}{Liste der verantwortliche Editoren.}{value="\#\{scientificForumBacking.editors\}"\newline title="\#\{help.managingEditors\}"}{/}{/}
 
-		\fentry{new-editor-itxt}{inputText}{Angabe der E-Mail eines Editors.}{E}{}{required="true"\newline }
+		\fentry{new-editor-itxt}{<h:inputText>}{Angabe der E-Mail eines Editors.}{value="\#\{scientificForumBacking.newEditorInput.emailAddress\}"}{rendered="\#\{scientificForumBacking.sessionInformation.user.editor\}"}{emailAddressExistsValidator, emailAddressLayoutValidator, required="true"\newline }
 
-		\fentry{addEditor}{commandButton}{Füge Editor zur Liste hinzu.}{E}{}{}
+		\fentry{add-editor-cbtn}{<h:commandButton>}{Füge Editor zur Liste hinzu.}{value="\#\{label.add\}"\newline action="\#\{scientificForumBacking.addEditor\}"}{rendered="\#\{scientificForumBacking.sessionInformation.user.editor\}"}{/}
 
-		\fentry{removeEditor}{commandButton}{Lösche ausgewählten Editor.}{E}{}{}
+		\fentry{remove-editor-cbtn}{<h:commandButton>}{Lösche ausgewählten Editor.}{value="\#\{label.remove\}"\newline action="\#\{scientificForumBacking.removeEditor\}"}{rendered="\#\{scientificForumBacking.sessionInformation.user.editor\}"}{/}
 
-		\fentry{deadline}{inputText}{Deadline des Forums.}{Alle}{}{}
+		\fentry{deadline-itxt}{<h:inputText>}{Deadline des Forums.}{value="\#\{scientificForumBacking.scientificForum.deadline\}"}{readonly="\#\{!scientificForumBacking.isViewerEditor\}"}{required="true"}
 
-		\fentry{description}{inputTextArea}{Kurzbeschreibung des Forums.}{Alle}{}{}
+		\fentry{description-itxt}{inputTextArea}{Kurzbeschreibung des Forums.}{value="\#\{scientificForumBacking.scientificForum.description\}"}{readonly="\#\{!scientificForumBacking.isViewerEditor\}"}{required="true"}
 
-		\fentry{url}{outputLink}{Link zur Konferenz oder zum Journal.}{Alle}{}{}
+		\fentry{url-lnk}{<h:outputLink>}{Link zur Konferenz oder zum Journal.}{value="\#\{scientificForumBacking.scientificForum.url\}"}{/}{/}
 
-		\fentry{changeUrl}{inputText}{Angabe einer neuen URL.}{E}{}{}
+		\fentry{change-url-itxt}{inputText}{Angabe einer neuen URL.}{value="\#\{scientificForumBacking.scientificForum.url\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{required="true"}
 
-		\fentry{reviewInstructions}{inputTextArea}{Anleitung für eine Begutachtung.}{G,E}{}{}
+		\fentry{review-instructions-itxt}{<h:inputTextArea>}{Anleitung für eine Begutachtung.}{value="\#\{scientificForumBacking.scientificForum.reviewManual\}"}{readonly="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
 
-		\fentry{scienceField}{outputText}{Fachgebiet des Forums.}{Alle}{}{}
+		\fentry{science-field-dtbl}{<h:dataTable>}{Fachgebiet des Forums.}{value="\#\{scientificForumBacking.selectedScienceFields\}"}{/}{/}
 
-		\fentry{newScienceField}{selectOneListbox}{Hinzufügen eines neuen Fachgebietes.}{E}{}{}
+		\fentry{new-science-field}{<p:selectOneListbox>}{Hinzufügen eines neuen Fachgebietes.}{value="\#\{scientificForumBacking.scienceFields\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
 
-		\fentry{addScienceField}{commandButton}{Speichern des neuen Fachgebietes.}{E}{}{}
+		\fentry{add-science-field-cbtn}{<h:commandButton>}{Speichern des neuen Fachgebietes.}{value="\#\{label.add\}"\newline action="\#\{scientificForumBacking.\newline
+		addScienceField\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
 
-		\fentry{deleteScienceField}{commandButton}{Löschen eines Fachgebietes.}{E}{}{}
+		\fentry{remove-science-field-cbtn}{commandButton}{Löschen eines Fachgebietes.}{value="\#\{label.remove\}"\newline action="\#\{scientificForumBacking.\newline
+		removeScienceField\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
 
-		\fentry{save}{commandLink}{Speichere Veränderungen.}{E}{}{}
-
-		\fentry{editorialPagination}{pagination}{Paginierte Liste aller Einreichungen, die der Editor verwaltet.}{E}{}{}
-
-		\fentry{reviewPagination}{pagination}{Paginierte Liste aller Einreichungen, die der Gutachter bearbeitet.}{E,G}{}{}
-
-		\fentry{submissionPagination}{pagination}{Paginierte Liste aller Einreichungen, die der Nutzer eingereicht hat.}{Alle}{}{}
+		\fentry{save-cbtn}{<h:commandButton>}{Speichere Veränderungen.}{value="\#\{label.save\}"\newline action="\#\{scientificForumBacking.submitChanges\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
 	}
 \end{samepage}
+
+\ftable{
+
+	\fentry{submission-pg}{<pg:pagination>}{Paginierte Liste aller Einreichungen, die der Nutzer eingereicht hat.}{paginator="\#\{scientificForumBacking.submissionPagination\}"}{/}{/}
+
+	\fentry{title-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Titel des Papers.}{paginator="\#\{scientificForumBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.submissionTitle\}"}{/}{/}
+
+	\fentry{title-otxt}{<h:outputText>}{Titel der Einreichung.}{value="\#\{var.title\}"}{/}{/}
+
+	\fentry{date-ssc}{<ssc:sortsearchcolumn>}{Spalte für das Abgabedatum der Einreichung.}{paginator="\#\{scientificForumBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.date\}"}{/}{/}
+
+	\fentry{date-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{scientificForumBacking.dateFilterSelectSub\}" title="\#\{help.dateSelect\}"}{/}{/}
+
+	\fentry{/}{<f:selectItems>}{Mögliche Filterung des Datums.}{value="\#\{\}"}{/}{/}
+
+	\fentry{date-otxt}{<h:outputText>}{Abgabedatum der Einreichung.}{value="\#\{var.submissionTime\}"}{/}{convertDateTime \newline pattern=""yyyy-MM-dd"}
+
+	\fentry{deadline-ssc}{<ssc:sortsearchcolumn>}{Spalte für die Deadline der Revision.}{paginator="\#\{scientificForumBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.deadline\}"}{/}{/}
+
+	\fentry{deadline-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit einer Deadline.}{value="\#\{\}" title="\#\{help.deadlineSelect\}"}{/}{/}
+
+	\fentry{/}{<f:selectItems>}{Mögliche Filterung der Deadline.}{value="\#\{\}"}{/}{/}
+
+	\fentry{deadline-otxt}{<h:outputText>}{Deadline für eine Revision.}{value="\#\{var.deadlineRevision\}"}{/}{convertDateTime \newline pattern=""yyyy-MM-dd"}
+
+	\fentry{state-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Status der Einreichung.}{paginator="\#\{scientificForumBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.stateSub\}"}{/}{/}
+
+	\fentry{state-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Status.}{value="\#\{\}" title="\#\{help.stateSubSelect\}"}{/}{/}
+
+	\fentry{/}{<f:selectItems>}{Mögliche Filterung des Status.}{value="\#\{\}"}{/}{/}
+
+	\fentry{state-otxt}{<h:outputText>}{Status der Einreichung.}{value="\#\{var.state\}"}{/}{/}
+}
+
+\ftable{
+
+	\multicolumn{6}{|c|}{Weitere Paginierungen mit den gleichen Spalten wie in der vorherigen Tabelle.} \\\hline %das hline verursacht keine probleme, wird sind in einem tabular
+
+	\fentry{editorial-pg}{<pg:pagination>}{Paginierte Liste aller Einreichungen, die der Editor verwaltet.}{paginator="\#\{scientificForumBacking.editedPagination\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
+
+	\fentry{review-pg}{<pg:pagination>}{Paginierte Liste aller Einreichungen, die der Gutachter bearbeitet.}{paginator="\#\{scientificForumBacking.reviewedPagination\}"}{rendered="\#\{userListBacking.sessionInformation.user.reviewer\}"}{/}
+}
 
 \subsubsection{Gutachter}
 
