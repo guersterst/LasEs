@@ -1,5 +1,6 @@
 package de.lases.business.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -47,7 +48,7 @@ public class SubmissionService {
     public void uploadFile(byte[] pdf) {
     }
 
-    public Paper downloadFile() {
+    public Paper downloadFile() throws IOException {
         return null;
     }
 
