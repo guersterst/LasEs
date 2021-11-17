@@ -175,6 +175,8 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 \todo{Messages direkt an Eingabefeldern?ja?}
 
+\subsubsection{Anonymer Nutzer}
+
 \begin{samepage}
 	\textbf{welcome.xhtml} \phantomLabel{flt:welcome} Auf der Login- bzw. Welcome-Seite wird das System vorgestellt.
 	Zusätzlich gibt es ein Login-Formular zur Anmeldung im System.
@@ -216,6 +218,16 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 		\fentry{register-cbtn}{<h:commandButton>}{Ausführen des Registrations-Prozesses.}{value="\#\{label.register\}"\newline action="\#\{registrationBacking.register\}"}{/}{/}
 
 		\fentry{welcomepage-lnk}{<h:link>}{Weiterleitung zur Login Seite.}{value="\#\{label.welcomeLink\}" \newline outcome="/anonymous/welcome" \newline title="\#\{help.welcomepage\}"}{/}{/}
+	}
+\end{samepage}
+
+\begin{samepage}
+	\textbf{verification.xhtml} Wird bei erfolgreicher Verifikation der E-Mail angezeigt.
+	\nopagebreak
+	
+	\ftable{		
+		\fentry{go-to-home-cbtn}{<h:commandButton>}{Button zur Weiterleitung auf die Homepage bei erfolgreicher Verifizierung. Ansonsten wird auf \emph{welcome.xhtml} weiter geleitet.}{/}{/}
+		
 	}
 \end{samepage}
 
