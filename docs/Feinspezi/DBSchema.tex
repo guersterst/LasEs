@@ -6,9 +6,9 @@ Das ER-Diagramm aus dem Entwurf wird hier in \emph{Data Definition Language} üb
 
 \subsubsection{SQL Standard}
 
-\emph{SQL} ist vielfach standardisiert und jedes Datenbank Management System weicht teilweise von diesen Standards ab und haben dadurch ihren eigenen \emph{SQL Dialekt}. Im Folgenden wird der PostgreSQL Dialekt verwendet, da PostgreSQL, wie im Pflichtenheft definiert, als SQL Server verwendet wird.
+\emph{SQL} ist vielfach standardisiert und alle Datenbank Management System weichen teilweise von diesen Standards ab und haben dadurch ihren eigenen \emph{SQL Dialekt}. Im Folgenden wird der PostgreSQL Dialekt verwendet, da PostgreSQL, wie im Pflichtenheft definiert, als SQL Server verwendet wird.
 
-Abweichungen vom ISO SQL Standard sind Enumerationen, \texttt{TIMESTAMP} Zeitpunkte, \texttt{BYTEA} als binärer Datentyp und einzelne Unterschiede im Syntax.
+Abweichungen vom ISO SQL Standard sind Enumerationen, \texttt{TIMESTAMP} Zeitpunkte, \texttt{BYTEA} als binärer Datentyp und einzelne Unterschiede in der Syntax.
 
 \subsubsection{Normalform}
 
@@ -18,7 +18,7 @@ Durch die Verwendung von Surrogatschlüsseln in den Entities sind die vorkommend
 
 \subsubsection{Namenskonventionen}
 
-Die Tabellennamen sind immer im Englischen Singular. Also beispielsweise \texttt{submission} anstatt \texttt{submissions}.
+Die Tabellennamen sind immer im englischen Singular. Also beispielsweise \texttt{submission} anstatt \texttt{submissions}.
 Alle Bezeichner in SQL werden in \texttt{snake\_case} geschrieben. Damit ist eine eindeutige optische Trennung zu Java's \texttt{camelCase} möglich. Die Werte von Enumerationen werden in \texttt{UPPER\_CASE} geschrieben.
 
 \subsubsection{Relationship-Typen}
