@@ -58,7 +58,7 @@ Wir verwenden eigene Fehlerseiten bei Exceptions und ersetzen die 404 und 500 Fe
     <error-code>404</error-code>
     <location>/WEB-INF/errorpages/error404.xhtml</location>
 </error-page>
-\end{lstlisting}\todo{location}
+\end{lstlisting}
 }
 Dadurch ist nicht ersichtlich, dass wir JSF/Mojarra verwenden.
 Das wird auch durch die Verwendung von .xhtml-Dateiendungen für unsere Facelets und Ersetzen des Bezeichners \code{JSESSONID} für Session-Cookies und URL-Rewriting in der web.xml-Datei verborgen:
@@ -71,3 +71,26 @@ Das wird auch durch die Verwendung von .xhtml-Dateiendungen für unsere Facelets
 </session-config>
 \end{lstlisting}
 }
+
+\subsection{Access Control}\label{subsec:access-control}
+Um unerlaubten Zugriff auf Seiten, Informationen und Aktionen zu verhindern, werden Zugriffe auf nicht-öffentliche Ressourcen (das ist alles außer Start-, Registrierungs- und Verifikationsseite) standardmäßig abgelehnt.
+Die Klasse \code{TrespassListener} entscheidet dann, ob der Nutzer die nötigen Rechte hat und akzeptiert eine Anfrage nur dann, sonst wird auf eine 404-Fehler-Seite weitergeleitet.
+Dazu wird über die angefragte URL das zugehörige Facelet bestimmt und geprüft, ob darauf mit der Rolle des Nutzers zugegriffen werden darf.
+Auf die Rolle kann der \code{TrespassListener} über die SessionInformation zugreifen.
+Der Zugriff hängt darüber hinaus auch von der Beziehung des Nutzers zur angefragten Ressource ab (ein normaler Nutzer kann z.B.\ nur sein \emph{eigenes} Profil oder eine \emph{eigene} Einreichung sehen).
+Deshalb prüft für die relevanten Seiten das jeweilige Backing Bean diese Beziehung und leitet ggf.\ auf eine Fehlerseite weiter.
+
+Durch den Eintrag
+\begin{lstlisting}
+    <servlet>
+        <servlet-name>facesServlet</servlet-name>
+        <servlet-class>jakarta.faces.webapp.FacesServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>facesServlet</servlet-name>
+        <url-pattern>/faces/*</url-pattern>
+    </servlet-mapping>
+\end{lstlisting}
+in der web.xml-Datei werden Aufrufe auf alle unsere Facelet-Dateien dem Faces Servlet weitergeleitet.
+Damit wird aufgrund der Entscheidung des \code{TrespassListener}s entweder das Facelet richtig als HTML-Datei gerendert, oder zur 404-Seite weitergeleitet. Ein Herunterladen der eigentlichen auf dem Server gespeicherten Facelet-Datei ist aber nicht möglich.
