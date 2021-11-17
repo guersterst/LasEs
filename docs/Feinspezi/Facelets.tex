@@ -269,37 +269,55 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	\ftable{
 		\fentry{your-submission-clnk}{<h:commandLink>}{Reiter zum Anzeigen der eigenen Einreichungen.}{value="\#\{label.yourSubmission\}" \newline action="\#\{homepageBacking.showOwnSubmissionsTab\}" \newline title="\#\{help.yourSubmissions\}"}{/}{/}
 		
-		\fentry{your-reviews-clnk}{<h:commandLink>}{Reiter zum Anzeigen der zu begutachtenden Einreichungen}{value="\#\{label.yourReviews\}" \newline action="\#\{homepageBacking.showSubmissionToReviewTab\}" \newline title="\#\{help.yourReviews\}"}{render="\#\{homepageBacking.sessionInformation.reviewer\}"}{/}
+		\fentry{your-reviews-clnk}{<h:commandLink>}{Reiter zum Anzeigen der zu begutachtenden Einreichungen}{value="\#\{label.yourReviews\}" \newline action="\#\{homepageBacking.showSubmissionToReviewTab\}" \newline title="\#\{help.yourReviews\}"}{render="\#\{homepageBacking.sessionInformation.user.reviewer\}"}{/}
 		
-		\fentry{editorial-overview-clnk}{<h:commandLink>}{Reiter zum Anzeigen aller Einreichungen, welche man editiert.}{value="\#\{label.editorialOverview\}" \newline action="\#\{homepageBacking.showSubmissionToEditTab\}" \newline title="\#\{help.editorialOverview\}"}{render="\#\{homepageBacking.sessionInformation.editor\}"}{/}
-		
-		\fentry{stateSelectEditor}{selectOneMenu}{Filtern des Status von Einreichungen}{E}
-		
-		\fentry{stateSelectReview}{selectOneMenu}{Filtern des Status von Einreichungen}{G}
-		
-		\fentry{stateSelect}{selectOneMenu}{Filtern des Status von Einreichungen}{Alle}
-		
-		\fentry{dateSelectEdit}{selectOneMenu}{Auswahl der Filtermöglichkeit eines Datums.}{E}
-		
-		\fentry{dateSelectReview}{selectOneMenu}{Auswahl der Filtermöglichkeit eines Datums.}{G}
-		
-		\fentry{dateSelect}{selectOneMenu}{Auswahl der Filtermöglichkeit eines Datums.}{Alle}
-		
-		\fentry{reviewPagination}{pagination}{Liste aller Gutachten.}{G}
-		
-		\fentry{editorPagination}{pagination}{Liste aller Einreichungen für einen Editor.}{E}
-		
+		\fentry{editorial-overview-clnk}{<h:commandLink>}{Reiter zum Anzeigen aller Einreichungen, welche man editiert.}{value="\#\{label.editorialOverview\}" \newline action="\#\{homepageBacking.showSubmissionToEditTab\}" \newline title="\#\{help.editorialOverview\}"}{render="\#\{homepageBacking.sessionInformation.editor\}"}{/}		
 	}
 \end{samepage}
 
+\todo{selectOneMenu noch nicht fertig}
+
 \begin{samepage}
-	Die Tabelle \emph{submissionPagination}ist nach den Punkten: Titel des Papers, Datum, Deadline und Status der Einreichung und Name des zugehörigen Forums gegliedert.
+	Die Tabellen \emph{submissionPagination}, \emph{reviewPagination} und \emph{editorPagination} sind nach den gleichen Punkten gegliedert und daher nur einmal ausführlich aufgegliedert: Titel des Papers, Datum, Deadline und Status der Einreichung und Name des zugehörigen Forums.
 	
 	\ftable{
 		\fentry{submission-pg}{<pg:pagination>}{Liste aller eignen Einreichungen.}{paginator="\#\{homepageBacking.submissionPagination\}"}{/}{/}
 		
+		\fentry{title-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Titel des Papers.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.paperTitle\}"}{/}{/}
+		
+		\fentry{title-otxt}{<h:outputText>}{Titel des Papers.}{value="\#\{var.title\}"}{/}{/}
+		
+		\fentry{date-ssc}{<ssc:sortsearchcolumn>}{Spalte für das Abgabedatum des Papers.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.date\}"}{/}{/}
+		
+		\fentry{date-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{\}" title="\#\{help.dateSelect\}"}{/}{/}
+		
+		\fentry{/}{<f:selectItems>}{Mögliche Filterung des Datums.}{value="\#\{\}"}{/}{/}
+		
+		\fentry{date-otxt}{<h:outputText>}{Abgabedatum des Papers.}{value="\#\{var.submissionTime\}"}{/}{convertDateTime \newline pattern=""yyyy-MM-dd"}
+		
+		\fentry{deadline-ssc}{<ssc:sortsearchcolumn>}{Spalte für die Deadline der Revision.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.deadline\}"}{/}{/}
+		
+		\fentry{deadline-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit einer Deadline.}{value="\#\{\}" title="\#\{help.deadlineSelect\}"}{/}{/}
+		
+		\fentry{/}{<f:selectItems>}{Mögliche Filterung der Deadline.}{value="\#\{\}"}{/}{/}
+		
+		\fentry{deadline-otxt}{<h:outputText>}{Deadline des Papers.}{value="\#\{var.deadlineRevision\}"}{/}{convertDateTime \newline pattern=""yyyy-MM-dd"}
+		
+		\fentry{state-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Status der Einreichung.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.stateSub\}"}{/}{/}
+		
+		\fentry{state-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Status.}{value="\#\{\}" title="\#\{help.stateSubSelect\}"}{/}{/}
+		
+		\fentry{/}{<f:selectItems>}{Mögliche Filterung des Status.}{value="\#\{\}"}{/}{/}
+		
+		\fentry{state-otxt}{<h:outputText>}{Status der Einreichung.}{value="\#\{var.state\}"}{/}{/}
+		
+		\fentry{forum-ssc}{<ssc:sortsearchcolumn>}{Spalte für zugehöriges Forum.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.forumSub\}"}{/}{/}
+		
+		\fentry{forum-otxt}{<h:outputText>}{Zugehöriges Forum der Einreichung.}{value="\#\{var.scientificForum\}"}{/}{/}
 		
 	}
+\end{samepage}
+	
 \end{samepage}
 
 
