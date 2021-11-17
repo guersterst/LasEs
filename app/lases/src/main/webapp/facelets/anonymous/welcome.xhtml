@@ -19,6 +19,8 @@
 
     <h:form>
     <h:link value="Home" outcome="/facelets/authenticated/homepage"/>
+        <h:inputText value="#{toolbarBacking.reviewedByInput.timestampDeadline}" rendered="#{toolbarBacking.sessionInformation.user.editor}"/>
+        <h:dataTable value="#{toolbarBacking.reviewer}" var="re"
     </h:form>
 
     <div class="login-container">

@@ -12,4 +12,7 @@ public class ReviewedBy {
 
     private AcceptanceStatus hasAccepted;
 
+    public LocalDateTime getTimestampDeadline() {
+        return timestampDeadline;
+    }
 }
