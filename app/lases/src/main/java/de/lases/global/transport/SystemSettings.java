@@ -13,7 +13,7 @@ public class SystemSettings {
 
     private String headlineWelcomePage;
 
-    private String shortMessageWelcomePage;
+    private String messageWelcomePage;
 
     private Style style;
 
