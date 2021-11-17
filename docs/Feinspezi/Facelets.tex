@@ -1,9 +1,9 @@
 %% Macros
 \newcommand{\ftable}[1]{\begin{sidewaystable}
 \begin{tabular}[H]{ |m{1.5cm}| m{1.5cm}| m{3cm}| m{7cm} |m{4cm}| m{4cm}| }
-    \toprule
+    \hline
     \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Binding} & \textbf{Constraints} & \textbf{Validator \newline Converter} \\
-    \midrule
+    \hline\hline
     #1
     %\bottomrule
 \end{tabular}
@@ -19,11 +19,7 @@
 Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren wir nach dem \emph{kebab-case} Prinzip. Um den genauen Typ in die ID mit aufzunehmen, wird das entsprechende Suffix angehängt.
 
 \todo{Suffix:}
-<<<<<<< HEAD
- graphicImage = gIm link =lnk inputText =itext commandButton = cbtn messages = msgs dataTable = dtbl selectOneMenu = slctom panelGrid = pgrd commandLink = clnk inputSecret = iscrt pagination = pg
-=======
- graphicImage = gim, link = lnk, inputText = itxt, outputText = otxt, commandButton = cbtn, messages = msgs, dataTable = dtbl, selectOneMenu = slctom, panelGrid = pgrd, commandLink = clnk, inputSecret = iscrt
->>>>>>> 3d4771ebfc8ffad5c117a8fa52300523d8d6be98
+ graphicImage = gim, link = lnk, inputText = itxt, outputText = otxt, commandButton = cbtn, messages = msgs, dataTable = dtbl, selectOneMenu = slctom, panelGrid = pgrd, commandLink = clnk, inputSecret = iscrt, inputFile = ifile
 
 \subsection{Templates}
 
@@ -269,13 +265,13 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 \begin{samepage}
 	\textbf{homepage.xhtml} \phantomsection \label{flt:homepage} Startseite die den Überblick über alle Einreichungen, aufgeteilt in Reiter, beinhaltet.
-	
+
 	\ftable{
 		\fentry{your-submission-clnk}{<h:commandLink>}{Reiter zum Anzeigen der eigenen Einreichungen.}{value="\#\{label.yourSubmission\}" \newline action="\#\{homepageBacking.showOwnSubmissionsTab\}" \newline title="\#\{help.yourSubmissions\}"}{/}{/}
-		
+
 		\fentry{your-reviews-clnk}{<h:commandLink>}{Reiter zum Anzeigen der zu begutachtenden Einreichungen}{value="\#\{label.yourReviews\}" \newline action="\#\{homepageBacking.showSubmissionToReviewTab\}" \newline title="\#\{help.yourReviews\}"}{render="\#\{homepageBacking.sessionInformation.user.reviewer\}"}{/}
-		
-		\fentry{editorial-overview-clnk}{<h:commandLink>}{Reiter zum Anzeigen aller Einreichungen, welche man editiert.}{value="\#\{label.editorialOverview\}" \newline action="\#\{homepageBacking.showSubmissionToEditTab\}" \newline title="\#\{help.editorialOverview\}"}{render="\#\{homepageBacking.sessionInformation.editor\}"}{/}		
+
+		\fentry{editorial-overview-clnk}{<h:commandLink>}{Reiter zum Anzeigen aller Einreichungen, welche man editiert.}{value="\#\{label.editorialOverview\}" \newline action="\#\{homepageBacking.showSubmissionToEditTab\}" \newline title="\#\{help.editorialOverview\}"}{render="\#\{homepageBacking.sessionInformation.editor\}"}{/}
 	}
 \end{samepage}
 
@@ -283,45 +279,135 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 \begin{samepage}
 	Die Tabellen \emph{submissionPagination}, \emph{reviewPagination} und \emph{editorPagination} sind nach den gleichen Punkten gegliedert und daher nur einmal ausführlich aufgegliedert: Titel des Papers, Datum, Deadline und Status der Einreichung und Name des zugehörigen Forums.
-	
+
 	\ftable{
 		\fentry{submission-pg}{<pg:pagination>}{Liste aller eignen Einreichungen.}{paginator="\#\{homepageBacking.submissionPagination\}"}{/}{/}
-		
+
 		\fentry{title-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Titel des Papers.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.paperTitle\}"}{/}{/}
-		
+
 		\fentry{title-otxt}{<h:outputText>}{Titel des Papers.}{value="\#\{var.title\}"}{/}{/}
-		
+
 		\fentry{date-ssc}{<ssc:sortsearchcolumn>}{Spalte für das Abgabedatum des Papers.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.date\}"}{/}{/}
-		
+
 		\fentry{date-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{\}" title="\#\{help.dateSelect\}"}{/}{/}
-		
+
 		\fentry{/}{<f:selectItems>}{Mögliche Filterung des Datums.}{value="\#\{\}"}{/}{/}
-		
+
 		\fentry{date-otxt}{<h:outputText>}{Abgabedatum des Papers.}{value="\#\{var.submissionTime\}"}{/}{convertDateTime \newline pattern=""yyyy-MM-dd"}
-		
+
 		\fentry{deadline-ssc}{<ssc:sortsearchcolumn>}{Spalte für die Deadline der Revision.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.deadline\}"}{/}{/}
-		
+
 		\fentry{deadline-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit einer Deadline.}{value="\#\{\}" title="\#\{help.deadlineSelect\}"}{/}{/}
-		
+
 		\fentry{/}{<f:selectItems>}{Mögliche Filterung der Deadline.}{value="\#\{\}"}{/}{/}
-		
+
 		\fentry{deadline-otxt}{<h:outputText>}{Deadline des Papers.}{value="\#\{var.deadlineRevision\}"}{/}{convertDateTime \newline pattern=""yyyy-MM-dd"}
-		
+
 		\fentry{state-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Status der Einreichung.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.stateSub\}"}{/}{/}
-		
+
 		\fentry{state-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Status.}{value="\#\{\}" title="\#\{help.stateSubSelect\}"}{/}{/}
-		
+
 		\fentry{/}{<f:selectItems>}{Mögliche Filterung des Status.}{value="\#\{\}"}{/}{/}
-		
+
 		\fentry{state-otxt}{<h:outputText>}{Status der Einreichung.}{value="\#\{var.state\}"}{/}{/}
-		
+
 		\fentry{forum-ssc}{<ssc:sortsearchcolumn>}{Spalte für zugehöriges Forum.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.forumSub\}"}{/}{/}
-		
+
 		\fentry{forum-otxt}{<h:outputText>}{Zugehöriges Forum der Einreichung.}{value="\#\{var.scientificForum\}"}{/}{/}
-		
+
 	}
 \end{samepage}
+
+\todo{uploadFile ist noch nicht vollständig}
+\todo{id von Scientific forum wietergeben? für link + profile}
+
+\begin{samepage}
 	
+	\textbf{submission.xhtml} ist die Übersichtsseite einer Abgabe.
+	Hier werden alle mit der Einreichung verbundenen Aktivitäten abgebildet.
+	\nopagebreak
+	
+	\ftable{
+		\fentry{/}{<ui:include>}{\hyperref[flt:toolbar]{Seitenleiste mit Tools.}}{rendered="\#\{submissionBacking.sessionInformation.user.editor\}"}{/}
+		
+		\fentry{upload-revision-ifile}{<h:inputFile>}{Upload einer Revision.}{value="\#\{\}" \newline requiered="true" \newline requieredMessage="\#\{requiered.inputFile\}"}{rendered="\#\{submissionBacking.isViewerSubmitter\}"}{/}
+		
+		\fentry{upload-cbtn}{<h:commandButton>}{Ausführen des Uploads.}{value="\#\{label.uploadFile\}" \newline action="\#\{submissionBacking.uploadPDF\}" \newline title="\#\{help.uploadRevision\}"}{rendered="\#\{submissionBacking.isViewerSubmitter\}"}{/}
+		
+		\fentry{new-review-cbtn}{<h:commandButton>}{Weiterleitung zur Einreichung eines neuen Gutachtens.}{value="\#\{label.uploadReview\}" \newline action="\#\{submissionBacking.uploadReview\}" \newline title="\#\{help.uploadRevision\}"}{rendered="\#\{submissionBacking.sessionInformation.user.reviewer\}"}{/}
+		
+		\fentry{accept-reviewing-cbtn}{<h:commandButton>}{Annahme der Rolle eines Gutachters für diese Einreichung.}{value="\#\{label.acceptReviewing\}" \newline action="\#\{submissionBacking.acceptReviewing\}" \newline title="\#\{help.acceptReviewing\}"}{rendered="\#\{submissionBacking.sessionInformation.user.reviewer\}"}{/}
+		
+		\fentry{decline-reviewing-cbtn}{<h:command>}{Ablehnen der Rolle eines Gutachters für diese Einreichung.}{value="\#\{label.declineReviewing\}" \newline action="\#\{submissionBacking.declineReviewing\}" \newline title="\#\{help.declineReviewing\}"}{rendered="\#\{submissionBacking.sessionInformation.user.reviewer\}"}{/}
+		
+		\fentry{title-otxt}{<h:outputText>}{Titel des Papers.}{value="\#\{submissionBacking.submission.title\}"}{/}{/}
+		
+		\fentry{forum-lnk}{<h:link>}{Name des Forums und Weiterleitung zur Forumsübersicht.}{value="\#\{submissionBacking.scientificForum.name\}" \newline outcome="/facelets/authenticated/scientificForum" \newline title="\#\{help.directToForum\}"}{disabled="\#\{not submissionBacking.sessionInformation.user.editor\}"}{/}
+		
+		\fentry{author-lnk}{<h:link>}{Name des Autors und Weiterleitung zum Profil.}{value="\#\{submissionBacking.authorForPaper\}" \newline outcome="/facelets/authenticated/profile" \newline title="\#\{help.directProfile\}"}{disabled="\#\{not submissionBacking.sessionInformation.user.editor\}"}{/}
+		
+		\fentry{email-lnk}{<h:link>}{E-Mail-Adressen der Co-Autoren und Mailto-Link.}{value="\#\{submissionBacking.author.emailAddress\}"\newline  outcome="\#\{'mailto:'.concat(submissionBacking.author.emailAddress)\}"}{disabled="\#\{not submissionBacking.sessionInformation.user.editor\}"}
+		
+		\fentry{dateSelect}{selectOneMenu}{Auswahl der Filtermöglichkeit eines Datums.}{Alle}{}{}
+		
+		\fentry{dateSelectReview}{selectOneMenu}{Auswahl der Filtermöglichkeit eines Datums.}{Alle}{}{}
+		
+		\fentry{reviewState}{selectOneMenu}{Filtern der Gutachten nach ihrem Status.}{E,G}{}{}
+		
+		\fentry{recommendation}{selectOneMenu}{Auswahl der Art von Empfehlungen.}{Alle}{}{}
+		
+		\fentry{paperPagination}{pagination}{Liste aller Versionen}{Alle}{}{}
+		
+		\fentry{reviewPagination}{pagination}{Liste aller/der eigenen Gutachten.}{E,G}{}{}
+	}
+\end{samepage}
+
+\begin{samepage}
+	
+	\emph{paperPagination} enthält die Spalten: Version, Datum, Deadline, Sichtbarkeit, Status und Download.
+	Die Elemente der Liste, der unterschiedlichen Versionen der Einrichtung, sieht wie folgt aus:
+	
+	\ftable{
+		\fentry{version}{outputText}{Versionsnummer der Einreichung}{Alle}{}{}
+		
+		\fentry{date}{outputText}{Datum der Einreichung}{Alle}{}{}
+		
+		\fentry{deadline}{outputText}{Deadline der Revision}{Alle}{}{}
+		
+		\fentry{unlockRevision}{commandButton}{Freischalten einer Revision.}{E}{}{}
+		
+		\fentry{state}{radioButton}{Status der Einreichung}{Alle}{}{}
+		
+		\fentry{pdf}{commandButton}{Download der Einreichung}{Alle}{}{}
+	}
+\end{samepage}
+
+\begin{samepage}
+	
+	\emph{reviewPagination} enthält die Spalten: Version, Gutachter, Datum, Deadline, Status, Empfehlung, Kommentar und Download.
+	Ist ein Gutachten freigeschaltet, so erhält auch ein Nutzer Leserechte.
+	Die Elemente der Liste von Gutachten sind folgende:
+	
+	\ftable{
+		\fentry{version}{outputText}{Versionsnummer des Gutachtens.}{E,G}{}{}
+		
+		\fentry{reviewer}{outputText}{Namen des Gutachters.}{E,G}{}{}
+		
+		\fentry{date}{outputText}{Datum des Gutachtens.}{E,G}{}{}
+		
+		\fentry{deadline}{outputText}{Deadline des Gutachtens.}{E,G}{}{}
+		
+		\fentry{state}{commandButton}{Freigabe des Gutachtens}{E}{}{}
+		
+		\fentry{stateText}{outputText}{Freigabestatus des Gutachtens}{G}{}{}
+		
+		\fentry{recommendation}{checkbox}{Empfehlung eines Gutachters}{E,G}{}{}
+		
+		\fentry{comment}{outputText}{Kommentar des Gutachters.}{E,G}{}{}
+		
+		\fentry{pdf}{commandButton}{Download der Einreichung.}{E,G}{}{}
+	}
+\end{samepage}
 
 
 
@@ -372,11 +458,44 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 \ftable{
 
-	\fentry{editorialPagination}{pagination}{Paginierte Liste aller Einreichungen, die der Editor verwaltet.}{E}{}{}
+	\fentry{submission-pg}{<pg:pagination>}{Paginierte Liste aller Einreichungen, die der Nutzer eingereicht hat.}{paginator="\#\{scientificForumBacking.submissionPagination\}"}{/}{/}
 
-	\fentry{reviewPagination}{pagination}{Paginierte Liste aller Einreichungen, die der Gutachter bearbeitet.}{E,G}{}{}
+	\fentry{title-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Titel des Papers.}{paginator="\#\{scientificForumBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.submissionTitle\}"}{/}{/}
 
-	\fentry{submissionPagination}{pagination}{Paginierte Liste aller Einreichungen, die der Nutzer eingereicht hat.}{Alle}{}{}
+	\fentry{title-otxt}{<h:outputText>}{Titel der Einreichung.}{value="\#\{var.title\}"}{/}{/}
+
+	\fentry{date-ssc}{<ssc:sortsearchcolumn>}{Spalte für das Abgabedatum der Einreichung.}{paginator="\#\{scientificForumBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.date\}"}{/}{/}
+
+	\fentry{date-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{scientificForumBacking.dateFilterSelectSub\}" title="\#\{help.dateSelect\}"}{/}{/}
+
+	\fentry{/}{<f:selectItems>}{Mögliche Filterung des Datums.}{value="\#\{\}"}{/}{/}
+
+	\fentry{date-otxt}{<h:outputText>}{Abgabedatum der Einreichung.}{value="\#\{var.submissionTime\}"}{/}{convertDateTime \newline pattern=""yyyy-MM-dd"}
+
+	\fentry{deadline-ssc}{<ssc:sortsearchcolumn>}{Spalte für die Deadline der Revision.}{paginator="\#\{scientificForumBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.deadline\}"}{/}{/}
+
+	\fentry{deadline-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit einer Deadline.}{value="\#\{\}" title="\#\{help.deadlineSelect\}"}{/}{/}
+
+	\fentry{/}{<f:selectItems>}{Mögliche Filterung der Deadline.}{value="\#\{\}"}{/}{/}
+
+	\fentry{deadline-otxt}{<h:outputText>}{Deadline für eine Revision.}{value="\#\{var.deadlineRevision\}"}{/}{convertDateTime \newline pattern=""yyyy-MM-dd"}
+
+	\fentry{state-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Status der Einreichung.}{paginator="\#\{scientificForumBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.stateSub\}"}{/}{/}
+
+	\fentry{state-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Status.}{value="\#\{\}" title="\#\{help.stateSubSelect\}"}{/}{/}
+
+	\fentry{/}{<f:selectItems>}{Mögliche Filterung des Status.}{value="\#\{\}"}{/}{/}
+
+	\fentry{state-otxt}{<h:outputText>}{Status der Einreichung.}{value="\#\{var.state\}"}{/}{/}
+}
+
+\ftable{
+
+	\multicolumn{6}{|c|}{Weitere Paginierungen mit den gleichen Spalten wie in der vorherigen Tabelle.} \\\hline %das hline verursacht keine probleme, wird sind in einem tabular
+
+	\fentry{editorial-pg}{<pg:pagination>}{Paginierte Liste aller Einreichungen, die der Editor verwaltet.}{paginator="\#\{scientificForumBacking.editedPagination\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
+
+	\fentry{review-pg}{<pg:pagination>}{Paginierte Liste aller Einreichungen, die der Gutachter bearbeitet.}{paginator="\#\{scientificForumBacking.reviewedPagination\}"}{rendered="\#\{userListBacking.sessionInformation.user.reviewer\}"}{/}
 }
 
 \subsubsection{Gutachter}

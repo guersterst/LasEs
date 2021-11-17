@@ -21,8 +21,7 @@
     <h:link value="Home" outcome="/facelets/authenticated/homepage"/>
         <h:inputText value="#{toolbarBacking.submission.}" rendered="#{toolbarBacking.sessionInformation.user.reviewer}"/>
         <h:dataTable value="#{toolbarBacking.reviewer}" var="review"/>
-        <h:inputText value="#{welcomeBacking.loginInput.passwordNotHashed}" id="password"/>
-        <h:message for=""
+        <h:inputText value="#{submissionBacking}" id="password" rendered="#{submissionBacking.sessionInformation.user.editor}"/>
     </h:form>
 
     <div class="login-container">
