@@ -32,7 +32,7 @@ public class UserService {
     }
 
     /**
-     * Manipulates a {@code User}-DTO.
+     * Manipulates a user.
      *
      * @param newUser A {@link User}-DTO filled with the fields that are desired to be changed.
      *                <p>
@@ -88,7 +88,7 @@ public class UserService {
     }
 
     /**
-     * Gets a sorted list of users. filterung, sortierung
+     * Gets a sorted and filtered list of users.
      *
      * @param privilege The view privileges of the calling user.
      * @param resultListParams Allows for filtering and sorting of the resulting list.

@@ -10,6 +10,7 @@ import jakarta.inject.Inject;
 
 /**
  * Provides functionality for the registration and creation of users.
+ * In case of an unexpected state, a {@link UIMessage} event will be fired.
  */
 @Dependent
 public class RegistrationService {
