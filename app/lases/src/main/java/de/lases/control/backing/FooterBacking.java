@@ -15,6 +15,11 @@ public class FooterBacking {
     @Inject
     private SessionInformation sessionInformation;
 
+    /**
+     * Get session information.
+     *
+     * @return The session information.
+     */
     public SessionInformation getSessionInformation() {
         return sessionInformation;
     }
