@@ -27,7 +27,7 @@ public class User {
 
     private int id;
 
-    //private List<Privilege> priveleges;
+    private List<Privilege> priveleges;
 
     private String title;
 

@@ -21,6 +21,8 @@ public class UserRepository {
     public static void remove(Submission submission, Transaction transaction) throws InvalidFieldsException {
     }
 
+    // TODO @Sebastian: getVerification(Verification verification)
+
     // get list for
     public static List<User> getList() {
         return null;
