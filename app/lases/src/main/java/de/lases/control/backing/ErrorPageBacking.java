@@ -1,6 +1,5 @@
 package de.lases.control.backing;
 
-import de.lases.global.transport.ErrorMessage;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Named;

@@ -3,6 +3,9 @@ package de.lases.global.transport;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Represents a submission.
+ */
 public class Submission {
 
     private List<Paper> papers;
