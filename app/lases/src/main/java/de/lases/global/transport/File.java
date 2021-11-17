@@ -7,4 +7,16 @@ public class File {
 
     private byte[] file;
 
+    public byte[] getFile() {
+        return file;
+    }
+
+    /**
+     * Set the file as a byte array.
+     *
+     * @param file The file.
+     */
+    public void setFile(byte[] file) {
+        this.file = file;
+    }
 }
