@@ -157,7 +157,7 @@ public class SubmissionService {
      * Determines whether a user has permission to view a submission
      *
      * @param submission The submission to be viewed.
-     * @param user The user whose view access is being determined.
+     * @param user       The user whose view access is being determined.
      * @return {@code true} if the view access is allowed, {@code false} otherwise.
      */
     public boolean canView(Submission submission, User user) {
@@ -165,22 +165,40 @@ public class SubmissionService {
     }
 
     /**
+     * Delivers all submissions, that a user either has submitted, is an editor to or reviews
+     * in a specified scientific forum.
      *
-     *
-     * @param scientificForum
-     * @param role
-     * @param resultParams
-     * @return
+     * @param scientificForum The {@link ScientificForum} where the wanted submissions are submitted to.
+     * @param user            The user, whose editorial, reviewed or own submissions.
+     * @param privilege       The role, to which submissions belong, in relation to a user.
+     *                        Meaning, the user can request to receive the submissions which he is an editor to,
+     *                        reviews or has submitted himself.
+     * @param resultParams    Parameters, that control filtering and sorting of the resulting list.
+     * @return The resulting list of submissions, that were submitted to a given scientific forum.
      */
-    public List<Submission> getSubmissions(ScientificForum scientificForum, User role, ResultListParameters resultParams) {
+    public List<Submission> getSubmissions(ScientificForum scientificForum, User user, Privilege privilege,
+                                           ResultListParameters resultParams) {
         return null;
     }
 
-    //todo meinung sebson
+    //todo what about coauthored submissions? one solution expand privilege for co-author.
+
+    /**
+     * Delivers all submissions, that a user has submitted, is an editor to or reviews.
+     *
+     * @param privilege    The role, to which submissions belong, in relation to a user.
+     *                     Meaning, the user can request to receive the submissions which he is an editor to,
+     *                     reviews or has submitted himself.
+     * @param user         The user, whose editorial, reviewed or own submissions.
+     * @param resultParams Parameters, that control filtering and sorting of the resulting list.
+     * @return The resulting list of submissions, which a user is involved in.
+     */
     public List<Submission> getSubmissions(Privilege privilege, User user, ResultListParameters resultParams) {
         return null;
     }
 
+
+    //todo was macht das wofür?
     public int countSubmissions() {
         return 0;
     }

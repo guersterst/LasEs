@@ -94,7 +94,7 @@ public class UserService {
      * Gets a sorted and filtered list of users.
      *
      * @param privilege The view privileges of the calling user.
-     * @param resultListParams Allows for filtering and sorting of the resulting list.
+     * @param resultListParams Parameters, that control filtering and sorting of the resulting list.
      * @return A list of {@link User}-DTOs.
      */
     public List<User> getUsers(Privilege privilege, ResultListParameters resultListParams) {
