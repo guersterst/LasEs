@@ -24,7 +24,6 @@ public class Submission {
 
     private User editor;
 
-
     private String title;
 
     private SubmissionState state;

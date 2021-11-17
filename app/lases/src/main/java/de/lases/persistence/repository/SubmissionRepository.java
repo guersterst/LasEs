@@ -43,6 +43,6 @@ public class SubmissionRepository {
         return 0;
     }
 
-    //Todo setstate, seteditor, accept, reject,
+    //Todo @Sebastson setstate, seteditor, canview
 
 }
