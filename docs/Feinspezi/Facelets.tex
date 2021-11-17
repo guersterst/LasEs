@@ -94,11 +94,11 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	\nopagebreak
 	
 	\ftable{
-		\fentry{add-reviewer-iTxt}{<h:inputText>}{Eingabefeld zur Angabe einer E-Mail-Adresse}{value="\#{}" \newline title="\#{tooltip.reviewerEmail}}{render="\#{}" nur für E und A}{emailAddressExistsValidator \newline required="true" \newline pattern="([^.@]+)(\.[^.@]+)*@([^.@]+\.)+([^.@]+)"}
+		\fentry{add-reviewer-iTxt}{<h:inputText>}{Eingabefeld zur Angabe einer E-Mail-Adresse}{value="\#{toolbarBacking.reviewerInput.email}" \newline title="\#{tooltip.reviewerEmail}}{render="\#{toolbarBacking.sessionInformation.user.editor}"}{emailAddressExistsValidator \newline required="true" \newline pattern="([^.@]+)(\.[^.@]+)*@([^.@]+\.)+([^.@]+)"}
 		
-		\fentry{add-deadline-reviewer-iTxt}{<h:inputText>}{Eingabefeld zur Angabe einer Deadline.}{value="\#{}" \newline title="\#{tooltip.reviewerDeadline}"}{render="\#{}"für A und E}{converterDateTime \newline patter="dd/MM/yyyy"}
+		\fentry{add-deadline-reviewer-iTxt}{<h:inputText>}{Eingabefeld zur Angabe einer Deadline.}{value="\#{toolbarBacking.reviewedByInput.timestampDeadline}" \newline title="\#{tooltip.reviewerDeadline}"}{render="\#{toolbarBacking.sessionInformation.user.editor}"}{converterDateTime \newline patter="dd/MM/yyyy"}
 		
-		\fentry{add-reviewer-cbtn}{<h:commandButton>}{Knopf zum Hinzufügen des Gutachters}{value="\#{label.addReviewer}" \newline action="\#{}" \newline title="\#{tooltip.addReviewer}"}{render="\#{}" nur für E und A}{/}
+		\fentry{add-reviewer-cbtn}{<h:commandButton>}{Knopf zum Hinzufügen des Gutachters}{value="\#{label.addReviewer}" \newline action="\#{}" \newline title="\#{tooltip.addReviewer}"}{render="\#{toolbarBacking.sessionInformation.user.editor}"}{/}
 		
 		\fentry{reviewer-dtbl}{<h:dataTable>}{Liste der Gutachter}{value="\#{}" \newline var="reviewer"}{render="\#{}"E und A}{/}
 		
