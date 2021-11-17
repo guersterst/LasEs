@@ -5,5 +5,19 @@ package de.lases.global.transport;
  * the request or has yet to decide.
  */
 public enum AcceptanceStatus {
-    PENDING, ACCEPTED, REJECTED;
+
+    /**
+     * The reviewer has yet to decide.
+     */
+    PENDING,
+
+    /**
+     * The reviewer accepted.
+     */
+    ACCEPTED,
+
+    /**
+     * The reviewer rejected.
+     */
+    REJECTED;
 }
