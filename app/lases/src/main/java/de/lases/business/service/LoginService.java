@@ -18,8 +18,4 @@ public class LoginService {
     public User login(String email, String password) {
         return null;
     }
-
-    // TODO: @Joahnnes. Keine Ahnung ob man das braucht, ich gluabe wir haben
-    // mal gesagt, dass wird nicht brauchen, aber schau nochmal
-    public void logout() { }
 }
