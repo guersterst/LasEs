@@ -1,10 +1,10 @@
 package de.lases.business.service;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import de.lases.persistence.repository.*;
 import de.lases.global.transport.*;
+import de.lases.persistence.repository.Transaction;
+import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
-import jakarta.inject.Named;
+import jakarta.inject.Inject;
 
 import java.util.List;
 
@@ -15,9 +15,6 @@ import java.util.List;
 @Dependent
 public class UserService {
 
-    // TODO @Johannes: Irgendwas zum verifien vom User fehlt (wahrscheinlich
-    //  auch bei den Repos)
-
     @Inject
     private Event<UIMessage> uiMessageEvent;
 
@@ -27,8 +24,8 @@ public class UserService {
     /**
      * Gets a {@code User}-DTO.
      *
-     * @param A {@link User}-DTO that should contain an existing id value.
-     * @return A {@code User}-DTO filled with all available fields filled.
+     * @param user A {@link User}-DTO that should contain an existing id value.
+     * @return A {@code User}-DTO filled with all available fields.
      */
     public User getUser(User user) throws IllegalArgumentException {
         return null;
@@ -108,7 +105,7 @@ public class UserService {
      * @return {@code true} if the verification process was succesful. {@code false} otherwise.
      */
     public boolean verify(Verification verification) {
-
+        return false;
     }
 
     /**
@@ -117,6 +114,6 @@ public class UserService {
      * @return {@true} if the user is verified. {@code false otherwise}.
      */
     public boolean isVerified(User user) {
-
+        return false;
     }
 }

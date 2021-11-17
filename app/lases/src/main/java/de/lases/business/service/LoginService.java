@@ -1,11 +1,11 @@
 package de.lases.business.service;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.Dependent;
 import jakarta.faces.component.UIMessage;
-import jakarta.inject.Dependent;
 import de.lases.global.transport.*;
 import jakarta.enterprise.event.Event;
 import de.lases.persistence.repository.*;
+import jakarta.inject.Inject;
 
 /**
  * Provides functionality regarding the authentication of a user.
@@ -13,8 +13,10 @@ import de.lases.persistence.repository.*;
 @Dependent
 public class LoginService {
 
+    @Inject
     private Event<UIMessage> uiMessageEvent;
 
+    @Inject
     private Transaction transaction;
 
     /**

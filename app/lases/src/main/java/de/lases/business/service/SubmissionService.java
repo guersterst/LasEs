@@ -3,14 +3,15 @@ package de.lases.business.service;
 import java.io.IOException;
 import java.util.List;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
-import jakarta.inject.Named;
 import de.lases.persistence.repository.*;
 import de.lases.global.transport.*;
 
-@ApplicationScoped
-@Named
+/**
+ * Provides functionality regarding the management and handling of submissions.
+ */
+@Dependent
 public class SubmissionService {
 
     private Event<UIMessage> uiMessageEvent;
