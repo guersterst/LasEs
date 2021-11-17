@@ -264,6 +264,52 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 %% Ab hier sind Bastis hinzugefügte Änderungen
 
 
+\begin{samepage}
+	\textbf{scientificForum.xhtml} Die Ansicht eines Forums dient zur Ausgabe von Informationen über die jeweilige Konferenz oder das jeweilige Journal.
+	Das Anzeigen und Filtern der Tabellen \emph{editorialPagination}, \emph{reviewPagination} und \emph{submissionPagination} wird genauso gehandhabt, wie auf \emph{homepage.xhtml}.
+	Ausnahme dabei ist die Spalte Forum, welche hier nicht angezeigt wird.
+	\nopagebreak
+
+	\ftable{
+
+		\fentry{forumName}{inputText}{Name des Forums.}{value="\#\{scientificForumBacking.scientificForum.name\}"}{readonly="\#\{!scientificForumBacking.isViewerEditor\}"}{required="true"}
+
+		\fentry{editor}{outputText}{Liste der verantwortliche Editoren.}{Alle}{}{}
+
+		\fentry{newEditor}{inputText}{Angabe der E-Mail eines Editors.}{E}{}{}
+
+		\fentry{addEditor}{commandButton}{Füge Editor zur Liste hinzu.}{E}{}{}
+
+		\fentry{removeEditor}{commandButton}{Lösche ausgewählten Editor.}{E}{}{}
+
+		\fentry{deadline}{inputText}{Deadline des Forums.}{Alle}{}{}
+
+		\fentry{description}{inputTextArea}{Kurzbeschreibung des Forums.}{Alle}{}{}
+
+		\fentry{url}{outputLink}{Link zur Konferenz oder zum Journal.}{Alle}{}{}
+
+		\fentry{changeUrl}{inputText}{Angabe einer neuen URL.}{E}{}{}
+
+		\fentry{reviewInstructions}{inputTextArea}{Anleitung für eine Begutachtung.}{G,E}{}{}
+
+		\fentry{scienceField}{outputText}{Fachgebiet des Forums.}{Alle}{}{}
+
+		\fentry{newScienceField}{selectOneListbox}{Hinzufügen eines neuen Fachgebietes.}{E}{}{}
+
+		\fentry{addScienceField}{commandButton}{Speichern des neuen Fachgebietes.}{E}{}{}
+
+		\fentry{deleteScienceField}{commandButton}{Löschen eines Fachgebietes.}{E}{}{}
+
+		\fentry{save}{commandLink}{Speichere Veränderungen.}{E}{}{}
+
+		\fentry{editorialPagination}{pagination}{Paginierte Liste aller Einreichungen, die der Editor verwaltet.}{E}{}{}
+
+		\fentry{reviewPagination}{pagination}{Paginierte Liste aller Einreichungen, die der Gutachter bearbeitet.}{E,G}{}{}
+
+		\fentry{submissionPagination}{pagination}{Paginierte Liste aller Einreichungen, die der Nutzer eingereicht hat.}{Alle}{}{}
+	}
+\end{samepage}
+
 \subsubsection{Gutachter}
 
 \begin{samepage}
