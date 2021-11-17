@@ -175,6 +175,33 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 %% Ab hier sind Bastis hinzugefügte Änderungen
 
 \begin{samepage}
+
+	\textbf{newUser.xhtml} Der Administrator kann hier einen neuen Nutzer anlegen.
+	\nopagebreak
+
+	\ftable{
+		\fentry{password-iscrt}{<h:inputSecret>}{Angabe des Passworts.}{value="\#\{newUserBacking.newUser.passwordNotHashed\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{required="true"}
+
+		\fentry{firstname-itxt}{<h:inputText>}{Angabe des Vornamen.}{value="\#\{newUserBacking.newUser.firstName\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{required="true"}
+
+		\fentry{lastname-itxt}{<h:inputText>}{Angabe des Nachnamen.}{value="\#\{newUserBacking.newUser.lastName\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{required="true"}
+
+		\fentry{titel-itxt}{<h:inputText>}{Angabe eines Titels.}{value="\#\{newUserBacking.newUser.title\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{/}
+
+		\fentry{e-mail-itxt}{<h:inputText>}{Angabe einer E-Mail-Adresse.}{value="\#\{newUserBacking.newUser.emailAddress\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{required="true"}
+
+		\fentry{is-admin-lbl}{<p:outputLabel>}{Label für die Administrator Checkbox}{value="\#\{label.setAdmin\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{/}
+
+		\fentry{is-admin-cbx}{<h:selectBooleanCheckbox>}{Zuordnung einer Administratorenrolle.}{value="\#\{newUserBacking.admin\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{/}
+
+		\fentry{abort-btn}{<h:commandButton>}{Abbruch des Vorgangs: Nutzererstellen.}{value="\#\{newUserBacking.abort\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{/}
+
+		\fentry{save-btn}{<h:commandButton>}{Speichern des neuen Nutzers.}{value="\#\{newUserBacking.saveUser\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{/}
+
+	}
+\end{samepage}
+
+\begin{samepage}
 	\textbf{administration.xhtml} Hier kann ein Administrator Konfigurationen vornehmen.
 	\nopagebreak
 
