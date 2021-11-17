@@ -1,0 +1,250 @@
+\localauthor{Johann Schicho}
+
+\subsection{Konvertierung des ER-Diagramms}
+
+Das ER-Diagramm aus dem Entwurf wird hier in \emph{Data Definition Language} übersetzt. Dabei werden die Details des Übertragungsprozesses dargestellt und erklärt.
+
+\subsubsection{SQL Standard}
+
+\emph{SQL} ist vielfach standardisiert und alle Datenbank Management System weichen teilweise von diesen Standards ab und haben dadurch ihren eigenen \emph{SQL Dialekt}. Im Folgenden wird der PostgreSQL Dialekt verwendet, da PostgreSQL, wie im Pflichtenheft definiert, als SQL Server verwendet wird.
+
+Abweichungen vom ISO SQL Standard sind Enumerationen, \texttt{TIMESTAMP} Zeitpunkte, \texttt{BYTEA} als binärer Datentyp und einzelne Unterschiede in der Syntax.
+
+\subsubsection{Normalform}
+
+Das Datenbankschema befindet sich in \emph{Boyce-Codd-Normalform} (BCNF).
+
+Durch die Verwendung von Surrogatschlüsseln in den Entities sind die vorkommenden funktionalen Abhängigkeiten offensichtlich. Für all diese gilt, dass die Surrogatschlüssel Superschlüssel der Relation sind. Die \emph{UNIQUE}s bilden ebenfalls funktionale Abhängigkeiten und sind auch Superschlüssel der jeweiligen Relation.
+
+\subsubsection{Namenskonventionen}
+
+Die Tabellennamen sind immer im englischen Singular. Also beispielsweise \texttt{submission} anstatt \texttt{submissions}.
+Alle Bezeichner in SQL werden in \texttt{snake\_case} geschrieben. Damit ist eine eindeutige optische Trennung zu Java's \texttt{camelCase} möglich. Die Werte von Enumerationen werden in \texttt{UPPER\_CASE} geschrieben.
+
+\subsubsection{Relationship-Typen}
+
+1 : n Relationships benötigen keine extra Tabellen in der Datenbank, da diese durch Referenz des Primärschlüssels der 1-Relation als Fremdschlüssel in der n-Relation abgespeichert werden können.
+
+n : m Relationships benötigen dahingegen eine eigene Relation in der die Schlüsselpaare abgespeichert werden.
+
+Abhängigkeiten, wie zum Beispiel Einreichungen, die zu einem Nutzer gehören, werden durch \texttt{ON DELETE CASCADE} modelliert. Wird der referenzierte Beziehungspartner (\emph{User}) gelöscht, so werden auch kaskadierend alle abhängigen weiteren Daten (\emph{Submissions}) automatisch gelöscht.
+
+\subsubsection{Vererbung}
+
+Durch \emph{IS-A} werden in ER-Diagrammen verschiedene Arten eines Typs definiert. Diese können dann in der \emph{DDL} unterschiedlich übersetzt werden.
+
+In unserem Fall wird die Rechtezuordnung der registrierten Nutzer durch jeweils eigene Entities \texttt{Administrator, Editor} und \texttt{Reviewer} anstatt einer Enumeration modelliert, da ein Nutzer mehrere Aufgaben in LasEs wahrnehmen kann.
+
+Die Unterscheidung zwischen Journalen und Konferenzen findet nur durch eine gesetzte oder \emph{NULL} Deadline statt, da sich beide funktional nicht weiter unterscheiden.
+
+\subsection{Entities}
+
+Hier werden die einzelnen Entities in der \emph{Data Definition Language} beschrieben. Durch die Verwendung von \emph{SERIAL} werden die Surrogatschlüssel der Relationen automatisch von PostgreSQL erstellt und die Primärschlüsseleigenschaft sichergestellt.\\
+
+\begin{lstlisting}[caption={DDL von Nutzern}]
+CREATE TABLE "user" (
+	id SERIAL PRIMARY KEY NOT NULL,
+	email_address VARCHAR UNIQUE NOT NULL,
+	firstname VARCHAR NOT NULL,
+	lastname VARCHAR NOT NULL,
+	title VARCHAR,
+	employer VARCHAR,
+	birthdate DATE,
+	avatar_thumbnail BYTEA,
+	is_registered BOOLEAN NOT NULL,
+	password_hash VARCHAR,
+	password_salt VARCHAR,
+
+	CONSTRAINT valid_name CHECK (length(firstname) >= 1 AND length(lastname) >= 1),
+	CONSTRAINT valid_birthdate CHECK (birthdate < CURRENT_DATE),
+	CONSTRAINT email_address_pattern CHECK (email_address LIKE '_%@_%._%')
+);
+
+CREATE TABLE reviewer(
+	id INTEGER PRIMARY KEY NOT NULL,
+	FOREIGN KEY (id) REFERENCES "user"(id) ON DELETE CASCADE
+);
+
+CREATE TABLE editor(
+	id INTEGER PRIMARY KEY NOT NULL,
+	FOREIGN KEY (id) REFERENCES "user"(id) ON DELETE CASCADE
+);
+
+CREATE TABLE administrator(
+	id INTEGER PRIMARY KEY NOT NULL,
+	FOREIGN KEY (id) REFERENCES "user"(id) ON DELETE CASCADE
+);
+\end{lstlisting}
+
+\begin{lstlisting}[caption={DDL von Verifizierung}]
+CREATE TABLE verification (
+	id INTEGER NOT NULL,
+	validation_random VARCHAR,
+	verified BOOLEAN,
+	timestamp_validation_started TIMESTAMP,
+	unvalidated_email_address VARCHAR,
+
+	PRIMARY KEY (id),
+	FOREIGN KEY (id) REFERENCES "user"(id)
+);
+\end{lstlisting}
+
+\begin{lstlisting}[caption={DDL von wissenschaftlichen Foren}]
+CREATE TABLE scientific_forum(
+	id SERIAL PRIMARY KEY NOT NULL,
+	name VARCHAR UNIQUE NOT NULL,
+	description VARCHAR,
+	url VARCHAR,
+	review_manual VARCHAR,
+	timestamp_deadline TIMESTAMP
+);
+\end{lstlisting}
+
+\begin{lstlisting}[caption={DDL von Fachgebieten}]
+CREATE TABLE science_field(
+	name VARCHAR PRIMARY KEY NOT NULL
+);
+\end{lstlisting}
+\begin{lstlisting}[caption={DDL von Einreichungen}]
+CREATE TYPE submission_state AS ENUM (
+	'SUBMITTED',
+	'REVISION_REQUIRED',
+	'REJECTED'
+	'ACCEPTED',
+);
+
+CREATE TABLE submission (
+	id SERIAL PRIMARY KEY NOT NULL,
+	title VARCHAR NOT NULL,
+	state submission_state NOT NULL,
+	timestamp_submission TIMESTAMP,
+	requires_revision BOOLEAN NOT NULL DEFAULT FALSE,
+	timestamp_deadline_revision TIMESTAMP,
+
+	author_id INTEGER REFERENCES "user"(id) ON DELETE CASCADE,
+	editor_id INTEGER REFERENCES editor(id) ON DELETE SET NULL,
+	forum_id INTEGER REFERENCES scientific_forum(id) ON DELETE CASCADE
+);
+\end{lstlisting}
+
+\begin{lstlisting}[caption={DDL von Papers}]
+CREATE TABLE paper (
+	version INTEGER NOT NULL,
+	submission_id SERIAL NOT NULL,
+	timestamp_upload TIMESTAMP NOT NULL DEFAULT NOW(),
+	is_visible BOOLEAN NOT NULL,
+	pdf_file BYTEA NOT NULL,
+
+	PRIMARY KEY (submission_id, version),
+	FOREIGN KEY (submission_id) REFERENCES submission(id) ON DELETE CASCADE
+);
+\end{lstlisting}
+
+\begin{lstlisting}[caption={DDL von Gutachten}]
+CREATE TABLE review (
+	reviewer_id INTEGER REFERENCES reviewer(id) ON DELETE CASCADE,
+	version INTEGER NOT NULL,
+	submission_id INTEGER NOT NULL,
+
+	timestamp_upload TIMESTAMP NOT NULL DEFAULT NOW(),
+	is_visible BOOLEAN NOT NULL,
+	is_recommended BOOLEAN NOT NULL,
+	comment VARCHAR,
+	pdf_file BYTEA,
+
+	PRIMARY KEY (submission_id, version, reviewer_id),
+	FOREIGN KEY (submission_id, version)
+	REFERENCES paper(submission_id, version) ON DELETE CASCADE
+);
+\end{lstlisting}
+
+\begin{lstlisting}[caption={DDL von den Systemeinstellungen}]
+CREATE TABLE system(
+	id INTEGER PRIMARY KEY,
+	company_name VARCHAR,
+	welcome_heading VARCHAR,
+	welcome_description VARCHAR,
+	imprint VARCHAR,
+	logo_image BYTEA
+);
+\end{lstlisting}
+
+\subsection{Indizes}
+
+Um die E-Mail-Adressen unabhängig von der Groß- oder Kleinschreibung in der Datenbank tatsächlich \emph{UNIQUE} zu halten benötigt es in PostgreSQL einen eigenen Index, da das \emph{UNIQUE} Schlüsselwort selbst \emph{case-sensitive} ist.\\
+
+\begin{lstlisting}[caption={DDL des UNIQUE Index auf E-Mail-Adressen}]
+CREATE UNIQUE INDEX email_unique_case_insensitive
+	ON "user" (LOWER(email_address));
+\end{lstlisting}
+
+\subsection{Relationships}
+
+n : m Relationships benötigen eigenen Relationen.\\
+
+\begin{lstlisting}[caption={DDL der Ko-Autoren}]
+CREATE TABLE co_authored(
+	user_id INTEGER NOT NULL,
+	submission_id INTEGER NOT NULL,
+
+	PRIMARY KEY (user_id, submission_id),
+	FOREIGN KEY (user_id) REFERENCES "user"(id) ON DELETE CASCADE,
+	FOREIGN KEY (submission_id) REFERENCES submission(id) ON DELETE CASCADE
+);
+\end{lstlisting}
+
+\begin{lstlisting}[caption={DDL der Interessensgebiete}]
+CREATE TABLE interests (
+	user_id INTEGER NOT NULL,
+	science_field_name VARCHAR NOT NULL,
+
+	PRIMARY KEY (user_id, science_field_name),
+	FOREIGN KEY (user_id) REFERENCES "user"(id) ON DELETE CASCADE,
+	FOREIGN KEY (science_field_name) REFERENCES science_field(name)
+	ON DELETE CASCADE
+);
+\end{lstlisting}
+
+\begin{lstlisting}[caption={DDL der verwaltenden Editoren}]
+CREATE TABLE member_of(
+	editor_id INTEGER NOT NULL,
+	scientific_forum_id INTEGER NOT NULL,
+
+	PRIMARY KEY (editor_id, scientific_forum_id),
+	FOREIGN KEY (editor_id) REFERENCES editor(id) ON DELETE CASCADE,
+	FOREIGN KEY (scientific_forum_id) REFERENCES scientific_forum(id)
+	ON DELETE CASCADE
+);
+\end{lstlisting}
+
+\begin{lstlisting}[caption={DDL der begutachtenden Gutachter}]
+CREATE TYPE review_task_state AS ENUM (
+	'PENDING',
+	'ACCEPTED',
+	'REJECTED'
+);
+
+CREATE TABLE reviewed_by(
+	reviewer_id INTEGER NOT NULL,
+	submission_id INTEGER NOT NULL,
+	has_accepted review_task_state,
+	timestamp_deadline TIMESTAMP,
+
+	PRIMARY KEY (reviewer_id, submission_id),
+	FOREIGN KEY (reviewer_id) REFERENCES reviewer(id) ON DELETE CASCADE,
+	FOREIGN KEY (submission_id) REFERENCES submission(id) ON DELETE CASCADE
+);
+\end{lstlisting}
+
+\begin{lstlisting}[caption={DDL der Themengebiete eines Forums}]
+CREATE TABLE topics(
+	science_field_name VARCHAR NOT NULL,
+	scientific_forum_id INTEGER NOT NULL,
+
+	PRIMARY KEY (science_field_name, scientific_forum_id),
+	FOREIGN KEY (science_field_name) REFERENCES science_field(name)
+	ON DELETE CASCADE,
+	FOREIGN KEY (scientific_forum_id) REFERENCES scientific_forum(id)
+	ON DELETE CASCADE
+);
+\end{lstlisting}

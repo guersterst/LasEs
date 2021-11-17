@@ -44,21 +44,27 @@
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
 
-\lstset{frame=tb,
-    language=Java,
+\lstdefinelanguage[postgres]{SQL}[]{SQL}{
+    morekeywords={SERIAL, BYTEA, BOOLEAN},
+}
+\lstset{
+	numbers=none,
+    language=[postgres]SQL,
+    frame=tb,
+    captionpos=below,
     aboveskip=3mm,
     belowskip=3mm,
+    xleftmargin=.01\textwidth, xrightmargin=.01\textwidth,
     showstringspaces=false,
     columns=flexible,
     basicstyle={\small\ttfamily},
-    numbers=none,
     numberstyle=\tiny\color{gray},
     keywordstyle=\color{blue},
     commentstyle=\color{dkgreen},
     stringstyle=\color{mauve},
-    breaklines=true,
+    breaklines=false,
     breakatwhitespace=true,
-    tabsize=3
+    tabsize=4
 }
 
 \newcommand{\shellcmd}[1]{\texttt{\footnotesize\$ #1}}
