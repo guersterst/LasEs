@@ -19,7 +19,7 @@
 Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren wir nach dem \emph{kebab-case} Prinzip. Um den genauen Typ in die ID mit aufzunehmen, wird das entsprechende Suffix angehängt.
 
 \todo{Suffix:}
- graphicImage = gIm link =lnk inputText =itext commandButton = cbtn messages = msgs
+ graphicImage = gIm link =lnk inputText =itext commandButton = cbtn messages = msgs dataTable = dtbl selectOneMenu = slctom
 
 \subsection{Templates}
 
@@ -38,15 +38,15 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	
 	\fentry{search-frm}{<h:form>}{Formular zur Suche.}{/}{/}{/}
 	
-	\fentry{search-Field-itxt}{<h:inputText>}{Suchleiste}{value="\#{navigationBacking.resultListParameters.globalSearchWord}"}{/}{/}
+	\fentry{search-Field-itxt}{<h:inputText>}{Suchleiste}{value="\#{navigationBacking.resultListParameters.globalSearchWord}" \newline title="\#{tooltip.search}"}{/}{/}
 	
 	\fentry{search-cbtn}{<h:commandButton>}{Suche ausführen.}{action="\#{navigationBacking.search}"}{/}{/}
 	
-	\fentry{user-list-lnk}{<h:link>}{Link zur Übersichtsseite aller Nutzer}{value="\#{label.nav.userList}" \newline outcome="/editor/userList}{render="\#{navigationBacking.sessionInformation.user.editor}"}{/}
+	\fentry{user-list-lnk}{<h:link>}{Link zur Übersichtsseite aller Nutzer}{value="\#{label.userList}" \newline outcome="/editor/userList \newline title="\#{tooltip.userList}"}{render="\#{navigationBacking.sessionInformation.user.editor}"}{/}
 	
-	\fentry{forum-list-lnk}{<h:link>}{Link zur Übersichtsseite alle Journale und Konferenzen}{value="\#{label.nav.forumList}" \newline outcome="/authenticated/scientificForumList"}{/}{/}
+	\fentry{forum-list-lnk}{<h:link>}{Link zur Übersichtsseite alle Journale und Konferenzen}{value="\#{label.forumList}" \newline outcome="/authenticated/scientificForumList" \newline title="\#{tooltip.forumList}"}{/}{/}
 	
-	\fentry{logout-cbtn}{<h:commandButton>}{Loggt den Nutzer aus dem System aus und leitet zur Loginseite weiter.}{action="\#{navigationBacking.logout}"}{/}{/}
+	\fentry{logout-cbtn}{<h:commandButton>}{Loggt den Nutzer aus dem System aus und leitet zur Loginseite weiter.}{value="\#{label.logout}" \newline action="\#{navigationBacking.logout}" \newline title="\#{tooltip.logout}"}{/}{/}
 	
 	\fentry{profile-lnk}{<h:link>}{Link zur Profilübersicht}{value="\#{label.nav.profile}" \newline outcome="/authenticated/profile"}{/}{/}
 	}
@@ -75,9 +75,48 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	\nopagebreak
 	
 	\ftable{
-		\fentry{imprint-lnk}{<h:link>}{Link zur Seite des Impressums}{value="\#{label.footer.imprint}" \newline outcome="/anonymous/imprint"}{/}{/}
+		\fentry{imprint-lnk}{<h:link>}{Link zur Seite des Impressums}{value="\#{label.footer.imprint}" \newline outcome="/anonymous/imprint" \newline too}{/}{/}
 		
 		\fentry{language-otxt}{<h:outputText>}{Anzeige der eingestellten Sprache.}{value="\#{}"}{/}{/}
+		
+	}
+\end{samepage}
+
+\todo{Toolbarbacking fehlt}
+\todo{Validierung?}
+\todo{Schätze wir brauchen doch min und mx length was ist wenn man zu lange usernames angibt?}
+\todo{Datum internationalisieren?}
+\todo{var als binding oder constraint?}
+\todo{evtl kein rendern sonder abhängiges include in submission.xhtml?}
+\todo{selectItem?}
+\begin{samepage}
+	\textbf{toolbar.xhtml} \phantomsection \label{flt:toolbar} ist die Seitenleiste für Editoren und Administratoren auf der Einreichungsübersicht. Hier wird die Einreichung verwaltet.
+	\nopagebreak
+	
+	\ftable{
+		\fentry{add-reviewer-iTxt}{<h:inputText>}{Eingabefeld zur Angabe einer E-Mail-Adresse}{value="\#{}" \newline title="\#{tooltip.reviewerEmail}}{render="\#{}" nur für E und A}{emailAddressExistsValidator \newline required="true" \newline pattern="([^.@]+)(\.[^.@]+)*@([^.@]+\.)+([^.@]+)"}
+		
+		\fentry{add-deadline-reviewer-iTxt}{<h:inputText>}{Eingabefeld zur Angabe einer Deadline.}{value="\#{}" \newline title="\#{tooltip.reviewerDeadline}"}{render="\#{}"für A und E}{converterDateTime \newline patter="dd/MM/yyyy"}
+		
+		\fentry{add-reviewer-cbtn}{<h:commandButton>}{Knopf zum Hinzufügen des Gutachters}{value="\#{label.addReviewer}" \newline action="\#{}" \newline title="\#{tooltip.addReviewer}"}{render="\#{}" nur für E und A}{/}
+		
+		\fentry{reviewer-dtbl}{<h:dataTable>}{Liste der Gutachter}{value="\#{}" \newline var="reviewer"}{render="\#{}"E und A}{/}
+		
+		\fentry{remove-reviewer-cbtn}{<h:commandButton>}{Entferne einen bestimmten Gutachters.}{action="\#{}" \newline title="\#{tooltip.removeReviewer}"}{render="\#{}"E und A}{/}
+		
+		\fentry{select-editor-slctom}{<h:selectOneMenu>}{Auswahländerung des verwaltenden Editors}{value="\#{}" \newline title="\#{tooltip.selectEditor}"}{render="\#{}"E und A}{/}
+		
+		\fentry{save-editor-cbtn}{<h:commandButton>}{Speichern der Änderung des Editors.}{value="\#{label.saveEditor}" \newline action="\#{}" \newline title="\#{tooltip.saveEditor}"}{render="\#{}"E und A}{/}
+		
+		\fentry{show-editor-otxt}{<h:outputText>}{Anzeige des aktuellen Editors.}{value="\#{}"}{render=""\#{}E und A}{/}
+		
+		\fentry{revision-deadline-iTxt}{<h:inputText>}{Eingabe zur Angabe einer Deadline.}{}{E}
+		
+		\fentry{requireRevisionBtn}{commandButton}{Fordert den Einreicher auf, seine Einreichung zu überarbeiten}{E}
+		
+		\fentry{acceptSubmissionBtn}{commandButton}{Akzeptiere die Einreichung}{E}
+		
+		\fentry{rejectSubmissionBtn}{commandButton}{Lehne die Einreichung ab}{E}
 		
 	}
 \end{samepage}
