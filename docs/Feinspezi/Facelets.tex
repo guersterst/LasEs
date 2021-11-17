@@ -264,7 +264,30 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 %% Ab hier sind Bastis hinzugefügte Änderungen
 
 
+\subsubsection{Gutachter}
+
+\begin{samepage}
+	\textbf{newReview.xhtml} Möchte ein Gutachter eines Papers seine Beurteilung abgeben, so ist dies auf dieser Seite möglich.
+	\nopagebreak
+
+	\todo{warten auf dto update damit anzeige der paper version geht.}
+
+	\ftable{
+		\fentry{version-number-otxt}{<h:outputText>}{Versionsnummer des eingereichten Papers, zu welchem der Gutachter ein Gutachten abgeben kann.}{}{/}{/}
+
+		\fentry{recommendation-cbx}{<h:selectBooleanCheckbox>}{Empfehlung des Gutachters ein Paper zu akzeptieren.}{value="\#\{newReviewBacking.review.acceptPaper\}"}{/}{/}
+
+		\fentry{comment-itxt}{<h:inputTextarea>}{Kommentar eines Gutachters}{value="\#\{newReviewBacking.review.comment\}"}{/}{/}
+
+		\fentry{review-pdf-ifile}{<h:inputFile>}{Einzureichendes Gutachten.}{value="\#\{newReviewBacking.uploadedPDF\}"}{/}{/}
+
+		\fentry{submit-review-btn}{<h:commandButton>}{Gutachten einreichen.}{value="\#\{newReviewBacking.addReview\}"}{/}{/}
+	}
+\end{samepage}
+
 \subsubsection{Editor}
+
+\todo{wie geht hier die übergabe von url params????}
 
 \begin{samepage}
 	\textbf{userList.xhtml} \phantomsection \label{flt:userList} Editoren und Administratoren erhalten hier einen Überblick über alle Nutzer. Die Seiten sind paginiert.\nopagebreak
