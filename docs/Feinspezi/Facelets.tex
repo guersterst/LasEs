@@ -237,24 +237,24 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \begin{samepage}
 	\textbf{errorPage.xhtml} Auf diese Seite wird navigiert, wenn auf eine nicht existierende URL oder auf eine URL zugegriffen wird, auf die man keine Zugriffsrechte hat.
 	\nopagebreak
-	
+
 	\ftable{
-		
+
 		\fentry{error-message-otxt}{<h:outputText>}{Anzeige einer Fehlermeldung.}{value="\#\{errorPageBacking.errorMessage.message\}"}{/}{/}
-		
+
 		\fentry{stack-trace-otxt}{<h:outputText>}{Stacktrace für den "Productive Mode".}{value="\#\{errorPageBacking.errorMessage.message\}"}{/}{/}
-		
+
 	}
 \end{samepage}
 
 \begin{samepage}
 	\textbf{imprint.xhtml} Das Impressum gibt die vom Administrator angegebenen Kontaktdaten des Betreibers wieder.\nopagebreak
-	
+
 	\ftable{
 		\fentry{logo-gimg}{<h:graphicImage>}{Logo des Betreibers.}{value="\#\{imprintBacking.systemSettings.logoImage\}"}{/}{/}
-		
+
 		\fentry{imprint-heading-otxt}{<h:outputText>}{Überschrift der Ansicht}{value="\#{imprintBacking.systemSetting.companyName}"}{/}{/}
-		
+
 		\fentry{imprint-otxt}{<h:outputText>}{Impressum des Betreibers.}{value="\#{imprintBacking.systemSetting.imprint}"}{/}{/}
 	}
 \end{samepage}
@@ -270,7 +270,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	\textbf{userList.xhtml} \phantomsection \label{flt:userList} Editoren und Administratoren erhalten hier einen Überblick über alle Nutzer. Die Seiten sind paginiert.\nopagebreak
 
 	\ftable{
-		\fentry{user-pg}{<pg:pagination>}{Die Tabelle enthält eine Paginierung.}{paginator="\#\{userListBacking.userPagination\}"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
+		\fentry{user-pg}{<pg:pagination>}{Paginierte Liste aller Nutzer}{paginator="\#\{userListBacking.userPagination\}"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
 
 		\fentry{rol-ssc}{<ssc:sortsearchcolumn>}{Spalte für die Nutzerrolle}{paginator="\#\{userListBacking.userPagination\}"\newline columnNamei18n="\#\{label.role\}"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
 
