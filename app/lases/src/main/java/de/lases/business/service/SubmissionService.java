@@ -35,7 +35,7 @@ public class SubmissionService {
     /**
      * Deletes a submission.
      *
-     * @param submission A {@link Submission}-DTO containing a valid id
+     * @param submission A {@link Submission}-DTO containing a valid id.
      */
     public void removeSubmission(Submission submission) {
     }
@@ -51,10 +51,28 @@ public class SubmissionService {
     public void changeSubmission(Submission newSubmission) {
     }
 
-    public void setState(Submission submission, SubmissionState state) {
+    //todo wieso rot
+    /**
+     * Sets the state of a submission.
+     * <p></p>
+     * The submitter and co-authors are informed about an accept or reject decision
+     * by email using the {@link EmailUtil} utility.
+     *
+     * @param submission The {@link Submission}-DTO with a valid state.
+     *
+     */
+    public void setState(Submission submission) {
     }
 
-    public void setEditor() {
+    /**
+     * Sets the editor of a submission.
+     * <p></p>
+     * When changed the new editor is informed
+     * by email using the {@link EmailUtil} utility.
+     *
+     * @param submission The {@link Submission}-DTO with a valid editor.
+     */
+    public void setEditor(Submission submission) {
     }
 
     public void addReviewer() {
