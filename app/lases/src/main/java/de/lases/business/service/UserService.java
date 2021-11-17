@@ -12,6 +12,9 @@ import java.util.List;
 @Named
 public class UserService {
 
+    // TODO @Johannes: Irgendwas zum verifien vom User fehlt (wahrscheinlich
+    //  auch bei den Repos)
+
     private Event<UIMessage> uiMessageEvent;
 
     private Transaction transaction;
