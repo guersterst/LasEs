@@ -51,7 +51,7 @@ public class ScientificForumListBacking implements Serializable {
     /**
      * Set the selected filter option for filtering forums after deadline
      *
-     * @param dateFilterSelectSub The selected filter option for filtering
+     * @param deadlineFilterSelect The selected filter option for filtering
      *                            forums after deadline.
      */
     public void setDeadlineFilterSelect(DateSelect deadlineFilterSelect) {
