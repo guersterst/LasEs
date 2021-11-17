@@ -20,10 +20,10 @@ JSF setzt für das Session-Cookie standardmäßig das \code{http-only}-Flag, dam
 
 Nach jeder Anmeldung wird die Session verworfen und neu generiert mit
 {\small
-\begin{verbatim}
-    FacesContext.getCurrentInstance().getExternalContext()
-        .getRequest().changeSessionId()
-\end{verbatim}
+\begin{lstlisting}
+FacesContext.getCurrentInstance().getExternalContext()
+    .getRequest().changeSessionId()
+\end{lstlisting}
 }
 Nach einer Authentifizierung bleibt also keine alte Session bestehen und \emph{Session-Fixation}-Attacken werden verhindert.
 
@@ -48,4 +48,26 @@ Unsere Zugangskontrolle \todo{link} sorgt dafür, dass auch bei Erfahren einer I
 
 \subsection{Information Leakage}\label{subsec:information-leakage}
 Alle Informationen über das System, die nach außen gelangen, können Angreifern helfen.
-Dazu gehören Details über die technische Umgebung und verwendete Software des Systems und Implementierungsdetails.
+Dazu gehören Details über die technische Umgebung und verwendete Software des Systems, interne Fehlermeldungen und Implementierungsdetails.
+Folgende Maßnahmen werden ergriffen, um Leakage solcher Informationen zu verhindern.
+Fehlermeldungen zeigen im Produktionsmodus keine Stacktraces an, sondern eigene Fehlermeldungen, die nur Informationen enthalten, die für den Endnutzer relevant sind.
+Wir verwenden eigene Fehlerseiten bei Exceptions und ersetzen die 404-Seite von JSF durch unsere eigene wie folgt in der web.xml-Datei:
+    {\small
+\begin{lstlisting}
+<error-page>
+    <error-code>404</error-code>
+    <location>/</location>
+</error-page>
+\end{lstlisting}\todo{location}
+}
+Dadurch ist nicht ersichtlich, dass wir JSF/Mojarra verwenden.
+Das wird auch durch die Verwendung von .xhtml-Dateiendungen für unsere Facelets und Ersetzen des Bezeichners \code{JSESSONID} für Session-Cookies und URL-Rewriting in der web.xml-Datei verborgen:
+    {\small
+\begin{lstlisting}
+<session-config>
+    <cookie-config>
+        <name>sesssionid</name>
+    </cookie-config>
+</session-config>
+\end{lstlisting}
+}
