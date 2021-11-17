@@ -42,6 +42,8 @@ public class SubmissionBacking implements Serializable {
     @Inject
     private NewReviewBacking newReviewBacking;
 
+    @Inject ToolbarBacking toolbarBacking;
+
     private Part uploadedRevisionPDF;
 
     private DateSelect dateFilterSelectPaper;

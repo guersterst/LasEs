@@ -1,69 +1,189 @@
 package de.lases.control.backing;
 
+import de.lases.business.service.SubmissionService;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * Backing bean for toolbar.xhtml. This view is the place where administrators and editors can administer a submission on the submission page.
+ * Backing bean for the toolbar view. This view belongs to the submission page.
  */
-@RequestScoped
+@ViewScoped
 @Named
-public class ToolbarBacking {
+public class ToolbarBacking implements Serializable {
 
-    private String reviewerEmailInput; // y
+    @Serial
+    private static final long serialVersionUID = -2791102953586117163L;
 
-    private LocalDateTime reviewerDeadlineInput; // y
-
-    private User editorInput; // y
-
-    private User currentEditor; //y
-
-    private LocalDateTime revisionDeadlineInput; //y
-
-
+    @Inject
     private SessionInformation sessionInformation;
 
-    private List<User> reviewer; // y
+    @Inject
+    SubmissionService submissionService;
 
-    private List<User> editors; // y
+    private Submission submission;
 
+    private User reviewerInput;
 
+    private ReviewedBy reviewedByInput;
+
+    private User editorInput;
+
+    private User currentEditor;
+
+    private List<User> reviewer;
+
+    private List<User> editors;
+
+    /**
+     * Initialize dtos.
+     */
     @PostConstruct
     public void init() {
     }
 
+    /**
+     * This method should be called when the proper submission was injected
+     * by the submission backing bean, and it initializes the entire toolbar.
+     */
+    public void onLoad() { }
+
+    /**
+     * The currently entered user will be added as a reviewer.
+     */
     public void addReviewer() {
     } // y
 
-    public String removeReviewer(int id) {
-        return null;
-    } // y
+    /**
+     * Remove the specified user form the list of reviewers.
+     *
+     * @param user The user to remove from the list of reviewers.
+     */
+    public void removeReviewer(String user) {
+    }
 
+    /**
+     * Add the entered user ad managing editor, replacing the old editor.
+     */
     public void chooseNewManagingEditor() {
-    } // y
+    }
 
+    /**
+     * State that a revision is required on the submission belonging to this
+     * page.
+     */
     public void requireRevision() {
-    } // y
+    }
 
+    /**
+     * Accept the submission belonging to this page.
+     */
     public void acceptSubmission() {
     } // y
 
+    /**
+     * Reject the submission belonging to this page.
+     */
     public void rejectSubmission() {
     } // y
 
+    public Submission getSubmission() {
+        return submission;
+    }
+
+    /**
+     * Set the submission belonging to this page.
+     *
+     * @param submission The new submissions.
+     */
+    public void setSubmission(Submission submission) {
+        this.submission = submission;
+    }
+
+    public User getReviewerInput() {
+        return reviewerInput;
+    }
+
+    /**
+     * Set the user that is input as a reviewer.
+     *
+     * @param reviewerInput The new reviewer.
+     */
+    public void setReviewerInput(User reviewerInput) {
+        this.reviewerInput = reviewerInput;
+    }
+
+    public ReviewedBy getReviewedByInput() {
+        return reviewedByInput;
+    }
+
+    /**
+     * Set meta information about the reviewer that is supposed to be added.
+     * This is used to set a deadline for the new reviewer.
+     *
+     * @param reviewedByInput Meta information about the new reviewer.
+     */
+    public void setReviewedByInput(ReviewedBy reviewedByInput) {
+        this.reviewedByInput = reviewedByInput;
+    }
+
+    public User getEditorInput() {
+        return editorInput;
+    }
+
+    /**
+     * Set the user that is currently entered as the new editor.
+     *
+     * @param editorInput User that is supposed to become the new editor.
+     */
+    public void setEditorInput(User editorInput) {
+        this.editorInput = editorInput;
+    }
+
+    /**
+     * Get the current editor of the submission.
+     *
+     * @return The editor of the submission.
+     */
+    public User getCurrentEditor() {
+        return currentEditor;
+    }
+
+    /**
+     * Get the list of reviewers of the submission.
+     *
+     * @return The list of reviewers.
+     */
     public List<User> getReviewer() {
-        return null;
+        return reviewer;
     }
 
+    /**
+     * Get the list of editors for the scientific forum this submission belongs
+     * to.
+     *
+     * @return The list of editors.
+     */
     public List<User> getEditors() {
-        return null;
+        return editors;
     }
 
+    /**
+     * Get session information.
+     *
+     * @return The session information.
+     */
+    public SessionInformation getSessionInformation() {
+        return sessionInformation;
+    }
 
 }
