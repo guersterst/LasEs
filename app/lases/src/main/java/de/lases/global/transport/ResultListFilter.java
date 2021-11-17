@@ -24,14 +24,17 @@ public class ResultListFilter {
         this.columnName = columnName;
     }
 
-    /**
-     * Get the list of filter options that should be applied to the column
-     * specified via {@code setColumnName}.
-     *
-     * @return List of filter options.
-     */
     public List<ResultListFilterOption> getFilterOptions() {
         return filterOptions;
     }
 
+    /**
+     * Set the list of filter options that should be applied to the column
+     * specified via {@code setColumnName}.
+     *
+     * @param filterOptions  List of filter options.
+     */
+    public void setFilterOptions(List<ResultListFilterOption> filterOptions) {
+        this.filterOptions = filterOptions;
+    }
 }
