@@ -3,6 +3,9 @@ package de.lases.global.transport;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Represents a user.
+ */
 public class User {
 
     //private Verification verification;
