@@ -10,4 +10,14 @@ public class DataNotWrittenException extends Exception {
 
     @Serial
     private static final long serialVersionUID = 7618083028127586109L;
+
+    /**
+     * Constructs an exception with a message and a cause.
+     *
+     * @param message Error message.
+     * @param cause Cause of the exception.
+     */
+    public DataNotWrittenException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

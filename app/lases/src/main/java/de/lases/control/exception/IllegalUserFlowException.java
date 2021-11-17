@@ -9,4 +9,13 @@ import java.io.Serial;
 public class IllegalUserFlowException extends RuntimeException {
     @Serial
     private static final long serialVersionUID = 5268923976706134722L;
+
+    /**
+     * Constructs an exception with a message.
+     *
+     * @param message Error message.
+     */
+    public IllegalUserFlowException(String message) {
+        super(message);
+    }
 }

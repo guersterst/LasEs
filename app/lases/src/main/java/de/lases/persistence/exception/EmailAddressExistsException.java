@@ -10,4 +10,14 @@ public class EmailAddressExistsException extends Exception {
 
     @Serial
     private static final long serialVersionUID = 4050043739568595650L;
+
+    /**
+     * Constructs an exception with a message and a cause.
+     *
+     * @param message Error message.
+     * @param cause Cause of the exception.
+     */
+    public EmailAddressExistsException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }
