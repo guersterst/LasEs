@@ -321,7 +321,94 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 		
 	}
 \end{samepage}
+
+\begin{samepage}
 	
+	\textbf{submission.xhtml} ist die Übersichtsseite einer Abgabe.
+	Hier werden alle mit der Einreichung verbundenen Aktivitäten abgebildet.
+	\nopagebreak
+	
+	\ftable{
+		\fentry{/}{<ui:include>}{\hyperref[flt:toolbar]{Seitenleiste mit Tools.}}{rendered="\#\{submissionBacking.sessionInformation.user.editor\}"}{/}
+		
+		\fentry{uploadRevision}{inputFile}{Upload einer Revision.}{N}
+		
+		\fentry{upload}{commandButton}{Ausführen des Uploads.}{N}
+		
+		\fentry{newReview}{commandLink}{Weiterleitung zur Einreichung eines neuen Gutachtens.}{G}
+		
+		\fentry{acceptReviewing}{commandButton}{Annahme der Rolle eines Gutachters für diese Einreichung.}{G}
+		
+		\fentry{declineReviewing}{commandButton}{Ablehnen der Rolle eines Gutachters für diese Einreichung.}{G}
+		
+		\fentry{title}{outputText}{Titel des Papers.}{Alle}
+		
+		\fentry{forum}{Link}{Name des Forums und Weiterleitung zur Forumsübersicht.}{Alle}
+		
+		\fentry{author}{Link}{Name des Autors und Weiterleitung zum Profil.}{E}
+		
+		\fentry{email}{Link}{E-Mail-Adressen der Co-Autoren und Mailto-Link.}{E}
+		
+		\fentry{dateSelect}{selectOneMenu}{Auswahl der Filtermöglichkeit eines Datums.}{Alle}
+		
+		\fentry{dateSelectReview}{selectOneMenu}{Auswahl der Filtermöglichkeit eines Datums.}{Alle}
+		
+		\fentry{reviewState}{selectOneMenu}{Filtern der Gutachten nach ihrem Status.}{E,G}
+		
+		\fentry{recommendation}{selectOneMenu}{Auswahl der Art von Empfehlungen.}{Alle}
+		
+		\fentry{paperPagination}{pagination}{Liste aller Versionen}{Alle}
+		
+		\fentry{reviewPagination}{pagination}{Liste aller/der eigenen Gutachten.}{E,G}
+	}
+\end{samepage}
+
+\begin{samepage}
+	
+	\emph{paperPagination} enthält die Spalten: Version, Datum, Deadline, Sichtbarkeit, Status und Download.
+	Die Elemente der Liste, der unterschiedlichen Versionen der Einrichtung, sieht wie folgt aus:
+	
+	\ftable{
+		\fentry{version}{outputText}{Versionsnummer der Einreichung}{Alle}
+		
+		\fentry{date}{outputText}{Datum der Einreichung}{Alle}
+		
+		\fentry{deadline}{outputText}{Deadline der Revision}{Alle}
+		
+		\fentry{unlockRevision}{commandButton}{Freischalten einer Revision.}{E}
+		
+		\fentry{state}{radioButton}{Status der Einreichung}{Alle}
+		
+		\fentry{pdf}{commandButton}{Download der Einreichung}{Alle}
+	}
+\end{samepage}
+
+\begin{samepage}
+	
+	\emph{reviewPagination} enthält die Spalten: Version, Gutachter, Datum, Deadline, Status, Empfehlung, Kommentar und Download.
+	Ist ein Gutachten freigeschaltet, so erhält auch ein Nutzer Leserechte.
+	Die Elemente der Liste von Gutachten sind folgende:
+	
+	\ftable{
+		\fentry{version}{outputText}{Versionsnummer des Gutachtens.}{E,G}
+		
+		\fentry{reviewer}{outputText}{Namen des Gutachters.}{E,G}
+		
+		\fentry{date}{outputText}{Datum des Gutachtens.}{E,G}
+		
+		\fentry{deadline}{outputText}{Deadline des Gutachtens.}{E,G}
+		
+		\fentry{state}{commandButton}{Freigabe des Gutachtens}{E}
+		
+		\fentry{stateText}{outputText}{Freigabestatus des Gutachtens}{G}
+		
+		\fentry{recommendation}{checkbox}{Empfehlung eines Gutachters}{E,G}
+		
+		\fentry{comment}{outputText}{Kommentar des Gutachters.}{E,G}
+		
+		\fentry{pdf}{commandButton}{Download der Einreichung.}{E,G}
+	}
+\end{samepage}
 
 
 
