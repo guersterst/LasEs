@@ -1,6 +1,6 @@
 %% Macros
 \newcommand{\ftable}[1]{\begin{sidewaystable}
-\begin{tabular}[H]{ |m{2cm}| m{3cm}| m{4cm}| m{6cm} |m{4cm}| m{2cm}| }
+\begin{tabular}[H]{ |m{1.5cm}| m{1.5cm}| m{3cm}| m{7cm} |m{4cm}| m{4cm}| }
     \toprule
     \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Binding} & \textbf{Constraints} & \textbf{Validator \newline Converter} \\
     \midrule
@@ -10,7 +10,7 @@
 \end{sidewaystable}
 }
 
-\newcommand{\fentry}[6]{#1 & #2 & #3 & #4 & #5 & #6\\\hline}
+\newcommand{\fentry}[6]{\footnotesize#1 &\footnotesize#2 &\footnotesize#3 &\footnotesize#4 &\footnotesize#5 &\footnotesize#6\\\hline}
 
 \localauthor{Stefanie Gürster}
 
@@ -33,38 +33,38 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \todo{outcome von links ist immer noch im ordner facelets. mit Johannes abklären und ausprobieren.}
 \ftable{
 	\fentry{logo-gimg}{<h:graphicImage>}{Logo der Applikation.}{value="\#{}"}{/}{/}
-	
-	\fentry{direct-to-home-lnk}{<h:link>}{Weiterleitung zur Homepage.}{outcome="/authenticated/homepage" \newline title="\#{tooltip.toHome}"}{/}{/}
-	
+
+	\fentry{direct-to-home-lnk}{<h:link>}{Weiterleitung zur Homepage.}{outcome="/authenticated/homepage" \newline title="\#{help.toHome}"}{/}{/}
+
 	\fentry{search-frm}{<h:form>}{Formular zur Suche.}{/}{/}{/}
-	
-	\fentry{search-Field-itxt}{<h:inputText>}{Suchleiste}{value="\#{navigationBacking.resultListParameters.globalSearchWord}" \newline title="\#{tooltip.search}"}{/}{/}
-	
+
+	\fentry{search-Field-itxt}{<h:inputText>}{Suchleiste}{value="\#{navigationBacking.resultListParameters.globalSearchWord}" \newline title="\#{help.search}"}{/}{/}
+
 	\fentry{search-cbtn}{<h:commandButton>}{Suche ausführen.}{action="\#{navigationBacking.search}"}{/}{/}
-	
-	\fentry{user-list-lnk}{<h:link>}{Link zur Übersichtsseite aller Nutzer}{value="\#{label.userList}" \newline outcome="/editor/userList \newline title="\#{tooltip.userList}"}{render="\#{navigationBacking.sessionInformation.user.editor}"}{/}
-	
-	\fentry{forum-list-lnk}{<h:link>}{Link zur Übersichtsseite alle Journale und Konferenzen}{value="\#{label.forumList}" \newline outcome="/authenticated/scientificForumList" \newline title="\#{tooltip.forumList}"}{/}{/}
-	
-	\fentry{logout-cbtn}{<h:commandButton>}{Loggt den Nutzer aus dem System aus und leitet zur Loginseite weiter.}{value="\#{label.logout}" \newline action="\#{navigationBacking.logout}" \newline title="\#{tooltip.logout}"}{/}{/}
-	
+
+	\fentry{user-list-lnk}{<h:link>}{Link zur Übersichtsseite aller Nutzer}{value="\#{label.userList}" \newline outcome="/editor/userList \newline title="\#{help.userList}"}{render="\#{navigationBacking.sessionInformation.user.editor}"}{/}
+
+	\fentry{forum-list-lnk}{<h:link>}{Link zur Übersichtsseite alle Journale und Konferenzen}{value="\#{label.forumList}" \newline outcome="/authenticated/scientificForumList" \newline title="\#{help.forumList}"}{/}{/}
+
+	\fentry{logout-cbtn}{<h:commandButton>}{Loggt den Nutzer aus dem System aus und leitet zur Loginseite weiter.}{value="\#{label.logout}" \newline action="\#{navigationBacking.logout}" \newline title="\#{help.logout}"}{/}{/}
+
 	\fentry{profile-lnk}{<h:link>}{Link zur Profilübersicht}{value="\#{label.nav.profile}" \newline outcome="/authenticated/profile"}{/}{/}
 	}
-	
+
 \end{samepage}
 
 \todo{wo css einbidnen?}
 
 \begin{samepage}
 	\textbf{main.xhtml} ist das Template, welches den Inhalt der Seiten zwischen Kopf- und Fußzeile einbettet.
-	
+
 	\ftable{
 		\fentry{/}{<ui:include>}{\hyperref[flt:navbar]{Kopfzeile}}{src="navigation.xhtml"}{/}{/}
-		
-		\fentry{global-msgs}{<h:messages>}{Anzeigen globaler Nachrichten.}{/}{/}{/}		
-		
+
+		\fentry{global-msgs}{<h:messages>}{Anzeigen globaler Nachrichten.}{/}{/}{/}
+
 		\fentry{/}{<ui:insert>}{\hyperref[flt:pages]{Seiteninhalt}}{name="main-content"}{/}{/}
-		
+
 		\fentry{/}{<ui:include>}{\hyperref[flt:footer]{Fußzeile}}{src="footer.xhtml"}{/}{/}
 	}
 \end{samepage}
@@ -73,12 +73,12 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \begin{samepage}
 	\textbf{footer.xhtml} \phantomsection \label{flt:footer} ist die Fußzeile der Webanwendung und für alle sichtbar.
 	\nopagebreak
-	
+
 	\ftable{
 		\fentry{imprint-lnk}{<h:link>}{Link zur Seite des Impressums}{value="\#{label.footer.imprint}" \newline outcome="/anonymous/imprint" \newline too}{/}{/}
-		
+
 		\fentry{language-otxt}{<h:outputText>}{Anzeige der eingestellten Sprache.}{value="\#{}"}{/}{/}
-		
+
 	}
 \end{samepage}
 
@@ -92,34 +92,74 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \begin{samepage}
 	\textbf{toolbar.xhtml} \phantomsection \label{flt:toolbar} ist die Seitenleiste für Editoren und Administratoren auf der Einreichungsübersicht. Hier wird die Einreichung verwaltet.
 	\nopagebreak
-	
+
 	\ftable{
-		\fentry{add-reviewer-iTxt}{<h:inputText>}{Eingabefeld zur Angabe einer E-Mail-Adresse}{value="\#{toolbarBacking.reviewerInput.email}" \newline title="\#{tooltip.reviewerEmail}}{render="\#{toolbarBacking.sessionInformation.user.editor}"}{emailAddressExistsValidator \newline required="true" \newline pattern="([^.@]+)(\.[^.@]+)*@([^.@]+\.)+([^.@]+)"}
-		
-		\fentry{add-deadline-reviewer-iTxt}{<h:inputText>}{Eingabefeld zur Angabe einer Deadline.}{value="\#{toolbarBacking.reviewedByInput.timestampDeadline}" \newline title="\#{tooltip.reviewerDeadline}"}{render="\#{toolbarBacking.sessionInformation.user.editor}"}{converterDateTime \newline patter="dd/MM/yyyy"}
-		
-		\fentry{add-reviewer-cbtn}{<h:commandButton>}{Knopf zum Hinzufügen des Gutachters}{value="\#{label.addReviewer}" \newline action="\#{}" \newline title="\#{tooltip.addReviewer}"}{render="\#{toolbarBacking.sessionInformation.user.editor}"}{/}
-		
-		\fentry{reviewer-dtbl}{<h:dataTable>}{Liste der Gutachter}{value="\#{}" \newline var="reviewer"}{render="\#{}"E und A}{/}
-		
-		\fentry{remove-reviewer-cbtn}{<h:commandButton>}{Entferne einen bestimmten Gutachters.}{action="\#{}" \newline title="\#{tooltip.removeReviewer}"}{render="\#{}"E und A}{/}
-		
-		\fentry{select-editor-slctom}{<h:selectOneMenu>}{Auswahländerung des verwaltenden Editors}{value="\#{}" \newline title="\#{tooltip.selectEditor}"}{render="\#{}"E und A}{/}
-		
-		\fentry{save-editor-cbtn}{<h:commandButton>}{Speichern der Änderung des Editors.}{value="\#{label.saveEditor}" \newline action="\#{}" \newline title="\#{tooltip.saveEditor}"}{render="\#{}"E und A}{/}
-		
-		\fentry{show-editor-otxt}{<h:outputText>}{Anzeige des aktuellen Editors.}{value="\#{}"}{render=""\#{}E und A}{/}
-		
-		\fentry{revision-deadline-iTxt}{<h:inputText>}{Eingabe zur Angabe einer Deadline.}{}{E}
-		
-		\fentry{requireRevisionBtn}{commandButton}{Fordert den Einreicher auf, seine Einreichung zu überarbeiten}{E}
-		
-		\fentry{acceptSubmissionBtn}{commandButton}{Akzeptiere die Einreichung}{E}
-		
-		\fentry{rejectSubmissionBtn}{commandButton}{Lehne die Einreichung ab}{E}
-		
+		\fentry{add-reviewer-iTxt}{<h:inputText>}{Eingabefeld zur Angabe einer E-Mail-Adresse}{value="\#{toolbarBacking.reviewerInput.email}" \newline title="\#{help.reviewerEmail}}{render="\#{toolbarBacking.sessionInformation.user.editor}"}{emailAddressExistsValidator \newline required="true" \newline pattern="([\^.@]+)(\.[\^.@]+)*@([\^.@]+\.)+([\^.@]+)"}
+
+		\fentry{add-deadline-reviewer-iTxt}{<h:inputText>}{Eingabefeld zur Angabe einer Deadline.}{value="\#{toolbarBacking.reviewedByInput.timestampDeadline}" \newline title="\#{help.reviewerDeadline}"}{render="\#{toolbarBacking.sessionInformation.user.editor}"}{converterDateTime \newline patter="dd/MM/yyyy"}
+
+		\fentry{add-reviewer-cbtn}{<h:commandButton>}{Knopf zum Hinzufügen des Gutachters}{value="\#{label.addReviewer}" \newline action="\#{}" \newline title="\#{help.addReviewer}"}{render="\#{toolbarBacking.sessionInformation.user.editor}"}{/}
+
+		\fentry{reviewer-dtbl}{<h:dataTable>}{Liste der Gutachter}{value="\#{toolbarbacking.reviewer}" \newline var="review"}{render="\#{toolbarBacking.sessionInformation.user.editor}"}{/}
+
+		\fentry{remove-reviewer-cbtn}{<h:commandButton>}{Entferne einen bestimmten Gutachters.}{action="\#{toolbarBacking.removeReviewer}" \newline title="\#{help.removeReviewer}"}{render="\#{toolbarBacking.sessionInformation.user.editor}"}{/}
+
+		\fentry{select-editor-slctom}{<h:selectOneMenu>}{Auswahländerung des verwaltenden Editors}{value="\#{}" \newline title="\#{help.selectEditor}"}{render="\#{toolbarBacking.sessionInformation.user.editor}"}{/}
+
+		\fentry{save-editor-cbtn}{<h:commandButton>}{Speichern der Änderung des Editors.}{value="\#{label.saveEditor}" \newline action="\#{toolbarBacking.chooseNewManagingEditor}" \newline title="\#{help.saveEditor}"}{render="\#{toolbarBacking.sessionInformation.user.editor}"E}{/}
+
+		\fentry{show-editor-otxt}{<h:outputText>}{Anzeige des aktuellen Editors.}{value="\#{toolbarBacking.currentEditor}"}{render="\#{toolbarBacking.sessionInformation.user.editor}"}{/}
+
+		\fentry{revision-deadline-iTxt}{<h:inputText>}{Eingabe zur Angabe einer Deadline.}{value="\#{toolbarBacking.submission.deadlineRevision}" \newline title="\#{help.revisionDeadline}"}{render="\#{toolbarBacking.sessionInformation.user.editor}"}{converterDateTime \newline patter="dd/MM/yyyy"}
+
+		\fentry{require-revision-cbtn}{<h:commandButton>}{Fordert den Einreicher auf, seine Einreichung zu überarbeiten}{value="\#{label.requireRevision}" \newline action="\#{toolbarBacking.requireRevision}" \newline title="\#{help.requireRevision}"}{render="\#{toolbarBacking.sessionInformation.user.editor}"}{/}
+
+		\fentry{accept-submission-cbtn}{<h:commandButton>}{Akzeptiere die Einreichung}{value="\#{label.acceptSubmission}" \newline action="\#{toolbarBacking.acceptSubmission}" \newline title="\#{help.accesptSubmission}"}{render="\#{toolbarBacking.sessionInformation.user.editor}"}{/}
+
+		\fentry{reject-submission-cbtn}{<h:commandButton>}{Lehne die Einreichung ab}{value="\#{label.rejectSubmission}" \newline action="\#{toolbarBacking.rejectSubmission}" \newline title="\#{help.rejectSubmission}"}{render="\#{toolbarBacking.sessionInformation.user.editor}"}{/}
+
 	}
 \end{samepage}
 
 \subsection{Seiten}
 
+
+%% Ab hier sind Bastis hinzugefügte Änderungen
+
+\begin{samepage}
+	\textbf{newScientificForum.xhtml} Auf der Seite zum Erstellen eines wissenschaftlichen Forums kann ein Administrator dessen wesentlichen Daten festlegen.
+	\nopagebreak
+
+	\ftable{
+
+		\fentry{forum-name-itxt}{<h:inputText>}{Angabe des Name des Forums.}{A}{}{}
+
+		\fentry{editors-list}{<h:dataTable>}{Liste der Editoren}{A}{}{}
+
+		\fentry{email-editor-itxt}{<h:inputText>}{Angabe der E-Mail-Adresse eines Editor.}{A}{}{}
+
+		\fentry{add-editor-btn}{<h:commandButton>}{Hinzufügen eines Editors in eine Liste.}{A}{}{}
+
+		\fentry{delete-editor-btn}{<h:commandButton>}{Löschen des zugehörigen Editors von der Liste.}{A}{}{}
+
+		\fentry{deadline-itxt}{<h:inputText>}{Hinzufügen einer Deadline des Forums.}{A}{}{}
+
+		\fentry{description-itxt}{<h:inputTextArea>}{Angabe einer Kurzbeschreibung.}{A}{}{}
+
+		\fentry{url-itxt}{<h:inputText>}{Link zur Konferenz oder zum Journal.}{A}{}{}
+
+		\fentry{review-instructions-itxt}{<h:inputTextArea>}{Angabe einer Anleitung für eine Begutachtung.}{A}{}{}
+
+		\fentry{science-field-list}{<h:outputText>}{Liste der ausgewählten Fachgebiete.}{A}{}{}
+
+		\fentry{science-field-list}{<p:selectOneListbox>}{Auswahl von Fachgebieten.}{A}{}{}
+
+		\fentry{new-science-field-itxt}{<h:inputText>}{Hinzufügen neuer Fachgebiete.}{A}{}{}
+
+		\fentry{add-science-field-btn}{<h:commandButton>}{Ausführen der Hinzufüge-Aktion.}{A}{}{}
+
+		\fentry{save-btn}{<h:commandButton>}{Speichern des neuen Forums.}{A}{}{}
+
+		\fentry{abort-btn}{<h:commandButton>}{Abbruch des Erstellungsprozesses.}{A}{}{}
+	}
+\end{samepage}
