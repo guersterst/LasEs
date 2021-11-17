@@ -2,6 +2,9 @@ package de.lases.global.transport;
 
 import java.time.LocalDateTime;
 
+/**
+ * Represents a review.
+ */
 public class Review {
 
     /*

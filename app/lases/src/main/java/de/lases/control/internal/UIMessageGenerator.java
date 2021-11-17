@@ -23,8 +23,8 @@ public class UIMessageGenerator {
         FacesContext.getCurrentInstance().addMessage(null, facesMessage);
     }
 
-    private FacesMessage.Severity convertCategory(Category category) {
-        return switch (category) {
+    private FacesMessage.Severity convertCategory(MessageCategory messageCategory) {
+        return switch (messageCategory) {
             case ERROR -> FacesMessage.SEVERITY_ERROR;
             case INFO -> FacesMessage.SEVERITY_INFO;
             case WARNING -> FacesMessage.SEVERITY_WARN;

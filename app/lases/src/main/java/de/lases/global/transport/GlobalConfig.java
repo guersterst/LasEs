@@ -1,5 +1,8 @@
 package de.lases.global.transport;
 
+/**
+ * Holds all data that is read from the config file.
+ */
 public class GlobalConfig {
 
     private int maximumMegabytesPDF;
