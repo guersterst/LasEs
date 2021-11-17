@@ -51,12 +51,12 @@ Alle Informationen über das System, die nach außen gelangen, können Angreifer
 Dazu gehören Details über die technische Umgebung und verwendete Software des Systems, interne Fehlermeldungen und Implementierungsdetails.
 Folgende Maßnahmen werden ergriffen, um Leakage solcher Informationen zu verhindern.
 Fehlermeldungen zeigen im Produktionsmodus keine Stacktraces an, sondern eigene Fehlermeldungen, die nur Informationen enthalten, die für den Endnutzer relevant sind.
-Wir verwenden eigene Fehlerseiten bei Exceptions und ersetzen die 404-Seite von JSF durch unsere eigene wie folgt in der web.xml-Datei:
+Wir verwenden eigene Fehlerseiten bei Exceptions und ersetzen die 404 und 500 Fehlerseiten von JSF durch unsere eigenen wie folgt in der web.xml-Datei:
     {\small
 \begin{lstlisting}
 <error-page>
     <error-code>404</error-code>
-    <location>/</location>
+    <location>/WEB-INF/errorpages/error404.xhtml</location>
 </error-page>
 \end{lstlisting}\todo{location}
 }
