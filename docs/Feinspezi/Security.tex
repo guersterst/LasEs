@@ -26,3 +26,13 @@ Nach jeder Anmeldung wird die Session verworfen und neu generiert mit
 \end{verbatim}
 }
 Nach einer Authentifizierung bleibt also keine alte Session bestehen und \emph{Session-Fixation}-Attacken werden verhindert.
+
+\subsection{Passwörter}
+Passwörter werden mit der modernen und sicheren PBKDF2-Funktion gehasht.
+Dabei wird für jedes Passwort ein eigener zufällig generierter Salt benutzt, welcher mit dem Hash in der Datenbank gespeichert wird.
+Eingegebene Passwörter werden so früh wie möglich gehasht, damit die Klartextpasswörter eine minimale Lebenszeit auf dem Server haben.
+Für das Generieren eins Salts und das Hashing bietet die Klasse \code{Hashing} aus \code{de.java.business.util}
+Methoden an.
+Sie verwendet die robuste \code{javax.crypto}-Bibliothek.
+
+Um das Erraten von Passwörtern durch Brute-Force-Attacken o.ä.\ zu erschweren, müssen Passwörter 8--100 Zeichen lang sein und Groß- und Kleinbuchstaben, Zahlen und Sonderzeichen enthalten.
