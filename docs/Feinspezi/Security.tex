@@ -13,3 +13,16 @@ Für SQL-Code werden \code{PreparedStatements} benutzt, damit die SQL-Statements
 Die Parameter werden dann an die Datenbank gesendet und von ihr getrennt vom Code als Daten betrachtet.
 Die Ausführung des Statements kann also nicht durch die Nutzereingaben modifiziert werden und eine SQL-Injection wird verhindert
 
+\subsection{Session Hijacking \& Fixation}
+In der \code{web.xml}-Datei ist ein Timeout für Sessions konfigurierbar.
+Dieser wirkt Session Hijacking sowie unerwünschten physischen Zugriffen auf den Browser des Clients entgegen.
+JSF setzt für das Session-Cookie standardmäßig das \code{http-only}-Flag, damit kann darauf nicht mit JavaScript zugegriffen werden und Hijacking wird erschwert.
+
+Nach jeder Anmeldung wird die Session verworfen und neu generiert mit
+{\small
+\begin{verbatim}
+    FacesContext.getCurrentInstance().getExternalContext()
+        .getRequest().changeSessionId()
+\end{verbatim}
+}
+Nach einer Authentifizierung bleibt also keine alte Session bestehen und \emph{Session-Fixation}-Attacken werden verhindert.
