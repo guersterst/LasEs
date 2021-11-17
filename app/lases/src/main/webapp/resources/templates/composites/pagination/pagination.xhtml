@@ -10,6 +10,7 @@
 
 
 <composite:implementation>
+    <h:commandButton action="#{cc.attrs.paginator.loadData}"/>
     <h:dataTable value="#{cc.attrs.paginator.entries}" var="var">
         <composite:insertChildren/>
     </h:dataTable>

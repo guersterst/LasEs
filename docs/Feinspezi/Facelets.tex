@@ -19,7 +19,7 @@
 Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren wir nach dem \emph{kebab-case} Prinzip. Um den genauen Typ in die ID mit aufzunehmen, wird das entsprechende Suffix angehängt.
 
 \todo{Suffix:}
- graphicImage = gIm link =lnk inputText =itext commandButton = cbtn messages = msgs dataTable = dtbl selectOneMenu = slctom
+ graphicImage = gIm link =lnk inputText =itext commandButton = cbtn messages = msgs dataTable = dtbl selectOneMenu = slctom panelGrid = pgrd commandLink = clnk
 
 \subsection{Templates}
 
@@ -32,23 +32,23 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \todo{Absprechen mit Sebastian und BB nicht vollstäandig}
 \todo{outcome von links ist immer noch im ordner facelets. mit Johannes abklären und ausprobieren.}
 \ftable{
-	\fentry{logo-gimg}{<h:graphicImage>}{Logo der Applikation.}{value="\#{}"}{/}{/}
+	\fentry{logo-gimg}{<h:graphicImage>}{Logo der Applikation.}{value="\#\{\}"}{/}{/}
 
-	\fentry{direct-to-home-lnk}{<h:link>}{Weiterleitung zur Homepage.}{outcome="/authenticated/homepage" \newline title="\#{help.toHome}"}{/}{/}
+	\fentry{direct-to-home-lnk}{<h:link>}{Weiterleitung zur Homepage.}{outcome="/authenticated/homepage" \newline title="\#\{help.toHome\}"}{/}{/}
 
 	\fentry{search-frm}{<h:form>}{Formular zur Suche.}{/}{/}{/}
 
-	\fentry{search-Field-itxt}{<h:inputText>}{Suchleiste}{value="\#{navigationBacking.resultListParameters.globalSearchWord}" \newline title="\#{help.search}"}{/}{/}
+	\fentry{search-Field-itxt}{<h:inputText>}{Suchleiste}{value="\#\{navigationBacking.resultListParameters.globalSearchWord\}" \newline title="\#\{help.search\}"}{/}{/}
 
-	\fentry{search-cbtn}{<h:commandButton>}{Suche ausführen.}{action="\#{navigationBacking.search}"}{/}{/}
+	\fentry{search-cbtn}{<h:commandButton>}{Suche ausführen.}{action="\#\{navigationBacking.search\}"}{/}{/}
 
-	\fentry{user-list-lnk}{<h:link>}{Link zur Übersichtsseite aller Nutzer}{value="\#{label.userList}" \newline outcome="/editor/userList \newline title="\#{help.userList}"}{render="\#{navigationBacking.sessionInformation.user.editor}"}{/}
+	\fentry{user-list-lnk}{<h:link>}{Link zur Übersichtsseite aller Nutzer}{value="\#\{label.userList\}" \newline outcome="/editor/userList \newline title="\#\{help.userList\}"}{render="\#\{navigationBacking.sessionInformation.user.editor\}"}{/}
 
-	\fentry{forum-list-lnk}{<h:link>}{Link zur Übersichtsseite alle Journale und Konferenzen}{value="\#{label.forumList}" \newline outcome="/authenticated/scientificForumList" \newline title="\#{help.forumList}"}{/}{/}
+	\fentry{forum-list-lnk}{<h:link>}{Link zur Übersichtsseite alle Journale und Konferenzen}{value="\#\{label.forumList\}" \newline outcome="/authenticated/scientificForumList" \newline title="\#\{help.forumList\}"}{/}{/}
 
-	\fentry{logout-cbtn}{<h:commandButton>}{Loggt den Nutzer aus dem System aus und leitet zur Loginseite weiter.}{value="\#{label.logout}" \newline action="\#{navigationBacking.logout}" \newline title="\#{help.logout}"}{/}{/}
+	\fentry{logout-cbtn}{<h:commandButton>}{Loggt den Nutzer aus dem System aus und leitet zur Loginseite weiter.}{value="\#\{label.logout\}" \newline action="\#\{navigationBacking.logout\}" \newline title="\#\{help.logout\}"}{/}{/}
 
-	\fentry{profile-lnk}{<h:link>}{Link zur Profilübersicht}{value="\#{label.nav.profile}" \newline outcome="/authenticated/profile"}{/}{/}
+	\fentry{profile-lnk}{<h:link>}{Link zur Profilübersicht}{value="\#\{label.nav.profile\}" \newline outcome="/authenticated/profile"}{/}{/}
 	}
 
 \end{samepage}
@@ -75,9 +75,9 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	\nopagebreak
 
 	\ftable{
-		\fentry{imprint-lnk}{<h:link>}{Link zur Seite des Impressums}{value="\#{label.footer.imprint}" \newline outcome="/anonymous/imprint" \newline too}{/}{/}
+		\fentry{imprint-lnk}{<h:link>}{Link zur Seite des Impressums}{value="\#\{label.footer.imprint\}" \newline outcome="/anonymous/imprint" \newline too}{/}{/}
 
-		\fentry{language-otxt}{<h:outputText>}{Anzeige der eingestellten Sprache.}{value="\#{}"}{/}{/}
+		\fentry{language-otxt}{<h:outputText>}{Anzeige der eingestellten Sprache.}{value="\#\{\}"}{/}{/}
 
 	}
 \end{samepage}
@@ -94,31 +94,79 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	\nopagebreak
 
 	\ftable{
-		\fentry{add-reviewer-iTxt}{<h:inputText>}{Eingabefeld zur Angabe einer E-Mail-Adresse}{value="\#{toolbarBacking.reviewerInput.email}" \newline title="\#{help.reviewerEmail}}{render="\#{toolbarBacking.sessionInformation.user.editor}"}{emailAddressExistsValidator \newline required="true" \newline pattern="([\^.@]+)(\.[\^.@]+)*@([\^.@]+\.)+([\^.@]+)"}
+		\fentry{add-reviewer-iTxt}{<h:inputText>}{Eingabefeld zur Angabe einer E-Mail-Adresse}{value="\#\{toolbarBacking.reviewerInput.email\}" \newline title="\#{help.reviewerEmail}}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{emailAddressExistsValidator \newline required="true" \newline pattern="([\^.@]+)(\.[\^.@]+)*@([\^.@]+\.)+([\^.@]+)"}
 
-		\fentry{add-deadline-reviewer-iTxt}{<h:inputText>}{Eingabefeld zur Angabe einer Deadline.}{value="\#{toolbarBacking.reviewedByInput.timestampDeadline}" \newline title="\#{help.reviewerDeadline}"}{render="\#{toolbarBacking.sessionInformation.user.editor}"}{converterDateTime \newline patter="dd/MM/yyyy"}
+		\fentry{add-deadline-reviewer-iTxt}{<h:inputText>}{Eingabefeld zur Angabe einer Deadline.}{value="\#\{toolbarBacking.reviewedByInput.timestampDeadline\}" \newline title="\#\{help.reviewerDeadline\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{converterDateTime \newline patter="dd/MM/yyyy"}
 
-		\fentry{add-reviewer-cbtn}{<h:commandButton>}{Knopf zum Hinzufügen des Gutachters}{value="\#{label.addReviewer}" \newline action="\#{}" \newline title="\#{help.addReviewer}"}{render="\#{toolbarBacking.sessionInformation.user.editor}"}{/}
+		\fentry{add-reviewer-cbtn}{<h:commandButton>}{Knopf zum Hinzufügen des Gutachters}{value="\#\{label.addReviewer\}" \newline action="\#\{\}" \newline title="\#\{help.addReviewer\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{/}
 
-		\fentry{reviewer-dtbl}{<h:dataTable>}{Liste der Gutachter}{value="\#{toolbarbacking.reviewer}" \newline var="review"}{render="\#{toolbarBacking.sessionInformation.user.editor}"}{/}
+		\fentry{reviewer-dtbl}{<h:dataTable>}{Liste der Gutachter}{value="\#\{toolbarbacking.reviewer\}" \newline var="review"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{/}
 
-		\fentry{remove-reviewer-cbtn}{<h:commandButton>}{Entferne einen bestimmten Gutachters.}{action="\#{toolbarBacking.removeReviewer}" \newline title="\#{help.removeReviewer}"}{render="\#{toolbarBacking.sessionInformation.user.editor}"}{/}
+		\fentry{remove-reviewer-cbtn}{<h:commandButton>}{Entferne einen bestimmten Gutachters.}{action="\#\{toolbarBacking.removeReviewer\}" \newline title="\#\{help.removeReviewer\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{/}
 
-		\fentry{select-editor-slctom}{<h:selectOneMenu>}{Auswahländerung des verwaltenden Editors}{value="\#{}" \newline title="\#{help.selectEditor}"}{render="\#{toolbarBacking.sessionInformation.user.editor}"}{/}
+		\fentry{select-editor-slctom}{<h:selectOneMenu>}{Auswahländerung des verwaltenden Editors}{value="\#\{\}" \newline title="\#\{help.selectEditor\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{/}
 
-		\fentry{save-editor-cbtn}{<h:commandButton>}{Speichern der Änderung des Editors.}{value="\#{label.saveEditor}" \newline action="\#{toolbarBacking.chooseNewManagingEditor}" \newline title="\#{help.saveEditor}"}{render="\#{toolbarBacking.sessionInformation.user.editor}"E}{/}
+		\fentry{save-editor-cbtn}{<h:commandButton>}{Speichern der Änderung des Editors.}{value="\#\{label.saveEditor\}" \newline action="\#\{toolbarBacking.chooseNewManagingEditor\}" \newline title="\#\{help.saveEditor\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"E}{/}
 
-		\fentry{show-editor-otxt}{<h:outputText>}{Anzeige des aktuellen Editors.}{value="\#{toolbarBacking.currentEditor}"}{render="\#{toolbarBacking.sessionInformation.user.editor}"}{/}
+		\fentry{show-editor-otxt}{<h:outputText>}{Anzeige des aktuellen Editors.}{value="\#\{toolbarBacking.currentEditor\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{/}
 
-		\fentry{revision-deadline-iTxt}{<h:inputText>}{Eingabe zur Angabe einer Deadline.}{value="\#{toolbarBacking.submission.deadlineRevision}" \newline title="\#{help.revisionDeadline}"}{render="\#{toolbarBacking.sessionInformation.user.editor}"}{converterDateTime \newline patter="dd/MM/yyyy"}
+		\fentry{revision-deadline-iTxt}{<h:inputText>}{Eingabe zur Angabe einer Deadline.}{value="\#\{toolbarBacking.submission.deadlineRevision\}" \newline title="\#\{help.revisionDeadline\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{converterDateTime \newline patter="dd/MM/yyyy"}
 
-		\fentry{require-revision-cbtn}{<h:commandButton>}{Fordert den Einreicher auf, seine Einreichung zu überarbeiten}{value="\#{label.requireRevision}" \newline action="\#{toolbarBacking.requireRevision}" \newline title="\#{help.requireRevision}"}{render="\#{toolbarBacking.sessionInformation.user.editor}"}{/}
+		\fentry{require-revision-cbtn}{<h:commandButton>}{Fordert den Einreicher auf, seine Einreichung zu überarbeiten}{value="\#\{label.requireRevision\}" \newline action="\#\{toolbarBacking.requireRevision\}" \newline title="\#\{help.requireRevision\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{/}
 
-		\fentry{accept-submission-cbtn}{<h:commandButton>}{Akzeptiere die Einreichung}{value="\#{label.acceptSubmission}" \newline action="\#{toolbarBacking.acceptSubmission}" \newline title="\#{help.accesptSubmission}"}{render="\#{toolbarBacking.sessionInformation.user.editor}"}{/}
+		\fentry{accept-submission-cbtn}{<h:commandButton>}{Akzeptiere die Einreichung}{value="\#\{label.acceptSubmission\}" \newline action="\#\{toolbarBacking.acceptSubmission\}" \newline title="\#\{help.accesptSubmission\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{/}
 
-		\fentry{reject-submission-cbtn}{<h:commandButton>}{Lehne die Einreichung ab}{value="\#{label.rejectSubmission}" \newline action="\#{toolbarBacking.rejectSubmission}" \newline title="\#{help.rejectSubmission}"}{render="\#{toolbarBacking.sessionInformation.user.editor}"}{/}
+		\fentry{reject-submission-cbtn}{<h:commandButton>}{Lehne die Einreichung ab}{value="\#\{label.rejectSubmission\}" \newline action="\#\{toolbarBacking.rejectSubmission\}" \newline title="\#\{help.rejectSubmission\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{/}
 
 	}
+\end{samepage}
+
+\begin{samepage}
+	\textbf{pagination.xhtml} ist ein Composite Component zur Paginierung von Listen.
+	\nopagebreak
+	
+	\ftable{
+		\fentry{/}{<composite:attribute>}{Paginator Attribut.}{name="paginator" \newline type="de.lases.control.internal.Pagination"}{required="true"}{/}
+		
+		\fentry{pagination-dtbl}{<h:dataTable>}{Hier werden die Spalten eingefügt. Durch Klicken auf die Spaltennamen werden die Einträge sortiert. Zusätzlich kann durch ein Textfeld die Liste gefiltert werden.}{value="\#\{cc.attrs.paginator.entries\}"\newline var="var"}{/}{/}
+		
+		\fentry{/}{<composite:insertChildren>}{Einfügen benötigter Spalten.}{/}{/}{/}
+		
+		\fentry{apply-cbtn}{<h:commandButton>}{Mit diesem Knopf können gewählte Filter angewandt werden.}{value="\#\{label.applyFilter\}" \newline action="\#\{cc.attrs.paginator.loadData\}" \newline title="\#\{help.applyFilter\}"}{/}{/}
+		
+		\fentry{navigation-pgrd}{<h:panelGrid>}{Hier befinden sich die Knöpfe zur Navigation zwischen den Seiten der Paginierungen.}{columns="5"}{/}{/}
+		
+		\fentry{first-page-cbtn}{<h:commandButton>}{Zurück zur ersten Seite.}{value="\#\{label.firstPage\}" \newline action="\#\{cc.attrs.paginator.firstPage\}" \newline title="\#\{help.firstPage\}"}{/}{/}
+		
+		\fentry{prev-page-cbtn}{<h:commandButton>}{Eine Seite zurück.}{value="\#\{label.prevPage\}" \newline action="\#\{cc.attrs.paginator.priviousPage\}" \newline title="\#\{help.prevPage\}"}{/}{/}
+		
+		\fentry{current-page-otxt}{<h:outputText>}{Nummer der aktuellen Seite.}{value="\#\{cc.attrs.paginator.currentPage\}" \newline title="\#\{help.currentPage\}"}{/}{/}
+		
+		\fentry{next-page-cbtn}{<h:commandButton>}{Eine Seite weiter.}{value="\#\{label.nextPage\}" \newline action="\#\{cc.attrs.paginator.nextPage\}" \newline title="\#\{help.nextPage\}"}{/}{/}
+		
+		\fentry{last-page-cbtn}{<h:commandButton>}{Zur letzten Seite.}{value="\#\{label.lastPage\}" \newline action="\#\{cc.attrs.paginator.lastPage\}" \newline title="\#\{help.lastPage\}"}{/}{/}
+		
+	}
+\end{samepage}
+
+\begin{samepage}
+	\textbf{sortfiltercolumn.xhtml} ist ein Composite Component, das eine sortierbare und filterbare Spalte einer Liste modelliert.
+	\nopagebreak
+	
+	\ftable{
+		\fentry{/}{<composite:attribute>}{Implementation der abstrakten Klasse.}{name="paginator" \newline type="de.lases.control.internal.Pagination"}{required="true"}{/}
+		
+		\fentry{/}{<composite:attribute>}{Anzeigename im Spaltenkopf.}{name="columnIdent" \newline type="java.lang.String"}{required="true"}{/}
+		
+		\fentry{/}{<composite:attribute>}{String Identifier der Spalte.}{name="columnName" \newline type="java.lang.String"}{required="true"}{/}
+		
+		\fentry{/}{<composite:attribute>}{Spaltennummer, null indiziert.}{name="coulumnNo" \newline type="java.lang.String"}{required="true"}{/}
+		
+		\fentry{column-name-clnk}{<h:commandLink>}{Durch Klicken auf den Spaltennamen wird nach dieser Spalte aufsteigend, bzw. absteigend sortiert.}{value="\#\{cc.attrs.columnNamei18n\}" \newline action="\#\{cc.attrs.paginator.sortBy[cc.attrs.columnNo]\}"}{/}{/}
+		
+		\fentry{column-filter-itxt}{<h:inputText>}{Hier kann ein Wert eingegeben werden, nach dem die Spalte dann gefiltert wird.}{value="\#\{cc.attrs.paginator.searchWords[cc.attrs.columnNo]\}"}{/}{/}
+	}
+	
 \end{samepage}
 
 \subsection{Seiten}
