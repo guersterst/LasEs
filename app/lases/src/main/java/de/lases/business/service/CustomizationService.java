@@ -1,21 +1,31 @@
 package de.lases.business.service;
 
-import de.lases.global.transport.*;
-import de.lases.persistence.repository.*;
-import jakarta.enterprise.context.ApplicationScoped;
+import de.lases.global.transport.ConnectionState;
+import de.lases.global.transport.Style;
+import de.lases.global.transport.SystemSettings;
+import de.lases.persistence.repository.Transaction;
+import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.faces.component.UIMessage;
-import jakarta.inject.Named;
+import jakarta.inject.Inject;
 
-@ApplicationScoped
-@Named
+@Dependent
 public class CustomizationService {
 
+    @Inject
     private Event<UIMessage> uiMessageEvent;
 
+    @Inject
     private Transaction transaction;
 
-    public void setSystemSettings(Style style) {
+    //todo passen hier die methoden überhaupt zum bb
+    /**
+     *
+     *
+     * @param style
+     * @param systemSettings
+     */
+    public void setSystemSettings(Style style, SystemSettings systemSettings) {
     }
 
     // TODO @Johannes: hier habe ich gemacht, dass das SystemSettings returned
