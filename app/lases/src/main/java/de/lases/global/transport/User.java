@@ -5,26 +5,26 @@ import java.util.List;
 
 public class User {
 
-    private Verification verification;
+    //private Verification verification;
+    private int verificationId;
 
-    private List<Review> reviews;
+    //private List<Review> reviews;
 
-    private List<ScienceField> scienceFields;
+    //private List<ScienceField> scienceFields;
 
-    private List<ScientificForum> edits;
+    //private List<ScientificForum> edits;
 
-    private List<Submission> edited;
+    //private List<Submission> edited;
 
-    private List<Submission> coAuthored;
+    //private List<Submission> coAuthored;
 
-    private List<Submission> authored;
+    //private List<Submission> authored;
 
-    private List<Submission> reviewed;
+    //private List<Submission> reviewed;
 
     private int id;
 
-
-    private List<Privilege> priveleges;
+    //private List<Privilege> priveleges;
 
     private String title;
 
@@ -38,6 +38,8 @@ public class User {
 
     private String employer;
 
+    private String passwordNotHashed;
+
     private String passwordHashed;
 
     private String passwordSalt;
@@ -50,4 +52,99 @@ public class User {
 
     public boolean isAdmin() { return false; }
 
+    public int getVerificationId() {
+        return verificationId;
+    }
+
+    public void setVerificationId(int verificationId) {
+        this.verificationId = verificationId;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+    }
+
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getEmployer() {
+        return employer;
+    }
+
+    public void setEmployer(String employer) {
+        this.employer = employer;
+    }
+
+    public String getPasswordNotHashed() {
+        return passwordNotHashed;
+    }
+
+    public void setPasswordNotHashed(String passwordNotHashed) {
+        this.passwordNotHashed = passwordNotHashed;
+    }
+
+    public String getPasswordHashed() {
+        return passwordHashed;
+    }
+
+    public void setPasswordHashed(String passwordHashed) {
+        this.passwordHashed = passwordHashed;
+    }
+
+    public String getPasswordSalt() {
+        return passwordSalt;
+    }
+
+    public void setPasswordSalt(String passwordSalt) {
+        this.passwordSalt = passwordSalt;
+    }
+
+    public boolean isNotRegistered() {
+        return isNotRegistered;
+    }
+
+    public void setNotRegistered(boolean notRegistered) {
+        isNotRegistered = notRegistered;
+    }
 }
