@@ -231,6 +231,22 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	}
 \end{samepage}
 
+\todo{ErrorMessage does not exist}
+\todo{Stacktrace im development}
+
+\begin{samepage}
+	\textbf{errorPage.xhtml} Auf diese Seite wird navigiert, wenn auf eine nicht existierende URL oder auf eine URL zugegriffen wird, auf die man keine Zugriffsrechte hat.
+	\nopagebreak
+	
+	\ftable{
+		
+		\fentry{error-message-otxt}{<h:outputText>}{Anzeige einer Fehlermeldung.}{value="\#\{errorPageBacking.errorMessage.message\}"}{/}{/}
+		
+		\fentry{stack-trace-otxt}{<h:outputText>}{Stacktrace für den "Productive Mode".}{value="\#\{errorPageBacking.errorMessage.message\}"}{/}{/}
+		
+	}
+\end{samepage}
+
 
 %% Ab hier sind Bastis hinzugefügte Änderungen
 
