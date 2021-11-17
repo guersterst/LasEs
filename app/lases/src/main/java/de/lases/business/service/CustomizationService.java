@@ -9,6 +9,10 @@ import jakarta.enterprise.event.Event;
 import jakarta.faces.component.UIMessage;
 import jakarta.inject.Inject;
 
+/**
+ * Provides functionality for the customization of the applications look and feel.
+ * In case of an unexpected state, a {@link de.lases.global.transport.UIMessage} event will be fired.
+ */
 @Dependent
 public class CustomizationService {
 

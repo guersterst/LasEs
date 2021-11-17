@@ -146,8 +146,7 @@ public class SubmissionService {
     public void uploadFile(File file, Submission submission) {
     }
 
-
-    //todo wie versionsnummer übergeben?
+    //todo what return? File or paper
     public Paper downloadFile() throws IOException {
         return null;
     }
