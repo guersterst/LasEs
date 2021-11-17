@@ -8,22 +8,15 @@ import java.util.List;
  */
 public class Submission {
 
-    private List<Paper> papers;
-
-    private ScientificForum scientificForum;
+    private int scientificForumId;
 
     private int id;
 
     private boolean revisionRequired;
 
-    private List<User> reviewers;
+    private int authorId;
 
-    private User author;
-
-    private List<User> coAuthors;
-
-    private User editor;
-
+    private int editorId;
 
     private String title;
 
@@ -33,4 +26,121 @@ public class Submission {
 
     private LocalDateTime submissionTime;
 
+    public int getScientificForumId() {
+        return scientificForumId;
+    }
+
+    /**
+     * Set the id of the scientific forum this submission belongs to.
+     *
+     * @param scientificForumId The id of the scientific forum.
+     */
+    public void setScientificForumId(int scientificForumId) {
+        this.scientificForumId = scientificForumId;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * Set the id of this submission.
+     *
+     * @param id The id.
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public boolean isRevisionRequired() {
+        return revisionRequired;
+    }
+
+    /**
+     * Set if a revision is required for this submission.
+     *
+     * @param revisionRequired Is a revision required?
+     */
+    public void setRevisionRequired(boolean revisionRequired) {
+        this.revisionRequired = revisionRequired;
+    }
+
+    public int getAuthorId() {
+        return authorId;
+    }
+
+    /**
+     * Set the id of the user that authored this submission.
+     *
+     * @param authorId Id of the author.
+     */
+    public void setAuthorId(int authorId) {
+        this.authorId = authorId;
+    }
+
+    public int getEditorId() {
+        return editorId;
+    }
+
+    /**
+     * Set the id of the user that is the editor for this submission.
+     *
+     * @param editorId Id of the editor.
+     */
+    public void setEditorId(int editorId) {
+        this.editorId = editorId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * Set the title of this submission.
+     *
+     * @param title The title.
+     */
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public SubmissionState getState() {
+        return state;
+    }
+
+    /**
+     * Set the acceptance state of this submission. For all possible states
+     * refer to {@link SubmissionState}
+     *
+     * @param state The state of the submission.
+     */
+    public void setState(SubmissionState state) {
+        this.state = state;
+    }
+
+    public LocalDateTime getDeadlineRevision() {
+        return deadlineRevision;
+    }
+
+    /**
+     * Set the deadline for the submission of a revision
+     *
+     * @param deadlineRevision Deadline for a revision.
+     */
+    public void setDeadlineRevision(LocalDateTime deadlineRevision) {
+        this.deadlineRevision = deadlineRevision;
+    }
+
+    public LocalDateTime getSubmissionTime() {
+        return submissionTime;
+    }
+
+    /**
+     * Set the time when the submission was submitted.
+     *
+     * @param submissionTime Submission time.
+     */
+    public void setSubmissionTime(LocalDateTime submissionTime) {
+        this.submissionTime = submissionTime;
+    }
 }
