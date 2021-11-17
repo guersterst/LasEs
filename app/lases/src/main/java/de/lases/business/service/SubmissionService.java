@@ -135,20 +135,19 @@ public class SubmissionService {
     public void addCoAuthor(Submission submission, User coAuthor) {
     }
 
-    //todo sebastian meinung
-
     /**
      * Uploads a file to a submission.
      * <p></p>
-     * Whether this is a submission-pdf or a revision-pdf is determined by
+     * Whether this is a submission-pdf or a revision-pdf is determined internally.
      *
      * @param file       The file to be added.
-     * @param user       The user, that adds the file.
      * @param submission The submission, to which the file is being added.
      */
     public void uploadFile(File file, Submission submission) {
     }
 
+
+    //todo wie versionsnummer übergeben?
     public Paper downloadFile() throws IOException {
         return null;
     }
