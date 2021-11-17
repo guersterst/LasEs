@@ -19,7 +19,7 @@
 Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren wir nach dem \emph{kebab-case} Prinzip. Um den genauen Typ in die ID mit aufzunehmen, wird das entsprechende Suffix angehängt.
 
 \todo{Suffix:}
- graphicImage = gIm link =lnk inputText =itext commandButton = cbtn messages = msgs dataTable = dtbl selectOneMenu = slctom panelGrid = pgrd commandLink = clnk
+ graphicImage = gIm link =lnk inputText =itext commandButton = cbtn messages = msgs dataTable = dtbl selectOneMenu = slctom panelGrid = pgrd commandLink = clnk inputSecret = iscrt
 
 \subsection{Templates}
 
@@ -75,7 +75,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	\nopagebreak
 
 	\ftable{
-		\fentry{imprint-lnk}{<h:link>}{Link zur Seite des Impressums}{value="\#\{label.footer.imprint\}" \newline outcome="/anonymous/imprint" \newline too}{/}{/}
+		\fentry{imprint-lnk}{<h:link>}{Link zur Seite des Impressums}{value="\#\{label.imprint\}" \newline outcome="/anonymous/imprint" \newline title="\#\{help.imprint\}"}{/}{/}
 
 		\fentry{language-otxt}{<h:outputText>}{Anzeige der eingestellten Sprache.}{value="\#\{\}"}{/}{/}
 
@@ -94,7 +94,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	\nopagebreak
 
 	\ftable{
-		\fentry{add-reviewer-iTxt}{<h:inputText>}{Eingabefeld zur Angabe einer E-Mail-Adresse}{value="\#\{toolbarBacking.reviewerInput.email\}" \newline title="\#{help.reviewerEmail}}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{emailAddressExistsValidator \newline required="true" \newline pattern="([\^.@]+)(\.[\^.@]+)*@([\^.@]+\.)+([\^.@]+)"}
+		\fentry{add-reviewer-iTxt}{<h:inputText>}{Eingabefeld zur Angabe einer E-Mail-Adresse}{value="\#\{toolbarBacking.reviewerInput.email\}" \newline title="\#{help.reviewerEmail}}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{emailAddressExistsValidator \newline emailAddressLayoutValidator \newline required="true"}
 
 		\fentry{add-deadline-reviewer-iTxt}{<h:inputText>}{Eingabefeld zur Angabe einer Deadline.}{value="\#\{toolbarBacking.reviewedByInput.timestampDeadline\}" \newline title="\#\{help.reviewerDeadline\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{converterDateTime \newline patter="dd/MM/yyyy"}
 
@@ -169,7 +169,34 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	
 \end{samepage}
 
-\subsection{Seiten}
+\subsection{Seiten}\label{flt:pages}
+
+\todo{Konventionen}
+
+\todo{Messages direkt an Eingabefeldern?ja?}
+
+\begin{samepage}
+	\textbf{welcome.xhtml} \phantomLabel{flt:welcome} Auf der Login- bzw. Welcome-Seite wird das System vorgestellt.
+	Zusätzlich gibt es ein Login-Formular zur Anmeldung im System.
+	Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{registration.xhtml} weitergeleitet.
+	\nopagebreak
+	
+	\ftable{
+		
+		\fentry{welcome-heading-otxt}{<h:outputText>}{Überschrift der Welcomepage.}{value="\#\{welcomeBacking.systemSettings.headlineWelcomePage\}"}{/}{/}
+		
+		\fentry{welcome-otxt}{<h:outputText>}{Bewerben der Anwendung mithilfe einer Kurzbeschreibung.}{value="\#\{welcomeBacking.systemSettings.messageWelcomePage\}"}{A/}{/}
+		
+		\fentry{email-itxt}{<h:inputText>}{Textfeld für E-Mail Eingabe.}{value="\#\{welcomeBacking.loginInput.emailAddress\}" \newline title="\#\{help.loginEmail\}"}{/}{emailAddressExistsValidator, emailAddressLayoutValidator, required="true"}
+		
+		\fentry{password-iscrt}{<h:inputSecret>}{Textfeld für Passwort Eingabe.}{value="\#\{welcomeBacking.loginInput.passwordNotHashed\}" title="\#\{help.loginPassword\}"}{/}{passwordValidator \newline required="true"}
+		
+		\fentry{login-cbtn}{<h:commandButton>}{Ausführen des Login-Prozesses.}{value="\#\{label.login\}" \newline action="\#\{welcomeBacking.login\}" \newline title="\#\{help.login\}"}{/}{/}
+		
+		\fentry{register-cbtn}{<h:commandButton>}{Weiterleitung zur Registrierung.}{value="\#\{label.register\}" \newline action="\#\{welcomeBacking.goToRegister\}" \newline title="\#\{help.register\}"}{/}{/}
+		
+	}
+\end{samepage}
 
 
 %% Ab hier sind Bastis hinzugefügte Änderungen
