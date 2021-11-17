@@ -85,7 +85,7 @@ public class UserService {
     /**
      * Deletes a users avatar.
      *
-     * @param user A {@code User}-DTO containing a valid id.
+     * @param user A {@link User}-DTO containing a valid id.
      */
     public void deleteAvatar(User user) {
     }
@@ -95,16 +95,27 @@ public class UserService {
      *
      * @param privilege The view privileges of the calling user.
      * @param resultListParams Allows for filtering and sorting of the resulting list.
-     * @return A list of {@code User}-DTOs.
+     * @return A list of {@link User}-DTOs.
      */
     public List<User> getUsers(Privilege privilege, ResultListParameters resultListParams) {
         return null;
     }
 
-    public void setVerified(Verification verification) {
+    /**
+     * Verifies a user's email-adress.
+     *
+     * @param verification A {@code Verification}-DTO. Must conatain a valid id and a validationRandom.
+     * @return {@code true} if the verification process was succesful. {@code false} otherwise.
+     */
+    public boolean verify(Verification verification) {
 
     }
 
+    /**
+     * Determines whether a users email-adress is already verified.
+     * @param user A {@link User}-DTO which should contain a valid id.
+     * @return {@true} if the user is verified. {@code false otherwise}.
+     */
     public boolean isVerified(User user) {
 
     }

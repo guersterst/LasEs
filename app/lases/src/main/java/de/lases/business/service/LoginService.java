@@ -8,7 +8,7 @@ import jakarta.enterprise.event.Event;
 import de.lases.persistence.repository.*;
 
 /**
- * Provides functionality regarding the authentication and loginof a user..
+ * Provides functionality regarding the authentication of auser.
  */
 @Dependent
 public class LoginService {

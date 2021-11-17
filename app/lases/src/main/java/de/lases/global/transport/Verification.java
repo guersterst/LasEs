@@ -12,7 +12,6 @@ public class Verification {
 
     private int id;
 
-
     private String validationRandom;
 
     private boolean verified;
