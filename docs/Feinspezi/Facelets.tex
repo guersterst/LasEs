@@ -180,47 +180,62 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	Zusätzlich gibt es ein Login-Formular zur Anmeldung im System.
 	Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{registration.xhtml} weitergeleitet.
 	\nopagebreak
-	
+
 	\ftable{
-		
+
 		\fentry{welcome-heading-otxt}{<h:outputText>}{Überschrift der Welcomepage.}{value="\#\{welcomeBacking.systemSettings.headlineWelcomePage\}"}{/}{/}
-		
+
 		\fentry{welcome-otxt}{<h:outputText>}{Bewerben der Anwendung mithilfe einer Kurzbeschreibung.}{value="\#\{welcomeBacking.systemSettings.messageWelcomePage\}"}{A/}{/}
-		
+
 		\fentry{email-itxt}{<h:inputText>}{Textfeld für E-Mail Eingabe.}{value="\#\{welcomeBacking.loginInput.emailAddress\}" \newline title="\#\{help.loginEmail\}"}{/}{emailAddressExistsValidator, emailAddressLayoutValidator, required="true"}
-		
+
 		\fentry{password-iscrt}{<h:inputSecret>}{Textfeld für Passwort Eingabe.}{value="\#\{welcomeBacking.loginInput.passwordNotHashed\}" title="\#\{help.loginPassword\}"}{/}{passwordValidator \newline required="true"}
-		
+
 		\fentry{login-cbtn}{<h:commandButton>}{Ausführen des Login-Prozesses.}{value="\#\{label.login\}" \newline action="\#\{welcomeBacking.login\}" \newline title="\#\{help.login\}"}{/}{/}
-		
+
 		\fentry{register-cbtn}{<h:commandButton>}{Weiterleitung zur Registrierung.}{value="\#\{label.register\}" \newline action="\#\{welcomeBacking.goToRegister\}" \newline title="\#\{help.register\}"}{/}{/}
-		
+
 	}
 \end{samepage}
 
 \begin{samepage}
 	\textbf{registration.xhtml} Seite zur Registrierung anonymer Nutzer.
 	\nopagebreak
-	
+
 	\ftable{
 		\fentry{title-itxt}{<h:inputText>}{Angabe eines Titels.}{value="\#\{registrationBacking.newUser.title\}" \newline title="\#\{help.title\}"}{/}{/}
-		
+
 		\fentry{first-name-itxt}{<h:inputText>}{Angabe des Vornamens.}{value="\#\{registrationBacking.newUser.firstName\}" \newline title="\#\{help.firstName\}"}{required="true"}{/}
-		
+
 		\fentry{last-name-itxt}{<h:inputText>}{Angabe des Nachnamen.}{value="\#\{registrationBacking.newUser.lastName\}" \newline title="\#\{help.lastName\}"}{required="true"}{/}
-		
+
 		\fentry{password-iscrt}{<h:inputSecret>}{Angabe eines Passwortes.}{value="\#\{registrationBacking.newUser.passwordNotHashed\}" \newline title="\#\{help.password\}"}{/}{passwordValidator \newline required="true"}
-		
+
 		\fentry{email-itxt}{<h:inputText>}{Angabe einer validen E-Mail.}{value="\#\{registrationBacking.newUser.emailAddress\}" \newline title="\#\{help.email\}"}{/}{emailAddressExistsValidator \newline emailAddressLayoutValidator \newline required=true"}
-		
+
 		\fentry{register-cbtn}{<h:commandButton>}{Ausführen des Registrations-Prozesses.}{value="\#\{label.register\}"\newline action="\#\{registrationBacking.register\}"}{/}{/}
-		
+
 		\fentry{welcomepage-lnk}{<h:link>}{Weiterleitung zur Login Seite.}{value="\#\{label.welcomeLink\}" \newline outcome="/anonymous/welcome" \newline title="\#\{help.welcomepage\}"}{/}{/}
 	}
 \end{samepage}
 
 
 %% Ab hier sind Bastis hinzugefügte Änderungen
+
+\subsubsection{Admin}
+
+\begin{samepage}
+
+	\textbf{initialConfig.xhtml} Auf dieser Seite landet man beim ersten Systemstart. Sie ist nur für Administratoren zugänglich.
+	Hier kann der Administrator die Datenbankschemata erstellen lassen.
+	\nopagebreak
+
+	\ftable{
+		\fentry{db-connection-state-otxt}{<h:outputText>}{Information über die Verbindung mit der Datenbank}{value="\#\{initialConfigBacking.getDatasourceConnectionState\}"}{/}{/}
+
+		\fentry{create-db-btn}{<h:commandButton>}{Erstellt die Datenbankschemata}{value="\#\{label.createDB\}"\newline action="\#\{initialConfigBacking.createDatasource\}"}{/}{/}
+	}
+\end{samepage}
 
 \begin{samepage}
 
