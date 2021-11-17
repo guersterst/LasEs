@@ -19,7 +19,7 @@
 Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren wir nach dem \emph{kebab-case} Prinzip. Um den genauen Typ in die ID mit aufzunehmen, wird das entsprechende Suffix angehängt.
 
 \todo{Suffix:}
- graphicImage = gIm link =lnk inputText =itext commandButton = cbtn messages = msgs dataTable = dtbl selectOneMenu = slctom panelGrid = pgrd commandLink = clnk inputSecret = iscrt
+ graphicImage = gIm link =lnk inputText =itext commandButton = cbtn messages = msgs dataTable = dtbl selectOneMenu = slctom panelGrid = pgrd commandLink = clnk inputSecret = iscrt pagination = pg
 
 \subsection{Templates}
 
@@ -256,6 +256,49 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 		\fentry{imprint-heading-otxt}{<h:outputText>}{Überschrift der Ansicht}{value="\#{imprintBacking.systemSetting.companyName}"}{/}{/}
 		
 		\fentry{imprint-otxt}{<h:outputText>}{Impressum des Betreibers.}{value="\#{imprintBacking.systemSetting.imprint}"}{/}{/}
+	}
+\end{samepage}
+
+\subsubsection{Angemeldeter Nutzer}
+
+\todo{zugriff von normalen nutzer wird über TrespassListener gehandhabt?}
+
+\begin{samepage}
+	\textbf{homepage.xhtml} \phantomsection \label{flt:homepage} Startseite die den Überblick über alle Einreichungen, aufgeteilt in Reiter, beinhaltet.
+	
+	\ftable{
+		\fentry{your-submission-clnk}{<h:commandLink>}{Reiter zum Anzeigen der eigenen Einreichungen.}{value="\#\{label.yourSubmission\}" \newline action="\#\{homepageBacking.showOwnSubmissionsTab\}" \newline title="\#\{help.yourSubmissions\}"}{/}{/}
+		
+		\fentry{your-reviews-clnk}{<h:commandLink>}{Reiter zum Anzeigen der zu begutachtenden Einreichungen}{value="\#\{label.yourReviews\}" \newline action="\#\{homepageBacking.showSubmissionToReviewTab\}" \newline title="\#\{help.yourReviews\}"}{render="\#\{homepageBacking.sessionInformation.reviewer\}"}{/}
+		
+		\fentry{editorial-overview-clnk}{<h:commandLink>}{Reiter zum Anzeigen aller Einreichungen, welche man editiert.}{value="\#\{label.editorialOverview\}" \newline action="\#\{homepageBacking.showSubmissionToEditTab\}" \newline title="\#\{help.editorialOverview\}"}{render="\#\{homepageBacking.sessionInformation.editor\}"}{/}
+		
+		\fentry{stateSelectEditor}{selectOneMenu}{Filtern des Status von Einreichungen}{E}
+		
+		\fentry{stateSelectReview}{selectOneMenu}{Filtern des Status von Einreichungen}{G}
+		
+		\fentry{stateSelect}{selectOneMenu}{Filtern des Status von Einreichungen}{Alle}
+		
+		\fentry{dateSelectEdit}{selectOneMenu}{Auswahl der Filtermöglichkeit eines Datums.}{E}
+		
+		\fentry{dateSelectReview}{selectOneMenu}{Auswahl der Filtermöglichkeit eines Datums.}{G}
+		
+		\fentry{dateSelect}{selectOneMenu}{Auswahl der Filtermöglichkeit eines Datums.}{Alle}
+		
+		\fentry{reviewPagination}{pagination}{Liste aller Gutachten.}{G}
+		
+		\fentry{editorPagination}{pagination}{Liste aller Einreichungen für einen Editor.}{E}
+		
+	}
+\end{samepage}
+
+\begin{samepage}
+	Die Tabelle \emph{submissionPagination}ist nach den Punkten: Titel des Papers, Datum, Deadline und Status der Einreichung und Name des zugehörigen Forums gegliedert.
+	
+	\ftable{
+		\fentry{submission-pg}{<pg:pagination>}{Liste aller eignen Einreichungen.}{paginator="\#\{homepageBacking.submissionPagination\}"}{/}{/}
+		
+		
 	}
 \end{samepage}
 
