@@ -124,49 +124,49 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \begin{samepage}
 	\textbf{pagination.xhtml} ist ein Composite Component zur Paginierung von Listen.
 	\nopagebreak
-	
+
 	\ftable{
 		\fentry{/}{<composite:attribute>}{Paginator Attribut.}{name="paginator" \newline type="de.lases.control.internal.Pagination"}{required="true"}{/}
-		
+
 		\fentry{pagination-dtbl}{<h:dataTable>}{Hier werden die Spalten eingefügt. Durch Klicken auf die Spaltennamen werden die Einträge sortiert. Zusätzlich kann durch ein Textfeld die Liste gefiltert werden.}{value="\#\{cc.attrs.paginator.entries\}"\newline var="var"}{/}{/}
-		
+
 		\fentry{/}{<composite:insertChildren>}{Einfügen benötigter Spalten.}{/}{/}{/}
-		
+
 		\fentry{apply-cbtn}{<h:commandButton>}{Mit diesem Knopf können gewählte Filter angewandt werden.}{value="\#\{label.applyFilter\}" \newline action="\#\{cc.attrs.paginator.loadData\}" \newline title="\#\{help.applyFilter\}"}{/}{/}
-		
+
 		\fentry{navigation-pgrd}{<h:panelGrid>}{Hier befinden sich die Knöpfe zur Navigation zwischen den Seiten der Paginierungen.}{columns="5"}{/}{/}
-		
+
 		\fentry{first-page-cbtn}{<h:commandButton>}{Zurück zur ersten Seite.}{value="\#\{label.firstPage\}" \newline action="\#\{cc.attrs.paginator.firstPage\}" \newline title="\#\{help.firstPage\}"}{/}{/}
-		
+
 		\fentry{prev-page-cbtn}{<h:commandButton>}{Eine Seite zurück.}{value="\#\{label.prevPage\}" \newline action="\#\{cc.attrs.paginator.priviousPage\}" \newline title="\#\{help.prevPage\}"}{/}{/}
-		
+
 		\fentry{current-page-otxt}{<h:outputText>}{Nummer der aktuellen Seite.}{value="\#\{cc.attrs.paginator.currentPage\}" \newline title="\#\{help.currentPage\}"}{/}{/}
-		
+
 		\fentry{next-page-cbtn}{<h:commandButton>}{Eine Seite weiter.}{value="\#\{label.nextPage\}" \newline action="\#\{cc.attrs.paginator.nextPage\}" \newline title="\#\{help.nextPage\}"}{/}{/}
-		
+
 		\fentry{last-page-cbtn}{<h:commandButton>}{Zur letzten Seite.}{value="\#\{label.lastPage\}" \newline action="\#\{cc.attrs.paginator.lastPage\}" \newline title="\#\{help.lastPage\}"}{/}{/}
-		
+
 	}
 \end{samepage}
 
 \begin{samepage}
 	\textbf{sortfiltercolumn.xhtml} ist ein Composite Component, das eine sortierbare und filterbare Spalte einer Liste modelliert.
 	\nopagebreak
-	
+
 	\ftable{
 		\fentry{/}{<composite:attribute>}{Implementation der abstrakten Klasse.}{name="paginator" \newline type="de.lases.control.internal.Pagination"}{required="true"}{/}
-		
+
 		\fentry{/}{<composite:attribute>}{Anzeigename im Spaltenkopf.}{name="columnIdent" \newline type="java.lang.String"}{required="true"}{/}
-		
+
 		\fentry{/}{<composite:attribute>}{String Identifier der Spalte.}{name="columnName" \newline type="java.lang.String"}{required="true"}{/}
-		
+
 		\fentry{/}{<composite:attribute>}{Spaltennummer, null indiziert.}{name="coulumnNo" \newline type="java.lang.String"}{required="true"}{/}
-		
+
 		\fentry{column-name-clnk}{<h:commandLink>}{Durch Klicken auf den Spaltennamen wird nach dieser Spalte aufsteigend, bzw. absteigend sortiert.}{value="\#\{cc.attrs.columnNamei18n\}" \newline action="\#\{cc.attrs.paginator.sortBy[cc.attrs.columnNo]\}"}{/}{/}
-		
+
 		\fentry{column-filter-itxt}{<h:inputText>}{Hier kann ein Wert eingegeben werden, nach dem die Spalte dann gefiltert wird.}{value="\#\{cc.attrs.paginator.searchWords[cc.attrs.columnNo]\}"}{/}{/}
 	}
-	
+
 \end{samepage}
 
 \subsection{Seiten}
@@ -175,39 +175,68 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 %% Ab hier sind Bastis hinzugefügte Änderungen
 
 \begin{samepage}
+	\textbf{administration.xhtml} Hier kann ein Administrator Konfigurationen vornehmen.
+	\nopagebreak
+
+	\ftable{
+		\fentry{select-theme-list}{<h:selectOneMenu>}{Auswahl eines Farbthemas.}{value="\#\{administrationBacking.systemSettings.\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
+
+		\fentry{logo-img}{<h:graphicImage>}{Logo des Systems.}{value="\#\{administrationBacking.systemSettings.logoImage\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
+
+		\fentry{change-logo-ifile}{<h:inputFile>}{Hochladen eines neuen Logos.}{title="\#\{help.uploadNewLogo\}"\newline value="\#\{administrationBacking.uploadedImage\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
+
+		\fentry{welcome-heading-itxt}{<h:inputText>}{Angabe einer Überschrift auf der \emph{welcomepage}}{value="\#\{administrationBacking.systemSettings.headlineWelcomePage\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{required="true"}
+
+		\fentry{welcome-text-itxt}{<h:inputTextArea>}{Angabe eines Textes auf der \emph{welcomepage}}{value="\#\{administrationBacking.systemSettings.shortMessageWelcomePage\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{required="true"}
+
+		\fentry{institution-itxt}{<h:inputText>}{Angabe des Namens der Einrichtung.}{value="\#\{administrationBacking.systemSettings.companyName\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{required="true"}
+
+		\fentry{imprint-itxt}{<h:inputTextArea>}{Angabe des Impressums der Einrichtung.}{value="\#\{administrationBacking.systemSettings.imprint\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{required="true"}
+
+		\fentry{abort-btn}{<h:commandButton>}{Abbruch des Änderungsvorgangs.}{value="\#\{label.abort\}"\newline action="\#\{administrationBacking.abort\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
+
+		\fentry{save-btn}{<h:commandButton>}{Speichern der Änderungen.}{value="\#\{label.save\}"\newline action="\#\{administrationBacking.save\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
+
+		\fentry{new-user-link}{<h:link>}{Weiterleitung zu \emph{newUser.xhtml}.}{value="\#\{label.gotoNewUser\}" \newline outcome="/authenticated/newUser"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
+
+		\fentry{new-scientific-forum-link}{<h:link>}{Weiterleitung zu \emph{newScientificForum.xhtml}.}{value="\#\{label.gotoNewScientificForum\}" \newline outcome="/authenticated/newScientificForum"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
+	}
+\end{samepage}
+
+\begin{samepage}
 	\textbf{newScientificForum.xhtml} Auf der Seite zum Erstellen eines wissenschaftlichen Forums kann ein Administrator dessen wesentlichen Daten festlegen.
 	\nopagebreak
 
 	\ftable{
 
-		\fentry{forum-name-itxt}{<h:inputText>}{Angabe des Name des Forums.}{value="\#{newScientificForumBacking.newScientificForum.name}"}{render="\#{newScientificForumBacking.sessionInformation.user.editor}"}{required="true"}
+		\fentry{forum-name-itxt}{<h:inputText>}{Angabe des Name des Forums.}{value="\#{newScientificForumBacking.newScientificForum.name}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{required="true"}
 
-		\fentry{editors-list}{<h:dataTable>}{Liste der Editoren}{value="\#{newScientificForumBacking.editors}"}{render="\#{toolbarBacking.sessionInformation.user.editor}"}{/}
+		\fentry{editors-list}{<h:dataTable>}{Liste der Editoren}{value="\#{newScientificForumBacking.editors}"}{render="\#{toolbarBacking.sessionInformation.user.isAdmin}"}{/}
 
-		\fentry{email-editor-itxt}{<h:inputText>}{Angabe der E-Mail-Adresse eines Editor.}{value="\#{newScientificForumBacking.newEditorInput.emailAddress}"}{render="\#{newScientificForumBacking.sessionInformation.user.editor}"}{required="true"}
+		\fentry{email-editor-itxt}{<h:inputText>}{Angabe der E-Mail-Adresse eines Editor.}{value="\#{newScientificForumBacking.newEditorInput.emailAddress}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{required="true"}
 
-		\fentry{add-editor-btn}{<h:commandButton>}{Hinzufügen eines Editors in eine Liste.}{value="\#\{label.add\}"\newline  action="\#\{newScientificForumBacking.addEditor\}"\newline title="\#\{help.addEditor\}"}{render="\#{newScientificForumBacking.sessionInformation.user.editor}"}{/}
+		\fentry{add-editor-btn}{<h:commandButton>}{Hinzufügen eines Editors in eine Liste.}{value="\#\{label.add\}"\newline  action="\#\{newScientificForumBacking.addEditor\}"\newline title="\#\{help.addEditor\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
 
-		\fentry{delete-editor-btn}{<h:commandButton>}{Löschen des zugehörigen Editors von der Liste.}{value="\#\{label.remove\}"\newline  action="\#\{newScientificForumBacking.removeEditor(var)\}"\newline title="\#\{help.removeEditor\}"}{render="\#{newScientificForumBacking.sessionInformation.user.editor}"}{/}
+		\fentry{delete-editor-btn}{<h:commandButton>}{Löschen des zugehörigen Editors von der Liste.}{value="\#\{label.remove\}"\newline  action="\#\{newScientificForumBacking.removeEditor(var)\}"\newline title="\#\{help.removeEditor\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
 
-		\fentry{deadline-itxt}{<h:inputText>}{Hinzufügen einer Deadline des Forums.}{value="\#\{newScientificForumBacking.newScientificForum.deadline\}"}{render="\#{newScientificForumBacking.sessionInformation.user.editor}"}{converterDateTime \newline patter="dd/MM/yyyy"}
+		\fentry{deadline-itxt}{<h:inputText>}{Hinzufügen einer Deadline des Forums.}{value="\#\{newScientificForumBacking.newScientificForum.deadline\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{converterDateTime \newline patter="dd/MM/yyyy"}
 
-		\fentry{description-itxt}{<h:inputTextArea>}{Angabe einer Kurzbeschreibung.}{value="\#\{newScientificForumBacking.newScientificForum.description\}"}{render="\#{newScientificForumBacking.sessionInformation.user.editor}"}{required="true"}
+		\fentry{description-itxt}{<h:inputTextArea>}{Angabe einer Kurzbeschreibung.}{value="\#\{newScientificForumBacking.newScientificForum.description\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{required="true"}
 
-		\fentry{url-itxt}{<h:inputText>}{Link zur Konferenz oder zum Journal.}{value="\#\{newScientificForumBacking.newScientificForum.url\}"}{render="\#{newScientificForumBacking.sessionInformation.user.editor}"}{/}
+		\fentry{url-itxt}{<h:inputText>}{Link zur Konferenz oder zum Journal.}{value="\#\{newScientificForumBacking.newScientificForum.url\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
 
-		\fentry{review-instructions-itxt}{<h:inputTextArea>}{Angabe einer Anleitung für eine Begutachtung.}{value="\#\{newScientificForumBacking.newScientificForum.reviewManual\}"}{render="\#{newScientificForumBacking.sessionInformation.user.editor}"}{required="true"}
+		\fentry{review-instructions-itxt}{<h:inputTextArea>}{Angabe einer Anleitung für eine Begutachtung.}{value="\#\{newScientificForumBacking.newScientificForum.reviewManual\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{required="true"}
 
-		\fentry{science-field-list}{<h:outputText>}{Liste der ausgewählten Fachgebiete.}{value="\#\{newScientificForumBacking.selectedScienceFields\}"}{render="\#{newScientificForumBacking.sessionInformation.user.editor}"}{/}
+		\fentry{science-field-list}{<h:outputText>}{Liste der ausgewählten Fachgebiete.}{value="\#\{newScientificForumBacking.selectedScienceFields\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
 
-		\fentry{science-field-list}{<p:selectOneListbox>}{Auswahl von Fachgebieten.}{value="\#\{newScientificForumBacking.scienceFields\}"}{render="\#{newScientificForumBacking.sessionInformation.user.editor}"}{/}
+		\fentry{science-field-list}{<p:selectOneListbox>}{Auswahl von Fachgebieten.}{value="\#\{newScientificForumBacking.scienceFields\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
 
-		\fentry{new-science-field-itxt}{<h:inputText>}{Hinzufügen neuer Fachgebiete.}{value="\#\{newScientificForumBacking.newScienceFieldInput.name\}"}{render="\#{newScientificForumBacking.sessionInformation.user.editor}"}{required="true"}
+		\fentry{new-science-field-itxt}{<h:inputText>}{Hinzufügen neuer Fachgebiete.}{value="\#\{newScientificForumBacking.newScienceFieldInput.name\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{required="true"}
 
-		\fentry{add-science-field-btn}{<h:commandButton>}{Ausführen der Hinzufüge-Aktion.}{value="\#\{label.add\}"\newline action="\#\{newScientificForumBacking.addScienceField\}"}{render="\#{newScientificForumBacking.sessionInformation.user.editor}"}{/}
+		\fentry{add-science-field-btn}{<h:commandButton>}{Ausführen der Hinzufüge-Aktion.}{value="\#\{label.add\}"\newline action="\#\{newScientificForumBacking.addScienceField\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
 
-		\fentry{save-btn}{<h:commandButton>}{Speichern des neuen Forums.}{value="\#\{label.save\}"\newline action="\#\{newScientificForumBacking.create\}"}{render="\#{newScientificForumBacking.sessionInformation.user.editor}"}{/}
+		\fentry{save-btn}{<h:commandButton>}{Speichern des neuen Forums.}{value="\#\{label.save\}"\newline action="\#\{newScientificForumBacking.create\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
 
-		\fentry{abort-btn}{<h:commandButton>}{Abbruch des Erstellungsprozesses.}{value="\#\{label.abort\}"\newline action="\#\{newScientificForumBacking.abort\}"}{render="\#{newScientificForumBacking.sessionInformation.user.editor}"}{/}
+		\fentry{abort-btn}{<h:commandButton>}{Abbruch des Erstellungsprozesses.}{value="\#\{label.abort\}"\newline action="\#\{newScientificForumBacking.abort\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
 	}
 \end{samepage}
