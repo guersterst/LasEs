@@ -45,7 +45,7 @@ public class PaperService {
     /**
      * Unlocks a revision.
      *
-     * @param paper
+     * @param paper The revision to be unlocked
      */
     public void unlockRevision(Paper paper) {
     }
