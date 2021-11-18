@@ -117,7 +117,7 @@ public class SubmissionService {
      * @param submission The submission which is requested to be reviewed by a reviewer.
      * @param reviewer The requested reviewer for a submission.
      * @return The {@link ReviewedBy}-DTO containing information about the review-request relationship of a
-     * submission and the reviewer.
+     * submission and the reviewer. Returns null if no such relationship exists.
      */
     public ReviewedBy getReviewedBy(Submission submission, User reviewer) {
         return null;
