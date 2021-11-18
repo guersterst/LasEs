@@ -1,6 +1,8 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.*;
+import de.lases.persistence.exception.DatasourceQueryFailedException;
+import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
@@ -201,5 +203,13 @@ public class SubmissionService implements Serializable {
         return null;
     }
 
-    //todo getcount
+    /**
+     * The amount of submissions where the given user is a direct author to.
+     *
+     * @param user A {@link User}-DTO with a valid id.
+     * @return The number of submission the specified user authored.
+     */
+    public static int countSubmissions(User user) {
+        return 0;
+    }
 }
