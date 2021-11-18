@@ -354,6 +354,15 @@ public class SubmissionBacking implements Serializable {
     }
 
     /**
+     * Return an array of all values the DateSelect enum can have.
+     *
+     * @return ALl options of DateSelect.
+     */
+    public DateSelect[] getDateSelects() {
+        return DateSelect.values();
+    }
+
+    /**
      * Get the possible reviewed-by relationship between this submission and
      * the logged-in user. May be null if there is none.
      *
