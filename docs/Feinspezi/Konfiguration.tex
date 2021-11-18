@@ -30,7 +30,29 @@ Damit die LasEs-Anwendung aussagekräftige \emph{Log}-Dateien ausgeben kann,
 wird der \emph{Logger} konfiguriert.
 
 \subsubsection{Sprachkonfiguration}
-Die Dateien, welche die dargestellten \emph{Strings} enthalten befinden sich im
+Die Dateien, welche die dargestellten \emph{Strings} enthalten, befinden sich im
 \emph{src/main/ressources}-Verzeichnis.
--bundles / gerüst
--sprach konfiguration -> faces.xml
+
+\begin{itemize}
+    \item \emph{Resource Bundle 'labels'} enthält solche \emph{Strings}, welche als \emph{Labels} für die Benutzeroberfläche verwendet
+    werden.
+    \item \emph{Resource Bundle 'help'} enthält solche \emph{Strings}, welche zum Anzeigen der \emph{Tooltips} verwendet
+    werden.
+    \item \emph{Resource Bundle 'messages'} enthält solche \emph{Strings}, welche zum Anzeigen von Hinweisen und Warnungen
+    an den Nutzer verwendet werden.
+    \item \emph{Resource Bundle 'texts'} enthält solche \emph{Strings}, welche zum Anzeigen längerer Texte, wie beispielsweise die
+    Begrüßung auf der Anmeldeseite, verwendet werden.
+\end{itemize}
+
+Ein \emph{Resource Bundle} enthält jeweils drei \emph{.properties}-Dateien.
+Jeweils eine für:
+\begin{itemize}
+    \item \emph{Strings} in deutscher Sprache.
+    \item \emph{Strings} in englischer Sprache.
+    \item sprachneutrale \emph{Strings}.
+\end{itemize}
+
+Diese \emph{Strings} werde nach der Konvention:
+\textbf{<key> = <value>} %todo latex let look like code
+abgelegt, wobei der \emph{<key>} in \emph{camelCase} geschrieben ist.
+-sprach konfiguration -> faces.xml %todo
