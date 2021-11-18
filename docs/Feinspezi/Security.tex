@@ -1,0 +1,96 @@
+\localauthor{Thomas Kirz}
+
+Im Folgenden wird erklärt, wie verschiedene Sicherheitsangriffe verhindert und Sicherheitsrisiken ausgeschlossen werden.
+
+\subsection{Cross Site Scripting (XSS)}\label{subsec:xss}
+Da ausschließlich JSF components für die HTML-Ausgabe verwendet werden, bereinigt JSF alle Nutzereingaben.
+Zum Beispiel werden \code{'<'} und \code{'>'} durch \code{'\&lt;'} und \code{'\&gt;'} ersetzt, Nutzereingaben können also keine HTML-Tags in der Ausgabe erstellen.
+Dadurch wird XSS bzw.\ HTML-Injection unmöglich.
+Auch JavaScript kann so nicht injected werden, da sich JavaScript-Code in einem HTML-Tag (\code{<script>}) befinden müsste.
+
+\subsection{SQL-Injection}\label{subsec:sql-injection}
+Für SQL-Code werden \code{PreparedStatements} benutzt, damit die SQL-Statements ohne von Nutzereingaben abhängige Parameter vorkompiliert werden.
+Die Parameter werden dann an die Datenbank gesendet und von ihr getrennt vom Code als Daten betrachtet.
+Die Ausführung des Statements kann also nicht durch die Nutzereingaben modifiziert werden und eine SQL-Injection wird verhindert
+
+\subsection{Session Hijacking \& Fixation}\label{subsec:session-hijacking}
+In der \code{web.xml}-Datei ist ein Timeout für Sessions konfigurierbar.
+Dieser wirkt Session Hijacking sowie unerwünschten physischen Zugriffen auf den Browser des Clients entgegen.
+JSF setzt für das Session-Cookie standardmäßig das \code{http-only}-Flag, damit kann darauf nicht mit JavaScript zugegriffen werden und Hijacking wird erschwert.
+
+Nach jeder Anmeldung wird die Session verworfen und neu generiert mit
+{\small
+\begin{lstlisting}
+FacesContext.getCurrentInstance().getExternalContext()
+    .getRequest().changeSessionId()
+\end{lstlisting}
+}
+Nach einer Authentifizierung bleibt also keine alte Session bestehen und \emph{Session-Fixation}-Attacken werden verhindert.
+
+\subsection{Passwörter}\label{subsec:passwords}
+Passwörter werden mit der modernen und sicheren PBKDF2-Funktion gehasht.
+Dabei wird für jedes Passwort ein eigener zufällig generierter Salt benutzt, welcher mit dem Hash in der Datenbank gespeichert wird.
+Eingegebene Passwörter werden so früh wie möglich gehasht, damit die Klartextpasswörter eine minimale Lebenszeit auf dem Server haben.
+Für das Generieren eins Salts und das Hashing bietet die Klasse \code{Hashing} aus \code{de.java.business.util}
+Methoden an.
+Sie verwendet die robuste \code{javax.crypto}-Bibliothek.
+
+Um das Erraten von Passwörtern durch Brute-Force-Attacken o.ä.\ zu erschweren, müssen Passwörter 8--100 Zeichen lang sein und Groß- und Kleinbuchstaben, Zahlen und Sonderzeichen enthalten.
+
+\subsection{Information Leakage}\label{subsec:information-leakage}
+Alle Informationen über das System, die nach außen gelangen, können Angreifern helfen.
+Dazu gehören Details über die technische Umgebung und verwendete Software des Systems, interne Fehlermeldungen und Implementierungsdetails.
+Folgende Maßnahmen werden ergriffen, um Leakage solcher Informationen zu verhindern.
+Fehlermeldungen zeigen im Produktionsmodus keine Stacktraces an, sondern eigene Nachrichten, die nur Informationen enthalten, die für den Endnutzer relevant sind.
+Wir verwenden eigene Fehlerseiten bei Exceptions und ersetzen die 404 und 500 Fehlerseiten von JSF durch unsere eigenen wie folgt in der web.xml-Datei:
+    {\small
+\begin{lstlisting}
+<error-page>
+    <error-code>404</error-code>
+    <location>/WEB-INF/errorpages/error404.xhtml</location>
+</error-page>
+\end{lstlisting}
+}
+Dadurch ist nicht ersichtlich, dass wir JSF/Mojarra verwenden.
+Das wird auch durch die Verwendung von .xhtml-Dateiendungen für unsere Facelets und durch das Ersetzen des Bezeichners \code{JSESSONID} für Session-Cookies und URL-Rewriting in der web.xml-Datei verborgen:
+
+\begin{minipage}{\linewidth}
+    {\small
+\begin{lstlisting}
+<session-config>
+    <cookie-config>
+        <name>sessionid</name>
+    </cookie-config>
+</session-config>
+\end{lstlisting}
+}
+\end{minipage}
+
+\subsection{Access Control}\label{subsec:access-control}
+Um unerlaubten Zugriff auf Seiten, Informationen und Aktionen zu verhindern, werden Zugriffe auf nicht-öffentliche Ressourcen (das ist alles außer Start-, Registrierungs- und Verifikationsseite) standardmäßig abgelehnt.
+Die Klasse \code{TrespassListener} entscheidet dann, ob der Nutzer die nötigen Rechte hat und akzeptiert eine Anfrage nur dann, sonst wird auf eine 404-Fehler-Seite weitergeleitet.
+Dazu wird über die angefragte URL das zugehörige Facelet bestimmt und geprüft, ob darauf mit der Rolle des Nutzers zugegriffen werden darf, wie in Kapitel \ref{sec:facelets} definiert.
+Einzelne Komponenten können im Facelet mit dem \code{rendered}-Attribut nur für bestimmte Rollen sichtbar gemacht werden.
+Auf die Rolle kann der \code{TrespassListener} über die \code{SessionInformation} zugreifen.
+Der Zugriff hängt darüber hinaus von der Beziehung des Nutzers zur angefragten Ressource ab (ein normaler Nutzer kann z.B.\ nur sein \emph{eigenes} Profil oder eine \emph{eigene} Einreichung sehen).
+Deshalb prüft für die relevanten Seiten das jeweilige Backing Bean diese Beziehung und leitet ggf.\ auf eine Fehlerseite weiter.
+Das verhindert \emph{Insecure Direct Object Reference}, da IDs von Submissions, Scientific Forums und Profilen über URL-Parameter preisgegeben werden.
+
+Durch den Eintrag
+\begin{lstlisting}[language=XML]
+    <servlet>
+        <servlet-name>facesServlet</servlet-name>
+        <servlet-class>jakarta.faces.webapp.FacesServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>facesServlet</servlet-name>
+        <url-pattern>/faces/*</url-pattern>
+    </servlet-mapping>
+\end{lstlisting}
+in der web.xml-Datei werden Aufrufe auf alle unsere Facelet-Dateien dem Faces Servlet weitergeleitet.
+Damit wird aufgrund der Entscheidung des \code{TrespassListener}s entweder das Facelet richtig als HTML-Datei gerendert, oder zur 404-Seite weitergeleitet. Ein Herunterladen der eigentlichen auf dem Server gespeicherten Facelet-Datei ist aber nicht möglich.
+
+\subsection{Vergabe von Admistratorrechten}
+Administratoren haben die Möglichkeit, Nutzern auf ihrer Profilseite Administratorrechte zu gewähren oder zu entfernen.
+Da das Ändern von Adminrechten sicherheitskritisch ist, müssen sie dafür ihr Passwort erneut angeben.
