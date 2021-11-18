@@ -13,8 +13,6 @@ public class Review {
 
     private int reviewerId;
 
-    private int id;
-
     private LocalDateTime timestampUpdloaded;
 
     private boolean visible;
@@ -60,19 +58,6 @@ public class Review {
      */
     public void setReviewerId(int reviewerId) {
         this.reviewerId = reviewerId;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * Set the id of this review.
-     *
-     * @param id Id of this review.
-     */
-    public void setId(int id) {
-        this.id = id;
     }
 
     public LocalDateTime getTimestampUpdloaded() {

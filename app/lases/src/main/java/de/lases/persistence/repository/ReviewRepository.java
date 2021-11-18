@@ -3,34 +3,144 @@ package de.lases.persistence.repository;
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
 
+import javax.xml.crypto.Data;
+import javax.xml.transform.Result;
+import java.nio.file.NotDirectoryException;
 import java.util.List;
 
+/**
+ * Offers get/add/change/remove operations on a review and the possibility to
+ * get lists of reviews.
+ */
 public class ReviewRepository {
 
-    // get, add, change, remove
-    public static Review get(Review review, Transaction transaction) throws InvalidFieldsException {
+    /**
+     * Takes a review dto that is filled out with a valid reviewerId, paperId
+     * and submissionId and returns a fully filled review dto.
+     *
+     * @param review A review dto that must be filled with a valid reviewerId,
+     *               paperId and submissionId
+     * @param transaction The transaction to use.
+     * @return A fully filled review dto.
+     * @throws NotFoundException If there is no review with the provided ids.
+     * @throws DatasourceQueryFailedException If the datasource cannot be
+     *                                        queried.
+     */
+    public static Review get(Review review, Transaction transaction)
+            throws NotFoundException {
         return null;
     }
 
-    public static void add() {
+    /**
+     * Adds a review to the repository.
+     *
+     * @param review A fully filled review dto.
+     * @param transaction The transaction to use.
+     * @throws DataNotWrittenException If writing the data to the repository
+     *                                 fails.
+     * @throws KeyExistsException If there is already a reviewer with the same
+     *                            ids.
+     * @throws InvalidFieldsException If one of the fields of the review is
+     *                                null.
+     * @throws DatasourceQueryFailedException If the datasource cannot be
+     *                                        queried.
+     */
+    public static void add(Review review, Transaction transaction)
+            throws DataNotWrittenException, KeyExistsException {
     }
 
-    public static void change() {
+    /**
+     * Changes the given review in the repository.
+     *
+     * @param review A fully filled review dto.
+     * @param transaction The transaction to use.
+     * @throws NotFoundException If there is no review with the provided
+     *                           reviewerId, paperId and submissionId.
+     * @throws DataNotWrittenException If writing the data to the repository
+     *                                 fails.
+     * @throws InvalidFieldsException If one of the fields of the review is
+     *                                null.
+     * @throws DatasourceQueryFailedException If the datasource cannot be
+     *                                        queried.
+     */
+    public static void change(Review review, Transaction transaction)
+            throws NotFoundException, DataNotWrittenException {
     }
 
-    public static void remove() {
+    /**
+     * Takes a review dto that is filled with a valid reviewerId, paperId and
+     * submissionId and removes this review from the repository.
+     *
+     * @param review The review to remove. Must be filled with a valid
+     *               reviewerId, paperId and submissionId.
+     * @param transaction The transaction to use.
+     * @throws NotFoundException The specified review was not found in the
+     *                           repository.
+     * @throws DataNotWrittenException If writing the data to the repository
+     * @throws DatasourceQueryFailedException If the datasource cannot be
+     *                                        queried.
+     */
+    public static void remove(Review review, Transaction transaction)
+            throws NotFoundException, DataNotWrittenException {
     }
 
-    // ueberladen fuer user und paper
-    public static List<Review> getList() {
+    /**
+     * Gets a list all reviews that belong to the specified submission that the
+     * specified user can see. (An editor can see everything, the submitter
+     * can view see all visible reviews, a reviewer his own reviews.)
+     *
+     * @param submission A submission dto filled with a valid id.
+     * @param user A user dto filled with a valid id.
+     * @param transaction The transaction to use.
+     * @param resultListParameters The ResultListParameters dto that results
+     *                             parameters from the pagination like
+     *                             filtering, sorting or number of elements.
+     * @return A list of fully filled review dtos for all reviews that belong
+     *         to the specified submission and the specified user can see.
+     * @throws DataNotCompleteException If the list is truncated.
+     * @throws NotFoundException If there is no submission with the provided id
+     *                           or there is no user with the provided id.
+     * @throws DatasourceQueryFailedException If the datasource cannot be
+     *                                        queried.
+     */
+    public static List<Review> getList(Submission submission, User user,
+                               Transaction transaction,
+                               ResultListParameters resultListParameters)
+            throws DataNotCompleteException, NotFoundException {
         return null;
     }
 
-    public static File getPDF() throws IllegalArgumentException {
+    /**
+     * Get the PDF file for the provided review.
+     *
+     * @param review A review dto filled with a valid reviewerId, paperId and
+     *              submissionId.
+     * @param transaction The transaction to use.
+     * @return A file containing the PDF for the specified review.
+     * @throws NotFoundException If there is no review with the provided ids.
+     * @throws DatasourceQueryFailedException If the datasource cannot be
+     *                                        queried.
+     */
+    public static File getPDF(Paper review, Transaction transaction)
+            throws NotFoundException {
         return null;
     }
 
-    public static void setPDF() throws IllegalArgumentException {
+    /**
+     * Sets the PDF belonging to a specified review.
+     *
+     * @param review A review dto filled with a valid reviewerId, paperId and
+     *               submissionId.
+     * @param pdf A file dto filled with a pdf file.
+     * @param transaction The transaction to use.
+     * @throws DataNotWrittenException If writing the data to the repository
+     *                                 fails.
+     * @throws NotFoundException If there is no review with the provided ids.
+     * @throws DatasourceQueryFailedException If the datasource cannot be
+     *                                        queried.
+     */
+    public static void setPDF(Review review, File pdf, Transaction transaction)
+            throws DataNotWrittenException, NotFoundException {
     }
 
 }

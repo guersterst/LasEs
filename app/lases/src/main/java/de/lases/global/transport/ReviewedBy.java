@@ -47,11 +47,9 @@ public class ReviewedBy {
     }
 
     /**
-     * Set the deadline the (designated) reviewer has to answer to the review
-     * request.
+     * Set the deadline the (designated) reviewer has to review.
      *
-     * @param timestampDeadline Deadline for the reviewer to answer the
-     *                          request.
+     * @param timestampDeadline Deadline for the reviewer to review.
      */
     public void setTimestampDeadline(LocalDateTime timestampDeadline) {
         this.timestampDeadline = timestampDeadline;
