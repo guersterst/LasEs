@@ -53,7 +53,41 @@ Jeweils eine für:
 \end{itemize}
 
 Diese \emph{Strings} werde nach der Konvention:
-\textbf{<key> = <value>} %todo latex let look like code
+\textbf{<key> = <value>}
 abgelegt, wobei der \emph{<key>} in \emph{camelCase} geschrieben ist.
--sprach konfiguration -> faces.xml %todo
-%todo für beispiele: strg f: title in facelets
+
+Hier ein Beispiel mit einigen ausgewählten \emph{key-value}-Paaren aus
+dem \emph{Resource Bundle 'labels'}.
+\begin{lstlisting}[language=XML, caption = Beispielhafter Ausschnitt aus \emph{labels.properties}]
+    # Language-neutral translations of labels displayed in the UI.
+    # The convention to follow is: <key> = <value>.
+
+    appName = LasEs
+\end{lstlisting}
+\begin{lstlisting}[language=XML, caption = Beispielhafter Ausschnitt aus \emph{labels\_de.properties}]
+    # German language translations of labels displayed in the UI.
+    # The convention to follow is: <key> = <value>.
+
+    login = Anmelden
+    register = Registrieren
+    logout = Abmelden
+    save = speichern
+    acceptSubmission = Annehmen
+    rejectSubmission = Ablehnen
+    prevPage = Nächste Seite
+    lastPage = Letzte Seite
+\end{lstlisting}
+
+\begin{lstlisting}[language=XML, caption = Beispielhafter Ausschnitt aus \emph{labels\_en.properties}]
+    # English language translations of labels displayed in the UI.
+    # The convention to follow is: <key> = <value>.
+
+    login = Login
+    register = Register
+    logout = Logout
+    saveEditor = Save
+    acceptSubmission = Accept
+    rejectSubmission = Reject
+    prevPage = Previous Page
+    lastPage = Last Page
+\end{lstlisting}
