@@ -96,7 +96,9 @@ user -> sb ++ : onLoad() //[via viewAction]//
 == Anfang Fehlerbehandlung ==
         return <font color=red><b>DataSourceNotFoundException e</b></font> (unchecked)
 
-        ssvc -> t1 ++ : close()
+        ssvc -> t1 ++ : abort()
+            t1 -> cp ++ : releaseConnection(Connection conn)
+            return
         return
 
     return <font color=red><b>DataSourceNotFoundException e
