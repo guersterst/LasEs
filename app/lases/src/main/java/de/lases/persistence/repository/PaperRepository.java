@@ -96,6 +96,8 @@ public class PaperRepository {
      * @throws NotFoundException If there is no submission with the provided id.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     * @throws InvalidQueryParamsException If the resultListParameters contain
+     *                                     an erroneous option.
      */
     public static List<Paper> getList(Submission submission,
                                       Transaction transaction,

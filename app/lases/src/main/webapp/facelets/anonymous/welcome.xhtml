@@ -21,7 +21,7 @@
     <h:link value="Home" outcome="/facelets/authenticated/homepage"/>
         <h:inputText value="#{toolbarBacking.submission.}" rendered="#{toolbarBacking.sessionInformation.user.reviewer}"/>
         <h:dataTable value="#{toolbarBacking.reviewer}" var="review"/>
-        <h:inputText value="#{submissionBacking}" id="password" rendered="#{submissionBacking.sessionInformation.user.editor}"/>
+        <h:inputText value="#{submissionBacking}" versionNumber="password" rendered="#{submissionBacking.sessionInformation.user.editor}"/>
         <h:selectOneListbox value="#{submissionBacking.submission.state}">
             <f:selectItem itemValue="#{submissionBacking.submission.state}" style="color: green"/>
         </h:selectOneListbox>
@@ -44,7 +44,7 @@
                 <div>
                     <h:commandButton value="Register" action="#{welcomeBacking.goToRegister}"/>
                 </div>
-                <div class="error-msgs" id="error-msgs">
+                <div class="error-msgs" versionNumber="error-msgs">
                     <h:messages/>
                 </div>
             </h:form>

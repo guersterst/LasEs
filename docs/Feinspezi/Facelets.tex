@@ -128,13 +128,15 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	\ftable{
 		\fentry{/}{<composite:attribute>}{Paginator Attribut.}{name="paginator" \newline type="de.lases.control.internal.Pagination"}{required="true"}{/}
 
-		\fentry{pagination-dtbl}{<h:dataTable>}{Hier werden die Spalten eingefügt. Durch Klicken auf die Spaltennamen werden die Einträge sortiert. Zusätzlich kann durch ein Textfeld die Liste gefiltert werden.}{value="\#\{cc.attrs.paginator.entries\}"\newline var="var"}{/}{/}
+		\fentry{is-empty-otxt}{<h:outputText>}{Hinweis wenn die Tabelle leer ist.}{value="\#\{label.emptyList\}"}{rendered="\#\{cc.attrs.paginator.entries.isEmpty()\}"}{/}
+
+		\fentry{pagination-dtbl}{<h:dataTable>}{Hier werden die Spalten eingefügt. Durch Klicken auf die Spaltennamen werden die Einträge sortiert. Zusätzlich kann durch ein Textfeld die Liste gefiltert werden.}{value="\#\{cc.attrs.paginator.entries\}"\newline var="var"}{rendered="\#\{!cc.attrs.paginator.entries.isEmpty()\}"}{/}
 
 		\fentry{/}{<composite:insertChildren>}{Einfügen benötigter Spalten.}{/}{/}{/}
 
 		\fentry{apply-cbtn}{<h:commandButton>}{Mit diesem Knopf können gewählte Filter angewandt werden.}{value="\#\{label.applyFilter\}" \newline action="\#\{cc.attrs.paginator.loadData\}" \newline title="\#\{help.applyFilter\}"}{/}{/}
 
-		\fentry{navigation-pgrd}{<h:panelGrid>}{Hier befinden sich die Knöpfe zur Navigation zwischen den Seiten der Paginierungen.}{columns="5"}{/}{/}
+		\fentry{navigation-pgrd}{<h:panelGrid>}{Hier befinden sich die Knöpfe zur Navigation zwischen den Seiten der Paginierungen.}{columns="5"}{rendered="\#\{!cc.attrs.paginator.entries.isEmpty()\}"}{/}
 
 		\fentry{first-page-cbtn}{<h:commandButton>}{Zurück zur ersten Seite.}{value="\#\{label.firstPage\}" \newline action="\#\{cc.attrs.paginator.firstPage\}" \newline title="\#\{help.firstPage\}"}{/}{/}
 
@@ -335,7 +337,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 		\fentry{upload-cbtn}{<h:commandButton>}{Ausführen des Uploads.}{value="\#\{label.uploadFile\}" \newline action="\#\{submissionBacking.uploadPDF\}" \newline title="\#\{help.uploadRevision\}"}{rendered="\#\{submissionBacking.isViewerSubmitter\}"}{/}
 
 		\fentry{new-review-cbtn}{<h:commandButton>}{Weiterleitung zur Einreichung eines neuen Gutachtens.}{value="\#\{label.uploadReview\}" \newline action="\#\{submissionBacking.uploadReview\}" \newline title="\#\{help.uploadRevision\}"}{rendered="\#\{submissionBacking.sessionInformation.user.reviewer\}"}{/}
-		
+
 		\fentry{deadline-review-otxt}{<h:outputText>}{Deadline der Einreichung.}{value="\#\{submissionBacking.reviewedBy.timestampDeadline\}"}{rendered="\#\{submissionBacking.sessioninformation.user.reviewer\}"}{/}
 
 		\fentry{accept-reviewing-cbtn}{<h:commandButton>}{Annahme der Rolle eines Gutachters für diese Einreichung.}{value="\#\{label.acceptReviewing\}" \newline action="\#\{submissionBacking.acceptReviewing\}" \newline title="\#\{help.acceptReviewing\}"}{rendered="\#\{submissionBacking.sessionInformation.user.reviewer\}"}{/}
@@ -343,11 +345,11 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 		\fentry{decline-reviewing-cbtn}{<h:command>}{Ablehnen der Rolle eines Gutachters für diese Einreichung.}{value="\#\{label.declineReviewing\}" \newline action="\#\{submissionBacking.declineReviewing\}" \newline title="\#\{help.declineReviewing\}"}{rendered="\#\{submissionBacking.sessionInformation.user.reviewer\}"}{/}
 
 		\fentry{state-slctom}{<h:selectOneMenu>}{Status der Submission.}{value="\#\{submissionBacking.submission.state\}"}{readonly="\#\{not submissionBacking.sessionInformation.user.editor\}"}{/}
-		
+
 		\fentry{/}{<f:selectItems>}{Auswahl des Status.}{itemValue="\#\{\}"}{/}{/}
-		
+
 		\fentry{state-otxt}{<h:outputText>}{Status der Einreichung.}{value="\#\{submissionBacking.submission.state\}"}{/}{/}
-		
+
 		\fentry{forum-lnk}{<h:link>}{Name des Forums und Weiterleitung zur Forumsübersicht.}{value="\#\{submissionBacking.scientificForum.name\}" \newline outcome="/facelets/authenticated/scientificForum" \newline title="\#\{help.directToForum\}"}{disabled="\#\{not submissionBacking.sessionInformation.user.editor\}"}{/}
 
 		\fentry{author-lnk}{<h:link>}{Name des Autors und Weiterleitung zum Profil.}{value="\#\{submissionBacking.authorForPaper\}" \newline outcome="/facelets/authenticated/profile" \newline title="\#\{help.directProfile\}"}{disabled="\#\{not submissionBacking.sessionInformation.user.editor\}"}{/}
@@ -361,8 +363,9 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \begin{samepage}
 	
 	\emph{paperPagination} enthält die Spalten: Version, Datum, Sichtbarkeit(E) und Download.
+
 	Die Elemente der Liste, der unterschiedlichen Versionen der Einreichung, sieht wie folgt aus:
-	
+
 	\ftable{
 		\fentry{paper-pg}{<pg:pagination>}{Liste aller eignen Einreichungen.}{paginator="\#\{submissionBacking.paperPagination\}"}{/}{/}
 
@@ -387,9 +390,9 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 		\fentry{release-review-otxt}{<h:outputText>}{Status der Freischaltung.}{value="\#\{label.releasedReview\}"}{rendered="\#\{var.visible \&\& submissionBacking.sessionInformation.user.reviewer\}"}{/}
 		
 		\fentry{release-revision-cbtn}{<h:commandButton>}{Freischalten einer Revision.}{value="\#\{label.releaseRevision\}" action="\#\{submissionBacking.releaseRevision(var)\}" title="\#\{help.releaseRevision\}"}{rendered="\#\{submissionBacking.sessionInfromation.user.editor\}"}{/}
-		
+
 		\fentry{download-file-clmn}{<h:column>}{Spalten für den Download der Datei.}{/}{/}{/}
-		
+
 	}
 \end{samepage}
 

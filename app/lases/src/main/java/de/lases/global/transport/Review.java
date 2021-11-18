@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
  */
 public class Review {
 
-    private int paperId;
+    private int paperVersion;
 
     private int submissionid;
 
@@ -21,17 +21,17 @@ public class Review {
 
     private String comment;
 
-    public int getPaperId() {
-        return paperId;
+    public int getPaperVersion() {
+        return paperVersion;
     }
 
     /**
      * Set the id of the paper this review belongs to.
      *
-     * @param paperId Id of the paper.
+     * @param paperVersion Id of the paper.
      */
-    public void setPaperId(int paperId) {
-        this.paperId = paperId;
+    public void setPaperVersion(int paperVersion) {
+        this.paperVersion = paperVersion;
     }
 
     public int getSubmissionid() {
