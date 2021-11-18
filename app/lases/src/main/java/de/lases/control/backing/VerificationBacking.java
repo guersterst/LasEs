@@ -2,6 +2,7 @@ package de.lases.control.backing;
 
 import de.lases.business.service.UserService;
 import de.lases.control.internal.*;
+import de.lases.global.transport.Verification;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -20,17 +21,21 @@ public class VerificationBacking { // y
     @Inject
     private UserService userService;
 
+    private Verification verification;
+
     /**
-     * Verify the user that clicked the verification link.
+     * Read verification random from the url and verify the user. On fail, an
+     * error message will be displayed. On success, the user is now verified
+     * and logged in.
      */
     @PostConstruct
     public void init() {
     }
 
     /**
-     * Go to homepage.
+     * Go to homepage if the user is now verified, go to welcome page if not.
      *
-     * @return Go to homepage.
+     * @return Go to next page.
      */
     public String goToHome() {
         return null;

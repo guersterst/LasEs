@@ -47,6 +47,8 @@ public class ProfileBacking implements Serializable {
 
     private List<ScienceField> scienceFields;
 
+    private User adminPasswordInPopup;
+
     private boolean popupShown;
 
     /**
@@ -173,6 +175,20 @@ public class ProfileBacking implements Serializable {
      */
     public void setSelectedScienceField(ScienceField selectedScienceField) {
         this.selectedScienceField = selectedScienceField;
+    }
+
+    public User getAdminPasswordInPopup() {
+        return adminPasswordInPopup;
+    }
+
+    /**
+     * Set the user that holds the password the admin has to enter on the
+     * pop-up.
+     *
+     * @param adminPasswordInPopup User that holds the admin password.
+     */
+    public void setAdminPasswordInPopup(User adminPasswordInPopup) {
+        this.adminPasswordInPopup = adminPasswordInPopup;
     }
 
     /**

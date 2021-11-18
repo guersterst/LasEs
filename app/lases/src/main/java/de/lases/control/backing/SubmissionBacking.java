@@ -87,10 +87,8 @@ public class SubmissionBacking implements Serializable {
     /**
      * Set the state of the submission, which can be SUBMITTED,
      * REVISION_REQUIRED, REJECTED, ACCEPTED.
-     *
-     * @param submissionState The new state of the submission.
      */
-    public void setState(SubmissionState submissionState) {
+    public void setState() {
     }
 
     // TODO: hier IOException? Ueberhaupt an den Service deligieren?
@@ -331,6 +329,15 @@ public class SubmissionBacking implements Serializable {
      */
     public SessionInformation getSessionInformation() {
         return sessionInformation;
+    }
+
+    /**
+     * Checks whether the viewer is the submitter.
+     *
+     * @return true if the viewer is the submitter of this submission.
+     */
+    public boolean isViewerSubmitter() {
+        return submission.getAuthorId() == sessionInformation.getUser().getId();
     }
 
 }

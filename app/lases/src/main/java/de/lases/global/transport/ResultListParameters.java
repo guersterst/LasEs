@@ -13,10 +13,6 @@ public class ResultListParameters {
 
     private int pageNo;
 
-    // private int resultOffset; = pageNo * resultLength
-
-    private int resultLength; // -> wird aus Konfigdatei eingelesen
-
     private String sortColumn;
 
     private SortOrder sortOrder;
@@ -35,22 +31,25 @@ public class ResultListParameters {
         return pageNo;
     }
 
+    /**
+     * The page the pagination is on and that should subsequently be loaded form
+     * the datasource.
+     *
+     * @param pageNo The page numner.
+     */
     public void setPageNo(int pageNo) {
         this.pageNo = pageNo;
-    }
-
-    public int getResultLength() {
-        return resultLength;
-    }
-
-    public void setResultLength(int resultLength) {
-        this.resultLength = resultLength;
     }
 
     public String getSortColumn() {
         return sortColumn;
     }
 
+    /**
+     * Set the name of the column the pagination should be sorted after.
+     *
+     * @param sortColumn Name of the column to sort after.
+     */
     public void setSortColumn(String sortColumn) {
         this.sortColumn = sortColumn;
     }
@@ -59,6 +58,11 @@ public class ResultListParameters {
         return sortOrder;
     }
 
+    /**
+     * Set the sort order to ascending or descending.
+     *
+     * @param sortOrder The sort order.
+     */
     public void setSortOrder(SortOrder sortOrder) {
         this.sortOrder = sortOrder;
     }
@@ -67,6 +71,11 @@ public class ResultListParameters {
         return globalSearchWord;
     }
 
+    /**
+     * Set a global search word that searches all fields of the table.
+     *
+     * @param globalSearchWord A global search word.
+     */
     public void setGlobalSearchWord(String globalSearchWord) {
         this.globalSearchWord = globalSearchWord;
     }

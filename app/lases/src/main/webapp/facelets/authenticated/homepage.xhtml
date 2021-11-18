@@ -36,7 +36,7 @@
                                 <col:sortsearchcolumn columnNamei18n="Date"
                                                       paginator="#{homepageBacking.submissionPagination}"
                                                       columnIdent="submit-date" columnNo="2"/>
-                                <h:selectOneMenu value="Alle">
+                                <h:selectOneMenu value="#{homepageBacking.dateFilterSelectSub}">
                                     <f:selectItem itemValue="Future" itemLabel="Future"/>
                                     <f:selectItem itemValue="Past" itemLabel="Past"/>
                                     <f:selectItem itemValue="All" itemLabel="All"/>

@@ -18,7 +18,7 @@ import java.util.List;
 public class NavigationBacking {
 
 
-    //TODO:Bild des logos braucht man für Navigationsleiste.
+    //TODO:Bild des logos braucht man für Navigationsleiste. Bzw ich brauche hier ein Systemsetting LG Steffi
 
     @Inject
     private LoginService loginService;

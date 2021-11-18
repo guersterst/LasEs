@@ -8,22 +8,7 @@ import java.util.List;
  */
 public class User {
 
-    //private Verification verification;
     private int verificationId;
-
-    //private List<Review> reviews;
-
-    //private List<ScienceField> scienceFields;
-
-    //private List<ScientificForum> edits;
-
-    //private List<Submission> edited;
-
-    //private List<Submission> coAuthored;
-
-    //private List<Submission> authored;
-
-    //private List<Submission> reviewed;
 
     private int id;
 
@@ -49,16 +34,57 @@ public class User {
 
     private boolean isNotRegistered;
 
+    /**
+     * Return if the user is an editor.
+     *
+     * @return Is the user an editor.
+     */
     public boolean isEditor() { return false; }
 
+    /**
+     * Add or remove editor privileges to the user.
+     *
+     * @param isEditor Should the user be an editor.
+     */
+    public void setEditor(boolean isEditor) { }
+
+    /**
+     * Return if the user is a reviewer.
+     *
+     * @return Is the user a reviewer.
+     */
     public boolean isReviewer() { return false; }
 
+    /**
+     * Add or remove reviewer privileges to the user.
+     *
+     * @param isReviewer Should the user be a reviewer.
+     */
+    public void setReviewer(boolean isReviewer) { }
+
+    /**
+     * Return if the user is an admin.
+     *
+     * @return Is the user an admin.
+     */
     public boolean isAdmin() { return false; }
+
+    /**
+     * Add or remove admin privileges to the user.
+     *
+     * @param isAdmin Should teh use be an admin.
+     */
+    public void setAdmin(boolean isAdmin) { }
 
     public int getVerificationId() {
         return verificationId;
     }
 
+    /**
+     * Set the id of the verification belonging to this user.
+     *
+     * @param verificationId The id of the verification.
+     */
     public void setVerificationId(int verificationId) {
         this.verificationId = verificationId;
     }
@@ -67,6 +93,11 @@ public class User {
         return id;
     }
 
+    /**
+     * Set the id of this user.
+     *
+     * @param id The user id.
+     */
     public void setId(int id) {
         this.id = id;
     }
@@ -75,6 +106,11 @@ public class User {
         return title;
     }
 
+    /**
+     * Set the academic title of this user.
+     *
+     * @param title The title of the user.
+     */
     public void setTitle(String title) {
         this.title = title;
     }
@@ -83,6 +119,11 @@ public class User {
         return firstName;
     }
 
+    /**
+     * Set the first name of this user.
+     *
+     * @param firstName The first name.
+     */
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -91,6 +132,11 @@ public class User {
         return lastName;
     }
 
+    /**
+     * Set the last name of this user.
+     *
+     * @param lastName The last name.
+     */
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
@@ -99,6 +145,11 @@ public class User {
         return emailAddress;
     }
 
+    /**
+     * Set the email address of this user.
+     *
+     * @param emailAddress The email addrss.
+     */
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
     }
@@ -107,6 +158,11 @@ public class User {
         return dateOfBirth;
     }
 
+    /**
+     * Set the date of birth for this user.
+     *
+     * @param dateOfBirth The date of birth.
+     */
     public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
@@ -115,6 +171,11 @@ public class User {
         return employer;
     }
 
+    /**
+     * Set the free text containing th employer of this user.
+     *
+     * @param employer The employer.
+     */
     public void setEmployer(String employer) {
         this.employer = employer;
     }
@@ -123,6 +184,11 @@ public class User {
         return passwordNotHashed;
     }
 
+    /**
+     * Set the unhashed password for this user.
+     *
+     * @param passwordNotHashed The user's unhashed password.
+     */
     public void setPasswordNotHashed(String passwordNotHashed) {
         this.passwordNotHashed = passwordNotHashed;
     }
@@ -131,6 +197,11 @@ public class User {
         return passwordHashed;
     }
 
+    /**
+     * Set the hashed password for this user.
+     *
+     * @param passwordHashed The user's hashed password.
+     */
     public void setPasswordHashed(String passwordHashed) {
         this.passwordHashed = passwordHashed;
     }
@@ -139,6 +210,11 @@ public class User {
         return passwordSalt;
     }
 
+    /**
+     * Set the salt used to hash this user's password.
+     *
+     * @param passwordSalt The password salt.
+     */
     public void setPasswordSalt(String passwordSalt) {
         this.passwordSalt = passwordSalt;
     }
@@ -147,7 +223,51 @@ public class User {
         return isNotRegistered;
     }
 
+    /**
+     * Decide if the user is registered or not.
+     *
+     * @param notRegistered Is the user not registered?
+     */
     public void setNotRegistered(boolean notRegistered) {
         isNotRegistered = notRegistered;
+    }
+
+    public List<Privilege> getPrivileges() {
+        return privileges;
+    }
+
+    /**
+     * Set the list of privileges. Each privilege has a dedicated getter/setter
+     * for convenience purposes.
+     *
+     * @param privileges The list of privileges.
+     */
+    public void setPrivileges(List<Privilege> privileges) {
+        this.privileges = privileges;
+    }
+
+    /**
+     * Check equality by comparing ids.
+     *
+     * @param object The object to compare to.
+     * @return Is the provided object equal to this user?
+     */
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        if (!super.equals(object)) return false;
+        User user = (User) object;
+        return id == user.id;
+    }
+
+    /**
+     * Hash the id of the user.
+     *
+     * @return The hashed id of this user.
+     */
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(id);
     }
 }
