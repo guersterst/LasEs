@@ -448,10 +448,8 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 
 \begin{samepage}
-	\textbf{newSubmission.xhtml} Hier können neue Paper eingereicht werden.
-	\nopagebreak
 
-	\ftable{
+	\ftable{\textbf{newSubmission.xhtml} Hier können neue Paper eingereicht werden.}{
 		\fentry{submission-title-itxt}{<h:inputText>}{Titel des abzugebenden Papers.}{value="\#\{newSubmissionBacking.newSubmission.title\}"}{/}{required="true" \newline requiredMessage="\#\{message.titleSub\}"}
 
 		\fentry{forum-name-itxt}{<h:inputText>}{Name des Forums, bei welchem abgegeben wird.}{value="\#\{newSubmissionBacking.newSubmission.forumInput.name\}"}{/}{required="true" \newline requiredMessage="\#\{message.forum\}"}
@@ -493,9 +491,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 \begin{samepage}
 
-	\textbf{scientificForumList.xhtml} Hier erhalten die Nutzer eine Übersicht über alle wissenschaftliche Foren.\nopagebreak
-
-	\ftable{
+	\ftable{\textbf{scientificForumList.xhtml} Hier erhalten die Nutzer eine Übersicht über alle wissenschaftliche Foren.}{
 		\fentry{date-select-slctom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{scientificForumListBacking.deadlineFilterSelect\}"}{/}{/}
 
 		\fentry{deadline-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{value="\#\{scientificForumListBacking.dateSelects\}"}{/}{/}
@@ -516,13 +512,10 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 \begin{samepage}
 
-	\textbf{profile.xhtml} Die Profilseite eines angemeldeten Nutzers ist nur vom Nutzer selbst und vom Administrator editierbar.
-	Ein Editor besitzt nur Leserechte. Alle zuvor gespeicherten Angaben werden in den jeweiligen Feldern angezeigt.
-	\nopagebreak
-
 	%%\todo{wie hier url von bild wissen?}
 
-	\ftable{
+	\ftable{\textbf{profile.xhtml} Die Profilseite eines angemeldeten Nutzers ist nur vom Nutzer selbst und vom Administrator editierbar.
+		Ein Editor besitzt nur Leserechte. Alle zuvor gespeicherten Angaben werden in den jeweiligen Feldern angezeigt.}{
 
 		\fentry{avatar-gimg}{<h:graphicImage>}{Aktueller Avatar.}{value="\#\{'https://lases.de/image/'.concat(profileBacking.user.id)\}"}{/}{/}
 
@@ -558,7 +551,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \end{samepage}
 
 \begin{samepage}
-	\ftable{
+	\ftable{}{
 	\fentry{science-field-lst}{<h:dataTable>}{Spezialgebiete des Nutzers}{value="\#\{profileBacking.usersScienceFields\}"}{/}{/}
 
 	\fentry{add-science-field-slctolb}{<p:selectOneListbox>}{Auswahl der Spezialgebiete des Nutzers}{value="\#\{profileBacking.selectedScienceField\}"}{rendered="\#\{!profileBacking.hasViewerEditRights\}"}{/}
@@ -578,10 +571,10 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 }
 \end{samepage}
 
-Sollte ein Administrator einem anderen Nutzer die Rolle des Administrators zuweisen oder entziehen, so erscheint beim Auslösen des Save-Buttons ein Popup-Dialog.
-In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Passwort zu bestätigen.
 
-\ftable{
+
+\ftable{Sollte ein Administrator einem anderen Nutzer die Rolle des Administrators zuweisen oder entziehen, so erscheint beim Auslösen des Save-Buttons ein Popup-Dialog.
+	In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Passwort zu bestätigen.}{
 
 	\fentry{password-admin-iscrt}{<h:inputSecret>}{Angabe eines Passworts.}{value="\#\{profileBacking.adminPasswordInPopup.passwordNotHashed\}"}{/}{passwordValidator \newline required="true" \newline requiredMessage="\#\{message.password\}"}
 
@@ -594,12 +587,10 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 }
 
 \begin{samepage}
-	\textbf{scientificForum.xhtml} Die Ansicht eines Forums dient zur Ausgabe von Informationen über die jeweilige Konferenz oder das jeweilige Journal.
-	Das Anzeigen und Filtern der Tabellen \emph{editorialPagination}, \emph{reviewPagination} und \emph{submissionPagination} wird genauso gehandhabt, wie auf \emph{homepage.xhtml}.
-	Ausnahme dabei ist die Spalte Forum, welche hier nicht angezeigt wird.
-	\nopagebreak
 
-	\ftable{
+	\ftable{\textbf{scientificForum.xhtml} Die Ansicht eines Forums dient zur Ausgabe von Informationen über die jeweilige Konferenz oder das jeweilige Journal.
+		Das Anzeigen und Filtern der Tabellen \emph{editorialPagination}, \emph{reviewPagination} und \emph{submissionPagination} wird genauso gehandhabt, wie auf \emph{homepage.xhtml}.
+		Ausnahme dabei ist die Spalte Forum, welche hier nicht angezeigt wird.}{
 
 		\fentry{/}{<f:viewParam>}{URL Parameter holen}{name="\#\{'id'\}"\newline value="\#\{scientificForumBacking.scientificForum.id\}"}{/}{required="true"}
 
@@ -641,7 +632,7 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 	}
 \end{samepage}
 
-\ftable{
+\ftable{}{
 
 	\fentry{submission-pg}{<pg:pagination>}{Paginierte Liste aller Einreichungen, die der Nutzer eingereicht hat.}{paginator="\#\{scientificForumBacking.submissionPagination\}"}{/}{/}
 
@@ -670,7 +661,7 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 	\fentry{state-otxt}{<h:outputText>}{Status der Einreichung.}{value="\#\{var.state\}"}{/}{/}
 }
 
-\ftable{
+\ftable{}{
 
 	\multicolumn{6}{|c|}{Weitere Paginierungen mit den gleichen Spalten wie in der vorherigen Tabelle.} \\\hline %das hline verursacht keine probleme, wird sind in einem tabular
 
@@ -682,10 +673,8 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 \subsubsection{Gutachter}
 
 \begin{samepage}
-	\textbf{newReview.xhtml} Möchte ein Gutachter eines Papers seine Beurteilung abgeben, so ist dies auf dieser Seite möglich.
-	\nopagebreak
 
-	\ftable{
+	\ftable{\textbf{newReview.xhtml} Möchte ein Gutachter eines Papers seine Beurteilung abgeben, so ist dies auf dieser Seite möglich.}{
 
 		\fentry{version-number-otxt}{<h:outputText>}{Versionsnummer des eingereichten Papers, zu welchem der Gutachter ein Gutachten abgeben kann.}{}{/}{/}
 
@@ -702,9 +691,9 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 \subsubsection{Editor}
 
 \begin{samepage}
-	\textbf{userList.xhtml} \phantomsection \label{flt:userList} Editoren und Administratoren erhalten hier einen Überblick über alle Nutzer. Die Seiten sind paginiert.\nopagebreak
 
-	\ftable{
+
+	\ftable{\textbf{userList.xhtml} \phantomsection \label{flt:userList} Editoren und Administratoren erhalten hier einen Überblick über alle Nutzer. Die Seiten sind paginiert.}{
 		\fentry{user-pg}{<pg:pagination>}{Paginierte Liste aller Nutzer}{paginator="\#\{userListBacking.userPagination\}"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
 
 		\fentry{rol-ssc}{<ssc:sortsearchcolumn>}{Spalte für die Nutzerrolle}{paginator="\#\{userListBacking.userPagination\}"\newline columnNamei18n="\#\{label.role\}"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
@@ -731,11 +720,8 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
 \begin{samepage}
 
-	\textbf{initialConfig.xhtml} Auf dieser Seite landet man beim ersten Systemstart. Sie ist nur für Administratoren zugänglich.
-	Hier kann der Administrator die Datenbankschemata erstellen lassen.
-	\nopagebreak
-
-	\ftable{
+	\ftable{\textbf{initialConfig.xhtml} Auf dieser Seite landet man beim ersten Systemstart. Sie ist nur für Administratoren zugänglich.
+		Hier kann der Administrator die Datenbankschemata erstellen lassen.}{
 		\fentry{db-connection-state-otxt}{<h:outputText>}{Information über die Verbindung mit der Datenbank}{value="\#\{initialConfigBacking.getDatasourceConnectionState\}"}{/}{/}
 
 		\fentry{create-db-btn}{<h:commandButton>}{Erstellt die Datenbankschemata}{value="\#\{label.createDB\}"\newline action="\#\{initialConfigBacking.createDatasource\}"}{/}{/}
@@ -744,10 +730,7 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
 \begin{samepage}
 
-	\textbf{newUser.xhtml} Der Administrator kann hier einen neuen Nutzer anlegen.
-	\nopagebreak
-
-	\ftable{
+	\ftable{\textbf{newUser.xhtml} Der Administrator kann hier einen neuen Nutzer anlegen.}{
 		\fentry{password-iscrt}{<h:inputSecret>}{Angabe des Passworts.}{value="\#\{newUserBacking.newUser.passwordNotHashed\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{passwordValidator \newline required="true" \newline requiredMessage="\#\{message.password\}"}
 
 		\fentry{firstname-itxt}{<h:inputText>}{Angabe des Vornamen.}{value="\#\{newUserBacking.newUser.firstName\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{required="true" \newline requiredMessage="\#\{message.firstName\}"}
@@ -770,10 +753,8 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 \end{samepage}
 
 \begin{samepage}
-	\textbf{administration.xhtml} Hier kann ein Administrator Konfigurationen vornehmen.
-	\nopagebreak
 
-	\ftable{
+	\ftable{\textbf{administration.xhtml} Hier kann ein Administrator Konfigurationen vornehmen.}{
 		\fentry{select-theme-slctom}{<h:selectOneMenu>}{Auswahl eines Farbthemas.}{value="\#\{administrationBacking.systemSettings.style\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
 
 		\fentry{styles-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{value="\#\{administrationBacking.styles\}"}{/}{/}
@@ -801,10 +782,9 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 \end{samepage}
 
 \begin{samepage}
-	\textbf{newScientificForum.xhtml} Auf der Seite zum Erstellen eines wissenschaftlichen Forums kann ein Administrator dessen wesentlichen Daten festlegen.
-	\nopagebreak
 
-	\ftable{
+	\ftable{\textbf{newScientificForum.xhtml} Auf der Seite zum Erstellen eines wissenschaftlichen Forums kann ein Administrator dessen wesentlichen Daten festlegen.
+	}{
 
 		\fentry{forum-name-itxt}{<h:inputText>}{Angabe des Name des Forums.}{value="\#{newScientificForumBacking.newScientificForum.name}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{required="true" \newline requiredMessage="\#\{message.forumName\}"}
 
