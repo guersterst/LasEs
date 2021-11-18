@@ -70,10 +70,10 @@ return
 
 
 user -> sb ++ : onLoad() //[via viewAction]//
-    sb -> ssvc ++ : canView(sub, usr)
+    sb -> ssvc ++ : canView(Submission sub, User usr)
     return true
 
-    sb -> ssvc : getSubmission(sub)
+    sb -> ssvc : getSubmission(Submission sub)
     activate ssvc
         ssvc -> t1 ** : Transaction()
         activate t1
@@ -117,7 +117,7 @@ user -> sb ++ : onLoad() //[via viewAction]//
         return
 '        destroy t1
         ......
-    return sub
+    return Submission sub
 return
 
 user -> sub ++ : getTitle()
