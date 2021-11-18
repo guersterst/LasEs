@@ -1,44 +1,83 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.*;
-import de.lases.persistence.repository.*;
-import jakarta.enterprise.context.ApplicationScoped;
+import de.lases.persistence.repository.Transaction;
+import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
-import jakarta.inject.Named;
+import jakarta.inject.Inject;
 
 import java.util.List;
 
-@ApplicationScoped
-@Named
+/**
+ * Provides functionality regarding the handling of scientific forums.
+ * In case of an unexpected state, a {@link UIMessage} event will be fired.
+ */
+@Dependent
 public class ScientificForumService {
 
+    @Inject
     private Event<UIMessage> uiMessageEvent;
 
+    @Inject
     private Transaction transaction;
 
-    public ScientificForum getForum() {
+    /**
+     * Gets a scientific forum.
+     *
+     * @param forum A {@link ScientificForum}-DTO containing a valid id.
+     * @return The requested scientific forum.
+     */
+    public ScientificForum getForum(ScientificForum forum) {
         return null;
     }
 
-    public void updateForum(ScientificForum forum, ScientificForum newForum) {
+    /**
+     * Updates a scientific forum.
+     *
+     * @param newForum The new data of the scientific forum.
+     *                 <p>
+     *                 Should contain a valid id.
+     *                 </p>
+     */
+    public void updateForum(ScientificForum newForum) {
     }
 
-    public void addForum(ScientificForum forum) {
+    /**
+     * Adds a scientific forum.
+     * <p>
+     * All editors will be informed about being added to this forum,
+     * using the {@link de.lases.business.util.EmailUtil} utility.
+     * </p>
+     *
+     * @param forum         The {@link ScientificForum}-DTO containing all necessary data.
+     * @param scienceFields The scientific fields, which this forum is specialized in.
+     * @param editors       The editors of this forum.
+     */
+    public void addForum(ScientificForum forum, List<ScienceField> scienceFields, List<User> editors) {
     }
 
-    public void removeForum() {
+
+    /**
+     * Deletes a scientific forum and all associated submissions and reviews.
+     *
+     * @param forum The scientific forum to be deleted.
+     */
+    public void removeForum(ScientificForum forum) {
     }
 
-    public void addSubmission(Submission submission) {
-    }
-
-    public void removeSubmission(Submission submission) {
-    }
 
     public void getSubmissions() {
     }
 
-    public void addEditor(User user) {
+    /**
+     * <p>
+     * All editors will be informed about being added to this forum,
+     * using the {@link de.lases.business.util.EmailUtil} utility.
+     * </p>
+     *
+     * @param editor
+     */
+    public void addEditor(User editor) {
     }
 
     public void removeEditor(User user) {

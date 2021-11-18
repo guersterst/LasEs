@@ -40,12 +40,14 @@ public class SubmissionService {
      * Do not forget to also add a paper using {@link PaperService#addPaper(File, Submission)}.
      *
      * @param submission The submissions' data.
+     * @param forum The forum where the submission is made.
      * @param reviewers  The desired reviewers as proper {@code User}-DTOs or exclusively containing
      *                   an email-address.
      * @param coauthors  The desired co-athors as proper {@link User}-DTOs or exclusively containing
      *                   an email-address.
      */
-    public void createSubmission(Submission submission, List<User> reviewers, List<User> coauthors) {
+    public void createSubmission(Submission submission, ScientificForum forum, List<User> reviewers,
+                                 List<User> coauthors) {
 
     }
 
@@ -69,7 +71,7 @@ public class SubmissionService {
     public void changeSubmission(Submission newSubmission) {
     }
 
-    //todo wieso rot
+    //todo wieso rot -> package angeben
 
     /**
      * Sets the state of a submission.
