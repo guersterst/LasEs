@@ -493,13 +493,13 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
 \ftable{
 
-	\fentry{password}{inputSecret}{Angabe eines Passworts.}{A}{}{}
+	\fentry{password-admin-iscrt}{<h:inputSecret>}{Angabe eines Passworts.}{value="\#\{profileBacking.adminPasswordInPopup.passwordNotHashed\}"}{/}{required="true"}
 
-	\fentry{reference}{outputText}{Hinweis zur Veränderung der Adminrolle.}{A}{}{}
+	\fentry{admin-note-otxt}{<h:outputText>}{Hinweis zur Veränderung der Adminrolle.}{value="\#\{label.adminNote\}"}{/}{/}
 
-	\fentry{abort}{commandButton}{Abbruch der Änderung.}{A}{}{}
+	\fentry{abort-cbtn}{<h:commandButton>}{Abbruch der Änderung.}{value="\#\{label.save\}"\newline action="\#\{profileBacking.saveInPopup\}"}{/}{/}
 
-	\fentry{save}{commandButton}{Speichern aller Änderungen.}{A}{}{}
+	\fentry{save-cbtn}{<h:commandButton>}{Speichern aller Änderungen.}{value="\#\{label.abort\}"\newline action="\#\{profileBacking.abortInPopup\}"}{/}{/}
 
 }
 
