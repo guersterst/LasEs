@@ -32,9 +32,6 @@ public class ProfileBacking implements Serializable {
     private UserService userService;
 
     @Inject
-    private SubmissionService submissionService;
-
-    @Inject
     private ScienceFieldService scienceFieldService;
 
     private Part uploadedAvatar;
@@ -207,5 +204,14 @@ public class ProfileBacking implements Serializable {
      */
     public boolean isPopupShown() {
         return popupShown;
+    }
+
+    /**
+     * Only the user belonging to the profile and an administrator have edit rights.
+     * @return true if they have edit rights.
+     */
+    public boolean hasViewerEditRights() {
+        return sessionInformation.getUser().getId() == user.getId()
+                || sessionInformation.getUser().isAdmin();
     }
 }

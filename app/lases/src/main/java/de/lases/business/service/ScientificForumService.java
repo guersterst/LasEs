@@ -1,57 +1,130 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.*;
-import de.lases.persistence.repository.*;
-import jakarta.enterprise.context.ApplicationScoped;
+import de.lases.persistence.repository.Transaction;
+import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
-import jakarta.inject.Named;
+import jakarta.inject.Inject;
 
 import java.util.List;
 
-@ApplicationScoped
-@Named
+/**
+ * Provides functionality regarding the handling of scientific forums.
+ * In case of an unexpected state, a {@link UIMessage} event will be fired.
+ */
+@Dependent
 public class ScientificForumService {
 
+    @Inject
     private Event<UIMessage> uiMessageEvent;
 
+    @Inject
     private Transaction transaction;
 
-    public ScientificForum getForum() {
+    /**
+     * Gets a scientific forum.
+     *
+     * @param forum A {@link ScientificForum}-DTO containing a valid id.
+     * @return The requested scientific forum.
+     */
+    public ScientificForum getForum(ScientificForum forum) {
         return null;
     }
 
-    public void updateForum(ScientificForum forum, ScientificForum newForum) {
+    /**
+     * Updates a scientific forum.
+     *
+     * @param newForum The new data of the scientific forum.
+     *                 <p>
+     *                 Should contain a valid id.
+     *                 </p>
+     */
+    public void updateForum(ScientificForum newForum) {
     }
 
-    public void addForum(ScientificForum forum) {
+    /**
+     * Adds a scientific forum.
+     * <p>
+     * All editors will be informed about being added to this forum,
+     * using the {@link de.lases.business.util.EmailUtil} utility.
+     * </p>
+     *
+     * @param forum         The {@link ScientificForum}-DTO containing all necessary data.
+     * @param scienceFields The scientific fields, which this forum is specialized in.
+     * @param editors       The editors of this forum.
+     */
+    public void addForum(ScientificForum forum, List<ScienceField> scienceFields, List<User> editors) {
     }
 
-    public void removeForum() {
+    /**
+     * Deletes a scientific forum and all associated submissions and reviews.
+     *
+     * @param forum The scientific forum to be deleted.
+     */
+    public void removeForum(ScientificForum forum) {
     }
 
-    public void addSubmission(Submission submission) {
+    /**
+     * Adds an editor to a scientific forum.
+     *
+     * @param editor The user added as an editor.
+     * @param forum  The forum to which the editor is being added.
+     */
+    public void addEditor(User editor, ScientificForum forum) {
     }
 
-    public void removeSubmission(Submission submission) {
+    /**
+     * Removes an editor from a scientific forum.
+     *
+     * @param editor The user removed as an editor.
+     * @param forum  The forum from which the editor is being removed.
+     */
+    public void removeEditor(User editor, ScientificForum forum) {
     }
 
-    public void getSubmissions() {
+    /**
+     * Adds a scientific field to a forum in which it has expertise.
+     *
+     * @param scienceField The scientific field of expertise.
+     * @param forum        The forum, which receives a new scientific field of expertise.
+     */
+    public void addScienceField(ScienceField scienceField, ScientificForum forum) {
     }
 
-    public void addEditor(User user) {
-    }
-
-    public void removeEditor(User user) {
-    }
-
-    public void addScienceField() {
-    }
-
-    public List<User> getEditors() {
+    /**
+     * Gets all editors of a scientific forum.
+     *
+     * @param forum The forum where the editors are requested.
+     * @return All editors of the given forum.
+     */
+    public List<User> getEditors(ScientificForum forum) {
         return null;
     }
 
+    /**
+     * Gets all scientific forums.
+     *
+     * @param resultListParams The parameters, that control filtering and sorting of the resulting list.
+     * @return All scientific forums.
+     */
     public List<ScientificForum> getForums(ResultListParameters resultListParams) {
+        return null;
+    }
+
+    /**
+     * Delivers all submissions, that a user either has submitted, is an editor to or reviews
+     * in a specified scientific forum.
+     *
+     * @param scientificForum The {@link ScientificForum} where the wanted submissions are submitted to.
+     * @param user            The user, whose editorial, reviewed or own submissions.
+     * @param privilege       The role, to which submissions belong, in relation to a user.
+     *                        Meaning, the user can request to receive the submissions which he is an editor to,
+     *                        reviews or has submitted himself.
+     * @param resultParams    Parameters, that control filtering and sorting of the resulting list.
+     * @return The resulting list of submissions, that were submitted to a given scientific forum.
+     */
+    public List<Submission> getSubmissions(ScientificForum scientificForum, User user, Privilege privilege,
+                                           ResultListParameters resultParams) {
         return null;
     }
 }
