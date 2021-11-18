@@ -24,13 +24,15 @@ box "control.validation"
     participant ":PDFValidator" as pdfv << @FacesValidator >>
 end box
 box "business.service"
-    participant "rsvc:RevisionService" as rsvc << @ApplicationScoped >>
+    participant "rsvc:PaperService" as rsvc << @ApplicationScoped >>
     participant "ssvc:SubmissionService" as ssvc << @ApplicationScoped >>
 end box
-box "global.transfer"
+box "global.transport"
     participant "sub:Submission" as sub << @Named >>
     participant "user:User" as usr
+    participant "file:File" as file
     participant "paper:Paper" as paper
+    participant "UIMessage:msg" as msg
 end box
 box persistence
     participant "t1:Transaction" as t1
@@ -49,162 +51,148 @@ note left
 end note
 user -> sb : init()
 activate sb
-    sb -> si ++ : getUserId()
-    return userId
+    sb -> si ++ : getUser()
+    return User sessionUsr
     sb -> usr ** : User()
-    sb -> usr ++ : setId(userId)
+    sb -> usr ++ : setId(int sessionUsr.getId())
     return
     sb -> sub ** : Submission()
 return
 
-note left of sb
+note right of user
     int subId wird
     gelesen von
     requestParams
     (URL-Parameter)
 end note
-user -> sub ++ : setId(subId)
+user -> sub ++ : setId(int subId)
 return
 
 
-user -> sb ++ : load() //[via viewAction]//
-    sb -> ssvc ++ : canView(sub, usr)
+user -> sb ++ : onLoad() //[via viewAction]//
+    sb -> ssvc ++ : canView(Submission sub, User usr)
     return true
 
-    sb -> ssvc : getSubmission(sub)
+    sb -> ssvc : getSubmission(Submission sub)
     activate ssvc
         ssvc -> t1 ** : Transaction()
         activate t1
             t1 -> cp : __getInstance()__
             activate cp
-            return cp
+            return ConnectionPool cp
             t1 -> cp : getConnection()
             activate cp
-            return
+            return Connection conn
         return
-        ssvc -> sr : __get(sub, t1)__
+        ssvc -> sr : __get(Submission sub, Transaction t1)__
         activate sr
             sr -> sub : getId()
             activate sub
-            return id
+            return int id
             sr -> t1 ++ : getConnection()
             return
-            sr -> sub : setTitle()
-            activate sub
-            return
-            sr -> sub : setPapers()
+            sr -> sub : setTitle(String title)
             activate sub
             return
             ......sub befüllen......
-        return
-        note right of ssvc
-            analoge DB-Zugriffe über die Repos:
-            UserRepository.__get(sub.getAuthor(),t1)__
-            UserRepository.__getList(sub,t1)__
-            PaperRepository.__getList(sub,t1)__
-        end note
-        ssvc -> sub ++ : setAuthor()
-        return
-        ssvc -> sub ++ : setCoAuthors()
-        return
-        ssvc -> sub ++ : setPapers()
-        return
+        return Submission sub
         ssvc -> t1 ++ : commit()
-            t1 -> cp ++ : releaseConnection()
+            t1 -> cp ++ : releaseConnection(Connection conn)
             return
         return
 '        destroy t1
         ......
-    return sub
-return "submission"
+    return Submission sub
+
+    note right of sb
+        analoge DB-Zugriffe über die Services:
+        UserService#getUsers(sub)
+        PaperService#getPaperList(sub,user)
+    end note
+
+return
 
 user -> sub ++ : getTitle()
-return
-user -> sub ++ : getPapers()
-return
-user -> sub ++ : getCoAuthors()
-return
-user -> sub ++ : getAuthor()
-return
+return Title title
 
-user -> pdfv ++ : validate()
+user -> pdfv ++ : validate(FacesContext fctx, UIComponent cmpt, Part revisionPDF)
 note left
     sucht die PDF-Datei mit
     dem file picker aus und
     klickt auf "Submit Revision"
 end note
 return
-user -> sb ++ : setUploadedRevisionPDF()
+user -> sb ++ : setUploadedRevisionPDF(Part revisionPDF)
 return
 
-user -> sb : releaseRevision()
+user -> sb : uploadPDF()
 activate sb
-    sb -> rsvc : uploadFile(sub, revisionPdf)
+    sb -> file ** : File()
+    sb -> file ++ : setFile(byte[] revisionPDFBytes)
+    return
+
+    sb -> rsvc : addPaper(Submission sub, File file)
     activate rsvc
         rsvc -> t2 ** : Transaction()
         activate t2
             t2 -> cp : __getInstance()__
             activate cp
-            return cp
+            return ConnectionPool cp
             t2 -> cp : getConnection()
             activate cp
             return
         return
-        rsvc -> sr : __get(sub,t2)__
+
+        rsvc -> file ++ : getFile()
+        return byte[] revisionBytes
+
+        rsvc -> sr : __get(Submission sub, Transaction t2)__
         activate sr
             sr -> sub : getId()
             activate sub
-            return id
+            return int id
             sr -> t2 ++ : getConnection()
             return
-            sr -> sub : setTitle()
-            activate sub
-            return
-            sr -> sub : setPapers()
+            sr -> sub : setTitle(String title)
             activate sub
             return
             ...sub befüllen...
-        return
-        rsvc -> pr ++ : __getPapers(sub, t2)__
+        return Submission sub
+        rsvc -> pr ++ : __getList(Submission sub, Transaction t2, new ResultListParameters())__
             pr -> sub ++ : getId()
-            return id
+            return int id
             pr -> t1 ++ : getConnection()
             return
-        return papers
+        return List<Paper> papers
         rsvc -> paper ** : Paper()
         rsvc -> paper : setSubmissionId(subId)
         activate paper
         return
-        rsvc -> paper : setVersion(papers.size())
+        rsvc -> paper : setId(int papers.size())
         activate paper
-        return paper
-        rsvc -> sub : addPaper(paper)
-        activate sub
+        return
+        rsvc -> paper ++ : setVisible(false)
         return
         rsvc -> sub ++ : setSubmissionState(SUBMITTED)
         return
 
-        rsvc -> pr ++ : __addPaper(paper, t2)__
+        rsvc -> pr ++ : __add(Paper paper, Transaction t2)__
             pr -> paper ++ : getId()
-            return
-            pr -> paper ++ : getUploadTime()
-            return
+            return int id
             pr -> paper ++ : getVisible()
-            return
+            return false
             pr -> t1 ++ : getConnection()
             return
         return
         note right of rsvc
-            analog: PaperRepository.__setPdf(paper,revisionPdf)__
+            analog: PaperRepository.__setPdf(Paper paper, File file)__
         end note
 
-        rsvc -> sr : __changeSubmission(sub, t2)__
+        rsvc -> sr : __change(Submission sub, Submission sub, Transaction t2)__
         activate sr
             sr -> sub ++ : getId()
             return
             sr -> sub ++ : getTitle()
-            return
-            sr -> sub ++ : getPapers()
             return
             ......sub auslesen......
             sr -> t1 ++ : getConnection()
@@ -215,6 +203,13 @@ activate sb
             t2 -> cp ++ : releaseConnection()
             return
         return
+
+        note right of rsvc
+            lädt String message
+            aus ResourceBundle
+        end note
+        rsvc -> msg ** : UIMessage(String message, MessageCategory.INFO)
+
 '        destroy t2
     return
 
@@ -222,7 +217,7 @@ activate sb
 '    activate rscBundle
 '    return msg
 
-return submission.xhtml\nwith facesMessage
+return
 
 
 

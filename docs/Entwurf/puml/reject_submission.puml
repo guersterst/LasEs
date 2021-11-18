@@ -29,6 +29,7 @@ box "business.util"
     participant "eu:EmailUtil" as eu
 end box
 box "global.transfer"
+    participant "msg:UIMessage" as msg
     participant "sub:Submission" as sub << @Named >>
     participant "user:User" as usr
 '    participant "paper:Paper" as paper
@@ -48,27 +49,26 @@ note left
     Submission-
     Seite auf
 end note
-sb --> ssvc : //injection//
-return //ssvc//
-sb --> si : //injection//
-return //si//
 editor -> sb : init()
 activate sb
-    note right
-        int subId wird
-        gelesen von
-        requestParams
-        (URL-Parameter)
-    end note
     sb -> si ++ : getUserId()
     return userId
-    sb -> sub ** : Submission()
-    sb -> sub : setId(subId)
-    activate sub
-    return
     sb -> usr ** : User()
     sb -> usr ++ : setId(userId)
     return
+    sb -> sub ** : Submission()
+return
+
+note right
+    int subId wird
+    gelesen von
+    requestParams
+    (URL-Parameter)
+end note
+sb -> sub ++ : setId(subId)
+return
+
+editor -> sb ++ : load() //[via viewAction]//
     sb -> ssvc ++ : canView(sub, user)
     return true
 
@@ -120,15 +120,16 @@ activate sb
         return
 '        destroy t1
     return sub
-    sb -> sub ++ : getTitle()
-    return
-    sb -> sub ++ : getPapers()
-    return
-    sb -> sub ++ : getCoAuthors()
-    return
-    sb -> sub ++ : getAuthor()
-    return
-return submission.xhtml
+return "submission"
+
+editor -> sub ++ : getTitle()
+return
+editor -> sub ++ : getPapers()
+return
+editor -> sub ++ : getCoAuthors()
+return
+editor -> sub ++ : getAuthor()
+return
 
 
 editor -> sb : setState(REJECTED)
@@ -193,28 +194,42 @@ activate sb
         end note
 
 == Anfang Fehlerbehandlung ==
-        return <font color=red><b>DBConnectionFailedException e
+        return <font color=red><b>DataSourceNotFoundException e</b></font> (unchecked)
 
         ssvc -> t2 ++ : close()
         return
 
-    return <font color=red><b>DBConnectionFailedException e
-deactivate sb
+    return <font color=red><b>DataSourceNotFoundException e
+return <font color=red><b>DataSourceNotFoundException e
 
-sb -> eh ++ : handle(e)
+editor -> eh ++ : handle(e)
     note right of eh
-    generate <font color=red><b>error</b></font>
-    <font color=red><b>message</b></font> and add
-    to FacesContext
+    get <font color=red><b>error</b></font>
+    <font color=red><b>message</b></font> from
+    resource bundle
     end note
+
+    eh -> msg ** : UIMessage(e)
+    eh -> msg ++ : setErrorMessage()
+    return
+    eh -> msg ++ : setStacktrace()
+    return
+
+    eh -> epb **
+    eh -> epb ++ : setUIMessage(msg)
+    return
+
     note right of eh
     redirect to
     errorPage.xhtml
     end note
 
-    eh -> epb **
-    eh --> editor : errorPage.xhtml displaying <font color=red><b>FacesMessage</b></font>
-deactivate eh
+return "errorPage"
+
+editor -> epb ++ : getUIMessage()
+return msg
+editor -> msg ++ : getMessage()
+return "<font color=red>Error: ...</font>"
 
 'note left
 'Die Ablehnung war
