@@ -103,7 +103,9 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{remove-reviewer-cbtn}{<h:commandButton>}{Entferne einen bestimmten Gutachters.}{action="\#\{toolbarBacking.removeReviewer\}" \newline title="\#\{help.removeReviewer\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{/}
 
-		\fentry{select-editor-slctom}{<h:selectOneMenu>}{Auswahländerung des verwaltenden Editors}{value="\#\{\}" \newline title="\#\{help.selectEditor\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{/}
+		\fentry{select-editor-slctom}{<h:selectOneMenu>}{Auswahländerung des verwaltenden Editors}{value="\#\{toolbarBacking.editorInput.firstName + toolbarBacking.editorInput.lastName\}" \newline title="\#\{help.selectEditor\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{/}
+		
+		\fentry{/}{<f:selectItems>}{Liste der möglichen Editoren.}{value="\#\{toolbar.editors\}" \newline var="entry" \newline itemLabel="\#\{entry.firstName + entry.lastName\}" \newline itemValue="\#\{entry\}"}{arg5}{arg6}
 
 		\fentry{save-editor-cbtn}{<h:commandButton>}{Speichern der Änderung des Editors.}{value="\#\{label.saveEditor\}" \newline action="\#\{toolbarBacking.chooseNewManagingEditor\}" \newline title="\#\{help.saveEditor\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"E}{/}
 
@@ -293,25 +295,21 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{date-ssc}{<ssc:sortsearchcolumn>}{Spalte für das Abgabedatum des Papers.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.date\}"}{/}{/}
 
-		\fentry{date-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{\}" title="\#\{help.dateSelect\}"}{/}{/}
+		\fentry{date-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{homepageBacking.dateFilterSelectSub\}" \newline title="\#\{help.dateSelect\}"}{/}{/}
 
-		\fentry{/}{<f:selectItems>}{Mögliche Filterung des Datums.}{value="\#\{\}"}{/}{/}
+		\fentry{/}{<f:selectItems>}{Mögliche Filterung des Datums.}{value="\#\{homepageBacking.dateSelects\}" \newline var="entry" \newline itemLabel="\#\{entry.toString()\}" \newline itemValue="\#\{entry\}"}{/}{/}
 
 		\fentry{date-otxt}{<h:outputText>}{Abgabedatum des Papers.}{value="\#\{var.submissionTime\}"}{/}{convertDateTime \newline pattern=""yyyy-MM-dd"}
 
 		\fentry{deadline-ssc}{<ssc:sortsearchcolumn>}{Spalte für die Deadline der Revision.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.deadline\}"}{/}{/}
 
-		\fentry{deadline-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit einer Deadline.}{value="\#\{\}" title="\#\{help.deadlineSelect\}"}{/}{/}
-
-		\fentry{/}{<f:selectItems>}{Mögliche Filterung der Deadline.}{value="\#\{\}"}{/}{/}
-
 		\fentry{deadline-otxt}{<h:outputText>}{Deadline des Papers.}{value="\#\{var.deadlineRevision\}"}{/}{convertDateTime \newline pattern=""yyyy-MM-dd"}
 
 		\fentry{state-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Status der Einreichung.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.stateSub\}"}{/}{/}
 
-		\fentry{state-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Status.}{value="\#\{\}" title="\#\{help.stateSubSelect\}"}{/}{/}
+		\fentry{state-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Status.}{value="\#\{homepageBacking.stateFilterSelectSub\}" \newline title="\#\{help.stateSubSelect\}"}{/}{/}
 
-		\fentry{/}{<f:selectItems>}{Mögliche Filterung des Status.}{value="\#\{\}"}{/}{/}
+		\fentry{/}{<f:selectItems>}{Mögliche Filterung des Status.}{value="\#\{homepageBacking.submissionStates\}" \newline var="entry" \newline itemLabel="\#\{entry.toString()\}" \newline itemValue="\#\{entry\}"}{/}{/}
 
 		\fentry{state-otxt}{<h:outputText>}{Status der Einreichung.}{value="\#\{var.state\}"}{/}{/}
 
@@ -354,7 +352,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{state-slctom}{<h:selectOneMenu>}{Status der Submission.}{value="\#\{submissionBacking.submission.state\}"}{readonly="\#\{not submissionBacking.sessionInformation.user.editor\}"}{/}
 
-		\fentry{/}{<f:selectItems>}{Auswahl des Status.}{itemValue="\#\{\}"}{/}{/}
+		\fentry{/}{<f:selectItems>}{Auswahl des Status.}{value="\#\{submissionBacking.submissionState\}"\newline var="entry" \newline itemLabel="\#\{entry.toString()\}" \newline itemValue="\#\{entry\}"}{/}{/}
 
 		\fentry{state-otxt}{<h:outputText>}{Status der Einreichung.}{value="\#\{submissionBacking.submission.state\}"}{/}{/}
 
@@ -387,9 +385,9 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{date-ssc}{<ssc:sortsearchcolumn>}{Spalte für das Abgabedatum des Papers.}{paginator="\#\{submissionBacking.paperPagination\}"\newline columnNamei18n="\#\{label.date\}"}{/}{/}
 
-		\fentry{date-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{\}" title="\#\{help.dateSelect\}"}{/}{/}
+		\fentry{date-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{submissionBacking.dateFilterSelectPaper\}" \newline title="\#\{help.dateSelect\}"}{/}{/}
 
-		\fentry{/}{<f:selectItems>}{Mögliche Filterung des Datums.}{value="\#\{\}"}{/}{/}
+		\fentry{/}{<f:selectItems>}{Mögliche Filterung des Datums.}{value="\#\{submissionBacking.dateSelect\}" \newline var="entry" \newline itemLabel="\#\{entry.toString()\}" \newline itemValue="\#\{entry\}"}{/}{/}
 
 		\fentry{date-otxt}{<h:outputText>}{Abgabedatum des Papers.}{value="\#\{var.uploadTime\}"}{/}{convertDateTime \newline pattern=""yyyy-MM-dd"}
 

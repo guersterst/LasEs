@@ -11,7 +11,7 @@ public abstract class Pagination<T> {
     private ResultListParameters resultListParameters;
 
     public Pagination(String sortedBy, Integer numberItemsPage, Integer numberColumns) {
-        resultListParameters.setResultLength(numberItemsPage);
+        //resultListParameters.setResultLength(numberItemsPage);
         resultListParameters.setSortColumn(sortedBy);
         resultListParameters.setSortOrder(SortOrder.ASCENDING);
         resultListParameters.setPageNo(1);

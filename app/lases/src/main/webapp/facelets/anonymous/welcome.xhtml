@@ -25,6 +25,9 @@
         <h:selectOneListbox value="#{submissionBacking.submission.state}">
             <f:selectItem itemValue="#{submissionBacking.submission.state}" style="color: green"/>
         </h:selectOneListbox>
+        <h:selectOneMenu value="#{homepageBacking.stateFilterSelectSub}">
+            <f:selectItems value="#{homepageBacking.submissionStates}" var="entry" itemLabel="#{entry.toString}" itemValue="#{entry}"/>
+        </h:selectOneMenu>
         <h:outputText value="#{submissionBacking.author.firstName + submissionBacking.author.lastName}"/>
         <h:selectBooleanCheckbox
         <h:link disabled="#{not(submissionBacking.sessionInformation.user.editor && submissionBacking.sessionInformation.user.reviewer)}"
