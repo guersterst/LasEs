@@ -2,6 +2,7 @@ de.lases.business.internal
 de.lases.business.service
 de.lases.business.util
 de.lases.control.backing
+de.lases.control.exception
 de.lases.control.internal
 de.lases.control.validation
 de.lases.global.logging
