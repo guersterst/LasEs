@@ -28,7 +28,6 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \textbf{navigation.xhtml} \phantomsection \label{flt:navbar} ist die Kopfzeile der Webanwendung. Diese bietet die Suchfunktion, Links zu verschiedenen Listen und dem Profil an.
 \nopagebreak
 
-\todo{outcome von links ist immer noch im ordner facelets. mit Johannes abklären und ausprobieren.}
 \ftable{
 	\fentry{logo-gimg}{<h:graphicImage>}{Logo der Applikation.}{value="\#\{navigationBacking.systemSettings.logoImage\}"\}"}{/}{/}
 
@@ -67,7 +66,6 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	}
 \end{samepage}
 
-\todo{language bearbeiten}
 \begin{samepage}
 	\textbf{footer.xhtml} \phantomsection \label{flt:footer} ist die Fußzeile der Webanwendung und für alle sichtbar.
 	\nopagebreak
@@ -75,48 +73,41 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	\ftable{
 		\fentry{imprint-lnk}{<h:link>}{Link zur Seite des Impressums}{value="\#\{label.imprint\}" \newline outcome="/facelets/anonymous/imprint" \newline title="\#\{help.imprint\}"}{/}{/}
 
-		\fentry{language-otxt}{<h:outputText>}{Anzeige der eingestellten Sprache.}{value="\#\{\}"}{/}{/}
+		\fentry{language-otxt}{<h:outputText>}{Anzeige der eingestellten Sprache.}{value="\#\{footerBacking.sessionInformation.locale.getLanguage()\}"}{/}{/}
 
 	}
 \end{samepage}
 
-\todo{Toolbarbacking fehlt}
-\todo{Validierung?}
-\todo{Schätze wir brauchen doch min und mx length was ist wenn man zu lange usernames angibt?}
-\todo{Datum internationalisieren?}
-\todo{var als binding oder constraint?}
-\todo{evtl kein rendern sonder abhängiges include in submission.xhtml?}
-\todo{selectItem?}
 \begin{samepage}
 	\textbf{toolbar.xhtml} \phantomsection \label{flt:toolbar} ist die Seitenleiste für Editoren und Administratoren auf der Einreichungsübersicht. Hier wird die Einreichung verwaltet.
 	\nopagebreak
 
 	\ftable{
-		\fentry{add-reviewer-iTxt}{<h:inputText>}{Eingabefeld zur Angabe einer E-Mail-Adresse}{value="\#\{toolbarBacking.reviewerInput.email\}" \newline title="\#{help.reviewerEmail}}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{emailAddressExistsValidator \newline emailAddressLayoutValidator \newline required="true" \newline requiredMessage="\#\{message.addReviewer\}"}
+		\fentry{add-reviewer-iTxt}{<h:inputText>}{Eingabefeld zur Angabe einer E-Mail-Adresse}{value="\#\{toolbarBacking.reviewerInput.email\}" \newline title="\#{help.reviewerEmail}}{/}{emailAddressExistsValidator \newline emailAddressLayoutValidator \newline required="true" \newline requiredMessage="\#\{message.addReviewer\}"}
 
-		\fentry{add-deadline-reviewer-iTxt}{<h:inputText>}{Eingabefeld zur Angabe einer Deadline.}{value="\#\{toolbarBacking.reviewedByInput.timestampDeadline\}" \newline title="\#\{help.reviewerDeadline\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{converterDateTime \newline patter="dd/MM/yyyy"}
+		\fentry{add-deadline-reviewer-iTxt}{<h:inputText>}{Eingabefeld zur Angabe einer Deadline.}{value="\#\{toolbarBacking.reviewedByInput.timestampDeadline\}" \newline title="\#\{help.reviewerDeadline\}"}{/}{converterDateTime \newline patter="dd/MM/yyyy"}
 
-		\fentry{add-reviewer-cbtn}{<h:commandButton>}{Knopf zum Hinzufügen des Gutachters}{value="\#\{label.addReviewer\}" \newline action="\#\{\}" \newline title="\#\{help.addReviewer\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{/}
+		\fentry{add-reviewer-cbtn}{<h:commandButton>}{Knopf zum Hinzufügen des Gutachters}{value="\#\{label.addReviewer\}" \newline action="\#\{\}" \newline title="\#\{help.addReviewer\}"}{/}{/}
 
-		\fentry{reviewer-dtbl}{<h:dataTable>}{Liste der Gutachter}{value="\#\{toolbarbacking.reviewer\}" \newline var="review"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{/}
+		\fentry{reviewer-dtbl}{<h:dataTable>}{Liste der Gutachter}{value="\#\{toolbarbacking.reviewer\}" \newline var="review"}{/}{/}
 
-		\fentry{remove-reviewer-cbtn}{<h:commandButton>}{Entferne einen bestimmten Gutachters.}{action="\#\{toolbarBacking.removeReviewer\}" \newline title="\#\{help.removeReviewer\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{/}
+		\fentry{remove-reviewer-cbtn}{<h:commandButton>}{Entferne einen bestimmten Gutachters.}{action="\#\{toolbarBacking.removeReviewer\}" \newline title="\#\{help.removeReviewer\}"}{/}{/}
 
-		\fentry{select-editor-slctom}{<h:selectOneMenu>}{Auswahländerung des verwaltenden Editors}{value="\#\{toolbarBacking.editorInput.firstName + toolbarBacking.editorInput.lastName\}" \newline title="\#\{help.selectEditor\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{/}
+		\fentry{select-editor-slctom}{<h:selectOneMenu>}{Auswahländerung des verwaltenden Editors}{value="\#\{toolbarBacking.editorInput.firstName + toolbarBacking.editorInput.lastName\}" \newline title="\#\{help.selectEditor\}"}{/}{/}
 		
-		\fentry{/}{<f:selectItems>}{Liste der möglichen Editoren.}{value="\#\{toolbar.editors\}" \newline var="entry" \newline itemLabel="\#\{entry.firstName + entry.lastName\}" \newline itemValue="\#\{entry\}"}{arg5}{arg6}
+		\fentry{/}{<f:selectItems>}{Liste der möglichen Editoren.}{value="\#\{toolbar.editors\}" \newline var="entry" \newline itemLabel="\#\{entry.firstName + entry.lastName\}" \newline itemValue="\#\{entry\}"}{}{}
 
-		\fentry{save-editor-cbtn}{<h:commandButton>}{Speichern der Änderung des Editors.}{value="\#\{label.saveEditor\}" \newline action="\#\{toolbarBacking.chooseNewManagingEditor\}" \newline title="\#\{help.saveEditor\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"E}{/}
+		\fentry{save-editor-cbtn}{<h:commandButton>}{Speichern der Änderung des Editors.}{value="\#\{label.saveEditor\}" \newline action="\#\{toolbarBacking.chooseNewManagingEditor\}" \newline title="\#\{help.saveEditor\}"}{/}{/}
 
-		\fentry{show-editor-otxt}{<h:outputText>}{Anzeige des aktuellen Editors.}{value="\#\{toolbarBacking.currentEditor\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{/}
+		\fentry{show-editor-otxt}{<h:outputText>}{Anzeige des aktuellen Editors.}{value="\#\{toolbarBacking.currentEditor\}"}{/}{/}
 
-		\fentry{revision-deadline-iTxt}{<h:inputText>}{Eingabe zur Angabe einer Deadline.}{value="\#\{toolbarBacking.submission.deadlineRevision\}" \newline title="\#\{help.revisionDeadline\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{converterDateTime \newline patter="dd/MM/yyyy"}
+		\fentry{revision-deadline-iTxt}{<h:inputText>}{Eingabe zur Angabe einer Deadline.}{value="\#\{toolbarBacking.submission.deadlineRevision\}" \newline title="\#\{help.revisionDeadline\}"}{/}{converterDateTime \newline patter="dd/MM/yyyy"}
 
-		\fentry{require-revision-cbtn}{<h:commandButton>}{Fordert den Einreicher auf, seine Einreichung zu überarbeiten}{value="\#\{label.requireRevision\}" \newline action="\#\{toolbarBacking.requireRevision\}" \newline title="\#\{help.requireRevision\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{/}
+		\fentry{require-revision-cbtn}{<h:commandButton>}{Fordert den Einreicher auf, seine Einreichung zu überarbeiten}{value="\#\{label.requireRevision\}" \newline action="\#\{toolbarBacking.requireRevision\}" \newline title="\#\{help.requireRevision\}"}{/}{/}
 
-		\fentry{accept-submission-cbtn}{<h:commandButton>}{Akzeptiere die Einreichung}{value="\#\{label.acceptSubmission\}" \newline action="\#\{toolbarBacking.acceptSubmission\}" \newline title="\#\{help.accesptSubmission\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{/}
+		\fentry{accept-submission-cbtn}{<h:commandButton>}{Akzeptiere die Einreichung}{value="\#\{label.acceptSubmission\}" \newline action="\#\{toolbarBacking.acceptSubmission\}" \newline title="\#\{help.accesptSubmission\}"}{/}{/}
 
-		\fentry{reject-submission-cbtn}{<h:commandButton>}{Lehne die Einreichung ab}{value="\#\{label.rejectSubmission\}" \newline action="\#\{toolbarBacking.rejectSubmission\}" \newline title="\#\{help.rejectSubmission\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{/}
+		\fentry{reject-submission-cbtn}{<h:commandButton>}{Lehne die Einreichung ab}{value="\#\{label.rejectSubmission\}" \newline action="\#\{toolbarBacking.rejectSubmission\}" \newline title="\#\{help.rejectSubmission\}"}{/}{/}
 
 	}
 \end{samepage}
