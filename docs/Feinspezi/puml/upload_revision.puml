@@ -79,12 +79,12 @@ user -> sb ++ : onLoad() //[via viewAction]//
         activate t1
             t1 -> cp : __getInstance()__
             activate cp
-            return cp
+            return ConnectionPool cp
             t1 -> cp : getConnection()
             activate cp
-            return
+            return Connection conn
         return
-        ssvc -> sr : __get(sub, t1)__
+        ssvc -> sr : __get(Submission sub, Transaction t1)__
         activate sr
             sr -> sub : getId()
             activate sub
@@ -95,9 +95,9 @@ user -> sb ++ : onLoad() //[via viewAction]//
             activate sub
             return
             ......sub befüllen......
-        return
+        return Submission sub
         ssvc -> t1 ++ : commit()
-            t1 -> cp ++ : releaseConnection()
+            t1 -> cp ++ : releaseConnection(Connection conn)
             return
         return
 '        destroy t1
@@ -138,7 +138,7 @@ activate sb
         activate t2
             t2 -> cp : __getInstance()__
             activate cp
-            return cp
+            return ConnectionPool cp
             t2 -> cp : getConnection()
             activate cp
             return
@@ -147,7 +147,7 @@ activate sb
         rsvc -> file ++ : getFile()
         return byte[] revisionBytes
 
-        rsvc -> sr : __get(sub,t2)__
+        rsvc -> sr : __get(Submission sub, Transaction t2)__
         activate sr
             sr -> sub : getId()
             activate sub
@@ -158,13 +158,13 @@ activate sb
             activate sub
             return
             ...sub befüllen...
-        return
-        rsvc -> pr ++ : __getPapers(sub, t2)__
+        return Submission sub
+        rsvc -> pr ++ : __getList(Submission sub, Transaction t2, new ResultListParameters())__
             pr -> sub ++ : getId()
             return int id
             pr -> t1 ++ : getConnection()
             return
-        return papers
+        return List<Paper> papers
         rsvc -> paper ** : Paper()
         rsvc -> paper : setSubmissionId(subId)
         activate paper
@@ -177,7 +177,7 @@ activate sb
         rsvc -> sub ++ : setSubmissionState(SUBMITTED)
         return
 
-        rsvc -> pr ++ : __addPaper(paper, t2)__
+        rsvc -> pr ++ : __add(Paper paper, Transaction t2)__
             pr -> paper ++ : getId()
             return int id
             pr -> paper ++ : getVisible()
@@ -189,7 +189,7 @@ activate sb
             analog: PaperRepository.__setPdf(Paper paper, File file)__
         end note
 
-        rsvc -> sr : __changeSubmission(sub, t2)__
+        rsvc -> sr : __change(Submission sub, Submission sub, Transaction t2)__
         activate sr
             sr -> sub ++ : getId()
             return
