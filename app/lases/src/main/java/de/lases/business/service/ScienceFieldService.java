@@ -1,7 +1,10 @@
 package de.lases.business.service;
 
-import de.lases.global.transport.ScienceField;
-import de.lases.global.transport.UIMessage;
+import de.lases.global.transport.*;
+import de.lases.persistence.exception.DataNotCompleteException;
+import de.lases.persistence.exception.DatasourceQueryFailedException;
+import de.lases.persistence.exception.InvalidQueryParamsException;
+import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
@@ -54,11 +57,39 @@ public class ScienceFieldService implements Serializable {
     }
 
     /**
-     * Delivers all scientific fields.
+     * Gets a list all science fields that belong to the specified scientific
+     * forum.
      *
-     * @return Returns all scientific fields.
+     * @param forum The {@code ScientificForum}-DTO with a valid id.
+     * @param resultListParameters The parameters, that control filtering and sorting of the resulting list.
+     * @return All scientific fields in which a given forum has expertise.
      */
-    public List<ScienceField> getScienceFields() {
+    public static List<ScienceField> getList(ScientificForum forum,
+                                             ResultListParameters
+                                                     resultListParameters) {
+        return null;
+    }
+
+    /**
+     * Gets a list of all scientific fields that belong to a given user.
+     *
+     * @param user A {@code User}-DTO with a valid id.
+     * @param resultListParameters The parameters, that control filtering and sorting of the resulting list.
+     * @return All scientific fields in which a given user has expertise.
+     */
+    public static List<ScienceField> getList(User user, Transaction transaction,
+                                             ResultListParameters
+                                                     resultListParameters) {
+        return null;
+    }
+
+    /**
+     * Gets a list all science fields.
+     *
+     * @param resultListParameters The parameters, that control filtering and sorting of the resulting list.
+     * @return All scientific fields.
+     */
+    public static List<ScienceField> getList(ResultListParameters resultListParameters) {
         return null;
     }
 }
