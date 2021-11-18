@@ -33,4 +33,13 @@ public class ErrorPageBacking {
     public void setErrorMessage(ErrorMessage errorMessage) {
         this.errorMessage = errorMessage;
     }
+
+    /**
+     * Returns if the file is in development mode, where stacktraces are shown.
+     *
+     * @return Is the app in development mode?
+     */
+    public boolean isDevelopmentMode() {
+
+    }
 }

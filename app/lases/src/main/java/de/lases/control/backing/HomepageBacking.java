@@ -31,6 +31,8 @@ public class HomepageBacking implements Serializable {
     @Inject
     private SessionInformation sessionInformation;
 
+    @Inject
+    private ScientificForumService scientificForumService;
 
 
     private DateSelect dateFilterSelectSub;
@@ -227,5 +229,7 @@ public class HomepageBacking implements Serializable {
     public SubmissionState[] getSubmissionStates() {
         return SubmissionState.values();
     }
+
+
 
 }
