@@ -24,12 +24,13 @@ box "control.validation"
     participant ":PDFValidator" as pdfv << @FacesValidator >>
 end box
 box "business.service"
-    participant "rsvc:RevisionService" as rsvc << @ApplicationScoped >>
+    participant "rsvc:PaperService" as rsvc << @ApplicationScoped >>
     participant "ssvc:SubmissionService" as ssvc << @ApplicationScoped >>
 end box
 box "global.transport"
     participant "sub:Submission" as sub << @Named >>
     participant "user:User" as usr
+    participant "file:File" as file
     participant "paper:Paper" as paper
     participant "UIMessage:msg" as msg
 end box
@@ -128,7 +129,7 @@ return
 user -> sub ++ : getAuthor()
 return
 
-user -> pdfv ++ : validate(FacesComp)
+user -> pdfv ++ : validate(FacesContext fctx, UIComponent cmpt, Part revisionPDF)
 note left
     sucht die PDF-Datei mit
     dem file picker aus und
@@ -140,7 +141,11 @@ return
 
 user -> sb : uploadPDF()
 activate sb
-    sb -> rsvc : uploadFile(sub, revisionPDF)
+    sb -> file ** : File()
+    sb -> file ++ : setFile(byte[] revisionPDFBytes)
+    return
+
+    sb -> rsvc : addPaper(Submission sub, File file)
     activate rsvc
         rsvc -> t2 ** : Transaction()
         activate t2
@@ -151,6 +156,10 @@ activate sb
             activate cp
             return
         return
+
+        rsvc -> file ++ : getFile()
+        return byte[] revisionBytes
+
         rsvc -> sr : __get(sub,t2)__
         activate sr
             sr -> sub : getId()
