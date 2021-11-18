@@ -170,20 +170,51 @@ public class UserRepository {
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
-    public static void removeScienceField(User user, Transaction transaction)
+    public static void removeScienceField(User user, ScienceField scienceField,
+                                          Transaction transaction)
             throws NotFoundException, DataNotWrittenException{
     }
 
-    public static boolean emailExists(String emailAddress,
-                                      Transaction transaction) {
+    /**
+     * Return if a user with the specified email address exists.
+     *
+     * @param user A user dto with an email address.
+     * @param transaction The transaction to use.
+     * @return Is there a user with the specified email address in the
+     *         repository.
+     * @throws InvalidFieldsException If the email address of the supplied user
+     *                                is null.
+     * @throws DatasourceQueryFailedException If the datasource cannot be
+     *                                        queried.
+     */
+    public static boolean emailExists(User user, Transaction transaction) {
         return false;
     }
 
-    public static File getAvatar() throws IllegalArgumentException {
+    /**
+     * Get the image file for the avatar.
+     *
+     * @param transaction The transaction to use.
+     * @return A file containing the logo.
+     * @throws DatasourceQueryFailedException If the datasource cannot be
+     *                                        queried.
+     */
+    public static File getAvatar(Transaction transaction) {
         return null;
     }
 
-    public static void setAvatar() throws IllegalArgumentException {
+    /**
+     * Sets the avatar.
+     *
+     * @param avatar A file dto filled with an image file.
+     * @param transaction The transaction to use.
+     * @throws DataNotWrittenException If writing the data to the repository
+     *                                 fails.
+     * @throws DatasourceQueryFailedException If the datasource cannot be
+     *                                        queried.
+     */
+    public static void setAvatar(File avatar, Transaction transaction)
+            throws DataNotWrittenException {
     }
 
 }
