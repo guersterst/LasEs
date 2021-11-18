@@ -206,16 +206,16 @@ public class UserRepository {
     }
 
     /**
-     * Sets the logo.
+     * Sets the avatar.
      *
-     * @param logo A file dto filled with an image file.
+     * @param avatar A file dto filled with an image file.
      * @param transaction The transaction to use.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
-    public static void setAvatar(Transaction transaction)
+    public static void setAvatar(File avatar, Transaction transaction)
             throws DataNotWrittenException {
     }
 
