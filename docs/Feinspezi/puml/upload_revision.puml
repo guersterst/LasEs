@@ -106,15 +106,14 @@ user -> sb ++ : onLoad() //[via viewAction]//
 
     note right of sb
         analoge DB-Zugriffe über die Services:
-        UserService.__getUsers(sub)__
-        PaperService.__getPaperList(sub,user)__
+        UserService#getUsers(sub)
+        PaperService#getPaperList(sub,user)
     end note
 
 return
 
 user -> sub ++ : getTitle()
 return Title title
-return
 
 user -> pdfv ++ : validate(FacesContext fctx, UIComponent cmpt, Part revisionPDF)
 note left
