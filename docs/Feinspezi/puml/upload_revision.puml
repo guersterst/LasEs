@@ -54,7 +54,7 @@ activate sb
     sb -> si ++ : getUser()
     return User sessionUsr
     sb -> usr ** : User()
-    sb -> usr ++ : setId(sessionUsr.getId())
+    sb -> usr ++ : setId(int sessionUsr.getId())
     return
     sb -> sub ** : Submission()
 return
@@ -65,7 +65,7 @@ note right of user
     requestParams
     (URL-Parameter)
 end note
-user -> sub ++ : setId(subId)
+user -> sub ++ : setId(int subId)
 return
 
 
@@ -88,28 +88,13 @@ user -> sb ++ : onLoad() //[via viewAction]//
         activate sr
             sr -> sub : getId()
             activate sub
-            return id
+            return int id
             sr -> t1 ++ : getConnection()
             return
-            sr -> sub : setTitle()
-            activate sub
-            return
-            sr -> sub : setPapers()
+            sr -> sub : setTitle(String title)
             activate sub
             return
             ......sub befüllen......
-        return
-        note right of ssvc
-            analoge DB-Zugriffe über die Repos:
-            UserRepository.__get(sub.getAuthor(),t1)__
-            UserRepository.__getList(sub,t1)__
-            PaperRepository.__getList(sub,t1)__
-        end note
-        ssvc -> sub ++ : setAuthor()
-        return
-        ssvc -> sub ++ : setCoAuthors()
-        return
-        ssvc -> sub ++ : setPapers()
         return
         ssvc -> t1 ++ : commit()
             t1 -> cp ++ : releaseConnection()
@@ -118,15 +103,17 @@ user -> sb ++ : onLoad() //[via viewAction]//
 '        destroy t1
         ......
     return Submission sub
+
+    note right of sb
+        analoge DB-Zugriffe über die Services:
+        UserService.__getUsers(sub)__
+        PaperService.__getPaperList(sub,user)__
+    end note
+
 return
 
 user -> sub ++ : getTitle()
-return
-user -> sub ++ : getPapers()
-return
-user -> sub ++ : getCoAuthors()
-return
-user -> sub ++ : getAuthor()
+return Title title
 return
 
 user -> pdfv ++ : validate(FacesContext fctx, UIComponent cmpt, Part revisionPDF)
@@ -164,20 +151,17 @@ activate sb
         activate sr
             sr -> sub : getId()
             activate sub
-            return id
+            return int id
             sr -> t2 ++ : getConnection()
             return
-            sr -> sub : setTitle()
-            activate sub
-            return
-            sr -> sub : setPapers()
+            sr -> sub : setTitle(String title)
             activate sub
             return
             ...sub befüllen...
         return
         rsvc -> pr ++ : __getPapers(sub, t2)__
             pr -> sub ++ : getId()
-            return id
+            return int id
             pr -> t1 ++ : getConnection()
             return
         return papers
@@ -185,27 +169,24 @@ activate sb
         rsvc -> paper : setSubmissionId(subId)
         activate paper
         return
-        rsvc -> paper : setVersion(papers.size())
+        rsvc -> paper : setId(int papers.size())
         activate paper
-        return paper
-        rsvc -> sub : addPaper(paper)
-        activate sub
+        return
+        rsvc -> paper ++ : setVisible(false)
         return
         rsvc -> sub ++ : setSubmissionState(SUBMITTED)
         return
 
         rsvc -> pr ++ : __addPaper(paper, t2)__
             pr -> paper ++ : getId()
-            return
-            pr -> paper ++ : getUploadTime()
-            return
+            return int id
             pr -> paper ++ : getVisible()
-            return
+            return false
             pr -> t1 ++ : getConnection()
             return
         return
         note right of rsvc
-            analog: PaperRepository.__setPdf(paper,revisionPdf)__
+            analog: PaperRepository.__setPdf(Paper paper, File file)__
         end note
 
         rsvc -> sr : __changeSubmission(sub, t2)__
@@ -213,8 +194,6 @@ activate sb
             sr -> sub ++ : getId()
             return
             sr -> sub ++ : getTitle()
-            return
-            sr -> sub ++ : getPapers()
             return
             ......sub auslesen......
             sr -> t1 ++ : getConnection()
@@ -230,7 +209,7 @@ activate sb
             lädt String message
             aus ResourceBundle
         end note
-        rsvc -> msg ** : "UIMessage(String message, MessageCategory.INFO)"
+        rsvc -> msg ** : UIMessage(String message, MessageCategory.INFO)
 
 '        destroy t2
     return
