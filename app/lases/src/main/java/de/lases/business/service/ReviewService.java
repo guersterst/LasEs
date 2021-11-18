@@ -49,7 +49,7 @@ public class ReviewService {
 
     /**
      * Gets all reviews that can be viewed by a given user.
-     * For example, a reviewer can only review his own reviews.
+     * For example, a reviewer can only view his own reviews.
      *
      * @param submission The submission from which the reviews are requested.
      * @param user The user who

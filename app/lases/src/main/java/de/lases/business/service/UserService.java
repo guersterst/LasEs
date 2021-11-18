@@ -115,7 +115,7 @@ public class UserService {
      * Determines whether a users email-address is already verified.
      *
      * @param user A {@link User}-DTO which should contain a valid id.
-     * @return {@true} if the user is verified. {@code false otherwise}.
+     * @return {@code true} if the user is verified. {@code false otherwise}.
      */
     public boolean isVerified(User user) {
         return false;

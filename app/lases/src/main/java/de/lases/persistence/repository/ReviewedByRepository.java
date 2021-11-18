@@ -17,6 +17,7 @@ public class ReviewedByRepository {
      *
      * @param submission A submission dto with a valid id.
      * @param user A user dto with a valid id.
+     * @param transaction The transaction to use.
      * @return A fully filled {@code ReviewedBy} dto for the specified
      *         submission and user. Returns null if there is no such
      *         relationship.
@@ -26,7 +27,8 @@ public class ReviewedByRepository {
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
-    public static ReviewedBy get(Submission submission, User user)
+    public static ReviewedBy get(Submission submission, User user,
+                                 Transaction transaction)
             throws NotFoundException {
         return null;
     }
@@ -35,6 +37,7 @@ public class ReviewedByRepository {
      * Changes the given {@code ReviewedBy} in the repository.
      *
      * @param reviewedBy A fully filled {@code ReviewedBy} dto.
+     * @param transaction The transaction to use.
      * @throws NotFoundException If there is no reviewedBy relationship with
      *                           the given user id and submission id.
      * @throws DataNotWrittenException If writing the data to the repository
@@ -44,8 +47,8 @@ public class ReviewedByRepository {
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
-    public static void change(ReviewedBy reviewedBy) throws NotFoundException,
-            DataNotWrittenException {
+    public static void change(ReviewedBy reviewedBy, Transaction transaction)
+            throws NotFoundException, DataNotWrittenException {
     }
 
 }

@@ -16,13 +16,15 @@ public class PaperRepository {
      * and returns a fully filled paper dto.
      *
      * @param paper A paper dto that must be filled with a valid id.
+     * @param transaction The transaction to use.
      * @return A fully filled paper dto.
      * @throws NotFoundException If there is no paper with the provided id and
      *                           submission id.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
-    public static Paper get(Paper paper) throws NotFoundException {
+    public static Paper get(Paper paper, Transaction transaction)
+            throws NotFoundException {
         return null;
     }
 
@@ -30,7 +32,7 @@ public class PaperRepository {
      * Adds a paper to the repository.
      *
      * @param paper A fully filled paper dto.
-     *
+     * @param transaction The transaction to use.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
      * @throws KeyExistsException If there is already a paper with the same id
@@ -40,7 +42,8 @@ public class PaperRepository {
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
-    public static void add(Paper paper) throws DataNotWrittenException,
+    public static void add(Paper paper, Transaction transaction)
+            throws DataNotWrittenException,
             KeyExistsException {
     }
 
@@ -48,6 +51,7 @@ public class PaperRepository {
      * Changes the given paper in the repository.
      *
      * @param paper A fully filled paper dto.
+     * @param transaction The transaction to use.
      * @throws NotFoundException If there is no paper with the provided id and
      *                           submission id.
      * @throws DataNotWrittenException If writing the data to the repository
@@ -56,7 +60,8 @@ public class PaperRepository {
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
-    public static void change(Paper paper) throws NotFoundException,
+    public static void change(Paper paper, Transaction transaction)
+            throws NotFoundException,
             DataNotWrittenException {
     }
 
@@ -66,20 +71,25 @@ public class PaperRepository {
      *
      * @param paper The paper to remove. Must be filled with a valid id and
      *              submission id.
+     * @param transaction The transaction to use.
      * @throws NotFoundException The specified paper was not found in the
      *                           repository.
      * @throws DataNotWrittenException If writing the data to the repository
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
-    public static void remove(Paper paper) throws NotFoundException,
-            DataNotWrittenException {
+    public static void remove(Paper paper, Transaction transaction)
+            throws NotFoundException, DataNotWrittenException {
     }
 
     /**
      * Gets a list all papers that belong to the specified submission.
      *
      * @param submission A submission dto filled with a valid id.
+     * @param transaction The transaction to use.
+     * @param resultListParameters The ResultListParameters dto that results
+     *                             parameters from the pagination like
+     *                             filtering, sorting or number of elements.
      * @return A list of fully filled paper dtos for all papers that belong
      *         to the specified submission.
      * @throws DataNotCompleteException If the list is truncated.
@@ -87,7 +97,9 @@ public class PaperRepository {
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
-    public static List<Paper> getList(Submission submission)
+    public static List<Paper> getList(Submission submission,
+                                      Transaction transaction,
+                                      ResultListParameters resultListParameters)
             throws DataNotCompleteException, NotFoundException {
         return null;
     }
@@ -96,13 +108,15 @@ public class PaperRepository {
      * Get the PDF file for the provided paper.
      *
      * @param paper A paper dto filled with a valid paper id and submission id.
+     * @param transaction The transaction to use.
      * @return A file containing the PDF for the specified paper.
      * @throws NotFoundException If there is no paper with the provided id and
      *                           submission id.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
-    public static File getPDF(Paper paper) throws NotFoundException {
+    public static File getPDF(Paper paper, Transaction transaction)
+            throws NotFoundException {
         return null;
     }
 
@@ -111,6 +125,7 @@ public class PaperRepository {
      *
      * @param paper A paper dto filled with a valid paper id and submission id.
      * @param pdf A file dto filled with a pdf file.
+     * @param transaction The transaction to use.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
      * @throws NotFoundException If there is no paper with the provided id and
@@ -118,7 +133,7 @@ public class PaperRepository {
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
-    public static void setPDF(Paper paper, File pdf)
+    public static void setPDF(Paper paper, File pdf, Transaction transaction)
             throws DataNotWrittenException, NotFoundException {
     }
 
