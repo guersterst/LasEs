@@ -22,7 +22,7 @@ public class ReviewService {
     @Inject
     private Transaction transaction;
 
-    //todo no use of reviewedByDTO?
+
     /**
      * Adds a review to a submission.
      *          <p>

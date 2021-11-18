@@ -179,9 +179,10 @@ public class SubmissionService {
         return null;
     }
 
-
-    //todo was macht das wofür?
-    public int countSubmissions() {
+    /**
+     * @return The amount of submissions that a user has submitted himself.
+     */
+    public Integer countSubmissions() {
         return 0;
     }
 }
