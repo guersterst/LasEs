@@ -112,7 +112,7 @@ public class UserRepository {
     }
 
     /**
-     * Gets a list all userss.
+     * Gets a list of all users.
      *
      * @param transaction The transaction to use.
      * @param resultListParameters The ResultListParameters dto that results

@@ -28,7 +28,6 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \textbf{navigation.xhtml} \phantomsection \label{flt:navbar} ist die Kopfzeile der Webanwendung. Diese bietet die Suchfunktion, Links zu verschiedenen Listen und dem Profil an.
 \nopagebreak
 
-\todo{outcome von links ist immer noch im ordner facelets. mit Johannes abklären und ausprobieren.}
 \ftable{
 	\fentry{logo-gimg}{<h:graphicImage>}{Logo der Applikation.}{value="\#\{navigationBacking.systemSettings.logoImage\}"\}"}{/}{/}
 
@@ -67,7 +66,6 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	}
 \end{samepage}
 
-\todo{language bearbeiten}
 \begin{samepage}
 	\textbf{footer.xhtml} \phantomsection \label{flt:footer} ist die Fußzeile der Webanwendung und für alle sichtbar.
 	\nopagebreak
@@ -75,48 +73,41 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	\ftable{
 		\fentry{imprint-lnk}{<h:link>}{Link zur Seite des Impressums}{value="\#\{label.imprint\}" \newline outcome="/facelets/anonymous/imprint" \newline title="\#\{help.imprint\}"}{/}{/}
 
-		\fentry{language-otxt}{<h:outputText>}{Anzeige der eingestellten Sprache.}{value="\#\{\}"}{/}{/}
+		\fentry{language-otxt}{<h:outputText>}{Anzeige der eingestellten Sprache.}{value="\#\{footerBacking.sessionInformation.locale.getLanguage()\}"}{/}{/}
 
 	}
 \end{samepage}
 
-\todo{Toolbarbacking fehlt}
-\todo{Validierung?}
-\todo{Schätze wir brauchen doch min und mx length was ist wenn man zu lange usernames angibt?}
-\todo{Datum internationalisieren?}
-\todo{var als binding oder constraint?}
-\todo{evtl kein rendern sonder abhängiges include in submission.xhtml?}
-\todo{selectItem?}
 \begin{samepage}
 	\textbf{toolbar.xhtml} \phantomsection \label{flt:toolbar} ist die Seitenleiste für Editoren und Administratoren auf der Einreichungsübersicht. Hier wird die Einreichung verwaltet.
 	\nopagebreak
 
 	\ftable{
-		\fentry{add-reviewer-iTxt}{<h:inputText>}{Eingabefeld zur Angabe einer E-Mail-Adresse}{value="\#\{toolbarBacking.reviewerInput.email\}" \newline title="\#{help.reviewerEmail}}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{emailAddressExistsValidator \newline emailAddressLayoutValidator \newline required="true"}
+		\fentry{add-reviewer-iTxt}{<h:inputText>}{Eingabefeld zur Angabe einer E-Mail-Adresse}{value="\#\{toolbarBacking.reviewerInput.email\}" \newline title="\#{help.reviewerEmail}}{/}{emailAddressExistsValidator \newline emailAddressLayoutValidator \newline required="true" \newline requiredMessage="\#\{message.addReviewer\}"}
 
-		\fentry{add-deadline-reviewer-iTxt}{<h:inputText>}{Eingabefeld zur Angabe einer Deadline.}{value="\#\{toolbarBacking.reviewedByInput.timestampDeadline\}" \newline title="\#\{help.reviewerDeadline\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{converterDateTime \newline patter="dd/MM/yyyy"}
+		\fentry{add-deadline-reviewer-iTxt}{<h:inputText>}{Eingabefeld zur Angabe einer Deadline.}{value="\#\{toolbarBacking.reviewedByInput.timestampDeadline\}" \newline title="\#\{help.reviewerDeadline\}"}{/}{converterDateTime \newline patter="dd/MM/yyyy"}
 
-		\fentry{add-reviewer-cbtn}{<h:commandButton>}{Knopf zum Hinzufügen des Gutachters}{value="\#\{label.addReviewer\}" \newline action="\#\{\}" \newline title="\#\{help.addReviewer\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{/}
+		\fentry{add-reviewer-cbtn}{<h:commandButton>}{Knopf zum Hinzufügen des Gutachters}{value="\#\{label.addReviewer\}" \newline action="\#\{\}" \newline title="\#\{help.addReviewer\}"}{/}{/}
 
-		\fentry{reviewer-dtbl}{<h:dataTable>}{Liste der Gutachter}{value="\#\{toolbarbacking.reviewer\}" \newline var="review"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{/}
+		\fentry{reviewer-dtbl}{<h:dataTable>}{Liste der Gutachter}{value="\#\{toolbarbacking.reviewer\}" \newline var="review"}{/}{/}
 
-		\fentry{remove-reviewer-cbtn}{<h:commandButton>}{Entferne einen bestimmten Gutachters.}{action="\#\{toolbarBacking.removeReviewer\}" \newline title="\#\{help.removeReviewer\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{/}
+		\fentry{remove-reviewer-cbtn}{<h:commandButton>}{Entferne einen bestimmten Gutachters.}{action="\#\{toolbarBacking.removeReviewer\}" \newline title="\#\{help.removeReviewer\}"}{/}{/}
 
-		\fentry{select-editor-slctom}{<h:selectOneMenu>}{Auswahländerung des verwaltenden Editors}{value="\#\{toolbarBacking.editorInput.firstName + toolbarBacking.editorInput.lastName\}" \newline title="\#\{help.selectEditor\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{/}
+		\fentry{select-editor-slctom}{<h:selectOneMenu>}{Auswahländerung des verwaltenden Editors}{value="\#\{toolbarBacking.editorInput.firstName + toolbarBacking.editorInput.lastName\}" \newline title="\#\{help.selectEditor\}"}{/}{/}
 		
-		\fentry{/}{<f:selectItems>}{Liste der möglichen Editoren.}{value="\#\{toolbar.editors\}" \newline var="entry" \newline itemLabel="\#\{entry.firstName + entry.lastName\}" \newline itemValue="\#\{entry\}"}{arg5}{arg6}
+		\fentry{/}{<f:selectItems>}{Liste der möglichen Editoren.}{value="\#\{toolbar.editors\}" \newline var="entry" \newline itemLabel="\#\{entry.firstName + entry.lastName\}" \newline itemValue="\#\{entry\}"}{}{}
 
-		\fentry{save-editor-cbtn}{<h:commandButton>}{Speichern der Änderung des Editors.}{value="\#\{label.saveEditor\}" \newline action="\#\{toolbarBacking.chooseNewManagingEditor\}" \newline title="\#\{help.saveEditor\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"E}{/}
+		\fentry{save-editor-cbtn}{<h:commandButton>}{Speichern der Änderung des Editors.}{value="\#\{label.saveEditor\}" \newline action="\#\{toolbarBacking.chooseNewManagingEditor\}" \newline title="\#\{help.saveEditor\}"}{/}{/}
 
-		\fentry{show-editor-otxt}{<h:outputText>}{Anzeige des aktuellen Editors.}{value="\#\{toolbarBacking.currentEditor\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{/}
+		\fentry{show-editor-otxt}{<h:outputText>}{Anzeige des aktuellen Editors.}{value="\#\{toolbarBacking.currentEditor\}"}{/}{/}
 
-		\fentry{revision-deadline-iTxt}{<h:inputText>}{Eingabe zur Angabe einer Deadline.}{value="\#\{toolbarBacking.submission.deadlineRevision\}" \newline title="\#\{help.revisionDeadline\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{converterDateTime \newline patter="dd/MM/yyyy"}
+		\fentry{revision-deadline-iTxt}{<h:inputText>}{Eingabe zur Angabe einer Deadline.}{value="\#\{toolbarBacking.submission.deadlineRevision\}" \newline title="\#\{help.revisionDeadline\}"}{/}{converterDateTime \newline patter="dd/MM/yyyy"}
 
-		\fentry{require-revision-cbtn}{<h:commandButton>}{Fordert den Einreicher auf, seine Einreichung zu überarbeiten}{value="\#\{label.requireRevision\}" \newline action="\#\{toolbarBacking.requireRevision\}" \newline title="\#\{help.requireRevision\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{/}
+		\fentry{require-revision-cbtn}{<h:commandButton>}{Fordert den Einreicher auf, seine Einreichung zu überarbeiten}{value="\#\{label.requireRevision\}" \newline action="\#\{toolbarBacking.requireRevision\}" \newline title="\#\{help.requireRevision\}"}{/}{/}
 
-		\fentry{accept-submission-cbtn}{<h:commandButton>}{Akzeptiere die Einreichung}{value="\#\{label.acceptSubmission\}" \newline action="\#\{toolbarBacking.acceptSubmission\}" \newline title="\#\{help.accesptSubmission\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{/}
+		\fentry{accept-submission-cbtn}{<h:commandButton>}{Akzeptiere die Einreichung}{value="\#\{label.acceptSubmission\}" \newline action="\#\{toolbarBacking.acceptSubmission\}" \newline title="\#\{help.accesptSubmission\}"}{/}{/}
 
-		\fentry{reject-submission-cbtn}{<h:commandButton>}{Lehne die Einreichung ab}{value="\#\{label.rejectSubmission\}" \newline action="\#\{toolbarBacking.rejectSubmission\}" \newline title="\#\{help.rejectSubmission\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{/}
+		\fentry{reject-submission-cbtn}{<h:commandButton>}{Lehne die Einreichung ab}{value="\#\{label.rejectSubmission\}" \newline action="\#\{toolbarBacking.rejectSubmission\}" \newline title="\#\{help.rejectSubmission\}"}{/}{/}
 
 	}
 \end{samepage}
@@ -191,9 +182,9 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{welcome-otxt}{<h:outputText>}{Bewerben der Anwendung mithilfe einer Kurzbeschreibung.}{value="\#\{welcomeBacking.systemSettings.messageWelcomePage\}"}{A/}{/}
 
-		\fentry{email-itxt}{<h:inputText>}{Textfeld für E-Mail Eingabe.}{value="\#\{welcomeBacking.loginInput.emailAddress\}" \newline title="\#\{help.loginEmail\}"}{/}{emailAddressExistsValidator, emailAddressLayoutValidator, required="true"}
+		\fentry{email-itxt}{<h:inputText>}{Textfeld für E-Mail Eingabe.}{value="\#\{welcomeBacking.loginInput.emailAddress\}" \newline title="\#\{help.loginEmail\}"}{/}{emailAddressExistsValidator, emailAddressLayoutValidator, required="true" \newline requiredMessage="\#\{message.email\}"}
 
-		\fentry{password-iscrt}{<h:inputSecret>}{Textfeld für Passwort Eingabe.}{value="\#\{welcomeBacking.loginInput.passwordNotHashed\}" title="\#\{help.loginPassword\}"}{/}{passwordValidator \newline required="true"}
+		\fentry{password-iscrt}{<h:inputSecret>}{Textfeld für Passwort Eingabe.}{value="\#\{welcomeBacking.loginInput.passwordNotHashed\}" title="\#\{help.loginPassword\}"}{/}{passwordValidator \newline required="true" \newline requiredMessage="\#\{message.password\}"}
 
 		\fentry{login-cbtn}{<h:commandButton>}{Ausführen des Login-Prozesses.}{value="\#\{label.login\}" \newline action="\#\{welcomeBacking.login\}" \newline title="\#\{help.login\}"}{/}{/}
 
@@ -209,13 +200,13 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	\ftable{
 		\fentry{title-itxt}{<h:inputText>}{Angabe eines Titels.}{value="\#\{registrationBacking.newUser.title\}" \newline title="\#\{help.title\}"}{/}{/}
 
-		\fentry{first-name-itxt}{<h:inputText>}{Angabe des Vornamens.}{value="\#\{registrationBacking.newUser.firstName\}" \newline title="\#\{help.firstName\}"}{required="true"}{/}
+		\fentry{first-name-itxt}{<h:inputText>}{Angabe des Vornamens.}{value="\#\{registrationBacking.newUser.firstName\}" \newline title="\#\{help.firstName\}"}{/}{required="true" \newline requiredMessage="\#\{message.firstName\}"}
 
-		\fentry{last-name-itxt}{<h:inputText>}{Angabe des Nachnamen.}{value="\#\{registrationBacking.newUser.lastName\}" \newline title="\#\{help.lastName\}"}{required="true"}{/}
+		\fentry{last-name-itxt}{<h:inputText>}{Angabe des Nachnamen.}{value="\#\{registrationBacking.newUser.lastName\}" \newline title="\#\{help.lastName\}"}{/}{required="true" \newline requiredMessage="\#\{message.lastName\}"}
 
-		\fentry{password-iscrt}{<h:inputSecret>}{Angabe eines Passwortes.}{value="\#\{registrationBacking.newUser.passwordNotHashed\}" \newline title="\#\{help.password\}"}{/}{passwordValidator \newline required="true"}
+		\fentry{password-iscrt}{<h:inputSecret>}{Angabe eines Passwortes.}{value="\#\{registrationBacking.newUser.passwordNotHashed\}" \newline title="\#\{help.password\}"}{/}{passwordValidator \newline required="true" \newline requiredMessage="\#\{message.password\}"}
 
-		\fentry{email-itxt}{<h:inputText>}{Angabe einer validen E-Mail.}{value="\#\{registrationBacking.newUser.emailAddress\}" \newline title="\#\{help.email\}"}{/}{emailAddressExistsValidator \newline emailAddressLayoutValidator \newline required=true"}
+		\fentry{email-itxt}{<h:inputText>}{Angabe einer validen E-Mail.}{value="\#\{registrationBacking.newUser.emailAddress\}" \newline title="\#\{help.email\}"}{ /}{emailAddressExistsValidator \newline emailAddressLayoutValidator \newline required=true" \newline requiredMessage="\#\{message.email\}"}
 
 		\fentry{register-cbtn}{<h:commandButton>}{Ausführen des Registrations-Prozesses.}{value="\#\{label.register\}"\newline action="\#\{registrationBacking.register\}"}{/}{/}
 
@@ -337,7 +328,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{/}{<f:viewAction>}{Laden der entsprechenden Einreichung.}{action="\#\{submissionBacking.onLoad\}"}{}{}
 
-		\fentry{upload-revision-ifile}{<h:inputFile>}{Upload einer Revision.}{value="\#\{submissionBacking.uploadedRevisionPDF\}" \newline requiered="true" \newline requieredMessage="\#\{requiered.inputFile\}"}{rendered="\#\{submissionBacking.isViewerSubmitter\}"}{/}
+		\fentry{upload-revision-ifile}{<h:inputFile>}{Upload einer Revision.}{value="\#\{submissionBacking.uploadedRevisionPDF\}" }{rendered="\#\{submissionBacking.isViewerSubmitter\}"}{required="true" \newline requiredMessage="\#\{message.inputFile\}"}
 
 		\fentry{upload-clnk}{<h:commandLink>}{Ausführen des Uploads.}{value="\#\{label.uploadFile\}" \newline action="\#\{submissionBacking.uploadPDF\}" \newline includeViewParams="true" title="\#\{help.uploadRevision\}"}{rendered="\#\{submissionBacking.isViewerSubmitter\}"}{/}
 
@@ -482,15 +473,15 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	\nopagebreak
 
 	\ftable{
-		\fentry{submission-title-itxt}{<h:inputText>}{Titel des abzugebenden Papers.}{value="\#\{newSubmissionBacking.newSubmission.title\}"}{/}{required="true"}
+		\fentry{submission-title-itxt}{<h:inputText>}{Titel des abzugebenden Papers.}{value="\#\{newSubmissionBacking.newSubmission.title\}"}{/}{required="true" \newline requiredMessage="\#\{message.titleSub\}"}
 
-		\fentry{forum-name-itxt}{<h:inputText>}{Name des Forums, bei welchem abgegeben wird.}{value="\#\{newSubmissionBacking.newSubmission.forumInput.name\}"}{/}{required="true"}
+		\fentry{forum-name-itxt}{<h:inputText>}{Name des Forums, bei welchem abgegeben wird.}{value="\#\{newSubmissionBacking.newSubmission.forumInput.name\}"}{/}{required="true" \newline requiredMessage="\#\{message.forum\}"}
 
 		\fentry{editor-slctom}{<h:selectOneMenu>}{Angabe eines Editors}{value="\#\{newSubmissionBacking.selectedEditor\}"}{/}{/}
 
 		\fentry{editor-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{value="\#\{newSubmissionBacking.editors\}"}{/}{/}
 
-		\fentry{pfd-upload-ifile}{<h:inputText>}{Angabe der Abgabedatei.}{value="\#\{newSubmissionBacking.uploadedPDF\}"}{/}{required="true"}
+		\fentry{pfd-upload-ifile}{<h:inputText>}{Angabe der Abgabedatei.}{value="\#\{newSubmissionBacking.uploadedPDF\}"}{/}{required="true" \newline requiredMessage="\#\{message.inputFile\}"}
 
 		\fentry{titel-itxt}{<h:inputText>}{Angabe eines Titels eines Co-Autors.}{value="\#\{newSubmissionBacking.coAuthorInput.title\}"}{/}{/}
 
@@ -568,13 +559,15 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{title-itxt}{<h:inputText>}{Titel des Nutzenden.}{value="\#\{profileBacking.user.title\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{/}
 
-		\fentry{firstname-itxt}{<h:inputText>}{Vorname des Nutzenden.}{value="\#\{profileBacking.user.firstName\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{required="true"}
+		\fentry{firstname-itxt}{<h:inputText>}{Vorname des Nutzenden.}{value="\#\{profileBacking.user.firstName\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{required="true" \newline requiredMessage="\#\{message.firstName\}"}
 
-		\fentry{lastname-itxt}{<h:inputText>}{Nachname des Nutzenden.}{value="\#\{profileBacking.user.lastName\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{required="true"}
+		\fentry{lastname-itxt}{<h:inputText>}{Nachname des Nutzenden.}{value="\#\{profileBacking.user.lastName\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{required="true" \newline requiredMessage="\#\{message.lastName\}"}
 
-		\fentry{password-iscrt}{<h:inputSecret>}{Leeres Eingabefeld für ein neues Passwort.}{value="\#\{profileBacking.user.passwordNotHashed\}"}{rendered="\#\{!profileBacking.hasViewerEditRights\}"}{required="true"}
+		\fentry{password-iscrt}{<h:inputSecret>}{Leeres Eingabefeld für ein neues Passwort.}{value="\#\{profileBacking.user.passwordNotHashed\}"}{rendered="\#\{!profileBacking.hasViewerEditRights\}"}{passwordValidator \newline required="true" \newline requiredMessage="\#\{message.password\}"}
 
-		\fentry{email-itxt}{<h:inputText>}{E-Mail des Nutzenden.}{value="\#\{profileBacking.user.emailAddress\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{required="true"}
+		\fentry{email-itxt}{<h:inputText>}{E-Mail des Nutzenden.}{value="\#\{profileBacking.user.emailAddress\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{emailAddressExistsValidator \newline emailAddressExistsValidator \newline required="true" \newline requiredMessage="\#\{message.email\}"}
+		
+		\fentry{/}{<f:attribute>}{Parameter zur E-Mail Validierung.}{name="id" \newline value="\#\{profilBacking.user.id\}"}{/}{/}
 
 		\fentry{submission-number-otxt}{<h:outputText>}{Anzahl der Einreichungen des Nutzers}{?}{/}{/}
 
@@ -611,7 +604,7 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
 \ftable{
 
-	\fentry{password-admin-iscrt}{<h:inputSecret>}{Angabe eines Passworts.}{value="\#\{profileBacking.adminPasswordInPopup.passwordNotHashed\}"}{/}{required="true"}
+	\fentry{password-admin-iscrt}{<h:inputSecret>}{Angabe eines Passworts.}{value="\#\{profileBacking.adminPasswordInPopup.passwordNotHashed\}"}{/}{passwordValidator \newline required="true" \newline requiredMessage="\#\{message.password\}"}
 
 	\fentry{admin-note-otxt}{<h:outputText>}{Hinweis zur Veränderung der Adminrolle.}{value="\#\{label.adminNote\}"}{/}{/}
 
@@ -633,23 +626,23 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
 		\fentry{/}{<f:viewAction>}{Action Methode ausführen.}{action="\#\{scientificForumBacking.onLoad\}"}{/}{/}
 
-		\fentry{forum-name-itxt}{inputText}{Name des Forums.}{value="\#\{scientificForumBacking.scientificForum.name\}"}{readonly="\#\{!scientificForumBacking.isViewerEditor\}"}{required="true"}
+		\fentry{forum-name-itxt}{inputText}{Name des Forums.}{value="\#\{scientificForumBacking.scientificForum.name\}"}{readonly="\#\{!scientificForumBacking.isViewerEditor\}"}{required="true" \newline requiredMessage="\#\{message.forumName\}"}
 
 		\fentry{editor-lst}{<h:dataTable>}{Liste der verantwortliche Editoren.}{value="\#\{scientificForumBacking.editors\}"\newline title="\#\{help.managingEditors\}"}{/}{/}
 
-		\fentry{new-editor-itxt}{<h:inputText>}{Angabe der E-Mail eines Editors.}{value="\#\{scientificForumBacking.newEditorInput.emailAddress\}"}{rendered="\#\{scientificForumBacking.sessionInformation.user.editor\}"}{emailAddressExistsValidator, emailAddressLayoutValidator, required="true"\newline }
+		\fentry{new-editor-itxt}{<h:inputText>}{Angabe der E-Mail eines Editors.}{value="\#\{scientificForumBacking.newEditorInput.emailAddress\}"}{rendered="\#\{scientificForumBacking.sessionInformation.user.editor\}"}{emailAddressExistsValidator \newline emailAddressLayoutValidator, required="true"\newline \newline requiredMessage="\#\{message.email\}" }
 
 		\fentry{add-editor-cbtn}{<h:commandButton>}{Füge Editor zur Liste hinzu.}{value="\#\{label.add\}"\newline action="\#\{scientificForumBacking.addEditor\}"}{rendered="\#\{scientificForumBacking.sessionInformation.user.editor\}"}{/}
 
 		\fentry{remove-editor-cbtn}{<h:commandButton>}{Lösche ausgewählten Editor.}{value="\#\{label.remove\}"\newline action="\#\{scientificForumBacking.removeEditor\}"}{rendered="\#\{scientificForumBacking.sessionInformation.user.editor\}"}{/}
 
-		\fentry{deadline-itxt}{<h:inputText>}{Deadline des Forums.}{value="\#\{scientificForumBacking.scientificForum.deadline\}"}{readonly="\#\{!scientificForumBacking.isViewerEditor\}"}{required="true"}
+		\fentry{deadline-itxt}{<h:inputText>}{Deadline des Forums.}{value="\#\{scientificForumBacking.scientificForum.deadline\}"}{readonly="\#\{!scientificForumBacking.isViewerEditor\}"}{required="true" \newline requiredMessage="\#\{message.deadline\}"}
 
-		\fentry{description-itxt}{inputTextArea}{Kurzbeschreibung des Forums.}{value="\#\{scientificForumBacking.scientificForum.description\}"}{readonly="\#\{!scientificForumBacking.isViewerEditor\}"}{required="true"}
+		\fentry{description-itxt}{inputTextArea}{Kurzbeschreibung des Forums.}{value="\#\{scientificForumBacking.scientificForum.description\}"}{readonly="\#\{!scientificForumBacking.isViewerEditor\}"}{required="true" \newline requiredMessage="\#\{message.description\}"}
 
 		\fentry{url-lnk}{<h:outputLink>}{Link zur Konferenz oder zum Journal.}{value="\#\{scientificForumBacking.scientificForum.url\}"}{/}{/}
 
-		\fentry{change-url-itxt}{inputText}{Angabe einer neuen URL.}{value="\#\{scientificForumBacking.scientificForum.url\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{required="true"}
+		\fentry{change-url-itxt}{inputText}{Angabe einer neuen URL.}{value="\#\{scientificForumBacking.scientificForum.url\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
 
 		\fentry{review-instructions-itxt}{<h:inputTextArea>}{Anleitung für eine Begutachtung.}{value="\#\{scientificForumBacking.scientificForum.reviewManual\}"}{readonly="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
 
@@ -776,15 +769,15 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 	\nopagebreak
 
 	\ftable{
-		\fentry{password-iscrt}{<h:inputSecret>}{Angabe des Passworts.}{value="\#\{newUserBacking.newUser.passwordNotHashed\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{required="true"}
+		\fentry{password-iscrt}{<h:inputSecret>}{Angabe des Passworts.}{value="\#\{newUserBacking.newUser.passwordNotHashed\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{passwordValidator \newline required="true" \newline requiredMessage="\#\{message.password\}"}
 
-		\fentry{firstname-itxt}{<h:inputText>}{Angabe des Vornamen.}{value="\#\{newUserBacking.newUser.firstName\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{required="true"}
+		\fentry{firstname-itxt}{<h:inputText>}{Angabe des Vornamen.}{value="\#\{newUserBacking.newUser.firstName\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{required="true" \newline requiredMessage="\#\{message.firstName\}"}
 
-		\fentry{lastname-itxt}{<h:inputText>}{Angabe des Nachnamen.}{value="\#\{newUserBacking.newUser.lastName\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{required="true"}
+		\fentry{lastname-itxt}{<h:inputText>}{Angabe des Nachnamen.}{value="\#\{newUserBacking.newUser.lastName\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{required="true" \newline requiredMessage="\#\{message.lastName\}"}
 
 		\fentry{titel-itxt}{<h:inputText>}{Angabe eines Titels.}{value="\#\{newUserBacking.newUser.title\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{/}
 
-		\fentry{e-mail-itxt}{<h:inputText>}{Angabe einer E-Mail-Adresse.}{value="\#\{newUserBacking.newUser.emailAddress\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{required="true"}
+		\fentry{e-mail-itxt}{<h:inputText>}{Angabe einer E-Mail-Adresse.}{value="\#\{newUserBacking.newUser.emailAddress\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{emailAddressExistsValidator \newline emailAddressLayoutValidator \newline required="true" \newline requiredMessage="\#\{message.email\}"}
 
 		\fentry{is-admin-lbl}{<p:outputLabel>}{Label für die Administrator Checkbox}{value="\#\{label.setAdmin\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{/}
 
@@ -810,13 +803,13 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
 		\fentry{change-logo-ifile}{<h:inputFile>}{Hochladen eines neuen Logos.}{title="\#\{help.uploadNewLogo\}"\newline value="\#\{administrationBacking.uploadedImage\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
 
-		\fentry{welcome-heading-itxt}{<h:inputText>}{Angabe einer Überschrift auf der \emph{welcomepage}}{value="\#\{administrationBacking.systemSettings.headlineWelcomePage\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{required="true"}
+		\fentry{welcome-heading-itxt}{<h:inputText>}{Angabe einer Überschrift auf der \emph{welcomepage}}{value="\#\{administrationBacking.systemSettings.headlineWelcomePage\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{required="true" \newline requiredMessage="\#\{message.welcomeHeading\}"}
 
-		\fentry{welcome-text-itxt}{<h:inputTextArea>}{Angabe eines Textes auf der \emph{welcomepage}}{value="\#\{administrationBacking.systemSettings.shortMessageWelcomePage\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{required="true"}
+		\fentry{welcome-text-itxt}{<h:inputTextArea>}{Angabe eines Textes auf der \emph{welcomepage}}{value="\#\{administrationBacking.systemSettings.shortMessageWelcomePage\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{required="true" \newline requiredMessage="\#\{message.welcomeText\}"}
 
-		\fentry{institution-itxt}{<h:inputText>}{Angabe des Namens der Einrichtung.}{value="\#\{administrationBacking.systemSettings.companyName\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{required="true"}
+		\fentry{institution-itxt}{<h:inputText>}{Angabe des Namens der Einrichtung.}{value="\#\{administrationBacking.systemSettings.companyName\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{required="true" \newline requiredMessage="\#\{message.institution\}"}
 
-		\fentry{imprint-itxt}{<h:inputTextArea>}{Angabe des Impressums der Einrichtung.}{value="\#\{administrationBacking.systemSettings.imprint\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{required="true"}
+		\fentry{imprint-itxt}{<h:inputTextArea>}{Angabe des Impressums der Einrichtung.}{value="\#\{administrationBacking.systemSettings.imprint\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{required="true" \newline requiredMessage="\#\{message.imprint\}"}
 
 		\fentry{abort-btn}{<h:commandButton>}{Abbruch des Änderungsvorgangs.}{value="\#\{label.abort\}"\newline action="\#\{administrationBacking.abort\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
 
@@ -834,11 +827,11 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
 	\ftable{
 
-		\fentry{forum-name-itxt}{<h:inputText>}{Angabe des Name des Forums.}{value="\#{newScientificForumBacking.newScientificForum.name}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{required="true"}
+		\fentry{forum-name-itxt}{<h:inputText>}{Angabe des Name des Forums.}{value="\#{newScientificForumBacking.newScientificForum.name}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{required="true" \newline requiredMessage="\#\{message.forumName\}"}
 
 		\fentry{editors-list}{<h:dataTable>}{Liste der Editoren}{value="\#{newScientificForumBacking.editors}"}{render="\#{toolbarBacking.sessionInformation.user.isAdmin}"}{/}
 
-		\fentry{email-editor-itxt}{<h:inputText>}{Angabe der E-Mail-Adresse eines Editor.}{value="\#{newScientificForumBacking.newEditorInput.emailAddress}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{required="true"}
+		\fentry{email-editor-itxt}{<h:inputText>}{Angabe der E-Mail-Adresse eines Editor.}{value="\#{newScientificForumBacking.newEditorInput.emailAddress}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{emailAddressValidator \newline emailAddressLayoutValidator \newline required="true" \newline requiredMessage="\#\{message.email\}"}
 
 		\fentry{add-editor-btn}{<h:commandButton>}{Hinzufügen eines Editors in eine Liste.}{value="\#\{label.add\}"\newline  action="\#\{newScientificForumBacking.addEditor\}"\newline title="\#\{help.addEditor\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
 
@@ -846,17 +839,17 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
 		\fentry{deadline-itxt}{<h:inputText>}{Hinzufügen einer Deadline des Forums.}{value="\#\{newScientificForumBacking.newScientificForum.deadline\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{converterDateTime \newline patter="dd/MM/yyyy"}
 
-		\fentry{description-itxt}{<h:inputTextArea>}{Angabe einer Kurzbeschreibung.}{value="\#\{newScientificForumBacking.newScientificForum.description\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{required="true"}
+		\fentry{description-itxt}{<h:inputTextArea>}{Angabe einer Kurzbeschreibung.}{value="\#\{newScientificForumBacking.newScientificForum.description\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{required="true" \newline requiredMessage="\#\{message.description\}"}
 
 		\fentry{url-itxt}{<h:inputText>}{Link zur Konferenz oder zum Journal.}{value="\#\{newScientificForumBacking.newScientificForum.url\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
 
-		\fentry{review-instructions-itxt}{<h:inputTextArea>}{Angabe einer Anleitung für eine Begutachtung.}{value="\#\{newScientificForumBacking.newScientificForum.reviewManual\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{required="true"}
+		\fentry{review-instructions-itxt}{<h:inputTextArea>}{Angabe einer Anleitung für eine Begutachtung.}{value="\#\{newScientificForumBacking.newScientificForum.reviewManual\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{required="true" \newline requiredMessage="\#\{message.instruction\}"}
 
 		\fentry{science-field-list}{<h:outputText>}{Liste der ausgewählten Fachgebiete.}{value="\#\{newScientificForumBacking.selectedScienceFields\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
 
 		\fentry{science-field-list}{<p:selectOneListbox>}{Auswahl von Fachgebieten.}{value="\#\{newScientificForumBacking.scienceFields\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
 
-		\fentry{new-science-field-itxt}{<h:inputText>}{Hinzufügen neuer Fachgebiete.}{value="\#\{newScientificForumBacking.newScienceFieldInput.name\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{required="true"}
+		\fentry{new-science-field-itxt}{<h:inputText>}{Hinzufügen neuer Fachgebiete.}{value="\#\{newScientificForumBacking.newScienceFieldInput.name\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{required="true" \newline requiredMessage="\#\{message.newScienceField\}"}
 
 		\fentry{add-science-field-btn}{<h:commandButton>}{Ausführen der Hinzufüge-Aktion.}{value="\#\{label.add\}"\newline action="\#\{newScientificForumBacking.addScienceField\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
 
