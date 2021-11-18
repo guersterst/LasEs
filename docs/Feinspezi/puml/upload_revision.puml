@@ -31,6 +31,7 @@ box "global.transport"
     participant "sub:Submission" as sub << @Named >>
     participant "user:User" as usr
     participant "paper:Paper" as paper
+    participant "UIMessage:msg" as msg
 end box
 box persistence
     participant "t1:Transaction" as t1
@@ -215,6 +216,13 @@ activate sb
             t2 -> cp ++ : releaseConnection()
             return
         return
+
+        note right of rsvc
+            lädt String message
+            aus ResourceBundle
+        end note
+        rsvc -> msg ** : "UIMessage(String message, MessageCategory.INFO)"
+
 '        destroy t2
     return
 
