@@ -3,8 +3,8 @@
 Im Folgenden wird erklärt, wie verschiedene Sicherheitsangriffe verhindert und Sicherheitsrisiken ausgeschlossen werden.
 
 \subsection{Cross Site Scripting (XSS)}\label{subsec:xss}
-Da JSF components für die HTML-Ausgabe verwendet werden, bereinigt JSF alle Nutzereingaben.
-Zum Beispiel werden also \code{'<'} und \code{'>'} durch \code{'\&lt;'} und \code{'\&gt;'} ersetzt und Nutzereingaben können keine HTML-Tags in der Ausgabe erstellen.
+Da ausschließlich JSF components für die HTML-Ausgabe verwendet werden, bereinigt JSF alle Nutzereingaben.
+Zum Beispiel werden \code{'<'} und \code{'>'} durch \code{'\&lt;'} und \code{'\&gt;'} ersetzt, Nutzereingaben können also keine HTML-Tags in der Ausgabe erstellen.
 Dadurch wird XSS bzw.\ HTML-Injection unmöglich.
 Auch JavaScript kann so nicht injected werden, da sich JavaScript-Code in einem HTML-Tag (\code{<script>}) befinden müsste.
 
@@ -41,7 +41,7 @@ Um das Erraten von Passwörtern durch Brute-Force-Attacken o.ä.\ zu erschweren,
 Alle Informationen über das System, die nach außen gelangen, können Angreifern helfen.
 Dazu gehören Details über die technische Umgebung und verwendete Software des Systems, interne Fehlermeldungen und Implementierungsdetails.
 Folgende Maßnahmen werden ergriffen, um Leakage solcher Informationen zu verhindern.
-Fehlermeldungen zeigen im Produktionsmodus keine Stacktraces an, sondern eigene Fehlermeldungen, die nur Informationen enthalten, die für den Endnutzer relevant sind.
+Fehlermeldungen zeigen keine Stacktraces an, sondern eigene Nachrichten, die nur Informationen enthalten, die für den Endnutzer relevant sind.
 Wir verwenden eigene Fehlerseiten bei Exceptions und ersetzen die 404 und 500 Fehlerseiten von JSF durch unsere eigenen wie folgt in der web.xml-Datei:
     {\small
 \begin{lstlisting}
@@ -52,28 +52,32 @@ Wir verwenden eigene Fehlerseiten bei Exceptions und ersetzen die 404 und 500 Fe
 \end{lstlisting}
 }
 Dadurch ist nicht ersichtlich, dass wir JSF/Mojarra verwenden.
-Das wird auch durch die Verwendung von .xhtml-Dateiendungen für unsere Facelets und Ersetzen des Bezeichners \code{JSESSONID} für Session-Cookies und URL-Rewriting in der web.xml-Datei verborgen:
+Das wird auch durch die Verwendung von .xhtml-Dateiendungen für unsere Facelets und durch das Ersetzen des Bezeichners \code{JSESSONID} für Session-Cookies und URL-Rewriting in der web.xml-Datei verborgen:
+
+\begin{minipage}{\linewidth}
     {\small
 \begin{lstlisting}
 <session-config>
     <cookie-config>
-        <name>sesssionid</name>
+        <name>sessionid</name>
     </cookie-config>
 </session-config>
 \end{lstlisting}
 }
+\end{minipage}
 
 \subsection{Access Control}\label{subsec:access-control}
 Um unerlaubten Zugriff auf Seiten, Informationen und Aktionen zu verhindern, werden Zugriffe auf nicht-öffentliche Ressourcen (das ist alles außer Start-, Registrierungs- und Verifikationsseite) standardmäßig abgelehnt.
 Die Klasse \code{TrespassListener} entscheidet dann, ob der Nutzer die nötigen Rechte hat und akzeptiert eine Anfrage nur dann, sonst wird auf eine 404-Fehler-Seite weitergeleitet.
-Dazu wird über die angefragte URL das zugehörige Facelet bestimmt und geprüft, ob darauf mit der Rolle des Nutzers zugegriffen werden darf.
-Auf die Rolle kann der \code{TrespassListener} über die SessionInformation zugreifen.
-Der Zugriff hängt darüber hinaus auch von der Beziehung des Nutzers zur angefragten Ressource ab (ein normaler Nutzer kann z.B.\ nur sein \emph{eigenes} Profil oder eine \emph{eigene} Einreichung sehen).
+Dazu wird über die angefragte URL das zugehörige Facelet bestimmt und geprüft, ob darauf mit der Rolle des Nutzers zugegriffen werden darf, wie in Kapitel \ref{sec:facelets} definiert.
+Einzelne Komponenten können im Facelet mit dem \code{rendered}-Attribut nur für bestimmte Rollen sichtbar gemacht werden.
+Auf die Rolle kann der \code{TrespassListener} über die \code{SessionInformation} zugreifen.
+Der Zugriff hängt darüber hinaus von der Beziehung des Nutzers zur angefragten Ressource ab (ein normaler Nutzer kann z.B.\ nur sein \emph{eigenes} Profil oder eine \emph{eigene} Einreichung sehen).
 Deshalb prüft für die relevanten Seiten das jeweilige Backing Bean diese Beziehung und leitet ggf.\ auf eine Fehlerseite weiter.
-Das verhindert \emph{Insercure Direct Object Reference}, da IDs von Submissions, Scientific Forums und Profilen über URL-Parameter preisgegeben werden.
+Das verhindert \emph{Insecure Direct Object Reference}, da IDs von Submissions, Scientific Forums und Profilen über URL-Parameter preisgegeben werden.
 
 Durch den Eintrag
-\begin{lstlisting}
+\begin{lstlisting}[language=XML]
     <servlet>
         <servlet-name>facesServlet</servlet-name>
         <servlet-class>jakarta.faces.webapp.FacesServlet</servlet-class>
@@ -88,5 +92,5 @@ in der web.xml-Datei werden Aufrufe auf alle unsere Facelet-Dateien dem Faces Se
 Damit wird aufgrund der Entscheidung des \code{TrespassListener}s entweder das Facelet richtig als HTML-Datei gerendert, oder zur 404-Seite weitergeleitet. Ein Herunterladen der eigentlichen auf dem Server gespeicherten Facelet-Datei ist aber nicht möglich.
 
 \subsection{Vergabe von Admistratorrechten}
-Adminsitratoren haben die Möglichkeit, Nutzern auf ihrer Profilseite Administratorrechte zu gewähren oder zu entfernen.
-Da das Ändern von Adminrechten stark sicherheitskritisch ist, müssen sie dafür ihr Passwort erneut angeben.
+Administratoren haben die Möglichkeit, Nutzern auf ihrer Profilseite Administratorrechte zu gewähren oder zu entfernen.
+Da das Ändern von Adminrechten sicherheitskritisch ist, müssen sie dafür ihr Passwort erneut angeben.
