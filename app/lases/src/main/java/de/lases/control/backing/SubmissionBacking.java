@@ -68,6 +68,8 @@ public class SubmissionBacking implements Serializable {
 
     private Pagination<Review> reviewPagination;
 
+    private ReviewedBy reviewedBy;
+
     /**
      * Initialize the dtos needed for displaying this page.
      */
@@ -349,4 +351,13 @@ public class SubmissionBacking implements Serializable {
         return SubmissionState.values();
     }
 
+    /**
+     * Get the possible reviewed-by relationship between this submission and
+     * the logged-in user. May be null if there is none.
+     *
+     * @return Reviewed-by between the logged-in user and this submission.
+     */
+    public ReviewedBy getReviewedBy() {
+        return reviewedBy;
+    }
 }
