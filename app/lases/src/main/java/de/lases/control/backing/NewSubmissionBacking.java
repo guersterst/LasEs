@@ -52,6 +52,8 @@ public class NewSubmissionBacking implements Serializable {
 
     private List<User> editors;
 
+    private Editor selectedEditor;
+
     /**
      * Initialize the dtos used in this bean and load the list of possible
      * editors.
