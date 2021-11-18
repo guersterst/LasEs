@@ -1,13 +1,13 @@
 package de.lases.global.config;
 
-import java.util.HashMap;
+import java.util.Properties;
 
 public class Configuration {
 
     private Configuration() {
     }
 
-    private HashMap<String, String> configuration;
+    private Properties properties;
 
     private static final Configuration instance = new Configuration();
 
@@ -19,8 +19,7 @@ public class Configuration {
         return null;
     }
 
-    public void setConfig(HashMap<String, String> config) {
-
+    public void setProperties(Properties properties) {
+        this.properties = properties;
     }
-
 }
