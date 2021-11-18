@@ -134,12 +134,12 @@ note left
     klickt auf "Submit Revision"
 end note
 return
-user -> sb ++ : setUploadedRevisionPDF()
+user -> sb ++ : setUploadedRevisionPDF(Part revisionPDF)
 return
 
-user -> sb : releaseRevision()
+user -> sb : uploadPDF()
 activate sb
-    sb -> rsvc : uploadFile(sub, revisionPdf)
+    sb -> rsvc : uploadFile(sub, revisionPDF)
     activate rsvc
         rsvc -> t2 ** : Transaction()
         activate t2
