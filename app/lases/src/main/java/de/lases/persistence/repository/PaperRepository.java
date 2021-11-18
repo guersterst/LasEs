@@ -140,4 +140,22 @@ public class PaperRepository {
             throws DataNotWrittenException, NotFoundException {
     }
 
+    /**
+     * Takes a submission dto that is filled out with a valid id
+     * and returns a fully filled paper dto for the newest paper in that
+     * submission.
+     *
+     * @param submission A submission dto that must be filled with a valid id.
+     * @param transaction The transaction to use.
+     * @return A fully filled paper dto.
+     * @throws NotFoundException If there is no submission with the provided id.
+     * @throws DatasourceQueryFailedException If the datasource cannot be
+     *                                        queried.
+     */
+    public Paper getNewestPaperForSubmission(Submission submission,
+                                             Transaction transaction)
+            throws NotFoundException {
+        return null;
+    }
+
 }

@@ -70,6 +70,8 @@ public class SubmissionBacking implements Serializable {
 
     private ReviewedBy reviewedBy;
 
+    private Paper newestPaper;
+
     /**
      * Initialize the dtos needed for displaying this page.
      */
@@ -360,4 +362,14 @@ public class SubmissionBacking implements Serializable {
     public ReviewedBy getReviewedBy() {
         return reviewedBy;
     }
+
+    /**
+     * Get the newest paper for this submission.
+     *
+     * @return The newest paper for this submission.
+     */
+    public Paper getNewestPaper() {
+        return newestPaper;
+    }
+
 }
