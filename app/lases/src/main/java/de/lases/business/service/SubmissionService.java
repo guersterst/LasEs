@@ -77,8 +77,6 @@ public class SubmissionService implements Serializable {
     public void changeSubmission(Submission newSubmission) {
     }
 
-    //todo wieso rot -> package angeben
-
     /**
      * Sets the state of a submission.
      * <p></p>
@@ -150,6 +148,7 @@ public class SubmissionService implements Serializable {
     public void realeaseReview(Review review, Submission submission) {
     }
 
+    //todo necessary?
     /**
      * Adds a co-author.
      *
