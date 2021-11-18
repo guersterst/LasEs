@@ -429,6 +429,38 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 
 \begin{samepage}
+	\textbf{newSubmission.xhtml} Hier können neue Paper eingereicht werden.
+	\nopagebreak
+
+	\ftable{
+		\fentry{submission-title-itxt}{<h:inputText>}{Titel des abzugebenden Papers.}{value="\#\{newSubmissionBacking.newSubmission.title\}"}{/}{required="true"}
+
+		\fentry{forum-name-itxt}{<h:inputText>}{Name des Forums, bei welchem abgegeben wird.}{value="\#\{newSubmissionBacking.newSubmission.forumInput.name\}"}{/}{required="true"}
+
+		\fentry{editor-slctom}{<h:selectOneMenu>}{Angabe eines Editors}{value="\#\{newSubmissionBacking.editors\}"}{/}{/}
+
+		\fentry{pfd-upload-ifile}{<h:inputText>}{Angabe der Abgabedatei.}{value="\#\{newSubmissionBacking.uploadedPDF\}"}{/}{required="true"}
+
+		\fentry{titel-itxt}{<h:inputText>}{Angabe eines Titels eines Co-Autors.}{value="\#\{newSubmissionBacking.coAuthorInput.title\}"}{/}{/}
+
+		\fentry{co-author-firstname-itxt}{<h:inputText>}{Angabe des Vornamen eines Co-Autors.}{value="\#\{newSubmissionBacking.coAuthorInput.firstName\}"}{/}{/}
+
+		\fentry{co-author-lastname-itxt}{<h:inputText>}{Angabe des Namen eines Co-Autors.}{value="\#\{newSubmissionBacking.coAuthorInput.lastName\}"}{/}{/}
+
+		\fentry{co-author-email-itxt}{<h:inputText>}{Angabe der E-Mail eines Co-Autors.}{value="\#\{newSubmissionBacking.coAuthorInput.emailAddress\}"}{/}{/}
+
+		\fentry{submit-co-author-cbtn}{<h:commandButton>}{Speichern des Co-Autors.}{value="\#\{label.save\}"\newline action="\#\{newSubmissionBacking.submitCoAuthor\}"}{/}{/}
+
+		\fentry{co-author-list}{<h:dataTable>}{Anzeige aller Co-Autoren in einer Liste.}{value="\#\{newSubmissionBacking.coAuthors\}"}{/}{/}
+
+		\fentry{delete-co-author-cbtn}{<h:commandButton>}{Löschen des zugehörigen Co-Authors.}{value="\#\{label.delete\}"\newline action="\#\{newSubmissionBacking.deleteCoAuthor(var)\}"}{/}{/}
+
+		\fentry{submit-cbtn}{<h:commandButton>}{Ausführen des Einreichungsprozess.}{value="\#\{label.submit\}"\newline
+		action="\#\{newSubmissionBacking.submit\}"}{/}{/}
+	}
+\end{samepage}
+
+\begin{samepage}
 	\textbf{resultList.xhtml} zeigt alle Ergebnisse einer Suche an.
 	\nopagebreak
 
