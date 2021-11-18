@@ -11,39 +11,44 @@ import jakarta.inject.Inject;
  */
 public class EmailUtil {
 
-    //todo flache params.
-
     @Inject
     private Event<UIMessage> uiMessageEvent;
 
-    //todo mehrere recipients
+
     /**
      * Sends an email to a given recipient.
      *
      * @param sender The senders email address.
-     * @param recipient The recipients email address.
+     * @param recipients The recipients email addresses.
+     * @param cc The recipients in carbon-copy.
      * @param subject The subject of the email.
      * @param body The body of the email.
      * @throws EmailTransmissionFailedException Thrown when an issue with the transmission of the email has occurred.
      */
-    public static void sendEmail(String sender, String recipient, String subject, String body) throws EmailTransmissionFailedException {
+    public static void sendEmail(String sender, String[] recipients, String[] cc, String subject, String body)
+            throws EmailTransmissionFailedException {
     }
 
-    //todo was ist return?
     /**
+     * Generates a mailto link.
      *
-     * @param receiver
-     * @param cc
-     * @param subject
-     * @param body
-     * @return
+     * @param recipients The recipients email addresses.
+     * @param cc The recipients in carbon-copy.
+     * @param subject The subject of the email.
+     * @param body The body of the email.
+     * @return A link leading to a mailto e-mail.
      */
-    public static String generateMailTo(String[] receiver, String[] cc, String subject, String body) {
+    public static String generateMailToLink(String[] recipients, String[] cc, String subject, String body) {
         return null;
     }
 
-    // todo what this?
-    public static boolean checkEmailAddress(String address) {
+    /**
+     * Determines whether an e-mail address has already been registered in the application.
+     *
+     * @param address The address to be checked.
+     * @return {@code true} if the email is already in use, {@code false} otherwise.
+     */
+    public static boolean isEmailUsed(String address) {
         return false;
     }
 
