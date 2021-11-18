@@ -30,7 +30,7 @@ end box
 box "global.transport"
     participant "sub:Submission" as sub << @Named >>
     participant "user:User" as usr
-    participant "UIMessage:msg" as msg
+    participant "ErrorMessage:msg" as msg
 end box
 box persistence
     participant "t1:Transaction" as t1
@@ -111,10 +111,10 @@ user -> eh ++ : handle()
     from resource bundle
     end note
 
-    eh -> msg ** : UIMessage(String errMsg, MessageCategory.FATAL)
+    eh -> msg ** : ErrorMessage(String errMsg, String stacktrace)
 
     eh -> epb **
-    eh -> epb ++ : setUIMessage(msg)
+    eh -> epb ++ : setErrorMessage(msg)
     return
 
     note right of eh
@@ -124,7 +124,7 @@ user -> eh ++ : handle()
 
 return
 
-user -> epb ++ : getUIMessage()
+user -> epb ++ : getErrorMessage()
 return msg
 user -> msg ++ : getMessage()
 return "<font color=red>Error: ...</font>"
