@@ -37,15 +37,6 @@ Sie verwendet die robuste \code{javax.crypto}-Bibliothek.
 
 Um das Erraten von Passwörtern durch Brute-Force-Attacken o.ä.\ zu erschweren, müssen Passwörter 8--100 Zeichen lang sein und Groß- und Kleinbuchstaben, Zahlen und Sonderzeichen enthalten.
 
-\subsection{Insecure Direct Object Reference}\label{subsec:idor}
-Beim Aufruf von Submission- und Profilseiten werden URL-Parameter benutzt, um die jeweilige Einreichung bzw\. Profil zu identifizieren.
-Damit nicht die dafür intern in der Datenbank verwendeten IDs an die Öffentlichkeit (oder einen potentiellen Angreifer) gelangen, werden diese IDs vor der Ausgabe gehasht.
-Dafür wird die Klasse \code{Hashing} aus \code{de.java.business.util} benutzt.
-Dafür wird ein Hash benutzt, der beim ersten Systemstart generiert und in der Konfigurationsdatei gespeichert wird.
-Damit kann von einem Hash nicht auf eine andere ID bzw.\ dessen Hash geschlossen werden.
-
-Unsere Zugangskontrolle \todo{link} sorgt dafür, dass auch bei Erfahren einer ID auf keine Ressourcen illegal zugegriffen werden könnte.
-
 \subsection{Information Leakage}\label{subsec:information-leakage}
 Alle Informationen über das System, die nach außen gelangen, können Angreifern helfen.
 Dazu gehören Details über die technische Umgebung und verwendete Software des Systems, interne Fehlermeldungen und Implementierungsdetails.
@@ -79,6 +70,7 @@ Dazu wird über die angefragte URL das zugehörige Facelet bestimmt und geprüft
 Auf die Rolle kann der \code{TrespassListener} über die SessionInformation zugreifen.
 Der Zugriff hängt darüber hinaus auch von der Beziehung des Nutzers zur angefragten Ressource ab (ein normaler Nutzer kann z.B.\ nur sein \emph{eigenes} Profil oder eine \emph{eigene} Einreichung sehen).
 Deshalb prüft für die relevanten Seiten das jeweilige Backing Bean diese Beziehung und leitet ggf.\ auf eine Fehlerseite weiter.
+Das verhindert \emph{Insercure Direct Object Reference}, da IDs von Submissions, Scientific Forums und Profilen über URL-Parameter preisgegeben werden.
 
 Durch den Eintrag
 \begin{lstlisting}
