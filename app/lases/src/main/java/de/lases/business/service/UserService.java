@@ -68,9 +68,9 @@ public class UserService {
      * <p>
      * The avatar is parsed into a thumbnail.
      *
-     * @param file The {@link File} containing the image as a byte-array.
+     * @param avatar The {@link File} containing the image as a byte-array.
      */
-    public void setAvatar(File file) {
+    public void setAvatar(File avatar) {
     }
 
     /**
