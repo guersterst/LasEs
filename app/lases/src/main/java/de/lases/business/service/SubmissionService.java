@@ -178,11 +178,4 @@ public class SubmissionService {
     public List<Submission> getSubmissions(Privilege privilege, User user, ResultListParameters resultParams) {
         return null;
     }
-
-    /**
-     * @return The amount of submissions that a user has submitted himself.
-     */
-    public Integer countSubmissions() {
-        return 0;
-    }
 }
