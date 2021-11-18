@@ -340,4 +340,13 @@ public class SubmissionBacking implements Serializable {
         return submission.getAuthorId() == sessionInformation.getUser().getId();
     }
 
+    /**
+     * Get the options of the SubmissionState enum as an array.
+     *
+     * @return Array of SubmissionState.
+     */
+    public SubmissionState[] getSubmissionStates() {
+        return SubmissionState.values();
+    }
+
 }
