@@ -74,16 +74,19 @@ public class PaperService {
 
     /**
      * Gets all papers associated with this submission.
+     *
      * <p>
      * The papers returned are determined by the highest privilege, which that
      * user possesses on that submission.
      * </p>
      *
-     * @param submission The submission for which the submissions are requested.
-     * @param user       The user who requests the papers.
+     * @param submission           The submission for which the submissions are requested.
+     * @param user                 The user who requests the papers.
+     * @param resultListParameters The parameters, that control filtering and sorting of the resulting list.
      * @return The list of papers of this submission the given user has access to.
      */
-    public List<Paper> getPaperList(Submission submission, User user) {
+    public List<Paper> getList(Submission submission, User user,
+                               ResultListParameters resultListParameters) {
         return null;
     }
 }

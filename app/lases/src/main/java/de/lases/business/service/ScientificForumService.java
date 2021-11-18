@@ -112,24 +112,8 @@ public class ScientificForumService implements Serializable {
      * @param resultListParams The parameters, that control filtering and sorting of the resulting list.
      * @return All scientific forums.
      */
-    public List<ScientificForum> getForums(ResultListParameters resultListParams) {
+    public List<ScientificForum> getList(ResultListParameters resultListParams) {
         return null;
     }
 
-    /**
-     * Delivers all submissions, that a user either has submitted, is an editor to or reviews
-     * in a specified scientific forum.
-     *
-     * @param scientificForum The {@link ScientificForum} where the wanted submissions are submitted to.
-     * @param user            The user, whose editorial, reviewed or own submissions.
-     * @param privilege       The role, to which submissions belong, in relation to a user.
-     *                        Meaning, the user can request to receive the submissions which he is an editor to,
-     *                        reviews or has submitted himself.
-     * @param resultParams    Parameters, that control filtering and sorting of the resulting list.
-     * @return The resulting list of submissions, that were submitted to a given scientific forum.
-     */
-    public List<Submission> getSubmissions(ScientificForum scientificForum, User user, Privilege privilege,
-                                           ResultListParameters resultParams) {
-        return null;
-    }
 }
