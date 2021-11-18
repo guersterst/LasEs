@@ -19,5 +19,10 @@ public enum Privilege {
     /**
      * A reviewer is a user that can review submissions he is assigned to.
      */
-    REVIEWER
+    REVIEWER,
+
+    /**
+     * A user that is authenticated in the system.
+     */
+    AUTHENTICATED
 }
