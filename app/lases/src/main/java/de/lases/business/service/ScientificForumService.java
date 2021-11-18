@@ -65,26 +65,48 @@ public class ScientificForumService {
     }
 
     /**
-     * <p>
-     * All editors will be informed about being added to this forum,
-     * using the {@link de.lases.business.util.EmailUtil} utility.
-     * </p>
+     * Adds an editor to a scientific forum.
      *
-     * @param editor
+     * @param editor The user added as an editor.
+     * @param forum  The forum to which the editor is being added.
      */
-    public void addEditor(User editor) {
+    public void addEditor(User editor, ScientificForum forum) {
     }
 
-    public void removeEditor(User user) {
+    /**
+     * Removes an editor from a scientific forum.
+     *
+     * @param editor The user removed as an editor.
+     * @param forum  The forum from which the editor is being removed.
+     */
+    public void removeEditor(User editor, ScientificForum forum) {
     }
 
-    public void addScienceField() {
+    /**
+     * Adds a scientific field to a forum in which it has expertise.
+     *
+     * @param scienceField The scientific field of expertise.
+     * @param forum        The forum, which receives a new scientific field of expertise.
+     */
+    public void addScienceField(ScienceField scienceField, ScientificForum forum) {
     }
 
-    public List<User> getEditors() {
+    /**
+     * Gets all editors of a scientific forum.
+     *
+     * @param forum The forum where the editors are requested.
+     * @return All editors of the given forum.
+     */
+    public List<User> getEditors(ScientificForum forum) {
         return null;
     }
 
+    /**
+     * Gets all scientific forums.
+     *
+     * @param resultListParams The parameters, that control filtering and sorting of the resulting list.
+     * @return All scientific forums.
+     */
     public List<ScientificForum> getForums(ResultListParameters resultListParams) {
         return null;
     }

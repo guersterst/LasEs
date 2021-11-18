@@ -157,7 +157,7 @@ public class SubmissionService {
      *                     Meaning, the user can request to receive the submissions which he is an editor to,
      *                     reviews or has submitted himself.
      * @param user         The user, whose editorial, reviewed or own and coauthored submissions.
-     * @param resultParams Parameters, that control filtering and sorting of the resulting list.
+     * @param resultParams The parameters, that control filtering and sorting of the resulting list.
      * @return The resulting list of submissions, which a user is involved in.
      */
     public List<Submission> getSubmissions(Privilege privilege, User user, ResultListParameters resultParams) {
