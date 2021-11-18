@@ -1,6 +1,8 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.*;
+import de.lases.persistence.exception.DatasourceQueryFailedException;
+import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
@@ -87,6 +89,24 @@ public class PaperService {
      */
     public List<Paper> getList(Submission submission, User user,
                                ResultListParameters resultListParameters) {
+        return null;
+    }
+
+    /**
+     * Returns the latest paper of a submission.
+     *
+     * <p>
+     * The paper returned is determined by the highest privilege, which that
+     * user possesses on that submission. Meaning he might not have view access
+     * on unreleased papers
+     * </p>
+     *
+     * @param submission A {@link Submission}-DTO containing a valid id.
+     * @param user       The user who requests the papers.
+     * @return The latest paper.
+     */
+    public Paper getLatest(Submission submission, User user)
+            throws NotFoundException {
         return null;
     }
 }

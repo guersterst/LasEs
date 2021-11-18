@@ -152,6 +152,7 @@ public class PaperRepository {
      * submission.
      *
      * @param submission  A submission dto that must be filled with a valid id.
+     * @param user       The user who requests the papers.
      * @param transaction The transaction to use.
      * @return A fully filled paper dto.
      * @throws NotFoundException              If there is no submission with the provided id.
@@ -159,6 +160,7 @@ public class PaperRepository {
      *                                        queried.
      */
     public Paper getNewestPaperForSubmission(Submission submission,
+                                             User user,
                                              Transaction transaction)
             throws NotFoundException {
         return null;
