@@ -330,7 +330,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	\ftable{
 		\fentry{/}{<ui:include>}{\hyperref[flt:toolbar]{Seitenleiste mit Tools.}}{rendered="\#\{submissionBacking.sessionInformation.user.editor\}"}{/}
 		
-		\fentry{upload-revision-ifile}{<h:inputFile>}{Upload einer Revision.}{value="\#\{\}" \newline requiered="true" \newline requieredMessage="\#\{requiered.inputFile\}"}{rendered="\#\{submissionBacking.isViewerSubmitter\}"}{/}
+		\fentry{upload-revision-ifile}{<h:inputFile>}{Upload einer Revision.}{value="\#\{submissionBacking.uploadedRevisionPDF\}" \newline requiered="true" \newline requieredMessage="\#\{requiered.inputFile\}"}{rendered="\#\{submissionBacking.isViewerSubmitter\}"}{/}
 		
 		\fentry{upload-cbtn}{<h:commandButton>}{Ausführen des Uploads.}{value="\#\{label.uploadFile\}" \newline action="\#\{submissionBacking.uploadPDF\}" \newline title="\#\{help.uploadRevision\}"}{rendered="\#\{submissionBacking.isViewerSubmitter\}"}{/}
 		
@@ -339,6 +339,8 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 		\fentry{accept-reviewing-cbtn}{<h:commandButton>}{Annahme der Rolle eines Gutachters für diese Einreichung.}{value="\#\{label.acceptReviewing\}" \newline action="\#\{submissionBacking.acceptReviewing\}" \newline title="\#\{help.acceptReviewing\}"}{rendered="\#\{submissionBacking.sessionInformation.user.reviewer\}"}{/}
 		
 		\fentry{decline-reviewing-cbtn}{<h:command>}{Ablehnen der Rolle eines Gutachters für diese Einreichung.}{value="\#\{label.declineReviewing\}" \newline action="\#\{submissionBacking.declineReviewing\}" \newline title="\#\{help.declineReviewing\}"}{rendered="\#\{submissionBacking.sessionInformation.user.reviewer\}"}{/}
+		
+		\fentry{state-otxt}{<h:outputText>}{Titel des Papers.}{value="\#\{submissionBacking.submission.title\}"}{/}{/}
 		
 		\fentry{title-otxt}{<h:outputText>}{Titel des Papers.}{value="\#\{submissionBacking.submission.title\}"}{/}{/}
 		
@@ -368,6 +370,12 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	Die Elemente der Liste, der unterschiedlichen Versionen der Einrichtung, sieht wie folgt aus:
 	
 	\ftable{
+		\fentry{paper-pg}{<pg:pagination>}{Liste aller eignen Einreichungen.}{paginator="\#\{homepageBacking.submissionPagination\}"}{/}{/}
+		
+		\fentry{title-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Titel des Papers.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.paperTitle\}"}{/}{/}
+		
+		\fentry{title-otxt}{<h:outputText>}{Titel des Papers.}{value="\#\{var.title\}"}{/}{/}
+		
 		\fentry{version}{outputText}{Versionsnummer der Einreichung}{Alle}{}{}
 		
 		\fentry{date}{outputText}{Datum der Einreichung}{Alle}{}{}

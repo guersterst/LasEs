@@ -22,6 +22,10 @@
         <h:inputText value="#{toolbarBacking.submission.}" rendered="#{toolbarBacking.sessionInformation.user.reviewer}"/>
         <h:dataTable value="#{toolbarBacking.reviewer}" var="review"/>
         <h:inputText value="#{submissionBacking}" id="password" rendered="#{submissionBacking.sessionInformation.user.editor}"/>
+        <h:selectOneListbox value="#{submissionBacking.submission.state}">
+            <f:selectItem itemValue="#{submissionBacking.submission.state}" style="color: green"/>
+        </h:selectOneListbox>
+        <h:inputFile value="#{submissionBacking.uploadedRevisionPDF}"/>
     </h:form>
 
     <div class="login-container">

@@ -11,7 +11,7 @@ import jakarta.inject.Named;
 @Named
 public class ErrorPageBacking {
 
-    private ErrorMessage errorMessage;
+/*    private ErrorMessage errorMessage;
 
     @PostConstruct
     public void init() {
@@ -28,7 +28,9 @@ public class ErrorPageBacking {
      * @param errorMessage Stacktrace and error message for the user
      *                     encapsulated in one object.
      */
+    /*
     public void setErrorMessage(ErrorMessage errorMessage) {
         this.errorMessage = errorMessage;
     }
+    */
 }
