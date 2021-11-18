@@ -1,5 +1,6 @@
 package de.lases.control.backing;
 
+import de.lases.global.transport.ErrorMessage;
 import de.lases.global.transport.UIMessage;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
@@ -12,13 +13,13 @@ import jakarta.inject.Named;
 @Named
 public class ErrorPageBacking {
 
-    private UIMessage errorMessage;
+    private ErrorMessage errorMessage;
 
     @PostConstruct
     public void init() {
     }
 
-    public UIMessage getErrorMessage() {
+    public ErrorMessage getErrorMessage() {
         return errorMessage;
     }
 
@@ -29,7 +30,7 @@ public class ErrorPageBacking {
      * @param errorMessage Stacktrace and error message for the user
      *                     encapsulated in one object.
      */
-    public void setErrorMessage(UIMessage errorMessage) {
+    public void setErrorMessage(ErrorMessage errorMessage) {
         this.errorMessage = errorMessage;
     }
 }
