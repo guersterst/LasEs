@@ -3,10 +3,10 @@ package de.lases.persistence.exception;
 import java.io.Serial;
 
 /**
- * Is thrown when the repository tries to save an email-address to the database
- * that already exists in the database.
+ * Is thrown when the repository tries to save data with a unique value that
+ * already exists in the data.
  */
-public class EmailAddressExistsException extends Exception {
+public class KeyExistsException extends Exception {
 
     @Serial
     private static final long serialVersionUID = 4050043739568595650L;
@@ -17,7 +17,7 @@ public class EmailAddressExistsException extends Exception {
      * @param message Error message.
      * @param cause Cause of the exception.
      */
-    public EmailAddressExistsException(String message, Throwable cause) {
+    public KeyExistsException(String message, Throwable cause) {
         super(message, cause);
     }
 }
