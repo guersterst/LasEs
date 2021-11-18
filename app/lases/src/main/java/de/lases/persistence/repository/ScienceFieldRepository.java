@@ -15,6 +15,7 @@ public class ScienceFieldRepository {
     public static void add(Submission submission, Transaction transaction) throws InvalidFieldsException {
     }
 
+    //Todo why change?
     public static void change(Submission old, Submission edited, Transaction transaction) throws InvalidFieldsException {
     }
 
@@ -30,4 +31,5 @@ public class ScienceFieldRepository {
         return false;
     }
 
+    //todo maybe imlplement equals and hash for issciencefield
 }

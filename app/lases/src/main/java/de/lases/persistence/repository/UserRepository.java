@@ -35,7 +35,6 @@ public class UserRepository {
     public static void removeScienceField() {
     }
 
-
     public static boolean emailExists(String emailAddress, Transaction transaction) {
         return false;
     }
