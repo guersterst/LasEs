@@ -288,7 +288,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 		\fentry{title-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Titel des Papers.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.paperTitle\}"}{/}{/}
 
 		\fentry{title-lnk}{<h:link>}{Titel des Einreichung.}{value="\#\{var.title\}" \newline outcome="/facelets/authenticated/submission" \newline includeViewParams="true"}{/}{/}
-		
+
 		\fentry{/}{<f:param>}{Parameter für id der Einreichung.}{value="\#\{var.id\}" name="id"}{/}{/}
 
 		\fentry{date-ssc}{<ssc:sortsearchcolumn>}{Spalte für das Abgabedatum des Papers.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.date\}"}{/}{/}
@@ -318,7 +318,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 		\fentry{forum-ssc}{<ssc:sortsearchcolumn>}{Spalte für zugehöriges Forum.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.forumSub\}"}{/}{/}
 
 		\fentry{forum-lnk}{<h:link>}{Zugehöriges Forum der Einreichung.}{value="\#\{var.scientificForum.name\}" outcome="/facelets/authenticated/scientificForum" \newline includeViewParams="true"}{/}{/}
-		
+
 		\fentry{/}{<f:param>}{Parameter für id des Forums.}{value="\#\{var.scientificForumId\}" name="id"}{/}{/}
 
 	}
@@ -335,9 +335,9 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 	\ftable{
 		\fentry{/}{<ui:include>}{\hyperref[flt:toolbar]{Seitenleiste mit Tools.}}{rendered="\#\{submissionBacking.sessionInformation.user.editor\}"}{/}
-		
+
 		\fentry{/}{<f:viewParam>}{Id der Einreichung.}{value="\#\{submissionBacking.submission.id\}" \newline name="id"}{/}{/}
-		
+
 		\fentry{/}{<f:viewAction>}{Laden der entsprechenden Einreichung.}{action="\#\{submissionBacking.onLoad\}"}{}{}
 
 		\fentry{upload-revision-ifile}{<h:inputFile>}{Upload einer Revision.}{value="\#\{submissionBacking.uploadedRevisionPDF\}" \newline requiered="true" \newline requieredMessage="\#\{requiered.inputFile\}"}{rendered="\#\{submissionBacking.isViewerSubmitter\}"}{/}
@@ -359,11 +359,11 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 		\fentry{state-otxt}{<h:outputText>}{Status der Einreichung.}{value="\#\{submissionBacking.submission.state\}"}{/}{/}
 
 		\fentry{forum-lnk}{<h:link>}{Name des Forums und Weiterleitung zur Forumsübersicht.}{value="\#\{submissionBacking.scientificForum.name\}" \newline outcome="/facelets/authenticated/scientificForum" \newline includeViewParams="true" \newline title="\#\{help.directToForum\}"}{disabled="\#\{not submissionBacking.sessionInformation.user.editor\}"}{/}
-		
+
 		\fentry{/}{<f:param>}{Parameter für id des Forums.}{value="\#\{submissionBacking.scientificForum.scientificForumId\}" name="id"}{/}{/}
 
 		\fentry{author-lnk}{<h:link>}{Name des Autors und Weiterleitung zum Profil.}{value="\#\{submissionBacking.author.firstName + submissionBacking.author.lastName\}" \newline outcome="/facelets/authenticated/profile" \newline includeViewParams="true" \newline title="\#\{help.directProfile\}"}{disabled="\#\{not submissionBacking.sessionInformation.user.editor\}"}{/}
-		
+
 		\fentry{/}{<f:param>}{Parameter für id des Profil.}{value="\#\{submissionBacking.author.id\}" name="id"}{/}{/}
 
 		\fentry{email-lnk}{<h:link>}{E-Mail-Adressen der Co-Autoren und Mailto-Link.}{value="\#\{submissionBacking.author.emailAddress\}"\newline  outcome="\#\{'mailto:'.concat(submissionBacking.author.emailAddress)\}"}{disabled="\#\{not submissionBacking.sessionInformation.user.editor\}"}
@@ -420,9 +420,9 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 		\fentry{reviewer-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Namen des Gutachters.}{paginator="\#\{submissionBacking.reviewPagination\}"\newline columnNamei18n="\#\{label.reviewerName\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor \&\& submissionBacking.sessionInformation.user.reviewer\}"}{/}
 
 		\fentry{reviewer-lnk}{<h:link>}{Namen des Gutachters.}{value="\#\{submissionBacking.getReviewerForReview(var)\}" \newline outcome="/facelets/authenticated/profile" \newline includeViewParams="true"}{rendered="\#\{submissionBacking.sessionInformation.user.editor \&\& submissionBacking.sessionInformation.user.reviewer\}"}{/}{/}
-		
+
 		\fentry{/}{<f:param>}{Parameter für id des Profil.}{value="\#\{submissionBacking.getReviewerForReview(var).id\}" name="id"}{/}{/}
-		
+
 		\fentry{date-ssc}{<ssc:sortsearchcolumn>}{Spalte für das Abgabedatum des Gutachtens.}{paginator="\#\{submissionBacking.reviewPagination\}"\newline columnNamei18n="\#\{label.date\}"}{/}{/}
 
 		\fentry{date-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{\}" title="\#\{help.dateSelect\}"}{/}{/}
@@ -483,9 +483,9 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{forum-name-itxt}{<h:inputText>}{Name des Forums, bei welchem abgegeben wird.}{value="\#\{newSubmissionBacking.newSubmission.forumInput.name\}"}{/}{required="true"}
 
-		\fentry{editor-slctom}{<h:selectOneMenu>}{Angabe eines Editors}{value="\#\{newSubmissionBacking.editors\}"}{/}{/}
+		\fentry{editor-slctom}{<h:selectOneMenu>}{Angabe eines Editors}{value="\#\{newSubmissionBacking.selectedEditor\}"}{/}{/}
 
-		\fentry{editor-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{?}{/}{/}
+		\fentry{editor-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{value="\#\{newSubmissionBacking.editors\}"}{/}{/}
 
 		\fentry{pfd-upload-ifile}{<h:inputText>}{Angabe der Abgabedatei.}{value="\#\{newSubmissionBacking.uploadedPDF\}"}{/}{required="true"}
 
@@ -525,7 +525,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	\ftable{
 		\fentry{date-select-slctom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{scientificForumListBacking.deadlineFilterSelect\}"}{/}{/}
 
-		\fentry{deadline-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{?}{/}{/}
+		\fentry{deadline-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{value="\#\{scientificForumListBacking.dateSelects\}"}{/}{/}
 
 		\fentry{forums-pagination-pg}{<pg:pagination>}{Liste aller Foren im System.}{paginator="\#\{scientificForumListBacking.scientificForumPagination\}"}{/}{/}
 
@@ -586,9 +586,9 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	\ftable{
 	\fentry{science-field-lst}{<h:dataTable>}{Spezialgebiete des Nutzers}{value="\#\{profileBacking.usersScienceFields\}"}{/}{/}
 
-	\fentry{add-science-field-slctolb}{<p:selectOneListbox>}{Auswahl der Spezialgebiete des Nutzers}{value="\#\{profileBacking.scienceFields\}"}{rendered="\#\{!profileBacking.hasViewerEditRights\}"}{/}
+	\fentry{add-science-field-slctolb}{<p:selectOneListbox>}{Auswahl der Spezialgebiete des Nutzers}{value="\#\{profileBacking.selectedScienceField\}"}{rendered="\#\{!profileBacking.hasViewerEditRights\}"}{/}
 
-	\fentry{field-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{?}{/}{/}
+	\fentry{field-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{value="\#\{profileBacking.scienceFields\}"}{/}{/}
 
 	\fentry{delete-field-cbtn}{<h:commandButton>}{Löschen des ausgewählten Fachgebietes.}{value="\#\{label.delete\}"\newline action="\#\{profileBacking.deleteScienceField\}"}{rendered="\#\{!profileBacking.hasViewerEditRights\}"}{/}
 
@@ -652,9 +652,9 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
 		\fentry{science-field-dtbl}{<h:dataTable>}{Fachgebiet des Forums.}{value="\#\{scientificForumBacking.selectedScienceFields\}"}{/}{/}
 
-		\fentry{new-science-field}{<p:selectOneListbox>}{Hinzufügen eines neuen Fachgebietes.}{value="\#\{scientificForumBacking.scienceFields\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
+		\fentry{new-science-field}{<p:selectOneListbox>}{Hinzufügen eines neuen Fachgebietes.}{value="\#\{scientificForumBacking.selectedScienceFieldInput\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
 
-		\fentry{field-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{?}{/}{/}
+		\fentry{field-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{value="\#\{scientificForumBacking.scienceFields\}"}{/}{/}
 
 		\fentry{add-science-field-cbtn}{<h:commandButton>}{Speichern des neuen Fachgebietes.}{value="\#\{label.add\}"\newline action="\#\{scientificForumBacking.\newline
 		addScienceField\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
@@ -676,25 +676,21 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
 	\fentry{date-ssc}{<ssc:sortsearchcolumn>}{Spalte für das Abgabedatum der Einreichung.}{paginator="\#\{scientificForumBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.date\}"}{/}{/}
 
-	\fentry{date-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{scientificForumBacking.dateFilterSelectSub\}" title="\#\{help.dateSelect\}"}{/}{/}
+	\fentry{deadline-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{scientificForumBacking.dateFilterSelectSub\}" title="\#\{help.deadlineSelect\}"}{/}{/}
 
-	\fentry{date-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{?}{/}{/}
+	\fentry{deadline-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{value="\#\{scientificForumBacking.dateSelects\}"}{/}{/}
 
 	\fentry{date-otxt}{<h:outputText>}{Abgabedatum der Einreichung.}{value="\#\{var.submissionTime\}"}{/}{convertDateTime \newline pattern=""yyyy-MM-dd"}
 
 	\fentry{deadline-ssc}{<ssc:sortsearchcolumn>}{Spalte für die Deadline der Revision.}{paginator="\#\{scientificForumBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.deadline\}"}{/}{/}
 
-	\fentry{deadline-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit einer Deadline.}{value="\#\{\}" title="\#\{help.deadlineSelect\}"}{/}{/}
-
-	\fentry{deadline-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{?}{/}{/}
-
 	\fentry{deadline-otxt}{<h:outputText>}{Deadline für eine Revision.}{value="\#\{var.deadlineRevision\}"}{/}{convertDateTime \newline pattern=""yyyy-MM-dd"}
 
 	\fentry{state-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Status der Einreichung.}{paginator="\#\{scientificForumBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.stateSub\}"}{/}{/}
 
-	\fentry{state-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Status.}{value="\#\{\}" title="\#\{help.stateSubSelect\}"}{/}{/}
+	\fentry{state-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Status.}{value="\#\{scientificForumBacking.stateFilterSelectSub\}" title="\#\{help.stateSubSelect\}"}{/}{/}
 
-	\fentry{state-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{?}{/}{/}
+	\fentry{state-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{value="\#\{scientificForumBacking.submissionStates\}"}{/}{/}
 
 	\fentry{state-otxt}{<h:outputText>}{Status der Einreichung.}{value="\#\{var.state\}"}{/}{/}
 }
@@ -805,7 +801,7 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 	\ftable{
 		\fentry{select-theme-slctom}{<h:selectOneMenu>}{Auswahl eines Farbthemas.}{value="\#\{administrationBacking.systemSettings.style\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
 
-		\fentry{styles-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{?}{/}{/}
+		\fentry{styles-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{value="\#\{administrationBacking.styles\}"}{/}{/}
 
 		\fentry{logo-img}{<h:graphicImage>}{Logo des Systems.}{value="\#\{administrationBacking.systemSettings.logoImage\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
 
