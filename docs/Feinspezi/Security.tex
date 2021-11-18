@@ -41,7 +41,7 @@ Um das Erraten von Passwörtern durch Brute-Force-Attacken o.ä.\ zu erschweren,
 Alle Informationen über das System, die nach außen gelangen, können Angreifern helfen.
 Dazu gehören Details über die technische Umgebung und verwendete Software des Systems, interne Fehlermeldungen und Implementierungsdetails.
 Folgende Maßnahmen werden ergriffen, um Leakage solcher Informationen zu verhindern.
-Fehlermeldungen zeigen keine Stacktraces an, sondern eigene Nachrichten, die nur Informationen enthalten, die für den Endnutzer relevant sind.
+Fehlermeldungen zeigen im Produktionsmodus keine Stacktraces an, sondern eigene Nachrichten, die nur Informationen enthalten, die für den Endnutzer relevant sind.
 Wir verwenden eigene Fehlerseiten bei Exceptions und ersetzen die 404 und 500 Fehlerseiten von JSF durch unsere eigenen wie folgt in der web.xml-Datei:
     {\small
 \begin{lstlisting}
