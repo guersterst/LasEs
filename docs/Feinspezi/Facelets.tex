@@ -24,7 +24,6 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \subsection{Templates}
 
 \begin{samepage}
-	\todo{Serachfield needs view param?}
 	\todo{Sebastians Rollenprüfung}
 \textbf{navigation.xhtml} \phantomsection \label{flt:navbar} ist die Kopfzeile der Webanwendung. Diese bietet die Suchfunktion, Links zu verschiedenen Listen und dem Profil an.
 \nopagebreak
@@ -32,7 +31,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \todo{Absprechen mit Sebastian und BB nicht vollstäandig + Systemsettign fehlt}
 \todo{outcome von links ist immer noch im ordner facelets. mit Johannes abklären und ausprobieren.}
 \ftable{
-	\fentry{logo-gimg}{<h:graphicImage>}{Logo der Applikation.}{value="\#\{value="\#\{navigationBacking.systemSettings.logoImage\}"\}"}{/}{/}
+	\fentry{logo-gimg}{<h:graphicImage>}{Logo der Applikation.}{value="\#\{navigationBacking.systemSettings.logoImage\}"\}"}{/}{/}
 
 	\fentry{direct-to-home-lnk}{<h:link>}{Weiterleitung zur Homepage.}{outcome="/authenticated/homepage" \newline title="\#\{help.toHome\}"}{/}{/}
 
@@ -278,6 +277,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \end{samepage}
 
 \todo{selectOneMenu noch nicht fertig}
+\todo{ScientificForumsname gibt es nicht}
 
 \begin{samepage}
 	Die Tabellen \emph{submissionPagination}, \emph{reviewPagination} und \emph{editorPagination} sind nach den gleichen Punkten gegliedert und daher nur einmal ausführlich aufgegliedert: Titel des Papers, Datum, Deadline und Status der Einreichung und Name des zugehörigen Forums.
@@ -287,7 +287,9 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{title-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Titel des Papers.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.paperTitle\}"}{/}{/}
 
-		\fentry{title-otxt}{<h:outputText>}{Titel des Papers.}{value="\#\{var.title\}"}{/}{/}
+		\fentry{title-lnk}{<h:link>}{Titel des Einreichung.}{value="\#\{var.title\}" \newline outcome="/facelets/authenticated/submission" \newline includeViewParams="true"}{/}{/}
+		
+		\fentry{/}{<f:param>}{Parameter für id der Einreichung.}{value="\#\{var.id\}" name="id"}{/}{/}
 
 		\fentry{date-ssc}{<ssc:sortsearchcolumn>}{Spalte für das Abgabedatum des Papers.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.date\}"}{/}{/}
 
@@ -315,7 +317,9 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{forum-ssc}{<ssc:sortsearchcolumn>}{Spalte für zugehöriges Forum.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.forumSub\}"}{/}{/}
 
-		\fentry{forum-otxt}{<h:outputText>}{Zugehöriges Forum der Einreichung.}{value="\#\{var.scientificForum\}"}{/}{/}
+		\fentry{forum-lnk}{<h:link>}{Zugehöriges Forum der Einreichung.}{value="\#\{var.scientificForum.name\}" outcome="/facelets/authenticated/scientificForum" \newline includeViewParams="true"}{/}{/}
+		
+		\fentry{/}{<f:param>}{Parameter für id des Forums.}{value="\#\{var.scientificForumId\}" name="id"}{/}{/}
 
 	}
 \end{samepage}
@@ -331,10 +335,14 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 	\ftable{
 		\fentry{/}{<ui:include>}{\hyperref[flt:toolbar]{Seitenleiste mit Tools.}}{rendered="\#\{submissionBacking.sessionInformation.user.editor\}"}{/}
+		
+		\fentry{/}{<f:viewParam>}{Id der Einreichung.}{value="\#\{submissionBacking.submission.id\}" \newline name="id"}{/}{/}
+		
+		\fentry{/}{<f:viewAction>}{Laden der entsprechenden Einreichung.}{action="\#\{submissionBacking.onLoad\}"}{}{}
 
 		\fentry{upload-revision-ifile}{<h:inputFile>}{Upload einer Revision.}{value="\#\{submissionBacking.uploadedRevisionPDF\}" \newline requiered="true" \newline requieredMessage="\#\{requiered.inputFile\}"}{rendered="\#\{submissionBacking.isViewerSubmitter\}"}{/}
 
-		\fentry{upload-cbtn}{<h:commandButton>}{Ausführen des Uploads.}{value="\#\{label.uploadFile\}" \newline action="\#\{submissionBacking.uploadPDF\}" \newline title="\#\{help.uploadRevision\}"}{rendered="\#\{submissionBacking.isViewerSubmitter\}"}{/}
+		\fentry{upload-clnk}{<h:commandLink>}{Ausführen des Uploads.}{value="\#\{label.uploadFile\}" \newline action="\#\{submissionBacking.uploadPDF\}" \newline includeViewParams="true" title="\#\{help.uploadRevision\}"}{rendered="\#\{submissionBacking.isViewerSubmitter\}"}{/}
 
 		\fentry{new-review-cbtn}{<h:commandButton>}{Weiterleitung zur Einreichung eines neuen Gutachtens.}{value="\#\{label.uploadReview\}" \newline action="\#\{submissionBacking.uploadReview\}" \newline title="\#\{help.uploadRevision\}"}{rendered="\#\{submissionBacking.sessionInformation.user.reviewer\}"}{/}
 
@@ -350,9 +358,13 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{state-otxt}{<h:outputText>}{Status der Einreichung.}{value="\#\{submissionBacking.submission.state\}"}{/}{/}
 
-		\fentry{forum-lnk}{<h:link>}{Name des Forums und Weiterleitung zur Forumsübersicht.}{value="\#\{submissionBacking.scientificForum.name\}" \newline outcome="/facelets/authenticated/scientificForum" \newline title="\#\{help.directToForum\}"}{disabled="\#\{not submissionBacking.sessionInformation.user.editor\}"}{/}
+		\fentry{forum-lnk}{<h:link>}{Name des Forums und Weiterleitung zur Forumsübersicht.}{value="\#\{submissionBacking.scientificForum.name\}" \newline outcome="/facelets/authenticated/scientificForum" \newline includeViewParams="true" \newline title="\#\{help.directToForum\}"}{disabled="\#\{not submissionBacking.sessionInformation.user.editor\}"}{/}
+		
+		\fentry{/}{<f:param>}{Parameter für id des Forums.}{value="\#\{submissionBacking.scientificForum.scientificForumId\}" name="id"}{/}{/}
 
-		\fentry{author-lnk}{<h:link>}{Name des Autors und Weiterleitung zum Profil.}{value="\#\{submissionBacking.authorForPaper\}" \newline outcome="/facelets/authenticated/profile" \newline title="\#\{help.directProfile\}"}{disabled="\#\{not submissionBacking.sessionInformation.user.editor\}"}{/}
+		\fentry{author-lnk}{<h:link>}{Name des Autors und Weiterleitung zum Profil.}{value="\#\{submissionBacking.author.firstName + submissionBacking.author.lastName\}" \newline outcome="/facelets/authenticated/profile" \newline includeViewParams="true" \newline title="\#\{help.directProfile\}"}{disabled="\#\{not submissionBacking.sessionInformation.user.editor\}"}{/}
+		
+		\fentry{/}{<f:param>}{Parameter für id des Profil.}{value="\#\{submissionBacking.author.id\}" name="id"}{/}{/}
 
 		\fentry{email-lnk}{<h:link>}{E-Mail-Adressen der Co-Autoren und Mailto-Link.}{value="\#\{submissionBacking.author.emailAddress\}"\newline  outcome="\#\{'mailto:'.concat(submissionBacking.author.emailAddress)\}"}{disabled="\#\{not submissionBacking.sessionInformation.user.editor\}"}
 
@@ -407,7 +419,9 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 		
 		\fentry{reviewer-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Namen des Gutachters.}{paginator="\#\{submissionBacking.reviewPagination\}"\newline columnNamei18n="\#\{label.reviewerName\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor \&\& submissionBacking.sessionInformation.user.reviewer\}"}{/}
 
-		\fentry{reviewer-lnk}{<h:link>}{Namen des Gutachters.}{value="\#\{submissionBacking.getReviewerForReview(var)\}" \newline outcome="/facelets/authenticated/profile"}{rendered="\#\{submissionBacking.sessionInformation.user.editor \&\& submissionBacking.sessionInformation.user.reviewer\}"}{/}{/}
+		\fentry{reviewer-lnk}{<h:link>}{Namen des Gutachters.}{value="\#\{submissionBacking.getReviewerForReview(var)\}" \newline outcome="/facelets/authenticated/profile" \newline includeViewParams="true"}{rendered="\#\{submissionBacking.sessionInformation.user.editor \&\& submissionBacking.sessionInformation.user.reviewer\}"}{/}{/}
+		
+		\fentry{/}{<f:param>}{Parameter für id des Profil.}{value="\#\{submissionBacking.getReviewerForReview(var).id\}" name="id"}{/}{/}
 		
 		\fentry{date-ssc}{<ssc:sortsearchcolumn>}{Spalte für das Abgabedatum des Gutachtens.}{paginator="\#\{submissionBacking.reviewPagination\}"\newline columnNamei18n="\#\{label.date\}"}{/}{/}
 		
