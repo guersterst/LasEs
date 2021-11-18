@@ -113,22 +113,6 @@ public class ScientificForumRepository {
     }
 
     /**
-     * Changes the given scientific forum in the repository.
-     *
-     * @param scientificForum A fully filled scientificForum dto.
-     * @param transaction The transaction to use.
-     * @throws NotFoundException If there is no scientific forum with the
-     *                           provided id.
-     * @throws DataNotWrittenException If writing the data to the repository
-     *                                 fails.
-     * @throws InvalidFieldsException If one of the fields of the scientific
-     *                                forum is null.
-     * @throws DatasourceQueryFailedException If the datasource cannot be
-     *                                        queried.
-     */
-
-
-    /**
      * Adds the specified editor to the specified scientific forum.
      *
      * @param scientificForum A scientific forum dto with a valid id.
