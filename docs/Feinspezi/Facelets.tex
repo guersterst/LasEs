@@ -454,6 +454,8 @@ Die Spalte zum Download der einzelnen Paper ist wie folgt definiert:
 
 		\fentry{editor-slctom}{<h:selectOneMenu>}{Angabe eines Editors}{value="\#\{newSubmissionBacking.editors\}"}{/}{/}
 
+		\fentry{editor-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{?}{/}{/}
+
 		\fentry{pfd-upload-ifile}{<h:inputText>}{Angabe der Abgabedatei.}{value="\#\{newSubmissionBacking.uploadedPDF\}"}{/}{required="true"}
 
 		\fentry{titel-itxt}{<h:inputText>}{Angabe eines Titels eines Co-Autors.}{value="\#\{newSubmissionBacking.coAuthorInput.title\}"}{/}{/}
@@ -493,6 +495,8 @@ Die Spalte zum Download der einzelnen Paper ist wie folgt definiert:
 
 	\ftable{
 		\fentry{date-select-slctom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{scientificForumListBacking.deadlineFilterSelect\}"}{/}{/}
+
+		\fentry{deadline-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{?}{/}{/}
 
 		\fentry{forums-pagination-pg}{<pg:pagination>}{Liste aller Foren im System.}{paginator="\#\{scientificForumListBacking.scientificForumPagination\}"}{/}{/}
 
@@ -552,6 +556,8 @@ Die Spalte zum Download der einzelnen Paper ist wie folgt definiert:
 	\fentry{science-field-lst}{<h:dataTable>}{Spezialgebiete des Nutzers}{value="\#\{profileBacking.usersScienceFields\}"}{/}{/}
 
 	\fentry{add-science-field-slctolb}{<p:selectOneListbox>}{Auswahl der Spezialgebiete des Nutzers}{value="\#\{profileBacking.scienceFields\}"}{rendered="\#\{!profileBacking.hasViewerEditRights\}"}{/}
+
+	\fentry{field-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{?}{/}{/}
 
 	\fentry{delete-field-cbtn}{<h:commandButton>}{Löschen des ausgewählten Fachgebietes.}{value="\#\{label.delete\}"\newline action="\#\{profileBacking.deleteScienceField\}"}{rendered="\#\{!profileBacking.hasViewerEditRights\}"}{/}
 
@@ -613,6 +619,8 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
 		\fentry{new-science-field}{<p:selectOneListbox>}{Hinzufügen eines neuen Fachgebietes.}{value="\#\{scientificForumBacking.scienceFields\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
 
+		\fentry{field-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{?}{/}{/}
+
 		\fentry{add-science-field-cbtn}{<h:commandButton>}{Speichern des neuen Fachgebietes.}{value="\#\{label.add\}"\newline action="\#\{scientificForumBacking.\newline
 		addScienceField\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
 
@@ -635,7 +643,7 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
 	\fentry{date-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{scientificForumBacking.dateFilterSelectSub\}" title="\#\{help.dateSelect\}"}{/}{/}
 
-	\fentry{/}{<f:selectItems>}{Mögliche Filterung des Datums.}{value="\#\{\}"}{/}{/}
+	\fentry{date-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{?}{/}{/}
 
 	\fentry{date-otxt}{<h:outputText>}{Abgabedatum der Einreichung.}{value="\#\{var.submissionTime\}"}{/}{convertDateTime \newline pattern=""yyyy-MM-dd"}
 
@@ -643,7 +651,7 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
 	\fentry{deadline-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit einer Deadline.}{value="\#\{\}" title="\#\{help.deadlineSelect\}"}{/}{/}
 
-	\fentry{/}{<f:selectItems>}{Mögliche Filterung der Deadline.}{value="\#\{\}"}{/}{/}
+	\fentry{deadline-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{?}{/}{/}
 
 	\fentry{deadline-otxt}{<h:outputText>}{Deadline für eine Revision.}{value="\#\{var.deadlineRevision\}"}{/}{convertDateTime \newline pattern=""yyyy-MM-dd"}
 
@@ -651,7 +659,7 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
 	\fentry{state-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Status.}{value="\#\{\}" title="\#\{help.stateSubSelect\}"}{/}{/}
 
-	\fentry{/}{<f:selectItems>}{Mögliche Filterung des Status.}{value="\#\{\}"}{/}{/}
+	\fentry{state-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{?}{/}{/}
 
 	\fentry{state-otxt}{<h:outputText>}{Status der Einreichung.}{value="\#\{var.state\}"}{/}{/}
 }
@@ -761,7 +769,9 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 	\nopagebreak
 
 	\ftable{
-		\fentry{select-theme-list}{<h:selectOneMenu>}{Auswahl eines Farbthemas.}{value="\#\{administrationBacking.systemSettings.\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
+		\fentry{select-theme-slctom}{<h:selectOneMenu>}{Auswahl eines Farbthemas.}{value="\#\{administrationBacking.systemSettings.style\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
+
+		\fentry{styles-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{?}{/}{/}
 
 		\fentry{logo-img}{<h:graphicImage>}{Logo des Systems.}{value="\#\{administrationBacking.systemSettings.logoImage\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
 
