@@ -50,10 +50,10 @@ note left
 end note
 user -> sb : init()
 activate sb
-    sb -> si ++ : getUserId()
-    return userId
+    sb -> si ++ : getUser()
+    return User sessionUsr
     sb -> usr ** : User()
-    sb -> usr ++ : setId(userId)
+    sb -> usr ++ : setId(sessionUsr.getId())
     return
     sb -> sub ** : Submission()
 return
@@ -128,7 +128,7 @@ return
 user -> sub ++ : getAuthor()
 return
 
-user -> pdfv ++ : validate()
+user -> pdfv ++ : validate(FacesComp)
 note left
     sucht die PDF-Datei mit
     dem file picker aus und
