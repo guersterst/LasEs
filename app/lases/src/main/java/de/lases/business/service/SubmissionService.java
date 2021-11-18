@@ -1,13 +1,12 @@
 package de.lases.business.service;
 
-import java.io.IOException;
-import java.util.List;
-
+import de.lases.global.transport.*;
+import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
-import de.lases.persistence.repository.*;
-import de.lases.global.transport.*;
 import jakarta.inject.Inject;
+
+import java.util.List;
 
 /**
  * Provides functionality regarding the management and handling of submissions.
