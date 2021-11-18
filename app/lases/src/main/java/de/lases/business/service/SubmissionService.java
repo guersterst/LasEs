@@ -77,7 +77,7 @@ public class SubmissionService {
      * Sets the state of a submission.
      * <p></p>
      * The submitter and all co-authors are informed about an accept or reject decision
-     * by email using the {@link EmailUtil} utility.
+     * by email using the {@link de.lases.business.util.EmailUtil} utility.
      *
      * @param submission The {@link Submission}-DTO with a valid state.
      */
