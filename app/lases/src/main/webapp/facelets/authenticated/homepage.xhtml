@@ -23,13 +23,14 @@
 
             <div class="list-body">
                 <h:form>
-                    <pg:pagination paginator="#{homepageBacking.submissionPagination}">
+                    <pg:pagination paginator="#{submissionBacking.paperPagination}">
                         <h:column>
                             <f:facet name="header">
                                 <col:sortsearchcolumn paginator="#{homepageBacking.submissionPagination}"
                                                       columnIdent="paper-title" columnNo="0" columnNamei18n="Title"/>
                             </f:facet>
                             <h:outputText value="#{var.forumName}"/>
+                            <h:commandButton action="#{submissionBacking.releaseRevision(var)}"
                         </h:column>
                         <h:column>
                             <f:facet name="header">
@@ -44,6 +45,12 @@
                             </f:facet>
                             <h:outputText value=""/>
                         </h:column>
+                        <h:column>
+                            <f:facet name="header">
+
+                            </f:facet>
+                        </h:column>
+
                     </pg:pagination>
                 </h:form>
             </div>

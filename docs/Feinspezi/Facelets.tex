@@ -19,7 +19,7 @@
 Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren wir nach dem \emph{kebab-case} Prinzip. Um den genauen Typ in die ID mit aufzunehmen, wird das entsprechende Suffix angehängt.
 
 \todo{Suffix:}
- graphicImage = gim, link = lnk, inputText = itxt, outputText = otxt, commandButton = cbtn, messages = msgs, dataTable = dtbl, selectOneMenu = slctom, panelGrid = pgrd, commandLink = clnk, inputSecret = iscrt, inputFile = ifile
+ graphicImage = gim, link = lnk, inputText = itxt, outputText = otxt, commandButton = cbtn, messages = msgs, dataTable = dtbl, selectOneMenu = slctom, panelGrid = pgrd, commandLink = clnk, inputSecret = iscrt, inputFile = ifile, column = clmn
 
 \subsection{Templates}
 
@@ -342,9 +342,9 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 		
 		\fentry{state-slctom}{<h:selectOneMenu>}{Status der Submission.}{value="\#\{submissionBacking.submission.state\}"}{readonly="\#\{not submissionBacking.sessionInformation.user.editor\}"}{/}
 		
-		\fentry{/}{arg2}{arg3}{arg4}{arg5}{arg6}
+		\fentry{/}{<f:selectItems>}{Auswahl des Status.}{itemValue="\#\{\}"}{/}{/}
 		
-		\fentry{title-otxt}{<h:outputText>}{Titel des Papers.}{value="\#\{submissionBacking.submission.title\}"}{/}{/}
+		\fentry{state-otxt}{<h:outputText>}{Status der Einreichung.}{value="\#\{submissionBacking.submission.state\}"}{/}{/}
 		
 		\fentry{forum-lnk}{<h:link>}{Name des Forums und Weiterleitung zur Forumsübersicht.}{value="\#\{submissionBacking.scientificForum.name\}" \newline outcome="/facelets/authenticated/scientificForum" \newline title="\#\{help.directToForum\}"}{disabled="\#\{not submissionBacking.sessionInformation.user.editor\}"}{/}
 		
@@ -370,8 +370,8 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 \begin{samepage}
 	
-	\emph{paperPagination} enthält die Spalten: Version, Datum, Sichtbarkeit, Status und Download.
-	Die Elemente der Liste, der unterschiedlichen Versionen der Einrichtung, sieht wie folgt aus:
+	\emph{paperPagination} enthält die Spalten: Version, Datum, Sichtbarkeit und Download.
+	Die Elemente der Liste, der unterschiedlichen Versionen der Einreichung, sieht wie folgt aus:
 	
 	\ftable{
 		\fentry{paper-pg}{<pg:pagination>}{Liste aller eignen Einreichungen.}{paginator="\#\{submissionBacking.paperPagination\}"}{/}{/}
@@ -388,12 +388,24 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 		
 		\fentry{date-otxt}{<h:outputText>}{Abgabedatum des Papers.}{value="\#\{var.uploadTime\}"}{/}{convertDateTime \newline pattern=""yyyy-MM-dd"}
 		
-		\fentry{unlockRevision}{commandButton}{Freischalten einer Revision.}{E}{}{}
+		\fentry{release-revision-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Freigabestatus.}{paginator="\#\{submissionBacking.paperPagination\}"\newline columnNamei18n="\#\{label.releaseRevision\}"}{/}{/}
 		
-		\fentry{state}{radioButton}{Status der Einreichung}{Alle}{}{}
+		\fentry{show-release-revision-otxt}{<h:outputText>}{Status der Freischaltung. }{value="\#\{label.releasedRevision\}"}{rendered="\#\{not submissionBacking.sessionInformation.user.editor\}"}{/}
 		
-		\fentry{pdf}{commandButton}{Download der Einreichung}{Alle}{}{}
+		\fentry{release-revision-cbtn}{<h:commandButton>}{Freischalten einer Revision.}{value="\#\{label.releaseRevision\}" action="\#\{submissionBacking.releaseRevision(var)\}" title="\#\{help.releaseRevision\}"}{rendered="\#\{submissionBacking.sessionInfromation.user.editor\}"}{/}
+		
+		\fentry{download-file-clmn}{<h:column>}{Spalten für den Download der Datei.}{/}{/}{/}
+		
 	}
+\end{samepage}
+
+\begin{samepage}
+Die Spalte zum Download der einzelnen Paper ist wie folgt definiert:
+
+		\fentry{download-header}{<f:facet>}{Spaltenkopf für den Download.}{name="header"}{/}{/}
+		
+		\fentry{pdf-submission-cbtn}{<h:commandButton>}{Download der Einreichung}{value="\#\{label.downloadFile\}" action="\#\{submissionBacking.downloadPaper(var)\}" title="\#\{help.downloadFile\}"}{/}{/}
+		
 \end{samepage}
 
 \begin{samepage}
