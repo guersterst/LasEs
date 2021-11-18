@@ -9,7 +9,7 @@ import jakarta.inject.Inject;
 
 /**
  * Provides functionality regarding the authentication of a user.
- * In case of an unexpected state, a {@link de.lases.global.transport.UIMessage} event will be fired.
+ * In case of an unexpected state, a {@link UIMessage} event will be fired.
  */
 @Dependent
 public class LoginService {

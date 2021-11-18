@@ -37,6 +37,7 @@ public class SubmissionService {
      * <p></p>
      * The selected editor, reviewers and co-authors are informed about this
      * using the {@code EmailUtil} utility.
+     * Do not forget to also add a paper using {@link PaperService#addPaper(File, Submission)}.
      *
      * @param submission The submissions' data.
      * @param reviewers  The desired reviewers as proper {@code User}-DTOs or exclusively containing
@@ -136,22 +137,6 @@ public class SubmissionService {
     }
 
     /**
-     * Uploads a file to a submission.
-     * <p></p>
-     * Whether this is a submission-pdf or a revision-pdf is determined internally.
-     *
-     * @param file       The file to be added.
-     * @param submission The submission, to which the file is being added.
-     */
-    public void uploadFile(File file, Submission submission) {
-    }
-
-    //todo what return? File or paper
-    public Paper downloadFile() throws IOException {
-        return null;
-    }
-
-    /**
      * Determines whether a user has permission to view a submission
      *
      * @param submission The submission to be viewed.
@@ -179,15 +164,13 @@ public class SubmissionService {
         return null;
     }
 
-    //todo what about coauthored submissions? one solution expand privilege for co-author.
-
     /**
      * Delivers all submissions, that a user has submitted, is an editor to or reviews.
      *
      * @param privilege    The role, to which submissions belong, in relation to a user.
      *                     Meaning, the user can request to receive the submissions which he is an editor to,
      *                     reviews or has submitted himself.
-     * @param user         The user, whose editorial, reviewed or own submissions.
+     * @param user         The user, whose editorial, reviewed or own and coauthored submissions.
      * @param resultParams Parameters, that control filtering and sorting of the resulting list.
      * @return The resulting list of submissions, which a user is involved in.
      */
