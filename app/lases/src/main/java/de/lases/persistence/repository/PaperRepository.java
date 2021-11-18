@@ -75,6 +75,7 @@ public class PaperRepository {
      * @throws NotFoundException The specified paper was not found in the
      *                           repository.
      * @throws DataNotWrittenException If writing the data to the repository
+     *                                 fails.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
