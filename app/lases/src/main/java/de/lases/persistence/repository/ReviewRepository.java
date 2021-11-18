@@ -102,6 +102,8 @@ public class ReviewRepository {
      *                           or there is no user with the provided id.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     * @throws InvalidQueryParamsException If the resultListParameters contain
+     *                                     an erroneous option.
      */
     public static List<Review> getList(Submission submission, User user,
                                Transaction transaction,
