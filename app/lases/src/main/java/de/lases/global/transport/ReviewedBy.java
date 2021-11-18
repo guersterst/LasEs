@@ -3,8 +3,8 @@ package de.lases.global.transport;
 import java.time.LocalDateTime;
 
 /**
- * Stores Information about the review-request relationship of a Submission and
- * a User (the reviewer).
+ * Stores information about the review-request relationship of a submission and
+ * a user (the reviewer).
  */
 public class ReviewedBy {
 
