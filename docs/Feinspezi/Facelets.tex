@@ -322,97 +322,103 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \todo{id von Scientific forum wietergeben? für link + profile}
 
 \begin{samepage}
-	
+
 	\textbf{submission.xhtml} ist die Übersichtsseite einer Abgabe.
 	Hier werden alle mit der Einreichung verbundenen Aktivitäten abgebildet.
 	\nopagebreak
-	
+
 	\ftable{
 		\fentry{/}{<ui:include>}{\hyperref[flt:toolbar]{Seitenleiste mit Tools.}}{rendered="\#\{submissionBacking.sessionInformation.user.editor\}"}{/}
-		
+
 		\fentry{upload-revision-ifile}{<h:inputFile>}{Upload einer Revision.}{value="\#\{submissionBacking.uploadedRevisionPDF\}" \newline requiered="true" \newline requieredMessage="\#\{requiered.inputFile\}"}{rendered="\#\{submissionBacking.isViewerSubmitter\}"}{/}
-		
+
 		\fentry{upload-cbtn}{<h:commandButton>}{Ausführen des Uploads.}{value="\#\{label.uploadFile\}" \newline action="\#\{submissionBacking.uploadPDF\}" \newline title="\#\{help.uploadRevision\}"}{rendered="\#\{submissionBacking.isViewerSubmitter\}"}{/}
-		
+
 		\fentry{new-review-cbtn}{<h:commandButton>}{Weiterleitung zur Einreichung eines neuen Gutachtens.}{value="\#\{label.uploadReview\}" \newline action="\#\{submissionBacking.uploadReview\}" \newline title="\#\{help.uploadRevision\}"}{rendered="\#\{submissionBacking.sessionInformation.user.reviewer\}"}{/}
-		
+
 		\fentry{accept-reviewing-cbtn}{<h:commandButton>}{Annahme der Rolle eines Gutachters für diese Einreichung.}{value="\#\{label.acceptReviewing\}" \newline action="\#\{submissionBacking.acceptReviewing\}" \newline title="\#\{help.acceptReviewing\}"}{rendered="\#\{submissionBacking.sessionInformation.user.reviewer\}"}{/}
-		
+
 		\fentry{decline-reviewing-cbtn}{<h:command>}{Ablehnen der Rolle eines Gutachters für diese Einreichung.}{value="\#\{label.declineReviewing\}" \newline action="\#\{submissionBacking.declineReviewing\}" \newline title="\#\{help.declineReviewing\}"}{rendered="\#\{submissionBacking.sessionInformation.user.reviewer\}"}{/}
-		
-		\fentry{state-otxt}{<h:outputText>}{Titel des Papers.}{value="\#\{submissionBacking.submission.title\}"}{/}{/}
-		
+
+		\fentry{state-slctom}{<h:selectOneMenu>}{Status der Submission.}{value="\#\{submissionBacking.submission.state\}"}{readonly="\#\{not submissionBacking.sessionInformation.user.editor\}"}{/}
+
+		\fentry{/}{arg2}{arg3}{arg4}{arg5}{arg6}
+
 		\fentry{title-otxt}{<h:outputText>}{Titel des Papers.}{value="\#\{submissionBacking.submission.title\}"}{/}{/}
-		
+
 		\fentry{forum-lnk}{<h:link>}{Name des Forums und Weiterleitung zur Forumsübersicht.}{value="\#\{submissionBacking.scientificForum.name\}" \newline outcome="/facelets/authenticated/scientificForum" \newline title="\#\{help.directToForum\}"}{disabled="\#\{not submissionBacking.sessionInformation.user.editor\}"}{/}
-		
+
 		\fentry{author-lnk}{<h:link>}{Name des Autors und Weiterleitung zum Profil.}{value="\#\{submissionBacking.authorForPaper\}" \newline outcome="/facelets/authenticated/profile" \newline title="\#\{help.directProfile\}"}{disabled="\#\{not submissionBacking.sessionInformation.user.editor\}"}{/}
-		
+
 		\fentry{email-lnk}{<h:link>}{E-Mail-Adressen der Co-Autoren und Mailto-Link.}{value="\#\{submissionBacking.author.emailAddress\}"\newline  outcome="\#\{'mailto:'.concat(submissionBacking.author.emailAddress)\}"}{disabled="\#\{not submissionBacking.sessionInformation.user.editor\}"}
-		
+
+		\fentry{deadlineRevision-otxt}{<h:outputText>}{Deadline der Revision}{value="\#\{submissionBacking.submission.deadlineRevision\}"}{/}{/}
+
 		\fentry{dateSelect}{selectOneMenu}{Auswahl der Filtermöglichkeit eines Datums.}{Alle}{}{}
-		
+
 		\fentry{dateSelectReview}{selectOneMenu}{Auswahl der Filtermöglichkeit eines Datums.}{Alle}{}{}
-		
+
 		\fentry{reviewState}{selectOneMenu}{Filtern der Gutachten nach ihrem Status.}{E,G}{}{}
-		
+
 		\fentry{recommendation}{selectOneMenu}{Auswahl der Art von Empfehlungen.}{Alle}{}{}
-		
+
 		\fentry{paperPagination}{pagination}{Liste aller Versionen}{Alle}{}{}
-		
+
 		\fentry{reviewPagination}{pagination}{Liste aller/der eigenen Gutachten.}{E,G}{}{}
 	}
 \end{samepage}
 
 \begin{samepage}
-	
-	\emph{paperPagination} enthält die Spalten: Version, Datum, Deadline, Sichtbarkeit, Status und Download.
+
+	\emph{paperPagination} enthält die Spalten: Version, Datum, Sichtbarkeit, Status und Download.
 	Die Elemente der Liste, der unterschiedlichen Versionen der Einrichtung, sieht wie folgt aus:
-	
+
 	\ftable{
-		\fentry{paper-pg}{<pg:pagination>}{Liste aller eignen Einreichungen.}{paginator="\#\{homepageBacking.submissionPagination\}"}{/}{/}
-		
-		\fentry{title-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Titel des Papers.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.paperTitle\}"}{/}{/}
-		
-		\fentry{title-otxt}{<h:outputText>}{Titel des Papers.}{value="\#\{var.title\}"}{/}{/}
-		
-		\fentry{version}{outputText}{Versionsnummer der Einreichung}{Alle}{}{}
-		
-		\fentry{date}{outputText}{Datum der Einreichung}{Alle}{}{}
-		
-		\fentry{deadline}{outputText}{Deadline der Revision}{Alle}{}{}
-		
+		\fentry{paper-pg}{<pg:pagination>}{Liste aller eignen Einreichungen.}{paginator="\#\{submissionBacking.paperPagination\}"}{/}{/}
+
+		\fentry{version-ssc}{<ssc:sortsearchcolumn>}{Spalte für die Version des Papers.}{paginator="\#\{submissionBacking.paperPagination\}"\newline columnNamei18n="\#\{label.paperVersion\}"}{/}{/}
+
+		\fentry{version-otxt}{<h:outputText>}{Version des Papers.}{value="\#\{var.submissionId\}"}{/}{/}
+
+		\fentry{date-ssc}{<ssc:sortsearchcolumn>}{Spalte für das Abgabedatum des Papers.}{paginator="\#\{submissionBacking.paperPagination\}"\newline columnNamei18n="\#\{label.date\}"}{/}{/}
+
+		\fentry{date-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{\}" title="\#\{help.dateSelect\}"}{/}{/}
+
+		\fentry{/}{<f:selectItems>}{Mögliche Filterung des Datums.}{value="\#\{\}"}{/}{/}
+
+		\fentry{date-otxt}{<h:outputText>}{Abgabedatum des Papers.}{value="\#\{var.uploadTime\}"}{/}{convertDateTime \newline pattern=""yyyy-MM-dd"}
+
 		\fentry{unlockRevision}{commandButton}{Freischalten einer Revision.}{E}{}{}
-		
+
 		\fentry{state}{radioButton}{Status der Einreichung}{Alle}{}{}
-		
+
 		\fentry{pdf}{commandButton}{Download der Einreichung}{Alle}{}{}
 	}
 \end{samepage}
 
 \begin{samepage}
-	
+
 	\emph{reviewPagination} enthält die Spalten: Version, Gutachter, Datum, Deadline, Status, Empfehlung, Kommentar und Download.
 	Ist ein Gutachten freigeschaltet, so erhält auch ein Nutzer Leserechte.
 	Die Elemente der Liste von Gutachten sind folgende:
-	
+
 	\ftable{
 		\fentry{version}{outputText}{Versionsnummer des Gutachtens.}{E,G}{}{}
-		
+
 		\fentry{reviewer}{outputText}{Namen des Gutachters.}{E,G}{}{}
-		
+
 		\fentry{date}{outputText}{Datum des Gutachtens.}{E,G}{}{}
-		
+
 		\fentry{deadline}{outputText}{Deadline des Gutachtens.}{E,G}{}{}
-		
+
 		\fentry{state}{commandButton}{Freigabe des Gutachtens}{E}{}{}
-		
+
 		\fentry{stateText}{outputText}{Freigabestatus des Gutachtens}{G}{}{}
-		
+
 		\fentry{recommendation}{checkbox}{Empfehlung eines Gutachters}{E,G}{}{}
-		
+
 		\fentry{comment}{outputText}{Kommentar des Gutachters.}{E,G}{}{}
-		
+
 		\fentry{pdf}{commandButton}{Download der Einreichung.}{E,G}{}{}
 	}
 \end{samepage}
@@ -421,6 +427,81 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 %% Ab hier sind Bastis hinzugefügte Änderungen
 
+
+\begin{samepage}
+
+	\textbf{profile.xhtml} Die Profilseite eines angemeldeten Nutzers ist nur vom Nutzer selbst und vom Administrator editierbar.
+	Ein Editor besitzt nur Leserechte. Alle zuvor gespeicherten Angaben werden in den jeweiligen Feldern angezeigt.
+	\nopagebreak
+
+	\todo{wie hier url von bild wissen?}
+
+	\ftable{
+
+		\fentry{avatar-gim}{<h:graphicImage>}{Aktueller Avatar.}{value="\#\{'https://lases.de/image/'.concat(profileBacking.user.id)\}"}{/}{/}
+
+		\fentry{new-avatar-ifile}{<h:inputFile>}{Hochladen eines neuen Avatars.}{value="\#\{profileBacking.uploadedAvatar\}"}{rendered="\#\{profileBacking.hasViewerEditRights\}"}{/}
+
+		\fentry{submit-avatar-cbtn}{<h:commandButton>}{Lade neuen Avatar hoch.}{value="\#\{profileBacking.uploadAvatar\}"}{rendered="\#\{profileBacking.hasViewerEditRights\}"}{/}
+
+		\fentry{delete-avatar-cbtn}{<h:commandButton>}{Löschen des Avatars.}{value="\#\{profileBacking.deleteAvatar\}"}{rendered="\#\{profileBacking.hasViewerEditRights\}"}{/}
+
+		\fentry{role-otxt}{<h:outputText>}{Angabe der Rolle eines Nutzers}{?}{/}{/}
+
+		\fentry{is-admin-cbx}{<h:selectBooleanCheckbox>}{Zuteilung der Rolle des Administrators.}{value="\#\{profileBacking.user.admin\}"}{rendered="\#\{profileBacking.sessionInformation.admin\}"}{/}
+
+		\fentry{title-itxt}{<h:inputText>}{Titel des Nutzenden.}{value="\#\{profileBacking.user.title\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{/}
+
+		\fentry{firstname-itxt}{<h:inputText>}{Vorname des Nutzenden.}{value="\#\{profileBacking.user.firstName\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{required="true"}
+
+		\fentry{lastname-itxt}{<h:inputText>}{Nachname des Nutzenden.}{value="\#\{profileBacking.user.lastName\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{required="true"}
+
+		\fentry{password-iscrt}{<h:inputSecret>}{Leeres Eingabefeld für ein neues Passwort.}{value="\#\{profileBacking.user.passwordNotHashed\}"}{rendered="\#\{!profileBacking.hasViewerEditRights\}"}{required="true"}
+
+		\fentry{email-itxt}{<h:inputText>}{E-Mail des Nutzenden.}{value="\#\{profileBacking.user.emailAddress\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{required="true"}
+
+		\fentry{submission-number-otxt}{<h:outputText>}{Anzahl der Einreichungen des Nutzers}{?}{/}{/}
+
+		\fentry{employer-itxt}{<h:inputText>}{Angabe des Arbeitgebers}{value="\#\{profileBacking.user.employer\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{/}
+
+		\multicolumn{6}{|c|}{Fortsetzung auf der nächsten Seite.} \\\hline %das hline verursacht keine probleme, wird sind in einem tabular
+
+	}
+\end{samepage}
+
+\begin{samepage}
+	\ftable{
+	\fentry{science-field-lst}{<h:dataTable>}{Spezialgebiete des Nutzers}{value="\#\{profileBacking.usersScienceFields\}"}{/}{/}
+
+	\fentry{add-science-field-slctolb}{<p:selectOneListbox>}{Auswahl der Spezialgebiete des Nutzers}{value="\#\{profileBacking.scienceFields\}"}{rendered="\#\{!profileBacking.hasViewerEditRights\}"}{/}
+
+	\fentry{delete-field-cbtn}{<h:commandButton>}{Löschen des ausgewählten Fachgebietes.}{value="\#\{label.delete\}"\newline action="\#\{profileBacking.deleteScienceField\}"}{rendered="\#\{!profileBacking.hasViewerEditRights\}"}{/}
+
+	\fentry{add-field-cbtn}{<h:commandButton>}{Füge Fachgebiet zur Liste hinzu.}{value="\#\{label.add\}"\newline action="\#\{profileBacking.addScienceField\}"}{rendered="\#\{!profileBacking.hasViewerEditRights\}"}{/}
+
+	\fentry{date-of-birth-itxt}{<h:inputText>}{Angabe des Geburtstages}{value="\#\{profileBacking.user.dateOfBirth\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{/}
+
+	\fentry{save-cbtn}{<h:commandButton>}{Daten werden gespeichert.}{value="\#\{label.save\}"\newline action="\#\{profileBacking.submitChanges\}"}{rendered="\#\{!profileBacking.hasViewerEditRights\}"}{/}
+
+	\fentry{delete-cbtn}{<h:commandButton>}{Nutzer und alle damit verbundenen Daten werden gelöscht.}{value="\#\{label.deleteUser\}"\newline action="\#\{profileBacking.deleteProfile\}"}{rendered="\#\{!profileBacking.hasViewerEditRights\}"}{/}
+
+}
+\end{samepage}
+
+Sollte ein Administrator einem anderen Nutzer die Rolle des Administrators zuweisen oder entziehen, so erscheint beim Auslösen des Save-Buttons ein Popup-Dialog.
+In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Passwort zu bestätigen.
+
+\ftable{
+
+	\fentry{password}{inputSecret}{Angabe eines Passworts.}{A}{}{}
+
+	\fentry{reference}{outputText}{Hinweis zur Veränderung der Adminrolle.}{A}{}{}
+
+	\fentry{abort}{commandButton}{Abbruch der Änderung.}{A}{}{}
+
+	\fentry{save}{commandButton}{Speichern aller Änderungen.}{A}{}{}
+
+}
 
 \begin{samepage}
 	\textbf{scientificForum.xhtml} Die Ansicht eines Forums dient zur Ausgabe von Informationen über die jeweilige Konferenz oder das jeweilige Journal.
