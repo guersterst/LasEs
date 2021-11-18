@@ -356,15 +356,11 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{deadlineRevision-otxt}{<h:outputText>}{Deadline der Revision}{value="\#\{submissionBacking.submission.deadlineRevision\}"}{/}{/}
 
-		\fentry{dateSelect}{selectOneMenu}{Auswahl der Filtermöglichkeit eines Datums.}{Alle}{}{}
-
 		\fentry{dateSelectReview}{selectOneMenu}{Auswahl der Filtermöglichkeit eines Datums.}{Alle}{}{}
 
 		\fentry{reviewState}{selectOneMenu}{Filtern der Gutachten nach ihrem Status.}{E,G}{}{}
 
 		\fentry{recommendation}{selectOneMenu}{Auswahl der Art von Empfehlungen.}{Alle}{}{}
-
-		\fentry{paperPagination}{pagination}{Liste aller Versionen}{Alle}{}{}
 
 		\fentry{reviewPagination}{pagination}{Liste aller/der eigenen Gutachten.}{E,G}{}{}
 	}
@@ -404,22 +400,25 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \begin{samepage}
 Die Spalte zum Download der einzelnen Paper ist wie folgt definiert:
 
+\ftable{
+
 		\fentry{download-header}{<f:facet>}{Spaltenkopf für den Download.}{name="header"}{/}{/}
 		
 		\fentry{pdf-submission-cbtn}{<h:commandButton>}{Download der Einreichung}{value="\#\{label.downloadFile\}" action="\#\{submissionBacking.downloadPaper(var)\}" title="\#\{help.downloadFile\}"}{/}{/}
+	}
 		
 \end{samepage}
 
 \begin{samepage}
 	
-	\emph{reviewPagination} enthält die Spalten: Version, Gutachter, Datum, Deadline, Status, Empfehlung, Kommentar und Download.
+	\emph{reviewPagination} enthält die Spalten: Version, Gutachter, Datum, Status, Empfehlung, Kommentar und Download.
 	Ist ein Gutachten freigeschaltet, so erhält auch ein Nutzer Leserechte.
 	Die Elemente der Liste von Gutachten sind folgende:
 
 	\ftable{
 		\fentry{version}{outputText}{Versionsnummer des Gutachtens.}{E,G}{}{}
 
-		\fentry{reviewer}{outputText}{Namen des Gutachters.}{E,G}{}{}
+		\fentry{reviewer-lnk}{<h:link>}{Namen des Gutachters.}{}{E,G}{}{}
 
 		\fentry{date}{outputText}{Datum des Gutachtens.}{E,G}{}{}
 
