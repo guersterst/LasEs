@@ -50,7 +50,6 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 \end{samepage}
 
-\todo{wo css einbidnen?}
 
 \begin{samepage}
 	\textbf{main.xhtml} ist das Template, welches den Inhalt der Seiten zwischen Kopf- und Fußzeile einbettet.
@@ -166,7 +165,6 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 \todo{Konventionen}
 
-\todo{Messages direkt an Eingabefeldern?ja?}
 
 \subsubsection{Anonymer Nutzer}
 
@@ -224,8 +222,6 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	}
 \end{samepage}
 
-\todo{ErrorMessage does not exist}
-\todo{Stacktrace im development}
 
 \begin{samepage}
 	\textbf{errorPage.xhtml} Auf diese Seite wird navigiert, wenn auf eine nicht existierende URL oder auf eine URL zugegriffen wird, auf die man keine Zugriffsrechte hat.
@@ -235,7 +231,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{error-message-otxt}{<h:outputText>}{Anzeige einer Fehlermeldung.}{value="\#\{errorPageBacking.errorMessage.message\}"}{/}{/}
 
-		\fentry{stack-trace-otxt}{<h:outputText>}{Stacktrace für den "Productive Mode".}{value="\#\{errorPageBacking.errorMessage.message\}"}{/}{/}
+		\fentry{stack-trace-otxt}{<h:outputText>}{Stacktrace für den "Development Mode".}{value="\#\{errorPageBacking.errorMessage.stackTrace\}"}{/}{rendered="\#\{errorPageBacking.isDevelopmentMode()\}"}
 
 	}
 \end{samepage}
@@ -254,7 +250,6 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 \subsubsection{Angemeldeter Nutzer}
 
-\todo{zugriff von normalen nutzer wird über TrespassListener gehandhabt?}
 
 \begin{samepage}
 	\textbf{homepage.xhtml} \phantomsection \label{flt:homepage} Startseite die den Überblick über alle Einreichungen, aufgeteilt in Reiter, beinhaltet.
@@ -268,8 +263,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	}
 \end{samepage}
 
-\todo{selectOneMenu noch nicht fertig}
-\todo{ScientificForumsname gibt es nicht}
+
 
 \begin{samepage}
 	Die Tabellen \emph{submissionPagination}, \emph{reviewPagination} und \emph{editorPagination} sind nach den gleichen Punkten gegliedert und daher nur einmal ausführlich aufgegliedert: Titel des Papers, Datum, Deadline und Status der Einreichung und Name des zugehörigen Forums.
@@ -305,15 +299,12 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{forum-ssc}{<ssc:sortsearchcolumn>}{Spalte für zugehöriges Forum.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.forumSub\}"}{/}{/}
 
-		\fentry{forum-lnk}{<h:link>}{Zugehöriges Forum der Einreichung.}{value="\#\{var.scientificForum.name\}" outcome="/facelets/authenticated/scientificForum" \newline includeViewParams="true"}{/}{/}
+		\fentry{forum-lnk}{<h:link>}{Zugehöriges Forum der Einreichung.}{value="\#\{homepageBacking.scientificForumForSubmission\}" outcome="/facelets/authenticated/scientificForum" \newline includeViewParams="true"}{/}{/}
 
 		\fentry{/}{<f:param>}{Parameter für id des Forums.}{value="\#\{var.scientificForumId\}" name="id"}{/}{/}
 
 	}
 \end{samepage}
-
-\todo{uploadFile ist noch nicht vollständig}
-\todo{id von Scientific forum wietergeben? für link + profile}
 
 \begin{samepage}
 
