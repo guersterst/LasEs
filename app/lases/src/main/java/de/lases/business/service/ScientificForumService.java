@@ -56,17 +56,12 @@ public class ScientificForumService {
     public void addForum(ScientificForum forum, List<ScienceField> scienceFields, List<User> editors) {
     }
 
-
     /**
      * Deletes a scientific forum and all associated submissions and reviews.
      *
      * @param forum The scientific forum to be deleted.
      */
     public void removeForum(ScientificForum forum) {
-    }
-
-
-    public void getSubmissions() {
     }
 
     /**
@@ -91,6 +86,23 @@ public class ScientificForumService {
     }
 
     public List<ScientificForum> getForums(ResultListParameters resultListParams) {
+        return null;
+    }
+
+    /**
+     * Delivers all submissions, that a user either has submitted, is an editor to or reviews
+     * in a specified scientific forum.
+     *
+     * @param scientificForum The {@link ScientificForum} where the wanted submissions are submitted to.
+     * @param user            The user, whose editorial, reviewed or own submissions.
+     * @param privilege       The role, to which submissions belong, in relation to a user.
+     *                        Meaning, the user can request to receive the submissions which he is an editor to,
+     *                        reviews or has submitted himself.
+     * @param resultParams    Parameters, that control filtering and sorting of the resulting list.
+     * @return The resulting list of submissions, that were submitted to a given scientific forum.
+     */
+    public List<Submission> getSubmissions(ScientificForum scientificForum, User user, Privilege privilege,
+                                           ResultListParameters resultParams) {
         return null;
     }
 }
