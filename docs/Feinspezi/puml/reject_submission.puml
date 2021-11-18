@@ -68,7 +68,7 @@ end note
 editor -> sub ++ : setId(subId)
 return
 
-editor -> sb ++ : load() //[via viewAction]//
+editor -> sb ++ : onLoad() //[via viewAction]//
     sb -> ssvc ++ : canView(sub, user)
     return true
 

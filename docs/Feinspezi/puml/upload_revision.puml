@@ -67,7 +67,7 @@ user -> sub ++ : setId(subId)
 return
 
 
-user -> sb ++ : load() //[via viewAction]//
+user -> sb ++ : onLoad() //[via viewAction]//
     sb -> ssvc ++ : canView(sub, usr)
     return true
 
