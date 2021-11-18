@@ -429,6 +429,37 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 
 \begin{samepage}
+	\textbf{resultList.xhtml} zeigt alle Ergebnisse einer Suche an.
+	\nopagebreak
+
+	Wird nach den eigenen Einreichungen, nach denen, die man begutachtet oder nach Einreichungen in eigener editorialer Verantwortung gesucht, so erscheinen die Listen im gleichen Schema wie auch auf der Homepage.
+	Ergibt die Suche eine Liste von User, so wird diese wie in der Userliste für den Administrator und dem Editor angezeigt.
+	Ist das Ziel der Suche, wissenschaftliche Foren zu finden, so erhält man bei passender Eingabe eine Liste im selben Format wie diejenige auf der Seite der Forumsliste.
+\end{samepage}
+
+
+\begin{samepage}
+
+	\textbf{scientificForumList.xhtml} Hier erhalten die Nutzer eine Übersicht über alle wissenschaftliche Foren.\nopagebreak
+
+	\todo{scientificcorum list wie view params?}
+
+	\ftable{
+		\fentry{date-select-slctom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{scientificForumListBacking.deadlineFilterSelect\}"}{/}{/}
+
+		\fentry{forums-pagination-pg}{<pg:pagination>}{Liste aller Foren im System.}{paginator="\#\{scientificForumListBacking.scientificForumPagination\}"}{/}{/}
+
+		\fentry{name-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Namen des Forums.}{paginator="\#\{scientificForumListBacking.scientificForumPagination\}"\newline columnNamei18n="\#\{label.name\}"}{/}{/}
+
+		\fentry{name}{link}{Name des Forums.}{value="\#\{'forum.xhtml?id='.concat(var.id)\}"}{/}{/}
+
+		\fentry{deadline-ssc}{<ssc:sortsearchcolumn>}{Spalte für die Deadline des Forums.}{paginator="\#\{scientificForumListBacking.scientificForumPagination\}"\newline columnNamei18n="\#\{label.deadline\}"}{/}{/}
+
+		\fentry{deadline}{outputText}{Abgabefrist des jeweiligen Forums.}{value="\#\{var.deadline\}"}{/}{/}
+	}
+\end{samepage}
+
+\begin{samepage}
 
 	\textbf{profile.xhtml} Die Profilseite eines angemeldeten Nutzers ist nur vom Nutzer selbst und vom Administrator editierbar.
 	Ein Editor besitzt nur Leserechte. Alle zuvor gespeicherten Angaben werden in den jeweiligen Feldern angezeigt.

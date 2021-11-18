@@ -34,6 +34,8 @@ public class User {
 
     private boolean isNotRegistered;
 
+    private int numberOfSubmissions;
+
     /**
      * Return if the user is an editor.
      *
@@ -269,5 +271,18 @@ public class User {
     @Override
     public int hashCode() {
         return java.util.Objects.hash(id);
+    }
+
+    public int getNumberOfSubmissions() {
+        return numberOfSubmissions;
+    }
+
+    /**
+     * Set the number of the user's own submissions.
+     *
+     * @param numberOfSubmissions How many submissions did the user submit.
+     */
+    public void setNumberOfSubmissions(int numberOfSubmissions) {
+        this.numberOfSubmissions = numberOfSubmissions;
     }
 }
