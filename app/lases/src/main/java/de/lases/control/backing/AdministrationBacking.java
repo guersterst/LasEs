@@ -74,4 +74,13 @@ public class AdministrationBacking {
     public void setUploadedLogo(Part uploadedLogo) {
         this.uploadedLogo = uploadedLogo;
     }
+
+    /**
+     * Return an array of all values the Style enum can have.
+     *
+     * @return ALl options of Style.
+     */
+    public Style[] getStyles() {
+        return Style.values();
+    }
 }

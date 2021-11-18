@@ -77,6 +77,7 @@ public class ReviewRepository {
      * @throws NotFoundException The specified review was not found in the
      *                           repository.
      * @throws DataNotWrittenException If writing the data to the repository
+     *                                 fails.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
@@ -102,6 +103,8 @@ public class ReviewRepository {
      *                           or there is no user with the provided id.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     * @throws InvalidQueryParamsException If the resultListParameters contain
+     *                                     an erroneous option.
      */
     public static List<Review> getList(Submission submission, User user,
                                Transaction transaction,

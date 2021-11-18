@@ -1,7 +1,6 @@
 package de.lases.global.transport;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * Represents a paper.
@@ -10,7 +9,7 @@ public class Paper {
 
     private int submissionId;
 
-    private int id;
+    private int versionNumber;
 
     private LocalDateTime uploadTime;
 
@@ -21,7 +20,7 @@ public class Paper {
     }
 
     /**
-     * Set the id of the submission this paper belongs to.
+     * Set the versionNumber of the submission this paper belongs to.
      *
      * @param submissionId Id of the parent submission.
      */
@@ -29,17 +28,17 @@ public class Paper {
         this.submissionId = submissionId;
     }
 
-    public int getId() {
-        return id;
+    public int getVersionNumber() {
+        return versionNumber;
     }
 
     /**
-     * Set the id of this paper.
+     * Set the versionNumber of this paper.
      *
-     * @param id The id of this paper.
+     * @param versionNumber The versionNumber of this paper.
      */
-    public void setId(int id) {
-        this.id = id;
+    public void setVersionNumber(int versionNumber) {
+        this.versionNumber = versionNumber;
     }
 
     public LocalDateTime getUploadTime() {

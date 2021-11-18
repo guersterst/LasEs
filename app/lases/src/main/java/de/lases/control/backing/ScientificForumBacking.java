@@ -13,6 +13,7 @@ import jakarta.inject.Named;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -332,4 +333,23 @@ public class ScientificForumBacking implements Serializable {
     public SessionInformation getSessionInformation() {
         return sessionInformation;
     }
+
+    /**
+     * Return an array of all values the SubmissionState enum can have.
+     *
+     * @return ALl options of SubmissionState.
+     */
+    public SubmissionState[] getSubmissionStates() {
+        return SubmissionState.values();
+    }
+
+    /**
+     * Return an array of all values the DateSelect enum can have.
+     *
+     * @return ALl options of DateSelect.
+     */
+    public DateSelect[] getDateSelects() {
+        return DateSelect.values();
+    }
+
 }
