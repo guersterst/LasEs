@@ -2,11 +2,29 @@ JSF lässt sich auf verschiedenste Art \& Weisen konfigurieren, wie beispielswei
 mithilfe der \emph{faces-config.xml}.
 Die Lases-Anwendung bietet nebenher weitere selbstdefinierte Konfigurationsmöglichkeiten an.
 Die Konfigurationsdateien befinden sich im \emph{webapp/WEB-INF/classes} Verzeichnis.
+Die Konfigurationsdateien werden intern in \emph{Properties}-Pakete umgewandelt,
+wobei jedes \emph{Properties}-Paket eine semantische Aufgabe übernimmt.
+So dient beispielsweise die \emph{mail.properties} der Konfiguration des Mailing.
+Wenn ein Paket bestimmte \emph{Properties} auslagert,
+so landen diese in der Anwendungskonfiguration \emph{config.properties}.
+%todo letzten teil kürzen zB letzten satz zu kofig der anw auslagern
 
 \subsection{Konfiguration der Anwendung}
 Die Anwendung kann auf einige Weisen personalisiert konfiguriert werden.
 Hierzu dient die \emph{config.properties}-Datei,  %todo hyperref
 welche zentrale Parameter der Anwendung definiert.
+
+\subsubsection{Konfiguration des Mailings}
+Damit die LasEs-Anwendung Mails versenden und Mailto-Links generieren kann
+müssen einige Konfigurationsentscheidungen getroffen werden.
+Hierzu dient die \emph{mail.properties}-Datei.
+
+\subsubsection{Konfiguration der Datenbank}
+Damit die LasEs-Anwendung einen persistenten Datenbankzugriff besitzen kann,
+muss dieser konfiguriert werden. Nennenswert sind ebenfalls die
+Konfigurationsentscheidungen bezüglich der SSL-Verschlüsselung.
+Hierzu dient die \emph{database.properties}-Datei.
+
 
 
 
