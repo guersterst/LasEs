@@ -175,8 +175,6 @@ public class UserRepository {
             throws NotFoundException, DataNotWrittenException{
     }
 
-    // TODO: Ab hier weiter machen
-
     /**
      * Return if a user with the specified email address exists.
      *
