@@ -24,16 +24,15 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \subsection{Templates}
 
 \begin{samepage}
-	\todo{Sebastians Rollenprüfung}
+	
 \textbf{navigation.xhtml} \phantomsection \label{flt:navbar} ist die Kopfzeile der Webanwendung. Diese bietet die Suchfunktion, Links zu verschiedenen Listen und dem Profil an.
 \nopagebreak
 
-\todo{Absprechen mit Sebastian und BB nicht vollstäandig + Systemsettign fehlt}
 \todo{outcome von links ist immer noch im ordner facelets. mit Johannes abklären und ausprobieren.}
 \ftable{
 	\fentry{logo-gimg}{<h:graphicImage>}{Logo der Applikation.}{value="\#\{navigationBacking.systemSettings.logoImage\}"\}"}{/}{/}
 
-	\fentry{direct-to-home-lnk}{<h:link>}{Weiterleitung zur Homepage.}{outcome="/authenticated/homepage" \newline title="\#\{help.toHome\}"}{/}{/}
+	\fentry{direct-to-home-lnk}{<h:link>}{Weiterleitung zur Homepage.}{outcome="/facelets/authenticated/homepage" \newline title="\#\{help.toHome\}"}{/}{/}
 
 	\fentry{search-frm}{<h:form>}{Formular zur Suche.}{/}{/}{/}
 
@@ -43,11 +42,11 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 	\fentry{user-list-lnk}{<h:link>}{Link zur Übersichtsseite aller Nutzer}{value="\#\{label.userList\}" \newline outcome="/editor/userList \newline title="\#\{help.userList\}"}{render="\#\{navigationBacking.sessionInformation.user.editor\}"}{/}
 
-	\fentry{forum-list-lnk}{<h:link>}{Link zur Übersichtsseite alle Journale und Konferenzen}{value="\#\{label.forumList\}" \newline outcome="/authenticated/scientificForumList" \newline title="\#\{help.forumList\}"}{/}{/}
+	\fentry{forum-list-lnk}{<h:link>}{Link zur Übersichtsseite alle Journale und Konferenzen}{value="\#\{label.forumList\}" \newline outcome="/facelets/authenticated/scientificForumList" \newline title="\#\{help.forumList\}"}{/}{/}
 
 	\fentry{logout-cbtn}{<h:commandButton>}{Loggt den Nutzer aus dem System aus und leitet zur Loginseite weiter.}{value="\#\{label.logout\}" \newline action="\#\{navigationBacking.logout\}" \newline title="\#\{help.logout\}"}{/}{/}
 
-	\fentry{profile-lnk}{<h:link>}{Link zur Profilübersicht}{value="\#\{label.nav.profile\}" \newline outcome="/authenticated/profile"}{/}{/}
+	\fentry{profile-lnk}{<h:link>}{Link zur Profilübersicht}{value="\#\{label.nav.profile\}" \newline outcome="/facelets/authenticated/profile"}{/}{/}
 	}
 
 \end{samepage}
@@ -74,7 +73,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	\nopagebreak
 
 	\ftable{
-		\fentry{imprint-lnk}{<h:link>}{Link zur Seite des Impressums}{value="\#\{label.imprint\}" \newline outcome="/anonymous/imprint" \newline title="\#\{help.imprint\}"}{/}{/}
+		\fentry{imprint-lnk}{<h:link>}{Link zur Seite des Impressums}{value="\#\{label.imprint\}" \newline outcome="/facelets/anonymous/imprint" \newline title="\#\{help.imprint\}"}{/}{/}
 
 		\fentry{language-otxt}{<h:outputText>}{Anzeige der eingestellten Sprache.}{value="\#\{\}"}{/}{/}
 
@@ -220,7 +219,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{register-cbtn}{<h:commandButton>}{Ausführen des Registrations-Prozesses.}{value="\#\{label.register\}"\newline action="\#\{registrationBacking.register\}"}{/}{/}
 
-		\fentry{welcomepage-lnk}{<h:link>}{Weiterleitung zur Login Seite.}{value="\#\{label.welcomeLink\}" \newline outcome="/anonymous/welcome" \newline title="\#\{help.welcomepage\}"}{/}{/}
+		\fentry{welcomepage-lnk}{<h:link>}{Weiterleitung zur Login Seite.}{value="\#\{label.welcomeLink\}" \newline outcome="/facelets/anonymous/welcome" \newline title="\#\{help.welcomepage\}"}{/}{/}
 	}
 \end{samepage}
 
@@ -555,7 +554,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 	\ftable{
 
-		\fentry{avatar-gim}{<h:graphicImage>}{Aktueller Avatar.}{value="\#\{'https://lases.de/image/'.concat(profileBacking.user.id)\}"}{/}{/}
+		\fentry{avatar-gimg}{<h:graphicImage>}{Aktueller Avatar.}{value="\#\{'https://lases.de/image/'.concat(profileBacking.user.id)\}"}{/}{/}
 
 		\fentry{new-avatar-ifile}{<h:inputFile>}{Hochladen eines neuen Avatars.}{value="\#\{profileBacking.uploadedAvatar\}"}{rendered="\#\{profileBacking.hasViewerEditRights\}"}{/}
 
@@ -742,7 +741,7 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
 		\fentry{name-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Namen des Nutzers}{paginator="\#\{userListBacking.userPagination\}"\newline columnNamei18n="\#\{label.name\}"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
 
-		\fentry{name-link}{<h:link>}{Name des Nutzers. Link mit URL-Parameter.}{value="\#\{var.firstName.concat( ).concat(var.lastName)\}"\newline outcome="\#\{'authenticated/profile'\}"\newline includeViewParams="true"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
+		\fentry{name-link}{<h:link>}{Name des Nutzers. Link mit URL-Parameter.}{value="\#\{var.firstName.concat( ).concat(var.lastName)\}"\newline outcome="/facelets/authenticated/profile"\newline includeViewParams="true"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
 
 		\fentry{/}{<f:param>}{Nutzer ID als URL Parameter.}{name="\#\{'id'\}"\newline value="\#\{var.id\}"}{/}{/}
 
@@ -823,9 +822,9 @@ In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Pa
 
 		\fentry{save-btn}{<h:commandButton>}{Speichern der Änderungen.}{value="\#\{label.save\}"\newline action="\#\{administrationBacking.save\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
 
-		\fentry{new-user-link}{<h:link>}{Weiterleitung zu \emph{newUser.xhtml}.}{value="\#\{label.gotoNewUser\}" \newline outcome="/authenticated/newUser"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
+		\fentry{new-user-link}{<h:link>}{Weiterleitung zu \emph{newUser.xhtml}.}{value="\#\{label.gotoNewUser\}" \newline outcome="/facelets/authenticated/newUser"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
 
-		\fentry{new-scientific-forum-link}{<h:link>}{Weiterleitung zu \emph{newScientificForum.xhtml}.}{value="\#\{label.gotoNewScientificForum\}" \newline outcome="/authenticated/newScientificForum"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
+		\fentry{new-scientific-forum-link}{<h:link>}{Weiterleitung zu \emph{newScientificForum.xhtml}.}{value="\#\{label.gotoNewScientificForum\}" \newline outcome="/facelets/authenticated/newScientificForum"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
 	}
 \end{samepage}
 
