@@ -8,7 +8,6 @@ public class Hashing {
     private Hashing() {
     }
 
-    //todo flache Params
     /**
      * Generates a random salt for increased entropy.
      *
@@ -18,7 +17,6 @@ public class Hashing {
         return null;
     }
 
-    //todo flache params.
     /**
      * Hashes a password.
      *
