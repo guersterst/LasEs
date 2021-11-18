@@ -28,20 +28,26 @@ public class PaperService {
      * A {@link Paper} may be the paper associated with a submission or a revision.
      *
      * @param submission The submission of the paper.
-     * @param paper A {@code Paper} containing a valid id.
+     * @param paper      A {@code Paper} containing a valid id.
      */
     public Paper getPaper(Submission submission, Paper paper) {
         return null;
     }
 
     /**
+     * Adds the requirement of a new revision to a given submission.
      *
-     * @param submission
+     * @param submission The submission for which a revision is requested.
      */
     public void requireRevision(Submission submission) {
     }
 
-    public void unlockRevision(int paperId) {
+    /**
+     * Unlocks a revision.
+     *
+     * @param paper
+     */
+    public void unlockRevision(Paper paper) {
     }
 
     /**
@@ -49,6 +55,7 @@ public class PaperService {
      * <p>
      * Whether this is a submission-pdf or a revision-pdf is determined internally.
      * </p>
+     *
      * @param file       The file to be added.
      * @param submission The submission, to which the file is being added.
      */
@@ -56,11 +63,12 @@ public class PaperService {
     }
 
     /**
-     * Returns a file.
+     * Returns a requested file.
+     *
+     * @param paper The paper whose file is requested.
      * @return The requested file.
      */
-    //todo what param?
-    public File downloadFile() {
+    public File downloadFile(Paper paper) {
         return null;
     }
 
@@ -70,8 +78,9 @@ public class PaperService {
      * The papers returned are determined by the highest privilege, which that
      * user possesses on that submission.
      * </p>
+     *
      * @param submission The submission for which the submissions are requested.
-     * @param user  The user who requests the papers.
+     * @param user       The user who requests the papers.
      * @return The list of papers of this submission the given user has access to.
      */
     public List<Paper> getPaperList(Submission submission, User user) {
