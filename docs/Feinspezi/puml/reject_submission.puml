@@ -204,16 +204,12 @@ return <font color=red><b>DataSourceNotFoundException e
 
 editor -> eh ++ : handle()
     note right of eh
-    get <font color=red><b>error</b></font>
-    <font color=red><b>message</b></font> from
-    resource bundle
+    get <font color=red><b>error</b></font> <font color=red><b>message</b></font>
+    (String errMsg)
+    from resource bundle
     end note
 
-    eh -> msg ** : UIMessage(e)
-    eh -> msg ++ : setErrorMessage()
-    return
-    eh -> msg ++ : setStacktrace()
-    return
+    eh -> msg ** : UIMessage(String errMsg, MessageCategory.FATAL)
 
     eh -> epb **
     eh -> epb ++ : setUIMessage(msg)
@@ -224,7 +220,7 @@ editor -> eh ++ : handle()
     errorPage.xhtml
     end note
 
-return "errorPage"
+return
 
 editor -> epb ++ : getUIMessage()
 return msg
