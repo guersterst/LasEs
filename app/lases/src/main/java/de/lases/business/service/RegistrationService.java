@@ -1,27 +1,46 @@
 package de.lases.business.service;
 
 
-import jakarta.enterprise.context.ApplicationScoped;
+import de.lases.global.transport.User;
+import de.lases.persistence.repository.Transaction;
+import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.faces.component.UIMessage;
-import jakarta.inject.Named;
+import jakarta.inject.Inject;
 
-import de.lases.persistence.repository.*;
-import de.lases.global.transport.*;
-
-@ApplicationScoped
-@Named
+/**
+ * Provides functionality for the registration and creation of users.
+ * In case of an unexpected state, a {@link UIMessage} event will be fired.
+ */
+@Dependent
 public class RegistrationService {
 
+    @Inject
     private Event<UIMessage> uiMessageEvent;
 
+    @Inject
     private Transaction transaction;
 
-    public User selfRegister(User user) {
-        return null;
+    /**
+     * Registers and creates a regular user in the database.
+     * <p></p>
+     * The email verification process is initiated using the
+     * {@code EmailUtil} utility.
+     *
+     * @param user The user's data.
+     */
+    public void selfRegister(User user) {
+
     }
 
+    /**
+     * Registers and creates a user in the database.
+     * This user may be an admin.
+     *
+     * @param user The user's data.
+     */
     public void registerByAdmin(User user) {
+
     }
 
 }

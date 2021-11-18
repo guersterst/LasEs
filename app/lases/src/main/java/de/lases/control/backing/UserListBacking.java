@@ -1,49 +1,58 @@
 package de.lases.control.backing;
 
-import de.lases.business.service.*;
+import de.lases.business.service.UserService;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * Backing bean for the user list page.
+ */
 @ViewScoped
 @Named
 public class UserListBacking implements Serializable {
 
+    @Serial
+    private static final long serialVersionUID = -1656064422555982220L;
+
+    @Inject
     private SessionInformation sessionInformation;
+
+    @Inject
+    private UserService userService;
 
     private Pagination<User> userPagination;
 
-    private UserService userService;
-
-
+    /**
+     * Set up the pagination and show the first page.
+     */
     @PostConstruct
     public void init() {
     }
 
-    public String applyFilter() {
-        return null;
+    /**
+     * Get the pagination for the search results with users.
+     *
+     * @return The pagination for users.
+     */
+    public Pagination<User> getUserPagination() {
+        return userPagination;
     }
 
-    public void nameUp() {
+    /**
+     * Get session information.
+     *
+     * @return The session information.
+     */
+    public SessionInformation getSessionInformation() {
+        return sessionInformation;
     }
-
-    public void nameDown() {
-    }
-
-    public void roleUp() {
-    }
-
-    public void roleDown() {
-    }
-
-    public List<User> getUserList() {
-        return null;
-    }
-
 
 }

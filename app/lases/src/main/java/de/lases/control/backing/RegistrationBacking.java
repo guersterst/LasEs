@@ -1,30 +1,54 @@
 package de.lases.control.backing;
 
-import de.lases.business.service.*;
+import de.lases.business.service.RegistrationService;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
-import java.io.Serializable;
-
+/**
+ * Backing bean for the registration page.
+ */
 @RequestScoped
 @Named
-public class RegistrationBacking implements Serializable {
+public class RegistrationBacking {
 
+    @Inject
     private RegistrationService registrationService;
+
+    @Inject
+    private SessionInformation sessionInformation;
 
     private User newUser;
 
-    private SessionInformation sessionInformation;
-
+    /**
+     * Initializes the dto for the new user.
+     */
     @PostConstruct
     public void init() {
     }
 
+    /**
+     * Register the new user and go to the homepage.
+     *
+     * @return Go to the homepage.
+     */
     public String register() {
         return null;
-    } // y
+    }
 
+    public User getNewUser() {
+        return newUser;
+    }
+
+    /**
+     * Set the dto of the new user.
+     *
+     * @param newUser The new user.
+     */
+    public void setNewUser(User newUser) {
+        this.newUser = newUser;
+    }
 }

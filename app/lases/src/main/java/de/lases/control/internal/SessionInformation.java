@@ -9,10 +9,25 @@ import java.util.Locale;
 
 @SessionScoped
 public class SessionInformation implements Serializable {
-    private int userID;
-    private List<Privilege> roles;
+    private User user;
     private Locale locale;
 
     public void invalidateSession() {
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Locale getLocale() {
+        return locale;
+    }
+
+    public void setLocale(Locale locale) {
+        this.locale = locale;
     }
 }

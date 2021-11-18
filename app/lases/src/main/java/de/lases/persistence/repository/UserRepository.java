@@ -21,6 +21,8 @@ public class UserRepository {
     public static void remove(Submission submission, Transaction transaction) throws InvalidFieldsException {
     }
 
+    // TODO @Sebastian: getVerification(Verification verification)
+
     // get list for
     public static List<User> getList() {
         return null;
@@ -32,7 +34,6 @@ public class UserRepository {
 
     public static void removeScienceField() {
     }
-
 
     public static boolean emailExists(String emailAddress, Transaction transaction) {
         return false;

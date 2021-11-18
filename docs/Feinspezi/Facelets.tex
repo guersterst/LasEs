@@ -1,0 +1,868 @@
+%% Macros
+\newcommand{\ftable}[1]{\begin{sidewaystable}
+\begin{tabular}[H]{ |m{1.5cm}| m{1.5cm}| m{3cm}| m{7cm} |m{4cm}| m{4cm}| }
+    \hline
+    \textbf{ID} & \textbf{Typ} & \textbf{Beschreibung} & \textbf{Binding} & \textbf{Constraints} & \textbf{Validator \newline Converter} \\
+    \hline\hline
+    #1
+    %\bottomrule
+\end{tabular}
+\end{sidewaystable}
+}
+
+\newcommand{\fentry}[6]{\footnotesize#1 &\footnotesize#2 &\footnotesize#3 &\footnotesize#4 &\footnotesize#5 &\footnotesize#6\\\hline}
+
+\localauthor{Stefanie Gürster}
+
+\subsection{Namenskonvention}
+
+Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren wir nach dem \emph{kebab-case} Prinzip. Um den genauen Typ in die ID mit aufzunehmen, wird das entsprechende Suffix angehängt.
+
+\todo{Suffix:}
+ graphicImage = gim, link = lnk, inputText = itxt, outputText = otxt, commandButton = cbtn, messages = msgs, dataTable = dtbl, selectOneMenu = slctom, panelGrid = pgrd, commandLink = clnk, inputSecret = iscrt, inputFile = ifile, column = clmn, selectBooleanCheckbox = slctbc
+
+\subsection{Templates}
+
+\begin{samepage}
+	\todo{Sebastians Rollenprüfung}
+\textbf{navigation.xhtml} \phantomsection \label{flt:navbar} ist die Kopfzeile der Webanwendung. Diese bietet die Suchfunktion, Links zu verschiedenen Listen und dem Profil an.
+\nopagebreak
+
+\todo{Absprechen mit Sebastian und BB nicht vollstäandig + Systemsettign fehlt}
+\todo{outcome von links ist immer noch im ordner facelets. mit Johannes abklären und ausprobieren.}
+\ftable{
+	\fentry{logo-gimg}{<h:graphicImage>}{Logo der Applikation.}{value="\#\{navigationBacking.systemSettings.logoImage\}"\}"}{/}{/}
+
+	\fentry{direct-to-home-lnk}{<h:link>}{Weiterleitung zur Homepage.}{outcome="/authenticated/homepage" \newline title="\#\{help.toHome\}"}{/}{/}
+
+	\fentry{search-frm}{<h:form>}{Formular zur Suche.}{/}{/}{/}
+
+	\fentry{search-Field-itxt}{<h:inputText>}{Suchleiste}{value="\#\{navigationBacking.resultListParameters.globalSearchWord\}" \newline title="\#\{help.search\}"}{/}{/}
+
+	\fentry{search-cbtn}{<h:commandButton>}{Suche ausführen.}{action="\#\{navigationBacking.search\}"}{/}{/}
+
+	\fentry{user-list-lnk}{<h:link>}{Link zur Übersichtsseite aller Nutzer}{value="\#\{label.userList\}" \newline outcome="/editor/userList \newline title="\#\{help.userList\}"}{render="\#\{navigationBacking.sessionInformation.user.editor\}"}{/}
+
+	\fentry{forum-list-lnk}{<h:link>}{Link zur Übersichtsseite alle Journale und Konferenzen}{value="\#\{label.forumList\}" \newline outcome="/authenticated/scientificForumList" \newline title="\#\{help.forumList\}"}{/}{/}
+
+	\fentry{logout-cbtn}{<h:commandButton>}{Loggt den Nutzer aus dem System aus und leitet zur Loginseite weiter.}{value="\#\{label.logout\}" \newline action="\#\{navigationBacking.logout\}" \newline title="\#\{help.logout\}"}{/}{/}
+
+	\fentry{profile-lnk}{<h:link>}{Link zur Profilübersicht}{value="\#\{label.nav.profile\}" \newline outcome="/authenticated/profile"}{/}{/}
+	}
+
+\end{samepage}
+
+\todo{wo css einbidnen?}
+
+\begin{samepage}
+	\textbf{main.xhtml} ist das Template, welches den Inhalt der Seiten zwischen Kopf- und Fußzeile einbettet.
+
+	\ftable{
+		\fentry{/}{<ui:include>}{\hyperref[flt:navbar]{Kopfzeile}}{src="navigation.xhtml"}{/}{/}
+
+		\fentry{global-msgs}{<h:messages>}{Anzeigen globaler Nachrichten.}{/}{/}{/}
+
+		\fentry{/}{<ui:insert>}{\hyperref[flt:pages]{Seiteninhalt}}{name="main-content"}{/}{/}
+
+		\fentry{/}{<ui:include>}{\hyperref[flt:footer]{Fußzeile}}{src="footer.xhtml"}{/}{/}
+	}
+\end{samepage}
+
+\todo{language bearbeiten}
+\begin{samepage}
+	\textbf{footer.xhtml} \phantomsection \label{flt:footer} ist die Fußzeile der Webanwendung und für alle sichtbar.
+	\nopagebreak
+
+	\ftable{
+		\fentry{imprint-lnk}{<h:link>}{Link zur Seite des Impressums}{value="\#\{label.imprint\}" \newline outcome="/anonymous/imprint" \newline title="\#\{help.imprint\}"}{/}{/}
+
+		\fentry{language-otxt}{<h:outputText>}{Anzeige der eingestellten Sprache.}{value="\#\{\}"}{/}{/}
+
+	}
+\end{samepage}
+
+\todo{Toolbarbacking fehlt}
+\todo{Validierung?}
+\todo{Schätze wir brauchen doch min und mx length was ist wenn man zu lange usernames angibt?}
+\todo{Datum internationalisieren?}
+\todo{var als binding oder constraint?}
+\todo{evtl kein rendern sonder abhängiges include in submission.xhtml?}
+\todo{selectItem?}
+\begin{samepage}
+	\textbf{toolbar.xhtml} \phantomsection \label{flt:toolbar} ist die Seitenleiste für Editoren und Administratoren auf der Einreichungsübersicht. Hier wird die Einreichung verwaltet.
+	\nopagebreak
+
+	\ftable{
+		\fentry{add-reviewer-iTxt}{<h:inputText>}{Eingabefeld zur Angabe einer E-Mail-Adresse}{value="\#\{toolbarBacking.reviewerInput.email\}" \newline title="\#{help.reviewerEmail}}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{emailAddressExistsValidator \newline emailAddressLayoutValidator \newline required="true"}
+
+		\fentry{add-deadline-reviewer-iTxt}{<h:inputText>}{Eingabefeld zur Angabe einer Deadline.}{value="\#\{toolbarBacking.reviewedByInput.timestampDeadline\}" \newline title="\#\{help.reviewerDeadline\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{converterDateTime \newline patter="dd/MM/yyyy"}
+
+		\fentry{add-reviewer-cbtn}{<h:commandButton>}{Knopf zum Hinzufügen des Gutachters}{value="\#\{label.addReviewer\}" \newline action="\#\{\}" \newline title="\#\{help.addReviewer\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{/}
+
+		\fentry{reviewer-dtbl}{<h:dataTable>}{Liste der Gutachter}{value="\#\{toolbarbacking.reviewer\}" \newline var="review"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{/}
+
+		\fentry{remove-reviewer-cbtn}{<h:commandButton>}{Entferne einen bestimmten Gutachters.}{action="\#\{toolbarBacking.removeReviewer\}" \newline title="\#\{help.removeReviewer\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{/}
+
+		\fentry{select-editor-slctom}{<h:selectOneMenu>}{Auswahländerung des verwaltenden Editors}{value="\#\{\}" \newline title="\#\{help.selectEditor\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{/}
+
+		\fentry{save-editor-cbtn}{<h:commandButton>}{Speichern der Änderung des Editors.}{value="\#\{label.saveEditor\}" \newline action="\#\{toolbarBacking.chooseNewManagingEditor\}" \newline title="\#\{help.saveEditor\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"E}{/}
+
+		\fentry{show-editor-otxt}{<h:outputText>}{Anzeige des aktuellen Editors.}{value="\#\{toolbarBacking.currentEditor\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{/}
+
+		\fentry{revision-deadline-iTxt}{<h:inputText>}{Eingabe zur Angabe einer Deadline.}{value="\#\{toolbarBacking.submission.deadlineRevision\}" \newline title="\#\{help.revisionDeadline\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{converterDateTime \newline patter="dd/MM/yyyy"}
+
+		\fentry{require-revision-cbtn}{<h:commandButton>}{Fordert den Einreicher auf, seine Einreichung zu überarbeiten}{value="\#\{label.requireRevision\}" \newline action="\#\{toolbarBacking.requireRevision\}" \newline title="\#\{help.requireRevision\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{/}
+
+		\fentry{accept-submission-cbtn}{<h:commandButton>}{Akzeptiere die Einreichung}{value="\#\{label.acceptSubmission\}" \newline action="\#\{toolbarBacking.acceptSubmission\}" \newline title="\#\{help.accesptSubmission\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{/}
+
+		\fentry{reject-submission-cbtn}{<h:commandButton>}{Lehne die Einreichung ab}{value="\#\{label.rejectSubmission\}" \newline action="\#\{toolbarBacking.rejectSubmission\}" \newline title="\#\{help.rejectSubmission\}"}{render="\#\{toolbarBacking.sessionInformation.user.editor\}"}{/}
+
+	}
+\end{samepage}
+
+\begin{samepage}
+	\textbf{pagination.xhtml} ist ein Composite Component zur Paginierung von Listen.
+	\nopagebreak
+
+	\ftable{
+		\fentry{/}{<composite:attribute>}{Paginator Attribut.}{name="paginator" \newline type="de.lases.control.internal.Pagination"}{required="true"}{/}
+
+		\fentry{is-empty-otxt}{<h:outputText>}{Hinweis wenn die Tabelle leer ist.}{value="\#\{label.emptyList\}"}{rendered="\#\{cc.attrs.paginator.entries.isEmpty()\}"}{/}
+
+		\fentry{pagination-dtbl}{<h:dataTable>}{Hier werden die Spalten eingefügt. Durch Klicken auf die Spaltennamen werden die Einträge sortiert. Zusätzlich kann durch ein Textfeld die Liste gefiltert werden.}{value="\#\{cc.attrs.paginator.entries\}"\newline var="var"}{rendered="\#\{!cc.attrs.paginator.entries.isEmpty()\}"}{/}
+
+		\fentry{/}{<composite:insertChildren>}{Einfügen benötigter Spalten.}{/}{/}{/}
+
+		\fentry{apply-cbtn}{<h:commandButton>}{Mit diesem Knopf können gewählte Filter angewandt werden.}{value="\#\{label.applyFilter\}" \newline action="\#\{cc.attrs.paginator.loadData\}" \newline title="\#\{help.applyFilter\}"}{/}{/}
+
+		\fentry{navigation-pgrd}{<h:panelGrid>}{Hier befinden sich die Knöpfe zur Navigation zwischen den Seiten der Paginierungen.}{columns="5"}{rendered="\#\{!cc.attrs.paginator.entries.isEmpty()\}"}{/}
+
+		\fentry{first-page-cbtn}{<h:commandButton>}{Zurück zur ersten Seite.}{value="\#\{label.firstPage\}" \newline action="\#\{cc.attrs.paginator.firstPage\}" \newline title="\#\{help.firstPage\}"}{/}{/}
+
+		\fentry{prev-page-cbtn}{<h:commandButton>}{Eine Seite zurück.}{value="\#\{label.prevPage\}" \newline action="\#\{cc.attrs.paginator.priviousPage\}" \newline title="\#\{help.prevPage\}"}{/}{/}
+
+		\fentry{current-page-otxt}{<h:outputText>}{Nummer der aktuellen Seite.}{value="\#\{cc.attrs.paginator.currentPage\}" \newline title="\#\{help.currentPage\}"}{/}{/}
+
+		\fentry{next-page-cbtn}{<h:commandButton>}{Eine Seite weiter.}{value="\#\{label.nextPage\}" \newline action="\#\{cc.attrs.paginator.nextPage\}" \newline title="\#\{help.nextPage\}"}{/}{/}
+
+		\fentry{last-page-cbtn}{<h:commandButton>}{Zur letzten Seite.}{value="\#\{label.lastPage\}" \newline action="\#\{cc.attrs.paginator.lastPage\}" \newline title="\#\{help.lastPage\}"}{/}{/}
+
+	}
+\end{samepage}
+
+\begin{samepage}
+	\textbf{sortfiltercolumn.xhtml} ist ein Composite Component, das eine sortierbare und filterbare Spalte einer Liste modelliert.
+	\nopagebreak
+
+	\ftable{
+		\fentry{/}{<composite:attribute>}{Implementation der abstrakten Klasse.}{name="paginator" \newline type="de.lases.control.internal.Pagination"}{required="true"}{/}
+
+		\fentry{/}{<composite:attribute>}{Anzeigename im Spaltenkopf.}{name="columnIdent" \newline type="java.lang.String"}{required="true"}{/}
+
+		\fentry{/}{<composite:attribute>}{String Identifier der Spalte.}{name="columnName" \newline type="java.lang.String"}{required="true"}{/}
+
+		\fentry{/}{<composite:attribute>}{Spaltennummer, null indiziert.}{name="coulumnNo" \newline type="java.lang.String"}{required="true"}{/}
+
+		\fentry{column-name-clnk}{<h:commandLink>}{Durch Klicken auf den Spaltennamen wird nach dieser Spalte aufsteigend, bzw. absteigend sortiert.}{value="\#\{cc.attrs.columnNamei18n\}" \newline action="\#\{cc.attrs.paginator.sortBy[cc.attrs.columnNo]\}"}{/}{/}
+
+		\fentry{column-filter-itxt}{<h:inputText>}{Hier kann ein Wert eingegeben werden, nach dem die Spalte dann gefiltert wird.}{value="\#\{cc.attrs.paginator.searchWords[cc.attrs.columnNo]\}"}{/}{/}
+	}
+
+\end{samepage}
+
+\subsection{Seiten}\label{flt:pages}
+
+\todo{Konventionen}
+
+\todo{Messages direkt an Eingabefeldern?ja?}
+
+\subsubsection{Anonymer Nutzer}
+
+\begin{samepage}
+	\textbf{welcome.xhtml} \phantomLabel{flt:welcome} Auf der Login- bzw. Welcome-Seite wird das System vorgestellt.
+	Zusätzlich gibt es ein Login-Formular zur Anmeldung im System.
+	Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{registration.xhtml} weitergeleitet.
+	\nopagebreak
+
+	\ftable{
+
+		\fentry{welcome-heading-otxt}{<h:outputText>}{Überschrift der Welcomepage.}{value="\#\{welcomeBacking.systemSettings.headlineWelcomePage\}"}{/}{/}
+
+		\fentry{welcome-otxt}{<h:outputText>}{Bewerben der Anwendung mithilfe einer Kurzbeschreibung.}{value="\#\{welcomeBacking.systemSettings.messageWelcomePage\}"}{A/}{/}
+
+		\fentry{email-itxt}{<h:inputText>}{Textfeld für E-Mail Eingabe.}{value="\#\{welcomeBacking.loginInput.emailAddress\}" \newline title="\#\{help.loginEmail\}"}{/}{emailAddressExistsValidator, emailAddressLayoutValidator, required="true"}
+
+		\fentry{password-iscrt}{<h:inputSecret>}{Textfeld für Passwort Eingabe.}{value="\#\{welcomeBacking.loginInput.passwordNotHashed\}" title="\#\{help.loginPassword\}"}{/}{passwordValidator \newline required="true"}
+
+		\fentry{login-cbtn}{<h:commandButton>}{Ausführen des Login-Prozesses.}{value="\#\{label.login\}" \newline action="\#\{welcomeBacking.login\}" \newline title="\#\{help.login\}"}{/}{/}
+
+		\fentry{register-cbtn}{<h:commandButton>}{Weiterleitung zur Registrierung.}{value="\#\{label.register\}" \newline action="\#\{welcomeBacking.goToRegister\}" \newline title="\#\{help.register\}"}{/}{/}
+
+	}
+\end{samepage}
+
+\begin{samepage}
+	\textbf{registration.xhtml} Seite zur Registrierung anonymer Nutzer.
+	\nopagebreak
+
+	\ftable{
+		\fentry{title-itxt}{<h:inputText>}{Angabe eines Titels.}{value="\#\{registrationBacking.newUser.title\}" \newline title="\#\{help.title\}"}{/}{/}
+
+		\fentry{first-name-itxt}{<h:inputText>}{Angabe des Vornamens.}{value="\#\{registrationBacking.newUser.firstName\}" \newline title="\#\{help.firstName\}"}{required="true"}{/}
+
+		\fentry{last-name-itxt}{<h:inputText>}{Angabe des Nachnamen.}{value="\#\{registrationBacking.newUser.lastName\}" \newline title="\#\{help.lastName\}"}{required="true"}{/}
+
+		\fentry{password-iscrt}{<h:inputSecret>}{Angabe eines Passwortes.}{value="\#\{registrationBacking.newUser.passwordNotHashed\}" \newline title="\#\{help.password\}"}{/}{passwordValidator \newline required="true"}
+
+		\fentry{email-itxt}{<h:inputText>}{Angabe einer validen E-Mail.}{value="\#\{registrationBacking.newUser.emailAddress\}" \newline title="\#\{help.email\}"}{/}{emailAddressExistsValidator \newline emailAddressLayoutValidator \newline required=true"}
+
+		\fentry{register-cbtn}{<h:commandButton>}{Ausführen des Registrations-Prozesses.}{value="\#\{label.register\}"\newline action="\#\{registrationBacking.register\}"}{/}{/}
+
+		\fentry{welcomepage-lnk}{<h:link>}{Weiterleitung zur Login Seite.}{value="\#\{label.welcomeLink\}" \newline outcome="/anonymous/welcome" \newline title="\#\{help.welcomepage\}"}{/}{/}
+	}
+\end{samepage}
+
+\begin{samepage}
+	\textbf{verification.xhtml} Wird bei erfolgreicher Verifikation der E-Mail angezeigt.
+	\nopagebreak
+
+	\ftable{
+		\fentry{go-to-home-cbtn}{<h:commandButton>}{Button zur Weiterleitung auf die Homepage bei erfolgreicher Verifizierung. Ansonsten wird auf \emph{welcome.xhtml} weiter geleitet.}{/}{/}
+
+	}
+\end{samepage}
+
+\todo{ErrorMessage does not exist}
+\todo{Stacktrace im development}
+
+\begin{samepage}
+	\textbf{errorPage.xhtml} Auf diese Seite wird navigiert, wenn auf eine nicht existierende URL oder auf eine URL zugegriffen wird, auf die man keine Zugriffsrechte hat.
+	\nopagebreak
+
+	\ftable{
+
+		\fentry{error-message-otxt}{<h:outputText>}{Anzeige einer Fehlermeldung.}{value="\#\{errorPageBacking.errorMessage.message\}"}{/}{/}
+
+		\fentry{stack-trace-otxt}{<h:outputText>}{Stacktrace für den "Productive Mode".}{value="\#\{errorPageBacking.errorMessage.message\}"}{/}{/}
+
+	}
+\end{samepage}
+
+\begin{samepage}
+	\textbf{imprint.xhtml} Das Impressum gibt die vom Administrator angegebenen Kontaktdaten des Betreibers wieder.\nopagebreak
+
+	\ftable{
+		\fentry{logo-gimg}{<h:graphicImage>}{Logo des Betreibers.}{value="\#\{imprintBacking.systemSettings.logoImage\}"}{/}{/}
+
+		\fentry{imprint-heading-otxt}{<h:outputText>}{Überschrift der Ansicht}{value="\#{imprintBacking.systemSetting.companyName}"}{/}{/}
+
+		\fentry{imprint-otxt}{<h:outputText>}{Impressum des Betreibers.}{value="\#{imprintBacking.systemSetting.imprint}"}{/}{/}
+	}
+\end{samepage}
+
+\subsubsection{Angemeldeter Nutzer}
+
+\todo{zugriff von normalen nutzer wird über TrespassListener gehandhabt?}
+
+\begin{samepage}
+	\textbf{homepage.xhtml} \phantomsection \label{flt:homepage} Startseite die den Überblick über alle Einreichungen, aufgeteilt in Reiter, beinhaltet.
+
+	\ftable{
+		\fentry{your-submission-clnk}{<h:commandLink>}{Reiter zum Anzeigen der eigenen Einreichungen.}{value="\#\{label.yourSubmission\}" \newline action="\#\{homepageBacking.showOwnSubmissionsTab\}" \newline title="\#\{help.yourSubmissions\}"}{/}{/}
+
+		\fentry{your-reviews-clnk}{<h:commandLink>}{Reiter zum Anzeigen der zu begutachtenden Einreichungen}{value="\#\{label.yourReviews\}" \newline action="\#\{homepageBacking.showSubmissionToReviewTab\}" \newline title="\#\{help.yourReviews\}"}{render="\#\{homepageBacking.sessionInformation.user.reviewer\}"}{/}
+
+		\fentry{editorial-overview-clnk}{<h:commandLink>}{Reiter zum Anzeigen aller Einreichungen, welche man editiert.}{value="\#\{label.editorialOverview\}" \newline action="\#\{homepageBacking.showSubmissionToEditTab\}" \newline title="\#\{help.editorialOverview\}"}{render="\#\{homepageBacking.sessionInformation.editor\}"}{/}
+	}
+\end{samepage}
+
+\todo{selectOneMenu noch nicht fertig}
+\todo{ScientificForumsname gibt es nicht}
+
+\begin{samepage}
+	Die Tabellen \emph{submissionPagination}, \emph{reviewPagination} und \emph{editorPagination} sind nach den gleichen Punkten gegliedert und daher nur einmal ausführlich aufgegliedert: Titel des Papers, Datum, Deadline und Status der Einreichung und Name des zugehörigen Forums.
+
+	\ftable{
+		\fentry{submission-pg}{<pg:pagination>}{Liste aller eignen Einreichungen.}{paginator="\#\{homepageBacking.submissionPagination\}"}{/}{/}
+
+		\fentry{title-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Titel des Papers.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.paperTitle\}"}{/}{/}
+
+		\fentry{title-lnk}{<h:link>}{Titel des Einreichung.}{value="\#\{var.title\}" \newline outcome="/facelets/authenticated/submission" \newline includeViewParams="true"}{/}{/}
+		
+		\fentry{/}{<f:param>}{Parameter für id der Einreichung.}{value="\#\{var.id\}" name="id"}{/}{/}
+
+		\fentry{date-ssc}{<ssc:sortsearchcolumn>}{Spalte für das Abgabedatum des Papers.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.date\}"}{/}{/}
+
+		\fentry{date-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{\}" title="\#\{help.dateSelect\}"}{/}{/}
+
+		\fentry{/}{<f:selectItems>}{Mögliche Filterung des Datums.}{value="\#\{\}"}{/}{/}
+
+		\fentry{date-otxt}{<h:outputText>}{Abgabedatum des Papers.}{value="\#\{var.submissionTime\}"}{/}{convertDateTime \newline pattern=""yyyy-MM-dd"}
+
+		\fentry{deadline-ssc}{<ssc:sortsearchcolumn>}{Spalte für die Deadline der Revision.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.deadline\}"}{/}{/}
+
+		\fentry{deadline-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit einer Deadline.}{value="\#\{\}" title="\#\{help.deadlineSelect\}"}{/}{/}
+
+		\fentry{/}{<f:selectItems>}{Mögliche Filterung der Deadline.}{value="\#\{\}"}{/}{/}
+
+		\fentry{deadline-otxt}{<h:outputText>}{Deadline des Papers.}{value="\#\{var.deadlineRevision\}"}{/}{convertDateTime \newline pattern=""yyyy-MM-dd"}
+
+		\fentry{state-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Status der Einreichung.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.stateSub\}"}{/}{/}
+
+		\fentry{state-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Status.}{value="\#\{\}" title="\#\{help.stateSubSelect\}"}{/}{/}
+
+		\fentry{/}{<f:selectItems>}{Mögliche Filterung des Status.}{value="\#\{\}"}{/}{/}
+
+		\fentry{state-otxt}{<h:outputText>}{Status der Einreichung.}{value="\#\{var.state\}"}{/}{/}
+
+		\fentry{forum-ssc}{<ssc:sortsearchcolumn>}{Spalte für zugehöriges Forum.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.forumSub\}"}{/}{/}
+
+		\fentry{forum-lnk}{<h:link>}{Zugehöriges Forum der Einreichung.}{value="\#\{var.scientificForum.name\}" outcome="/facelets/authenticated/scientificForum" \newline includeViewParams="true"}{/}{/}
+		
+		\fentry{/}{<f:param>}{Parameter für id des Forums.}{value="\#\{var.scientificForumId\}" name="id"}{/}{/}
+
+	}
+\end{samepage}
+
+\todo{uploadFile ist noch nicht vollständig}
+\todo{id von Scientific forum wietergeben? für link + profile}
+
+\begin{samepage}
+
+	\textbf{submission.xhtml} ist die Übersichtsseite einer Abgabe.
+	Hier werden alle mit der Einreichung verbundenen Aktivitäten abgebildet.
+	\nopagebreak
+
+	\ftable{
+		\fentry{/}{<ui:include>}{\hyperref[flt:toolbar]{Seitenleiste mit Tools.}}{rendered="\#\{submissionBacking.sessionInformation.user.editor\}"}{/}
+		
+		\fentry{/}{<f:viewParam>}{Id der Einreichung.}{value="\#\{submissionBacking.submission.id\}" \newline name="id"}{/}{/}
+		
+		\fentry{/}{<f:viewAction>}{Laden der entsprechenden Einreichung.}{action="\#\{submissionBacking.onLoad\}"}{}{}
+
+		\fentry{upload-revision-ifile}{<h:inputFile>}{Upload einer Revision.}{value="\#\{submissionBacking.uploadedRevisionPDF\}" \newline requiered="true" \newline requieredMessage="\#\{requiered.inputFile\}"}{rendered="\#\{submissionBacking.isViewerSubmitter\}"}{/}
+
+		\fentry{upload-clnk}{<h:commandLink>}{Ausführen des Uploads.}{value="\#\{label.uploadFile\}" \newline action="\#\{submissionBacking.uploadPDF\}" \newline includeViewParams="true" title="\#\{help.uploadRevision\}"}{rendered="\#\{submissionBacking.isViewerSubmitter\}"}{/}
+
+		\fentry{new-review-cbtn}{<h:commandButton>}{Weiterleitung zur Einreichung eines neuen Gutachtens.}{value="\#\{label.uploadReview\}" \newline action="\#\{submissionBacking.uploadReview\}" \newline title="\#\{help.uploadRevision\}"}{rendered="\#\{submissionBacking.sessionInformation.user.reviewer\}"}{/}
+
+		\fentry{deadline-review-otxt}{<h:outputText>}{Deadline der Einreichung.}{value="\#\{submissionBacking.reviewedBy.timestampDeadline\}"}{rendered="\#\{submissionBacking.sessioninformation.user.reviewer\}"}{/}
+
+		\fentry{accept-reviewing-cbtn}{<h:commandButton>}{Annahme der Rolle eines Gutachters für diese Einreichung.}{value="\#\{label.acceptReviewing\}" \newline action="\#\{submissionBacking.acceptReviewing\}" \newline title="\#\{help.acceptReviewing\}"}{rendered="\#\{submissionBacking.sessionInformation.user.reviewer\}"}{/}
+
+		\fentry{decline-reviewing-cbtn}{<h:command>}{Ablehnen der Rolle eines Gutachters für diese Einreichung.}{value="\#\{label.declineReviewing\}" \newline action="\#\{submissionBacking.declineReviewing\}" \newline title="\#\{help.declineReviewing\}"}{rendered="\#\{submissionBacking.sessionInformation.user.reviewer\}"}{/}
+
+		\fentry{state-slctom}{<h:selectOneMenu>}{Status der Submission.}{value="\#\{submissionBacking.submission.state\}"}{readonly="\#\{not submissionBacking.sessionInformation.user.editor\}"}{/}
+
+		\fentry{/}{<f:selectItems>}{Auswahl des Status.}{itemValue="\#\{\}"}{/}{/}
+
+		\fentry{state-otxt}{<h:outputText>}{Status der Einreichung.}{value="\#\{submissionBacking.submission.state\}"}{/}{/}
+
+		\fentry{forum-lnk}{<h:link>}{Name des Forums und Weiterleitung zur Forumsübersicht.}{value="\#\{submissionBacking.scientificForum.name\}" \newline outcome="/facelets/authenticated/scientificForum" \newline includeViewParams="true" \newline title="\#\{help.directToForum\}"}{disabled="\#\{not submissionBacking.sessionInformation.user.editor\}"}{/}
+		
+		\fentry{/}{<f:param>}{Parameter für id des Forums.}{value="\#\{submissionBacking.scientificForum.scientificForumId\}" name="id"}{/}{/}
+
+		\fentry{author-lnk}{<h:link>}{Name des Autors und Weiterleitung zum Profil.}{value="\#\{submissionBacking.author.firstName + submissionBacking.author.lastName\}" \newline outcome="/facelets/authenticated/profile" \newline includeViewParams="true" \newline title="\#\{help.directProfile\}"}{disabled="\#\{not submissionBacking.sessionInformation.user.editor\}"}{/}
+		
+		\fentry{/}{<f:param>}{Parameter für id des Profil.}{value="\#\{submissionBacking.author.id\}" name="id"}{/}{/}
+
+		\fentry{email-lnk}{<h:link>}{E-Mail-Adressen der Co-Autoren und Mailto-Link.}{value="\#\{submissionBacking.author.emailAddress\}"\newline  outcome="\#\{'mailto:'.concat(submissionBacking.author.emailAddress)\}"}{disabled="\#\{not submissionBacking.sessionInformation.user.editor\}"}
+
+		\fentry{deadlineRevision-otxt}{<h:outputText>}{Deadline der Revision}{value="\#\{submissionBacking.submission.deadlineRevision\}"}{/}{/}
+	}
+\end{samepage}
+
+\begin{samepage}
+
+	\emph{paperPagination} enthält die Spalten: Version, Datum, Sichtbarkeit(E) und Download.
+
+	Die Elemente der Liste, der unterschiedlichen Versionen der Einreichung, sieht wie folgt aus:
+
+	\ftable{
+		\fentry{paper-pg}{<pg:pagination>}{Liste aller eignen Einreichungen.}{paginator="\#\{submissionBacking.paperPagination\}"}{/}{/}
+
+		\fentry{version-ssc}{<ssc:sortsearchcolumn>}{Spalte für die Version des Papers.}{paginator="\#\{submissionBacking.paperPagination\}"\newline columnNamei18n="\#\{label.paperVersion\}"}{/}{/}
+
+		\fentry{version-otxt}{<h:outputText>}{Version des Papers.}{value="\#\{var.submissionId\}"}{/}{/}
+
+		\fentry{date-ssc}{<ssc:sortsearchcolumn>}{Spalte für das Abgabedatum des Papers.}{paginator="\#\{submissionBacking.paperPagination\}"\newline columnNamei18n="\#\{label.date\}"}{/}{/}
+
+		\fentry{date-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{\}" title="\#\{help.dateSelect\}"}{/}{/}
+
+		\fentry{/}{<f:selectItems>}{Mögliche Filterung des Datums.}{value="\#\{\}"}{/}{/}
+
+		\fentry{date-otxt}{<h:outputText>}{Abgabedatum des Papers.}{value="\#\{var.uploadTime\}"}{/}{convertDateTime \newline pattern=""yyyy-MM-dd"}
+
+		\fentry{release-revision-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Freigabestatus.}{paginator="\#\{submissionBacking.paperPagination\}"\newline columnNamei18n="\#\{label.releaseRevision\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor || submissionBacking.sessionInformation.user.reviewer \}"}{/}
+
+		\fentry{release-revision-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit Freischalten der Revision}{value="\#\{\}" title="\#\{help.releaseRevisionSelect\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor || submissionBacking.sessionInformation.user.reviewer \}"}{/}
+
+		\fentry{/}{<f:selectItems>}{Mögliche Filterung der Revision.}{value="\#\{\}"}{/}{/}
+
+		\fentry{release-review-otxt}{<h:outputText>}{Status der Freischaltung.}{value="\#\{label.releasedReview\}"}{rendered="\#\{var.visible \&\& submissionBacking.sessionInformation.user.reviewer\}"}{/}
+
+		\fentry{release-revision-cbtn}{<h:commandButton>}{Freischalten einer Revision.}{value="\#\{label.releaseRevision\}" action="\#\{submissionBacking.releaseRevision(var)\}" title="\#\{help.releaseRevision\}"}{rendered="\#\{submissionBacking.sessionInfromation.user.editor\}"}{/}
+
+		\fentry{download-file-clmn}{<h:column>}{Spalten für den Download der Datei.}{/}{/}{/}
+
+	}
+\end{samepage}
+
+\begin{samepage}
+
+	\emph{reviewPagination} enthält die Spalten: Gutachter, Datum, Status, Empfehlung, Kommentar und Download.
+	Ist ein Gutachten freigeschaltet, so erhält auch ein Nutzer Leserechte.
+	Die Elemente der Liste von Gutachten sind folgende:
+
+	\ftable{
+		\fentry{review-pg}{<pg:pagination>}{Liste aller oder der eignen Gutachten.}{paginator="\#\{submissionBacking.reviewPagination\}"}{/}{/}
+
+		\fentry{reviewer-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Namen des Gutachters.}{paginator="\#\{submissionBacking.reviewPagination\}"\newline columnNamei18n="\#\{label.reviewerName\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor \&\& submissionBacking.sessionInformation.user.reviewer\}"}{/}
+
+		\fentry{reviewer-lnk}{<h:link>}{Namen des Gutachters.}{value="\#\{submissionBacking.getReviewerForReview(var)\}" \newline outcome="/facelets/authenticated/profile" \newline includeViewParams="true"}{rendered="\#\{submissionBacking.sessionInformation.user.editor \&\& submissionBacking.sessionInformation.user.reviewer\}"}{/}{/}
+		
+		\fentry{/}{<f:param>}{Parameter für id des Profil.}{value="\#\{submissionBacking.getReviewerForReview(var).id\}" name="id"}{/}{/}
+		
+		\fentry{date-ssc}{<ssc:sortsearchcolumn>}{Spalte für das Abgabedatum des Gutachtens.}{paginator="\#\{submissionBacking.reviewPagination\}"\newline columnNamei18n="\#\{label.date\}"}{/}{/}
+
+		\fentry{date-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{\}" title="\#\{help.dateSelect\}"}{/}{/}
+
+		\fentry{/}{<f:selectItems>}{Mögliche Filterung des Datums.}{value="\#\{\}"}{/}{/}
+
+		\fentry{date-otxt}{<h:outputText>}{Abgabedatum des Gutachtens.}{value="\#\{var.timestampUpdloaded\}"}{/}{convertDateTime \newline pattern=""yyyy-MM-dd"}
+
+		\fentry{release-review-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Freigabestatus.}{paginator="\#\{submissionBacking.reviewPagination\}"\newline columnNamei18n="\#\{label.releaseReview\}"}{rendered="\#\{submissionBacking.sessionInfromation.user.editor\}"}{/}
+
+		\fentry{release-review-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit Freischalten der Gutachten}{value="\#\{\}" title="\#\{help.releaseReviewSelect\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor || submissionBacking.sessionInformation.user.reviewer \}"}{/}
+
+		\fentry{/}{<f:selectItems>}{Mögliche Filterung der Freigabe.}{value="\#\{\}"}{/}{/}
+
+		\fentry{release-review-otxt}{<h:outputText>}{Status der Freischaltung.}{value="\#\{label.releasedReview\}"}{rendered="\#\{var.visible\}"}{/}
+
+		\fentry{release-review-cbtn}{<h:commandButton>}{Freischalten eines Gutachtens.}{value="\#\{label.releaseReview\}" action="\#\{submissionBacking.releaseReview(var)\}" title="\#\{help.releaseReview\}"}{rendered="\#\{submissionBacking.sessionInfromation.user.editor\}"}{/}
+
+		\fentry{recommendation-review-ssc}{<ssc:sortsearchcolumn>}{Spalte für die Empfehlung.}{paginator="\#\{submissionBacking.reviewPagination\}"\newline columnNamei18n="\#\{label.recommendation\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor || submissionBacking.sessionInformation.user.reviewer}{/}
+
+		\fentry{recommendation-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit Empfehlung.}{value="\#\{\}" title="\#\{help.recommendationSelect\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor || submissionBacking.sessionInformation.user.reviewer}{/}
+
+		\fentry{/}{<f:selectItems>}{Mögliche Filterung der Empfehulung.}{value="\#\{\}"}{/}{/}
+
+		\fentry{recommendation-slctbc}{<h:selectBooleanCheckbox>}{Empfehlung eines Gutachters.}{value="\#\{var.acceptPaper\}" readonly="true"}{rendered="\#\{submissionBacking.sessionInformation.user.editor || submissionBacking.sessionInformation.user.reviewer}{/}
+
+		\fentry{comment-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Kommentar des Gutachters.}{paginator="\#\{submissionBacking.reviewPagination\}"\newline columnNamei18n="\#\{label.comment\}"}{/}{/}
+
+		\fentry{comment-otxt}{<h:outputText>}{Kommentar des Gutachters.}{value="\#\{var.comment\}"}{/}{/}
+
+		\fentry{download-file-clmn}{<h:column>}{Spalten für den Download der Datei.}{/}{/}{/}
+	}
+\end{samepage}
+
+\begin{samepage}
+	Die Spalte zum Download der einzelnen Paper ist wie folgt definiert und ist beiden Paginations vorhanden:
+
+	\ftable{
+
+		\fentry{download-header}{<f:facet>}{Spaltenkopf für den Download.}{name="header"}{/}{/}
+
+		\fentry{pdf-submission-cbtn}{<h:commandButton>}{Download der Einreichung}{value="\#\{label.downloadFile\}" action="\#\{submissionBacking.downloadPaper(var)\}" title="\#\{help.downloadFile\}"}{/}{/}
+	}
+
+\end{samepage}
+
+
+
+%% Ab hier sind Bastis hinzugefügte Änderungen
+
+
+\begin{samepage}
+	\textbf{newSubmission.xhtml} Hier können neue Paper eingereicht werden.
+	\nopagebreak
+
+	\ftable{
+		\fentry{submission-title-itxt}{<h:inputText>}{Titel des abzugebenden Papers.}{value="\#\{newSubmissionBacking.newSubmission.title\}"}{/}{required="true"}
+
+		\fentry{forum-name-itxt}{<h:inputText>}{Name des Forums, bei welchem abgegeben wird.}{value="\#\{newSubmissionBacking.newSubmission.forumInput.name\}"}{/}{required="true"}
+
+		\fentry{editor-slctom}{<h:selectOneMenu>}{Angabe eines Editors}{value="\#\{newSubmissionBacking.editors\}"}{/}{/}
+
+		\fentry{editor-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{?}{/}{/}
+
+		\fentry{pfd-upload-ifile}{<h:inputText>}{Angabe der Abgabedatei.}{value="\#\{newSubmissionBacking.uploadedPDF\}"}{/}{required="true"}
+
+		\fentry{titel-itxt}{<h:inputText>}{Angabe eines Titels eines Co-Autors.}{value="\#\{newSubmissionBacking.coAuthorInput.title\}"}{/}{/}
+
+		\fentry{co-author-firstname-itxt}{<h:inputText>}{Angabe des Vornamen eines Co-Autors.}{value="\#\{newSubmissionBacking.coAuthorInput.firstName\}"}{/}{/}
+
+		\fentry{co-author-lastname-itxt}{<h:inputText>}{Angabe des Namen eines Co-Autors.}{value="\#\{newSubmissionBacking.coAuthorInput.lastName\}"}{/}{/}
+
+		\fentry{co-author-email-itxt}{<h:inputText>}{Angabe der E-Mail eines Co-Autors.}{value="\#\{newSubmissionBacking.coAuthorInput.emailAddress\}"}{/}{/}
+
+		\fentry{submit-co-author-cbtn}{<h:commandButton>}{Speichern des Co-Autors.}{value="\#\{label.save\}"\newline action="\#\{newSubmissionBacking.submitCoAuthor\}"}{/}{/}
+
+		\fentry{co-author-list}{<h:dataTable>}{Anzeige aller Co-Autoren in einer Liste.}{value="\#\{newSubmissionBacking.coAuthors\}"}{/}{/}
+
+		\fentry{delete-co-author-cbtn}{<h:commandButton>}{Löschen des zugehörigen Co-Authors.}{value="\#\{label.delete\}"\newline action="\#\{newSubmissionBacking.deleteCoAuthor(var)\}"}{/}{/}
+
+		\fentry{submit-cbtn}{<h:commandButton>}{Ausführen des Einreichungsprozess.}{value="\#\{label.submit\}"\newline
+		action="\#\{newSubmissionBacking.submit\}"}{/}{/}
+	}
+\end{samepage}
+
+\begin{samepage}
+	\textbf{resultList.xhtml} zeigt alle Ergebnisse einer Suche an.
+	\nopagebreak
+
+	Wird nach den eigenen Einreichungen, nach denen, die man begutachtet oder nach Einreichungen in eigener editorialer Verantwortung gesucht, so erscheinen die Listen im gleichen Schema wie auch auf der Homepage.
+	Ergibt die Suche eine Liste von User, so wird diese wie in der Userliste für den Administrator und dem Editor angezeigt.
+	Ist das Ziel der Suche, wissenschaftliche Foren zu finden, so erhält man bei passender Eingabe eine Liste im selben Format wie diejenige auf der Seite der Forumsliste.
+\end{samepage}
+
+
+\begin{samepage}
+
+	\textbf{scientificForumList.xhtml} Hier erhalten die Nutzer eine Übersicht über alle wissenschaftliche Foren.\nopagebreak
+
+	\ftable{
+		\fentry{date-select-slctom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{scientificForumListBacking.deadlineFilterSelect\}"}{/}{/}
+
+		\fentry{deadline-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{?}{/}{/}
+
+		\fentry{forums-pagination-pg}{<pg:pagination>}{Liste aller Foren im System.}{paginator="\#\{scientificForumListBacking.scientificForumPagination\}"}{/}{/}
+
+		\fentry{name-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Namen des Forums.}{paginator="\#\{scientificForumListBacking.scientificForumPagination\}"\newline columnNamei18n="\#\{label.name\}"}{/}{/}
+
+		\fentry{name-link}{<h:link>}{Name des Forums.}{value="\#\{var.name\}"\newline includeViewParams="true"}{/}{/}
+
+		\fentry{/}{<f:param>}{URL Parameter Forum ID}{name="\#\{'id'\}"\newline value="\#\{var.id\}"}{/}{/}
+
+		\fentry{deadline-ssc}{<ssc:sortsearchcolumn>}{Spalte für die Deadline des Forums.}{paginator="\#\{scientificForumListBacking.scientificForumPagination\}"\newline columnNamei18n="\#\{label.deadline\}"}{/}{/}
+
+		\fentry{deadline}{outputText}{Abgabefrist des jeweiligen Forums.}{value="\#\{var.deadline\}"}{/}{/}
+	}
+\end{samepage}
+
+\begin{samepage}
+
+	\textbf{profile.xhtml} Die Profilseite eines angemeldeten Nutzers ist nur vom Nutzer selbst und vom Administrator editierbar.
+	Ein Editor besitzt nur Leserechte. Alle zuvor gespeicherten Angaben werden in den jeweiligen Feldern angezeigt.
+	\nopagebreak
+
+	\todo{wie hier url von bild wissen?}
+
+	\ftable{
+
+		\fentry{avatar-gim}{<h:graphicImage>}{Aktueller Avatar.}{value="\#\{'https://lases.de/image/'.concat(profileBacking.user.id)\}"}{/}{/}
+
+		\fentry{new-avatar-ifile}{<h:inputFile>}{Hochladen eines neuen Avatars.}{value="\#\{profileBacking.uploadedAvatar\}"}{rendered="\#\{profileBacking.hasViewerEditRights\}"}{/}
+
+		\fentry{submit-avatar-cbtn}{<h:commandButton>}{Lade neuen Avatar hoch.}{value="\#\{profileBacking.uploadAvatar\}"}{rendered="\#\{profileBacking.hasViewerEditRights\}"}{/}
+
+		\fentry{delete-avatar-cbtn}{<h:commandButton>}{Löschen des Avatars.}{value="\#\{profileBacking.deleteAvatar\}"}{rendered="\#\{profileBacking.hasViewerEditRights\}"}{/}
+
+		\fentry{role-otxt}{<h:outputText>}{Angabe der Rolle eines Nutzers}{?}{/}{/}
+
+		\fentry{is-admin-cbx}{<h:selectBooleanCheckbox>}{Zuteilung der Rolle des Administrators.}{value="\#\{profileBacking.user.admin\}"}{rendered="\#\{profileBacking.sessionInformation.admin\}"}{/}
+
+		\fentry{title-itxt}{<h:inputText>}{Titel des Nutzenden.}{value="\#\{profileBacking.user.title\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{/}
+
+		\fentry{firstname-itxt}{<h:inputText>}{Vorname des Nutzenden.}{value="\#\{profileBacking.user.firstName\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{required="true"}
+
+		\fentry{lastname-itxt}{<h:inputText>}{Nachname des Nutzenden.}{value="\#\{profileBacking.user.lastName\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{required="true"}
+
+		\fentry{password-iscrt}{<h:inputSecret>}{Leeres Eingabefeld für ein neues Passwort.}{value="\#\{profileBacking.user.passwordNotHashed\}"}{rendered="\#\{!profileBacking.hasViewerEditRights\}"}{required="true"}
+
+		\fentry{email-itxt}{<h:inputText>}{E-Mail des Nutzenden.}{value="\#\{profileBacking.user.emailAddress\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{required="true"}
+
+		\fentry{submission-number-otxt}{<h:outputText>}{Anzahl der Einreichungen des Nutzers}{?}{/}{/}
+
+		\fentry{employer-itxt}{<h:inputText>}{Angabe des Arbeitgebers}{value="\#\{profileBacking.user.employer\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{/}
+
+		\multicolumn{6}{|c|}{Fortsetzung auf der nächsten Seite.} \\\hline %das hline verursacht keine probleme, wird sind in einem tabular
+
+	}
+\end{samepage}
+
+\begin{samepage}
+	\ftable{
+	\fentry{science-field-lst}{<h:dataTable>}{Spezialgebiete des Nutzers}{value="\#\{profileBacking.usersScienceFields\}"}{/}{/}
+
+	\fentry{add-science-field-slctolb}{<p:selectOneListbox>}{Auswahl der Spezialgebiete des Nutzers}{value="\#\{profileBacking.scienceFields\}"}{rendered="\#\{!profileBacking.hasViewerEditRights\}"}{/}
+
+	\fentry{field-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{?}{/}{/}
+
+	\fentry{delete-field-cbtn}{<h:commandButton>}{Löschen des ausgewählten Fachgebietes.}{value="\#\{label.delete\}"\newline action="\#\{profileBacking.deleteScienceField\}"}{rendered="\#\{!profileBacking.hasViewerEditRights\}"}{/}
+
+	\fentry{add-field-cbtn}{<h:commandButton>}{Füge Fachgebiet zur Liste hinzu.}{value="\#\{label.add\}"\newline action="\#\{profileBacking.addScienceField\}"}{rendered="\#\{!profileBacking.hasViewerEditRights\}"}{/}
+
+	\fentry{date-of-birth-itxt}{<h:inputText>}{Angabe des Geburtstages}{value="\#\{profileBacking.user.dateOfBirth\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{/}
+
+	\fentry{save-cbtn}{<h:commandButton>}{Daten werden gespeichert.}{value="\#\{label.save\}"\newline action="\#\{profileBacking.submitChanges\}"}{rendered="\#\{!profileBacking.hasViewerEditRights\}"}{/}
+
+	\fentry{delete-cbtn}{<h:commandButton>}{Nutzer und alle damit verbundenen Daten werden gelöscht.}{value="\#\{label.deleteUser\}"\newline action="\#\{profileBacking.deleteProfile\}"}{rendered="\#\{!profileBacking.hasViewerEditRights\}"}{/}
+
+}
+\end{samepage}
+
+Sollte ein Administrator einem anderen Nutzer die Rolle des Administrators zuweisen oder entziehen, so erscheint beim Auslösen des Save-Buttons ein Popup-Dialog.
+In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Passwort zu bestätigen.
+
+\ftable{
+
+	\fentry{password-admin-iscrt}{<h:inputSecret>}{Angabe eines Passworts.}{value="\#\{profileBacking.adminPasswordInPopup.passwordNotHashed\}"}{/}{required="true"}
+
+	\fentry{admin-note-otxt}{<h:outputText>}{Hinweis zur Veränderung der Adminrolle.}{value="\#\{label.adminNote\}"}{/}{/}
+
+	\fentry{abort-cbtn}{<h:commandButton>}{Abbruch der Änderung.}{value="\#\{label.save\}"\newline action="\#\{profileBacking.saveInPopup\}"}{/}{/}
+
+	\fentry{save-cbtn}{<h:commandButton>}{Speichern aller Änderungen.}{value="\#\{label.abort\}"\newline action="\#\{profileBacking.abortInPopup\}"}{/}{/}
+
+}
+
+\begin{samepage}
+	\textbf{scientificForum.xhtml} Die Ansicht eines Forums dient zur Ausgabe von Informationen über die jeweilige Konferenz oder das jeweilige Journal.
+	Das Anzeigen und Filtern der Tabellen \emph{editorialPagination}, \emph{reviewPagination} und \emph{submissionPagination} wird genauso gehandhabt, wie auf \emph{homepage.xhtml}.
+	Ausnahme dabei ist die Spalte Forum, welche hier nicht angezeigt wird.
+	\nopagebreak
+
+	\ftable{
+
+		\fentry{/}{<f:viewParam>}{URL Parameter holen}{name="\#\{'id'\}"\newline value="\#\{scientificForumBacking.scientificForum.id\}"}{/}{required="true"}
+
+		\fentry{/}{<f:viewAction>}{Action Methode ausführen.}{action="\#\{scientificForumBacking.onLoad\}"}{/}{/}
+
+		\fentry{forum-name-itxt}{inputText}{Name des Forums.}{value="\#\{scientificForumBacking.scientificForum.name\}"}{readonly="\#\{!scientificForumBacking.isViewerEditor\}"}{required="true"}
+
+		\fentry{editor-lst}{<h:dataTable>}{Liste der verantwortliche Editoren.}{value="\#\{scientificForumBacking.editors\}"\newline title="\#\{help.managingEditors\}"}{/}{/}
+
+		\fentry{new-editor-itxt}{<h:inputText>}{Angabe der E-Mail eines Editors.}{value="\#\{scientificForumBacking.newEditorInput.emailAddress\}"}{rendered="\#\{scientificForumBacking.sessionInformation.user.editor\}"}{emailAddressExistsValidator, emailAddressLayoutValidator, required="true"\newline }
+
+		\fentry{add-editor-cbtn}{<h:commandButton>}{Füge Editor zur Liste hinzu.}{value="\#\{label.add\}"\newline action="\#\{scientificForumBacking.addEditor\}"}{rendered="\#\{scientificForumBacking.sessionInformation.user.editor\}"}{/}
+
+		\fentry{remove-editor-cbtn}{<h:commandButton>}{Lösche ausgewählten Editor.}{value="\#\{label.remove\}"\newline action="\#\{scientificForumBacking.removeEditor\}"}{rendered="\#\{scientificForumBacking.sessionInformation.user.editor\}"}{/}
+
+		\fentry{deadline-itxt}{<h:inputText>}{Deadline des Forums.}{value="\#\{scientificForumBacking.scientificForum.deadline\}"}{readonly="\#\{!scientificForumBacking.isViewerEditor\}"}{required="true"}
+
+		\fentry{description-itxt}{inputTextArea}{Kurzbeschreibung des Forums.}{value="\#\{scientificForumBacking.scientificForum.description\}"}{readonly="\#\{!scientificForumBacking.isViewerEditor\}"}{required="true"}
+
+		\fentry{url-lnk}{<h:outputLink>}{Link zur Konferenz oder zum Journal.}{value="\#\{scientificForumBacking.scientificForum.url\}"}{/}{/}
+
+		\fentry{change-url-itxt}{inputText}{Angabe einer neuen URL.}{value="\#\{scientificForumBacking.scientificForum.url\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{required="true"}
+
+		\fentry{review-instructions-itxt}{<h:inputTextArea>}{Anleitung für eine Begutachtung.}{value="\#\{scientificForumBacking.scientificForum.reviewManual\}"}{readonly="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
+
+		\fentry{science-field-dtbl}{<h:dataTable>}{Fachgebiet des Forums.}{value="\#\{scientificForumBacking.selectedScienceFields\}"}{/}{/}
+
+		\fentry{new-science-field}{<p:selectOneListbox>}{Hinzufügen eines neuen Fachgebietes.}{value="\#\{scientificForumBacking.scienceFields\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
+
+		\fentry{field-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{?}{/}{/}
+
+		\fentry{add-science-field-cbtn}{<h:commandButton>}{Speichern des neuen Fachgebietes.}{value="\#\{label.add\}"\newline action="\#\{scientificForumBacking.\newline
+		addScienceField\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
+
+		\fentry{remove-science-field-cbtn}{commandButton}{Löschen eines Fachgebietes.}{value="\#\{label.remove\}"\newline action="\#\{scientificForumBacking.\newline
+		removeScienceField\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
+
+		\fentry{save-cbtn}{<h:commandButton>}{Speichere Veränderungen.}{value="\#\{label.save\}"\newline action="\#\{scientificForumBacking.submitChanges\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
+	}
+\end{samepage}
+
+\ftable{
+
+	\fentry{submission-pg}{<pg:pagination>}{Paginierte Liste aller Einreichungen, die der Nutzer eingereicht hat.}{paginator="\#\{scientificForumBacking.submissionPagination\}"}{/}{/}
+
+	\fentry{title-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Titel des Papers.}{paginator="\#\{scientificForumBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.submissionTitle\}"}{/}{/}
+
+	\fentry{title-otxt}{<h:outputText>}{Titel der Einreichung.}{value="\#\{var.title\}"}{/}{/}
+
+	\fentry{date-ssc}{<ssc:sortsearchcolumn>}{Spalte für das Abgabedatum der Einreichung.}{paginator="\#\{scientificForumBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.date\}"}{/}{/}
+
+	\fentry{date-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{scientificForumBacking.dateFilterSelectSub\}" title="\#\{help.dateSelect\}"}{/}{/}
+
+	\fentry{date-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{?}{/}{/}
+
+	\fentry{date-otxt}{<h:outputText>}{Abgabedatum der Einreichung.}{value="\#\{var.submissionTime\}"}{/}{convertDateTime \newline pattern=""yyyy-MM-dd"}
+
+	\fentry{deadline-ssc}{<ssc:sortsearchcolumn>}{Spalte für die Deadline der Revision.}{paginator="\#\{scientificForumBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.deadline\}"}{/}{/}
+
+	\fentry{deadline-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit einer Deadline.}{value="\#\{\}" title="\#\{help.deadlineSelect\}"}{/}{/}
+
+	\fentry{deadline-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{?}{/}{/}
+
+	\fentry{deadline-otxt}{<h:outputText>}{Deadline für eine Revision.}{value="\#\{var.deadlineRevision\}"}{/}{convertDateTime \newline pattern=""yyyy-MM-dd"}
+
+	\fentry{state-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Status der Einreichung.}{paginator="\#\{scientificForumBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.stateSub\}"}{/}{/}
+
+	\fentry{state-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Status.}{value="\#\{\}" title="\#\{help.stateSubSelect\}"}{/}{/}
+
+	\fentry{state-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{?}{/}{/}
+
+	\fentry{state-otxt}{<h:outputText>}{Status der Einreichung.}{value="\#\{var.state\}"}{/}{/}
+}
+
+\ftable{
+
+	\multicolumn{6}{|c|}{Weitere Paginierungen mit den gleichen Spalten wie in der vorherigen Tabelle.} \\\hline %das hline verursacht keine probleme, wird sind in einem tabular
+
+	\fentry{editorial-pg}{<pg:pagination>}{Paginierte Liste aller Einreichungen, die der Editor verwaltet.}{paginator="\#\{scientificForumBacking.editedPagination\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
+
+	\fentry{review-pg}{<pg:pagination>}{Paginierte Liste aller Einreichungen, die der Gutachter bearbeitet.}{paginator="\#\{scientificForumBacking.reviewedPagination\}"}{rendered="\#\{userListBacking.sessionInformation.user.reviewer\}"}{/}
+}
+
+\subsubsection{Gutachter}
+
+\begin{samepage}
+	\textbf{newReview.xhtml} Möchte ein Gutachter eines Papers seine Beurteilung abgeben, so ist dies auf dieser Seite möglich.
+	\nopagebreak
+
+	\ftable{
+
+		\fentry{version-number-otxt}{<h:outputText>}{Versionsnummer des eingereichten Papers, zu welchem der Gutachter ein Gutachten abgeben kann.}{}{/}{/}
+
+		\fentry{recommendation-cbx}{<h:selectBooleanCheckbox>}{Empfehlung des Gutachters ein Paper zu akzeptieren.}{value="\#\{newReviewBacking.review.acceptPaper\}"}{/}{/}
+
+		\fentry{comment-itxt}{<h:inputTextarea>}{Kommentar eines Gutachters}{value="\#\{newReviewBacking.review.comment\}"}{/}{/}
+
+		\fentry{review-pdf-ifile}{<h:inputFile>}{Einzureichendes Gutachten.}{value="\#\{newReviewBacking.uploadedPDF\}"}{/}{/}
+
+		\fentry{submit-review-btn}{<h:commandButton>}{Gutachten einreichen.}{value="\#\{newReviewBacking.addReview\}"}{/}{/}
+	}
+\end{samepage}
+
+\subsubsection{Editor}
+
+\begin{samepage}
+	\textbf{userList.xhtml} \phantomsection \label{flt:userList} Editoren und Administratoren erhalten hier einen Überblick über alle Nutzer. Die Seiten sind paginiert.\nopagebreak
+
+	\ftable{
+		\fentry{user-pg}{<pg:pagination>}{Paginierte Liste aller Nutzer}{paginator="\#\{userListBacking.userPagination\}"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
+
+		\fentry{rol-ssc}{<ssc:sortsearchcolumn>}{Spalte für die Nutzerrolle}{paginator="\#\{userListBacking.userPagination\}"\newline columnNamei18n="\#\{label.role\}"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
+
+		\fentry{role-otxt}{<h:outputText>}{Rolle des Nutzers}{value="\#\{var.role\}"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
+
+		\fentry{name-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Namen des Nutzers}{paginator="\#\{userListBacking.userPagination\}"\newline columnNamei18n="\#\{label.name\}"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
+
+		\fentry{name-link}{<h:link>}{Name des Nutzers. Link mit URL-Parameter.}{value="\#\{var.firstName.concat( ).concat(var.lastName)\}"\newline outcome="\#\{'authenticated/profile'\}"\newline includeViewParams="true"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
+
+		\fentry{/}{<f:param>}{Nutzer ID als URL Parameter.}{name="\#\{'id'\}"\newline value="\#\{var.id\}"}{/}{/}
+
+		\fentry{email-ssc}{<ssc:sortsearchcolumn>}{Spalte für die E-Mail des Nutzers}{paginator="\#\{userListBacking.userPagination\}"\newline columnNamei18n="\#\{label.email\}"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
+
+		\fentry{email-link}{<h:link>}{Mailto-Link mit E-Mail-Adresse des Nutzers.}{value="\#\{var.emailAddress\}"\newline  outcome="\#\{'mailto:'.concat(var.emailAddress)\}"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
+
+		\fentry{employer-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Arbeitsgeber des Nutzers}{paginator="\#\{userListBacking.userPagination\}"\newline columnNamei18n="\#\{label.employer\}"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
+
+		\fentry{employer-otxt}{<h:outputText>}{Arbeitgeber des Nutzers.}{value="\#\{var.employer\}"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
+	}
+\end{samepage}
+
+\subsubsection{Admin}
+
+\begin{samepage}
+
+	\textbf{initialConfig.xhtml} Auf dieser Seite landet man beim ersten Systemstart. Sie ist nur für Administratoren zugänglich.
+	Hier kann der Administrator die Datenbankschemata erstellen lassen.
+	\nopagebreak
+
+	\ftable{
+		\fentry{db-connection-state-otxt}{<h:outputText>}{Information über die Verbindung mit der Datenbank}{value="\#\{initialConfigBacking.getDatasourceConnectionState\}"}{/}{/}
+
+		\fentry{create-db-btn}{<h:commandButton>}{Erstellt die Datenbankschemata}{value="\#\{label.createDB\}"\newline action="\#\{initialConfigBacking.createDatasource\}"}{/}{/}
+	}
+\end{samepage}
+
+\begin{samepage}
+
+	\textbf{newUser.xhtml} Der Administrator kann hier einen neuen Nutzer anlegen.
+	\nopagebreak
+
+	\ftable{
+		\fentry{password-iscrt}{<h:inputSecret>}{Angabe des Passworts.}{value="\#\{newUserBacking.newUser.passwordNotHashed\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{required="true"}
+
+		\fentry{firstname-itxt}{<h:inputText>}{Angabe des Vornamen.}{value="\#\{newUserBacking.newUser.firstName\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{required="true"}
+
+		\fentry{lastname-itxt}{<h:inputText>}{Angabe des Nachnamen.}{value="\#\{newUserBacking.newUser.lastName\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{required="true"}
+
+		\fentry{titel-itxt}{<h:inputText>}{Angabe eines Titels.}{value="\#\{newUserBacking.newUser.title\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{/}
+
+		\fentry{e-mail-itxt}{<h:inputText>}{Angabe einer E-Mail-Adresse.}{value="\#\{newUserBacking.newUser.emailAddress\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{required="true"}
+
+		\fentry{is-admin-lbl}{<p:outputLabel>}{Label für die Administrator Checkbox}{value="\#\{label.setAdmin\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{/}
+
+		\fentry{is-admin-cbx}{<h:selectBooleanCheckbox>}{Zuordnung einer Administratorenrolle.}{value="\#\{newUserBacking.admin\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{/}
+
+		\fentry{abort-btn}{<h:commandButton>}{Abbruch des Vorgangs: Nutzererstellen.}{value="\#\{newUserBacking.abort\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{/}
+
+		\fentry{save-btn}{<h:commandButton>}{Speichern des neuen Nutzers.}{value="\#\{newUserBacking.saveUser\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{/}
+
+	}
+\end{samepage}
+
+\begin{samepage}
+	\textbf{administration.xhtml} Hier kann ein Administrator Konfigurationen vornehmen.
+	\nopagebreak
+
+	\ftable{
+		\fentry{select-theme-slctom}{<h:selectOneMenu>}{Auswahl eines Farbthemas.}{value="\#\{administrationBacking.systemSettings.style\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
+
+		\fentry{styles-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{?}{/}{/}
+
+		\fentry{logo-img}{<h:graphicImage>}{Logo des Systems.}{value="\#\{administrationBacking.systemSettings.logoImage\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
+
+		\fentry{change-logo-ifile}{<h:inputFile>}{Hochladen eines neuen Logos.}{title="\#\{help.uploadNewLogo\}"\newline value="\#\{administrationBacking.uploadedImage\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
+
+		\fentry{welcome-heading-itxt}{<h:inputText>}{Angabe einer Überschrift auf der \emph{welcomepage}}{value="\#\{administrationBacking.systemSettings.headlineWelcomePage\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{required="true"}
+
+		\fentry{welcome-text-itxt}{<h:inputTextArea>}{Angabe eines Textes auf der \emph{welcomepage}}{value="\#\{administrationBacking.systemSettings.shortMessageWelcomePage\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{required="true"}
+
+		\fentry{institution-itxt}{<h:inputText>}{Angabe des Namens der Einrichtung.}{value="\#\{administrationBacking.systemSettings.companyName\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{required="true"}
+
+		\fentry{imprint-itxt}{<h:inputTextArea>}{Angabe des Impressums der Einrichtung.}{value="\#\{administrationBacking.systemSettings.imprint\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{required="true"}
+
+		\fentry{abort-btn}{<h:commandButton>}{Abbruch des Änderungsvorgangs.}{value="\#\{label.abort\}"\newline action="\#\{administrationBacking.abort\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
+
+		\fentry{save-btn}{<h:commandButton>}{Speichern der Änderungen.}{value="\#\{label.save\}"\newline action="\#\{administrationBacking.save\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
+
+		\fentry{new-user-link}{<h:link>}{Weiterleitung zu \emph{newUser.xhtml}.}{value="\#\{label.gotoNewUser\}" \newline outcome="/authenticated/newUser"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
+
+		\fentry{new-scientific-forum-link}{<h:link>}{Weiterleitung zu \emph{newScientificForum.xhtml}.}{value="\#\{label.gotoNewScientificForum\}" \newline outcome="/authenticated/newScientificForum"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
+	}
+\end{samepage}
+
+\begin{samepage}
+	\textbf{newScientificForum.xhtml} Auf der Seite zum Erstellen eines wissenschaftlichen Forums kann ein Administrator dessen wesentlichen Daten festlegen.
+	\nopagebreak
+
+	\ftable{
+
+		\fentry{forum-name-itxt}{<h:inputText>}{Angabe des Name des Forums.}{value="\#{newScientificForumBacking.newScientificForum.name}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{required="true"}
+
+		\fentry{editors-list}{<h:dataTable>}{Liste der Editoren}{value="\#{newScientificForumBacking.editors}"}{render="\#{toolbarBacking.sessionInformation.user.isAdmin}"}{/}
+
+		\fentry{email-editor-itxt}{<h:inputText>}{Angabe der E-Mail-Adresse eines Editor.}{value="\#{newScientificForumBacking.newEditorInput.emailAddress}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{required="true"}
+
+		\fentry{add-editor-btn}{<h:commandButton>}{Hinzufügen eines Editors in eine Liste.}{value="\#\{label.add\}"\newline  action="\#\{newScientificForumBacking.addEditor\}"\newline title="\#\{help.addEditor\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
+
+		\fentry{delete-editor-btn}{<h:commandButton>}{Löschen des zugehörigen Editors von der Liste.}{value="\#\{label.remove\}"\newline  action="\#\{newScientificForumBacking.removeEditor(var)\}"\newline title="\#\{help.removeEditor\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
+
+		\fentry{deadline-itxt}{<h:inputText>}{Hinzufügen einer Deadline des Forums.}{value="\#\{newScientificForumBacking.newScientificForum.deadline\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{converterDateTime \newline patter="dd/MM/yyyy"}
+
+		\fentry{description-itxt}{<h:inputTextArea>}{Angabe einer Kurzbeschreibung.}{value="\#\{newScientificForumBacking.newScientificForum.description\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{required="true"}
+
+		\fentry{url-itxt}{<h:inputText>}{Link zur Konferenz oder zum Journal.}{value="\#\{newScientificForumBacking.newScientificForum.url\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
+
+		\fentry{review-instructions-itxt}{<h:inputTextArea>}{Angabe einer Anleitung für eine Begutachtung.}{value="\#\{newScientificForumBacking.newScientificForum.reviewManual\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{required="true"}
+
+		\fentry{science-field-list}{<h:outputText>}{Liste der ausgewählten Fachgebiete.}{value="\#\{newScientificForumBacking.selectedScienceFields\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
+
+		\fentry{science-field-list}{<p:selectOneListbox>}{Auswahl von Fachgebieten.}{value="\#\{newScientificForumBacking.scienceFields\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
+
+		\fentry{new-science-field-itxt}{<h:inputText>}{Hinzufügen neuer Fachgebiete.}{value="\#\{newScientificForumBacking.newScienceFieldInput.name\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{required="true"}
+
+		\fentry{add-science-field-btn}{<h:commandButton>}{Ausführen der Hinzufüge-Aktion.}{value="\#\{label.add\}"\newline action="\#\{newScientificForumBacking.addScienceField\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
+
+		\fentry{save-btn}{<h:commandButton>}{Speichern des neuen Forums.}{value="\#\{label.save\}"\newline action="\#\{newScientificForumBacking.create\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
+
+		\fentry{abort-btn}{<h:commandButton>}{Abbruch des Erstellungsprozesses.}{value="\#\{label.abort\}"\newline action="\#\{newScientificForumBacking.abort\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
+	}
+\end{samepage}

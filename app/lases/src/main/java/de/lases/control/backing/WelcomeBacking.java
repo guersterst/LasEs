@@ -1,58 +1,95 @@
 package de.lases.control.backing;
 
-import de.lases.business.service.*;
+import de.lases.business.service.CustomizationService;
+import de.lases.business.service.LoginService;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.annotation.FacesConfig;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import java.io.Serializable;
 
 /**
- * This is the backing bean for welcome.xhtml. On that page, registered users can log in.
+ * Backing bean for the welcome page.
  */
+@FacesConfig
 @Named
 @RequestScoped
-public class WelcomeBacking implements Serializable {
+public class WelcomeBacking {
 
+    @Inject
+    private SessionInformation sessionInformation;
+
+    @Inject
     private LoginService loginService;
 
-    private String emailInput; // y
+    @Inject
+    private CustomizationService customizationService;
 
-    private String passwordInput; // y
+    private User loginInput;
 
     private SystemSettings systemSettings;
 
-    private CustomizationService customizationService;
-
-    private SessionInformation sessionInformation;
-
+    /**
+     * Load the text displayed on the welcome page from the system settigns
+     * and set up the user dto for login.
+     */
     @PostConstruct
     public void init() {
     }
 
+    /**
+     * Check the entered login data and either show an error message or go
+     * to the homepage (and log the user in).
+     *
+     * @return Go to the homepage on success and nowhere on failure.
+     */
     public String login() {
         return "welcome";
-    } // y
+    }
 
+    /**
+     * Go to the register page.
+     *
+     * @return Go to the register page.
+     */
     public String goToRegister() {
         return "register";
     }
 
-    public String getEmailInput() {
-        return emailInput;
+    public User getLoginInput() {
+        return loginInput;
     }
 
-    public void setEmailInput(String emailInput) {
-        this.emailInput = emailInput;
+    /**
+     * Set the user dto that holds the entered login information.
+     *
+     * @param loginInput The dto holding the entered login information.
+     */
+    public void setLoginInput(User loginInput) {
+        this.loginInput = loginInput;
     }
 
-    public String getPasswordInput() {
-        return passwordInput;
+    /**
+     * Get the system setting dto, which especially holds the headline and
+     * the message for the welcome page.
+     *
+     * @return The system settings dto.
+     */
+    public SystemSettings getSystemSettings() {
+        return systemSettings;
     }
 
-    public void setPasswordInput(String passwordInput) {
-        this.passwordInput = passwordInput;
+    /**
+     * Get session information.
+     *
+     * @return The session information.
+     */
+    public SessionInformation getSessionInformation() {
+        return sessionInformation;
     }
+
 }

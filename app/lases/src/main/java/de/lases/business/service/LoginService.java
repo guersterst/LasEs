@@ -1,21 +1,32 @@
 package de.lases.business.service;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.Dependent;
 import jakarta.faces.component.UIMessage;
-import jakarta.inject.Named;
 import de.lases.global.transport.*;
 import jakarta.enterprise.event.Event;
 import de.lases.persistence.repository.*;
+import jakarta.inject.Inject;
 
-@ApplicationScoped
-@Named
+/**
+ * Provides functionality regarding the authentication of a user.
+ * In case of an unexpected state, a {@link UIMessage} event will be fired.
+ */
+@Dependent
 public class LoginService {
 
+    @Inject
     private Event<UIMessage> uiMessageEvent;
 
+    @Inject
     private Transaction transaction;
 
-    public User login(String email, String password) {
+    /**
+     * Authenticates a user.
+     *
+     * @param user A {@link User}-DTO containing an email-adress and a non-hashed password.
+     * @return If succesful the user with all their data, null otherwise.
+     */
+    public User login(User user) {
         return null;
     }
 }

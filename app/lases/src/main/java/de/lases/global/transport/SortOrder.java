@@ -1,5 +1,18 @@
 package de.lases.global.transport;
 
+/**
+ * A List can be sorted in ascending or descending order.
+ */
 public enum SortOrder {
-    ASCENDING, DESCENDING
+
+    /**
+     * Ascending order.
+     */
+    ASCENDING,
+
+    /**
+     * Descending order.
+     */
+    DESCENDING
+
 }
