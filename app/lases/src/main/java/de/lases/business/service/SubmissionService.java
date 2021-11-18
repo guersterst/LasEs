@@ -88,7 +88,7 @@ public class SubmissionService {
      * Sets the editor of a submission.
      * <p></p>
      * When changed, the new editor is informed
-     * by email using the {@link EmailUtil} utility.
+     * by email using the {@link de.lases.business.util.EmailUtil} utility.
      *
      * @param submission The {@link Submission}-DTO with a valid editor.
      */
@@ -103,8 +103,24 @@ public class SubmissionService {
      *
      * @param submission The submission, that receives a new reviewer.
      * @param reviewer   The reviewer to be added to the submission.
+     * @param reviewedBy Information about the review-request relationship.
      */
-    public void addReviewer(Submission submission, User reviewer) {
+    public void addReviewer(Submission submission, User reviewer, ReviewedBy reviewedBy) {
+    }
+
+
+    /**
+     * Gets the {@code ReviewedBy}-DTO for a submission and a reviewer.
+     * Therefore, gets whether a reviewer has accepted to review a submission
+     * and the reviews' deadline.
+     *
+     * @param submission The submission which is requested to be reviewed by a reviewer.
+     * @param reviewer The requested reviewer for a submission.
+     * @return The {@link ReviewedBy}-DTO containing information about the review-request relationship of a
+     * submission and the reviewer.
+     */
+    public ReviewedBy getReviewedBy(Submission submission, User reviewer) {
+        return null;
     }
 
     /**
