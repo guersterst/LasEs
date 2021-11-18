@@ -8,6 +8,8 @@ public class UIMessage {
 
     private final String message;
 
+    private String stackTrace;
+
     private final MessageCategory messageCategory;
 
     /**
@@ -19,6 +21,17 @@ public class UIMessage {
     public UIMessage(String message, MessageCategory messageCategory) {
         this.message = message;
         this.messageCategory = messageCategory;
+    }
+
+    /**
+     * Construct a UIMessage with a message text and a stack trace.
+     *
+     * @param message The message text.
+     * @param messageCategory The message category.
+     */
+    public UIMessage(String message,String stackTrace) {
+        this.message = message;
+        this.messageCategory = MessageCategory.FATAL;
     }
 
     /**
@@ -39,4 +52,14 @@ public class UIMessage {
     public MessageCategory getCategory() {
         return messageCategory;
     }
+
+    /**
+     * Get stack trace. Is null if no stackTrace exists.
+     *
+     * @return Stack trace.
+     */
+    public String getStackTrace() {
+        return stackTrace;
+    }
+
 }
