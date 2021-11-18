@@ -9,8 +9,8 @@ public class ConfigReader {
     public static void initLogger() {
     }
 
-    public static HashMap<String, String> getConfiguration() {
-        return null;
+    public static void initConfig() {
+
     }
 
 }
