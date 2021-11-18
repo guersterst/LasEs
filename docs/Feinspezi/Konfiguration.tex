@@ -2,6 +2,7 @@ JSF lässt sich auf verschiedenste Art \& Weisen konfigurieren, wie beispielswei
 mithilfe der \emph{faces-config.xml}.
 Die Lases-Anwendung bietet nebenher weitere selbstdefinierte Konfigurationsmöglichkeiten an.
 Die Konfigurationsdateien befinden sich im \emph{webapp/WEB-INF/classes} Verzeichnis.
+\newline\newline
 Die Konfigurationsdateien werden intern in \emph{Properties}-Pakete umgewandelt,
 wobei jedes \emph{Properties}-Paket eine semantische Aufgabe übernimmt.
 So dient beispielsweise die \emph{mail.properties} der Konfiguration des Mailing.
@@ -11,13 +12,68 @@ so landen diese in der Anwendungskonfiguration \emph{config.properties}.
 
 \subsection{Konfiguration der Anwendung}
 Die Anwendung kann auf einige Weisen personalisiert konfiguriert werden.
-Hierzu dient die \emph{config.properties}-Datei,  %todo hyperref
+Hierzu dient die \emph{config.properties}-Datei,
 welche zentrale Parameter der Anwendung definiert.
+
+\begin{lstlisting}[language=XML, caption = Die Anwendungskonfiguration \emph{config.properties}]
+# The configuration for the LasEs application.
+# The convention to follow is: <key> = <value>.
+
+#------------------- GENERAL ------------------------#
+
+# The maximum filesize for a pdf upload.
+MAX_PDF_FILE_SIZE_MB = 20
+
+# The maximum filesize for a image upload.
+MAX_AVATAR_FILE_SIZE_MB = 5
+
+# The maximum length of paginated lists.
+MAX_PAGINATION_LIST_LENGTH = 25
+
+#------------------- MAIL -------------------------------#
+
+MAIL_ADDRESS_FROM = system@lases.de
+
+#------------------- DATABASE ---------------------------#
+
+# The URL with which the database can be accessed.
+DB_URL = jdbc:postgresql://bueno.fim.uni-passau.de/sep21g02
+
+# The database driver.
+DB_DRIVER = org.postgresql.Driver
+
+# The minimum amount of database connections provided
+# by the ConnectionPool.
+MIN_DB_CONNECTIONS = 10
+
+# The maximum amount of database connections provided
+# by the ConnectionPool.
+MAX_DB_CONNECTIONS = 50
+\end{lstlisting}
 
 \subsubsection{Konfiguration des Mailings}
 Damit die LasEs-Anwendung Mails versenden und Mailto-Links generieren kann
 müssen einige Konfigurationsentscheidungen getroffen werden.
 Hierzu dient die \emph{mail.properties}-Datei.
+
+\begin{lstlisting}[language=XML, caption = Die Mailingkonfiguration \emph{mail.properties}]
+# The configuration for the mailing API.
+# The convention to follow is: <key> = <value>.
+
+# For documentation see:
+# https://jakarta.ee/specifications/mail/1.6/apidocs/index.html?com/sun/mail/smtp/package-summary.html
+
+
+#------------------- SMTP ---------------------------#
+
+mail.smtp.host = mail.fim.uni-passau.de
+
+mail.smtp.port = 587
+
+mail.smtp.auth = true
+
+mail.smtp.starttls.enable = true
+\end{lstlisting}
 
 \subsubsection{Konfiguration der Datenbank}
 Damit die LasEs-Anwendung einen persistenten Datenbankzugriff besitzen kann,
@@ -25,9 +81,52 @@ muss dieser konfiguriert werden. Nennenswert sind ebenfalls die
 Konfigurationsentscheidungen bezüglich der SSL-Verschlüsselung.
 Hierzu dient die \emph{database.properties}-Datei.
 
+\begin{lstlisting}[language=XML, caption = Die Datenbankkonfiguration \emph{database.properties}]
+# The configuration for the database.
+# The convention to follow is: <key> = <value>.
+# For documentation see:
+# https://jdbc.postgresql.org/documentation/head/connect.html
+
+#------------------- ACCESS ------------------------#
+
+# The username for database access.
+user = sep21g02
+
+# The password for database access.
+password = ieQu2aeShoon
+
+#------------------- SSL ---------------------------#
+
+# Is SSL protection being used.
+ssl = true
+
+# The SSL factory used for SSL protection.
+sslfactory = org.postgresql.ssl.DefaultJavaSSLFactory
+\end{lstlisting}
+
+
 \subsubsection{Konfiguration des Logging}
 Damit die LasEs-Anwendung aussagekräftige \emph{Log}-Dateien ausgeben kann,
 wird der \emph{Logger} konfiguriert.
+
+\begin{lstlisting}[language=XML, caption = Die Loggingkonfiguration \emph{logger.properties}]
+# The configuration for the logger.
+# For documentation see:
+# https://docs.oracle.com/javase/7/docs/api/java/util/logging/FileHandler.html
+
+#------------------- LOGGING ---------------------------#
+
+# The handler for logging.
+handlers= java.util.logging.FileHandler
+
+# The level of logs that are to be logged. With 'Info' all logs
+# with higher priority will also be logged.
+.level= INFO
+
+# The directory where the logs will be placed.
+# We need help deciding where this should be.
+java.util.logging.FileHandler.pattern = %h/java%u.log
+\end{lstlisting}
 
 \subsubsection{Sprachkonfiguration}
 Die Dateien, welche die dargestellten \emph{Strings} enthalten, befinden sich im
