@@ -194,5 +194,16 @@ public class ScientificForumRepository {
             throws NotFoundException, DataNotWrittenException{
     }
 
+    /**
+     * Returns the scientific forum that belongs to a specific submission.
+     *
+     * @param submission The submission to which the forum should be returned.
+     * @return The scientific forum for the given submission.
+     */
+    public ScientificForum getScientificForumForSubmission(
+            Submission submission) {
+        return null;
+    }
+
 
 }
