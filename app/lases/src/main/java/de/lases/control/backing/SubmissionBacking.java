@@ -101,7 +101,7 @@ public class SubmissionBacking implements Serializable {
      *
      * @param review The review to download.
      */
-    public void downloadReview(Review review) {
+    public void downloadReview(Review review) throws IOException {
     }
 
     /**
@@ -117,7 +117,7 @@ public class SubmissionBacking implements Serializable {
      *
      * @param paper The paper to download.
      */
-    public void downloadPaper(Paper paper) {
+    public void downloadPaper(Paper paper) throws IOException {
     }
 
     /**
