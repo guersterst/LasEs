@@ -27,7 +27,7 @@ box "business.service"
     participant "rsvc:RevisionService" as rsvc << @ApplicationScoped >>
     participant "ssvc:SubmissionService" as ssvc << @ApplicationScoped >>
 end box
-box "global.transfer"
+box "global.transport"
     participant "sub:Submission" as sub << @Named >>
     participant "user:User" as usr
     participant "paper:Paper" as paper

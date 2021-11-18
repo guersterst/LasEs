@@ -28,7 +28,7 @@ end box
 box "business.util"
     participant "eu:EmailUtil" as eu
 end box
-box "global.transfer"
+box "global.transport"
     participant "msg:UIMessage" as msg
     participant "sub:Submission" as sub << @Named >>
     participant "user:User" as usr
