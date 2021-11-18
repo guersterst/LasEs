@@ -2,14 +2,14 @@ package de.lases.persistence.util;
 
 import de.lases.global.transport.*;
 
+import java.util.HashMap;
+
 public class ConfigReader {
 
-    private static GlobalConfig config;
-
-    public static void loadConfigs() {
+    public static void initLogger() {
     }
 
-    public static GlobalConfig getGlobalConfig() {
+    public static HashMap<String, String> getConfiguration() {
         return null;
     }
 
