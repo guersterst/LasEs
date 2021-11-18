@@ -335,25 +335,19 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 		\fentry{upload-cbtn}{<h:commandButton>}{Ausführen des Uploads.}{value="\#\{label.uploadFile\}" \newline action="\#\{submissionBacking.uploadPDF\}" \newline title="\#\{help.uploadRevision\}"}{rendered="\#\{submissionBacking.isViewerSubmitter\}"}{/}
 
 		\fentry{new-review-cbtn}{<h:commandButton>}{Weiterleitung zur Einreichung eines neuen Gutachtens.}{value="\#\{label.uploadReview\}" \newline action="\#\{submissionBacking.uploadReview\}" \newline title="\#\{help.uploadRevision\}"}{rendered="\#\{submissionBacking.sessionInformation.user.reviewer\}"}{/}
+		
+		\fentry{deadline-review-otxt}{<h:outputText>}{Deadline der Einreichung.}{value="\#\{submissionBacking.reviewedBy.timestampDeadline\}"}{rendered="\#\{submissionBacking.sessioninformation.user.reviewer\}"}{/}
 
 		\fentry{accept-reviewing-cbtn}{<h:commandButton>}{Annahme der Rolle eines Gutachters für diese Einreichung.}{value="\#\{label.acceptReviewing\}" \newline action="\#\{submissionBacking.acceptReviewing\}" \newline title="\#\{help.acceptReviewing\}"}{rendered="\#\{submissionBacking.sessionInformation.user.reviewer\}"}{/}
 
 		\fentry{decline-reviewing-cbtn}{<h:command>}{Ablehnen der Rolle eines Gutachters für diese Einreichung.}{value="\#\{label.declineReviewing\}" \newline action="\#\{submissionBacking.declineReviewing\}" \newline title="\#\{help.declineReviewing\}"}{rendered="\#\{submissionBacking.sessionInformation.user.reviewer\}"}{/}
 
 		\fentry{state-slctom}{<h:selectOneMenu>}{Status der Submission.}{value="\#\{submissionBacking.submission.state\}"}{readonly="\#\{not submissionBacking.sessionInformation.user.editor\}"}{/}
-<<<<<<< HEAD
 		
 		\fentry{/}{<f:selectItems>}{Auswahl des Status.}{itemValue="\#\{\}"}{/}{/}
 		
 		\fentry{state-otxt}{<h:outputText>}{Status der Einreichung.}{value="\#\{submissionBacking.submission.state\}"}{/}{/}
 		
-=======
-
-		\fentry{/}{arg2}{arg3}{arg4}{arg5}{arg6}
-
-		\fentry{title-otxt}{<h:outputText>}{Titel des Papers.}{value="\#\{submissionBacking.submission.title\}"}{/}{/}
-
->>>>>>> 32901500e4b07a24970bff725c4422721538d78e
 		\fentry{forum-lnk}{<h:link>}{Name des Forums und Weiterleitung zur Forumsübersicht.}{value="\#\{submissionBacking.scientificForum.name\}" \newline outcome="/facelets/authenticated/scientificForum" \newline title="\#\{help.directToForum\}"}{disabled="\#\{not submissionBacking.sessionInformation.user.editor\}"}{/}
 
 		\fentry{author-lnk}{<h:link>}{Name des Autors und Weiterleitung zum Profil.}{value="\#\{submissionBacking.authorForPaper\}" \newline outcome="/facelets/authenticated/profile" \newline title="\#\{help.directProfile\}"}{disabled="\#\{not submissionBacking.sessionInformation.user.editor\}"}{/}
@@ -377,17 +371,10 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \end{samepage}
 
 \begin{samepage}
-<<<<<<< HEAD
 	
 	\emph{paperPagination} enthält die Spalten: Version, Datum, Sichtbarkeit und Download.
 	Die Elemente der Liste, der unterschiedlichen Versionen der Einreichung, sieht wie folgt aus:
 	
-=======
-
-	\emph{paperPagination} enthält die Spalten: Version, Datum, Sichtbarkeit, Status und Download.
-	Die Elemente der Liste, der unterschiedlichen Versionen der Einrichtung, sieht wie folgt aus:
-
->>>>>>> 32901500e4b07a24970bff725c4422721538d78e
 	\ftable{
 		\fentry{paper-pg}{<pg:pagination>}{Liste aller eignen Einreichungen.}{paginator="\#\{submissionBacking.paperPagination\}"}{/}{/}
 
@@ -415,7 +402,6 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \end{samepage}
 
 \begin{samepage}
-<<<<<<< HEAD
 Die Spalte zum Download der einzelnen Paper ist wie folgt definiert:
 
 		\fentry{download-header}{<f:facet>}{Spaltenkopf für den Download.}{name="header"}{/}{/}
@@ -426,9 +412,6 @@ Die Spalte zum Download der einzelnen Paper ist wie folgt definiert:
 
 \begin{samepage}
 	
-=======
-
->>>>>>> 32901500e4b07a24970bff725c4422721538d78e
 	\emph{reviewPagination} enthält die Spalten: Version, Gutachter, Datum, Deadline, Status, Empfehlung, Kommentar und Download.
 	Ist ein Gutachten freigeschaltet, so erhält auch ein Nutzer Leserechte.
 	Die Elemente der Liste von Gutachten sind folgende:
