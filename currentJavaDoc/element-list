@@ -5,7 +5,7 @@ de.lases.control.backing
 de.lases.control.exception
 de.lases.control.internal
 de.lases.control.validation
-de.lases.global.logging
+de.lases.global.config
 de.lases.global.transport
 de.lases.jsfconfig
 de.lases.persistence.exception

@@ -7,6 +7,8 @@ import jakarta.enterprise.event.Event;
 import jakarta.faces.component.UIMessage;
 import jakarta.inject.Inject;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -14,7 +16,10 @@ import java.util.List;
  * In case of an unexpected state, a {@link UIMessage} event will be fired.
  */
 @Dependent
-public class ReviewService {
+public class ReviewService implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 7609005550975689458L;
 
     @Inject
     private Event<UIMessage> uiMessageEvent;

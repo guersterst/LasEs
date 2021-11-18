@@ -19,12 +19,9 @@ import java.util.List;
 /**
  * Backing bean for the new submission page.
  */
-@SessionScoped
+@RequestScoped
 @Named
-public class NewSubmissionBacking implements Serializable {
-
-    @Serial
-    private static final long serialVersionUID = 1743748242529451059L;
+public class NewSubmissionBacking {
 
     @Inject
     private SessionInformation sessionInformation;
@@ -52,7 +49,7 @@ public class NewSubmissionBacking implements Serializable {
 
     private List<User> editors;
 
-    private Editor selectedEditor;
+    private User selectedEditor;
 
     /**
      * Initialize the dtos used in this bean and load the list of possible
