@@ -393,9 +393,11 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{release-revision-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Freigabestatus.}{paginator="\#\{submissionBacking.paperPagination\}"\newline columnNamei18n="\#\{label.releaseRevision\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor || submissionBacking.sessionInformation.user.reviewer \}"}{/}
 
-		\fentry{release-revision-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit Freischalten der Revision}{value="\#\{\}" title="\#\{help.releaseRevisionSelect\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor || submissionBacking.sessionInformation.user.reviewer \}"}{/}
+		\fentry{release-revision-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit Freischalten der Revision}{value="\#\{submissionBacking.visibleFilterInputPaper\}" title="\#\{help.releaseRevisionSelect\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor || submissionBacking.sessionInformation.user.reviewer \}"}{/}
 
-		\fentry{/}{<f:selectItems>}{Mögliche Filterung der Revision.}{value="\#\{\}"}{/}{/}
+		\fentry{/}{<f:selectItem>}{Revision freigeschaltet.}{itemValue="true" \newline itemLabel="\#\{label.releaseRevisionTrue\}"}{/}{/}
+		
+		\fentry{/}{<f:selectItem>}{Revision nicht freigeschaltet.}{itemValue="false" \newline itemLabel="\#\{label.releaswRevisionFalse\}"}{/}{/}
 
 		\fentry{release-review-otxt}{<h:outputText>}{Status der Freischaltung.}{value="\#\{label.releasedReview\}"}{rendered="\#\{var.visible \&\& submissionBacking.sessionInformation.user.reviewer\}"}{/}
 
@@ -423,17 +425,19 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{date-ssc}{<ssc:sortsearchcolumn>}{Spalte für das Abgabedatum des Gutachtens.}{paginator="\#\{submissionBacking.reviewPagination\}"\newline columnNamei18n="\#\{label.date\}"}{/}{/}
 
-		\fentry{date-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{\}" title="\#\{help.dateSelect\}"}{/}{/}
+		\fentry{date-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{submissionBacking.dateFilterSelectReview\}" title="\#\{help.dateSelect\}"}{/}{/}
 
-		\fentry{/}{<f:selectItems>}{Mögliche Filterung des Datums.}{value="\#\{\}"}{/}{/}
+		\fentry{/}{<f:selectItems>}{Mögliche Filterung des Datums.}{value="\#\{dateSelect\}" \newline var="entry" itemValue="\#\{entry\}" itemLabel="\#\{entry.toString()\}"}{/}{/}
 
 		\fentry{date-otxt}{<h:outputText>}{Abgabedatum des Gutachtens.}{value="\#\{var.timestampUpdloaded\}"}{/}{convertDateTime \newline pattern=""yyyy-MM-dd"}
 
 		\fentry{release-review-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Freigabestatus.}{paginator="\#\{submissionBacking.reviewPagination\}"\newline columnNamei18n="\#\{label.releaseReview\}"}{rendered="\#\{submissionBacking.sessionInfromation.user.editor\}"}{/}
 
-		\fentry{release-review-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit Freischalten der Gutachten}{value="\#\{\}" title="\#\{help.releaseReviewSelect\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor || submissionBacking.sessionInformation.user.reviewer \}"}{/}
-
-		\fentry{/}{<f:selectItems>}{Mögliche Filterung der Freigabe.}{value="\#\{\}"}{/}{/}
+		\fentry{release-review-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit Freischalten der Gutachten}{value="\#\{submissionBacking.visibleFilterInputPaper\}" title="\#\{help.releaseReviewSelect\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor || submissionBacking.sessionInformation.user.reviewer \}"}{/}
+		
+		\fentry{/}{<f:selectItem>}{Gutachten freigeschaltet.}{itemValue="true" \newline itemLabel="\#\{label.releaseReviewTrue\}"}{/}{/}
+		
+		\fentry{/}{<f:selectItem>}{Gutachten nicht freigeschaltet.}{itemValue="false" \newline itemLabel="\#\{label.releaswReviewFalse\}"}{/}{/}
 
 		\fentry{release-review-otxt}{<h:outputText>}{Status der Freischaltung.}{value="\#\{label.releasedReview\}"}{rendered="\#\{var.visible\}"}{/}
 
@@ -441,9 +445,11 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{recommendation-review-ssc}{<ssc:sortsearchcolumn>}{Spalte für die Empfehlung.}{paginator="\#\{submissionBacking.reviewPagination\}"\newline columnNamei18n="\#\{label.recommendation\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor || submissionBacking.sessionInformation.user.reviewer}{/}
 
-		\fentry{recommendation-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit Empfehlung.}{value="\#\{\}" title="\#\{help.recommendationSelect\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor || submissionBacking.sessionInformation.user.reviewer}{/}
-
-		\fentry{/}{<f:selectItems>}{Mögliche Filterung der Empfehulung.}{value="\#\{\}"}{/}{/}
+		\fentry{recommendation-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit Empfehlung.}{value="\#\{submissionBacking.recommendationFilterInputReview\}" \newline title="\#\{help.recommendationSelect\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor || submissionBacking.sessionInformation.user.reviewer}{/}
+		
+		\fentry{/}{<f:selectItem>}{Positive Empfehlung.}{itemValue="true" \newline itemLabel="\#\{label.recommendationTrue\}"}{/}{/}
+		
+		\fentry{/}{<f:selectItem>}{Negative Empfehlung.}{itemValue="false" \newline itemLabel="\#\{label.recommendationFalse\}"}{/}{/}
 
 		\fentry{recommendation-slctbc}{<h:selectBooleanCheckbox>}{Empfehlung eines Gutachters.}{value="\#\{var.acceptPaper\}" readonly="true"}{rendered="\#\{submissionBacking.sessionInformation.user.editor || submissionBacking.sessionInformation.user.reviewer}{/}
 
