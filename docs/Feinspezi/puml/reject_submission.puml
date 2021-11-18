@@ -120,7 +120,7 @@ editor -> sb ++ : onLoad() //[via viewAction]//
         return
 '        destroy t1
     return sub
-return "submission"
+return
 
 editor -> sub ++ : getTitle()
 return

@@ -116,7 +116,7 @@ user -> sb ++ : onLoad() //[via viewAction]//
 '        destroy t1
         ......
     return sub
-return "submission"
+return
 
 user -> sub ++ : getTitle()
 return
@@ -222,7 +222,7 @@ activate sb
 '    activate rscBundle
 '    return msg
 
-return submission.xhtml\nwith facesMessage
+return
 
 
 
