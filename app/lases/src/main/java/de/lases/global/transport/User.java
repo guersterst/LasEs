@@ -55,7 +55,8 @@ public class User {
      *
      * @return Is the user a reviewer.
      */
-    public boolean isReviewer() { return false; }
+    public
+    boolean isReviewer() { return false; }
 
     /**
      * Add or remove reviewer privileges to the user.

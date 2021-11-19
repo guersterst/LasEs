@@ -1,11 +1,15 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.*;
+import de.lases.persistence.exception.DatasourceQueryFailedException;
+import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -13,7 +17,10 @@ import java.util.List;
  * In case of an unexpected state, a {@link UIMessage} event will be fired.
  */
 @Dependent
-public class SubmissionService {
+public class SubmissionService implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 3347910586400642643L;
 
     @Inject
     private Event<UIMessage> uiMessageEvent;
@@ -69,8 +76,6 @@ public class SubmissionService {
      */
     public void changeSubmission(Submission newSubmission) {
     }
-
-    //todo wieso rot -> package angeben
 
     /**
      * Sets the state of a submission.
@@ -143,6 +148,7 @@ public class SubmissionService {
     public void realeaseReview(Review review, Submission submission) {
     }
 
+    //todo necessary?
     /**
      * Adds a co-author.
      *
@@ -175,7 +181,34 @@ public class SubmissionService {
      * @param resultParams The parameters, that control filtering and sorting of the resulting list.
      * @return The resulting list of submissions, which a user is involved in.
      */
-    public List<Submission> getSubmissions(Privilege privilege, User user, ResultListParameters resultParams) {
+    public List<Submission> getList(Privilege privilege, User user, ResultListParameters resultParams) {
         return null;
+    }
+
+    /**
+     * Delivers all submissions, that a user either has submitted, is an editor to or reviews
+     * in a specified scientific forum.
+     *
+     * @param scientificForum The {@link ScientificForum} where the wanted submissions are submitted to.
+     * @param user            The user, whose editorial, reviewed or own submissions.
+     * @param privilege       The role, to which submissions belong, in relation to a user.
+     *                        Meaning, the user can request to receive the submissions which he is an editor to,
+     *                        reviews or has submitted himself.
+     * @param resultParams    The parameters, that control filtering and sorting of the resulting list.
+     * @return The resulting list of submissions, that were submitted to a given scientific forum.
+     */
+    public List<Submission> getList(ScientificForum scientificForum, User user, Privilege privilege,
+                                    ResultListParameters resultParams) {
+        return null;
+    }
+
+    /**
+     * The amount of submissions where the given user is a direct author to.
+     *
+     * @param user A {@link User}-DTO with a valid id.
+     * @return The number of submission the specified user authored.
+     */
+    public static int countSubmissions(User user) {
+        return 0;
     }
 }

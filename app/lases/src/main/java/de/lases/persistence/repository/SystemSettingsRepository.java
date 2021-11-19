@@ -1,10 +1,10 @@
 package de.lases.persistence.repository;
 
-import de.lases.global.transport.*;
+import de.lases.global.transport.File;
+import de.lases.global.transport.SystemSettings;
 import de.lases.persistence.exception.DataNotWrittenException;
 import de.lases.persistence.exception.DatasourceQueryFailedException;
 import de.lases.persistence.exception.InvalidFieldsException;
-import de.lases.persistence.exception.NotFoundException;
 
 /**
  * Offers get/update operations on the system settings and the

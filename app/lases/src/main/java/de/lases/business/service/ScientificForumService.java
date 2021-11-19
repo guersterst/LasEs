@@ -6,6 +6,8 @@ import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -13,7 +15,10 @@ import java.util.List;
  * In case of an unexpected state, a {@link UIMessage} event will be fired.
  */
 @Dependent
-public class ScientificForumService {
+public class ScientificForumService implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 5459943608069682810L;
 
     @Inject
     private Event<UIMessage> uiMessageEvent;
@@ -107,24 +112,8 @@ public class ScientificForumService {
      * @param resultListParams The parameters, that control filtering and sorting of the resulting list.
      * @return All scientific forums.
      */
-    public List<ScientificForum> getForums(ResultListParameters resultListParams) {
+    public List<ScientificForum> getList(ResultListParameters resultListParams) {
         return null;
     }
 
-    /**
-     * Delivers all submissions, that a user either has submitted, is an editor to or reviews
-     * in a specified scientific forum.
-     *
-     * @param scientificForum The {@link ScientificForum} where the wanted submissions are submitted to.
-     * @param user            The user, whose editorial, reviewed or own submissions.
-     * @param privilege       The role, to which submissions belong, in relation to a user.
-     *                        Meaning, the user can request to receive the submissions which he is an editor to,
-     *                        reviews or has submitted himself.
-     * @param resultParams    Parameters, that control filtering and sorting of the resulting list.
-     * @return The resulting list of submissions, that were submitted to a given scientific forum.
-     */
-    public List<Submission> getSubmissions(ScientificForum scientificForum, User user, Privilege privilege,
-                                           ResultListParameters resultParams) {
-        return null;
-    }
 }

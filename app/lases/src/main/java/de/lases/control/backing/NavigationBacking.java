@@ -1,5 +1,6 @@
 package de.lases.control.backing;
 
+import de.lases.business.service.CustomizationService;
 import de.lases.business.service.LoginService;
 import de.lases.global.transport.*;
 import de.lases.control.internal.*;
@@ -16,9 +17,6 @@ import java.util.List;
 @RequestScoped
 @Named
 public class NavigationBacking {
-
-
-    //TODO:Bild des logos braucht man für Navigationsleiste. Bzw ich brauche hier ein Systemsetting LG Steffi
 
     @Inject
     private LoginService loginService;
