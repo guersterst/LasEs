@@ -293,17 +293,17 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \begin{samepage}
 	\ftable{Fortsetzung}{
 		\fentry{state-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Status der Einreichung.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.stateSub\}"}{/}{/}
-		
+
 		\fentry{state-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Status.}{value="\#\{homepageBacking.stateFilterSelectSub\}" \newline title="\#\{help.stateSubSelect\}"}{/}{/}
-		
+
 		\fentry{/}{<f:selectItems>}{Mögliche Filterung des Status.}{value="\#\{homepageBacking.submissionStates\}" \newline var="entry" \newline itemLabel="\#\{entry.toString()\}" \newline itemValue="\#\{entry\}"}{/}{/}
-		
+
 		\fentry{state-otxt}{<h:outputText>}{Status der Einreichung.}{value="\#\{var.state\}"}{/}{/}
-		
+
 		\fentry{forum-ssc}{<ssc:sortsearchcolumn>}{Spalte für zugehöriges Forum.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.forumSub\}"}{/}{/}
-		
+
 		\fentry{forum-lnk}{<h:link>}{Zugehöriges Forum der Einreichung.}{value="\#\{homepageBacking.scientificForumForSubmission\}" outcome="/facelets/authenticated/scientificForum" \newline includeViewParams="true"}{/}{/}
-		
+
 		\fentry{/}{<f:param>}{Parameter für id des Forums.}{value="\#\{var.scientificForumId\}" name="id"}{/}{/}
 	}
 \end{samepage}
@@ -341,15 +341,15 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \begin{samepage}
 	\ftable{Fortsetzung}{
 		\fentry{forum-lnk}{<h:link>}{Name des Forums und Weiterleitung zur Forumsübersicht.}{value="\#\{submissionBacking.scientificForum.name\}" \newline outcome="/facelets/authenticated/scientificForum" \newline includeViewParams="true" \newline title="\#\{help.directToForum\}"}{disabled="\#\{not submissionBacking.sessionInformation.user.editor\}"}{/}
-		
+
 		\fentry{/}{<f:param>}{Parameter für id des Forums.}{value="\#\{submissionBacking.scientificForum.scientificForumId\}" name="id"}{/}{/}
-		
+
 		\fentry{author-lnk}{<h:link>}{Name des Autors und Weiterleitung zum Profil.}{value="\#\{submissionBacking.author.firstName + submissionBacking.author.lastName\}" \newline outcome="/facelets/authenticated/profile" \newline includeViewParams="true" \newline title="\#\{help.directProfile\}"}{disabled="\#\{not submissionBacking.sessionInformation.user.editor\}"}{/}
-		
+
 		\fentry{/}{<f:param>}{Parameter für id des Profil.}{value="\#\{submissionBacking.author.id\}" name="id"}{/}{/}
-		
+
 		\fentry{email-lnk}{<h:link>}{E-Mail-Adressen der Co-Autoren und Mailto-Link.}{value="\#\{submissionBacking.author.emailAddress\}"\newline  outcome="\#\{'mailto:'.concat(submissionBacking\newline.author.emailAddress)\}"}{disabled="\#\{not submissionBacking.sessionInformation.user.editor\}"}
-		
+
 		\fentry{deadline-revision-otxt}{<h:outputText>}{Deadline der Revision}{value="\#\{submissionBacking.submission.deadlineRevision\}"}{/}{/}
 	}
 \end{samepage}
@@ -377,17 +377,17 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \begin{samepage}
 	\ftable{Fortsetzung}{
 		\fentry{release-revision-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Freigabestatus.}{paginator="\#\{submissionBacking.paperPagination\}"\newline columnNamei18n="\#\{label.releaseRevision\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor || submissionBacking.sessionInformation.user.reviewer \}"}{/}
-		
+
 		\fentry{release-revision-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit Freischalten der Revision}{value="\#\{submissionBacking.visibleFilterInputPaper\}" title="\#\{help.releaseRevisionSelect\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor || submissionBacking.sessionInformation.user.reviewer \}"}{/}
-		
+
 		\fentry{/}{<f:selectItem>}{Revision freigeschaltet.}{itemValue="true" \newline itemLabel="\#\{label.releaseRevisionTrue\}"}{/}{/}
-		
+
 		\fentry{/}{<f:selectItem>}{Revision nicht freigeschaltet.}{itemValue="false" \newline itemLabel="\#\{label.releaswRevisionFalse\}"}{/}{/}
-		
+
 		\fentry{release-review-otxt}{<h:outputText>}{Status der Freischaltung.}{value="\#\{label.releasedReview\}"}{rendered="\#\{var.visible \&\& submissionBacking.sessionInformation.user.reviewer\}"}{/}
-		
+
 		\fentry{release-revision-cbtn}{<h:commandButton>}{Freischalten einer Revision.}{value="\#\{label.releaseRevision\}" action="\#\{submissionBacking.releaseRevision(var)\}" title="\#\{help.releaseRevision\}"}{rendered="\#\{submissionBacking.sessionInfromation.user.editor\}"}{/}
-		
+
 		\fentry{download-file-clmn}{<h:column>}{Spalten für den Download der Datei.}{/}{/}{/}
 	}
 \end{samepage}
@@ -418,36 +418,36 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \begin{samepage}
 	\ftable{Fortsetzung 1}{
 		\fentry{release-review-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Freigabestatus.}{paginator="\#\{submissionBacking.reviewPagination\}"\newline columnNamei18n="\#\{label.releaseReview\}"}{rendered="\#\{submissionBacking.sessionInfromation.user.editor\}"}{/}
-		
+
 		\fentry{release-review-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit Freischalten der Gutachten}{value="\#\{submissionBacking.visibleFilterInputPaper\}" title="\#\{help.releaseReviewSelect\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor || submissionBacking.sessionInformation.user.reviewer \}"}{/}
-		
+
 		\fentry{/}{<f:selectItem>}{Gutachten freigeschaltet.}{itemValue="true" \newline itemLabel="\#\{label.releaseReviewTrue\}"}{/}{/}
-		
+
 		\fentry{/}{<f:selectItem>}{Gutachten nicht freigeschaltet.}{itemValue="false" \newline itemLabel="\#\{label.releaswReviewFalse\}"}{/}{/}
-		
+
 		\fentry{release-review-otxt}{<h:outputText>}{Status der Freischaltung.}{value="\#\{label.releasedReview\}"}{rendered="\#\{var.visible\}"}{/}
-		
+
 		\fentry{release-review-cbtn}{<h:commandButton>}{Freischalten eines Gutachtens.}{value="\#\{label.releaseReview\}" action="\#\{submissionBacking.releaseReview(var)\}" title="\#\{help.releaseReview\}"}{rendered="\#\{submissionBacking.sessionInfromation.user.editor\}"}{/}
 	}
 \end{samepage}
 
 \begin{samepage}
 	\ftable{Fortsetzung 2}{
-		
+
 		\fentry{recommen-dation-review-ssc}{<ssc:sortsearchcolumn>}{Spalte für die Empfehlung.}{paginator="\#\{submissionBacking.reviewPagination\}"\newline columnNamei18n="\#\{label.recommendation\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor || submissionBacking.sessionInformation.user.reviewer}{/}
-		
+
 		\fentry{recommen-dation-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit Empfehlung.}{value="\#\{submissionBacking.recommendationFilterInputReview\}" \newline title="\#\{help.recommendationSelect\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor || submissionBacking.sessionInformation.user.reviewer}{/}
-		
+
 		\fentry{/}{<f:selectItem>}{Positive Empfehlung.}{itemValue="true" \newline itemLabel="\#\{label.recommendationTrue\}"}{/}{/}
-		
+
 		\fentry{/}{<f:selectItem>}{Negative Empfehlung.}{itemValue="false" \newline itemLabel="\#\{label.recommendationFalse\}"}{/}{/}
-		
+
 		\fentry{recommen-dation-slctbc}{<h:selectBooleanCheckbox>}{Empfehlung eines Gutachters.}{value="\#\{var.acceptPaper\}" readonly="true"}{rendered="\#\{submissionBacking.sessionInformation.user.editor || submissionBacking.sessionInformation.user.reviewer}{/}
-		
+
 		\fentry{comment-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Kommentar des Gutachters.}{paginator="\#\{submissionBacking.reviewPagination\}"\newline columnNamei18n="\#\{label.comment\}"}{/}{/}
-		
+
 		\fentry{comment-otxt}{<h:outputText>}{Kommentar des Gutachters.}{value="\#\{var.comment\}"}{/}{/}
-		
+
 		\fentry{download-file-clmn}{<h:column>}{Spalten für den Download der Datei.}{/}{/}{/}
 	}
 \end{samepage}
@@ -501,12 +501,18 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \end{samepage}
 
 \begin{samepage}
-	\textbf{resultList.xhtml} zeigt alle Ergebnisse einer Suche an.
-	\nopagebreak
 
-	Wird nach den eigenen Einreichungen, nach denen, die man begutachtet oder nach Einreichungen in eigener editorialer Verantwortung gesucht, so erscheinen die Listen im gleichen Schema wie auch auf der Homepage.
-	Ergibt die Suche eine Liste von User, so wird diese wie in der Userliste für den Administrator und dem Editor angezeigt.
-	Ist das Ziel der Suche, wissenschaftliche Foren zu finden, so erhält man bei passender Eingabe eine Liste im selben Format wie diejenige auf der Seite der Forumsliste.
+	\begin{sidewaystable}[ph!]
+		\begin{tabular}{|l|}
+
+			\hline
+			Wird nach den eigenen Einreichungen, nach denen, die man begutachtet oder nach Einreichungen in eigener editorialer Verantwortung gesucht, \\ so erscheinen die Listen im gleichen Schema wie auch auf der Homepage.
+			Ergibt die Suche eine Liste von User, so wird diese wie in der Userliste \\ für den Administrator und dem Editor angezeigt.
+			Ist das Ziel der Suche, wissenschaftliche Foren zu finden, so erhält man bei passender Eingabe \\ eine Liste im selben Format wie diejenige auf der Seite der Forumsliste. \\\hline
+		\end{tabular}
+	\caption{\textbf{searchResult.xhtml}}
+	\end{sidewaystable}
+
 \end{samepage}
 
 
