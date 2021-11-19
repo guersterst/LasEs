@@ -39,4 +39,5 @@ public class UIMessage {
     public MessageCategory getCategory() {
         return messageCategory;
     }
+
 }

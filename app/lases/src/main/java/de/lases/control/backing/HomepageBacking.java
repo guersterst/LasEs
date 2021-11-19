@@ -8,6 +8,7 @@ import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -16,6 +17,9 @@ import java.io.Serializable;
 @ViewScoped
 @Named
 public class HomepageBacking implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = -3666609342938323378L;
 
     private enum Tab {
         OWN_SUBMISSIONS, SUBMISSIONS_TO_EDIT, SUBMISSIONS_TO_REVIEW
@@ -27,6 +31,8 @@ public class HomepageBacking implements Serializable {
     @Inject
     private SessionInformation sessionInformation;
 
+    @Inject
+    private ScientificForumService scientificForumService;
 
 
     private DateSelect dateFilterSelectSub;
@@ -223,5 +229,7 @@ public class HomepageBacking implements Serializable {
     public SubmissionState[] getSubmissionStates() {
         return SubmissionState.values();
     }
+
+
 
 }

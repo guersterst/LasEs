@@ -20,7 +20,7 @@ public class ScientificForumRepository {
      * @param scientificForum A {@code ScientificForum} dto that must be filled
      *                        with a valid id or name.
      * @param transaction The transaction to use.
-     * @return A fully filled {@codeScientificForum} dto.
+     * @return A fully filled {@code ScientificForum} dto.
      * @throws NotFoundException If there is no scientific forum with the
      *                           provided id or name.
      * @throws InvalidFieldsException If both name and id are provided, but they
@@ -192,6 +192,17 @@ public class ScientificForumRepository {
                                           ScienceField scienceField,
                                           Transaction transaction)
             throws NotFoundException, DataNotWrittenException{
+    }
+
+    /**
+     * Returns the scientific forum that belongs to a specific submission.
+     *
+     * @param submission The submission to which the forum should be returned.
+     * @return The scientific forum for the given submission.
+     */
+    public ScientificForum getScientificForumForSubmission(
+            Submission submission) {
+        return null;
     }
 
 
