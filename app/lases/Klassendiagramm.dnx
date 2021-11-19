@@ -1474,6 +1474,19 @@
     <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=ResultListFilterOption%5Bjcu%5Ename=ResultListFilterOption.java%5Bjpack%5Ename=de.lases.global.transport%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D$uml.Class"/>
     <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Atdnaki-Eey0A4aY0WCKzw" x="261270" y="25584"/>
   </children>
+  <children xmi:type="umlnotation:UMLShape" xmi:id="_ihkloEi_EeyAfsoLQLc6tw" fontName="Noto Sans" fontHeight="8" showListVisibility="Text" fillColor="8508846" transparency="0" lineColor="2009705" lineWidth="1" showStereotype="Text">
+    <children xmi:type="notation:DecorationNode" xmi:id="_ihshcEi_EeyAfsoLQLc6tw" type="ImageCompartment">
+      <layoutConstraint xmi:type="notation:Size" xmi:id="_ihshcUi_EeyAfsoLQLc6tw" width="1320" height="1320"/>
+    </children>
+    <children xmi:type="notation:BasicDecorationNode" xmi:id="_ihshcki_EeyAfsoLQLc6tw" type="Stereotype"/>
+    <children xmi:type="notation:BasicDecorationNode" xmi:id="_ihtIgEi_EeyAfsoLQLc6tw" type="Name"/>
+    <children xmi:type="notation:BasicDecorationNode" xmi:id="_ihtIgUi_EeyAfsoLQLc6tw" type="Parent"/>
+    <children xmi:type="notation:ListCompartment" xmi:id="_ihtIgki_EeyAfsoLQLc6tw" visible="false" type="ANNOTATION_COMPARTMENT"/>
+    <children xmi:type="notation:ListCompartment" xmi:id="_ihtvkEi_EeyAfsoLQLc6tw" type="ANNOTATED_ATTRIBUTE_COMPARTMENT" showTitle="true"/>
+    <children xmi:type="notation:ListCompartment" xmi:id="_ihtvkUi_EeyAfsoLQLc6tw" type="ANNOTATED_OPERATION_COMPARTMENT"/>
+    <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=Configuration%5Bjcu%5Ename=Configuration.java%5Bjpack%5Ename=de.lases.global.config%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D$uml.Class"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_ihkloUi_EeyAfsoLQLc6tw" x="161660" y="64558"/>
+  </children>
   <element xsi:nil="true"/>
   <edges xmi:type="umlnotation:UMLConnector" xmi:id="_8jtOoEi7EeysvK1zCQD8Rw" source="_8g81mEi7EeysvK1zCQD8Rw" target="_8g8OiEi7EeysvK1zCQD8Rw" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
     <children xmi:type="notation:DecorationNode" xmi:id="_8jtOoki7EeysvK1zCQD8Rw" type="KindLabel">
