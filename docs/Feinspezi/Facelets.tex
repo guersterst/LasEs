@@ -86,7 +86,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \end{samepage}
 
 \begin{samepage}
-	
+
 	\ftable{\textbf{footer.xhtml} ist die Fußzeile der Webanwendung und für alle sichtbar.}{
 		\fentry{imprint-lnk}{<h:link>}{Link zur Seite des Impressums}{value="\#\{label.imprint\}" \newline outcome="/facelets/anonymous/imprint" \newline title="\#\{help.imprint\}"}{/}{/}
 
@@ -96,7 +96,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \end{samepage}
 
 \begin{samepage}
-	
+
 	\ftable{\textbf{toolbar.xhtml} ist die Seitenleiste für Editoren und Administratoren auf der Einreichungsübersicht. Hier wird die Einreichung verwaltet.}{
 		\fentry{add-reviewer-iTxt}{<h:inputText>}{Eingabefeld zur Angabe einer E-Mail-Adresse}{value="\#\{toolbarBacking.reviewerInput.email\}" \newline title="\#{help.reviewerEmail}}{/}{emailAddressExistsValidator \newline emailAddressLayoutValidator \newline required="true" \newline requiredMessage="\#\{message.addReviewer\}"}
 
@@ -450,15 +450,15 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \begin{samepage}
 
 	\ftable{\textbf{newSubmission.xhtml} Hier können neue Paper eingereicht werden.}{
-		\fentry{submission-title-itxt}{<h:inputText>}{Titel des abzugebenden Papers.}{value="\#\{newSubmissionBacking.newSubmission.title\}"}{/}{required="true" \newline requiredMessage="\#\{message.titleSub\}"}
+		\fentry{submission-title-itxt}{<h:inputText>}{Titel des abzugebenden Papers.}{value="\#\{newSubmissionBacking.newSubmission.title\}"}{/}{required="true" \newline requiredMessage=\newline "\#\{message.titleSub\}"}
 
-		\fentry{forum-name-itxt}{<h:inputText>}{Name des Forums, bei welchem abgegeben wird.}{value="\#\{newSubmissionBacking.newSubmission.forumInput.name\}"}{/}{required="true" \newline requiredMessage="\#\{message.forum\}"}
+		\fentry{forum-name-itxt}{<h:inputText>}{Name des Forums, bei welchem abgegeben wird.}{value="\#\{newSubmissionBacking.newSubmission.forumInput.name\}"}{/}{required="true" \newline requiredMessage=\newline "\#\{message.forum\}"}
 
 		\fentry{editor-slctom}{<h:selectOneMenu>}{Angabe eines Editors}{value="\#\{newSubmissionBacking.selectedEditor\}"}{/}{/}
 
 		\fentry{editor-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{value="\#\{newSubmissionBacking.editors\}"}{/}{/}
 
-		\fentry{pfd-upload-ifile}{<h:inputText>}{Angabe der Abgabedatei.}{value="\#\{newSubmissionBacking.uploadedPDF\}"}{/}{required="true" \newline requiredMessage="\#\{message.inputFile\}"}
+		\fentry{pfd-upload-ifile}{<h:inputText>}{Angabe der Abgabedatei.}{value="\#\{newSubmissionBacking.uploadedPDF\}"}{/}{required="true" \newline requiredMessage=\newline "\#\{message.inputFile\}"}
 
 		\fentry{titel-itxt}{<h:inputText>}{Angabe eines Titels eines Co-Autors.}{value="\#\{newSubmissionBacking.coAuthorInput.title\}"}{/}{/}
 
@@ -531,13 +531,18 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{title-itxt}{<h:inputText>}{Titel des Nutzenden.}{value="\#\{profileBacking.user.title\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{/}
 
-		\fentry{firstname-itxt}{<h:inputText>}{Vorname des Nutzenden.}{value="\#\{profileBacking.user.firstName\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{required="true" \newline requiredMessage="\#\{message.firstName\}"}
+		\fentry{firstname-itxt}{<h:inputText>}{Vorname des Nutzenden.}{value="\#\{profileBacking.user.firstName\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{required="true" \newline requiredMessage=\newline "\#\{message.firstName\}"}
 
-		\fentry{lastname-itxt}{<h:inputText>}{Nachname des Nutzenden.}{value="\#\{profileBacking.user.lastName\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{required="true" \newline requiredMessage="\#\{message.lastName\}"}
+		\fentry{lastname-itxt}{<h:inputText>}{Nachname des Nutzenden.}{value="\#\{profileBacking.user.lastName\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{required="true" \newline requiredMessage=\newline "\#\{message.lastName\}"}
 
-		\fentry{password-iscrt}{<h:inputSecret>}{Leeres Eingabefeld für ein neues Passwort.}{value="\#\{profileBacking.user.passwordNotHashed\}"}{rendered="\#\{!profileBacking.hasViewerEditRights\}"}{passwordValidator \newline required="true" \newline requiredMessage="\#\{message.password\}"}
+	}
+\end{samepage}
 
-		\fentry{email-itxt}{<h:inputText>}{E-Mail des Nutzenden.}{value="\#\{profileBacking.user.emailAddress\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{emailAddressExistsValidator \newline emailAddressExistsValidator \newline required="true" \newline requiredMessage="\#\{message.email\}"}
+\begin{samepage}
+	\ftable{Fortsetzung}{
+		\fentry{password-iscrt}{<h:inputSecret>}{Leeres Eingabefeld für ein neues Passwort.}{value="\#\{profileBacking.user.passwordNotHashed\}"}{rendered="\#\{!profileBacking.hasViewerEditRights\}"}{passwordValidator \newline required="true" \newline requiredMessage=\newline "\#\{message.password\}"}
+
+		\fentry{email-itxt}{<h:inputText>}{E-Mail des Nutzenden.}{value="\#\{profileBacking.user.emailAddress\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{emailAddressExistsValidator \newline emailAddressExistsValidator \newline required="true" \newline requiredMessage=\newline "\#\{message.email\}"}
 
 		\fentry{/}{<f:attribute>}{Parameter zur E-Mail Validierung.}{name="id" \newline value="\#\{profilBacking.user.id\}"}{/}{/}
 
@@ -545,13 +550,11 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{employer-itxt}{<h:inputText>}{Angabe des Arbeitgebers}{value="\#\{profileBacking.user.employer\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{/}
 
-		\multicolumn{6}{|c|}{Fortsetzung auf der nächsten Seite.} \\\hline %das hline verursacht keine probleme, wird sind in einem tabular
-
-	}
+}
 \end{samepage}
 
 \begin{samepage}
-	\ftable{}{
+	\ftable{Fortsetzung}{
 	\fentry{science-field-lst}{<h:dataTable>}{Spezialgebiete des Nutzers}{value="\#\{profileBacking.usersScienceFields\}"}{/}{/}
 
 	\fentry{add-science-field-slctolb}{<p:selectOneListbox>}{Auswahl der Spezialgebiete des Nutzers}{value="\#\{profileBacking.selectedScienceField\}"}{rendered="\#\{!profileBacking.hasViewerEditRights\}"}{/}
@@ -576,7 +579,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \ftable{Sollte ein Administrator einem anderen Nutzer die Rolle des Administrators zuweisen oder entziehen, so erscheint beim Auslösen des Save-Buttons ein Popup-Dialog.
 	In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Passwort zu bestätigen.}{
 
-	\fentry{password-admin-iscrt}{<h:inputSecret>}{Angabe eines Passworts.}{value="\#\{profileBacking.adminPasswordInPopup.passwordNotHashed\}"}{/}{passwordValidator \newline required="true" \newline requiredMessage="\#\{message.password\}"}
+	\fentry{password-admin-iscrt}{<h:inputSecret>}{Angabe eines Passworts.}{value="\#\{profileBacking.adminPasswordInPopup.passwordNotHashed\}"}{/}{passwordValidator \newline required="true" \newline requiredMessage=\newline "\#\{message.password\}"}
 
 	\fentry{admin-note-otxt}{<h:outputText>}{Hinweis zur Veränderung der Adminrolle.}{value="\#\{label.adminNote\}"}{/}{/}
 
@@ -596,43 +599,48 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{/}{<f:viewAction>}{Action Methode ausführen.}{action="\#\{scientificForumBacking.onLoad\}"}{/}{/}
 
-		\fentry{forum-name-itxt}{inputText}{Name des Forums.}{value="\#\{scientificForumBacking.scientificForum.name\}"}{readonly="\#\{!scientificForumBacking.isViewerEditor\}"}{required="true" \newline requiredMessage="\#\{message.forumName\}"}
+		\fentry{forum-name-itxt}{inputText}{Name des Forums.}{value="\#\{scientificForumBacking.scientificForum.name\}"}{readonly="\#\{!scientificForumBacking.isViewerEditor\}"}{required="true" \newline requiredMessage=\newline "\#\{message.forumName\}"}
 
 		\fentry{editor-lst}{<h:dataTable>}{Liste der verantwortliche Editoren.}{value="\#\{scientificForumBacking.editors\}"\newline title="\#\{help.managingEditors\}"}{/}{/}
 
-		\fentry{new-editor-itxt}{<h:inputText>}{Angabe der E-Mail eines Editors.}{value="\#\{scientificForumBacking.newEditorInput.emailAddress\}"}{rendered="\#\{scientificForumBacking.sessionInformation.user.editor\}"}{emailAddressExistsValidator \newline emailAddressLayoutValidator, required="true"\newline \newline requiredMessage="\#\{message.email\}" }
+		\fentry{new-editor-itxt}{<h:inputText>}{Angabe der E-Mail eines Editors.}{value="\#\{scientificForumBacking.newEditorInput.emailAddress\}"}{rendered="\#\{scientificForumBacking.sessionInformation.user.editor\}"}{emailAddressExistsValidator \newline emailAddressLayoutValidator, required="true"\newline requiredMessage=\newline "\#\{message.email\}" }
 
 		\fentry{add-editor-cbtn}{<h:commandButton>}{Füge Editor zur Liste hinzu.}{value="\#\{label.add\}"\newline action="\#\{scientificForumBacking.addEditor\}"}{rendered="\#\{scientificForumBacking.sessionInformation.user.editor\}"}{/}
 
 		\fentry{remove-editor-cbtn}{<h:commandButton>}{Lösche ausgewählten Editor.}{value="\#\{label.remove\}"\newline action="\#\{scientificForumBacking.removeEditor\}"}{rendered="\#\{scientificForumBacking.sessionInformation.user.editor\}"}{/}
 
-		\fentry{deadline-itxt}{<h:inputText>}{Deadline des Forums.}{value="\#\{scientificForumBacking.scientificForum.deadline\}"}{readonly="\#\{!scientificForumBacking.isViewerEditor\}"}{required="true" \newline requiredMessage="\#\{message.deadline\}"}
+		\fentry{deadline-itxt}{<h:inputText>}{Deadline des Forums.}{value="\#\{scientificForumBacking.scientificForum.deadline\}"}{readonly="\#\{!scientificForumBacking.isViewerEditor\}"}{required="true" \newline requiredMessage=\newline "\#\{message.deadline\}"}
 
-		\fentry{description-itxt}{inputTextArea}{Kurzbeschreibung des Forums.}{value="\#\{scientificForumBacking.scientificForum.description\}"}{readonly="\#\{!scientificForumBacking.isViewerEditor\}"}{required="true" \newline requiredMessage="\#\{message.description\}"}
+		\fentry{description-itxt}{inputTextArea}{Kurzbeschreibung des Forums.}{value="\#\{scientificForumBacking.scientificForum.description\}"}{readonly="\#\{!scientificForumBacking.isViewerEditor\}"}{required="true" \newline requiredMessage=\newline "\#\{message.description\}"}
 
 		\fentry{url-lnk}{<h:outputLink>}{Link zur Konferenz oder zum Journal.}{value="\#\{scientificForumBacking.scientificForum.url\}"}{/}{/}
 
 		\fentry{change-url-itxt}{inputText}{Angabe einer neuen URL.}{value="\#\{scientificForumBacking.scientificForum.url\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
 
 		\fentry{review-instructions-itxt}{<h:inputTextArea>}{Anleitung für eine Begutachtung.}{value="\#\{scientificForumBacking.scientificForum.reviewManual\}"}{readonly="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
+	}
+\end{samepage}
 
-		\fentry{science-field-dtbl}{<h:dataTable>}{Fachgebiet des Forums.}{value="\#\{scientificForumBacking.selectedScienceFields\}"}{/}{/}
+\begin{samepage}
+	\ftable{Fortsetzung}{
+				\fentry{science-field-dtbl}{<h:dataTable>}{Fachgebiet des Forums.}{value="\#\{scientificForumBacking.selectedScienceFields\}"}{/}{/}
 
 		\fentry{new-science-field}{<p:selectOneListbox>}{Hinzufügen eines neuen Fachgebietes.}{value="\#\{scientificForumBacking.selectedScienceFieldInput\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
 
 		\fentry{field-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{value="\#\{scientificForumBacking.scienceFields\}"}{/}{/}
 
 		\fentry{add-science-field-cbtn}{<h:commandButton>}{Speichern des neuen Fachgebietes.}{value="\#\{label.add\}"\newline action="\#\{scientificForumBacking.\newline
-		addScienceField\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
+			addScienceField\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
 
 		\fentry{remove-science-field-cbtn}{commandButton}{Löschen eines Fachgebietes.}{value="\#\{label.remove\}"\newline action="\#\{scientificForumBacking.\newline
-		removeScienceField\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
+			removeScienceField\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
 
 		\fentry{save-cbtn}{<h:commandButton>}{Speichere Veränderungen.}{value="\#\{label.save\}"\newline action="\#\{scientificForumBacking.submitChanges\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
-	}
+
+}
 \end{samepage}
 
-\ftable{}{
+\ftable{Fortsetzung}{
 
 	\fentry{submission-pg}{<pg:pagination>}{Paginierte Liste aller Einreichungen, die der Nutzer eingereicht hat.}{paginator="\#\{scientificForumBacking.submissionPagination\}"}{/}{/}
 
@@ -661,7 +669,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	\fentry{state-otxt}{<h:outputText>}{Status der Einreichung.}{value="\#\{var.state\}"}{/}{/}
 }
 
-\ftable{}{
+\ftable{Fortsetzung}{
 
 	\multicolumn{6}{|c|}{Weitere Paginierungen mit den gleichen Spalten wie in der vorherigen Tabelle.} \\\hline %das hline verursacht keine probleme, wird sind in einem tabular
 
@@ -731,15 +739,15 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \begin{samepage}
 
 	\ftable{\textbf{newUser.xhtml} Der Administrator kann hier einen neuen Nutzer anlegen.}{
-		\fentry{password-iscrt}{<h:inputSecret>}{Angabe des Passworts.}{value="\#\{newUserBacking.newUser.passwordNotHashed\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{passwordValidator \newline required="true" \newline requiredMessage="\#\{message.password\}"}
+		\fentry{password-iscrt}{<h:inputSecret>}{Angabe des Passworts.}{value="\#\{newUserBacking.newUser.passwordNotHashed\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{passwordValidator \newline required="true" \newline requiredMessage=\newline "\#\{message.password\}"}
 
-		\fentry{firstname-itxt}{<h:inputText>}{Angabe des Vornamen.}{value="\#\{newUserBacking.newUser.firstName\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{required="true" \newline requiredMessage="\#\{message.firstName\}"}
+		\fentry{firstname-itxt}{<h:inputText>}{Angabe des Vornamen.}{value="\#\{newUserBacking.newUser.firstName\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{required="true" \newline requiredMessage=\newline "\#\{message.firstName\}"}
 
-		\fentry{lastname-itxt}{<h:inputText>}{Angabe des Nachnamen.}{value="\#\{newUserBacking.newUser.lastName\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{required="true" \newline requiredMessage="\#\{message.lastName\}"}
+		\fentry{lastname-itxt}{<h:inputText>}{Angabe des Nachnamen.}{value="\#\{newUserBacking.newUser.lastName\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{required="true" \newline requiredMessage=\newline "\#\{message.lastName\}"}
 
 		\fentry{titel-itxt}{<h:inputText>}{Angabe eines Titels.}{value="\#\{newUserBacking.newUser.title\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{/}
 
-		\fentry{e-mail-itxt}{<h:inputText>}{Angabe einer E-Mail-Adresse.}{value="\#\{newUserBacking.newUser.emailAddress\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{emailAddressExistsValidator \newline emailAddressLayoutValidator \newline required="true" \newline requiredMessage="\#\{message.email\}"}
+		\fentry{e-mail-itxt}{<h:inputText>}{Angabe einer E-Mail-Adresse.}{value="\#\{newUserBacking.newUser.emailAddress\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{emailAddressExistsValidator \newline emailAddressLayoutValidator \newline required="true" \newline requiredMessage=\newline "\#\{message.email\}"}
 
 		\fentry{is-admin-lbl}{<p:outputLabel>}{Label für die Administrator Checkbox}{value="\#\{label.setAdmin\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{/}
 
@@ -763,13 +771,13 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{change-logo-ifile}{<h:inputFile>}{Hochladen eines neuen Logos.}{title="\#\{help.uploadNewLogo\}"\newline value="\#\{administrationBacking.uploadedImage\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
 
-		\fentry{welcome-heading-itxt}{<h:inputText>}{Angabe einer Überschrift auf der \emph{welcomepage}}{value="\#\{administrationBacking.systemSettings.headlineWelcomePage\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{required="true" \newline requiredMessage="\#\{message.welcomeHeading\}"}
+		\fentry{welcome-heading-itxt}{<h:inputText>}{Angabe einer Überschrift auf der \emph{welcomepage}}{value="\#\{administrationBacking.systemSettings.headlineWelcomePage\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{required="true" \newline requiredMessage=\newline "\#\{message.welcomeHeading\}"}
 
-		\fentry{welcome-text-itxt}{<h:inputTextArea>}{Angabe eines Textes auf der \emph{welcomepage}}{value="\#\{administrationBacking.systemSettings.shortMessageWelcomePage\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{required="true" \newline requiredMessage="\#\{message.welcomeText\}"}
+		\fentry{welcome-text-itxt}{<h:inputTextArea>}{Angabe eines Textes auf der \emph{welcomepage}}{value="\#\{administrationBacking.systemSettings.shortMessageWelcomePage\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{required="true" \newline requiredMessage=\newline "\#\{message.welcomeText\}"}
 
-		\fentry{institution-itxt}{<h:inputText>}{Angabe des Namens der Einrichtung.}{value="\#\{administrationBacking.systemSettings.companyName\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{required="true" \newline requiredMessage="\#\{message.institution\}"}
+		\fentry{institution-itxt}{<h:inputText>}{Angabe des Namens der Einrichtung.}{value="\#\{administrationBacking.systemSettings.companyName\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{required="true" \newline requiredMessage=\newline "\#\{message.institution\}"}
 
-		\fentry{imprint-itxt}{<h:inputTextArea>}{Angabe des Impressums der Einrichtung.}{value="\#\{administrationBacking.systemSettings.imprint\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{required="true" \newline requiredMessage="\#\{message.imprint\}"}
+		\fentry{imprint-itxt}{<h:inputTextArea>}{Angabe des Impressums der Einrichtung.}{value="\#\{administrationBacking.systemSettings.imprint\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{required="true" \newline requiredMessage=\newline "\#\{message.imprint\}"}
 
 		\fentry{abort-btn}{<h:commandButton>}{Abbruch des Änderungsvorgangs.}{value="\#\{label.abort\}"\newline action="\#\{administrationBacking.abort\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
 
@@ -786,34 +794,38 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	\ftable{\textbf{newScientificForum.xhtml} Auf der Seite zum Erstellen eines wissenschaftlichen Forums kann ein Administrator dessen wesentlichen Daten festlegen.
 	}{
 
-		\fentry{forum-name-itxt}{<h:inputText>}{Angabe des Name des Forums.}{value="\#{newScientificForumBacking.newScientificForum.name}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{required="true" \newline requiredMessage="\#\{message.forumName\}"}
+		\fentry{forum-name-itxt}{<h:inputText>}{Angabe des Name des Forums.}{value="\#{newScientificForumBacking.newScientificForum.name}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{required="true" \newline requiredMessage=\newline "\#\{message.forumName\}"}
 
 		\fentry{editors-list}{<h:dataTable>}{Liste der Editoren}{value="\#{newScientificForumBacking.editors}"}{render="\#{toolbarBacking.sessionInformation.user.isAdmin}"}{/}
 
-		\fentry{email-editor-itxt}{<h:inputText>}{Angabe der E-Mail-Adresse eines Editor.}{value="\#{newScientificForumBacking.newEditorInput.emailAddress}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{emailAddressValidator \newline emailAddressLayoutValidator \newline required="true" \newline requiredMessage="\#\{message.email\}"}
+		\fentry{email-editor-itxt}{<h:inputText>}{Angabe der E-Mail-Adresse eines Editor.}{value="\#{newScientificForumBacking.newEditorInput.emailAddress}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{emailAddressValidator \newline emailAddressLayoutValidator \newline required="true" \newline requiredMessage=\newline "\#\{message.email\}"}
 
-		\fentry{add-editor-btn}{<h:commandButton>}{Hinzufügen eines Editors in eine Liste.}{value="\#\{label.add\}"\newline  action="\#\{newScientificForumBacking.addEditor\}"\newline title="\#\{help.addEditor\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
+		\fentry{add-editor-btn}{<h:commandButton>}{Hinzufügen eines Editors in eine Liste.}{value="\#\{label.add\}"\newline  action="\#\{newScientificForumBacking.addEditor\}"\newline title="\#\{help.addEditor\}"}{render="\#\{newScientificForumBacking.sessionInformation.user.isAdmin\}"}{/}
 
-		\fentry{delete-editor-btn}{<h:commandButton>}{Löschen des zugehörigen Editors von der Liste.}{value="\#\{label.remove\}"\newline  action="\#\{newScientificForumBacking.removeEditor(var)\}"\newline title="\#\{help.removeEditor\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
+		\fentry{delete-editor-btn}{<h:commandButton>}{Löschen des zugehörigen Editors von der Liste.}{value="\#\{label.remove\}"\newline  action="\#\{newScientificForumBacking.removeEditor(var)\}"\newline title="\#\{help.removeEditor\}"}{render="\#\{newScientificForumBacking.sessionInformation.user.isAdmin\}"}{/}
 
 		\fentry{deadline-itxt}{<h:inputText>}{Hinzufügen einer Deadline des Forums.}{value="\#\{newScientificForumBacking.newScientificForum.deadline\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{converterDateTime \newline patter="dd/MM/yyyy"}
 
-		\fentry{description-itxt}{<h:inputTextArea>}{Angabe einer Kurzbeschreibung.}{value="\#\{newScientificForumBacking.newScientificForum.description\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{required="true" \newline requiredMessage="\#\{message.description\}"}
+		\fentry{description-itxt}{<h:inputTextArea>}{Angabe einer Kurzbeschreibung.}{value="\#\{newScientificForumBacking.newScientificForum.description\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{required="true" \newline requiredMessage=\newline "\#\{message.description\}"}
 
 		\fentry{url-itxt}{<h:inputText>}{Link zur Konferenz oder zum Journal.}{value="\#\{newScientificForumBacking.newScientificForum.url\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
 
-		\fentry{review-instructions-itxt}{<h:inputTextArea>}{Angabe einer Anleitung für eine Begutachtung.}{value="\#\{newScientificForumBacking.newScientificForum.reviewManual\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{required="true" \newline requiredMessage="\#\{message.instruction\}"}
+		\fentry{review-instructions-itxt}{<h:inputTextArea>}{Angabe einer Anleitung für eine Begutachtung.}{value="\#\{newScientificForumBacking.newScientificForum.reviewManual\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{required="true" \newline requiredMessage=\newline "\#\{message.instruction\}"}
 
 		\fentry{science-field-list}{<h:outputText>}{Liste der ausgewählten Fachgebiete.}{value="\#\{newScientificForumBacking.selectedScienceFields\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
-
-		\fentry{science-field-list}{<p:selectOneListbox>}{Auswahl von Fachgebieten.}{value="\#\{newScientificForumBacking.scienceFields\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
-
-		\fentry{new-science-field-itxt}{<h:inputText>}{Hinzufügen neuer Fachgebiete.}{value="\#\{newScientificForumBacking.newScienceFieldInput.name\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{required="true" \newline requiredMessage="\#\{message.newScienceField\}"}
-
-		\fentry{add-science-field-btn}{<h:commandButton>}{Ausführen der Hinzufüge-Aktion.}{value="\#\{label.add\}"\newline action="\#\{newScientificForumBacking.addScienceField\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
-
-		\fentry{save-btn}{<h:commandButton>}{Speichern des neuen Forums.}{value="\#\{label.save\}"\newline action="\#\{newScientificForumBacking.create\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
-
-		\fentry{abort-btn}{<h:commandButton>}{Abbruch des Erstellungsprozesses.}{value="\#\{label.abort\}"\newline action="\#\{newScientificForumBacking.abort\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
 	}
+\end{samepage}
+
+\begin{samepage}
+	\ftable{Fortsetzung}{
+	\fentry{science-field-list}{<p:selectOneListbox>}{Auswahl von Fachgebieten.}{value="\#\{newScientificForumBacking.scienceFields\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
+
+	\fentry{new-science-field-itxt}{<h:inputText>}{Hinzufügen neuer Fachgebiete.}{value="\#\{newScientificForumBacking.newScienceFieldInput.name\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{required="true" \newline requiredMessage=\newline "\#\{message.newScienceField\}"}
+
+	\fentry{add-science-field-btn}{<h:commandButton>}{Ausführen der Hinzufüge-Aktion.}{value="\#\{label.add\}"\newline action="\#\{newScientificForumBacking.addScienceField\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
+
+	\fentry{save-btn}{<h:commandButton>}{Speichern des neuen Forums.}{value="\#\{label.save\}"\newline action="\#\{newScientificForumBacking.create\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
+
+	\fentry{abort-btn}{<h:commandButton>}{Abbruch des Erstellungsprozesses.}{value="\#\{label.abort\}"\newline action="\#\{newScientificForumBacking.abort\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
+}
 \end{samepage}
