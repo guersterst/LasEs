@@ -40,6 +40,6 @@ public class ErrorPageBacking {
      * @return Is the app in development mode?
      */
     public boolean isDevelopmentMode() {
-
+        return true;
     }
 }
