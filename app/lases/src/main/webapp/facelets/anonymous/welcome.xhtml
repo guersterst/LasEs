@@ -33,12 +33,12 @@
                         <h4>E-Mail</h4>
                         <h:inputText id="email-itxt" value="#{welcomeBacking.loginInput.emailAddress}" required="true"
                         requiredMessage="#{message.email}">
-                            <f:validator/>
-                            <f:validator/>
+                            <!--<f:validator/>
+                            <f:validator/>-->
                         </h:inputText>
                         <h4>Password</h4>
                         <h:inputSecret id="password-itxt" value="#{welcomeBacking.loginInput.passwordNotHashed}" required="true" requiredMessage="#{message.password}">
-                            <f:validator/>
+                           <!-- <f:validator/>-->
                         </h:inputSecret>
                         <div>
                             <h:commandButton id="login-cbtn" value="Login" action="#{welcomeBacking.login}"/>

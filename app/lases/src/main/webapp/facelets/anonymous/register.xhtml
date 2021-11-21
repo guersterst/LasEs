@@ -25,12 +25,12 @@
                 <h6>Passwort</h6>
                 <h:inputSecret id="password-iscrt" value="#{registrationBacking.newUser.passwordNotHashed}" title="#{help.password}" required="true"
                 requiredMessage="#{message.password}">
-                    <f:validator for="password-iscrt"/>
+                   <!-- <f:validator for="password-iscrt"/>-->
                 </h:inputSecret>
                 <h:outputText id="email-itxt" value="#{registrationBacking.newUser.passwordNotHashed}" title="#{help.email}" required="true"
                 requiredMessage="#{message.email}">
-                    <f:validator/>
-                    <f:validator/>
+                    <!--<f:validator/>
+                    <f:validator/>-->
                 </h:outputText>
                 <div>
                     <h:commandButton id="register-cbtn" value="#{label.register}" action="#{registrationBacking.register}"/>
