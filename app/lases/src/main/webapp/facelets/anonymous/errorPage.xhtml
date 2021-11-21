@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+<h:head>
+    <title>LasEs - Error</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrap.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+</h:head>
+
+<h:body>
+    <div class="container-fluid">
+        <h:outputText id="error-message-otxt" value="#{errorPageBacking.errorMessage.message}"/>
+        <h:outputText id="stack-trace-otxt" value="#{errorPageBacking.errorMessage.stackTrace}" rendered="#{errorPageBacking.developmentMode}"/>
+    </div>
+</h:body>
+
+</html>
