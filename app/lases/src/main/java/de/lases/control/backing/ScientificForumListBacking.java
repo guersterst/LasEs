@@ -76,13 +76,5 @@ public class ScientificForumListBacking implements Serializable {
         return sessionInformation;
     }
 
-    /**
-     * Return an array of all values the DateSelect enum can have.
-     *
-     * @return ALl options of DateSelect.
-     */
-    public DateSelect[] getDateSelects() {
-        return DateSelect.values();
-    }
 
 }
