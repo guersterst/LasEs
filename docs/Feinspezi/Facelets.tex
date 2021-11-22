@@ -217,7 +217,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \begin{samepage}
 
 	\ftable{registration}{\textbf{registration.xhtml} Seite zur Registrierung anonymer Nutzer.}{
-		\fentry{title-itxt}{<h:inputText>}{Angabe eines Titels.}{value="\#\{registrationBacking.newUser.title\}" \newline title="\#\{help.title\}"}{/}{/}
+		\fentry{title-itxt}{<h:inputText>}{Angabe eines Titels.}{value="\#\{registrationBacking.newUser.title\}" \newline title="\#\{help.title\}"}{/}{maxLength="\#\{Const.TITLE\_MAX\}"}
 
 		\fentry{first-name-itxt}{<h:inputText>}{Angabe des Vornamens.}{value="\#\{registrationBacking.newUser.firstName\}" \newline title="\#\{help.firstName\}"}{/}{required="true" \newline requiredMessage=\newline"\#\{message.firstName\}" \newline maxLength="\#\{Const.FIRST\_NAME\_MAX\}}
 
@@ -549,7 +549,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 	\fentry{is-admin-cbx}{<h:selectBooleanCheckbox>}{Zuteilung der Rolle des Administrators.}{value="\#\{profileBacking.user.admin\}"}{rendered="\#\{profileBacking.sessionInformation.admin\}"}{/}
 
-	\fentry{title-itxt}{<h:inputText>}{Titel des Nutzenden.}{value="\#\{profileBacking.user.title\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{/}
+	\fentry{title-itxt}{<h:inputText>}{Titel des Nutzenden.}{value="\#\{profileBacking.user.title\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{maxLength="\#\{Const.TITLE\_MAX\}"}
 
 	\fentry{firstname-itxt}{<h:inputText>}{Vorname des Nutzenden.}{value="\#\{profileBacking.user.firstName\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{required="true" \newline requiredMessage=\newline "\#\{message.firstName\}" \newline maxLength="\#\{Const.FIRST\_NAME\_MAX\}"}
 
