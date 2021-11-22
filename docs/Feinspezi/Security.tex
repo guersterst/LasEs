@@ -7,6 +7,7 @@ Da ausschließlich JSF components für die HTML-Ausgabe verwendet werden, berein
 Zum Beispiel werden \code{'<'} und \code{'>'} durch \code{'\&lt;'} und \code{'\&gt;'} ersetzt, Nutzereingaben können also keine HTML-Tags in der Ausgabe erstellen.
 Dadurch wird XSS bzw.\ HTML-Injection unmöglich.
 Auch JavaScript kann so nicht injected werden, da sich JavaScript-Code in einem HTML-Tag (\code{<script>}) befinden müsste.
+Da dem Administrator vertraut werden kann, sind von ihm eingegebene Texte für das Impressum und die Willkommensseite davon ausgeschlossen (durch das Attribut \code{escape="false"}). Das ermöglicht eine Formatierung der Ausgabe.
 
 \subsection{SQL-Injection}\label{subsec:sql-injection}
 Für SQL-Code werden \code{PreparedStatements} benutzt, damit die SQL-Statements ohne von Nutzereingaben abhängige Parameter vorkompiliert werden.
