@@ -1421,19 +1421,6 @@
     <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=ScientificForum%5Bjcu%5Ename=ScientificForum.java%5Bjpack%5Ename=de.lases.global.transport%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D$uml.Class"/>
     <layoutConstraint xmi:type="notation:Bounds" xmi:id="_AtYu4ki-Eey0A4aY0WCKzw" x="180590" y="22896"/>
   </children>
-  <children xmi:type="umlnotation:UMLShape" xmi:id="_AtakEEi-Eey0A4aY0WCKzw" fontName="Noto Sans" fontHeight="8" showListVisibility="Text" showListSignature="true" fillColor="5828351" transparency="0" lineColor="1358284" lineWidth="1" showStereotype="Text">
-    <children xmi:type="notation:DecorationNode" xmi:id="_AtakEki-Eey0A4aY0WCKzw" type="ImageCompartment">
-      <layoutConstraint xmi:type="notation:Size" xmi:id="_AtakE0i-Eey0A4aY0WCKzw" width="1320" height="1320"/>
-    </children>
-    <children xmi:type="notation:BasicDecorationNode" xmi:id="_AtakFEi-Eey0A4aY0WCKzw" type="Stereotype"/>
-    <children xmi:type="notation:BasicDecorationNode" xmi:id="_AtakFUi-Eey0A4aY0WCKzw" type="Name"/>
-    <children xmi:type="notation:BasicDecorationNode" xmi:id="_AtakFki-Eey0A4aY0WCKzw" type="Parent"/>
-    <children xmi:type="notation:ListCompartment" xmi:id="_AtakF0i-Eey0A4aY0WCKzw" visible="false" type="ANNOTATION_COMPARTMENT"/>
-    <children xmi:type="notation:ListCompartment" xmi:id="_AtbLIEi-Eey0A4aY0WCKzw" type="ANNOTATED_ATTRIBUTE_COMPARTMENT" showTitle="true"/>
-    <children xmi:type="notation:ListCompartment" xmi:id="_AtbLIUi-Eey0A4aY0WCKzw" type="ANNOTATED_OPERATION_COMPARTMENT"/>
-    <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=File%5Bjcu%5Ename=File.java%5Bjpack%5Ename=de.lases.global.transport%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D$uml.Class"/>
-    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_AtakEUi-Eey0A4aY0WCKzw" x="134013" y="26256"/>
-  </children>
   <children xmi:type="umlnotation:UMLShape" xmi:id="_AtbLIki-Eey0A4aY0WCKzw" fontName="Noto Sans" fontHeight="8" showListVisibility="Text" showListSignature="true" fillColor="5828351" transparency="0" lineColor="1358284" lineWidth="1" showStereotype="Text">
     <children xmi:type="notation:DecorationNode" xmi:id="_AtbLJEi-Eey0A4aY0WCKzw" type="ImageCompartment">
       <layoutConstraint xmi:type="notation:Size" xmi:id="_AtbLJUi-Eey0A4aY0WCKzw" width="1320" height="1320"/>
@@ -1486,6 +1473,19 @@
     <children xmi:type="notation:ListCompartment" xmi:id="_ihtvkUi_EeyAfsoLQLc6tw" type="ANNOTATED_OPERATION_COMPARTMENT"/>
     <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=Configuration%5Bjcu%5Ename=Configuration.java%5Bjpack%5Ename=de.lases.global.config%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D$uml.Class"/>
     <layoutConstraint xmi:type="notation:Bounds" xmi:id="_ihkloUi_EeyAfsoLQLc6tw" x="161660" y="64558"/>
+  </children>
+  <children xmi:type="umlnotation:UMLShape" xmi:id="_-nZBMEt6EeyWQppyPQefCQ" fontName="Noto Sans" fontHeight="8" showListVisibility="Text" showListSignature="true" fillColor="5828351" transparency="0" lineColor="1358284" lineWidth="1" showStereotype="Text">
+    <children xmi:type="notation:DecorationNode" xmi:id="_-ndSoEt6EeyWQppyPQefCQ" type="ImageCompartment">
+      <layoutConstraint xmi:type="notation:Size" xmi:id="_-ndSoUt6EeyWQppyPQefCQ" width="1320" height="1320"/>
+    </children>
+    <children xmi:type="notation:BasicDecorationNode" xmi:id="_-nd5sEt6EeyWQppyPQefCQ" type="Stereotype"/>
+    <children xmi:type="notation:BasicDecorationNode" xmi:id="_-nd5sUt6EeyWQppyPQefCQ" type="Name"/>
+    <children xmi:type="notation:BasicDecorationNode" xmi:id="_-nd5skt6EeyWQppyPQefCQ" type="Parent"/>
+    <children xmi:type="notation:ListCompartment" xmi:id="_-negwEt6EeyWQppyPQefCQ" visible="false" type="ANNOTATION_COMPARTMENT"/>
+    <children xmi:type="notation:ListCompartment" xmi:id="_-nfH0Et6EeyWQppyPQefCQ" type="ANNOTATED_ATTRIBUTE_COMPARTMENT" showTitle="true"/>
+    <children xmi:type="notation:ListCompartment" xmi:id="_-nfH0Ut6EeyWQppyPQefCQ" type="ANNOTATED_OPERATION_COMPARTMENT"/>
+    <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=FileDTO%5Bjcu%5Ename=FileDTO.java%5Bjpack%5Ename=de.lases.global.transport%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D$uml.Class"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_-nZBMUt6EeyWQppyPQefCQ" x="133716" y="26268"/>
   </children>
   <element xsi:nil="true"/>
   <edges xmi:type="umlnotation:UMLConnector" xmi:id="_8jtOoEi7EeysvK1zCQD8Rw" source="_8g81mEi7EeysvK1zCQD8Rw" target="_8g8OiEi7EeysvK1zCQD8Rw" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
@@ -3558,18 +3558,6 @@
     <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlATYEi-Eey0A4aY0WCKzw" id="(0.8571428571428575,0.0)"/>
     <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlATYUi-Eey0A4aY0WCKzw" id="(0.4999999999999917,0.9890282131661439)"/>
   </edges>
-  <edges xmi:type="umlnotation:UMLConnector" xmi:id="_BTmaWEi-Eey0A4aY0WCKzw" source="_FlHvUEi9Eey0A4aY0WCKzw" target="_AtakEEi-Eey0A4aY0WCKzw" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
-    <children xmi:type="notation:DecorationNode" xmi:id="_BTmaWki-Eey0A4aY0WCKzw" type="KindLabel">
-      <children xmi:type="notation:BasicDecorationNode" xmi:id="_BTmaXEi-Eey0A4aY0WCKzw" type="Stereotype"/>
-      <children xmi:type="notation:BasicDecorationNode" xmi:id="_BTmaXki-Eey0A4aY0WCKzw" type="Kind"/>
-      <children xmi:type="notation:BasicDecorationNode" xmi:id="_BTmaXUi-Eey0A4aY0WCKzw" type="Name"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_BTmaW0i-Eey0A4aY0WCKzw" y="-186"/>
-    </children>
-    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=UserService%5Bjcu%5Ename=UserService.java%5Bjpack%5Ename=de.lases.business.service%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=File%5Bjcu%5Ename=File.java%5Bjpack%5Ename=de.lases.global.transport%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D%5D$uml.Usage"/>
-    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_BTmaWUi-Eey0A4aY0WCKzw" points="[12, 0, -147493, 24045]$[12, -6422, -147493, 17623]$[147513, -6422, 8, 17623]$[147513, -23943, 8, 102]"/>
-    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlATYki-Eey0A4aY0WCKzw" id="(0.14285714285714285,0.0)"/>
-    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlATY0i-Eey0A4aY0WCKzw" id="(0.0999986858704794,0.9631578947368409)"/>
-  </edges>
   <edges xmi:type="umlnotation:UMLConnector" xmi:id="_BTnBYEi-Eey0A4aY0WCKzw" source="_FlHvUEi9Eey0A4aY0WCKzw" target="_AtHCEki-Eey0A4aY0WCKzw" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
     <children xmi:type="notation:DecorationNode" xmi:id="_BTnBYki-Eey0A4aY0WCKzw" type="KindLabel">
       <children xmi:type="notation:BasicDecorationNode" xmi:id="_BTnBZEi-Eey0A4aY0WCKzw" type="Stereotype"/>
@@ -3750,18 +3738,6 @@
     <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlEk00i-Eey0A4aY0WCKzw" id="(0.3333331803630169,0.0)"/>
     <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlEk1Ei-Eey0A4aY0WCKzw" id="(0.4000025976724794,0.9847428073234524)"/>
   </edges>
-  <edges xmi:type="umlnotation:UMLConnector" xmi:id="_BTrS00i-Eey0A4aY0WCKzw" source="_Fle7sEi9Eey0A4aY0WCKzw" target="_AtakEEi-Eey0A4aY0WCKzw" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
-    <children xmi:type="notation:DecorationNode" xmi:id="_BTrS1Ui-Eey0A4aY0WCKzw" type="KindLabel">
-      <children xmi:type="notation:BasicDecorationNode" xmi:id="_BTrS10i-Eey0A4aY0WCKzw" type="Stereotype"/>
-      <children xmi:type="notation:BasicDecorationNode" xmi:id="_BTrS2Ui-Eey0A4aY0WCKzw" type="Kind"/>
-      <children xmi:type="notation:BasicDecorationNode" xmi:id="_BTrS2Ei-Eey0A4aY0WCKzw" type="Name"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_BTrS1ki-Eey0A4aY0WCKzw" y="-186"/>
-    </children>
-    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=PaperService%5Bjcu%5Ename=PaperService.java%5Bjpack%5Ename=de.lases.business.service%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=File%5Bjcu%5Ename=File.java%5Bjpack%5Ename=de.lases.global.transport%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D%5D$uml.Usage"/>
-    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_BTrS1Ei-Eey0A4aY0WCKzw" points="[13, 0, -122114, 25165]$[13, -7456, -122114, 17709]$[122143, -7456, 16, 17709]$[122143, -25063, 16, 102]"/>
-    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlFL4Ei-Eey0A4aY0WCKzw" id="(0.16666659018150803,0.0)"/>
-    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlFL4Ui-Eey0A4aY0WCKzw" id="(0.1999973717409588,0.9631578947368409)"/>
-  </edges>
   <edges xmi:type="umlnotation:UMLConnector" xmi:id="_BTrS2ki-Eey0A4aY0WCKzw" source="_Fle7sEi9Eey0A4aY0WCKzw" target="_AtSoQUi-Eey0A4aY0WCKzw" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
     <children xmi:type="notation:DecorationNode" xmi:id="_BTrS3Ei-Eey0A4aY0WCKzw" type="KindLabel">
       <children xmi:type="notation:BasicDecorationNode" xmi:id="_BTr54Ei-Eey0A4aY0WCKzw" type="Stereotype"/>
@@ -3797,18 +3773,6 @@
     <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_BTr560i-Eey0A4aY0WCKzw" points="[40, 0, -198027, 22479]$[40, -4024, -198027, 18455]$[198124, -4024, 57, 18455]$[198124, -22375, 57, 104]"/>
     <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlFy8ki-Eey0A4aY0WCKzw" id="(0.5,0.0)"/>
     <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlFy80i-Eey0A4aY0WCKzw" id="(0.7142857142857085,0.9872355944566006)"/>
-  </edges>
-  <edges xmi:type="umlnotation:UMLConnector" xmi:id="_BTsg8Ui-Eey0A4aY0WCKzw" source="_FljNI0i9Eey0A4aY0WCKzw" target="_AtakEEi-Eey0A4aY0WCKzw" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
-    <children xmi:type="notation:DecorationNode" xmi:id="_BTsg80i-Eey0A4aY0WCKzw" type="KindLabel">
-      <children xmi:type="notation:BasicDecorationNode" xmi:id="_BTsg9Ui-Eey0A4aY0WCKzw" type="Stereotype"/>
-      <children xmi:type="notation:BasicDecorationNode" xmi:id="_BTsg90i-Eey0A4aY0WCKzw" type="Kind"/>
-      <children xmi:type="notation:BasicDecorationNode" xmi:id="_BTsg9ki-Eey0A4aY0WCKzw" type="Name"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_BTsg9Ei-Eey0A4aY0WCKzw" y="-186"/>
-    </children>
-    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=CustomizationService%5Bjcu%5Ename=CustomizationService.java%5Bjpack%5Ename=de.lases.business.service%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=File%5Bjcu%5Ename=File.java%5Bjpack%5Ename=de.lases.global.transport%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D%5D$uml.Usage"/>
-    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_BTsg8ki-Eey0A4aY0WCKzw" points="[20, 0, -115612, 25165]$[20, -7371, -115612, 17794]$[115656, -7371, 24, 17794]$[115656, -25063, 24, 102]"/>
-    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlGaAEi-Eey0A4aY0WCKzw" id="(0.25,0.0)"/>
-    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlGaAUi-Eey0A4aY0WCKzw" id="(0.29999605761143816,0.9631578947368409)"/>
   </edges>
   <edges xmi:type="umlnotation:UMLConnector" xmi:id="_BTsg-Ei-Eey0A4aY0WCKzw" source="_FlpTw0i9Eey0A4aY0WCKzw" target="_AtKscki-Eey0A4aY0WCKzw" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
     <children xmi:type="notation:DecorationNode" xmi:id="_BTsg-ki-Eey0A4aY0WCKzw" type="KindLabel">
@@ -3930,18 +3894,6 @@
     <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlJdUEi-Eey0A4aY0WCKzw" id="(0.44444424048402087,0.0)"/>
     <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlJdUUi-Eey0A4aY0WCKzw" id="(0.6923164441747572,0.9956077972057225)"/>
   </edges>
-  <edges xmi:type="umlnotation:UMLConnector" xmi:id="_BTvkQ0i-Eey0A4aY0WCKzw" source="_Fl2IEki9Eey0A4aY0WCKzw" target="_AtakEEi-Eey0A4aY0WCKzw" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
-    <children xmi:type="notation:DecorationNode" xmi:id="_BTvkRUi-Eey0A4aY0WCKzw" type="KindLabel">
-      <children xmi:type="notation:BasicDecorationNode" xmi:id="_BTvkR0i-Eey0A4aY0WCKzw" type="Stereotype"/>
-      <children xmi:type="notation:BasicDecorationNode" xmi:id="_BTvkSUi-Eey0A4aY0WCKzw" type="Kind"/>
-      <children xmi:type="notation:BasicDecorationNode" xmi:id="_BTvkSEi-Eey0A4aY0WCKzw" type="Name"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_BTvkRki-Eey0A4aY0WCKzw" y="-186"/>
-    </children>
-    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=ReviewService%5Bjcu%5Ename=ReviewService.java%5Bjpack%5Ename=de.lases.business.service%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=File%5Bjcu%5Ename=File.java%5Bjpack%5Ename=de.lases.global.transport%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D%5D$uml.Usage"/>
-    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_BTvkREi-Eey0A4aY0WCKzw" points="[13, 0, -95944, 25389]$[13, -7509, -95944, 17880]$[95989, -7509, 32, 17880]$[95989, -25287, 32, 102]"/>
-    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlJdUki-Eey0A4aY0WCKzw" id="(0.16666636072603383,0.0)"/>
-    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlJdU0i-Eey0A4aY0WCKzw" id="(0.39999474348190533,0.9631578947368409)"/>
-  </edges>
   <edges xmi:type="umlnotation:UMLConnector" xmi:id="_BTvkSki-Eey0A4aY0WCKzw" source="_Fl2IEki9Eey0A4aY0WCKzw" target="_AtWSoki-Eey0A4aY0WCKzw" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
     <children xmi:type="notation:DecorationNode" xmi:id="_BTvkTEi-Eey0A4aY0WCKzw" type="KindLabel">
       <children xmi:type="notation:BasicDecorationNode" xmi:id="_BTvkTki-Eey0A4aY0WCKzw" type="Stereotype"/>
@@ -3989,18 +3941,6 @@
     <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_BTwyZEi-Eey0A4aY0WCKzw" points="[26, 0, -171386, 14864]$[26, -4763, -171386, 10101]$[171469, -4763, 57, 10101]$[171469, -14759, 57, 105]"/>
     <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlKrcki-Eey0A4aY0WCKzw" id="(0.33333272145206766,0.0)"/>
     <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlKrc0i-Eey0A4aY0WCKzw" id="(0.7307784688511327,0.9956077972057225)"/>
-  </edges>
-  <edges xmi:type="umlnotation:UMLConnector" xmi:id="_BTwyaki-Eey0A4aY0WCKzw" source="_OmzyQEi9Eey0A4aY0WCKzw" target="_AtakEEi-Eey0A4aY0WCKzw" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
-    <children xmi:type="notation:DecorationNode" xmi:id="_BTwybEi-Eey0A4aY0WCKzw" type="KindLabel">
-      <children xmi:type="notation:BasicDecorationNode" xmi:id="_BTwybki-Eey0A4aY0WCKzw" type="Stereotype"/>
-      <children xmi:type="notation:BasicDecorationNode" xmi:id="_BTxZcEi-Eey0A4aY0WCKzw" type="Kind"/>
-      <children xmi:type="notation:BasicDecorationNode" xmi:id="_BTwyb0i-Eey0A4aY0WCKzw" type="Name"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_BTwybUi-Eey0A4aY0WCKzw" y="-186"/>
-    </children>
-    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=AvatarUtil%5Bjcu%5Ename=AvatarUtil.java%5Bjpack%5Ename=de.lases.business.util%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=File%5Bjcu%5Ename=File.java%5Bjpack%5Ename=de.lases.global.transport%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D%5D$uml.Usage"/>
-    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_BTwya0i-Eey0A4aY0WCKzw" points="[39, 0, -45956, 26937]$[39, -8885, -45956, 18052]$[46042, -8885, 47, 18052]$[46042, -26835, 47, 102]"/>
-    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlKrdEi-Eey0A4aY0WCKzw" id="(0.49999999999999645,0.0)"/>
-    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlLSgEi-Eey0A4aY0WCKzw" id="(0.5999921152228763,0.9631578947368409)"/>
   </edges>
   <edges xmi:type="umlnotation:UMLConnector" xmi:id="_BTxZcUi-Eey0A4aY0WCKzw" source="_Om1AYUi9Eey0A4aY0WCKzw" target="_AtSoQUi-Eey0A4aY0WCKzw" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
     <children xmi:type="notation:DecorationNode" xmi:id="_BTxZc0i-Eey0A4aY0WCKzw" type="KindLabel">
@@ -4110,18 +4050,6 @@
     <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlNuwUi-Eey0A4aY0WCKzw" id="(0.75,0.0)"/>
     <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlNuwki-Eey0A4aY0WCKzw" id="(0.8461645428802589,0.9956077972057225)"/>
   </edges>
-  <edges xmi:type="umlnotation:UMLConnector" xmi:id="_BTz1t0i-Eey0A4aY0WCKzw" source="_rDl78ki9Eey0A4aY0WCKzw" target="_AtakEEi-Eey0A4aY0WCKzw" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
-    <children xmi:type="notation:DecorationNode" xmi:id="_BT0cwEi-Eey0A4aY0WCKzw" type="KindLabel">
-      <children xmi:type="notation:BasicDecorationNode" xmi:id="_BT0cwki-Eey0A4aY0WCKzw" type="Stereotype"/>
-      <children xmi:type="notation:BasicDecorationNode" xmi:id="_BT0cxEi-Eey0A4aY0WCKzw" type="Kind"/>
-      <children xmi:type="notation:BasicDecorationNode" xmi:id="_BT0cw0i-Eey0A4aY0WCKzw" type="Name"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_BT0cwUi-Eey0A4aY0WCKzw" y="-186"/>
-    </children>
-    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=SystemSettingsRepository%5Bjcu%5Ename=SystemSettingsRepository.java%5Bjpack%5Ename=de.lases.persistence.repository%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=File%5Bjcu%5Ename=File.java%5Bjpack%5Ename=de.lases.global.transport%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D%5D$uml.Usage"/>
-    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_BTz1uEi-Eey0A4aY0WCKzw" points="[27, 0, -86118, 57929]$[27, -3411, -86118, 54518]$[142505, -3411, 56360, 54518]$[142505, -39963, 56360, 17966]$[86208, -39963, 63, 17966]$[86208, -57827, 63, 102]"/>
-    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlNuw0i-Eey0A4aY0WCKzw" id="(0.333333034895714,0.0)"/>
-    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlNuxEi-Eey0A4aY0WCKzw" id="(0.7999894869638352,0.9631578947368409)"/>
-  </edges>
   <edges xmi:type="umlnotation:UMLConnector" xmi:id="_BT0cxUi-Eey0A4aY0WCKzw" source="_rDl78ki9Eey0A4aY0WCKzw" target="_AtNItEi-Eey0A4aY0WCKzw" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
     <children xmi:type="notation:DecorationNode" xmi:id="_BT0cx0i-Eey0A4aY0WCKzw" type="KindLabel">
       <children xmi:type="notation:BasicDecorationNode" xmi:id="_BT0cyUi-Eey0A4aY0WCKzw" type="Stereotype"/>
@@ -4145,18 +4073,6 @@
     <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_BT1D0ki-Eey0A4aY0WCKzw" points="[66, 0, -172880, 45836]$[66, -1990, -172880, 43846]$[173019, -1990, 73, 43846]$[173019, -45731, 73, 105]"/>
     <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlOV0ki-Eey0A4aY0WCKzw" id="(0.8333349536460926,0.0)"/>
     <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlOV00i-Eey0A4aY0WCKzw" id="(0.9230885922330098,0.9956077972057225)"/>
-  </edges>
-  <edges xmi:type="umlnotation:UMLConnector" xmi:id="_BT1D2Ei-Eey0A4aY0WCKzw" source="_rDnxIki9Eey0A4aY0WCKzw" target="_AtakEEi-Eey0A4aY0WCKzw" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
-    <children xmi:type="notation:DecorationNode" xmi:id="_BT1q4Ei-Eey0A4aY0WCKzw" type="KindLabel">
-      <children xmi:type="notation:BasicDecorationNode" xmi:id="_BT1q4ki-Eey0A4aY0WCKzw" type="Stereotype"/>
-      <children xmi:type="notation:BasicDecorationNode" xmi:id="_BT1q5Ei-Eey0A4aY0WCKzw" type="Kind"/>
-      <children xmi:type="notation:BasicDecorationNode" xmi:id="_BT1q40i-Eey0A4aY0WCKzw" type="Name"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_BT1q4Ui-Eey0A4aY0WCKzw" y="-186"/>
-    </children>
-    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=UserRepository%5Bjcu%5Ename=UserRepository.java%5Bjpack%5Ename=de.lases.persistence.repository%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=File%5Bjcu%5Ename=File.java%5Bjpack%5Ename=de.lases.global.transport%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D%5D$uml.Usage"/>
-    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_BT1D2Ui-Eey0A4aY0WCKzw" points="[13, 0, -99163, 56361]$[13, -2579, -99163, 53782]$[99231, -2579, 55, 53782]$[99231, -56259, 55, 102]"/>
-    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlO84Ei-Eey0A4aY0WCKzw" id="(0.1666669907292167,0.0)"/>
-    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlO84Ui-Eey0A4aY0WCKzw" id="(0.6999908010933558,0.9631578947368409)"/>
   </edges>
   <edges xmi:type="umlnotation:UMLConnector" xmi:id="_BT1q5Ui-Eey0A4aY0WCKzw" source="_rDnxIki9Eey0A4aY0WCKzw" target="_AtKscki-Eey0A4aY0WCKzw" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
     <children xmi:type="notation:DecorationNode" xmi:id="_BT1q50i-Eey0A4aY0WCKzw" type="KindLabel">
@@ -4314,18 +4230,6 @@
     <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlSnQki-Eey0A4aY0WCKzw" id="(0.4000005627588691,0.0)"/>
     <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlSnQ0i-Eey0A4aY0WCKzw" id="(0.8000051953449709,0.9847428073234524)"/>
   </edges>
-  <edges xmi:type="umlnotation:UMLConnector" xmi:id="_BT7KeEi-Eey0A4aY0WCKzw" source="_rDrbg0i9Eey0A4aY0WCKzw" target="_AtakEEi-Eey0A4aY0WCKzw" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
-    <children xmi:type="notation:DecorationNode" xmi:id="_BT7xgEi-Eey0A4aY0WCKzw" type="KindLabel">
-      <children xmi:type="notation:BasicDecorationNode" xmi:id="_BT7xgki-Eey0A4aY0WCKzw" type="Stereotype"/>
-      <children xmi:type="notation:BasicDecorationNode" xmi:id="_BT7xhEi-Eey0A4aY0WCKzw" type="Kind"/>
-      <children xmi:type="notation:BasicDecorationNode" xmi:id="_BT7xg0i-Eey0A4aY0WCKzw" type="Name"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_BT7xgUi-Eey0A4aY0WCKzw" y="-186"/>
-    </children>
-    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=PaperRepository%5Bjcu%5Ename=PaperRepository.java%5Bjpack%5Ename=de.lases.persistence.repository%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=File%5Bjcu%5Ename=File.java%5Bjpack%5Ename=de.lases.global.transport%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D%5D$uml.Usage"/>
-    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_BT7KeUi-Eey0A4aY0WCKzw" points="[16, 0, -73724, 57033]$[16, -1632, -73724, 55401]$[138686, -1632, 64946, 55401]$[138686, -39153, 64946, 17880]$[73811, -39153, 71, 17880]$[73811, -56931, 71, 102]"/>
-    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlTOUEi-Eey0A4aY0WCKzw" id="(0.20000028137943324,0.0)"/>
-    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlTOUUi-Eey0A4aY0WCKzw" id="(0.8999881728343023,0.9631578947368409)"/>
-  </edges>
   <edges xmi:type="umlnotation:UMLConnector" xmi:id="_BT7xhUi-Eey0A4aY0WCKzw" source="_rDrbg0i9Eey0A4aY0WCKzw" target="_AtHCEki-Eey0A4aY0WCKzw" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
     <children xmi:type="notation:DecorationNode" xmi:id="_BT7xh0i-Eey0A4aY0WCKzw" type="KindLabel">
       <children xmi:type="notation:BasicDecorationNode" xmi:id="_BT7xiUi-Eey0A4aY0WCKzw" type="Stereotype"/>
@@ -4385,18 +4289,6 @@
     <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_BT9mtki-Eey0A4aY0WCKzw" points="[56, 0, -224478, 51884]$[56, -5535, -224478, 46349]$[224594, -5535, 60, 46349]$[224594, -51779, 60, 105]"/>
     <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlUccki-Eey0A4aY0WCKzw" id="(0.7142858902112232,0.0)"/>
     <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlUcc0i-Eey0A4aY0WCKzw" id="(0.7499999999999947,0.9922805469783855)"/>
-  </edges>
-  <edges xmi:type="umlnotation:UMLConnector" xmi:id="_BT-NwUi-Eey0A4aY0WCKzw" source="_rDspoki9Eey0A4aY0WCKzw" target="_AtakEEi-Eey0A4aY0WCKzw" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
-    <children xmi:type="notation:DecorationNode" xmi:id="_BT-Nw0i-Eey0A4aY0WCKzw" type="KindLabel">
-      <children xmi:type="notation:BasicDecorationNode" xmi:id="_BT-NxUi-Eey0A4aY0WCKzw" type="Stereotype"/>
-      <children xmi:type="notation:BasicDecorationNode" xmi:id="_BT-Nx0i-Eey0A4aY0WCKzw" type="Kind"/>
-      <children xmi:type="notation:BasicDecorationNode" xmi:id="_BT-Nxki-Eey0A4aY0WCKzw" type="Name"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_BT-NxEi-Eey0A4aY0WCKzw" y="-186"/>
-    </children>
-    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=ReviewRepository%5Bjcu%5Ename=ReviewRepository.java%5Bjpack%5Ename=de.lases.persistence.repository%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=File%5Bjcu%5Ename=File.java%5Bjpack%5Ename=de.lases.global.transport%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D%5D$uml.Usage"/>
-    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_BT-Nwki-Eey0A4aY0WCKzw" points="[12, 0, -128108, 57257]$[12, -6123, -128108, 51134]$[19513, -6123, -108607, 51134]$[19513, -19043, -108607, 38214]$[69171, -19043, -58949, 38214]$[69171, -39291, -58949, 17966]$[128159, -39291, 39, 17966]$[128159, -57155, 39, 102]"/>
-    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlUcdEi-Eey0A4aY0WCKzw" id="(0.14285720882920871,0.0)"/>
-    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlVDgEi-Eey0A4aY0WCKzw" id="(0.499993429352397,0.9631578947368409)"/>
   </edges>
   <edges xmi:type="umlnotation:UMLConnector" xmi:id="_BT-NyEi-Eey0A4aY0WCKzw" source="_rDspoki9Eey0A4aY0WCKzw" target="_AtWSoki-Eey0A4aY0WCKzw" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
     <children xmi:type="notation:DecorationNode" xmi:id="_BT-00Ei-Eey0A4aY0WCKzw" type="KindLabel">
@@ -4552,5 +4444,113 @@
     <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_BUEUYki-Eey0A4aY0WCKzw" points="[40, 103, 75136, 839]$[40, 16694, 75136, 17430]$[-75057, 16694, 39, 17430]$[-75057, -635, 39, 101]"/>
     <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlYt4Ei-Eey0A4aY0WCKzw" id="(0.49999999999999084,0.9749642346208861)"/>
     <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_BlYt4Ui-Eey0A4aY0WCKzw" id="(0.4999999999999935,0.9613828613460831)"/>
+  </edges>
+  <edges xmi:type="umlnotation:UMLConnector" xmi:id="_--vKMEt6EeyWQppyPQefCQ" source="_FlHvUEi9Eey0A4aY0WCKzw" target="_-nZBMEt6EeyWQppyPQefCQ" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
+    <children xmi:type="notation:DecorationNode" xmi:id="_--vxQEt6EeyWQppyPQefCQ" type="KindLabel">
+      <children xmi:type="notation:BasicDecorationNode" xmi:id="_--vxQkt6EeyWQppyPQefCQ" type="Stereotype"/>
+      <children xmi:type="notation:BasicDecorationNode" xmi:id="_--vxREt6EeyWQppyPQefCQ" type="Kind"/>
+      <children xmi:type="notation:BasicDecorationNode" xmi:id="_--vxQ0t6EeyWQppyPQefCQ" type="Name"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_--vxQUt6EeyWQppyPQefCQ" y="-186"/>
+    </children>
+    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=UserService%5Bjcu%5Ename=UserService.java%5Bjpack%5Ename=de.lases.business.service%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=FileDTO%5Bjcu%5Ename=FileDTO.java%5Bjpack%5Ename=de.lases.global.transport%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D%5D$uml.Usage"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_--vKMUt6EeyWQppyPQefCQ" points="[40, 0, -150466, 24297]$[40, -7836, -150466, 16461]$[150514, -7836, 8, 16461]$[150514, -24195, 8, 102]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_JShHIEt7EeyWQppyPQefCQ" id="(0.4999999999999998,-9.888499067930723E-16)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_JShHIUt7EeyWQppyPQefCQ" id="(0.10013620476972887,0.9631578947368409)"/>
+  </edges>
+  <edges xmi:type="umlnotation:UMLConnector" xmi:id="_--vxRUt6EeyWQppyPQefCQ" source="_Fle7sEi9Eey0A4aY0WCKzw" target="_-nZBMEt6EeyWQppyPQefCQ" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
+    <children xmi:type="notation:DecorationNode" xmi:id="_--wYUEt6EeyWQppyPQefCQ" type="KindLabel">
+      <children xmi:type="notation:BasicDecorationNode" xmi:id="_--wYUkt6EeyWQppyPQefCQ" type="Stereotype"/>
+      <children xmi:type="notation:BasicDecorationNode" xmi:id="_--wYVEt6EeyWQppyPQefCQ" type="Kind"/>
+      <children xmi:type="notation:BasicDecorationNode" xmi:id="_--wYU0t6EeyWQppyPQefCQ" type="Name"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_--wYUUt6EeyWQppyPQefCQ" y="-186"/>
+    </children>
+    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=PaperService%5Bjcu%5Ename=PaperService.java%5Bjpack%5Ename=de.lases.business.service%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=FileDTO%5Bjcu%5Ename=FileDTO.java%5Bjpack%5Ename=de.lases.global.transport%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D%5D$uml.Usage"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_--vxRkt6EeyWQppyPQefCQ" points="[40, 0, -120198, 25353]$[40, -8363, -120198, 16990]$[120254, -8363, 16, 16990]$[120254, -25251, 16, 102]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_JShHIkt7EeyWQppyPQefCQ" id="(0.4999999999999994,-1.3072148067163899E-15)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_JShHI0t7EeyWQppyPQefCQ" id="(0.20013534813595693,0.9631578947368409)"/>
+  </edges>
+  <edges xmi:type="umlnotation:UMLConnector" xmi:id="_--wYVUt6EeyWQppyPQefCQ" source="_FljNI0i9Eey0A4aY0WCKzw" target="_-nZBMEt6EeyWQppyPQefCQ" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
+    <children xmi:type="notation:DecorationNode" xmi:id="_--wYV0t6EeyWQppyPQefCQ" type="KindLabel">
+      <children xmi:type="notation:BasicDecorationNode" xmi:id="_--wYWUt6EeyWQppyPQefCQ" type="Stereotype"/>
+      <children xmi:type="notation:BasicDecorationNode" xmi:id="_--wYW0t6EeyWQppyPQefCQ" type="Kind"/>
+      <children xmi:type="notation:BasicDecorationNode" xmi:id="_--wYWkt6EeyWQppyPQefCQ" type="Name"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_--wYWEt6EeyWQppyPQefCQ" y="-186"/>
+    </children>
+    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=CustomizationService%5Bjcu%5Ename=CustomizationService.java%5Bjpack%5Ename=de.lases.business.service%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=FileDTO%5Bjcu%5Ename=FileDTO.java%5Bjpack%5Ename=de.lases.global.transport%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D%5D$uml.Usage"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_--wYVkt6EeyWQppyPQefCQ" points="[40, 0, -112493, 25881]$[40, -8362, -112493, 17519]$[112556, -8362, 23, 17519]$[112556, -25779, 23, 102]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_JShuMEt7EeyWQppyPQefCQ" id="(0.5,-1.421640799957684E-15)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_JShuMUt7EeyWQppyPQefCQ" id="(0.300134491502185,0.9631578947368409)"/>
+  </edges>
+  <edges xmi:type="umlnotation:UMLConnector" xmi:id="_--w_YEt6EeyWQppyPQefCQ" source="_Fl2IEki9Eey0A4aY0WCKzw" target="_-nZBMEt6EeyWQppyPQefCQ" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
+    <children xmi:type="notation:DecorationNode" xmi:id="_--w_Ykt6EeyWQppyPQefCQ" type="KindLabel">
+      <children xmi:type="notation:BasicDecorationNode" xmi:id="_--w_ZEt6EeyWQppyPQefCQ" type="Stereotype"/>
+      <children xmi:type="notation:BasicDecorationNode" xmi:id="_--w_Zkt6EeyWQppyPQefCQ" type="Kind"/>
+      <children xmi:type="notation:BasicDecorationNode" xmi:id="_--w_ZUt6EeyWQppyPQefCQ" type="Name"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_--w_Y0t6EeyWQppyPQefCQ" y="-186"/>
+    </children>
+    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=ReviewService%5Bjcu%5Ename=ReviewService.java%5Bjpack%5Ename=de.lases.business.service%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=FileDTO%5Bjcu%5Ename=FileDTO.java%5Bjpack%5Ename=de.lases.global.transport%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D%5D$uml.Usage"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_--w_YUt6EeyWQppyPQefCQ" points="[39, 0, -81761, 25617]$[39, -7569, -81761, 18048]$[81831, -7569, 31, 18048]$[81831, -25515, 31, 102]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_JShuMkt7EeyWQppyPQefCQ" id="(0.4999999999999992,0.0)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_JShuM0t7EeyWQppyPQefCQ" id="(0.4001336348684131,0.9631578947368409)"/>
+  </edges>
+  <edges xmi:type="umlnotation:UMLConnector" xmi:id="_--w_Z0t6EeyWQppyPQefCQ" source="_OmzyQEi9Eey0A4aY0WCKzw" target="_-nZBMEt6EeyWQppyPQefCQ" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
+    <children xmi:type="notation:DecorationNode" xmi:id="_--xmcEt6EeyWQppyPQefCQ" type="KindLabel">
+      <children xmi:type="notation:BasicDecorationNode" xmi:id="_--xmckt6EeyWQppyPQefCQ" type="Stereotype"/>
+      <children xmi:type="notation:BasicDecorationNode" xmi:id="_--xmdEt6EeyWQppyPQefCQ" type="Kind"/>
+      <children xmi:type="notation:BasicDecorationNode" xmi:id="_--xmc0t6EeyWQppyPQefCQ" type="Name"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_--xmcUt6EeyWQppyPQefCQ" y="-186"/>
+    </children>
+    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=AvatarUtil%5Bjcu%5Ename=AvatarUtil.java%5Bjpack%5Ename=de.lases.business.util%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=FileDTO%5Bjcu%5Ename=FileDTO.java%5Bjpack%5Ename=de.lases.global.transport%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D%5D$uml.Usage"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_--w_aEt6EeyWQppyPQefCQ" points="[40, 0, -41914, 26937]$[40, -7302, -41914, 19635]$[42010, -7302, 56, 19635]$[42010, -26835, 56, 102]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_JShuNEt7EeyWQppyPQefCQ" id="(0.5,-5.105935167848018E-15)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_JSiVQEt7EeyWQppyPQefCQ" id="(0.7001310649670973,0.9631578947368409)"/>
+  </edges>
+  <edges xmi:type="umlnotation:UMLConnector" xmi:id="_--xmdUt6EeyWQppyPQefCQ" source="_rDl78ki9Eey0A4aY0WCKzw" target="_-nZBMEt6EeyWQppyPQefCQ" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
+    <children xmi:type="notation:DecorationNode" xmi:id="_--xmd0t6EeyWQppyPQefCQ" type="KindLabel">
+      <children xmi:type="notation:BasicDecorationNode" xmi:id="_--xmeUt6EeyWQppyPQefCQ" type="Stereotype"/>
+      <children xmi:type="notation:BasicDecorationNode" xmi:id="_--xme0t6EeyWQppyPQefCQ" type="Kind"/>
+      <children xmi:type="notation:BasicDecorationNode" xmi:id="_--xmekt6EeyWQppyPQefCQ" type="Name"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_--xmeEt6EeyWQppyPQefCQ" y="-186"/>
+    </children>
+    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=SystemSettingsRepository%5Bjcu%5Ename=SystemSettingsRepository.java%5Bjpack%5Ename=de.lases.persistence.repository%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=FileDTO%5Bjcu%5Ename=FileDTO.java%5Bjpack%5Ename=de.lases.global.transport%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D%5D$uml.Usage"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_--xmdkt6EeyWQppyPQefCQ" points="[40, 0, -82899, 58089]$[40, -4475, -82899, 53614]$[83002, -4475, 63, 53614]$[83002, -57987, 63, 102]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_JSiVQUt7EeyWQppyPQefCQ" id="(0.49999999999999906,-4.412345430068785E-15)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_JSiVQkt7EeyWQppyPQefCQ" id="(0.8001302083333254,0.9631578947368409)"/>
+  </edges>
+  <edges xmi:type="umlnotation:UMLConnector" xmi:id="_--xmfEt6EeyWQppyPQefCQ" source="_rDnxIki9Eey0A4aY0WCKzw" target="_-nZBMEt6EeyWQppyPQefCQ" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
+    <children xmi:type="notation:DecorationNode" xmi:id="_--yNgUt6EeyWQppyPQefCQ" type="KindLabel">
+      <children xmi:type="notation:BasicDecorationNode" xmi:id="_--yNg0t6EeyWQppyPQefCQ" type="Stereotype"/>
+      <children xmi:type="notation:BasicDecorationNode" xmi:id="_--yNhUt6EeyWQppyPQefCQ" type="Kind"/>
+      <children xmi:type="notation:BasicDecorationNode" xmi:id="_--yNhEt6EeyWQppyPQefCQ" type="Name"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_--yNgkt6EeyWQppyPQefCQ" y="-186"/>
+    </children>
+    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=UserRepository%5Bjcu%5Ename=UserRepository.java%5Bjpack%5Ename=de.lases.persistence.repository%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=FileDTO%5Bjcu%5Ename=FileDTO.java%5Bjpack%5Ename=de.lases.global.transport%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D%5D$uml.Usage"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_--yNgEt6EeyWQppyPQefCQ" points="[40, 0, -96387, 56373]$[40, -3288, -96387, 53085]$[51234, -3288, -45193, 53085]$[51234, -37267, -45193, 19106]$[96475, -37267, 48, 19106]$[96475, -56271, 48, 102]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_JSiVQ0t7EeyWQppyPQefCQ" id="(0.5,-2.261721359708867E-15)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_JSi8UEt7EeyWQppyPQefCQ" id="(0.6001319216008693,0.9631578947368409)"/>
+  </edges>
+  <edges xmi:type="umlnotation:UMLConnector" xmi:id="_--yNhkt6EeyWQppyPQefCQ" source="_rDrbg0i9Eey0A4aY0WCKzw" target="_-nZBMEt6EeyWQppyPQefCQ" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
+    <children xmi:type="notation:DecorationNode" xmi:id="_--yNiEt6EeyWQppyPQefCQ" type="KindLabel">
+      <children xmi:type="notation:BasicDecorationNode" xmi:id="_--yNikt6EeyWQppyPQefCQ" type="Stereotype"/>
+      <children xmi:type="notation:BasicDecorationNode" xmi:id="_--yNjEt6EeyWQppyPQefCQ" type="Kind"/>
+      <children xmi:type="notation:BasicDecorationNode" xmi:id="_--yNi0t6EeyWQppyPQefCQ" type="Name"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_--yNiUt6EeyWQppyPQefCQ" y="-186"/>
+    </children>
+    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=PaperRepository%5Bjcu%5Ename=PaperRepository.java%5Bjpack%5Ename=de.lases.persistence.repository%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=FileDTO%5Bjcu%5Ename=FileDTO.java%5Bjpack%5Ename=de.lases.global.transport%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D%5D$uml.Usage"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_--yNh0t6EeyWQppyPQefCQ" points="[40, 0, -62713, 56769]$[40, -2626, -62713, 54143]$[62824, -2626, 71, 54143]$[62824, -56667, 71, 102]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_JSi8UUt7EeyWQppyPQefCQ" id="(0.5,0.0)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_JSi8Ukt7EeyWQppyPQefCQ" id="(0.9001293516995534,0.9631578947368409)"/>
+  </edges>
+  <edges xmi:type="umlnotation:UMLConnector" xmi:id="_--yNjUt6EeyWQppyPQefCQ" source="_rDspoki9Eey0A4aY0WCKzw" target="_-nZBMEt6EeyWQppyPQefCQ" fontName="Noto Sans" fontHeight="8" roundedBendpointsRadius="4" routing="Rectilinear" lineColor="8421504" lineWidth="1" showStereotype="Text">
+    <children xmi:type="notation:DecorationNode" xmi:id="_--y0kUt6EeyWQppyPQefCQ" type="KindLabel">
+      <children xmi:type="notation:BasicDecorationNode" xmi:id="_--y0k0t6EeyWQppyPQefCQ" type="Stereotype"/>
+      <children xmi:type="notation:BasicDecorationNode" xmi:id="_--y0lUt6EeyWQppyPQefCQ" type="Kind"/>
+      <children xmi:type="notation:BasicDecorationNode" xmi:id="_--y0lEt6EeyWQppyPQefCQ" type="Name"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_--y0kkt6EeyWQppyPQefCQ" y="-186"/>
+    </children>
+    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=ReviewRepository%5Bjcu%5Ename=ReviewRepository.java%5Bjpack%5Ename=de.lases.persistence.repository%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=FileDTO%5Bjcu%5Ename=FileDTO.java%5Bjpack%5Ename=de.lases.global.transport%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=lases%5D%5D%5D%5D%5D$uml.Usage"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_--y0kEt6EeyWQppyPQefCQ" points="[40, 0, -146742, 57693]$[40, -4608, -146742, 53085]$[29341, -4608, -117441, 53085]$[29341, -13540, -117441, 44153]$[87481, -13540, -59301, 44153]$[87481, -39116, -59301, 18577]$[146822, -39116, 40, 18577]$[146822, -57591, 40, 102]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_JSi8U0t7EeyWQppyPQefCQ" id="(0.49999999999999967,0.0)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_JSi8VEt7EeyWQppyPQefCQ" id="(0.5001327782346412,0.9631578947368409)"/>
   </edges>
 </umlnotation:UMLDiagram>
