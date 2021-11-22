@@ -74,7 +74,7 @@ Dazu wird über die angefragte URL das zugehörige Facelet bestimmt und geprüft
 Einzelne Komponenten können im Facelet mit dem \code{rendered}-Attribut nur für bestimmte Rollen sichtbar gemacht werden.
 Auf die Rolle kann der \code{TrespassListener} über die \code{SessionInformation} zugreifen.
 Der Zugriff hängt darüber hinaus von der Beziehung des Nutzers zur angefragten Ressource ab (ein normaler Nutzer kann z.B.\ nur sein \emph{eigenes} Profil oder eine \emph{eigene} Einreichung sehen).
-Deshalb prüft für die relevanten Seiten das jeweilige Backing Bean diese Beziehung und leitet ggf.\ auf eine Fehlerseite weiter.
+Deshalb prüft für die relevanten Seiten das jeweilige Backing Bean in ihrer \code{onLoad()}-Methode diese Beziehung und leitet ggf.\ auf eine Fehlerseite weiter.
 Das verhindert \emph{Insecure Direct Object Reference}, da IDs von Submissions, Scientific Forums und Profilen über URL-Parameter preisgegeben werden.
 
 Durch den Eintrag
