@@ -14,6 +14,6 @@ CREATE TABLE submission (
 	timestamp_deadline_revision TIMESTAMP,
 	
 	author_id INTEGER REFERENCES "user"(id) ON DELETE CASCADE,
-	editor_id INTEGER REFERENCES editor(id) ON DELETE SET NULL,
+	editor_id INTEGER REFERENCES "user"(id) ON DELETE SET NULL,
 	forum_id INTEGER REFERENCES scientific_forum(id) ON DELETE CASCADE
 );
