@@ -563,7 +563,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 	\fentry{submission-number-otxt}{<h:outputText>}{Anzahl der Einreichungen des Nutzers}{?}{/}{/}
 
-	\fentry{employer-itxt}{<h:inputText>}{Angabe des Arbeitgebers}{value="\#\{profileBacking.user.employer\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{/}
+	\fentry{employer-itxt}{<h:inputText>}{Angabe des Arbeitgebers}{value="\#\{profileBacking.user.employer\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{maxLength="\#\{Const.EMPLOYER\_MAX\}"}
 
 	\fentry{science-field-lst}{<h:dataTable>}{Spezialgebiete des Nutzers}{value="\#\{profileBacking.usersScienceFields\}"}{/}{/}
 
