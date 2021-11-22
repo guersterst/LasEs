@@ -1,5 +1,5 @@
 CREATE TABLE review (
-	reviewer_id INTEGER REFERENCES reviewer(id) ON DELETE CASCADE,
+	reviewer_id INTEGER REFERENCES "user"(id) ON DELETE CASCADE,
 	version INTEGER NOT NULL,
 	submission_id INTEGER NOT NULL,
 	
