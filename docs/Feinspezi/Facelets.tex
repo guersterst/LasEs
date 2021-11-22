@@ -464,7 +464,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \begin{samepage}
 
 	\ftable{newSubmission}{\textbf{newSubmission.xhtml} Hier können neue Paper eingereicht werden.}{
-		\fentry{submission-title-itxt}{<h:inputText>}{Titel des abzugebenden Papers.}{value="\#\{newSubmissionBacking.newSubmission.title\}"}{/}{required="true" \newline requiredMessage=\newline "\#\{message.titleSub\}"}
+		\fentry{submission-title-itxt}{<h:inputText>}{Titel des abzugebenden Papers.}{value="\#\{newSubmissionBacking.newSubmission.title\}"}{/}{required="true" \newline requiredMessage=\newline "\#\{message.titleSub\}" \newline maxLength="\#\{Const.SUBMISSION\_TITLE\_MAX\}"}
 
 		\fentry{forum-name-itxt}{<h:inputText>}{Name des Forums, bei welchem abgegeben wird.}{value="\#\{newSubmissionBacking.newSubmission.forumInput.name\}"}{/}{required="true" \newline requiredMessage=\newline "\#\{message.forum\}"}
 
