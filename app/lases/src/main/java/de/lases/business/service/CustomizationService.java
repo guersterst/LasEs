@@ -1,8 +1,7 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.ConnectionState;
-import de.lases.global.transport.File;
-import de.lases.global.transport.Style;
+import de.lases.global.transport.FileDTO;
 import de.lases.global.transport.SystemSettings;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
@@ -60,13 +59,13 @@ public class CustomizationService {
      *
      * @param logo The applications logo.
      */
-    public void setLogo(File logo) {
+    public void setLogo(FileDTO logo) {
     }
 
     /**
      * @return The logo of the application.
      */
-    public File getLogo() {
+    public FileDTO getLogo() {
         return null;
     }
 }

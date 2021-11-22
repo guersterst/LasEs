@@ -1,8 +1,6 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.*;
-import de.lases.persistence.exception.DatasourceQueryFailedException;
-import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
@@ -43,7 +41,7 @@ public class SubmissionService implements Serializable {
      * <p></p>
      * The selected editor, reviewers and co-authors are informed about this
      * using the {@code EmailUtil} utility.
-     * Do not forget to also add a paper using {@link PaperService#addPaper(File, Submission)}.
+     * Do not forget to also add a paper using {@link PaperService#addPaper(FileDTO, Submission)}.
      *
      * @param submission The submissions' data.
      * @param forum The forum where the submission is made.

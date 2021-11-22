@@ -73,17 +73,17 @@ public class UserService implements Serializable {
      * <p>
      * The avatar is parsed into a thumbnail.
      *
-     * @param avatar The {@link File} containing the image as a byte-array.
+     * @param avatar The {@link FileDTO} containing the image as a byte-array.
      */
-    public void setAvatar(File avatar) {
+    public void setAvatar(FileDTO avatar) {
     }
 
     /**
      * Gets the users' avatar.
      *
-     * @return The users' avatar as a byte-array, wrapped by a {@code File}.
+     * @return The users' avatar as a byte-array, wrapped by a {@code FileDTO}.
      */
-    public File getAvatar() {
+    public FileDTO getAvatar() {
         return null;
     }
 

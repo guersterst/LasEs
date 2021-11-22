@@ -3,9 +3,6 @@ package de.lases.persistence.repository;
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
 
-import javax.xml.crypto.Data;
-import javax.xml.transform.Result;
-import java.nio.file.NotDirectoryException;
 import java.util.List;
 
 /**
@@ -124,7 +121,7 @@ public class ReviewRepository {
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
-    public static File getPDF(Paper review, Transaction transaction)
+    public static FileDTO getPDF(Paper review, Transaction transaction)
             throws NotFoundException {
         return null;
     }
@@ -142,7 +139,7 @@ public class ReviewRepository {
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
-    public static void setPDF(Review review, File pdf, Transaction transaction)
+    public static void setPDF(Review review, FileDTO pdf, Transaction transaction)
             throws DataNotWrittenException, NotFoundException {
     }
 

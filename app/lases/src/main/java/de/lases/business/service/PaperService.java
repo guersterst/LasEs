@@ -1,14 +1,12 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.*;
-import de.lases.persistence.exception.DatasourceQueryFailedException;
 import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -61,7 +59,7 @@ public class PaperService {
      * @param file       The file to be added.
      * @param submission The submission, to which the file is being added.
      */
-    public void addPaper(File file, Submission submission) {
+    public void addPaper(FileDTO file, Submission submission) {
     }
 
     /**
@@ -70,7 +68,7 @@ public class PaperService {
      * @param paper The paper whose file is requested.
      * @return The requested file.
      */
-    public File downloadFile(Paper paper) {
+    public FileDTO downloadFile(Paper paper) {
         return null;
     }
 

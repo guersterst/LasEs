@@ -3,8 +3,6 @@ package de.lases.persistence.repository;
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
 
-import javax.xml.crypto.Data;
-import java.security.Key;
 import java.util.List;
 
 /**
@@ -199,7 +197,7 @@ public class UserRepository {
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
-    public static File getAvatar(Transaction transaction) {
+    public static FileDTO getAvatar(Transaction transaction) {
         return null;
     }
 
@@ -213,7 +211,7 @@ public class UserRepository {
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
-    public static void setAvatar(File avatar, Transaction transaction)
+    public static void setAvatar(FileDTO avatar, Transaction transaction)
             throws DataNotWrittenException {
     }
 

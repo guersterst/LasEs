@@ -1,6 +1,6 @@
 package de.lases.persistence.repository;
 
-import de.lases.global.transport.File;
+import de.lases.global.transport.FileDTO;
 import de.lases.global.transport.SystemSettings;
 import de.lases.persistence.exception.DataNotWrittenException;
 import de.lases.persistence.exception.DatasourceQueryFailedException;
@@ -49,7 +49,7 @@ public class SystemSettingsRepository {
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
-    public static File getLogo(Transaction transaction) {
+    public static FileDTO getLogo(Transaction transaction) {
         return null;
     }
 
@@ -63,7 +63,7 @@ public class SystemSettingsRepository {
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
-    public static void setLogo(File logo, Transaction transaction)
+    public static void setLogo(FileDTO logo, Transaction transaction)
             throws DataNotWrittenException{
     }
 

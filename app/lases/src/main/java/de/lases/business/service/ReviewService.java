@@ -40,7 +40,7 @@ public class ReviewService implements Serializable {
      * @param file       The file containing the pdf review itself.
      * @param reviewer   The reviewer attempting to submit.
      */
-    public void addReview(Submission submission, Review review, File file, User reviewer) {
+    public void addReview(Submission submission, Review review, FileDTO file, User reviewer) {
 
     }
 
@@ -73,7 +73,7 @@ public class ReviewService implements Serializable {
      * @param review The review containing the requested file.
      * @return The requested file.
      */
-    public File downloadFile(Review review) {
+    public FileDTO downloadFile(Review review) {
         return null;
     }
 }

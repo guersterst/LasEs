@@ -124,7 +124,7 @@ public class PaperRepository {
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
-    public static File getPDF(Paper paper, Transaction transaction)
+    public static FileDTO getPDF(Paper paper, Transaction transaction)
             throws NotFoundException {
         return null;
     }
@@ -142,7 +142,7 @@ public class PaperRepository {
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
-    public static void setPDF(Paper paper, File pdf, Transaction transaction)
+    public static void setPDF(Paper paper, FileDTO pdf, Transaction transaction)
             throws DataNotWrittenException, NotFoundException {
     }
 
