@@ -126,7 +126,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{select-editor-slctom}{<h:selectOneMenu>}{Auswahländerung des verwaltenden Editors}{value="\#\{toolbarBacking.editorInput.firstName + toolbarBacking.editorInput.lastName\}" \newline title="\#\{help.selectEditor\}"}{/}{/}
 
-		\fentry{/}{<f:selectItems>}{Liste der möglichen Editoren.}{value="\#\{toolbar.editors\}" \newline var="entry" \newline itemLabel="\#\{entry.firstName + entry.lastName\}" \newline itemValue="\#\{entry\}"}{}{}
+		\fentry{/}{<f:selectItems>}{Liste der möglichen Editoren.}{value="\#\{toolbar.editors\}" \newline var="user" \newline itemLabel="\#\{user.firstName + user.lastName\}" \newline itemValue="\#\{entry\}"}{}{}
 
 		\fentry{save-editor-cbtn}{<h:commandButton>}{Speichern der Änderung des Editors.}{value="\#\{label.saveEditor\}" \newline action=\newline"\#\{toolbarBacking.chooseNewManagingEditor\}" \newline title="\#\{help.saveEditor\}"}{/}{/}
 
