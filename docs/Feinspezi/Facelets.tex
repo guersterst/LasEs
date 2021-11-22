@@ -199,9 +199,9 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 		Zusätzlich gibt es ein Login-Formular zur Anmeldung im System.
 		Für nicht registrierte Nutzer wird man über einen gegebenen Link zu \emph{registration.xhtml} weitergeleitet.}{
 
-		\fentry{welcome-heading-otxt}{<h:outputText>}{Überschrift der Welcomepage.}{value="\#\{welcomeBacking.systemSettings.headlineWelcomePage\}"}{/}{/}
+		\fentry{welcome-heading-otxt}{<h:outputText>}{Überschrift der Welcomepage.}{value="\#\{welcomeBacking.systemSettings.headlineWelcomePage\}"}{escape="false"}{/}
 
-		\fentry{welcome-otxt}{<h:outputText>}{Bewerben der Anwendung mithilfe einer Kurzbeschreibung.}{value="\#\{welcomeBacking.systemSettings.messageWelcomePage\}"}{A/}{/}
+		\fentry{welcome-otxt}{<h:outputText>}{Bewerben der Anwendung mithilfe einer Kurzbeschreibung.}{value="\#\{welcomeBacking.systemSettings.messageWelcomePage\}"}{escape="false"}{/}
 
 		\fentry{email-itxt}{<h:inputText>}{Textfeld für E-Mail Eingabe.}{value="\#\{welcomeBacking.loginInput.emailAddress\}" \newline title="\#\{help.loginEmail\}"}{/}{emailAddressExistsValidator, emailAddressLayoutValidator, required="true" \newline requiredMessage=\newline"\#\{message.email\}"}
 
@@ -257,9 +257,9 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 	\ftable{imprint}{\textbf{imprint.xhtml} Das Impressum gibt die vom Administrator angegebenen Kontaktdaten des Betreibers wieder.}{
 
-		\fentry{imprint-heading-otxt}{<h:outputText>}{Überschrift der Ansicht}{value="\#{imprintBacking.systemSetting.companyName}"}{/}{/}
+		\fentry{imprint-heading-otxt}{<h:outputText>}{Überschrift der Ansicht}{value="\#{imprintBacking.systemSetting.companyName}"}{escape="false"}{/}
 
-		\fentry{imprint-otxt}{<h:outputText>}{Impressum des Betreibers.}{value="\#{imprintBacking.systemSetting.imprint}"}{/}{/}
+		\fentry{imprint-otxt}{<h:outputText>}{Impressum des Betreibers.}{value="\#{imprintBacking.systemSetting.imprint}"}{escape="false"}{/}
 	}
 \end{samepage}
 
@@ -770,7 +770,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{change-logo-ifile}{<h:inputFile>}{Hochladen eines neuen Logos.}{title="\#\{help.uploadNewLogo\}"\newline value="\#\{administrationBacking.uploadedImage\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
 
-		\fentry{welcome-heading-itxt}{<h:inputText>}{Angabe einer Überschrift auf der \emph{welcomepage}}{value="\#\{administrationBacking.systemSettings.headlineWelcomePage\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{required="true" \newline requiredMessage=\newline "\#\{message.welcomeHeading\}" \newline maxLength="\#\{Const.WELCOME\_HEADING\_MAX\}"}
+		\fentry{welcome-heading-itxt}{<h:inputText>}{Angabe einer Überschrift auf der \emph{welcomepage}}{value="\#\{administrationBacking.systemSettings.headlineWelcomePage\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}" }{required="true" \newline requiredMessage=\newline "\#\{message.welcomeHeading\}" \newline maxLength="\#\{Const.WELCOME\_HEADING\_MAX\}"}
 
 		\fentry{welcome-text-itxt}{<h:inputTextArea>}{Angabe eines Textes auf der \emph{welcomepage}}{value="\#\{administrationBacking.systemSettings.shortMessageWelcomePage\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{required="true" \newline requiredMessage=\newline "\#\{message.welcomeText\}" \newline maxLength="\#\{Const.WELCOME\_DESCRIPTION\_MAX\}"}
 
