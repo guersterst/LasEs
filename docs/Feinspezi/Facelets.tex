@@ -221,7 +221,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{first-name-itxt}{<h:inputText>}{Angabe des Vornamens.}{value="\#\{registrationBacking.newUser.firstName\}" \newline title="\#\{help.firstName\}"}{/}{required="true" \newline requiredMessage=\newline"\#\{message.firstName\}" \newline maxLength="\#\{Const.FIRST\_NAME\_MAX\}}
 
-		\fentry{last-name-itxt}{<h:inputText>}{Angabe des Nachnamen.}{value="\#\{registrationBacking.newUser.lastName\}" \newline title="\#\{help.lastName\}"}{/}{required="true" \newline requiredMessage=\newline"\#\{message.lastName\}"}
+		\fentry{last-name-itxt}{<h:inputText>}{Angabe des Nachnamen.}{value="\#\{registrationBacking.newUser.lastName\}" \newline title="\#\{help.lastName\}"}{/}{required="true" \newline requiredMessage=\newline"\#\{message.lastName\}" \newline maxLength="\#\{Const.LAST\_NAME\_MAX\}"}
 
 		\fentry{password-iscrt}{<h:inputSecret>}{Angabe eines Passwortes.}{value="\#\{registrationBacking.newUser.passwordNotHashed\}" \newline title="\#\{help.password\}"}{/}{passwordValidator \newline required="true" \newline requiredMessage=\newline"\#\{message.password\}"}
 
@@ -476,9 +476,9 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{titel-itxt}{<h:inputText>}{Angabe eines Titels eines Co-Autors.}{value="\#\{newSubmissionBacking.coAuthorInput.title\}"}{/}{/}
 
-		\fentry{co-author-firstname-itxt}{<h:inputText>}{Angabe des Vornamen eines Co-Autors.}{value="\#\{newSubmissionBacking.coAuthorInput.firstName\}"}{/}{/}
+		\fentry{co-author-firstname-itxt}{<h:inputText>}{Angabe des Vornamen eines Co-Autors.}{value="\#\{newSubmissionBacking.coAuthorInput.firstName\}"}{/}{maxLength="\#\{Const.FIRST\_NAME\_MAX\}"}
 
-		\fentry{co-author-lastname-itxt}{<h:inputText>}{Angabe des Namen eines Co-Autors.}{value="\#\{newSubmissionBacking.coAuthorInput.lastName\}"}{/}{/}
+		\fentry{co-author-lastname-itxt}{<h:inputText>}{Angabe des Namen eines Co-Autors.}{value="\#\{newSubmissionBacking.coAuthorInput.lastName\}"}{/}{maxLength="\#\{Const.LAST\_NAME\_MAX\}"}
 
 		\fentry{co-author-email-itxt}{<h:inputText>}{Angabe der E-Mail eines Co-Autors.}{value="\#\{newSubmissionBacking.coAuthorInput.emailAddress\}"}{/}{/}
 
@@ -553,7 +553,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 	\fentry{firstname-itxt}{<h:inputText>}{Vorname des Nutzenden.}{value="\#\{profileBacking.user.firstName\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{required="true" \newline requiredMessage=\newline "\#\{message.firstName\}" \newline maxLength="\#\{Const.FIRST\_NAME\_MAX\}"}
 
-	\fentry{lastname-itxt}{<h:inputText>}{Nachname des Nutzenden.}{value="\#\{profileBacking.user.lastName\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{required="true" \newline requiredMessage=\newline "\#\{message.lastName\}"}
+	\fentry{lastname-itxt}{<h:inputText>}{Nachname des Nutzenden.}{value="\#\{profileBacking.user.lastName\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{required="true" \newline requiredMessage=\newline "\#\{message.lastName\}" \newline maxLength="\#\{Const.LAST\_NAME\_MAX\}"}
 
 	\fentry{password-iscrt}{<h:inputSecret>}{Leeres Eingabefeld für ein neues Passwort.}{value="\#\{profileBacking.user.passwordNotHashed\}"}{rendered="\#\{!profileBacking.hasViewerEditRights\}"}{passwordValidator \newline required="true" \newline requiredMessage=\newline "\#\{message.password\}"}
 
@@ -743,7 +743,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{firstname-itxt}{<h:inputText>}{Angabe des Vornamen.}{value="\#\{newUserBacking.newUser.firstName\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{required="true" \newline requiredMessage=\newline maxLength="\#\{Const.FIRST\_NAME\_MAX\}"}
 
-		\fentry{lastname-itxt}{<h:inputText>}{Angabe des Nachnamen.}{value="\#\{newUserBacking.newUser.lastName\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{required="true" \newline requiredMessage=\newline "\#\{message.lastName\}"}
+		\fentry{lastname-itxt}{<h:inputText>}{Angabe des Nachnamen.}{value="\#\{newUserBacking.newUser.lastName\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{required="true" \newline requiredMessage=\newline "\#\{message.lastName\}" \newline maxLength="\#\{Const.LAST\_NAME\_MAX\}"}
 
 		\fentry{titel-itxt}{<h:inputText>}{Angabe eines Titels.}{value="\#\{newUserBacking.newUser.title\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{/}
 
