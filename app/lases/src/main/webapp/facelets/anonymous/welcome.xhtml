@@ -5,37 +5,56 @@
 
 <h:head>
     <title>LasEs</title>
-    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrap.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
 </h:head>
 
 
 <h:body>
-    <div class="welcome-container">
-        <div class="welcome">
-            <h2>Login</h2>
-            <p>Please enter your login credentials.</p>
+    <div class="container-fluid">
+        <div class="col-first">
+            <h1>Welcome to LasEs
+                <h:outputText id="welcome-heading-otxt" value="#{welcomeBacking.systemSettings.headlineWelcomePage}"/>
+            </h1>
+            <p>This is the discription.
+                <h:outputText id="welcome-otxt" value="#{welcomeBacking.systemSettings.messageWelcomePage}"/>
+            </p>
         </div>
-    </div>
+        <div class="col-second card">
+            <div class="card-header">
+                <div class="welcome">
+                    <h2>Login</h2>
+                    <p>Please enter your login credentials.</p>
+                </div>
+            </div>
 
-    <div class="login-container">
-        <div class="login-form">
-            <h:form>
-                <h4>E-Mail</h4>
-                <h:inputText value="#{welcomeBacking.loginInput.emailAddress}"/>
-                <h4>Password</h4>
-                <h:inputSecret value="#{welcomeBacking.loginInput.passwordNotHashed}"/>
-                <div>
-                    <h:commandButton value="Login" action="#{welcomeBacking.login}"/>
+            <div class="card-body">
+                <div class="login-form">
+                    <h:form>
+                        <h4>E-Mail</h4>
+                        <h:inputText id="email-itxt" value="#{welcomeBacking.loginInput.emailAddress}" required="true"
+                        requiredMessage="#{message.email}">
+                            <!--<f:validator/>
+                            <f:validator/>-->
+                        </h:inputText>
+                        <h4>Password</h4>
+                        <h:inputSecret id="password-itxt" value="#{welcomeBacking.loginInput.passwordNotHashed}" required="true" requiredMessage="#{message.password}">
+                           <!-- <f:validator/>-->
+                        </h:inputSecret>
+                        <div>
+                            <h:commandButton id="login-cbtn" value="Login" action="#{welcomeBacking.login}"/>
+                        </div>
+                        <div>
+                            <h:commandButton id="register-cbtn" value="Register" action="#{welcomeBacking.goToRegister}"/>
+                        </div>
+                        <!--<div class="error-msgs" versionNumber="error-msgs">
+                            <h:messages/>
+                        </div>
+                        -->
+                    </h:form>
                 </div>
-                <div>
-                    <h:commandButton value="Register" action="#{welcomeBacking.goToRegister}"/>
-                </div>
-                <!--<div class="error-msgs" versionNumber="error-msgs">
-                    <h:messages/>
-                </div>
-                -->
-            </h:form>
+            </div>
         </div>
+        <h:link value="Register" outcome="/facelets/anonymous/register"/>
     </div>
 
 
