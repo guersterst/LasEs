@@ -225,7 +225,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{password-iscrt}{<h:inputSecret>}{Angabe eines Passwortes.}{value="\#\{registrationBacking.newUser.passwordNotHashed\}" \newline title="\#\{help.password\}"}{/}{passwordValidator \newline required="true" \newline requiredMessage=\newline"\#\{message.password\}"}
 
-		\fentry{email-itxt}{<h:inputText>}{Angabe einer validen E-Mail.}{value="\#\{registrationBacking.newUser.emailAddress\}" \newline title="\#\{help.email\}"}{ /}{emailAddressExistsValidator \newline emailAddressLayoutValidator \newline required=true" \newline requiredMessage=\newline"\#\{message.email\}"}
+		\fentry{email-itxt}{<h:inputText>}{Angabe einer validen E-Mail.}{value="\#\{registrationBacking.newUser.emailAddress\}" \newline title="\#\{help.email\}"}{ /}{emailAddressExistsValidator \newline emailAddressLayoutValidator \newline required=true" \newline requiredMessage=\newline"\#\{message.email\}" \newline maxLength="\#\{Const.EMAIL\_MAX\}"}
 
 		\fentry{register-cbtn}{<h:commandButton>}{Ausführen des Registrations-Prozesses.}{value="\#\{label.register\}"\newline action="\#\{registrationBacking.register\}"}{/}{/}
 
@@ -480,7 +480,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{co-author-lastname-itxt}{<h:inputText>}{Angabe des Namen eines Co-Autors.}{value="\#\{newSubmissionBacking.coAuthorInput.lastName\}"}{/}{maxLength="\#\{Const.LAST\_NAME\_MAX\}"}
 
-		\fentry{co-author-email-itxt}{<h:inputText>}{Angabe der E-Mail eines Co-Autors.}{value="\#\{newSubmissionBacking.coAuthorInput.emailAddress\}"}{/}{/}
+		\fentry{co-author-email-itxt}{<h:inputText>}{Angabe der E-Mail eines Co-Autors.}{value="\#\{newSubmissionBacking.coAuthorInput.emailAddress\}"}{/}{maxLength="\#\{Const.EMAIL\_MAX\}"}
 
 		\fentry{submit-co-author-cbtn}{<h:commandButton>}{Speichern des Co-Autors.}{value="\#\{label.save\}"\newline action="\#\{newSubmissionBacking.submitCoAuthor\}"}{/}{/}
 
@@ -557,7 +557,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 	\fentry{password-iscrt}{<h:inputSecret>}{Leeres Eingabefeld für ein neues Passwort.}{value="\#\{profileBacking.user.passwordNotHashed\}"}{rendered="\#\{!profileBacking.hasViewerEditRights\}"}{passwordValidator \newline required="true" \newline requiredMessage=\newline "\#\{message.password\}"}
 
-	\fentry{email-itxt}{<h:inputText>}{E-Mail des Nutzenden.}{value="\#\{profileBacking.user.emailAddress\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{emailAddressExistsValidator \newline emailAddressExistsValidator \newline required="true" \newline requiredMessage=\newline "\#\{message.email\}"}
+	\fentry{email-itxt}{<h:inputText>}{E-Mail des Nutzenden.}{value="\#\{profileBacking.user.emailAddress\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{emailAddressExistsValidator \newline emailAddressExistsValidator \newline required="true" \newline requiredMessage=\newline "\#\{message.email\}" \newline maxLength="\#\{Const.EMAIL\_MAX\}"}
 
 	\fentry{/}{<f:attribute>}{Parameter zur E-Mail Validierung.}{name="id" \newline value="\#\{profilBacking.user.id\}"}{/}{/}
 
