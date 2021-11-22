@@ -68,7 +68,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \ftable{navigation}{\textbf{navigation.xhtml} ist die Kopfzeile der Webanwendung. Diese bietet die Suchfunktion, Links zu verschiedenen Listen und dem Profil an.}{
 	\fentry{logo-gimg}{<h:graphicImage>}{Logo der Applikation.}{value="\#\{navigationBacking.systemSettings.logoImage\}"\}"}{/}{/}
 
-	\fentry{direct-to-home-lnk}{<h:link>}{Weiterleitung zur Homepage.}{outcome="/facelets/authenticated/homepage" \newline title="\#\{help.toHome\}"}{disabled="\#\{navigationBacking.sessionInformation.user == null\}"}{/}
+	\fentry{direct-to-home-lnk}{<h:link>}{Weiterleitung zur Homepage.}{outcome="/views/authenticated/homepage" \newline title="\#\{help.toHome\}"}{disabled="\#\{navigationBacking.sessionInformation.user == null\}"}{/}
 
 	\fentry{search-frm}{<h:form>}{Formular zur Suche.}{/}{rendered="\#\{navigationBacking.sessionInformation.user != null\}"}{/}
 
@@ -76,13 +76,13 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 	\fentry{search-cbtn}{<h:commandButton>}{Suche ausführen.}{action="\#\{navigationBacking.search\}"}{rendered="\#\{navigationBacking.sessionInformation.user != null\}"}{/}
 
-	\fentry{user-list-lnk}{<h:link>}{Link zur Übersichtsseite aller Nutzer}{value="\#\{label.userList\}" \newline outcome="/editor/userList \newline title="\#\{help.userList\}"}{rendered="\#\{navigationBacking.sessionInformation.user.editor\}"}{/}
+	\fentry{user-list-lnk}{<h:link>}{Link zur Übersichtsseite aller Nutzer}{value="\#\{label.userList\}" \newline outcome="/views/editor/userList \newline title="\#\{help.userList\}"}{rendered="\#\{navigationBacking.sessionInformation.user.editor\}"}{/}
 
-	\fentry{forum-list-lnk}{<h:link>}{Link zur Übersichtsseite alle Journale und Konferenzen}{value="\#\{label.forumList\}" \newline outcome="/facelets/authenticated/scientificForumList" \newline title="\#\{help.forumList\}"}{rendered="\#\{navigationBacking.sessionInformation.user != null\}"}{/}
+	\fentry{forum-list-lnk}{<h:link>}{Link zur Übersichtsseite alle Journale und Konferenzen}{value="\#\{label.forumList\}" \newline outcome="/views/authenticated/scientificForumList" \newline title="\#\{help.forumList\}"}{rendered="\#\{navigationBacking.sessionInformation.user != null\}"}{/}
 
 	\fentry{logout-cbtn}{<h:commandButton>}{Loggt den Nutzer aus dem System aus und leitet zur Loginseite weiter.}{value="\#\{label.logout\}" \newline action="\#\{navigationBacking.logout\}" \newline title="\#\{help.logout\}"}{rendered="\#\{navigationBacking.sessionInformation.user != null\}"}{/}
 
-	\fentry{profile-lnk}{<h:link>}{Link zur Profilübersicht}{value="\#\{label.nav.profile\}" \newline outcome="/facelets/authenticated/profile"}{rendered="\#\{navigationBacking.sessionInformation.user != null\}"}{/}
+	\fentry{profile-lnk}{<h:link>}{Link zur Profilübersicht}{value="\#\{label.nav.profile\}" \newline outcome="/views/authenticated/profile"}{rendered="\#\{navigationBacking.sessionInformation.user != null\}"}{/}
 }
 
 %\end{samepage}
@@ -104,7 +104,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \begin{samepage}
 
 	\ftable{footer}{\textbf{footer.xhtml} ist die Fußzeile der Webanwendung und für alle sichtbar.}{
-		\fentry{imprint-lnk}{<h:link>}{Link zur Seite des Impressums}{value="\#\{label.imprint\}" \newline outcome="/facelets/anonymous/imprint" \newline title="\#\{help.imprint\}"}{/}{/}
+		\fentry{imprint-lnk}{<h:link>}{Link zur Seite des Impressums}{value="\#\{label.imprint\}" \newline outcome="/views/anonymous/imprint" \newline title="\#\{help.imprint\}"}{/}{/}
 
 		\fentry{language-otxt}{<h:outputText>}{Anzeige der eingestellten Sprache.}{value="\#\{footerBacking.sessionInformation.locale.getLanguage()\}"}{/}{/}
 
@@ -229,7 +229,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{register-cbtn}{<h:commandButton>}{Ausführen des Registrations-Prozesses.}{value="\#\{label.register\}"\newline action="\#\{registrationBacking.register\}"}{/}{/}
 
-		\fentry{welcomepage-lnk}{<h:link>}{Weiterleitung zur Login Seite.}{value="\#\{label.welcomeLink\}" \newline outcome="/facelets/anonymous/welcome" \newline title="\#\{help.welcomepage\}"}{/}{/}
+		\fentry{welcomepage-lnk}{<h:link>}{Weiterleitung zur Login Seite.}{value="\#\{label.welcomeLink\}" \newline outcome="/views/anonymous/welcome" \newline title="\#\{help.welcomepage\}"}{/}{/}
 	}
 \end{samepage}
 
@@ -286,7 +286,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{title-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Titel des Papers.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.paperTitle\}"}{/}{/}
 
-		\fentry{title-lnk}{<h:link>}{Titel des Einreichung.}{value="\#\{var.title\}" \newline outcome="/facelets/authenticated/submission" \newline includeViewParams="true"}{/}{/}
+		\fentry{title-lnk}{<h:link>}{Titel des Einreichung.}{value="\#\{var.title\}" \newline outcome="/views/authenticated/submission" \newline includeViewParams="true"}{/}{/}
 
 		\fentry{/}{<f:param>}{Parameter für id der Einreichung.}{value="\#\{var.id\}" name="id"}{/}{/}
 
@@ -312,7 +312,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{forum-ssc}{<ssc:sortsearchcolumn>}{Spalte für zugehöriges Forum.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.forumSub\}"}{/}{/}
 
-		\fentry{forum-lnk}{<h:link>}{Zugehöriges Forum der Einreichung.}{value="\#\{homepageBacking.scientificForumForSubmission\}" outcome="/facelets/authenticated/scientificForum" \newline includeViewParams="true"}{/}{/}
+		\fentry{forum-lnk}{<h:link>}{Zugehöriges Forum der Einreichung.}{value="\#\{homepageBacking.scientificForumForSubmission\}" outcome="/views/authenticated/scientificForum" \newline includeViewParams="true"}{/}{/}
 
 		\fentry{/}{<f:param>}{Parameter für id des Forums.}{value="\#\{var.scientificForumId\}" name="id"}{/}{/}
 	}
@@ -346,11 +346,11 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{state-otxt}{<h:outputText>}{Status der Einreichung.}{value="\#\{submissionBacking.submission.state\}"}{/}{/}
 
-		\fentry{forum-lnk}{<h:link>}{Name des Forums und Weiterleitung zur Forumsübersicht.}{value="\#\{submissionBacking.scientificForum.name\}" \newline outcome="/facelets/authenticated/scientificForum" \newline includeViewParams="true" \newline title="\#\{help.directToForum\}"}{disabled="\#\{not submissionBacking.sessionInformation.user.editor\}"}{/}
+		\fentry{forum-lnk}{<h:link>}{Name des Forums und Weiterleitung zur Forumsübersicht.}{value="\#\{submissionBacking.scientificForum.name\}" \newline outcome="/views/authenticated/scientificForum" \newline includeViewParams="true" \newline title="\#\{help.directToForum\}"}{disabled="\#\{not submissionBacking.sessionInformation.user.editor\}"}{/}
 
 		\fentry{/}{<f:param>}{Parameter für id des Forums.}{value="\#\{submissionBacking.scientificForum.scientificForumId\}" name="id"}{/}{/}
 
-		\fentry{author-lnk}{<h:link>}{Name des Autors und Weiterleitung zum Profil.}{value="\#\{submissionBacking.author.firstName + submissionBacking.author.lastName\}" \newline outcome="/facelets/authenticated/profile" \newline includeViewParams="true" \newline title="\#\{help.directProfile\}"}{disabled="\#\{not submissionBacking.sessionInformation.user.editor\}"}{/}
+		\fentry{author-lnk}{<h:link>}{Name des Autors und Weiterleitung zum Profil.}{value="\#\{submissionBacking.author.firstName + submissionBacking.author.lastName\}" \newline outcome="/views/authenticated/profile" \newline includeViewParams="true" \newline title="\#\{help.directProfile\}"}{disabled="\#\{not submissionBacking.sessionInformation.user.editor\}"}{/}
 
 		\fentry{/}{<f:param>}{Parameter für id des Profil.}{value="\#\{submissionBacking.author.id\}" name="id"}{/}{/}
 
@@ -402,7 +402,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{reviewer-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Namen des Gutachters.}{paginator="\#\{submissionBacking.reviewPagination\}"\newline columnNamei18n="\#\{label.reviewerName\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor \&\& submissionBacking.sessionInformation.user.reviewer\}"}{/}
 
-		\fentry{reviewer-lnk}{<h:link>}{Namen des Gutachters.}{value="\#\{submissionBacking.getReviewerForReview(var)\}" \newline outcome="/facelets/authenticated/profile" \newline includeViewParams="true"}{rendered="\#\{submissionBacking.sessionInformation.user.editor \&\& submissionBacking.sessionInformation.user.reviewer\}"}{/}{/}
+		\fentry{reviewer-lnk}{<h:link>}{Namen des Gutachters.}{value="\#\{submissionBacking.getReviewerForReview(var)\}" \newline outcome="/views/authenticated/profile" \newline includeViewParams="true"}{rendered="\#\{submissionBacking.sessionInformation.user.editor \&\& submissionBacking.sessionInformation.user.reviewer\}"}{/}{/}
 
 		\fentry{/}{<f:param>}{Parameter für id des Profil.}{value="\#\{submissionBacking.getReviewerForReview(var).id\}" name="id"}{/}{/}
 
@@ -709,7 +709,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{name-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Namen des Nutzers}{paginator="\#\{userListBacking.userPagination\}"\newline columnNamei18n="\#\{label.name\}"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
 
-		\fentry{name-link}{<h:link>}{Name des Nutzers. Link mit URL-Parameter.}{value="\#\{var.firstName.concat( ).concat(var.lastName)\}"\newline outcome="/facelets/authenticated/profile"\newline includeViewParams="true"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
+		\fentry{name-link}{<h:link>}{Name des Nutzers. Link mit URL-Parameter.}{value="\#\{var.firstName.concat( ).concat(var.lastName)\}"\newline outcome="/views/authenticated/profile"\newline includeViewParams="true"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
 
 		\fentry{/}{<f:param>}{Nutzer ID als URL Parameter.}{name="\#\{'id'\}"\newline value="\#\{var.id\}"}{/}{/}
 
@@ -782,9 +782,9 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{save-btn}{<h:commandButton>}{Speichern der Änderungen.}{value="\#\{label.save\}"\newline action="\#\{administrationBacking.save\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
 
-		\fentry{new-user-link}{<h:link>}{Weiterleitung zu \emph{newUser.xhtml}.}{value="\#\{label.gotoNewUser\}" \newline outcome="/facelets/authenticated/newUser"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
+		\fentry{new-user-link}{<h:link>}{Weiterleitung zu \emph{newUser.xhtml}.}{value="\#\{label.gotoNewUser\}" \newline outcome="/views/authenticated/newUser"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
 
-		\fentry{new-scientific-forum-link}{<h:link>}{Weiterleitung zu \emph{newScientificForum.xhtml}.}{value="\#\{label.gotoNewScientificForum\}" \newline outcome="/facelets/authenticated/newScientificForum"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
+		\fentry{new-scientific-forum-link}{<h:link>}{Weiterleitung zu \emph{newScientificForum.xhtml}.}{value="\#\{label.gotoNewScientificForum\}" \newline outcome="/views/authenticated/newScientificForum"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
 	}
 \end{samepage}
 
