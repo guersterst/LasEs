@@ -1,16 +1,18 @@
 CREATE TABLE "user" (
 	id SERIAL PRIMARY KEY NOT NULL,
-	email_address VARCHAR UNIQUE NOT NULL,
+	email_address VARCHAR(70) UNIQUE NOT NULL,
 	administrator BOOLEAN NOT NULL,
-	firstname VARCHAR NOT NULL,
-	lastname VARCHAR NOT NULL,
-	title VARCHAR,
-	employer VARCHAR,
+	firstname VARCHAR(50) NOT NULL,
+	lastname VARCHAR(50) NOT NULL,
+	title VARCHAR(20),
+	employer VARCHAR(100),
 	birthdate DATE,
 	avatar_thumbnail BYTEA,
 	is_registered BOOLEAN NOT NULL,
-	password_hash VARCHAR,
-	password_salt VARCHAR,
+	-- 128 Bit, Base64 encoded
+	password_hash VARCHAR(24),
+	-- 16 Byte Salt, Base64 encoded
+	password_salt VARCHAR(24),
 	
 	CONSTRAINT valid_name CHECK (length(firstname) >= 1 AND length(lastname) >= 1),
 	CONSTRAINT valid_birthdate CHECK (birthdate < CURRENT_DATE),
