@@ -17,23 +17,23 @@
         <div>
             <h:form id="register-frm">
                 <h6>Titel</h6>
-                <h:inputText id="title-itxt" value="#{registrationBacking.newUser.title}" title="#{help.title}" maxlength="#{Const.FIRST_NAME_MAX}"/>
+                <h:inputText id="title-itxt" value="#{registrationBacking.newUser.title}" title="#{help.title}"/>
                 <h6>Vorname</h6>
                 <h:inputText id="first-name-itxt" value="#{registrationBacking.newUser.firstName}" title="#{help.firstName}" required="true"
-                requiredMessage="#{message.firstName}" />
+                requiredMessage="#{message.firstName}" maxlength="#{Const.FIRST_NAME_MAX}"/>
                 <h6>Nachname</h6>
                 <h:inputText id="last-name-itxt" value="#{registrationBacking.newUser.passwordNotHashed}" title="#{help.lastName}" required="true"
-                requiredMessage="#{message.lastName}"/>
+                requiredMessage="#{message.lastName}" maxlength="#{Const.LAST_NAME_MAX}"/>
                 <h6>Passwort</h6>
                 <h:inputSecret id="password-iscrt" value="#{registrationBacking.newUser.passwordNotHashed}" title="#{help.password}" required="true"
                 requiredMessage="#{message.password}">
                    <!-- <f:validator for="password-iscrt"/>-->
                 </h:inputSecret>
-                <h:outputText id="email-itxt" value="#{registrationBacking.newUser.passwordNotHashed}" title="#{help.email}" required="true"
-                requiredMessage="#{message.email}">
+                <h:inputText id="email-itxt" value="#{registrationBacking.newUser.emailAddress}" title="#{help.email}" required="true"
+                requiredMessage="#{message.email}" maxlength="#{Const.EMAIL_MAX}">
                     <!--<f:validator/>
                     <f:validator/>-->
-                </h:outputText>
+                </h:inputText>
                 <div>
                     <h:commandButton id="register-cbtn" value="#{label.register}" action="#{registrationBacking.register}"/>
                 </div>
