@@ -5,6 +5,8 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import java.util.Locale;
+
 /**
  * Backing bean for the footer
  */
@@ -16,21 +18,12 @@ public class FooterBacking {
     private SessionInformation sessionInformation;
 
     /**
-     * Get session information.
+     * Get the locale of the current request.
      *
-     * @return The session information.
+     * @return The locale of the current request.
      */
-    public SessionInformation getSessionInformation() {
-        return sessionInformation;
-    }
-
-    /**
-     * Set the bean about the session information.
-     *
-     * @param sessionInformation
-     */
-    public void setSessionInformation(SessionInformation sessionInformation) {
-        this.sessionInformation = sessionInformation;
+    public Locale getLocale() {
+        return null;
     }
 
 }
