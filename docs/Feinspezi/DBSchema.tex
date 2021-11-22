@@ -33,7 +33,7 @@ Abhängigkeiten, wie zum Beispiel Einreichungen, die zu einem Nutzer gehören, w
 
 Durch \emph{IS-A} werden in ER-Diagrammen verschiedene Arten eines Typs definiert. Diese können dann in der \emph{DDL} unterschiedlich übersetzt werden.
 
-In unserem Fall wird die Rechtezuordnung der registrierten Nutzer durch jeweils eigene Entities \texttt{Administrator, Editor} und \texttt{Reviewer} anstatt einer Enumeration modelliert, da ein Nutzer mehrere Aufgaben in LasEs wahrnehmen kann.
+Anstatt einer Enumeration wird in unserem Fall die Rechtezuordnung der registrierten Nutzer durch ein \emph{boolean} für Administratorrechte und durch Relationen für Gutachter und Editor modelliert, da ein Nutzer mehrere Aufgaben in LasEs wahrnehmen kann.
 
 Die Unterscheidung zwischen Journalen und Konferenzen findet nur durch eine gesetzte oder \emph{NULL} Deadline statt, da sich beide funktional nicht weiter unterscheiden.
 
