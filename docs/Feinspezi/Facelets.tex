@@ -816,7 +816,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 	\fentry{science-field-list}{<p:selectOneListbox>}{Auswahl von Fachgebieten.}{value="\#\{newScientificForumBacking.scienceFields\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
 
-	\fentry{new-science-field-itxt}{<h:inputText>}{Hinzufügen neuer Fachgebiete.}{value="\#\{newScientificForumBacking.newScienceFieldInput.name\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{required="true" \newline requiredMessage=\newline "\#\{message.newScienceField\}"}
+	\fentry{new-science-field-itxt}{<h:inputText>}{Hinzufügen neuer Fachgebiete.}{value="\#\{newScientificForumBacking.newScienceFieldInput.name\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{required="true" \newline requiredMessage=\newline "\#\{message.newScienceField\}" \newline maxLength="\#\{Const.SCIENCE\_FIELD\}"}
 
 	\fentry{add-science-field-btn}{<h:commandButton>}{Ausführen der Hinzufüge-Aktion.}{value="\#\{label.add\}"\newline action="\#\{newScientificForumBacking.addScienceField\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
 
