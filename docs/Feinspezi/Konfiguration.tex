@@ -32,6 +32,11 @@ MAX_AVATAR_FILE_SIZE_MB = 5
 # The maximum length of paginated lists.
 MAX_PAGINATION_LIST_LENGTH = 25
 
+# Allows for easier debug and test handling of the application.
+# For example, stacktraces will be displayed in error-pages and the email-verification process
+# is shortened for easier testing.
+DEBUG_AND_TEST_MODE = true
+
 #------------------- MAIL -------------------------------#
 
 MAIL_ADDRESS_FROM = system@lases.de
@@ -43,14 +48,6 @@ DB_URL = jdbc:postgresql://bueno.fim.uni-passau.de/sep21g02
 
 # The database driver.
 DB_DRIVER = org.postgresql.Driver
-
-# The minimum amount of database connections provided
-# by the ConnectionPool.
-MIN_DB_CONNECTIONS = 10
-
-# The maximum amount of database connections provided
-# by the ConnectionPool.
-MAX_DB_CONNECTIONS = 50
 \end{lstlisting}
 
 \subsubsection{Konfiguration des Mailings}
@@ -65,7 +62,6 @@ Hierzu dient die \emph{mail.properties}-Datei.
 # For documentation see:
 # https://jakarta.ee/specifications/mail/1.6/apidocs/index.html?com/
   sun/mail/smtp/package-summary.html
-
 
 #------------------- SMTP ---------------------------#
 
