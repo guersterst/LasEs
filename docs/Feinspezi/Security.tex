@@ -7,6 +7,7 @@ Da ausschließlich JSF components für die HTML-Ausgabe verwendet werden, berein
 Zum Beispiel werden \code{'<'} und \code{'>'} durch \code{'\&lt;'} und \code{'\&gt;'} ersetzt, Nutzereingaben können also keine HTML-Tags in der Ausgabe erstellen.
 Dadurch wird XSS bzw.\ HTML-Injection unmöglich.
 Auch JavaScript kann so nicht injected werden, da sich JavaScript-Code in einem HTML-Tag (\code{<script>}) befinden müsste.
+Da dem Administrator vertraut werden kann, sind von ihm eingegebene Texte für das Impressum und die Willkommensseite davon ausgeschlossen (durch das Attribut \code{escape="false"}). Das ermöglicht eine Formatierung der Ausgabe.
 
 \subsection{SQL-Injection}\label{subsec:sql-injection}
 Für SQL-Code werden \code{PreparedStatements} benutzt, damit die SQL-Statements ohne von Nutzereingaben abhängige Parameter vorkompiliert werden.
@@ -36,6 +37,7 @@ Methoden an.
 Sie verwendet die robuste \code{javax.crypto}-Bibliothek.
 
 Um das Erraten von Passwörtern durch Brute-Force-Attacken o.ä.\ zu erschweren, müssen Passwörter 8--100 Zeichen lang sein und Groß- und Kleinbuchstaben, Zahlen und Sonderzeichen enthalten.
+Dies wird vom \code{PasswordValidator} geprüft.
 
 \subsection{Information Leakage}\label{subsec:information-leakage}
 Alle Informationen über das System, die nach außen gelangen, können Angreifern helfen.
@@ -56,13 +58,13 @@ Das wird auch durch die Verwendung von .xhtml-Dateiendungen für unsere Facelets
 
 \begin{minipage}{\linewidth}
     {\small
-\begin{lstlisting}
+\begin{lstlisting}[language=XML]
 <session-config>
     <cookie-config>
         <name>sessionid</name>
     </cookie-config>
 </session-config>
-\end{lstlisting}
+    \end{lstlisting}
 }
 \end{minipage}
 
@@ -73,7 +75,7 @@ Dazu wird über die angefragte URL das zugehörige Facelet bestimmt und geprüft
 Einzelne Komponenten können im Facelet mit dem \code{rendered}-Attribut nur für bestimmte Rollen sichtbar gemacht werden.
 Auf die Rolle kann der \code{TrespassListener} über die \code{SessionInformation} zugreifen.
 Der Zugriff hängt darüber hinaus von der Beziehung des Nutzers zur angefragten Ressource ab (ein normaler Nutzer kann z.B.\ nur sein \emph{eigenes} Profil oder eine \emph{eigene} Einreichung sehen).
-Deshalb prüft für die relevanten Seiten das jeweilige Backing Bean diese Beziehung und leitet ggf.\ auf eine Fehlerseite weiter.
+Deshalb prüft für die relevanten Seiten das jeweilige Backing Bean in ihrer \code{onLoad()}-Methode diese Beziehung und leitet ggf.\ auf eine Fehlerseite weiter.
 Das verhindert \emph{Insecure Direct Object Reference}, da IDs von Submissions, Scientific Forums und Profilen über URL-Parameter preisgegeben werden.
 
 Durch den Eintrag
@@ -85,7 +87,7 @@ Durch den Eintrag
     </servlet>
     <servlet-mapping>
         <servlet-name>facesServlet</servlet-name>
-        <url-pattern>/faces/*</url-pattern>
+        <url-pattern>/views/*</url-pattern>
     </servlet-mapping>
 \end{lstlisting}
 in der web.xml-Datei werden Aufrufe auf alle unsere Facelet-Dateien dem Faces Servlet weitergeleitet.
