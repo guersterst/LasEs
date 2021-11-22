@@ -6,7 +6,7 @@
 //
 // =============================================================================
 
-package de.lases.jsfconfig;
+package de.lases.control.internal;
 
 import jakarta.faces.annotation.FacesConfig;
 
