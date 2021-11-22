@@ -68,21 +68,21 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \ftable{navigation}{\textbf{navigation.xhtml} ist die Kopfzeile der Webanwendung. Diese bietet die Suchfunktion, Links zu verschiedenen Listen und dem Profil an.}{
 	\fentry{logo-gimg}{<h:graphicImage>}{Logo der Applikation.}{value="\#\{navigationBacking.systemSettings.logoImage\}"\}"}{/}{/}
 
-	\fentry{direct-to-home-lnk}{<h:link>}{Weiterleitung zur Homepage.}{outcome="/facelets/authenticated/homepage" \newline title="\#\{help.toHome\}"}{/}{/}
+	\fentry{direct-to-home-lnk}{<h:link>}{Weiterleitung zur Homepage.}{outcome="/facelets/authenticated/homepage" \newline title="\#\{help.toHome\}"}{disabled="\#\{navigationBacking.sessionInformation.user == null\}"}{/}
 
-	\fentry{search-frm}{<h:form>}{Formular zur Suche.}{/}{/}{/}
+	\fentry{search-frm}{<h:form>}{Formular zur Suche.}{/}{rendered="\#\{navigationBacking.sessionInformation.user != null\}"}{/}
 
-	\fentry{search-Field-itxt}{<h:inputText>}{Suchleiste}{value="\#\{navigationBacking.resultListParameters.globalSearchWord\}" \newline title="\#\{help.search\}"}{/}{/}
+	\fentry{search-Field-itxt}{<h:inputText>}{Suchleiste}{value="\#\{navigationBacking.resultListParameters.globalSearchWord\}" \newline title="\#\{help.search\}"}{rendered="\#\{navigationBacking.sessionInformation.user != null\}"}{/}
 
-	\fentry{search-cbtn}{<h:commandButton>}{Suche ausführen.}{action="\#\{navigationBacking.search\}"}{/}{/}
+	\fentry{search-cbtn}{<h:commandButton>}{Suche ausführen.}{action="\#\{navigationBacking.search\}"}{rendered="\#\{navigationBacking.sessionInformation.user != null\}"}{/}
 
 	\fentry{user-list-lnk}{<h:link>}{Link zur Übersichtsseite aller Nutzer}{value="\#\{label.userList\}" \newline outcome="/editor/userList \newline title="\#\{help.userList\}"}{rendered="\#\{navigationBacking.sessionInformation.user.editor\}"}{/}
 
-	\fentry{forum-list-lnk}{<h:link>}{Link zur Übersichtsseite alle Journale und Konferenzen}{value="\#\{label.forumList\}" \newline outcome="/facelets/authenticated/scientificForumList" \newline title="\#\{help.forumList\}"}{/}{/}
+	\fentry{forum-list-lnk}{<h:link>}{Link zur Übersichtsseite alle Journale und Konferenzen}{value="\#\{label.forumList\}" \newline outcome="/facelets/authenticated/scientificForumList" \newline title="\#\{help.forumList\}"}{rendered="\#\{navigationBacking.sessionInformation.user != null\}"}{/}
 
-	\fentry{logout-cbtn}{<h:commandButton>}{Loggt den Nutzer aus dem System aus und leitet zur Loginseite weiter.}{value="\#\{label.logout\}" \newline action="\#\{navigationBacking.logout\}" \newline title="\#\{help.logout\}"}{/}{/}
+	\fentry{logout-cbtn}{<h:commandButton>}{Loggt den Nutzer aus dem System aus und leitet zur Loginseite weiter.}{value="\#\{label.logout\}" \newline action="\#\{navigationBacking.logout\}" \newline title="\#\{help.logout\}"}{rendered="\#\{navigationBacking.sessionInformation.user != null\}"}{/}
 
-	\fentry{profile-lnk}{<h:link>}{Link zur Profilübersicht}{value="\#\{label.nav.profile\}" \newline outcome="/facelets/authenticated/profile"}{/}{/}
+	\fentry{profile-lnk}{<h:link>}{Link zur Profilübersicht}{value="\#\{label.nav.profile\}" \newline outcome="/facelets/authenticated/profile"}{rendered="\#\{navigationBacking.sessionInformation.user != null\}"}{/}
 }
 
 %\end{samepage}
