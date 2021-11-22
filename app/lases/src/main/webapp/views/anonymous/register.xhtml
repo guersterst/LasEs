@@ -2,7 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html">
-
+<f:metadata>
+    <f:importConstants type="de.lases.control.internal.Constants" var="Const"/>
+</f:metadata>
 <h:head>
     <title>LasEs - Register</title>
     <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css"/>
@@ -15,10 +17,10 @@
         <div>
             <h:form id="register-frm">
                 <h6>Titel</h6>
-                <h:inputText id="title-itxt" value="#{registrationBacking.newUser.title}" title="#{help.title}"/>
+                <h:inputText id="title-itxt" value="#{registrationBacking.newUser.title}" title="#{help.title}" maxlength="#{Const.FIRST_NAME_MAX}"/>
                 <h6>Vorname</h6>
                 <h:inputText id="first-name-itxt" value="#{registrationBacking.newUser.firstName}" title="#{help.firstName}" required="true"
-                requiredMessage="#{message.firstName}"/>
+                requiredMessage="#{message.firstName}" />
                 <h6>Nachname</h6>
                 <h:inputText id="last-name-itxt" value="#{registrationBacking.newUser.passwordNotHashed}" title="#{help.lastName}" required="true"
                 requiredMessage="#{message.lastName}"/>
