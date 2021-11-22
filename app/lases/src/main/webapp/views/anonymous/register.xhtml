@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+<h:head>
+    <title>LasEs - Register</title>
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css"/>
+</h:head>
+<h:body>
+    <div class="container-fluid">
+        <div>
+            <h2>Registrierung</h2>
+        </div>
+        <div>
+            <h:form id="register-frm">
+                <h6>Titel</h6>
+                <h:inputText id="title-itxt" value="#{registrationBacking.newUser.title}" title="#{help.title}"/>
+                <h6>Vorname</h6>
+                <h:inputText id="first-name-itxt" value="#{registrationBacking.newUser.firstName}" title="#{help.firstName}" required="true"
+                requiredMessage="#{message.firstName}"/>
+                <h6>Nachname</h6>
+                <h:inputText id="last-name-itxt" value="#{registrationBacking.newUser.passwordNotHashed}" title="#{help.lastName}" required="true"
+                requiredMessage="#{message.lastName}"/>
+                <h6>Passwort</h6>
+                <h:inputSecret id="password-iscrt" value="#{registrationBacking.newUser.passwordNotHashed}" title="#{help.password}" required="true"
+                requiredMessage="#{message.password}">
+                   <!-- <f:validator for="password-iscrt"/>-->
+                </h:inputSecret>
+                <h:outputText id="email-itxt" value="#{registrationBacking.newUser.passwordNotHashed}" title="#{help.email}" required="true"
+                requiredMessage="#{message.email}">
+                    <!--<f:validator/>
+                    <f:validator/>-->
+                </h:outputText>
+                <div>
+                    <h:commandButton id="register-cbtn" value="#{label.register}" action="#{registrationBacking.register}"/>
+                </div>
+                <div>
+                    <h:link id="welcomepage-lnk" value="#{label.welcome}" outcome="/facelets/anonymous/welcome" title="#{help.welcomepage}"/>
+                </div>
+            </h:form>
+        </div>
+    </div>
+
+</h:body>
+</html>
