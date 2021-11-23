@@ -32,7 +32,7 @@ public class PaperService {
      * @param paper      A {@code Paper} containing a valid id.
      * @return A fully filled {@link Paper}.
      */
-    public Paper getPaper(Submission submission, Paper paper) {
+    public Paper get(Submission submission, Paper paper) {
         return null;
     }
 

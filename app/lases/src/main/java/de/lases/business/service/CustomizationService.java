@@ -29,7 +29,7 @@ public class CustomizationService {
      *
      * @param systemSettings The system's settings.
      */
-    public void update(SystemSettings systemSettings) {
+    public void change(SystemSettings systemSettings) {
     }
 
     /**
