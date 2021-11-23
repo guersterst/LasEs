@@ -598,6 +598,12 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 }
 
+\ftable{delete-profile-popup}{Sollte ein Benutzer sein eigenes  Profil, bzw. ein Administrator einen anderen Benutzer, löschen wollen, so erscheint hier ein eine Warnung, um auf die Folgen seines Handelns hinzuweisen.}{
+	\fentry{delete-warning-otxt}{<h:outputText>}{Warnhinweis zum Löschen eines Profils.}{value="\#\{texts.deleteWarning\}"}{/}{/}
+	
+	\fentry{agree-delet-cbtn}{<h:commandButton>}{Entgültiges Löschen des Profils.}{value="\#{labels.agree}" \newline action="\#\{profileBacking.deleteProfile\}"}{/}{/}
+}
+
 \ftable{scientificForum}{\textbf{scientificForum.xhtml} Die Ansicht eines Forums dient zur Ausgabe von Informationen über die jeweilige Konferenz oder das jeweilige Journal.
 	Das Anzeigen und Filtern der Tabellen \emph{editorialPagination}, \emph{reviewPagination} und \emph{submissionPagination} wird genauso gehandhabt, wie auf \emph{homepage.xhtml}.
 	Ausnahme dabei ist die Spalte Forum, welche hier nicht angezeigt wird.}{
