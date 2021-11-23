@@ -17,7 +17,7 @@
     <h:panelGrid columns="5">
         <h:commandButton value="First" action="#{cc.attrs.paginator.firstPage}"/>
         <h:commandButton value="Back" action="#{cc.attrs.paginator.previousPage}"/>
-        <h:outputText value="#{cc.attrs.paginator.currentPage}"/>
+        <h:outputText value="#{cc.attrs.paginator.resultListParameters.pageNo}"/>
         <h:commandButton value="Next" action="#{cc.attrs.paginator.nextPage}"/>
         <h:commandButton value="Last" action="#{cc.attrs.paginator.lastPage}"/>
     </h:panelGrid>

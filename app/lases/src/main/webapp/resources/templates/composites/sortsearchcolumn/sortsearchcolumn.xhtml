@@ -7,15 +7,14 @@
 <composite:interface>
     <composite:attribute name="paginator" type="de.lases.control.internal.Pagination" required="true"/>
     <composite:attribute name="columnNamei18n" type="java.lang.String" required="true"/>
-    <composite:attribute name="columnIdent" type="java.lang.String" required="true"/>
-    <composite:attribute name="columnNo" type="java.lang.Integer" required="true"/>
+    <composite:attribute name="columnIdentifier" type="java.lang.String" required="true"/>
 </composite:interface>
 
 
 <composite:implementation>
-    <h:commandLink value="#{cc.attrs.columnNamei18n}" action="#{cc.attrs.paginator.sortBy(cc.attrs.columnIdent)}"/>
+    <h:commandLink value="#{cc.attrs.columnNamei18n}" action="#{cc.attrs.paginator.sortBy(cc.attrs.columnIdentifier)}"/>
     <br/>
-    <h:inputText value="#{cc.attrs.paginator.searchWords[cc.attrs.columnNo]}"/>
+    <h:inputText value="#{cc.attrs.paginator.resultListParameters.filterColumns[cc.attrs.columnIdentifier]}"/>
 </composite:implementation>
 
 </html>

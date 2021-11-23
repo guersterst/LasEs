@@ -1,6 +1,7 @@
 package de.lases.global.transport;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Encapsulates all values a repository needs to configure the result lists on
@@ -9,7 +10,7 @@ import java.util.List;
  */
 public class ResultListParameters {
 
-    private List<ResultListFilter> filters;
+    private final Map<String, String> filterColumns = new HashMap<>();
 
     private int pageNo;
 
@@ -19,16 +20,17 @@ public class ResultListParameters {
 
     private String globalSearchWord;
 
-    public List<ResultListFilter> getFilters() {
-        return filters;
-    }
-
-    public void setFilters(List<ResultListFilter> filters) {
-        this.filters = filters;
-    }
-
     public int getPageNo() {
         return pageNo;
+    }
+
+    /**
+     * Maps column names to a filter string.
+     *
+     * @return the  map.
+     */
+    public Map<String, String> getFilterColumns() {
+        return filterColumns;
     }
 
     /**
