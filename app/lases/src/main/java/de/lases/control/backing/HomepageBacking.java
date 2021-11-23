@@ -58,8 +58,55 @@ public class HomepageBacking implements Serializable {
     private ResultListParameters resultListParameters;
 
     /**
-     * Load submissions from the database for the first time to fill the first
-     * page of the submission lists.
+     * Initialize the dtos and load data from the datasource where possible.
+     * Create objects for:
+     * <ul>
+     *     <li>
+     *         the date filter option for own submissions
+     *     </li>
+     *     <li>
+     *         the date filter option for reviewed submissions
+     *     </li>
+     *     <li>
+     *         the date filter option for edited submissions
+     *     </li>
+     *     <li>
+     *         the submission state filter option for own submissions
+     *     </li>
+     *     <li>
+     *         the submission state filter for reviewed submissions
+     *     </li>
+     *     <li>
+     *         the submission state filter for edited submissions
+     *     </li>
+     *     <li>
+     *         the current tab the user is on.
+     *     </li>
+     *     <li>
+     *         the own submission pagination.
+     *     </li>
+     *     <li>
+     *         the reviewed submission pagination.
+     *     </li>
+     *     <li>
+     *         the reviewed submission pagination.
+     *     </li>
+     *     <li>
+     *         The result list parameters.
+     *     </li>
+     * </ul>
+     * Load the following data from the datasource:
+     * <ul>
+     *     <li>
+     *         the first page of the own submission pagination.
+     *     </li>
+     *     <li>
+     *         the fist page of the reviewed submission pagination.
+     *     </li>
+     *     <li>
+     *         the first page of the reviewed submission pagination.
+     *     </li>
+     * </ul>
      */
     @PostConstruct
     public void init() {
@@ -91,7 +138,11 @@ public class HomepageBacking implements Serializable {
     public void applyFilters() {
     }
 
-
+    /**
+     * Get the selected filter option for filtering own submissions after date.
+     *
+     * @return The selected date filter option for own submission.
+     */
     public DateSelect getDateFilterSelectSub() {
         return dateFilterSelectSub;
     }
@@ -166,6 +217,24 @@ public class HomepageBacking implements Serializable {
     public void setStateFilterSelectEdit(
             SubmissionState stateFilterSelectEdit) {
         this.stateFilterSelectEdit = stateFilterSelectEdit;
+    }
+
+    /**
+     * Get the tab the user is on.
+     *
+     * @return The tab the user is on.
+     */
+    public Tab getTab() {
+        return tab;
+    }
+
+    /**
+     * Set the tab the user is on.
+     *
+     * @param tab the tab the user is on.
+     */
+    public void setTab(Tab tab) {
+        this.tab = tab;
     }
 
     public SubmissionState getStateFilterSelectReview() {
