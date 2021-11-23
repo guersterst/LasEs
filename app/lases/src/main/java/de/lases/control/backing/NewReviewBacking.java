@@ -29,7 +29,7 @@ public class NewReviewBacking {
 
     /**
      * Checks if this review belongs to a submission and throws an exception
-     * if there is non.
+     * if there is none. Also initializes the review dto and the uploaded PDF.
      *
      * @throws IllegalUserFlowException If there is no submission which belongs
      *                                  this new review, which means the user
@@ -48,6 +48,11 @@ public class NewReviewBacking {
         return null;
     }
 
+    /**
+     * Get the {@code Part} file of the uploaded pdf.
+     *
+     * @return the uploaded pdf.
+     */
     public Part getUploadedPDF() {
         return uploadedPDF;
     }
@@ -61,6 +66,11 @@ public class NewReviewBacking {
         this.uploadedPDF = uploadedPDF;
     }
 
+    /**
+     * Get the dto for the review.
+     *
+     * @return The review.
+     */
     public Review getReview() {
         return review;
     }
