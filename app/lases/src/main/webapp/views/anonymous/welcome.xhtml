@@ -34,7 +34,7 @@
                 <div class="login-form">
                     <h:form>
                         <h:selectOneMenu value="#{submissionBacking.dateFilterSelectPaper}">
-                            <f:selectItems value="#{Date}" var="select" itemLabel="#{labels[select.dateSelect]}" itemValue="#{select}"/>
+                            <f:selectItems value="#{submissionBacking.dateSelects}" var="select" itemValue="#{select}" itemLabel="#{labels['dateSelect.' += select]}"/>
                         </h:selectOneMenu>
                         <h4>
                             <h:outputText value="#{labels['appName']}"/>
