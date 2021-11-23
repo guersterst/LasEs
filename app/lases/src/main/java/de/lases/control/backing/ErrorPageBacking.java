@@ -15,17 +15,27 @@ public class ErrorPageBacking {
 
     private ErrorMessage errorMessage;
 
+    /**
+     * Initialize the error message dto.
+     */
     @PostConstruct
     public void init() {
     }
 
+    /**
+     * Get the error message, including a stacktrace for the developer and an
+     * error message for the user.
+     *
+     * @return Stacktrace and error message for the user encapsulated in one
+     *         object.
+     */
     public ErrorMessage getErrorMessage() {
         return errorMessage;
     }
 
     /**
      * Set the full error message, including a stacktrace for the developer
-     * and an error message for the use.
+     * and an error message for the user.
      *
      * @param errorMessage Stacktrace and error message for the user
      *                     encapsulated in one object.
