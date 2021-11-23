@@ -226,7 +226,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{last-name-itxt}{<h:inputText>}{Angabe des Nachnamen.}{value="\#\{registrationBacking.newUser.lastName\}" \newline title="\#\{help.lastName\}"}{/}{required="true" \newline requiredMessage=\newline"\#\{message.lastName\}" \newline maxLength="\#\{Const.LAST\_NAME\_MAX\}"}
 
-		\fentry{password-iscrt}{<h:inputSecret>}{Angabe eines Passwortes.}{value="\#\{registrationBacking.newUser.passwordNotHashed\}" \newline title="\#\{help.password\}"}{/}{passwordValidator \newline required="true" \newline requiredMessage=\newline"\#\{message.password\}"}
+		\fentry{password-iscrt}{<h:inputSecret>}{Angabe eines Passwortes.}{value="\#\{registrationBacking.newUser.passwordNotHashed\}" \newline title="\#\{help.password\}"}{/}{passwordValidator \newline validateLength \newline minimum="8" \newline maximum="100" \newline required="true" \newline requiredMessage=\newline"\#\{message.password\}"}
 
 		\fentry{email-itxt}{<h:inputText>}{Angabe einer validen E-Mail.}{value="\#\{registrationBacking.newUser.emailAddress\}" \newline title="\#\{help.email\}"}{ /}{emailAddressExistsValidator \newline emailAddressLayoutValidator \newline required=true" \newline requiredMessage=\newline"\#\{message.email\}" \newline maxLength="\#\{Const.EMAIL\_MAX\}"}
 
@@ -557,7 +557,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 	\fentry{lastname-itxt}{<h:inputText>}{Nachname des Nutzenden.}{value="\#\{profileBacking.user.lastName\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{required="true" \newline requiredMessage=\newline "\#\{message.lastName\}" \newline maxLength="\#\{Const.LAST\_NAME\_MAX\}"}
 
-	\fentry{password-iscrt}{<h:inputSecret>}{Leeres Eingabefeld für ein neues Passwort.}{value="\#\{profileBacking.user.passwordNotHashed\}"}{rendered="\#\{!profileBacking.hasViewerEditRights\}"}{passwordValidator \newline required="true" \newline requiredMessage=\newline "\#\{message.password\}"}
+	\fentry{password-iscrt}{<h:inputSecret>}{Leeres Eingabefeld für ein neues Passwort.}{value="\#\{profileBacking.user.passwordNotHashed\}"}{rendered="\#\{!profileBacking.hasViewerEditRights\}"}{passwordValidator \newline validateLength \newline minimum="8" \newline maximum="100" \newline required="true" \newline requiredMessage=\newline "\#\{message.password\}"}
 
 	\fentry{email-itxt}{<h:inputText>}{E-Mail des Nutzenden.}{value="\#\{profileBacking.user.emailAddress\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{emailAddressExistsValidator \newline emailAddressExistsValidator \newline required="true" \newline requiredMessage=\newline "\#\{message.email\}" \newline maxLength="\#\{Const.EMAIL\_MAX\}"}
 
@@ -747,7 +747,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \begin{samepage}
 
 	\ftable{newUser}{\textbf{newUser.xhtml} Der Administrator kann hier einen neuen Nutzer anlegen.}{
-		\fentry{password-iscrt}{<h:inputSecret>}{Angabe des Passworts.}{value="\#\{newUserBacking.newUser.passwordNotHashed\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{passwordValidator \newline required="true" \newline requiredMessage=\newline "\#\{message.password\}"}
+		\fentry{password-iscrt}{<h:inputSecret>}{Angabe des Passworts.}{value="\#\{newUserBacking.newUser.passwordNotHashed\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{passwordValidator \newline validateLength \newline minimum="8" \newline maximum="100" \newline required="true" \newline requiredMessage=\newline "\#\{message.password\}"}
 
 		\fentry{firstname-itxt}{<h:inputText>}{Angabe des Vornamen.}{value="\#\{newUserBacking.newUser.firstName\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{required="true" \newline requiredMessage=\newline maxLength="\#\{Const.FIRST\_NAME\_MAX\}"}
 

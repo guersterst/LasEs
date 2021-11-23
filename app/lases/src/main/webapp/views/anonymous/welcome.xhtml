@@ -46,7 +46,7 @@
                         </h:inputText>
                         <h4>Password</h4>
                         <h:inputSecret id="password-itxt" value="#{welcomeBacking.loginInput.passwordNotHashed}" required="true" requiredMessage="#{message.password}">
-                           <!-- <f:validator/>-->
+                           <f:validateLength minimum="8" maximum="100"/>
                         </h:inputSecret>
                         <div>
                             <h:commandButton id="login-cbtn" value="Login" action="#{welcomeBacking.login}"/>
