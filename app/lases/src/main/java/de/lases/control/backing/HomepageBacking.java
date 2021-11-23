@@ -281,6 +281,24 @@ public class HomepageBacking implements Serializable {
         return reviewedPagination;
     }
 
+    /**
+     * Get the options of the DateSelect enum as an array.
+     *
+     * @return Array of DateSelect.
+     */
+    public DateSelect[] getDateSelects() {
+        return DateSelect.values();
+    }
+
+    /**
+     * Get the options of the SubmissionState enum as an array.
+     *
+     * @return Array of SubmissionState.
+     */
+    public SubmissionState[] getSubmissionStates() {
+        return SubmissionState.values();
+    }
+
 
 
 }

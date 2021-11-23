@@ -334,5 +334,22 @@ public class ScientificForumBacking implements Serializable {
         return sessionInformation;
     }
 
+    /**
+     * Return an array of all values the SubmissionState enum can have.
+     *
+     * @return ALl options of SubmissionState.
+     */
+    public SubmissionState[] getSubmissionStates() {
+        return SubmissionState.values();
+    }
+
+    /**
+     * Return an array of all values the DateSelect enum can have.
+     *
+     * @return ALl options of DateSelect.
+     */
+    public DateSelect[] getDateSelects() {
+        return DateSelect.values();
+    }
 
 }
