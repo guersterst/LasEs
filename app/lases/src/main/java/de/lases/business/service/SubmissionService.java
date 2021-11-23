@@ -44,7 +44,7 @@ public class SubmissionService implements Serializable {
      * Do not forget to also add a paper using {@link PaperService#addPaper(FileDTO, Submission)}.
      *
      * @param submission The submissions' data.
-     * @param forum The forum where the submission is made.
+     * @param forum      The forum where the submission is made.
      * @param reviewers  The desired reviewers as proper {@code User}-DTOs or exclusively containing
      *                   an email-address.
      * @param coauthors  The desired co-athors as proper {@link User}-DTOs or exclusively containing
@@ -65,14 +65,15 @@ public class SubmissionService implements Serializable {
 
 
     /**
-     * Manipulates a submission
+     * Manipulates a submission.
      *
      * @param newSubmission A {@link Submission}-DTO filled with the fields that are desired to be changed.
-     *                      <p>
-     *                      All fields filled with legal values will be overwritten, the rest are ignored.
-     *                      It should contain an existing id value.
+     * <p>
+     * All fields filled with legal values will be overwritten, the rest are ignored.
+     * It should contain an existing id value.
+     * </p>
      */
-    public void changeSubmission(Submission newSubmission) {
+    public void change(Submission newSubmission) {
     }
 
     /**
@@ -117,7 +118,7 @@ public class SubmissionService implements Serializable {
      * and the reviews' deadline.
      *
      * @param submission The submission which is requested to be reviewed by a reviewer.
-     * @param reviewer The requested reviewer for a submission.
+     * @param reviewer   The requested reviewer for a submission.
      * @return The {@link ReviewedBy}-DTO containing information about the review-request relationship of a
      * submission and the reviewer. Returns null if no such relationship exists.
      */
@@ -146,7 +147,18 @@ public class SubmissionService implements Serializable {
     public void realeaseReview(Review review, Submission submission) {
     }
 
+    //todo with boolean?
+
+    /**
+     * Adds the requirement of a new revision to a given submission.
+     *
+     * @param submission The submission for which a revision is requested.
+     */
+    public void requireRevision(Submission submission) {
+    }
+
     //todo necessary?
+
     /**
      * Adds a co-author.
      *
