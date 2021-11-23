@@ -4,6 +4,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html">
 <f:metadata>
     <f:importConstants type="de.lases.control.backing.DateSelect" var="Date"/>
+    <f:loadBundle var="labels" basename="resource_bundles.labels"/>
 </f:metadata>
 <h:head>
     <title>LasEs</title>
@@ -33,9 +34,11 @@
                 <div class="login-form">
                     <h:form>
                         <h:selectOneMenu value="#{submissionBacking.dateFilterSelectPaper}">
-                            <f:selectItems value="#{Date}" var="date" itemLabel="try"/>
+                            <f:selectItems value="#{Date}" var="select" itemLabel="#{labels[select.dateSelect]}" itemValue="#{select}"/>
                         </h:selectOneMenu>
-                        <h4>E-Mail</h4>
+                        <h4>
+                            <h:outputText value="#{labels['appName']}"/>
+                        </h4>
                         <h:inputText id="email-itxt" value="#{welcomeBacking.loginInput.emailAddress}" required="true"
                         requiredMessage="#{message.email}">
                             <!--<f:validator/>
