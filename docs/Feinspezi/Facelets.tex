@@ -27,6 +27,7 @@
 \newcommand{\fentry}[6]{\footnotesize#1 &\footnotesize#2 &\footnotesize#3 &\footnotesize#4 &\footnotesize#5 &\footnotesize#6\\\hline}
 
 \localauthor{Stefanie Gürster}
+Im Allgemeinen gilt für die Benachrichtigung an den Benutzer folgende Konvention: Ist eine Benutzereingabe nicht valide so wird die Nachricht direkt an dem Eingabefeld angezeigt. Informiert die Nachricht lediglich den Benutzer (z.B. Erfolgreiches Speichern), so wird sie \hyperref[fclt:main]{global} angezeigt
 
 \subsection{Namenskonvention}
 
@@ -90,7 +91,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 \begin{samepage}
 
-	\ftable{main}{\textbf{main.xhtml} ist das Template, welches den Inhalt der Seiten zwischen Kopf- und Fußzeile einbettet.}{
+	\ftable{main}{\textbf{main.xhtml} \label{fclt:main} ist das Template, welches den Inhalt der Seiten zwischen Kopf- und Fußzeile einbettet.}{
 		\fentry{/}{<ui:include>}{Kopfzeile}{src="navigation.xhtml"}{/}{/}
 
 		\fentry{global-msgs}{<h:mes-sages>}{Anzeigen globaler Nachrichten.}{/}{/}{/}
