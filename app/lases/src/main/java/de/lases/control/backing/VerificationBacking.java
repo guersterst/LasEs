@@ -24,12 +24,22 @@ public class VerificationBacking { // y
     private Verification verification;
 
     /**
-     * Read verification random from the url and verify the user. On fail, an
-     * error message will be displayed. On success, the user is now verified
-     * and logged in.
+     * Create the dtos for the verification.
+     * No data will be loaded form the datasource at this point.
      */
     @PostConstruct
     public void init() {
+    }
+
+    /**
+     * Read the verification random from the url and verify the user. On fail,
+     * an error message will be displayed. On success, the user is now verified
+     * and logged in.
+     * This method is called by a view action when it can get the url parameter
+     * from a view param.
+     */
+    public void onLoad() {
+
     }
 
     /**

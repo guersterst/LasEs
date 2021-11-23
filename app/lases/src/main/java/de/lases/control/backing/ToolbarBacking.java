@@ -47,17 +47,52 @@ public class ToolbarBacking implements Serializable {
     private List<User> editors;
 
     /**
-     * Initialize dtos.
+     * Initialize the dtos.
+     * Create the dtos for:
+     * <ul>
+     *     <li> the submission </li>
+     *     <li> the reviewer input </li>
+     *     <li> the "reviewed by" input </li>
+     *     <li> the editor input </li>
+     *     <li> current editor </li>
+     *     <li>
+     *         the list of reviewers of the submission this toolbar is
+     *         about
+     *     </li>
+     *     <li>
+     *         the list of editors of the scientific forum for this
+     *         submission
+     *     </li>
+     * </ul>
+     * No data can be loaded form the datasource at this point. (See the
+     * {@code onLoad() method}).
      */
     @PostConstruct
     public void init() {
     }
 
     /**
-     * This method should be called when the proper submission was injected
-     * by the submission backing bean, and it initializes the entire toolbar.
+     * Load data that was not loaded in the {@code init()} method from the
+     * datasource:
+     * <ul>
+     *     <li> The current editor of the submission. </li>
+     *     <li> The list of editors of the submission. </li>
+     *     <li>
+     *         The list of reviewers for this submission
+     *     </li>
+     *     <li>
+     *         The list of editors of the scientific forum this submission is in
+     *     </li>
+     * </ul>
+     * This method is called after the id of our submission was received via
+     * view params by the {@code SubmissionBacking}. This method is <b>not</b>
+     * called by a view action but rather by the onLoad method in the
+     * {@code SubmissionBacking}.
+     *
+     * @param submission A submission dto that is filled with the id received
+     *                   via view params.
      */
-    public void onLoad() { }
+    public void onLoad(Submission submission) { }
 
     /**
      * The currently entered user will be added as a reviewer.
@@ -74,7 +109,7 @@ public class ToolbarBacking implements Serializable {
     }
 
     /**
-     * Add the entered user ad managing editor, replacing the old editor.
+     * Add the entered user as managing editor, replacing the old editor.
      */
     public void chooseNewManagingEditor() {
     }
