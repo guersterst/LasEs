@@ -52,7 +52,19 @@ public class NewScientificForumBacking implements Serializable {
     private User newEditorInput;
 
     /**
-     * Initialize dtos.
+     * Initialize dtos and load data from the datasource where necessary.
+     * Create dtos for:
+     * <ul>
+     *     <li> The list of science fields in the system </li>
+     *     <li> The new scientific forum that is created on this page </li>
+     *     <li> the input for the science field selection </li>
+     *     <li> the input for the science field creation </li>
+     *     <li> the list of selected science fields </li>
+     *     <li> The list of editors </li>
+     *     <li> the input for a new editor </li>
+     * </ul>
+     * Additionally, load the list of science fields in the system from the
+     * datasource.
      */
     @PostConstruct
     public void init() {
@@ -105,6 +117,11 @@ public class NewScientificForumBacking implements Serializable {
         return null;
     }
 
+    /**
+     * Get the list of science fields in the system.
+     *
+     * @return the lsit of science fields in the system.
+     */
     public List<ScienceField> getScienceFields() {
         return scienceFields;
     }
@@ -118,6 +135,13 @@ public class NewScientificForumBacking implements Serializable {
         this.scienceFields = scienceFields;
     }
 
+    /**
+     * Get the dto that encapsulates the parameters for the new scientific
+     * forum.
+     *
+     * @return The dto that encapsulates the parameters for the new scientific
+     *         forum.
+     */
     public ScientificForum getNewScientificForum() {
         return newScientificForum;
     }
@@ -126,13 +150,20 @@ public class NewScientificForumBacking implements Serializable {
      * Set the dto that encapsulates the parameters for the new scientific
      * forum.
      *
-     * @param newScientificForum The dto that ecapsulates the parameters
+     * @param newScientificForum The dto that encapsulates the parameters
      *                           for the new scientific forum.
      */
     public void setNewScientificForum(ScientificForum newScientificForum) {
         this.newScientificForum = newScientificForum;
     }
 
+    /**
+     * Get the science field that the administrator has entered in order to add
+     * it to the list of selected science fields for this forum.
+     *
+     * @return The science field the administrator
+     *         has entered.
+     */
     public ScienceField getScienceFieldSelectionInput() {
         return scienceFieldSelectionInput;
     }
@@ -149,6 +180,13 @@ public class NewScientificForumBacking implements Serializable {
         this.scienceFieldSelectionInput = scienceFieldSelectionInput;
     }
 
+    /**
+     * Ger the science field that the administrator has entered in order to add
+     * it to the list of global science fields.
+     *
+     * @return The science field the administrator has
+     *         entered.
+     */
     public ScienceField getNewScienceFieldInput() {
         return newScienceFieldInput;
     }
@@ -186,6 +224,12 @@ public class NewScientificForumBacking implements Serializable {
         return editors;
     }
 
+    /**
+     * Get the user that the administrator wants to add to the list of editors.
+     *
+     * @return The user that the administrator wants to add to
+     *         the list of editors.
+     */
     public User getNewEditorInput() {
         return newEditorInput;
     }
