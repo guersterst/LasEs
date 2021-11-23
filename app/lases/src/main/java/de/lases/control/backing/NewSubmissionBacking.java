@@ -54,6 +54,36 @@ public class NewSubmissionBacking {
     /**
      * Initialize the dtos used in this bean and load the list of possible
      * editors.
+     * The following dtos are initialized:
+     * <ul>
+     *     <li>
+     *         the submission that is created on this page
+     *     </li>
+     *     <li>
+     *         the scientific forum input
+     *     </li>
+     *     <li>
+     *         the editor selection input
+     *     </li>
+     *     <li>
+     *         the pdf upload input
+     *     </li>
+     *     <li>
+     *         the co author input
+     *     </li>
+     *     <li>
+     *         the list of co authors
+     *     </li>
+     *     <li>
+     *         the list of editors for the forum this submission will be
+     *         submitted in
+     *     </li>
+     *     <li>
+     *         the selected editor
+     *     </li>
+     * </ul>
+     * The list of editors for the forum this submission will be submitted in
+     * will be directly populated from the database.
      */
     @PostConstruct
     public void init() {
@@ -82,6 +112,11 @@ public class NewSubmissionBacking {
         return null;
     }
 
+    /**
+     * Get the dto that stores data about the new submission.
+     *
+     * @return The dto that holds data about the new submission.
+     */
     public Submission getNewSubmission() {
         return newSubmission;
     }
@@ -95,6 +130,12 @@ public class NewSubmissionBacking {
         this.newSubmission = newSubmission;
     }
 
+    /**
+     * Get the input where the user chooses a scientific forum for this
+     * submission.
+     *
+     * @return The input of the scientific forum.
+     */
     public ScientificForum getForumInput() {
         return forumInput;
     }
@@ -103,12 +144,17 @@ public class NewSubmissionBacking {
      * Set the input where the user chooses a scientific forum for this
      * submission.
      *
-     * @param forumInput The input where of the scientific forum.
+     * @param forumInput The input of the scientific forum.
      */
     public void setForumInput(ScientificForum forumInput) {
         this.forumInput = forumInput;
     }
 
+    /**
+     * Get the selected user that can be added as an editor.
+     *
+     * @return The selected user that can be added as an editor.
+     */
     public User getEditorSelectionInput() {
         return editorSelectionInput;
     }
@@ -122,6 +168,11 @@ public class NewSubmissionBacking {
         this.editorSelectionInput = editorSelectionInput;
     }
 
+    /**
+     * Get the PDF that is uploaded for submission.
+     *
+     * @return PDF that is uploaded for the submission.
+     */
     public Part getUploadedPDF() {
         return uploadedPDF;
     }
@@ -135,6 +186,11 @@ public class NewSubmissionBacking {
         this.uploadedPDF = uploadedPDF;
     }
 
+    /**
+     * Get the user that can be submitted as a co-author.
+     *
+     * @return The user that can be submitted as a co-author.
+     */
     public User getCoAuthorInput() {
         return coAuthorInput;
     }

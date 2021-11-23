@@ -24,7 +24,7 @@ public class VerificationBacking { // y
     private Verification verification;
 
     /**
-     * Create the dtos for the verification.
+     * Create the dto for the verification.
      * No data will be loaded form the datasource at this point.
      */
     @PostConstruct
@@ -51,4 +51,21 @@ public class VerificationBacking { // y
         return null;
     }
 
+    /**
+     * Get the information about the verification of the user.
+     *
+     * @return The verification dto.
+     */
+    public Verification getVerification() {
+        return verification;
+    }
+
+    /**
+     * Set the information about the verification of the user.
+     *
+     * @param verification The verification dto.
+     */
+    public void setVerification(Verification verification) {
+        this.verification = verification;
+    }
 }
