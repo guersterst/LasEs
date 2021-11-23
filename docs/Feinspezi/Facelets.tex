@@ -239,6 +239,10 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \begin{samepage}
 
 	\ftable{verification}{\textbf{verification.xhtml} Wird bei erfolgreicher Verifikation der E-Mail angezeigt.}{
+		\fentry{success-otxt}{<h:outputText>}{Text zur erfolgreichen Verifizierung.}{value="\#\{texts.success\}"}{rendered="\#\{verificationBacking.verification.verified\}"}{/}
+		
+		\fentry{failed-otxt}{<h:outputText>}{Text zur keiner erfolgreichen Verifizierung.}{value="\#\{texts.fialed\}"}{rendered="\#\{not verificationBacking.verification.verified\}"}{/}
+		
 		\fentry{go-to-home-cbtn}{<h:commandButton>}{Button zur Weiterleitung auf die Homepage bei erfolgreicher Verifizierung. Ansonsten wird auf \emph{welcome.xhtml} weiter geleitet.}{/}{/}
 
 	}
