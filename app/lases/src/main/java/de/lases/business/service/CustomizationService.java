@@ -25,15 +25,15 @@ public class CustomizationService {
 
 
     /**
-     * Sets the applications settings determining the look and feel.
+     * Sets the application's settings, that determine its look and feel.
      *
      * @param systemSettings The system's settings.
      */
-    public void change(SystemSettings systemSettings) {
+    public void update(SystemSettings systemSettings) {
     }
 
     /**
-     * @return The current settings of the system.
+     * @return The current settings of the system, that determine its look and feel.
      */
     public SystemSettings get() {
         return null;
