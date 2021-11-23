@@ -27,7 +27,9 @@
 \newcommand{\fentry}[6]{\footnotesize#1 &\footnotesize#2 &\footnotesize#3 &\footnotesize#4 &\footnotesize#5 &\footnotesize#6\\\hline}
 
 \localauthor{Stefanie Gürster}
-Im Allgemeinen gilt für die Benachrichtigung an den Benutzer folgende Konvention: Ist eine Benutzereingabe nicht valide so wird die Nachricht direkt an dem Eingabefeld angezeigt. Informiert die Nachricht lediglich den Benutzer (z.B. Erfolgreiches Speichern), so wird sie \hyperref[fclt:main]{global} angezeigt
+Im Allgemeinen gilt für die Benachrichtigung an den Benutzer folgende Konvention: Ist eine Benutzereingabe nicht valide so wird die Nachricht direkt an dem Eingabefeld angezeigt. Wird also ein Validator verwendet, so wird auch an dieser Stelle ein \emph{<h:message for=''id"/>} verwendet. Informiert die Nachricht lediglich den Benutzer (z.B. Erfolgreiches Speichern), so wird sie \hyperref[fclt:main]{global} angezeigt.
+
+Formulare werden in den Tabellen nicht explizit genannt. Sie werden aber überall verwendet, wo auch Informationen des Benutzers übermittelt werden müssen.
 
 \subsection{Namenskonvention}
 
