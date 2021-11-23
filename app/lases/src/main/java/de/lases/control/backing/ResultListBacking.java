@@ -35,20 +35,6 @@ public class ResultListBacking implements Serializable {
     @Inject
     private UserService userService;
 
-    private SubmissionState stateFilterSelectSub;
-
-    private SubmissionState stateFilterSelectEdit;
-
-    private SubmissionState stateFilterSelectReview;
-
-    private DateSelect dateFilterSelectSub;
-
-    private DateSelect dateFilterSelectEdit;
-
-    private DateSelect dateFilterSelectReview;
-
-    private DateSelect dateFilterSelectForum;
-
     private Pagination<Submission> submissionPagination;
 
     private Pagination<Submission> reviewedPagination;
@@ -64,112 +50,6 @@ public class ResultListBacking implements Serializable {
      */
     @PostConstruct
     public void init() {
-    }
-
-    public SubmissionState getStateFilterSelectSub() {
-        return stateFilterSelectSub;
-    }
-
-    /**
-     * Set the {@code SubmissionState} which the user wants to filter for the
-     * table with his own submissions.
-     *
-     * @param stateFilterSelectSub The submission state the user wants to filter
-     *                             after.
-     */
-    public void setStateFilterSelectSub(SubmissionState stateFilterSelectSub) {
-        this.stateFilterSelectSub = stateFilterSelectSub;
-    }
-
-    public SubmissionState getStateFilterSelectEdit() {
-        return stateFilterSelectEdit;
-    }
-
-    /**
-     * Set the {@code SubmissionState} which the user wants to filter for the
-     * table with his edited submissions.
-     *
-     * @param stateFilterSelectEdit The submission state the user wants to
-     *                              filter after.
-     */
-    public void setStateFilterSelectEdit(SubmissionState stateFilterSelectEdit) {
-        this.stateFilterSelectEdit = stateFilterSelectEdit;
-    }
-
-    public SubmissionState getStateFilterSelectReview() {
-        return stateFilterSelectReview;
-    }
-
-    /**
-     * Set the {@code SubmissionState} which the user wants to filter for the
-     * table with his reviewed submissions.
-     *
-     * @param stateFilterSelectReview The submission state the user wants to
-     *                                filter after.
-     */
-    public void setStateFilterSelectReview(
-            SubmissionState stateFilterSelectReview) {
-        this.stateFilterSelectReview = stateFilterSelectReview;
-    }
-
-    public DateSelect getDateFilterSelectSub() {
-        return dateFilterSelectSub;
-    }
-
-    /**
-     * Set the {@code DateSelect} which the user wants to filter for the
-     * table with his own submissions.
-     *
-     * @param dateFilterSelectSub The date filter option the user wants to
-     *                             filter after.
-     */
-    public void setDateFilterSelectSub(DateSelect dateFilterSelectSub) {
-        this.dateFilterSelectSub = dateFilterSelectSub;
-    }
-
-    public DateSelect getDateFilterSelectEdit() {
-        return dateFilterSelectEdit;
-    }
-
-    /**
-     * Set the {@code DateSelect} which the user wants to filter for the
-     * table with his edited submissions.
-     *
-     * @param dateFilterSelectEdit The date filter option the user wants to
-     *                             filter after.
-     */
-    public void setDateFilterSelectEdit(DateSelect dateFilterSelectEdit) {
-        this.dateFilterSelectEdit = dateFilterSelectEdit;
-    }
-
-    public DateSelect getDateFilterSelectReview() {
-        return dateFilterSelectReview;
-    }
-
-    /**
-     * Set the {@code DateSelect} which the user wants to filter for the
-     * table with his reviewed submissions.
-     *
-     * @param dateFilterSelectReview The date filter option the user wants to
-     *                             filter after.
-     */
-    public void setDateFilterSelectReview(DateSelect dateFilterSelectReview) {
-        this.dateFilterSelectReview = dateFilterSelectReview;
-    }
-
-    public DateSelect getDateFilterSelectForum() {
-        return dateFilterSelectForum;
-    }
-
-    /**
-     * Set the {@code DateSelect} which the user wants to filter for the
-     * table with scientific forums.
-     *
-     * @param dateFilterSelectForum The date filter option the user wants to
-     *                             filter after.
-     */
-    public void setDateFilterSelectForum(DateSelect dateFilterSelectForum) {
-        this.dateFilterSelectForum = dateFilterSelectForum;
     }
 
     /**
