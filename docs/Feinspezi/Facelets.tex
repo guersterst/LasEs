@@ -126,7 +126,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{select-editor-slctom}{<h:selectOneMenu>}{Auswahländerung des verwaltenden Editors}{value="\#\{toolbarBacking.editorInput.firstName + toolbarBacking.editorInput.lastName\}" \newline title="\#\{help.selectEditor\}"}{/}{/}
 
-		\fentry{/}{<f:selectItems>}{Liste der möglichen Editoren.}{value="\#\{toolbar.editors\}" \newline var="user" \newline itemLabel="\#\{user.firstName + user.lastName\}" \newline itemValue="\#\{entry\}"}{}{}
+		\fentry{/}{<f:selectItems>}{Liste der möglichen Editoren.}{value="\#\{toolbar.editors\}" \newline var="user" \newline itemLabel="\#\{user.firstName + ' ' + user.lastName\}" \newline itemValue="\#\{entry\}"}{}{}
 
 		\fentry{save-editor-cbtn}{<h:commandButton>}{Speichern der Änderung des Editors.}{value="\#\{label.saveEditor\}" \newline action=\newline"\#\{toolbarBacking.chooseNewManagingEditor\}" \newline title="\#\{help.saveEditor\}"}{/}{/}
 
@@ -294,7 +294,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{date-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{homepageBacking.dateFilterSelectSub\}" \newline title="\#\{help.dateSelect\}"}{/}{/}
 
-		\fentry{/}{<f:selectItems>}{Mögliche Filterung des Datums.}{value="\#\{homepageBacking.dateSelects\}" \newline var="entry" \newline itemLabel="\#\{entry.toString()\}" \newline itemValue="\#\{entry\}"}{/}{/}
+		\fentry{/}{<f:selectItems>}{Mögliche Filterung des Datums.}{value="\#\{homepageBacking.dateSelects\}" \newline var=''select" \newline itemLabel="\#\{labels['dateSelect.' += select]\}" \newline itemValue="\#\{select\}"}{/}{/}
 
 		\fentry{date-otxt}{<h:outputText>}{Abgabedatum des Papers.}{value="\#\{var.submissionTime\}"}{/}{convertDateTime \newline pattern=""yyyy-MM-dd"}
 
@@ -306,7 +306,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{state-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Status.}{value="\#\{homepageBacking.stateFilterSelectSub\}" \newline title="\#\{help.stateSubSelect\}"}{/}{/}
 
-		\fentry{/}{<f:selectItems>}{Mögliche Filterung des Status.}{value="\#\{homepageBacking.submissionStates\}" \newline var="entry" \newline itemLabel="\#\{entry.toString()\}" \newline itemValue="\#\{entry\}"}{/}{/}
+		\fentry{/}{<f:selectItems>}{Mögliche Filterung des Status.}{value="\#\{homepageBacking.submissionStates\}" \newline var=''select" \newline itemLabel="\#\{labels['stateSelect.' += select]\}" \newline itemValue="\#\{select\}"}{/}{/}
 
 		\fentry{state-otxt}{<h:outputText>}{Status der Einreichung.}{value="\#\{var.state\}"}{/}{/}
 
@@ -342,7 +342,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{state-slctom}{<h:selectOneMenu>}{Status der Submission.}{value="\#\{submissionBacking.submission.state\}"}{readonly="\#\{not submissionBacking.sessionInformation.user.editor\}"}{/}
 
-		\fentry{/}{<f:selectItems>}{Auswahl des Status.}{value="\#\{submissionBacking.submissionState\}"\newline var="entry" \newline itemLabel="\#\{entry.toString()\}" \newline itemValue="\#\{entry\}"}{/}{/}
+		\fentry{/}{<f:selectItems>}{Auswahl des Status.}{value="\#\{submissionBacking.submissionState\}"\newline var=''select" \newline itemLabel="\#\{labels['subStateSelect.' += select]\}" \newline itemValue="\#\{select\}"}{/}{/}
 
 		\fentry{state-otxt}{<h:outputText>}{Status der Einreichung.}{value="\#\{submissionBacking.submission.state\}"}{/}{/}
 
@@ -373,7 +373,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{date-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{submissionBacking.dateFilterSelectPaper\}" \newline title="\#\{help.dateSelect\}"}{/}{/}
 
-		\fentry{/}{<f:selectItems>}{Mögliche Filterung des Datums.}{value="\#\{submissionBacking.dateSelect\}" \newline var="entry" \newline itemLabel="\#\{entry.toString()\}" \newline itemValue="\#\{entry\}"}{/}{/}
+		\fentry{/}{<f:selectItems>}{Mögliche Filterung des Datums.}{value="\#\{submissionBacking.dateSelect\}" \newline var=''select" \newline itemLabel="\#\{labels['dateSelect.' += select]\}" \newline itemValue="\#\{select\}"}{/}{/}
 
 		\fentry{date-otxt}{<h:outputText>}{Abgabedatum des Papers.}{value="\#\{var.uploadTime\}"}{/}{convertDateTime \newline pattern=""yyyy-MM-dd"}
 
@@ -410,7 +410,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{date-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{submissionBacking.dateFilterSelectReview\}" title="\#\{help.dateSelect\}"}{/}{/}
 
-		\fentry{/}{<f:selectItems>}{Mögliche Filterung des Datums.}{value="\#\{dateSelect\}" \newline var="entry" itemValue="\#\{entry\}" itemLabel=\newline"\#\{entry.toString()\}"}{/}{/}
+		\fentry{/}{<f:selectItems>}{Mögliche Filterung des Datums.}{value="\#\{submissionBacking.dateSelect\}" \newline var=''select" itemValue="\#\{select\}" itemLabel=\newline"\#\{labels['dateSelect.' += select]\}"}{/}{/}
 
 		\fentry{date-otxt}{<h:outputText>}{Abgabedatum des Gutachtens.}{value="\#\{var.timestampUpdloaded\}"}{/}{convertDateTime \newline pattern=""yyyy-MM-dd"}
 
@@ -469,7 +469,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{editor-slctom}{<h:selectOneMenu>}{Angabe eines Editors}{value="\#\{newSubmissionBacking.selectedEditor\}"}{/}{/}
 
-		\fentry{editor-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{value="\#\{newSubmissionBacking.editors\}"}{/}{/}
+		\fentry{editor-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{value="\#\{newSubmissionBacking.editors\}" \newline var=''editor" \newline itemLabel="\#\{editor.user.firstName + ' ' + editor.user.lastName\}"}{/}{/}
 
 		\fentry{pfd-upload-ifile}{<h:inputText>}{Angabe der Abgabedatei.}{value="\#\{newSubmissionBacking.uploadedPDF\}"}{/}{required="true" \newline requiredMessage=\newline "\#\{message.inputFile\}"}
 
@@ -513,7 +513,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	\ftable{scientificForumList}{\textbf{scientificForumList.xhtml} Hier erhalten die Nutzer eine Übersicht über alle wissenschaftliche Foren.}{
 		\fentry{date-select-slctom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{scientificForumListBacking.deadlineFilterSelect\}"}{/}{/}
 
-		\fentry{deadline-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{value="\#\{scientificForumListBacking.dateSelects\}"}{/}{/}
+		\fentry{deadline-lst}{<f:selectItems>}{Liste der Auswahlmöglichkeiten}{value="\#\{scientificForumListBacking.dateSelects\}" \newline var=''"select" \newline itemLabel="\#\{labels['dateSelect.' += select]\}" \newline itemValue="\#\{select\}"}{/}{/}
 
 		\fentry{forums-pagination-pg}{<pg:pagination>}{Liste aller Foren im System.}{paginator="\#\{scientificForumListBacking.scientificForumPagination\}"}{/}{/}
 
@@ -656,7 +656,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 	\fentry{deadline-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{scientificForumBacking.dateFilterSelectSub\}" title="\#\{help.deadlineSelect\}"}{/}{/}
 
-	\fentry{deadline-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{value="\#\{scientificForumBacking.dateSelects\}"}{/}{/}
+	\fentry{deadline-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{value="\#\{scientificForumBacking.dateSelects\}" \newline var=''select" \newline itemLabel="\#\{labels['dateSelect.' += select]\}" \newline itemValue="\#\{select\}"}{/}{/}
 
 	\fentry{date-otxt}{<h:outputText>}{Abgabedatum der Einreichung.}{value="\#\{var.submissionTime\}"}{/}{convertDateTime \newline pattern=""yyyy-MM-dd"}
 
@@ -668,7 +668,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 	\fentry{state-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Status.}{value="\#\{scientificForumBacking.stateFilterSelectSub\}" title="\#\{help.stateSubSelect\}"}{/}{/}
 
-	\fentry{state-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{value="\#\{scientificForumBacking.submissionStates\}"}{/}{/}
+	\fentry{state-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{value="\#\{scientificForumBacking.submissionStates\}" \newline var=''select" \newline itemLabel="\#\{labels['subStateSelect.' += select]\}" \newline itemValue="\#\{select\}"}{/}{/}
 
 	\fentry{state-otxt}{<h:outputText>}{Status der Einreichung.}{value="\#\{var.state\}"}{/}{/}
 
@@ -770,7 +770,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	\ftable{administration}{\textbf{administration.xhtml} Hier kann ein Administrator Konfigurationen vornehmen.}{
 		\fentry{select-theme-slctom}{<h:selectOneMenu>}{Auswahl eines Farbthemas.}{value="\#\{administrationBacking.systemSettings.style\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
 
-		\fentry{styles-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{value="\#\{administrationBacking.styles\}"}{/}{/}
+		\fentry{styles-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{value="\#\{administrationBacking.styles\}" \newline var=''select" \newline itemLabel="\#\{labels['theme.' += select]\}" \newline itemValue="\#\{select\}"}{/}{/}
 
 		\fentry{logo-img}{<h:graphicImage>}{Logo des Systems.}{value="\#\{administrationBacking.systemSettings.logoImage\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
 
