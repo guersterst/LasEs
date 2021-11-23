@@ -47,6 +47,12 @@ public class NavigationBacking {
         return null;
     }
 
+    /**
+     * Set the parameters for the result lists, which specifically contains a
+     * global search word.
+     *
+     * @return The parameters for the result list.
+     */
     public ResultListParameters getResultListParameters() {
         return resultListParameters;
     }
