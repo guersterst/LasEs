@@ -30,7 +30,8 @@ public class ScientificForumListBacking implements Serializable {
     private Pagination<ScientificForum> scientificForumPagination;
 
     /**
-     * Initialize the list by getting the first page from the data source.
+     * Initialize the scientific forum pagination and load the first page from
+     * the datasource.
      */
     @PostConstruct
     public void init() {
