@@ -1,6 +1,7 @@
 package de.lases.control.backing;
 
 import de.lases.business.service.CustomizationService;
+import de.lases.control.exception.IllegalAccessException;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
@@ -24,6 +25,9 @@ public class AdministrationBacking {
 
     /**
      * Loads the current system settings from the datasource.
+     *
+     * @throws IllegalAccessException If the accessing user is not an
+     *                                administrator.
      */
     @PostConstruct
     public void init() {
