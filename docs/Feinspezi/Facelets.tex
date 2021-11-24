@@ -71,7 +71,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \captionsetup{width=\linewidth}
 
 \ftable{navigation}{\textbf{navigation.xhtml} ist die Kopfzeile der Webanwendung. Diese bietet die Suchfunktion, Links zu verschiedenen Listen und dem Profil an.}{
-	\fentry{logo-gimg}{<h:graphicImage>}{Logo der Applikation.}{value="\#\{navigationBacking.systemSettings.logoImage\}"\}"}{/}{/}
+	\fentry{logo-gimg}{<h:graphicImage>}{Logo der Applikation.}{value="\#\{'/image/logo'\}"\}"}{/}{/}
 
 	\fentry{direct-to-home-lnk}{<h:link>}{Weiterleitung zur Homepage.}{outcome="/views/authenticated/homepage" \newline title="\#\{help.toHome\}"}{disabled="\#\{navigationBacking.sessionInformation.user == null\}"}{/}
 
@@ -560,7 +560,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	
 	\fentry{/}{<f:viewAction>}{Laden des entsprechenden Profils.}{action="\#\{profileBacking.onLoad\}"}{/}{/}
 
-	\fentry{avatar-gimg}{<h:graphicImage>}{Aktueller Avatar.}{value="\#\{'image/'.concat(profileBacking.user.id)\}"}{/}{/}
+	\fentry{avatar-gimg}{<h:graphicImage>}{Aktueller Avatar.}{value="\#\{'/image/avatar/'.concat(profileBacking.user.id)\}"}{/}{/}
 
 	\fentry{new-avatar-ifile}{<h:inputFile>}{Hochladen eines neuen Avatars.}{value="\#\{profileBacking.uploadedAvatar\}"}{rendered="\#\{profileBacking.hasViewerEditRights\}"}{/}
 
@@ -797,7 +797,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{styles-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{value="\#\{administrationBacking.styles\}" \newline var=''select" \newline itemLabel="\#\{labels['theme.' += select]\}" \newline itemValue="\#\{select\}"}{/}{/}
 
-		\fentry{logo-img}{<h:graphicImage>}{Logo des Systems.}{value="\#\{administrationBacking.systemSettings.logoImage\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
+		\fentry{logo-gimg}{<h:graphicImage>}{Logo des Systems.}{value="\#\{'/image/logo'\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
 
 		\fentry{change-logo-ifile}{<h:inputFile>}{Hochladen eines neuen Logos.}{title="\#\{help.uploadNewLogo\}"\newline value="\#\{administrationBacking.uploadedImage\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
 
