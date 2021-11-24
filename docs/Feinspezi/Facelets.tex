@@ -239,6 +239,11 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \begin{samepage}
 
 	\ftable{verification}{\textbf{verification.xhtml} Wird bei erfolgreicher Verifikation der E-Mail angezeigt.}{
+		
+		\fentry{/}{<f:viewParam>}{Random der Verifikation.}{value="\#\{verificationBacking.verifcation.validationRandom\}" \newline name="validationRandom"}{/}{/}
+		
+		\fentry{/}{<f:viewAction>}{Verifizierung.}{action="\#\{verificationBacking.onLoad\}"}{/}{/}
+		
 		\fentry{success-otxt}{<h:outputText>}{Text zur erfolgreichen Verifizierung.}{value="\#\{texts.success\}"}{rendered="\#\{verificationBacking.verification.verified\}"}{/}
 
 		\fentry{failed-otxt}{<h:outputText>}{Text zur keiner erfolgreichen Verifizierung.}{value="\#\{texts.fialed\}"}{rendered="\#\{not verificationBacking.verification.verified\}"}{/}
@@ -341,7 +346,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{/}{<f:viewParam>}{Id der Einreichung.}{value="\#\{submissionBacking.submission.id\}" \newline name="id"}{/}{/}
 
-		\fentry{/}{<f:viewAction>}{Laden der entsprechenden Einreichung.}{action="\#\{submissionBacking.onLoad\}"}{}{}
+		\fentry{/}{<f:viewAction>}{Laden der entsprechenden Einreichung.}{action="\#\{submissionBacking.onLoad\}"}{/}{/}
 
 		\fentry{upload-revision-ifile}{<h:inputFile>}{Upload einer Revision.}{value="\#\{submissionBacking.uploadedRevisionPDF\}" }{rendered="\#\{submissionBacking.isViewerSubmitter\}"}{required="true" \newline requiredMessage=\newline"\#\{message.inputFile\}"}
 
@@ -550,6 +555,10 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 \ftable{profile}{\textbf{profile.xhtml} Die Profilseite eines angemeldeten Nutzers ist nur vom Nutzer selbst und vom Administrator editierbar.
 	Ein Editor besitzt nur Leserechte. Alle zuvor gespeicherten Angaben werden in den jeweiligen Feldern angezeigt.}{
+	
+	\fentry{/}{<f:viewParam>}{Id des User.}{value="\#\{profileBacking.user.id\}" \newline name="id"}{/}{/}
+	
+	\fentry{/}{<f:viewAction>}{Laden des entsprechenden Profils.}{action="\#\{profileBacking.onLoad\}"}{/}{/}
 
 	\fentry{avatar-gimg}{<h:graphicImage>}{Aktueller Avatar.}{value="\#\{'image/'.concat(profileBacking.user.id)\}"}{/}{/}
 
