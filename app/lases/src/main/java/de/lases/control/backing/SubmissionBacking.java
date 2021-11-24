@@ -42,19 +42,10 @@ public class SubmissionBacking implements Serializable {
     @Inject
     private NewReviewBacking newReviewBacking;
 
-    @Inject ToolbarBacking toolbarBacking;
+    @Inject
+    ToolbarBacking toolbarBacking;
 
     private Part uploadedRevisionPDF;
-
-    private DateSelect dateFilterSelectPaper;
-
-    private DateSelect dateFilterSelectReview;
-
-    private boolean visibleFilterInputPaper;
-
-    private boolean visibleFilterInputReview;
-
-    private boolean recommendationFilterInputReview;
 
     private Submission submission;
 
@@ -142,7 +133,8 @@ public class SubmissionBacking implements Serializable {
      * @throws IllegalAccessException If the user has no access rights for this
      *                                submission
      */
-    public void onLoad() throws IllegalAccessException { }
+    public void onLoad() throws IllegalAccessException {
+    }
 
     /**
      * Set the state of the submission, which can be SUBMITTED,
@@ -152,6 +144,7 @@ public class SubmissionBacking implements Serializable {
     }
 
     // TODO: hier IOException? Ueberhaupt an den Service deligieren?
+
     /**
      * Download the PDF belonging to a specific review.
      *
@@ -258,107 +251,6 @@ public class SubmissionBacking implements Serializable {
      */
     public void setUploadedRevisionPDF(Part uploadedRevisionPDF) {
         this.uploadedRevisionPDF = uploadedRevisionPDF;
-    }
-
-    /**
-     * Get the selected filter option for filtering papers after date.
-     *
-     * @return The selected filter option for filtering papers after date.
-     */
-    public DateSelect getDateFilterSelectPaper() {
-        return dateFilterSelectPaper;
-    }
-
-    /**
-     * Set the selected filter option for filtering papers after date.
-     *
-     * @param dateFilterSelectPaper The selected filter option for filtering
-     *                              papers after date.
-     */
-    public void setDateFilterSelectPaper(DateSelect dateFilterSelectPaper) {
-        this.dateFilterSelectPaper = dateFilterSelectPaper;
-    }
-
-    /**
-     * Get the selected filter option for filtering review after date.
-     *
-     * @return The selected filter option for filtering review after date.
-     */
-    public DateSelect getDateFilterSelectReview() {
-        return dateFilterSelectReview;
-    }
-
-    /**
-     * Set the selected filter option for filtering reviews after date.
-     *
-     * @param dateFilterSelectReview The selected filter option for filtering
-     *                               reviews after date.
-     */
-    public void setDateFilterSelectReview(DateSelect dateFilterSelectReview) {
-        this.dateFilterSelectReview = dateFilterSelectReview;
-    }
-
-    /**
-     * Set the selected filter option for filtering papers after visibility.
-     *
-     * @return The selected filer option for filtering papers afte visibiltiy.
-     */
-    public boolean isVisibleFilterInputPaper() {
-        return visibleFilterInputPaper;
-    }
-
-    /**
-     * Set the selected filter option for filtering papers after visibility.
-     *
-     * @param visibleFilterInputPaper The selected filter option for filtering
-     *                                papers after visibility.
-     */
-    public void setVisibleFilterInputPaper(boolean visibleFilterInputPaper) {
-        this.visibleFilterInputPaper = visibleFilterInputPaper;
-    }
-
-    /**
-     * Get the selected filter option for filtering review after visibility.
-     *
-     * @return The selected filter option for filtering reviews after
-     *         visibility.
-     */
-    public boolean isVisibleFilterInputReview() {
-        return visibleFilterInputReview;
-    }
-
-    /**
-     * Set the selected filter option for filtering reviews after visibility.
-     *
-     * @param visibleFilterInputReview The selected filter option for filtering
-     *                                 reviews after visibility.
-     */
-    public void setVisibleFilterInputReview(boolean visibleFilterInputReview) {
-        this.visibleFilterInputReview = visibleFilterInputReview;
-    }
-
-    /**
-     * Get the selected filter option for filtering reviews after reviewer
-     * recommendation.
-     *
-     * @return The selected filter option for filtering reviews after reviewr
-     *         recommendation.
-     */
-    public boolean isRecommendationFilterInputReview() {
-        return recommendationFilterInputReview;
-    }
-
-    /**
-     * Set the selected filter option for filtering reviews after reviewer
-     * recommendation.
-     *
-     * @param recommendationFilterInputReview The selected filter option for
-     *                                        filtering reviews after reviewer
-     *                                        recommendation.
-     */
-    public void setRecommendationFilterInputReview(
-            boolean recommendationFilterInputReview) {
-        this.recommendationFilterInputReview = recommendationFilterInputReview;
     }
 
     /**

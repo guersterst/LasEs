@@ -19,18 +19,9 @@ public abstract class Pagination<T> {
 
     /**
      * Meta-information about this pagination.
+     * Includes information about the filtering and sorting.
      */
     private final ResultListParameters resultListParameters;
-
-    /**
-     * Selected date filtering.
-     */
-    private DateSelect dateSelect;
-
-    /**
-     * Selected submission-state filtering.
-     */
-    private SubmissionState submissionState;
 
     /**
      * Create a pagination instance. loadData() and calculateNumberPages() needs
@@ -129,41 +120,5 @@ public abstract class Pagination<T> {
      */
     public List<T> getEntries() {
         return entries;
-    }
-
-    /**
-     * Get the selected date filtering for all dates in this pagination.
-     *
-     * @return don't care, future, past
-     */
-    public DateSelect getDateSelect() {
-        return dateSelect;
-    }
-
-    /**
-     * Set the filtering for dates.
-     *
-     * @param dateSelect filter by.
-     */
-    public void setDateSelect(DateSelect dateSelect) {
-        this.dateSelect = dateSelect;
-    }
-
-    /**
-     * Get the filtering for a submission state.
-     *
-     * @return {@code SubmissionState}
-     */
-    public SubmissionState getSubmissionState() {
-        return submissionState;
-    }
-
-    /**
-     * Set the filtering for submission.
-     *
-     * @param submissionState {@code SubmissionState}
-     */
-    public void setSubmissionState(SubmissionState submissionState) {
-        this.submissionState = submissionState;
     }
 }
