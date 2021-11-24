@@ -51,6 +51,23 @@ public class ProfileBacking implements Serializable {
     /**
      * Initializes the dto objects and gets the global list of science fields
      * from the datasource.
+     * The following objects are initialized by this method:
+     * <ul>
+     *     <li> The uploaded avatar </li>
+     *     <li> The user object of the profile </li>
+     *     <li>
+     *         the list of science fields of the user this profile is about
+     *     </li>
+     *     <li>
+     *         the list of global science fields
+     *     </li>
+     *     <li>
+     *         the science field that is currently selected to be added
+     *     </li>
+     *     <li>
+     *         the user for the admin password input
+     *     </li>
+     * </ul>
      */
     @PostConstruct
     public void init() {
@@ -59,6 +76,15 @@ public class ProfileBacking implements Serializable {
     /**
      * Get the user id from the view param and load their data from the
      * datasource. This method should be called by a view action.
+     * The following data is loaded from the datasource by this method:
+     * <ul>
+     *     <li>
+     *         The user object of this profile
+     *     </li>
+     *     <li>
+     *         the list of science fields of the user
+     *     </li>
+     * </ul>
      */
     public void onLoad() { }
 
@@ -124,7 +150,11 @@ public class ProfileBacking implements Serializable {
      */
     public int getNumberOfSubmissions() { return -1; }
 
-
+    /**
+     * Get the avatar that the user uploaded.
+     *
+     * @return The avatar that the user uploaded.
+     */
     public Part getUploadedAvatar() {
         return uploadedAvatar;
     }
@@ -138,6 +168,11 @@ public class ProfileBacking implements Serializable {
         this.uploadedAvatar = uploadedAvatar;
     }
 
+    /**
+     * Get the user whose profile this is.
+     *
+     * @return The user whose profile this is.
+     */
     public User getUser() {
         return user;
     }
@@ -160,6 +195,11 @@ public class ProfileBacking implements Serializable {
         return usersScienceFields;
     }
 
+    /**
+     * Set the science field that is selected to be added.
+     *
+     * @return The science field that is selected to be added.
+     */
     public ScienceField getSelectedScienceField() {
         return selectedScienceField;
     }
@@ -174,6 +214,12 @@ public class ProfileBacking implements Serializable {
         this.selectedScienceField = selectedScienceField;
     }
 
+    /**
+     * Get the user that holds the password the admin has to enter on the
+     * pop-up.
+     *
+     * @return User that holds the admin password.
+     */
     public User getAdminPasswordInPopup() {
         return adminPasswordInPopup;
     }
