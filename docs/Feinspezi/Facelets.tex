@@ -301,11 +301,11 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{/}{<f:selectItems>}{Mögliche Filterung des Datums.}{value="\#\{homepageBacking.dateSelects\}" \newline var=''select" \newline itemLabel="\#\{labels['dateSelect.' += select]\}" \newline itemValue="\#\{select\}"}{/}{/}
 
-		\fentry{date-otxt}{<h:outputText>}{Abgabedatum des Papers.}{value="\#\{var.submissionTime\}"}{/}{convertDateTime \newline pattern=""yyyy-MM-dd" \newline type="localDate"}
+		\fentry{date-otxt}{<h:outputText>}{Abgabedatum des Papers.}{value="\#\{var.submissionTime\}"}{/}{convertDateTime \newline type="localDate"}
 
 		\fentry{deadline-ssc}{<ssc:sortsearchcolumn>}{Spalte für die Deadline der Revision.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.deadline\}"}{/}{/}
 
-		\fentry{deadline-otxt}{<h:outputText>}{Deadline des Papers.}{value="\#\{var.deadlineRevision\}"}{/}{convertDateTime \newline pattern=""yyyy-MM-dd" \newline type="localDate"}
+		\fentry{deadline-otxt}{<h:outputText>}{Deadline des Papers.}{value="\#\{var.deadlineRevision\}"}{/}{convertDateTime \newline  type="localDate"}
 
 		\fentry{state-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Status der Einreichung.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.stateSub\}"}{/}{/}
 
@@ -388,7 +388,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{/}{<f:selectItems>}{Mögliche Filterung des Datums.}{value="\#\{submissionBacking.dateSelect\}" \newline var=''select" \newline itemLabel="\#\{labels['dateSelect.' += select]\}" \newline itemValue="\#\{select\}"}{/}{/}
 
-		\fentry{date-otxt}{<h:outputText>}{Abgabedatum des Papers.}{value="\#\{var.uploadTime\}"}{/}{convertDateTime \newline pattern=""yyyy-MM-dd" \newline type="localDate"}
+		\fentry{date-otxt}{<h:outputText>}{Abgabedatum des Papers.}{value="\#\{var.uploadTime\}"}{/}{convertDateTime \newline type="localDate"}
 
 		\fentry{release-revision-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Freigabestatus.}{paginator="\#\{submissionBacking.paperPagination\}"\newline columnNamei18n="\#\{label.releaseRevision\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor || submissionBacking.sessionInformation.user.reviewer \}"}{/}
 
@@ -425,7 +425,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{/}{<f:selectItems>}{Mögliche Filterung des Datums.}{value="\#\{submissionBacking.dateSelect\}" \newline var=''select" itemValue="\#\{select\}" itemLabel=\newline"\#\{labels['dateSelect.' += select]\}"}{/}{/}
 
-		\fentry{date-otxt}{<h:outputText>}{Abgabedatum des Gutachtens.}{value="\#\{var.timestampUpdloaded\}"}{/}{convertDateTime \newline pattern=""yyyy-MM-dd" \newline type="localDate"}
+		\fentry{date-otxt}{<h:outputText>}{Abgabedatum des Gutachtens.}{value="\#\{var.timestampUpdloaded\}"}{/}{convertDateTime \newline type="localDate"}
 
 		\fentry{release-review-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Freigabestatus.}{paginator="\#\{submissionBacking.reviewPagination\}"\newline columnNamei18n="\#\{label.releaseReview\}"}{rendered="\#\{submissionBacking.sessionInfromation.user.editor\}"}{/}
 
@@ -673,11 +673,11 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 	\fentry{deadline-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{value="\#\{scientificForumBacking.dateSelects\}" \newline var=''select" \newline itemLabel="\#\{labels['dateSelect.' += select]\}" \newline itemValue="\#\{select\}"}{/}{/}
 
-	\fentry{date-otxt}{<h:outputText>}{Abgabedatum der Einreichung.}{value="\#\{var.submissionTime\}"}{/}{convertDateTime \newline type="localDate" \newline pattern=""yyyy-MM-dd" \newline type="localDate"}
+	\fentry{date-otxt}{<h:outputText>}{Abgabedatum der Einreichung.}{value="\#\{var.submissionTime\}"}{/}{convertDateTime \newline type="localDate"}
 
 	\fentry{deadline-ssc}{<ssc:sortsearchcolumn>}{Spalte für die Deadline der Revision.}{paginator="\#\{scientificForumBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.deadline\}"}{/}{/}
 
-	\fentry{deadline-otxt}{<h:outputText>}{Deadline für eine Revision.}{value="\#\{var.deadlineRevision\}"}{/}{convertDateTime \newline type="localDate" \newline pattern=""yyyy-MM-dd" \newline type="localDate"}
+	\fentry{deadline-otxt}{<h:outputText>}{Deadline für eine Revision.}{value="\#\{var.deadlineRevision\}"}{/}{convertDateTime \newline type="localDate"}
 
 	\fentry{state-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Status der Einreichung.}{paginator="\#\{scientificForumBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.stateSub\}"}{/}{/}
 
