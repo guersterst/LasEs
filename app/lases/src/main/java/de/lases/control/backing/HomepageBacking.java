@@ -56,7 +56,7 @@ public class HomepageBacking implements Serializable {
      *         the reviewed submission pagination.
      *     </li>
      *     <li>
-     *         the reviewed submission pagination.
+     *         the edited submission pagination.
      *     </li>
      * </ul>
      * Load the following data from the datasource:
@@ -68,7 +68,7 @@ public class HomepageBacking implements Serializable {
      *         the fist page of the reviewed submission pagination.
      *     </li>
      *     <li>
-     *         the first page of the reviewed submission pagination.
+     *         the first page of the edited submission pagination.
      *     </li>
      * </ul>
      */

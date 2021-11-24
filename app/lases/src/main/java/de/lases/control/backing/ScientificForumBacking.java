@@ -60,15 +60,67 @@ public class ScientificForumBacking implements Serializable {
     private List<ScienceField> scienceFields;
 
     /**
-     * Initialized the dtos.
+     * Initialize the dtos and load data from the datasource where possible.
+     * Create objects for:
+     * <ul>
+     *     <li>
+     *         this scientific forum
+     *     </li>
+     *     <li>
+     *         The user input for a new editor
+     *     </li>
+     *     <li>
+     *         the science field input
+     *     </li>
+     *     <li>
+     *         the list of editors for this scientific forum
+     *     </li>
+     *     <li>
+     *         the list of science fields for this scientific forum
+     *     </li>
+     *     <li>
+     *         the list of global science fields
+     *     </li>
+     *     <li>
+     *         the own submission pagination.
+     *     </li>
+     *     <li>
+     *         the reviewed submission pagination.
+     *     </li>
+     *     <li>
+     *         the edited submission pagination.
+     *     </li>
+     * </ul>
+     * Additionally, load the global list of science fields from the datasource.
      */
     @PostConstruct
     public void init() {
     }
 
     /**
-     * Gets the id of the scientific forum in question from view params and
-     * loads the data needed to display the page.
+     * Gets the id of the scientific forum in question from view params (after
+     * being called by a view action) and loads the data needed to display the
+     * page from the datasource:
+     * <ul>
+     *     <li>
+     *         th dto for this scientific forum
+     *     </li>
+     *     <li>
+     *         the list of editors for this scientific forum
+     *     </li>
+     *     <li>
+     *         the list of science fields for this scientific forum
+     *     </li>
+     *     <li>
+     *         the first page of the own submission pagination.
+     *     </li>
+     *     <li>
+     *         the fist page of the reviewed submission pagination.
+     *     </li>
+     *     <li>
+     *         the first page of the edited submission pagination.
+     *     </li>
+     * </ul>
      */
     public void onLoad() {
     }
