@@ -344,7 +344,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 	\ftable{submission}{\textbf{submission.xhtml} ist die Übersichtsseite einer Abgabe.
 		Hier werden alle mit der Einreichung verbundenen Aktivitäten abgebildet.}{
-		\fentry{/}{<ui:include>}{\hyperref[flt:toolbar]{Seitenleiste mit Tools.}}{rendered="\#\{submissionBacking.sessionInformation.user.editor\}"}{/}
+		\fentry{/}{<ui:include>}{\hyperref[flt:toolbar]{Seitenleiste mit Tools.}}{rendered="\#\{submissionBacking.loggedInUserIsEditor\}"}{/}
 
 		\fentry{/}{<f:viewParam>}{Id der Einreichung.}{value="\#\{submissionBacking.submission.id\}" \newline name="id"}{/}{/}
 		
@@ -356,13 +356,13 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{upload-clnk}{<h:commandLink>}{Ausführen des Uploads.}{value="\#\{labels.uploadFile\}" \newline action="\#\{submissionBacking.uploadPDF\}" \newline includeViewParams="true" title=\newline"\#\{help.uploadRevision\}"}{rendered="\#\{submissionBacking.isViewerSubmitter\}"}{/}
 
-		\fentry{new-review-cbtn}{<h:commandButton>}{Weiterleitung zur Einreichung eines neuen Gutachtens.}{value="\#\{labels.uploadReview\}" \newline action="\#\{submissionBacking.uploadReview\}" \newline title="\#\{help.uploadRevision\}"}{rendered="\#\{submissionBacking.sessionInformation.user.reviewer\}"}{/}
+		\fentry{new-review-cbtn}{<h:commandButton>}{Weiterleitung zur Einreichung eines neuen Gutachtens.}{value="\#\{labels.uploadReview\}" \newline action="\#\{submissionBacking.uploadReview\}" \newline title="\#\{help.uploadRevision\}"}{rendered="\#\{submissionBacking.loggedInUserIsReviewer\}"}{/}
 
-		\fentry{deadline-review-otxt}{<h:outputText>}{Deadline der Einreichung.}{value="\#\{submissionBacking.reviewedBy.timestampDeadline\}"}{rendered="\#\{submissionBacking.sessioninformation.user.reviewer\}"}{/}
+		\fentry{deadline-review-otxt}{<h:outputText>}{Deadline der Einreichung.}{value="\#\{submissionBacking.reviewedBy.timestampDeadline\}"}{rendered="\#\{submissionBacking.loggedInUserIsReviewer\}"}{/}
 
-		\fentry{accept-reviewing-cbtn}{<h:commandButton>}{Annahme der Rolle eines Gutachters für diese Einreichung.}{value="\#\{labels.acceptReviewing\}" \newline action="\#\{submissionBacking.acceptReviewing\}" \newline title="\#\{help.acceptReviewing\}"}{rendered="\#\{submissionBacking.sessionInformation.user.reviewer\}"}{/}
+		\fentry{accept-reviewing-cbtn}{<h:commandButton>}{Annahme der Rolle eines Gutachters für diese Einreichung.}{value="\#\{labels.acceptReviewing\}" \newline action="\#\{submissionBacking.acceptReviewing\}" \newline title="\#\{help.acceptReviewing\}"}{rendered="\#\{submissionBacking.loggedInUserIsReviewer\}"}{/}
 
-		\fentry{decline-reviewing-cbtn}{<h:command>}{Ablehnen der Rolle eines Gutachters für diese Einreichung.}{value="\#\{labels.declineReviewing\}" \newline action="\#\{submissionBacking.declineReviewing\}" \newline title="\#\{help.declineReviewing\}"}{rendered="\#\{submissionBacking.sessionInformation.user.reviewer\}"}{/}
+		\fentry{decline-reviewing-cbtn}{<h:command>}{Ablehnen der Rolle eines Gutachters für diese Einreichung.}{value="\#\{labels.declineReviewing\}" \newline action="\#\{submissionBacking.declineReviewing\}" \newline title="\#\{help.declineReviewing\}"}{rendered="\#\{submissionBacking.loggedInUserIsReviewer\}"}{/}
 
 		\fentry{state-slctom}{<h:selectOneMenu>}{Status der Submission.}{value="\#\{submissionBacking.submission.state\}"}{readonly="\#\{not submissionBacking.sessionInformation.user.editor\}"}{/}
 
@@ -401,17 +401,17 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{date-otxt}{<h:outputText>}{Abgabedatum des Papers.}{value="\#\{var.uploadTime\}"}{/}{convertDateTime \newline type="localDate"}
 
-		\fentry{release-revision-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Freigabestatus.}{paginator="\#\{submissionBacking.paperPagination\}"\newline columnNamei18n="\#\{labels.releaseRevision\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor || submissionBacking.sessionInformation.user.reviewer \}"}{/}
+		\fentry{release-revision-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Freigabestatus.}{paginator="\#\{submissionBacking.paperPagination\}"\newline columnNamei18n="\#\{labels.releaseRevision\}"}{rendered="\#\{submissionBacking.loggedInUserIsEditor || submissionBacking.loggedInUserIsReviewer \}"}{/}
 
-		\fentry{release-revision-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit Freischalten der Revision}{value="\#\{submissionBacking.paperPagination.resultListParameters.visibleFilter\}" title="\#\{help.releaseRevisionSelect\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor || submissionBacking.sessionInformation.user.reviewer \}"}{/}
+		\fentry{release-revision-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit Freischalten der Revision}{value="\#\{submissionBacking.paperPagination.resultListParameters.visibleFilter\}" title="\#\{help.releaseRevisionSelect\}"}{rendered="\#\{submissionBacking.loggedInUserIsEditor || submissionBacking.loggedInUserIsReviewer \}"}{/}
 
 		\fentry{/}{<f:selectItem>}{Revision freigeschaltet.}{itemValue="true" \newline itemLabel="\#\{labels.releaseRevisionTrue\}"}{/}{/}
 
 		\fentry{/}{<f:selectItem>}{Revision nicht freigeschaltet.}{itemValue="false" \newline itemLabel="\#\{labels.releaswRevisionFalse\}"}{/}{/}
 
-		\fentry{release-review-otxt}{<h:outputText>}{Status der Freischaltung.}{value="\#\{labels.releasedReview\}"}{rendered="\#\{var.visible \&\& submissionBacking.sessionInformation.user.reviewer\}"}{/}
+		\fentry{release-review-otxt}{<h:outputText>}{Status der Freischaltung.}{value="\#\{labels.releasedReview\}"}{rendered="\#\{var.visible \&\& submissionBacking.loggedInUserIsReviewer\}"}{/}
 
-		\fentry{release-revision-cbtn}{<h:commandButton>}{Freischalten einer Revision.}{value="\#\{labels.releaseRevision\}" action="\#\{submissionBacking.releaseRevision(var)\}" title="\#\{help.releaseRevision\}"}{rendered="\#\{submissionBacking.sessionInfromation.user.editor\}"}{/}
+		\fentry{release-revision-cbtn}{<h:commandButton>}{Freischalten einer Revision.}{value="\#\{labels.releaseRevision\}" action="\#\{submissionBacking.releaseRevision(var)\}" title="\#\{help.releaseRevision\}"}{rendered="\#\{submissionBacking.loggedInUserIsEditor\}"}{/}
 
 		\fentry{download-file-clmn}{<h:column>}{Spalten für den Download der Datei.}{/}{/}{/}
 	}
@@ -424,9 +424,9 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 		Die Elemente der Liste von Gutachten sind folgende:}{
 		\fentry{review-pg}{<pg:pagination>}{Liste aller oder der eignen Gutachten.}{paginator="\#\{submissionBacking.reviewPagination\}"}{/}{/}
 
-		\fentry{reviewer-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Namen des Gutachters.}{paginator="\#\{submissionBacking.reviewPagination\}"\newline columnNamei18n="\#\{labels.reviewerName\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor \&\& submissionBacking.sessionInformation.user.reviewer\}"}{/}
+		\fentry{reviewer-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Namen des Gutachters.}{paginator="\#\{submissionBacking.reviewPagination\}"\newline columnNamei18n="\#\{labels.reviewerName\}"}{rendered="\#\{submissionBacking.loggedInUserIsEditor \&\& submissionBacking.loggedInUserIsReviewer\}"}{/}
 
-		\fentry{reviewer-lnk}{<h:link>}{Namen des Gutachters.}{value="\#\{submissionBacking.getReviewerForReview(var)\}" \newline outcome="/views/authenticated/profile" \newline includeViewParams="true"}{rendered="\#\{submissionBacking.sessionInformation.user.editor \&\& submissionBacking.sessionInformation.user.reviewer\}"}{/}{/}
+		\fentry{reviewer-lnk}{<h:link>}{Namen des Gutachters.}{value="\#\{submissionBacking.getReviewerForReview(var)\}" \newline outcome="/views/authenticated/profile" \newline includeViewParams="true"}{rendered="\#\{submissionBacking.loggedInUserIsEditor \&\& submissionBacking.loggedInUserIsReviewer\}"}{/}{/}
 
 		\fentry{/}{<f:param>}{Parameter für id des Profil.}{value="\#\{submissionBacking.getReviewerForReview(var).id\}" name="id"}{/}{/}
 
@@ -438,9 +438,9 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{date-otxt}{<h:outputText>}{Abgabedatum des Gutachtens.}{value="\#\{var.timestampUpdloaded\}"}{/}{convertDateTime \newline type="localDate"}
 
-		\fentry{release-review-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Freigabestatus.}{paginator="\#\{submissionBacking.reviewPagination\}"\newline columnNamei18n="\#\{labels.releaseReview\}"}{rendered="\#\{submissionBacking.sessionInfromation.user.editor\}"}{/}
+		\fentry{release-review-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Freigabestatus.}{paginator="\#\{submissionBacking.reviewPagination\}"\newline columnNamei18n="\#\{labels.releaseReview\}"}{rendered="\#\{submissionBacking.loggedInUserIsEditor\}"}{/}
 
-		\fentry{release-review-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit Freischalten der Gutachten}{value="\#\{submissionBacking.reviewPagination.resultListParameters.visibleFilter\}" title="\#\{help.releaseReviewSelect\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor || submissionBacking.sessionInformation.user.reviewer \}"}{/}
+		\fentry{release-review-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit Freischalten der Gutachten}{value="\#\{submissionBacking.reviewPagination.resultListParameters.visibleFilter\}" title="\#\{help.releaseReviewSelect\}"}{rendered="\#\{submissionBacking.loggedInUserIsEditor || submissionBacking.loggedInUserIsReviewer \}"}{/}
 
 		\fentry{/}{<f:selectItem>}{Gutachten freigeschaltet.}{itemValue="true" \newline itemLabel="\#\{labels.releaseReviewTrue\}"}{/}{/}
 
@@ -448,17 +448,17 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{release-review-otxt}{<h:outputText>}{Status der Freischaltung.}{value="\#\{labels.releasedReview\}"}{rendered="\#\{var.visible\}"}{/}
 
-		\fentry{release-review-cbtn}{<h:commandButton>}{Freischalten eines Gutachtens.}{value="\#\{labels.releaseReview\}" action="\#\{submissionBacking.releaseReview(var)\}" title="\#\{help.releaseReview\}"}{rendered="\#\{submissionBacking.sessionInfromation.user.editor\}"}{/}
+		\fentry{release-review-cbtn}{<h:commandButton>}{Freischalten eines Gutachtens.}{value="\#\{labels.releaseReview\}" action="\#\{submissionBacking.releaseReview(var)\}" title="\#\{help.releaseReview\}"}{rendered="\#\{submissionBacking.loggedInUserIsEditor\}"}{/}
 
-		\fentry{recommen-dation-review-ssc}{<ssc:sortsearchcolumn>}{Spalte für die Empfehlung.}{paginator="\#\{submissionBacking.reviewPagination\}"\newline columnNamei18n="\#\{labels.recommendation\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor || submissionBacking.sessionInformation.user.reviewer}{/}
+		\fentry{recommen-dation-review-ssc}{<ssc:sortsearchcolumn>}{Spalte für die Empfehlung.}{paginator="\#\{submissionBacking.reviewPagination\}"\newline columnNamei18n="\#\{labels.recommendation\}"}{rendered="\#\{submissionBacking.loggedInUserIsEditor || submissionBacking.loggedInUserIsReviewer}{/}
 
-		\fentry{recommen-dation-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit Empfehlung.}{value="\#\{submissionBacking.reviewPagination.resultListParameters.recommendationFilter\}" \newline title="\#\{help.recommendationSelect\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor || submissionBacking.sessionInformation.user.reviewer}{/}
+		\fentry{recommen-dation-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit Empfehlung.}{value="\#\{submissionBacking.reviewPagination.resultListParameters.recommendationFilter\}" \newline title="\#\{help.recommendationSelect\}"}{rendered="\#\{submissionBacking.loggedInUserIsEditor || submissionBacking.loggedInUserIsReviewer}{/}
 
 		\fentry{/}{<f:selectItem>}{Positive Empfehlung.}{itemValue="true" \newline itemLabel="\#\{labels.recommendationTrue\}"}{/}{/}
 
 		\fentry{/}{<f:selectItem>}{Negative Empfehlung.}{itemValue="false" \newline itemLabel="\#\{labels.recommendationFalse\}"}{/}{/}
 
-		\fentry{recommen-dation-slctbc}{<h:selectBooleanCheckbox>}{Empfehlung eines Gutachters.}{value="\#\{var.acceptPaper\}" readonly="true"}{rendered="\#\{submissionBacking.sessionInformation.user.editor || submissionBacking.sessionInformation.user.reviewer}{/}
+		\fentry{recommen-dation-slctbc}{<h:selectBooleanCheckbox>}{Empfehlung eines Gutachters.}{value="\#\{var.acceptPaper\}" readonly="true"}{rendered="\#\{submissionBacking.loggedInUserIsEditor || submissionBacking.loggedInUserIsReviewer}{/}
 
 		\fentry{comment-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Kommentar des Gutachters.}{paginator="\#\{submissionBacking.reviewPagination\}"\newline columnNamei18n="\#\{labels.comment\}"}{/}{/}
 
@@ -644,39 +644,39 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 	\fentry{/}{<f:viewAction>}{Action Methode ausführen.}{action="\#\{scientificForumBacking.onLoad\}"}{/}{/}
 
-	\fentry{forum-name-itxt}{inputText}{Name des Forums.}{value="\#\{scientificForumBacking.scientificForum.name\}"}{readonly="\#\{!scientificForumBacking.isViewerEditor\}"}{required="true" \newline requiredMessage=\newline "\#\{message.forumName\}" \newline maxLength="\#\{Const.FORUM\_NAME\_MAX\}"}
+	\fentry{forum-name-itxt}{inputText}{Name des Forums.}{value="\#\{scientificForumBacking.scientificForum.name\}"}{readonly="\#\{!scientificForumBacking.loggedInUserIsEditor\}"}{required="true" \newline requiredMessage=\newline "\#\{message.forumName\}" \newline maxLength="\#\{Const.FORUM\_NAME\_MAX\}"}
 
 	\fentry{editor-lst}{<h:dataTable>}{Liste der verantwortliche Editoren.}{value="\#\{scientificForumBacking.editors\}"\newline title="\#\{help.managingEditors\}"}{/}{/}
 
-	\fentry{new-editor-itxt}{<h:inputText>}{Angabe der E-Mail eines Editors.}{value="\#\{scientificForumBacking.newEditorInput.emailAddress\}"}{rendered="\#\{scientificForumBacking.sessionInformation.user.editor\}"}{emailAddressExistsValidator \newline emailAddressLayoutValidator, required="true"\newline requiredMessage=\newline "\#\{message.email\}" }
+	\fentry{new-editor-itxt}{<h:inputText>}{Angabe der E-Mail eines Editors.}{value="\#\{scientificForumBacking.newEditorInput.emailAddress\}"}{rendered="\#\{scientificForumBacking.loggedInUserIsEditor\}"}{emailAddressExistsValidator \newline emailAddressLayoutValidator, required="true"\newline requiredMessage=\newline "\#\{message.email\}" }
 
-	\fentry{add-editor-cbtn}{<h:commandButton>}{Füge Editor zur Liste hinzu.}{value="\#\{labels.add\}"\newline action="\#\{scientificForumBacking.addEditor\}"}{rendered="\#\{scientificForumBacking.sessionInformation.user.editor\}"}{/}
+	\fentry{add-editor-cbtn}{<h:commandButton>}{Füge Editor zur Liste hinzu.}{value="\#\{labels.add\}"\newline action="\#\{scientificForumBacking.addEditor\}"}{rendered="\#\{scientificForumBacking.loggedInUserIsEditor\}"}{/}
 
-	\fentry{remove-editor-cbtn}{<h:commandButton>}{Lösche ausgewählten Editor.}{value="\#\{labels.remove\}"\newline action="\#\{scientificForumBacking.removeEditor\}"}{rendered="\#\{scientificForumBacking.sessionInformation.user.editor\}"}{/}
+	\fentry{remove-editor-cbtn}{<h:commandButton>}{Lösche ausgewählten Editor.}{value="\#\{labels.remove\}"\newline action="\#\{scientificForumBacking.removeEditor\}"}{rendered="\#\{scientificForumBacking.loggedInUserIsEditor\}"}{/}
 
-	\fentry{deadline-itxt}{<h:inputText>}{Deadline des Forums.}{value="\#\{scientificForumBacking.scientificForum.deadline\}"}{readonly="\#\{!scientificForumBacking.isViewerEditor\}"}{required="true" \newline requiredMessage=\newline "\#\{message.deadline\}"}
+	\fentry{deadline-itxt}{<h:inputText>}{Deadline des Forums.}{value="\#\{scientificForumBacking.scientificForum.deadline\}"}{readonly="\#\{!scientificForumBacking.loggedInUserIsEditor\}"}{required="true" \newline requiredMessage=\newline "\#\{message.deadline\}"}
 
-	\fentry{description-itxt}{inputTextArea}{Kurzbeschreibung des Forums.}{value="\#\{scientificForumBacking.scientificForum.description\}"}{readonly="\#\{!scientificForumBacking.isViewerEditor\}"}{required="true" \newline requiredMessage=\newline "\#\{message.description\}" \newline maxLength="\#\{Const.FORUM\_DESCRIPTION\_MAX\}"}
+	\fentry{description-itxt}{inputTextArea}{Kurzbeschreibung des Forums.}{value="\#\{scientificForumBacking.scientificForum.description\}"}{readonly="\#\{!scientificForumBacking.loggedInUserIsEditor\}"}{required="true" \newline requiredMessage=\newline "\#\{message.description\}" \newline maxLength="\#\{Const.FORUM\_DESCRIPTION\_MAX\}"}
 
 	\fentry{url-lnk}{<h:outputLink>}{Link zur Konferenz oder zum Journal.}{value="\#\{scientificForumBacking.scientificForum.url\}"}{/}{/}
 
-	\fentry{change-url-itxt}{inputText}{Angabe einer neuen URL.}{value="\#\{scientificForumBacking.scientificForum.url\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{maxLength="\#\{Const.FORUM\_URL\_MAX\}"}
+	\fentry{change-url-itxt}{inputText}{Angabe einer neuen URL.}{value="\#\{scientificForumBacking.scientificForum.url\}"}{rendered="\#\{scientificForumBacking.loggedInUserIsEditor\}"}{maxLength="\#\{Const.FORUM\_URL\_MAX\}"}
 
-	\fentry{review-manual-itxt}{<h:inputTextArea>}{Anleitung für eine Begutachtung.}{value="\#\{scientificForumBacking.scientificForum.reviewManual\}"}{readonly="\#\{!scientificForumBacking.isViewerEditor\}"}{maxLength="\#\{Const.REVIEW\_MANUA\_MAX\}"}
+	\fentry{review-manual-itxt}{<h:inputTextArea>}{Anleitung für eine Begutachtung.}{value="\#\{scientificForumBacking.scientificForum.reviewManual\}"}{readonly="\#\{!scientificForumBacking.loggedInUserIsEditor\}"}{maxLength="\#\{Const.REVIEW\_MANUA\_MAX\}"}
 
 	\fentry{science-field-dtbl}{<h:dataTable>}{Fachgebiet des Forums.}{value="\#\{scientificForumBacking.selectedScienceFields\}"}{/}{/}
 
-	\fentry{new-science-field}{<p:selectOneListbox>}{Hinzufügen eines neuen Fachgebietes.}{value="\#\{scientificForumBacking.selectedScienceFieldInput\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
+	\fentry{new-science-field}{<p:selectOneListbox>}{Hinzufügen eines neuen Fachgebietes.}{value="\#\{scientificForumBacking.selectedScienceFieldInput\}"}{rendered="\#\{!scientificForumBacking.loggedInUserIsEditor\}"}{/}
 
 	\fentry{field-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{value="\#\{scientificForumBacking.scienceFields\}"}{/}{/}
 
 	\fentry{add-science-field-cbtn}{<h:commandButton>}{Speichern des neuen Fachgebietes.}{value="\#\{labels.add\}"\newline action="\#\{scientificForumBacking.\newline
-		addScienceField\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
+		addScienceField\}"}{rendered="\#\{!scientificForumBacking.loggedInUserIsEditor\}"}{/}
 
 	\fentry{remove-science-field-cbtn}{commandButton}{Löschen eines Fachgebietes.}{value="\#\{labels.remove\}"\newline action="\#\{scientificForumBacking.\newline
-		removeScienceField\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
+		removeScienceField\}"}{rendered="\#\{!scientificForumBacking.loggedInUserIsEditor\}"}{/}
 
-	\fentry{save-cbtn}{<h:commandButton>}{Speichere Veränderungen.}{value="\#\{labels.save\}"\newline action="\#\{scientificForumBacking.submitChanges\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
+	\fentry{save-cbtn}{<h:commandButton>}{Speichere Veränderungen.}{value="\#\{labels.save\}"\newline action="\#\{scientificForumBacking.submitChanges\}"}{rendered="\#\{!scientificForumBacking.loggedInUserIsEditor\}"}{/}
 }
 
 \ftable{scientificForum-pg-submission}{Tabelle der Einreichungen zu diesem \emph{Scientific Forum.}}{
@@ -709,9 +709,9 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	\multicolumn{6}{c}{Weitere Paginierungen mit den gleichen Spalten wie in der vorherigen Tabelle:} \\ %das hline verursacht keine probleme, wird sind in einem tabular
 	\hline
 
-	\fentry{review-pg}{<pg:pagination>}{Paginierte Liste aller Einreichungen, die der Gutachter bearbeitet.}{paginator="\#\{scientificForumBacking.reviewedPagination\}"}{rendered="\#\{scientificForumBacking.sessionInformation.user.reviewer\}"}{/}
+	\fentry{review-pg}{<pg:pagination>}{Paginierte Liste aller Einreichungen, die der Gutachter bearbeitet.}{paginator="\#\{scientificForumBacking.reviewedPagination\}"}{rendered="\#\{scientificForumBacking.loggedInUserIsReviewer\}"}{/}
 
-	\fentry{editorial-pg}{<pg:pagination>}{Paginierte Liste aller Einreichungen, die der Editor verwaltet.}{paginator="\#\{scientificForumBacking.editedPagination\}"}{rendered="\#\{!scientificForumBacking.isViewerEditor\}"}{/}
+	\fentry{editorial-pg}{<pg:pagination>}{Paginierte Liste aller Einreichungen, die der Editor verwaltet.}{paginator="\#\{scientificForumBacking.editedPagination\}"}{rendered="\#\{!scientificForumBacking.loggedInUserIsEditor\}"}{/}
 }
 
 \subsubsection{Gutachter}$~$
@@ -740,25 +740,25 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 
 	\ftable{userList}{\textbf{userList.xhtml} Editoren und Administratoren erhalten hier einen Überblick über alle Nutzer. Die Seiten sind paginiert.}{
-		\fentry{user-pg}{<pg:pagination>}{Paginierte Liste aller Nutzer}{paginator="\#\{userListBacking.userPagination\}"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
+		\fentry{user-pg}{<pg:pagination>}{Paginierte Liste aller Nutzer}{paginator="\#\{userListBacking.userPagination\}"}{rendered="\#\{userListBacking.sessionInformation.user.editor\}"}{/}
 
-		\fentry{rol-ssc}{<ssc:sortsearchcolumn>}{Spalte für die Nutzerrolle}{paginator="\#\{userListBacking.userPagination\}"\newline columnNamei18n="\#\{labels.role\}"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
+		\fentry{rol-ssc}{<ssc:sortsearchcolumn>}{Spalte für die Nutzerrolle}{paginator="\#\{userListBacking.userPagination\}"\newline columnNamei18n="\#\{labels.role\}"}{rendered="\#\{userListBacking.sessionInformation.user.editor\}"}{/}
 
-		\fentry{role-otxt}{<h:outputText>}{Rolle des Nutzers}{value="\#\{var.role\}"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
+		\fentry{role-otxt}{<h:outputText>}{Rolle des Nutzers}{value="\#\{var.role\}"}{rendered="\#\{userListBacking.sessionInformation.user.editor\}"}{/}
 
-		\fentry{name-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Namen des Nutzers}{paginator="\#\{userListBacking.userPagination\}"\newline columnNamei18n="\#\{labels.name\}"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
+		\fentry{name-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Namen des Nutzers}{paginator="\#\{userListBacking.userPagination\}"\newline columnNamei18n="\#\{labels.name\}"}{rendered="\#\{userListBacking.sessionInformation.user.editor\}"}{/}
 
-		\fentry{name-link}{<h:link>}{Name des Nutzers. Link mit URL-Parameter.}{value="\#\{var.firstName.concat( ).concat(var.lastName)\}"\newline outcome="/views/authenticated/profile"\newline includeViewParams="true"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
+		\fentry{name-link}{<h:link>}{Name des Nutzers. Link mit URL-Parameter.}{value="\#\{var.firstName.concat( ).concat(var.lastName)\}"\newline outcome="/views/authenticated/profile"\newline includeViewParams="true"}{rendered="\#\{userListBacking.sessionInformation.user.editor\}"}{/}
 
 		\fentry{/}{<f:param>}{Nutzer ID als URL Parameter.}{name="\#\{'id'\}"\newline value="\#\{var.id\}"}{/}{/}
 
-		\fentry{email-ssc}{<ssc:sortsearchcolumn>}{Spalte für die E-Mail des Nutzers}{paginator="\#\{userListBacking.userPagination\}"\newline columnNamei18n="\#\{labels.email\}"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
+		\fentry{email-ssc}{<ssc:sortsearchcolumn>}{Spalte für die E-Mail des Nutzers}{paginator="\#\{userListBacking.userPagination\}"\newline columnNamei18n="\#\{labels.email\}"}{rendered="\#\{userListBacking.sessionInformation.user.editor\}"}{/}
 
-		\fentry{email-link}{<h:link>}{Mailto-Link mit E-Mail-Adresse des Nutzers.}{value="\#\{var.emailAddress\}"\newline  outcome="\#\{'mailto:'.concat(var.emailAddress)\}"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
+		\fentry{email-link}{<h:link>}{Mailto-Link mit E-Mail-Adresse des Nutzers.}{value="\#\{var.emailAddress\}"\newline  outcome="\#\{'mailto:'.concat(var.emailAddress)\}"}{rendered="\#\{userListBacking.sessionInformation.user.editor\}"}{/}
 
-		\fentry{employer-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Arbeitsgeber des Nutzers}{paginator="\#\{userListBacking.userPagination\}"\newline columnNamei18n="\#\{labels.employer\}"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
+		\fentry{employer-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Arbeitsgeber des Nutzers}{paginator="\#\{userListBacking.userPagination\}"\newline columnNamei18n="\#\{labels.employer\}"}{rendered="\#\{userListBacking.sessionInformation.user.editor\}"}{/}
 
-		\fentry{employer-otxt}{<h:outputText>}{Arbeitgeber des Nutzers.}{value="\#\{var.employer\}"}{rendered="\#\{userListBacking.sessionInformation.user.isEditor\}"}{/}
+		\fentry{employer-otxt}{<h:outputText>}{Arbeitgeber des Nutzers.}{value="\#\{var.employer\}"}{rendered="\#\{userListBacking.sessionInformation.user.editor\}"}{/}
 	}
 \end{samepage}
 
@@ -777,21 +777,21 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \begin{samepage}
 
 	\ftable{newUser}{\textbf{newUser.xhtml} Der Administrator kann hier einen neuen Nutzer anlegen.}{
-		\fentry{password-iscrt}{<h:inputSecret>}{Angabe des Passworts.}{value="\#\{newUserBacking.newUser.passwordNotHashed\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{passwordValidator \newline validateLength \newline minimum="8" \newline maximum="100" \newline required="true" \newline requiredMessage=\newline "\#\{message.password\}"}
+		\fentry{password-iscrt}{<h:inputSecret>}{Angabe des Passworts.}{value="\#\{newUserBacking.newUser.passwordNotHashed\}"}{render="\#\{newUserBacking.sessionInformation.user.admin\}"}{passwordValidator \newline validateLength \newline minimum="8" \newline maximum="100" \newline required="true" \newline requiredMessage=\newline "\#\{message.password\}"}
 
-		\fentry{firstname-itxt}{<h:inputText>}{Angabe des Vornamen.}{value="\#\{newUserBacking.newUser.firstName\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{required="true" \newline requiredMessage=\newline maxLength="\#\{Const.FIRST\_NAME\_MAX\}"}
+		\fentry{firstname-itxt}{<h:inputText>}{Angabe des Vornamen.}{value="\#\{newUserBacking.newUser.firstName\}"}{render="\#\{newUserBacking.sessionInformation.user.admin\}"}{required="true" \newline requiredMessage=\newline maxLength="\#\{Const.FIRST\_NAME\_MAX\}"}
 
-		\fentry{lastname-itxt}{<h:inputText>}{Angabe des Nachnamen.}{value="\#\{newUserBacking.newUser.lastName\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{required="true" \newline requiredMessage=\newline "\#\{message.lastName\}" \newline maxLength="\#\{Const.LAST\_NAME\_MAX\}"}
+		\fentry{lastname-itxt}{<h:inputText>}{Angabe des Nachnamen.}{value="\#\{newUserBacking.newUser.lastName\}"}{render="\#\{newUserBacking.sessionInformation.user.admin\}"}{required="true" \newline requiredMessage=\newline "\#\{message.lastName\}" \newline maxLength="\#\{Const.LAST\_NAME\_MAX\}"}
 
-		\fentry{titel-itxt}{<h:inputText>}{Angabe eines Titels.}{value="\#\{newUserBacking.newUser.title\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{/}
+		\fentry{titel-itxt}{<h:inputText>}{Angabe eines Titels.}{value="\#\{newUserBacking.newUser.title\}"}{render="\#\{newUserBacking.sessionInformation.user.admin\}"}{/}
 
-		\fentry{e-mail-itxt}{<h:inputText>}{Angabe einer E-Mail-Adresse.}{value="\#\{newUserBacking.newUser.emailAddress\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{emailAddressExistsValidator \newline emailAddressLayoutValidator \newline required="true" \newline requiredMessage=\newline "\#\{message.email\}"}
+		\fentry{e-mail-itxt}{<h:inputText>}{Angabe einer E-Mail-Adresse.}{value="\#\{newUserBacking.newUser.emailAddress\}"}{render="\#\{newUserBacking.sessionInformation.user.admin\}"}{emailAddressExistsValidator \newline emailAddressLayoutValidator \newline required="true" \newline requiredMessage=\newline "\#\{message.email\}"}
 
-		\fentry{is-admin-cbx}{<h:selectBooleanCheckbox>}{Zuordnung einer Administratorenrolle.}{value="\#\{newUserBacking.admin\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{/}
+		\fentry{is-admin-cbx}{<h:selectBooleanCheckbox>}{Zuordnung einer Administratorenrolle.}{value="\#\{newUserBacking.admin\}"}{render="\#\{newUserBacking.sessionInformation.user.admin\}"}{/}
 
-		\fentry{abort-btn}{<h:commandButton>}{Abbruch des Vorgangs: Nutzererstellen.}{value="\#\{newUserBacking.abort\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{/}
+		\fentry{abort-btn}{<h:commandButton>}{Abbruch des Vorgangs: Nutzererstellen.}{value="\#\{newUserBacking.abort\}"}{render="\#\{newUserBacking.sessionInformation.user.admin\}"}{/}
 
-		\fentry{save-btn}{<h:commandButton>}{Speichern des neuen Nutzers.}{value="\#\{newUserBacking.saveUser\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{/}
+		\fentry{save-btn}{<h:commandButton>}{Speichern des neuen Nutzers.}{value="\#\{newUserBacking.saveUser\}"}{render="\#\{newUserBacking.sessionInformation.user.admin\}"}{/}
 
 	}
 \end{samepage}
@@ -799,29 +799,29 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \begin{samepage}
 
 	\ftable{administration}{\textbf{administration.xhtml} Hier kann ein Administrator Konfigurationen vornehmen.}{
-		\fentry{select-theme-slctom}{<h:selectOneMenu>}{Auswahl eines Farbthemas.}{value="\#\{administrationBacking.systemSettings.style\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
+		\fentry{select-theme-slctom}{<h:selectOneMenu>}{Auswahl eines Farbthemas.}{value="\#\{administrationBacking.systemSettings.style\}"}{render="\#\{administrationBacking.sessionInformation.user.admin\}"}{/}
 
 		\fentry{styles-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{value="\#\{administrationBacking.styles\}" \newline var=''select" \newline itemLabel="\#\{labels['theme.' += select]\}" \newline itemValue="\#\{select\}"}{/}{/}
 
-		\fentry{logo-gimg}{<h:graphicImage>}{Logo des Systems.}{value="\#\{'/image/logo'\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
+		\fentry{logo-gimg}{<h:graphicImage>}{Logo des Systems.}{value="\#\{'/image/logo'\}"}{render="\#\{administrationBacking.sessionInformation.user.admin\}"}{/}
 
-		\fentry{change-logo-ifile}{<h:inputFile>}{Hochladen eines neuen Logos.}{title="\#\{help.uploadNewLogo\}"\newline value="\#\{administrationBacking.uploadedImage\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
+		\fentry{change-logo-ifile}{<h:inputFile>}{Hochladen eines neuen Logos.}{title="\#\{help.uploadNewLogo\}"\newline value="\#\{administrationBacking.uploadedImage\}"}{render="\#\{administrationBacking.sessionInformation.user.admin\}"}{/}
 
-		\fentry{welcome-heading-itxt}{<h:inputText>}{Angabe einer Überschrift auf der \emph{welcomepage}}{value="\#\{administrationBacking.systemSettings.headlineWelcomePage\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}" }{required="true" \newline requiredMessage=\newline "\#\{message.welcomeHeading\}" \newline maxLength="\#\{Const.WELCOME\_HEADING\_MAX\}"}
+		\fentry{welcome-heading-itxt}{<h:inputText>}{Angabe einer Überschrift auf der \emph{welcomepage}}{value="\#\{administrationBacking.systemSettings.headlineWelcomePage\}"}{render="\#\{administrationBacking.sessionInformation.user.admin\}" }{required="true" \newline requiredMessage=\newline "\#\{message.welcomeHeading\}" \newline maxLength="\#\{Const.WELCOME\_HEADING\_MAX\}"}
 
-		\fentry{welcome-text-itxt}{<h:inputTextArea>}{Angabe eines Textes auf der \emph{welcomepage}}{value="\#\{administrationBacking.systemSettings.shortMessageWelcomePage\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{required="true" \newline requiredMessage=\newline "\#\{message.welcomeText\}" \newline maxLength="\#\{Const.WELCOME\_DESCRIPTION\_MAX\}"}
+		\fentry{welcome-text-itxt}{<h:inputTextArea>}{Angabe eines Textes auf der \emph{welcomepage}}{value="\#\{administrationBacking.systemSettings.shortMessageWelcomePage\}"}{render="\#\{administrationBacking.sessionInformation.user.admin\}"}{required="true" \newline requiredMessage=\newline "\#\{message.welcomeText\}" \newline maxLength="\#\{Const.WELCOME\_DESCRIPTION\_MAX\}"}
 
-		\fentry{institution-itxt}{<h:inputText>}{Angabe des Namens der Einrichtung.}{value="\#\{administrationBacking.systemSettings.companyName\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{required="true" \newline requiredMessage=\newline "\#\{message.institution\}" \newline maxLength="\#\{Const.SYSTEM\_COMPANY\_NAME\_MAX\}"}
+		\fentry{institution-itxt}{<h:inputText>}{Angabe des Namens der Einrichtung.}{value="\#\{administrationBacking.systemSettings.companyName\}"}{render="\#\{administrationBacking.sessionInformation.user.admin\}"}{required="true" \newline requiredMessage=\newline "\#\{message.institution\}" \newline maxLength="\#\{Const.SYSTEM\_COMPANY\_NAME\_MAX\}"}
 
-		\fentry{imprint-itxt}{<h:inputTextArea>}{Angabe des Impressums der Einrichtung.}{value="\#\{administrationBacking.systemSettings.imprint\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{required="true" \newline requiredMessage=\newline "\#\{message.imprint\}"}
+		\fentry{imprint-itxt}{<h:inputTextArea>}{Angabe des Impressums der Einrichtung.}{value="\#\{administrationBacking.systemSettings.imprint\}"}{render="\#\{administrationBacking.sessionInformation.user.admin\}"}{required="true" \newline requiredMessage=\newline "\#\{message.imprint\}"}
 
-		\fentry{abort-btn}{<h:commandButton>}{Abbruch des Änderungsvorgangs.}{value="\#\{labels.abort\}"\newline action="\#\{administrationBacking.abort\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
+		\fentry{abort-btn}{<h:commandButton>}{Abbruch des Änderungsvorgangs.}{value="\#\{labels.abort\}"\newline action="\#\{administrationBacking.abort\}"}{render="\#\{administrationBacking.sessionInformation.user.admin\}"}{/}
 
-		\fentry{save-btn}{<h:commandButton>}{Speichern der Änderungen.}{value="\#\{labels.save\}"\newline action="\#\{administrationBacking.save\}"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
+		\fentry{save-btn}{<h:commandButton>}{Speichern der Änderungen.}{value="\#\{labels.save\}"\newline action="\#\{administrationBacking.save\}"}{render="\#\{administrationBacking.sessionInformation.user.admin\}"}{/}
 
-		\fentry{new-user-link}{<h:link>}{Weiterleitung zu \emph{newUser.xhtml}.}{value="\#\{labels.gotoNewUser\}" \newline outcome="/views/authenticated/newUser"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
+		\fentry{new-user-link}{<h:link>}{Weiterleitung zu \emph{newUser.xhtml}.}{value="\#\{labels.gotoNewUser\}" \newline outcome="/views/authenticated/newUser"}{render="\#\{administrationBacking.sessionInformation.user.admin\}"}{/}
 
-		\fentry{new-scientific-forum-link}{<h:link>}{Weiterleitung zu \emph{newScientificForum.xhtml}.}{value="\#\{labels.gotoNewScientificForum\}" \newline outcome="/views/authenticated/newScientificForum"}{render="\#\{administrationBacking.sessionInformation.user.isAdmin\}"}{/}
+		\fentry{new-scientific-forum-link}{<h:link>}{Weiterleitung zu \emph{newScientificForum.xhtml}.}{value="\#\{labels.gotoNewScientificForum\}" \newline outcome="/views/authenticated/newScientificForum"}{render="\#\{administrationBacking.sessionInformation.user.admin\}"}{/}
 	}
 \end{samepage}
 
@@ -830,35 +830,35 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	\ftable{newScientificForum}{\textbf{newScientificForum.xhtml} Auf der Seite zum Erstellen eines wissenschaftlichen Forums kann ein Administrator dessen wesentlichen Daten festlegen.
 	}{
 
-	\fentry{forum-name-itxt}{<h:inputText>}{Angabe des Name des Forums.}{value="\#{newScientificForumBacking.newScientificForum.name}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{required="true" \newline requiredMessage=\newline "\#\{message.forumName\}" \newline maxLength="\#\{Const.FORUM\_NAME\_MAX\}"}
+	\fentry{forum-name-itxt}{<h:inputText>}{Angabe des Name des Forums.}{value="\#{newScientificForumBacking.newScientificForum.name}"}{render="\#{newScientificForumBacking.sessionInformation.user.admin}"}{required="true" \newline requiredMessage=\newline "\#\{message.forumName\}" \newline maxLength="\#\{Const.FORUM\_NAME\_MAX\}"}
 
-	\fentry{editors-list}{<h:dataTable>}{Liste der Editoren}{value="\#{newScientificForumBacking.editors}"}{render="\#{toolbarBacking.sessionInformation.user.isAdmin}"}{/}
+	\fentry{editors-list}{<h:dataTable>}{Liste der Editoren}{value="\#{newScientificForumBacking.editors}"}{render="\#{toolbarBacking.sessionInformation.user.admin}"}{/}
 
-	\fentry{email-editor-itxt}{<h:inputText>}{Angabe der E-Mail-Adresse eines Editor.}{value="\#{newScientificForumBacking.newEditorInput.emailAddress}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{emailAddressValidator \newline emailAddressLayoutValidator \newline required="true" \newline requiredMessage=\newline "\#\{message.email\}"}
+	\fentry{email-editor-itxt}{<h:inputText>}{Angabe der E-Mail-Adresse eines Editor.}{value="\#{newScientificForumBacking.newEditorInput.emailAddress}"}{render="\#{newScientificForumBacking.sessionInformation.user.admin}"}{emailAddressValidator \newline emailAddressLayoutValidator \newline required="true" \newline requiredMessage=\newline "\#\{message.email\}"}
 
-	\fentry{add-editor-btn}{<h:commandButton>}{Hinzufügen eines Editors in eine Liste.}{value="\#\{labels.add\}"\newline  action="\#\{newScientificForumBacking.addEditor\}"\newline title="\#\{help.addEditor\}"}{render="\#\{newScientificForumBacking.sessionInformation.user.isAdmin\}"}{/}
+	\fentry{add-editor-btn}{<h:commandButton>}{Hinzufügen eines Editors in eine Liste.}{value="\#\{labels.add\}"\newline  action="\#\{newScientificForumBacking.addEditor\}"\newline title="\#\{help.addEditor\}"}{render="\#\{newScientificForumBacking.sessionInformation.user.admin\}"}{/}
 
-	\fentry{delete-editor-btn}{<h:commandButton>}{Löschen des zugehörigen Editors von der Liste.}{value="\#\{labels.remove\}"\newline  action="\#\{newScientificForumBacking.removeEditor(var)\}"\newline title="\#\{help.removeEditor\}"}{render="\#\{newScientificForumBacking.sessionInformation.user.isAdmin\}"}{/}
+	\fentry{delete-editor-btn}{<h:commandButton>}{Löschen des zugehörigen Editors von der Liste.}{value="\#\{labels.remove\}"\newline  action="\#\{newScientificForumBacking.removeEditor(var)\}"\newline title="\#\{help.removeEditor\}"}{render="\#\{newScientificForumBacking.sessionInformation.user.admin\}"}{/}
 
-	\fentry{deadline-itxt}{<h:inputText>}{Hinzufügen einer Deadline des Forums.}{value="\#\{newScientificForumBacking.newScientificForum.deadline\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{converterDateTime \newline type="localDate"}
+	\fentry{deadline-itxt}{<h:inputText>}{Hinzufügen einer Deadline des Forums.}{value="\#\{newScientificForumBacking.newScientificForum.deadline\}"}{render="\#{newScientificForumBacking.sessionInformation.user.admin}"}{converterDateTime \newline type="localDate"}
 
-	\fentry{description-itxt}{<h:inputTextArea>}{Angabe einer Kurzbeschreibung.}{value="\#\{newScientificForumBacking.newScientificForum.description\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{required="true" \newline requiredMessage=\newline "\#\{message.description\}" \newline maxLength="\#\{Const.FORUM\_DESCRIPTION\_MAX\}"}
+	\fentry{description-itxt}{<h:inputTextArea>}{Angabe einer Kurzbeschreibung.}{value="\#\{newScientificForumBacking.newScientificForum.description\}"}{render="\#{newScientificForumBacking.sessionInformation.user.admin}"}{required="true" \newline requiredMessage=\newline "\#\{message.description\}" \newline maxLength="\#\{Const.FORUM\_DESCRIPTION\_MAX\}"}
 
-	\fentry{url-itxt}{<h:inputText>}{Link zur Konferenz oder zum Journal.}{value="\#\{newScientificForumBacking.newScientificForum.url\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{maxLength="\#\{Const.FORUM\_URL\_MAX\}"}
+	\fentry{url-itxt}{<h:inputText>}{Link zur Konferenz oder zum Journal.}{value="\#\{newScientificForumBacking.newScientificForum.url\}"}{render="\#{newScientificForumBacking.sessionInformation.user.admin}"}{maxLength="\#\{Const.FORUM\_URL\_MAX\}"}
 
-	\fentry{review-manual-itxt}{<h:inputTextArea>}{Angabe einer Anleitung für eine Begutachtung.}{value="\#\{newScientificForumBacking.newScientificForum.reviewManual\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{required="true" \newline requiredMessage=\newline "\#\{message.manual\}" \newline maxLength="\#\{Const.REVIEW\_MANUAL\_MAX\}"}
+	\fentry{review-manual-itxt}{<h:inputTextArea>}{Angabe einer Anleitung für eine Begutachtung.}{value="\#\{newScientificForumBacking.newScientificForum.reviewManual\}"}{render="\#{newScientificForumBacking.sessionInformation.user.admin}"}{required="true" \newline requiredMessage=\newline "\#\{message.manual\}" \newline maxLength="\#\{Const.REVIEW\_MANUAL\_MAX\}"}
 
-	\fentry{science-field-list}{<h:outputText>}{Liste der ausgewählten Fachgebiete.}{value="\#\{newScientificForumBacking.selectedScienceFields\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
+	\fentry{science-field-list}{<h:outputText>}{Liste der ausgewählten Fachgebiete.}{value="\#\{newScientificForumBacking.selectedScienceFields\}"}{render="\#{newScientificForumBacking.sessionInformation.user.admin}"}{/}
 
-	\fentry{science-field-list}{<p:selectOneListbox>}{Auswahl von Fachgebieten.}{value="\#\{newScientificForumBacking.scienceFields\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
+	\fentry{science-field-list}{<p:selectOneListbox>}{Auswahl von Fachgebieten.}{value="\#\{newScientificForumBacking.scienceFields\}"}{render="\#{newScientificForumBacking.sessionInformation.user.admin}"}{/}
 
-	\fentry{new-science-field-itxt}{<h:inputText>}{Hinzufügen neuer Fachgebiete.}{value="\#\{newScientificForumBacking.newScienceFieldInput.name\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{required="true" \newline requiredMessage=\newline "\#\{message.newScienceField\}" \newline maxLength="\#\{Const.SCIENCE\_FIELD\}"}
+	\fentry{new-science-field-itxt}{<h:inputText>}{Hinzufügen neuer Fachgebiete.}{value="\#\{newScientificForumBacking.newScienceFieldInput.name\}"}{render="\#{newScientificForumBacking.sessionInformation.user.admin}"}{required="true" \newline requiredMessage=\newline "\#\{message.newScienceField\}" \newline maxLength="\#\{Const.SCIENCE\_FIELD\}"}
 
-	\fentry{add-science-field-btn}{<h:commandButton>}{Ausführen der Hinzufüge-Aktion.}{value="\#\{labels.add\}"\newline action="\#\{newScientificForumBacking.addScienceField\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
+	\fentry{add-science-field-btn}{<h:commandButton>}{Ausführen der Hinzufüge-Aktion.}{value="\#\{labels.add\}"\newline action="\#\{newScientificForumBacking.addScienceField\}"}{render="\#{newScientificForumBacking.sessionInformation.user.admin}"}{/}
 
-	\fentry{save-btn}{<h:commandButton>}{Speichern des neuen Forums.}{value="\#\{labels.save\}"\newline action="\#\{newScientificForumBacking.create\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
+	\fentry{save-btn}{<h:commandButton>}{Speichern des neuen Forums.}{value="\#\{labels.save\}"\newline action="\#\{newScientificForumBacking.create\}"}{render="\#{newScientificForumBacking.sessionInformation.user.admin}"}{/}
 
-	\fentry{abort-btn}{<h:commandButton>}{Abbruch des Erstellungsprozesses.}{value="\#\{labels.abort\}"\newline action="\#\{newScientificForumBacking.abort\}"}{render="\#{newScientificForumBacking.sessionInformation.user.isAdmin}"}{/}
+	\fentry{abort-btn}{<h:commandButton>}{Abbruch des Erstellungsprozesses.}{value="\#\{labels.abort\}"\newline action="\#\{newScientificForumBacking.abort\}"}{render="\#{newScientificForumBacking.sessionInformation.user.admin}"}{/}
 }
 \end{samepage}
 
