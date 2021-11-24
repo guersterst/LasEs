@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:h="http://xmlns.jcp.org/jsf/html">
 <f:metadata>
     <f:importConstants type="de.lases.control.backing.DateSelect" var="Date"/>
@@ -33,6 +34,8 @@
             <div class="card-body">
                 <div class="login-form">
                     <h:form>
+                        <input type="date"/>
+                        <h:inputText a:type="date"/>
                         <h:selectOneMenu value="#{submissionBacking.dateFilterSelectPaper}">
                             <f:selectItems value="#{submissionBacking.dateSelects}" var="select" itemValue="#{select}" itemLabel="#{labels['dateSelect.' += select]}"/>
                         </h:selectOneMenu>
