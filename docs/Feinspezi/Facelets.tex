@@ -549,7 +549,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \ftable{profile}{\textbf{profile.xhtml} Die Profilseite eines angemeldeten Nutzers ist nur vom Nutzer selbst und vom Administrator editierbar.
 	Ein Editor besitzt nur Leserechte. Alle zuvor gespeicherten Angaben werden in den jeweiligen Feldern angezeigt.}{
 
-	\fentry{avatar-gimg}{<h:graphicImage>}{Aktueller Avatar.}{value="\#\{'https://lases.de/image/'.concat(profileBacking.user.id)\}"}{/}{/}
+	\fentry{avatar-gimg}{<h:graphicImage>}{Aktueller Avatar.}{value="\#\{'image/'.concat(profileBacking.user.id)\}"}{/}{/}
 
 	\fentry{new-avatar-ifile}{<h:inputFile>}{Hochladen eines neuen Avatars.}{value="\#\{profileBacking.uploadedAvatar\}"}{rendered="\#\{profileBacking.hasViewerEditRights\}"}{/}
 
