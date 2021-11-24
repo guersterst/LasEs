@@ -384,7 +384,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{release-revision-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Freigabestatus.}{paginator="\#\{submissionBacking.paperPagination\}"\newline columnNamei18n="\#\{label.releaseRevision\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor || submissionBacking.sessionInformation.user.reviewer \}"}{/}
 
-		\fentry{release-revision-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit Freischalten der Revision}{value="\#\{submissionBacking.visibleFilterInputPaper\}" title="\#\{help.releaseRevisionSelect\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor || submissionBacking.sessionInformation.user.reviewer \}"}{/}
+		\fentry{release-revision-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit Freischalten der Revision}{value="\#\{submissionBacking.paperPagination.resultListParameters.visibleFilter\}" title="\#\{help.releaseRevisionSelect\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor || submissionBacking.sessionInformation.user.reviewer \}"}{/}
 
 		\fentry{/}{<f:selectItem>}{Revision freigeschaltet.}{itemValue="true" \newline itemLabel="\#\{label.releaseRevisionTrue\}"}{/}{/}
 
@@ -421,7 +421,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{release-review-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Freigabestatus.}{paginator="\#\{submissionBacking.reviewPagination\}"\newline columnNamei18n="\#\{label.releaseReview\}"}{rendered="\#\{submissionBacking.sessionInfromation.user.editor\}"}{/}
 
-		\fentry{release-review-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit Freischalten der Gutachten}{value="\#\{submissionBacking.visibleFilterInputPaper\}" title="\#\{help.releaseReviewSelect\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor || submissionBacking.sessionInformation.user.reviewer \}"}{/}
+		\fentry{release-review-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit Freischalten der Gutachten}{value="\#\{submissionBacking.reviewPagination.resultListParameters.visibleFilter\}" title="\#\{help.releaseReviewSelect\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor || submissionBacking.sessionInformation.user.reviewer \}"}{/}
 
 		\fentry{/}{<f:selectItem>}{Gutachten freigeschaltet.}{itemValue="true" \newline itemLabel="\#\{label.releaseReviewTrue\}"}{/}{/}
 
