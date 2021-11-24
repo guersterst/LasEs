@@ -12,6 +12,21 @@ public class KeyExistsException extends Exception {
     private static final long serialVersionUID = 4050043739568595650L;
 
     /**
+     * Constructs an exception.
+     */
+    public KeyExistsException() {
+    }
+
+    /**
+     * Constructs an exception with a message.
+     *
+     * @param message Error message.
+     */
+    public KeyExistsException(String message) {
+        super(message);
+    }
+
+    /**
      * Constructs an exception with a message and a cause.
      *
      * @param message Error message.

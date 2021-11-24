@@ -13,6 +13,21 @@ public class NoPermissionException extends Exception {
     private static final long serialVersionUID = 4189764514650645309L;
 
     /**
+     * Constructs an exception.
+     */
+    public NoPermissionException() {
+    }
+
+    /**
+     * Constructs an exception with a message.
+     *
+     * @param message Error message.
+     */
+    public NoPermissionException(String message) {
+        super(message);
+    }
+
+    /**
      * Constructs an exception with a message and a cause.
      *
      * @param message Error message.

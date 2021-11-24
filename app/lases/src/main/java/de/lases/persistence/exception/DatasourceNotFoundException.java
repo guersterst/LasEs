@@ -12,6 +12,21 @@ public class DatasourceNotFoundException extends RuntimeException {
     private static final long serialVersionUID = -2008534506407499953L;
 
     /**
+     * Constructs an exception.
+     */
+    public DatasourceNotFoundException() {
+    }
+
+    /**
+     * Constructs an exception with a message.
+     *
+     * @param message Error message.
+     */
+    public DatasourceNotFoundException(String message) {
+        super(message);
+    }
+
+    /**
      * Constructs an exception with a message and a cause.
      *
      * @param message Error message.

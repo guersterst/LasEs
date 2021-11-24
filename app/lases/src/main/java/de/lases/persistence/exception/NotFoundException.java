@@ -13,6 +13,21 @@ public class NotFoundException extends Exception {
     private static final long serialVersionUID = -8622898374545070975L;
 
     /**
+     * Construct an exception.
+     */
+    public NotFoundException() {
+    }
+
+    /**
+     * Construct an exception with a message.
+     *
+     * @param message Error message.
+     */
+    public NotFoundException(String message) {
+        super(message);
+    }
+
+    /**
      * Constructs an exception with a message and a cause.
      *
      * @param message Error message.

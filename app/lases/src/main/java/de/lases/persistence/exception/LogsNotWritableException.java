@@ -11,6 +11,21 @@ public class LogsNotWritableException extends RuntimeException {
     private static final long serialVersionUID = -4400360015042796433L;
 
     /**
+     * Constructs an exception.
+     */
+    public LogsNotWritableException() {
+    }
+
+    /**
+     * Constructs an exception with a message.
+     *
+     * @param message Error message.
+     */
+    public LogsNotWritableException(String message) {
+        super(message);
+    }
+
+    /**
      * Constructs an exception with a message and a cause.
      *
      * @param message Error message.
