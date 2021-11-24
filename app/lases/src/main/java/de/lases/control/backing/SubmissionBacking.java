@@ -130,7 +130,7 @@ public class SubmissionBacking implements Serializable {
      * @throws IllegalAccessException If the user has no access rights for this
      *                                submission
      */
-    public void onLoad() throws IllegalAccessException {
+    public void onLoad() {
     }
 
     /**
@@ -357,6 +357,24 @@ public class SubmissionBacking implements Serializable {
      */
     public Paper getNewestPaper() {
         return newestPaper;
+    }
+
+    /**
+     * Return if the logged-in user is editor of this submission.
+     *
+     * @return Is the logged-in user editor of this submission?
+     */
+    public boolean loggedInUserIsEditor() {
+        return false;
+    }
+
+    /**
+     * Return if the logged-in user is reviewer of this submission.
+     *
+     * @return Is the logged-in user reviewer of this submission?
+     */
+    public boolean loggedInUserIsReviewer() {
+        return false;
     }
 
 }

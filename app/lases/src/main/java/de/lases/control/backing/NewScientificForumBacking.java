@@ -9,8 +9,8 @@ import de.lases.business.service.ScientificForumService;
 import de.lases.business.service.UserService;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
+import de.lases.control.exception.IllegalAccessException;
 import jakarta.annotation.PostConstruct;
-import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -65,6 +65,8 @@ public class NewScientificForumBacking implements Serializable {
      * </ul>
      * Additionally, load the list of science fields in the system from the
      * datasource.
+     *
+     * @throws IllegalAccessException If the accessing user is not an admin.
      */
     @PostConstruct
     public void init() {

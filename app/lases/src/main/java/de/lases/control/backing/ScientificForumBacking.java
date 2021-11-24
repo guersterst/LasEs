@@ -252,4 +252,22 @@ public class ScientificForumBacking implements Serializable {
         return DateSelect.values();
     }
 
+    /**
+     * Return if the logged-in user is editor of this scientific forum.
+     *
+     * @return Is the logged-in user editor of this scientific forum?
+     */
+    public boolean loggedInUserIsEditor() {
+        return false;
+    }
+
+    /**
+     * Return if the logged-in user is reviewer of this scientific forum.
+     *
+     * @return Is the logged-in user reviewer of this scientific forum?
+     */
+    public boolean loggedInUserIsReviewer() {
+        return false;
+    }
+
 }

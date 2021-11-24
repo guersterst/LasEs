@@ -36,6 +36,20 @@ public class User implements Cloneable {
 
     private int numberOfSubmissions;
 
+    /**
+     * Return if the user is an admin.
+     *
+     * @return Is the user an admin.
+     */
+    public boolean isAdmin() { return false; }
+
+    /**
+     * Add or remove admin privileges to the user.
+     *
+     * @param isAdmin Should teh use be an admin.
+     */
+    public void setAdmin(boolean isAdmin) { }
+
     public int getVerificationId() {
         return verificationId;
     }

@@ -28,11 +28,11 @@ public class NewUserBacking {
      * Checks if the user accessing this site is really an administrator and
      * initialized the dto for the new user.
      *
-     * @throws IllegalAccessException If the accessing user id not an
+     * @throws IllegalAccessException If the accessing user is not an
      *                                administrator.
      */
     @PostConstruct
-    public void init() throws IllegalAccessException {
+    public void init() {
 
     }
 

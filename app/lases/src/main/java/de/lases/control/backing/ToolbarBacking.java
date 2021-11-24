@@ -223,4 +223,22 @@ public class ToolbarBacking implements Serializable {
         return sessionInformation;
     }
 
+    /**
+     * Return if the logged-in user is editor of this submission.
+     *
+     * @return Is the logged-in user editor of this submission?
+     */
+    public boolean loggedInUserIsEditor() {
+        return false;
+    }
+
+    /**
+     * Return if the logged-in user is reviewer of this submission.
+     *
+     * @return Is the logged-in user reviewer of this submission?
+     */
+    public boolean loggedInUserIsReviewer() {
+        return false;
+    }
+
 }

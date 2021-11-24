@@ -1,10 +1,10 @@
 package de.lases.control.backing;
 
 import de.lases.business.service.ScienceFieldService;
-import de.lases.business.service.SubmissionService;
 import de.lases.business.service.UserService;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
+import de.lases.control.exception.IllegalAccessException;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -68,6 +68,8 @@ public class ProfileBacking implements Serializable {
      *         the user for the admin password input
      *     </li>
      * </ul>
+     * @throws IllegalAccessException If someone tries to access a profile that
+     *                                does not belong to him.
      */
     @PostConstruct
     public void init() {
