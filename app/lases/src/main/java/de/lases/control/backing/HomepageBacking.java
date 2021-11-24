@@ -47,24 +47,6 @@ public class HomepageBacking implements Serializable {
      * Create objects for:
      * <ul>
      *     <li>
-     *         the date filter option for own submissions
-     *     </li>
-     *     <li>
-     *         the date filter option for reviewed submissions
-     *     </li>
-     *     <li>
-     *         the date filter option for edited submissions
-     *     </li>
-     *     <li>
-     *         the submission state filter option for own submissions
-     *     </li>
-     *     <li>
-     *         the submission state filter for reviewed submissions
-     *     </li>
-     *     <li>
-     *         the submission state filter for edited submissions
-     *     </li>
-     *     <li>
      *         the current tab the user is on.
      *     </li>
      *     <li>
@@ -75,9 +57,6 @@ public class HomepageBacking implements Serializable {
      *     </li>
      *     <li>
      *         the reviewed submission pagination.
-     *     </li>
-     *     <li>
-     *         The result list parameters.
      *     </li>
      * </ul>
      * Load the following data from the datasource:

@@ -46,7 +46,43 @@ public class ResultListBacking implements Serializable {
     private Pagination<ScientificForum> scientificForumPagination;
 
     /**
-     * Show the first page of search results for each pagination.
+     * Initialize the dtos and load data from the datasource where possible.
+     * Create objects for:
+     * <ul>
+     *     <li>
+     *         the own submission pagination
+     *     </li>
+     *     <li>
+     *         the reviewed submission pagination
+     *     </li>
+     *     <li>
+     *         the reviewed submission pagination
+     *     </li>
+     *     <li>
+     *         the user pagination
+     *     </li>
+     *     <li>
+     *         the scientific forum pagination
+     *     </li>
+     * </ul>
+     * Load the following data from the datasource:
+     * <ul>
+     *     <li>
+     *         the first page of the own submission pagination
+     *     </li>
+     *     <li>
+     *         the fist page of the reviewed submission pagination
+     *     </li>
+     *     <li>
+     *         the first page of the reviewed submission pagination
+     *     </li>
+     *     <li>
+     *         the first page of the user pagination
+     *     </li>
+     *     <li>
+     *         the first page of the scientific forum pagination
+     *     </li>
+     * </ul>
      */
     @PostConstruct
     public void init() {
