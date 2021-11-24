@@ -297,7 +297,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{date-ssc}{<ssc:sortsearchcolumn>}{Spalte für das Abgabedatum des Papers.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.date\}"}{/}{/}
 
-		\fentry{date-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{homepageBacking.submissionPagination.dateSelect\}" \newline title="\#\{help.dateSelect\}"}{/}{/}
+		\fentry{date-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{homepageBacking.submissionPagination.resultListParameters.dateSelect\}" \newline title="\#\{help.dateSelect\}"}{/}{/}
 
 		\fentry{/}{<f:selectItems>}{Mögliche Filterung des Datums.}{value="\#\{homepageBacking.dateSelects\}" \newline var=''select" \newline itemLabel="\#\{labels['dateSelect.' += select]\}" \newline itemValue="\#\{select\}"}{/}{/}
 
@@ -325,7 +325,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 \begin{samepage}
 
-	\ftable{submission}{\textbf{sumbission.xhtml} ist die Übersichtsseite einer Abgabe.
+	\ftable{submission}{\textbf{submission.xhtml} ist die Übersichtsseite einer Abgabe.
 		Hier werden alle mit der Einreichung verbundenen Aktivitäten abgebildet.}{
 		\fentry{/}{<ui:include>}{\hyperref[flt:toolbar]{Seitenleiste mit Tools.}}{rendered="\#\{submissionBacking.sessionInformation.user.editor\}"}{/}
 
@@ -347,7 +347,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{state-slctom}{<h:selectOneMenu>}{Status der Submission.}{value="\#\{submissionBacking.submission.state\}"}{readonly="\#\{not submissionBacking.sessionInformation.user.editor\}"}{/}
 
-		\fentry{/}{<f:selectItems>}{Auswahl des Status.}{value="\#\{submissionBacking.submissionState\}"\newline var=''select" \newline itemLabel="\#\{labels['subStateSelect.' += select]\}" \newline itemValue="\#\{select\}"}{/}{/}
+		\fentry{/}{<f:selectItems>}{Auswahl des Status.}{value="\#\{submissionBacking.submissionStates\}"\newline var=''select" \newline itemLabel="\#\{labels['subStateSelect.' += select]\}" \newline itemValue="\#\{select\}"}{/}{/}
 
 		\fentry{state-otxt}{<h:outputText>}{Status der Einreichung.}{value="\#\{submissionBacking.submission.state\}"}{/}{/}
 
@@ -376,7 +376,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{date-ssc}{<ssc:sortsearchcolumn>}{Spalte für das Abgabedatum des Papers.}{paginator="\#\{submissionBacking.paperPagination\}"\newline columnNamei18n="\#\{label.date\}"}{/}{/}
 
-		\fentry{date-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{submissionBacking.paperPagination.dateSelect\}" \newline title="\#\{help.dateSelect\}"}{/}{/}
+		\fentry{date-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{submissionBacking.paperPagination.resultListParameters.dateSelect\}" \newline title="\#\{help.dateSelect\}"}{/}{/}
 
 		\fentry{/}{<f:selectItems>}{Mögliche Filterung des Datums.}{value="\#\{submissionBacking.dateSelect\}" \newline var=''select" \newline itemLabel="\#\{labels['dateSelect.' += select]\}" \newline itemValue="\#\{select\}"}{/}{/}
 
@@ -413,7 +413,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{date-ssc}{<ssc:sortsearchcolumn>}{Spalte für das Abgabedatum des Gutachtens.}{paginator="\#\{submissionBacking.reviewPagination\}"\newline columnNamei18n="\#\{label.date\}"}{/}{/}
 
-		\fentry{date-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{submissionBacking.reviewPagination.dateSelect\}" title="\#\{help.dateSelect\}"}{/}{/}
+		\fentry{date-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{submissionBacking.reviewPagination.resultListParameters.dateSelect\}" title="\#\{help.dateSelect\}"}{/}{/}
 
 		\fentry{/}{<f:selectItems>}{Mögliche Filterung des Datums.}{value="\#\{submissionBacking.dateSelect\}" \newline var=''select" itemValue="\#\{select\}" itemLabel=\newline"\#\{labels['dateSelect.' += select]\}"}{/}{/}
 
@@ -516,7 +516,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \begin{samepage}
 
 	\ftable{scientificForumList}{\textbf{scientificForumList.xhtml} Hier erhalten die Nutzer eine Übersicht über alle wissenschaftliche Foren.}{
-		\fentry{date-select-slctom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{scientificForumListBacking.deadlineFilterSelect\}"}{/}{/}
+		\fentry{date-select-slctom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{scientificForumListBacking.scientificForumPagination.resultListParameters.dateSelect\}"}{/}{/}
 
 		\fentry{deadline-lst}{<f:selectItems>}{Liste der Auswahlmöglichkeiten}{value="\#\{scientificForumListBacking.dateSelects\}" \newline var=''"select" \newline itemLabel="\#\{labels['dateSelect.' += select]\}" \newline itemValue="\#\{select\}"}{/}{/}
 
@@ -659,7 +659,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 	\fentry{date-ssc}{<ssc:sortsearchcolumn>}{Spalte für das Abgabedatum der Einreichung.}{paginator="\#\{scientificForumBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.date\}"}{/}{/}
 
-	\fentry{deadline-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{scientificForumBacking.submissionPagination.dateSelect\}" title="\#\{help.deadlineSelect\}"}{/}{/}
+	\fentry{deadline-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{scientificForumBacking.submissionPagination.resultListParameters.dateSelect\}" title="\#\{help.deadlineSelect\}"}{/}{/}
 
 	\fentry{deadline-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{value="\#\{scientificForumBacking.dateSelects\}" \newline var=''select" \newline itemLabel="\#\{labels['dateSelect.' += select]\}" \newline itemValue="\#\{select\}"}{/}{/}
 
