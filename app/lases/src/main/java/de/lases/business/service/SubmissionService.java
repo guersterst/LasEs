@@ -1,6 +1,10 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.*;
+import de.lases.persistence.exception.DataNotCompleteException;
+import de.lases.persistence.exception.DatasourceQueryFailedException;
+import de.lases.persistence.exception.InvalidQueryParamsException;
+import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
@@ -9,6 +13,7 @@ import jakarta.inject.Inject;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Provides functionality regarding the management and handling of submissions.
@@ -32,31 +37,36 @@ public class SubmissionService implements Serializable {
      * @param submission A {@link Submission}-DTO containing a valid id.
      * @return The submission's data.
      */
-    public Submission getSubmission(Submission submission) {
+    public Submission get(Submission submission) {
         return null;
     }
 
     /**
      * Creates a new submission.
-     * <p></p>
+     * <p>
      * The selected editor, reviewers and co-authors are informed about this
-     * using the {@code EmailUtil} utility.
-     * Do not forget to also add a paper using {@link PaperService#addPaper(FileDTO, Submission)}.
+     * using the {@link de.lases.business.util.EmailUtil} utility.
+     * Do not forget to also add a paper using {@link PaperService#add(FileDTO, Submission)}.
+     * </p>
      *
-     * @param submission The submissions' data.
-     * @param forum      The forum where the submission is made.
+     * @param submission The submission's data in a {@link Submission}.
+     *                   Be cautious, this must contain a valid forum's id.
      * @param reviewers  The desired reviewers as proper {@code User}-DTOs or exclusively containing
      *                   an email-address.
      * @param coauthors  The desired co-athors as proper {@link User}-DTOs or exclusively containing
      *                   an email-address.
      */
-    public void createSubmission(Submission submission, ScientificForum forum, List<User> reviewers,
+    public void createSubmission(Submission submission, List<User> reviewers,
                                  List<User> coauthors) {
 
     }
 
     /**
      * Deletes a submission.
+     * <p>
+     * Assigned editors will be informed about this using the
+     * {@link de.lases.business.util.EmailUtil}-utility.
+     * </p>
      *
      * @param submission A {@link Submission}-DTO containing a valid id.
      */
@@ -67,25 +77,27 @@ public class SubmissionService implements Serializable {
     /**
      * Manipulates a submission.
      *
-     * @param newSubmission A {@link Submission}-DTO filled with the fields that are desired to be changed.
      * <p>
-     * All fields filled with legal values will be overwritten, the rest are ignored.
-     * It should contain an existing id value.
+     * Some manipulations will cause an email to be dispatched
+     * using the {@link de.lases.business.util.EmailUtil}-utility.
+     * <ul>
+     * <li> The submitter and all co-authors are informed
+     * about an accept or reject decision</li>
+     * <li> When changed, the new editor will be informed.</li>
+     * <li> The submitter about a required revision. </li>
+     * </ul>
      * </p>
+     *
+     * @param newSubmission A {@link Submission}-DTO filled with the fields that are desired to be changed.
+     *                      <p>
+     *                      All fields filled with legal values will be overwritten, the rest are ignored.
+     *                      It should contain an existing id value.
+     *                      </p>
      */
     public void change(Submission newSubmission) {
     }
 
-    /**
-     * Sets the state of a submission.
-     * <p></p>
-     * The submitter and all co-authors are informed about an accept or reject decision
-     * by email using the {@link de.lases.business.util.EmailUtil} utility.
-     *
-     * @param submission The {@link Submission}-DTO with a valid state.
-     */
-    public void setState(Submission submission) {
-    }
+    //todo remove
 
     /**
      * Sets the editor of a submission.
@@ -100,11 +112,12 @@ public class SubmissionService implements Serializable {
 
     /**
      * Adds a reviewer to a submission.
-     * <p></p>
+     * <p>
      * If successful the reviewer is informed by email using the
      * {@code EmailUtil} utility.
+     * </p>
      *
-     * @param submission The submission, that receives a new reviewer.
+     * @param submission The submission, with a valid id, that receives a new reviewer.
      * @param reviewer   The reviewer to be added to the submission.
      * @param reviewedBy Information about the review-request relationship.
      */
@@ -128,9 +141,10 @@ public class SubmissionService implements Serializable {
 
     /**
      * Removes a reviewer.
-     * <p></p>
+     * <p>
      * If successful the reviewer is informed by email using the
      * {@code EmailUtil} utility.
+     * </p>
      *
      * @param submission The submission, that loses a reviewer.
      * @param reviewer   The reviewer to be removed from the submission.
@@ -147,34 +161,38 @@ public class SubmissionService implements Serializable {
     public void realeaseReview(Review review, Submission submission) {
     }
 
-    //todo with boolean?
+    //todo remove
+    // ist schon in change doc integriert
 
     /**
      * Adds the requirement of a new revision to a given submission.
+     * // email -> change()
      *
      * @param submission The submission for which a revision is requested.
      */
     public void requireRevision(Submission submission) {
     }
 
-    //todo necessary?
-
     /**
      * Adds a co-author.
      *
      * @param coAuthor   The co-author to be added. This can be a regular {@link User}-DTO
+     *                   with a valid id
      *                   or exclusively contain an email address.
      * @param submission The submission, that receives a new co-author.
      */
     public void addCoAuthor(Submission submission, User coAuthor) {
     }
 
+    //todo necessary
+
     /**
      * Determines whether a user has permission to view a submission
      *
-     * @param submission The submission to be viewed.
-     * @param user       The user whose view access is being determined.
-     * @return {@code true} if the view access is allowed, {@code false} otherwise.
+     * @param submission The {@link Submission}, with a valid id, to be viewed.
+     * @param user       The {@link User} whose view access is being determined.
+     *                   Must contain a view-privilege.
+     * @return {@code false} if view access is restricted, {@code true} otherwise.
      */
     public boolean canView(Submission submission, User user) {
         return false;
@@ -209,6 +227,21 @@ public class SubmissionService implements Serializable {
      */
     public List<Submission> getList(ScientificForum scientificForum, User user, Privilege privilege,
                                     ResultListParameters resultParams) {
+        return null;
+    }
+
+    /**
+     * Gets a list all submissions that belong to a given scientific forum.
+     *
+     * @param scientificForum      A {@link ScientificForum} with a valid id.
+     * @param resultListParameters The {@link ResultListParameters} that results
+     *                             parameters from the pagination like
+     *                             filtering, sorting or number of elements.
+     * @return A list of all {@link Submission}s that belong to a given scientific forum.
+     */
+    public static List<Submission> getList(ScientificForum scientificForum,
+                                           ResultListParameters
+                                                   resultListParameters) {
         return null;
     }
 
