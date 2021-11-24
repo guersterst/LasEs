@@ -309,7 +309,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{state-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Status der Einreichung.}{paginator="\#\{homepageBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.stateSub\}"}{/}{/}
 
-		\fentry{state-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Status.}{value="\#\{homepageBacking.submissionPagination.submissionState\}" \newline title="\#\{help.stateSubSelect\}"}{/}{/}
+		\fentry{state-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Status.}{value="\#\{homepageBacking.submissionPagination.resultListParameters.submissionState\}" \newline title="\#\{help.stateSubSelect\}"}{/}{/}
 
 		\fentry{/}{<f:selectItems>}{Mögliche Filterung des Status.}{value="\#\{homepageBacking.submissionStates\}" \newline var=''select" \newline itemLabel="\#\{labels['stateSelect.' += select]\}" \newline itemValue="\#\{select\}"}{/}{/}
 
@@ -671,7 +671,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 	\fentry{state-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Status der Einreichung.}{paginator="\#\{scientificForumBacking.submissionPagination\}"\newline columnNamei18n="\#\{label.stateSub\}"}{/}{/}
 
-	\fentry{state-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Status.}{value="\#\{scientificForumBacking.submissionPagination.submissionState\}" title="\#\{help.stateSubSelect\}"}{/}{/}
+	\fentry{state-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Status.}{value="\#\{scientificForumBacking.submissionPagination.resultListParameters.submissionState\}" title="\#\{help.stateSubSelect\}"}{/}{/}
 
 	\fentry{state-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{value="\#\{scientificForumBacking.submissionStates\}" \newline var=''select" \newline itemLabel="\#\{labels['subStateSelect.' += select]\}" \newline itemValue="\#\{select\}"}{/}{/}
 
