@@ -31,11 +31,21 @@
                 </div>
             </div>
 
+            <h:form>
+                <input type="date"/>
+                <h:inputText a:type="date" value="#{profileBacking.testDate}" readonly="true">
+
+                </h:inputText>
+                <h:outputText value="#{profileBacking.testDate}" a:type="date">
+                    <f:convertDateTime type="localDate"/>
+                </h:outputText>
+            </h:form>
+
             <div class="card-body">
                 <div class="login-form">
                     <h:form>
-                        <input type="date"/>
-                        <h:inputText a:type="date"/>
+
+
                         <h:selectOneMenu value="#{submissionBacking.dateFilterSelectPaper}">
                             <f:selectItems value="#{submissionBacking.dateSelects}" var="select" itemValue="#{select}" itemLabel="#{labels['dateSelect.' += select]}"/>
                         </h:selectOneMenu>

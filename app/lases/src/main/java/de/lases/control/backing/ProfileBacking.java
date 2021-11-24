@@ -13,6 +13,7 @@ import jakarta.servlet.http.Part;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -47,6 +48,16 @@ public class ProfileBacking implements Serializable {
     private User adminPasswordInPopup;
 
     private boolean popupShown;
+
+    private LocalDate testDate = LocalDate.now();
+
+    public LocalDate getTestDate() {
+        return testDate;
+    }
+
+    public void setTestDate(LocalDate testDate) {
+        this.testDate = testDate;
+    }
 
     /**
      * Initializes the dto objects and gets the global list of science fields
