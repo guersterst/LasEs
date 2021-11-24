@@ -71,9 +71,6 @@ public class SubmissionBacking implements Serializable {
      *         the revision upload pdf
      *     </li>
      *     <li>
-     *         //TODO: filter doch noch?
-     *     </li>
-     *     <li>
      *         The submission this page is about
      *     </li>
      *     <li>
