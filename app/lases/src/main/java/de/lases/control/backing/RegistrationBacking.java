@@ -39,6 +39,11 @@ public class RegistrationBacking {
         return null;
     }
 
+    /**
+     * Get the dto of the new user.
+     *
+     * @return The new user.
+     */
     public User getNewUser() {
         return newUser;
     }
