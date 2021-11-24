@@ -84,6 +84,8 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	\fentry{user-list-lnk}{<h:link>}{Link zur Übersichtsseite aller Nutzer}{value="\#\{labels.userList\}" \newline outcome="/views/editor/userList \newline title="\#\{help.userList\}"}{rendered="\#\{navigationBacking.sessionInformation.user.editor\}"}{/}
 
 	\fentry{forum-list-lnk}{<h:link>}{Link zur Übersichtsseite alle Journale und Konferenzen}{value="\#\{labels.forumList\}" \newline outcome="/views/authenticated/scientificForumList" \newline title="\#\{help.forumList\}"}{rendered="\#\{navigationBacking.sessionInformation.user != null\}"}{/}
+	
+	\fentry{administration-lnk}{<h:link>}{Link zur Administartionsseite.}{value="\#\{labels.administration\}" \newline outcome="/views/admin/administration"}{rendered="navigationBacking.sessionInformation.user.admin"}{/}
 
 	\fentry{logout-cbtn}{<h:commandButton>}{Loggt den Nutzer aus dem System aus und leitet zur Loginseite weiter.}{value="\#\{labels.logout\}" \newline action="\#\{navigationBacking.logout\}" \newline title="\#\{help.logout\}"}{rendered="\#\{navigationBacking.sessionInformation.user != null\}"}{/}
 
@@ -778,7 +780,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 		\fentry{titel-itxt}{<h:inputText>}{Angabe eines Titels.}{value="\#\{newUserBacking.newUser.title\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{/}
 
 		\fentry{e-mail-itxt}{<h:inputText>}{Angabe einer E-Mail-Adresse.}{value="\#\{newUserBacking.newUser.emailAddress\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{emailAddressExistsValidator \newline emailAddressLayoutValidator \newline required="true" \newline requiredMessage=\newline "\#\{message.email\}"}
-		
+
 		\fentry{is-admin-cbx}{<h:selectBooleanCheckbox>}{Zuordnung einer Administratorenrolle.}{value="\#\{newUserBacking.admin\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{/}
 
 		\fentry{abort-btn}{<h:commandButton>}{Abbruch des Vorgangs: Nutzererstellen.}{value="\#\{newUserBacking.abort\}"}{render="\#\{newUserBacking.sessionInformation.user.isAdmin\}"}{/}
