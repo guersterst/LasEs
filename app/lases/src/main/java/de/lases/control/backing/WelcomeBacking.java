@@ -34,8 +34,8 @@ public class WelcomeBacking {
     private SystemSettings systemSettings;
 
     /**
-     * Load the text displayed on the welcome page from the system settigns
-     * and set up the user dto for login.
+     * Load the system settings dto in order to get the  text displayed on the
+     * welcome page and set up the user dto for login.
      */
     @PostConstruct
     public void init() {
@@ -60,6 +60,11 @@ public class WelcomeBacking {
         return "register";
     }
 
+    /**
+     * Get the user dto that holds the entered login information.
+     *
+     * @return The dto holding the entered login information.
+     */
     public User getLoginInput() {
         return loginInput;
     }
