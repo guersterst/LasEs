@@ -35,6 +35,24 @@ public class ScientificForumRepository {
     }
 
     /**
+     * Takes a scientific forum dto that is filled with an id or a
+     * name and returns if this scientific forum exists.
+     *
+     * @param scientificForum A {@code ScientificForum} dto that must be filled
+     *                        with an id or name.
+     * @param transaction The transaction to use.
+     * @return Does this scientific forum exist?
+     * @throws InvalidFieldsException If both name and id are provided, but they
+     *                                belong to two different scientific forums.
+     * @throws DatasourceQueryFailedException If the datasource cannot be
+     *                                        queried.
+     */
+    public static boolean exists(ScientificForum scientificForum,
+                                 Transaction transaction) {
+        return false;
+    }
+
+    /**
      * Adds a scientific forum to the repository.
      *
      * @param scientificForum A fully filled scientific forum dto.
@@ -193,17 +211,5 @@ public class ScientificForumRepository {
                                           Transaction transaction)
             throws NotFoundException, DataNotWrittenException{
     }
-
-    /**
-     * Returns the scientific forum that belongs to a specific submission.
-     *
-     * @param submission The submission to which the forum should be returned.
-     * @return The scientific forum for the given submission.
-     */
-    public ScientificForum getScientificForumForSubmission(
-            Submission submission) {
-        return null;
-    }
-
 
 }
