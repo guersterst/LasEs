@@ -31,7 +31,8 @@ public class UserListBacking implements Serializable {
     private Pagination<User> userPagination;
 
     /**
-     * Set up the pagination and show the first page.
+     * Initialize the user pagination and load the first page from the
+     * datasource.
      */
     @PostConstruct
     public void init() {
