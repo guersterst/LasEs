@@ -433,7 +433,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{recommen-dation-review-ssc}{<ssc:sortsearchcolumn>}{Spalte für die Empfehlung.}{paginator="\#\{submissionBacking.reviewPagination\}"\newline columnNamei18n="\#\{label.recommendation\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor || submissionBacking.sessionInformation.user.reviewer}{/}
 
-		\fentry{recommen-dation-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit Empfehlung.}{value="\#\{submissionBacking.recommendationFilterInputReview\}" \newline title="\#\{help.recommendationSelect\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor || submissionBacking.sessionInformation.user.reviewer}{/}
+		\fentry{recommen-dation-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit Empfehlung.}{value="\#\{submissionBacking.reviewPagination.resultListParameters.recommendationFilter\}" \newline title="\#\{help.recommendationSelect\}"}{rendered="\#\{submissionBacking.sessionInformation.user.editor || submissionBacking.sessionInformation.user.reviewer}{/}
 
 		\fentry{/}{<f:selectItem>}{Positive Empfehlung.}{itemValue="true" \newline itemLabel="\#\{label.recommendationTrue\}"}{/}{/}
 
