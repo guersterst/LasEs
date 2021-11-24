@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
 <f:metadata>
     <f:importConstants type="de.lases.control.backing.DateSelect" var="Date"/>
     <f:loadBundle var="labels" basename="resource_bundles.labels"/>
@@ -34,15 +35,35 @@
             <h:form>
                 <h:outputText value="#{footerBacking.sessionInformation.locale.getCountry}"/>
                 <input type="date"/>
-                <h:inputText a:type="date" value="#{profileBacking.testDate}" readonly="true">
 
+                <br/>
+
+                <h:inputText a:type="date" value="#{profileBacking.testDate}" readonly="true">
                 </h:inputText>
+
+                <br/>
+
                 <h:outputText value="#{profileBacking.testDate}" a:type="date">
                     <f:convertDateTime type="localDate"/>
                 </h:outputText>
 
+                <br/>
+
                 <h:outputText value="#{labels.appName}"/>
+
+                <br/>
+
             </h:form>
+
+            <p:commandButton value="DIALOG FÜR STEFAN" type="button" onclick="PF('dlg').show();"/>
+            <h:form>
+                <p:dialog header="Wichtiger hinweis" appendToBody="true" widgetVar="dlg" modal="true">
+                    <h:outputText value="dialog jaja?"/>
+                    mEEEXDN xD
+                    <p:commandButton value="Close" onclick="PF('dlg').hide();"/>
+                </p:dialog>
+            </h:form>
+
 
             <div class="card-body">
                 <div class="login-form">
@@ -50,25 +71,28 @@
 
 
                         <h:selectOneMenu value="#{submissionBacking.dateFilterSelectPaper}">
-                            <f:selectItems value="#{submissionBacking.dateSelects}" var="select" itemValue="#{select}" itemLabel="#{labels['dateSelect.' += select]}"/>
+                            <f:selectItems value="#{submissionBacking.dateSelects}" var="select" itemValue="#{select}"
+                                           itemLabel="#{labels['dateSelect.' += select]}"/>
                         </h:selectOneMenu>
                         <h4>
                             <h:outputText value="#{labels['appName']}"/>
                         </h4>
                         <h:inputText id="email-itxt" value="#{welcomeBacking.loginInput.emailAddress}" required="true"
-                        requiredMessage="#{message.email}">
+                                     requiredMessage="#{message.email}">
                             <!--<f:validator/>
                             <f:validator/>-->
                         </h:inputText>
                         <h4>Password</h4>
-                        <h:inputSecret id="password-itxt" value="#{welcomeBacking.loginInput.passwordNotHashed}" required="true" requiredMessage="#{message.password}">
-                           <f:validateLength minimum="8" maximum="100"/>
+                        <h:inputSecret id="password-itxt" value="#{welcomeBacking.loginInput.passwordNotHashed}"
+                                       required="true" requiredMessage="#{message.password}">
+                            <f:validateLength minimum="8" maximum="100"/>
                         </h:inputSecret>
                         <div>
                             <h:commandButton id="login-cbtn" value="Login" action="#{welcomeBacking.login}"/>
                         </div>
                         <div>
-                            <h:commandButton id="register-cbtn" value="Register" action="#{welcomeBacking.goToRegister}"/>
+                            <h:commandButton id="register-cbtn" value="Register"
+                                             action="#{welcomeBacking.goToRegister}"/>
                         </div>
                         <!--<div class="error-msgs" versionNumber="error-msgs">
                             <h:messages/>
