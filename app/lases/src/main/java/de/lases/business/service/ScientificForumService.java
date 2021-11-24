@@ -32,7 +32,7 @@ public class ScientificForumService implements Serializable {
      * @param forum A {@link ScientificForum}-DTO containing a valid id.
      * @return The requested scientific forum.
      */
-    public ScientificForum getForum(ScientificForum forum) {
+    public ScientificForum get(ScientificForum forum) {
         return null;
     }
 
@@ -41,10 +41,11 @@ public class ScientificForumService implements Serializable {
      *
      * @param newForum The new data of the scientific forum.
      *                 <p>
-     *                 Should contain a valid id.
+     *                 All fields filled with legal values will be overwritten, the rest are ignored.
+     *                 It should contain an existing id value.
      *                 </p>
      */
-    public void updateForum(ScientificForum newForum) {
+    public void change(ScientificForum newForum) {
     }
 
     /**
@@ -58,7 +59,7 @@ public class ScientificForumService implements Serializable {
      * @param scienceFields The scientific fields, which this forum is specialized in.
      * @param editors       The editors of this forum.
      */
-    public void addForum(ScientificForum forum, List<ScienceField> scienceFields, List<User> editors) {
+    public void add(ScientificForum forum, List<ScienceField> scienceFields, List<User> editors) {
     }
 
     /**
@@ -66,14 +67,15 @@ public class ScientificForumService implements Serializable {
      *
      * @param forum The scientific forum to be deleted.
      */
-    public void removeForum(ScientificForum forum) {
+    public void remove(ScientificForum forum) {
     }
 
     /**
      * Adds an editor to a scientific forum.
      *
-     * @param editor The user added as an editor.
-     * @param forum  The forum to which the editor is being added.
+     * @param editor The {@link User} added as an editor, containing a valid id.
+     * @param forum  The {@link ScientificForum} to which the editor is being added,
+     *               containing a valid id.
      */
     public void addEditor(User editor, ScientificForum forum) {
     }
@@ -81,8 +83,9 @@ public class ScientificForumService implements Serializable {
     /**
      * Removes an editor from a scientific forum.
      *
-     * @param editor The user removed as an editor.
-     * @param forum  The forum from which the editor is being removed.
+     * @param editor The {@link User} removed as an editor, containing a valid id.
+     * @param forum  The {@link ScientificForum} from which the editor is being removed,
+     *               containing a valid id
      */
     public void removeEditor(User editor, ScientificForum forum) {
     }
@@ -90,16 +93,31 @@ public class ScientificForumService implements Serializable {
     /**
      * Adds a scientific field to a forum in which it has expertise.
      *
-     * @param scienceField The scientific field of expertise.
-     * @param forum        The forum, which receives a new scientific field of expertise.
+     * @param scienceField The scientific field of expertise, with a valid id.
+     * @param forum        The forum, which receives a new scientific field of expertise,
+     *                     containing a valid id
      */
     public void addScienceField(ScienceField scienceField, ScientificForum forum) {
     }
 
     /**
+     * Removes an area of expertise from a scientific forum.
+     *
+     * @param scienceField    A {@link ScienceField} containing a valid id, which is removed
+     *                        from the forum.
+     * @param scientificForum A {@link ScientificForum} from which the area of expertise e.g.
+     *                        {@code ScienceField} is being removed from. Should contain
+     *                        a valid id.
+     */
+    public void removeScienceField(ScienceField scienceField, ScientificForum scientificForum) {
+
+    }
+
+    /**
      * Gets all editors of a scientific forum.
      *
-     * @param forum The forum where the editors are requested.
+     * @param forum The {@link ScientificForum} where the editors are requested,
+     *              containing a valid id.
      * @return All editors of the given forum.
      */
     public List<User> getEditors(ScientificForum forum) {
@@ -113,6 +131,17 @@ public class ScientificForumService implements Serializable {
      * @return All scientific forums.
      */
     public List<ScientificForum> getList(ResultListParameters resultListParams) {
+        return null;
+    }
+
+    /**
+     * Returns the {@code ScientificForum}, to which a given {@code Submission} was submitted to.
+     *
+     * @param submission The {@link Submission} for which the {@link ScientificForum}
+     *                   is requested.
+     * @return The requested {@code ScientificForum} for a {@code Submission}.
+     */
+    public ScientificForum getScientificForumForSubmission(Submission submission) {
         return null;
     }
 
