@@ -1,10 +1,6 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.*;
-import de.lases.persistence.exception.DataNotCompleteException;
-import de.lases.persistence.exception.DatasourceQueryFailedException;
-import de.lases.persistence.exception.InvalidQueryParamsException;
-import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
@@ -31,17 +27,28 @@ public class ScienceFieldService implements Serializable {
     private Transaction transaction;
 
     /**
-     * Adds a scientific field to the database.
+     * Gets a {@link ScienceField}.
      *
-     * @param field The scientific fields' data.
+     * @param scienceField A {@code ScienceField} containing a valid id.
+     * @return The fully filled requested {@code ScienceField}.
+     */
+    public ScienceField get(ScienceField scienceField) {
+    return null;
+    }
+
+    /**
+     * Adds a {@link ScienceField} to the database.
+     *
+     * @param field The scientific field's data.
      */
     public void add(ScienceField field) {
     }
 
     /**
-     * Determines whether a scientific field is already represented in the database.
+     * Determines whether a {@link ScienceField} is already represented in the database.
      *
-     * @param scienceField The data of the scientific field, which is to be evaluated.
+     * @param scienceField The {@code ScienceField}, which is to be evaluated.
+     *                     Must contain a valid id.
      * @return {@code true} if this scientific field already exists, {@code false} otherwise.
      */
     public boolean exists(ScienceField scienceField) {
@@ -49,20 +56,21 @@ public class ScienceFieldService implements Serializable {
     }
 
     /**
-     * Removes a scientific field from the database.
+     * Removes a {@link ScienceField} from the database.
      *
-     * @param field The scientific field to be removed.
+     * @param field The {@code ScienceField} to be removed.
+     *              Must contain a valid id.
      */
     public void remove(ScienceField field) {
     }
 
     /**
-     * Gets a list all science fields that belong to the specified scientific
-     * forum.
+     * Gets a list all {@link ScienceField} that belong to the specified {@link ScientificForum}.
      *
-     * @param forum The {@code ScientificForum}-DTO with a valid id.
+     * @param forum The {@code ScientificForum} whose fields of epertise are requested.
+     *             Must contain a valid id.
      * @param resultListParameters The parameters, that control filtering and sorting of the resulting list.
-     * @return All scientific fields in which a given forum has expertise.
+     * @return All scientific fields in which a given {@code ScientificForum} has expertise.
      */
     public static List<ScienceField> getList(ScientificForum forum,
                                              ResultListParameters
@@ -71,11 +79,12 @@ public class ScienceFieldService implements Serializable {
     }
 
     /**
-     * Gets a list of all scientific fields that belong to a given user.
+     * Gets a list of all {@link ScienceField}s, in which a given {@link User} has expertise.
      *
-     * @param user A {@code User}-DTO with a valid id.
+     * @param user The {@code User}, whose {@code ScienceField}s are requested.
+     *             Must contain a valid id.
      * @param resultListParameters The parameters, that control filtering and sorting of the resulting list.
-     * @return All scientific fields in which a given user has expertise.
+     * @return All scientific fields in which a given {@code User} has expertise.
      */
     public static List<ScienceField> getList(User user, Transaction transaction,
                                              ResultListParameters
@@ -84,7 +93,7 @@ public class ScienceFieldService implements Serializable {
     }
 
     /**
-     * Gets a list all science fields.
+     * Gets a list of all {@link ScienceField}s.
      *
      * @param resultListParameters The parameters, that control filtering and sorting of the resulting list.
      * @return All scientific fields.

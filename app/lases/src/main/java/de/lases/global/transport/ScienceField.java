@@ -3,7 +3,7 @@ package de.lases.global.transport;
 import java.util.List;
 
 /**
- * Represents a field of science.
+ * Represents a field of expertise in science.
  */
 public class ScienceField {
 
