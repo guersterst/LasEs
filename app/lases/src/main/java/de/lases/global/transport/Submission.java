@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Represents a submission.
  */
-public class Submission {
+public class Submission implements Cloneable {
 
     private int scientificForumId;
 
@@ -142,5 +142,21 @@ public class Submission {
      */
     public void setSubmissionTime(LocalDateTime submissionTime) {
         this.submissionTime = submissionTime;
+    }
+
+    /**
+     * Create a deep copy of the original object.
+     *
+     * @return A deep copy.
+     */
+    @Override
+    public Submission clone() {
+        try {
+            Submission clone = (Submission) super.clone();
+            // TODO: copy mutable state here, so the clone can't change the internals of the original
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

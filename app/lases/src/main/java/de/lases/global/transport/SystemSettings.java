@@ -3,7 +3,7 @@ package de.lases.global.transport;
 /**
  * Represents the system settings.
  */
-public class SystemSettings {
+public class SystemSettings implements Cloneable {
 
     private String imprint;
 
@@ -80,5 +80,21 @@ public class SystemSettings {
      */
     public void setStyle(Style style) {
         this.style = style;
+    }
+
+    /**
+     * Create a deep copy of the original object.
+     *
+     * @return A deep copy.
+     */
+    @Override
+    public SystemSettings clone() {
+        try {
+            SystemSettings clone = (SystemSettings) super.clone();
+            // TODO: copy mutable state here, so the clone can't change the internals of the original
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

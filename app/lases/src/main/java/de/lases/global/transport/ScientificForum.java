@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Represents a scientific forum.
  */
-public class ScientificForum {
+public class ScientificForum implements Cloneable {
 
     private int id;
 
@@ -96,5 +96,21 @@ public class ScientificForum {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * Create a deep copy of the original object.
+     *
+     * @return A deep copy.
+     */
+    @Override
+    public ScientificForum clone() {
+        try {
+            ScientificForum clone = (ScientificForum) super.clone();
+            // TODO: copy mutable state here, so the clone can't change the internals of the original
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }
