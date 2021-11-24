@@ -73,15 +73,71 @@ public class SubmissionBacking implements Serializable {
     private Paper newestPaper;
 
     /**
-     * Initialize the dtos needed for displaying this page.
+     * Initialize the dtos.
+     * Create the objects for:
+     * <ul>
+     *     <li>
+     *         the revision upload pdf
+     *     </li>
+     *     <li>
+     *         //TODO: filter doch noch?
+     *     </li>
+     *     <li>
+     *         The submission this page is about
+     *     </li>
+     *     <li>
+     *         the scientific forum this paper was submitted into
+     *     </li>
+     *     <li>
+     *         the list of co-authors for this submission
+     *     </li>
+     *     <li>
+     *         the pagination for papers
+     *     </li>
+     *     <li>
+     *         the pagination for reviews
+     *     </li>
+     *     <li>
+     *         the reviewed by object
+     *     </li>
+     *     <li>
+     *         the newest paper in the submission
+     *     </li>
+     * </ul>
+     * No data can be loaded form the datasource at this point. (See the
+     * {@code onLoad() method}).
      */
     @PostConstruct
     public void init() {
     }
 
     /**
-     * Get the correct submission from the view param and load all data that
-     * should be displayed.
+     * Get the correct submission id from the view param (will be called in a
+     * view action) and load all data that should be displayed from the
+     * datasource:
+     * <ul>
+     *     <li>
+     *         The submission this page is about
+     *     </li>
+     *     <li>
+     *         the scientific forum this submission was submitted into
+     *     </li>
+     *     <li>
+     *         the list of co-authors for this submission
+     *     </li>
+     *     <li>
+     *         the pagination for papers
+     *     </li>
+     *     <li>
+     *         the pagination for reviews
+     *     </li>
+     *     <li>
+     *         the reviewed by object
+     *     </li>
+     *     <li>
+     *         the newest paper in the submission
+     *     </li>
+     * </ul>
      *
      * @throws IllegalAccessException If the user has no access rights for this
      *                                submission
@@ -186,6 +242,11 @@ public class SubmissionBacking implements Serializable {
     public void uploadPDF() {
     }
 
+    /**
+     * Get the {@code Part} file where the revision PDF can be uploaded.
+     *
+     * @return The file where the revision can be uploaded.
+     */
     public Part getUploadedRevisionPDF() {
         return uploadedRevisionPDF;
     }
@@ -199,6 +260,11 @@ public class SubmissionBacking implements Serializable {
         this.uploadedRevisionPDF = uploadedRevisionPDF;
     }
 
+    /**
+     * Get the selected filter option for filtering papers after date.
+     *
+     * @return The selected filter option for filtering papers after date.
+     */
     public DateSelect getDateFilterSelectPaper() {
         return dateFilterSelectPaper;
     }
@@ -213,6 +279,11 @@ public class SubmissionBacking implements Serializable {
         this.dateFilterSelectPaper = dateFilterSelectPaper;
     }
 
+    /**
+     * Get the selected filter option for filtering review after date.
+     *
+     * @return The selected filter option for filtering review after date.
+     */
     public DateSelect getDateFilterSelectReview() {
         return dateFilterSelectReview;
     }
@@ -227,6 +298,11 @@ public class SubmissionBacking implements Serializable {
         this.dateFilterSelectReview = dateFilterSelectReview;
     }
 
+    /**
+     * Set the selected filter option for filtering papers after visibility.
+     *
+     * @return The selected filer option for filtering papers afte visibiltiy.
+     */
     public boolean isVisibleFilterInputPaper() {
         return visibleFilterInputPaper;
     }
@@ -241,6 +317,12 @@ public class SubmissionBacking implements Serializable {
         this.visibleFilterInputPaper = visibleFilterInputPaper;
     }
 
+    /**
+     * Get the selected filter option for filtering review after visibility.
+     *
+     * @return The selected filter option for filtering reviews after
+     *         visibility.
+     */
     public boolean isVisibleFilterInputReview() {
         return visibleFilterInputReview;
     }
@@ -255,6 +337,13 @@ public class SubmissionBacking implements Serializable {
         this.visibleFilterInputReview = visibleFilterInputReview;
     }
 
+    /**
+     * Get the selected filter option for filtering reviews after reviewer
+     * recommendation.
+     *
+     * @return The selected filter option for filtering reviews after reviewr
+     *         recommendation.
+     */
     public boolean isRecommendationFilterInputReview() {
         return recommendationFilterInputReview;
     }
