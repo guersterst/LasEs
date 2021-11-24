@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Represents a user.
  */
-public class User {
+public class User implements Cloneable {
 
     private int verificationId;
 
@@ -285,5 +285,21 @@ public class User {
      */
     public void setNumberOfSubmissions(int numberOfSubmissions) {
         this.numberOfSubmissions = numberOfSubmissions;
+    }
+
+    /**
+     * Create a deep copy of the original object.
+     *
+     * @return A deep copy.
+     */
+    @Override
+    public User clone() {
+        try {
+            User clone = (User) super.clone();
+            // TODO: copy mutable state here, so the clone can't change the internals of the original
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
  * Bundles information about the verification process is somebody is newly
  * registered or has just changed their email.
  */
-public class Verification {
+public class Verification implements Cloneable {
 
     private int userId;
 
@@ -98,5 +98,21 @@ public class Verification {
      */
     public void setNonVerifiedEmailAddress(String nonVerifiedEmailAddress) {
         this.nonVerifiedEmailAddress = nonVerifiedEmailAddress;
+    }
+
+    /**
+     * Create a deep copy of the original object.
+     *
+     * @return A deep copy.
+     */
+    @Override
+    public Verification clone() {
+        try {
+            Verification clone = (Verification) super.clone();
+            // TODO: copy mutable state here, so the clone can't change the internals of the original
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

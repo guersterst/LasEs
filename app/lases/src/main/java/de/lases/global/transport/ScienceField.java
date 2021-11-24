@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Represents a field of science.
  */
-public class ScienceField {
+public class ScienceField implements Cloneable {
 
     private int id;
 
@@ -35,5 +35,21 @@ public class ScienceField {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * Create a deep copy of the original object.
+     *
+     * @return A deep copy.
+     */
+    @Override
+    public ScienceField clone() {
+        try {
+            ScienceField clone = (ScienceField) super.clone();
+            // TODO: copy mutable state here, so the clone can't change the internals of the original
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

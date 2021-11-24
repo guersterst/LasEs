@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 /**
  * Represents a review.
  */
-public class Review {
+public class Review implements Cloneable {
 
     private int paperVersion;
 
@@ -113,5 +113,21 @@ public class Review {
      */
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    /**
+     * Create a deep copy of the original object.
+     *
+     * @return A deep copy.
+     */
+    @Override
+    public Review clone() {
+        try {
+            Review clone = (Review) super.clone();
+            // TODO: copy mutable state here, so the clone can't change the internals of the original
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }
