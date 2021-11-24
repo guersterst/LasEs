@@ -36,49 +36,6 @@ public class User implements Cloneable {
 
     private int numberOfSubmissions;
 
-    /**
-     * Return if the user is an editor.
-     *
-     * @return Is the user an editor.
-     */
-    public boolean isEditor() { return false; }
-
-    /**
-     * Add or remove editor privileges to the user.
-     *
-     * @param isEditor Should the user be an editor.
-     */
-    public void setEditor(boolean isEditor) { }
-
-    /**
-     * Return if the user is a reviewer.
-     *
-     * @return Is the user a reviewer.
-     */
-    public
-    boolean isReviewer() { return false; }
-
-    /**
-     * Add or remove reviewer privileges to the user.
-     *
-     * @param isReviewer Should the user be a reviewer.
-     */
-    public void setReviewer(boolean isReviewer) { }
-
-    /**
-     * Return if the user is an admin.
-     *
-     * @return Is the user an admin.
-     */
-    public boolean isAdmin() { return false; }
-
-    /**
-     * Add or remove admin privileges to the user.
-     *
-     * @param isAdmin Should teh use be an admin.
-     */
-    public void setAdmin(boolean isAdmin) { }
-
     public int getVerificationId() {
         return verificationId;
     }
