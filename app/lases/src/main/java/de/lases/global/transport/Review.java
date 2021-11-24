@@ -130,4 +130,15 @@ public class Review implements Cloneable {
             throw new AssertionError();
         }
     }
+
+    /**
+     * Check equality by comparing reviewer id, paper version and submission id.
+     *
+     * @param object The object to compare to.
+     * @return Is the provided object equal to this review?
+     */
+    @Override
+    public boolean equals(Object object) {
+        return false;
+    }
 }

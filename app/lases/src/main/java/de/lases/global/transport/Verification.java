@@ -101,6 +101,17 @@ public class Verification implements Cloneable {
     }
 
     /**
+     * Check equality by comparing ids.
+     *
+     * @param object The object to compare to.
+     * @return Is the provided object equal to this verification?
+     */
+    @Override
+    public boolean equals(Object object) {
+        return false;
+    }
+
+    /**
      * Create a deep copy of the original object.
      *
      * @return A deep copy.

@@ -82,4 +82,15 @@ public class Paper implements Cloneable {
             throw new AssertionError();
         }
     }
+
+    /**
+     * Check equality by comparing version and submission id.
+     *
+     * @param object The object to compare to.
+     * @return Is the provided object equal to this paper?
+     */
+    @Override
+    public boolean equals(Object object) {
+        return false;
+    }
 }

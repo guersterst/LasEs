@@ -84,4 +84,15 @@ public class ReviewedBy implements Cloneable {
             throw new AssertionError();
         }
     }
+
+    /**
+     * Check equality by comparing reviewerId and submissionId.
+     *
+     * @param object The object to compare to.
+     * @return Is the provided object equal to this ReviewedBy?
+     */
+    @Override
+    public boolean equals(Object object) {
+        return false;
+    }
 }

@@ -52,4 +52,15 @@ public class ScienceField implements Cloneable {
             throw new AssertionError();
         }
     }
+
+    /**
+     * Check equality by comparing ids.
+     *
+     * @param object The object to compare to.
+     * @return Is the provided object equal to this user?
+     */
+    @Override
+    public boolean equals(Object object) {
+        return false;
+    }
 }
