@@ -143,7 +143,7 @@ public class SubmissionRepository {
     }
 
     /**
-     * Gets a list all submissions that belong to the specified scientific
+     * Gets a list of all submissions that belong to the specified scientific
      * forum.
      *
      * @param scientificForum A {@code ScientificForum} dto with a valid id.
@@ -151,6 +151,7 @@ public class SubmissionRepository {
      * @param resultListParameters The ResultListParameters dto that results
      *                             parameters from the pagination like
      *                             filtering, sorting or number of elements.
+     *
      * @return A list of fully filled submission dtos for all reviews that
      *         belong to the specified scientific forum.
      * @throws DataNotCompleteException If the list is truncated.

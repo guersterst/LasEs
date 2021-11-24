@@ -27,37 +27,70 @@ public class ReviewService implements Serializable {
     @Inject
     private Transaction transaction;
 
+    /**
+     * Gets a {@link Review}.
+     *
+     * @param review The requested {@code Review} containing a valid id.
+     * @return The fully filled requested {@code Review}.
+     */
+    public Review get(Review review) {
+        return null;
+    }
 
     /**
-     * Adds a review to a submission.
+     * Updates a {@link Review}.
+     *
+     * @param newReview A {@link Review} filled with the fields that are desired to be changed.
+     *                  <p>
+     *                  All fields filled with legal values will be overwritten, the rest are ignored.
+     *                  It should contain an existing id value.
+     *                  </p>
+     */
+    public void change(Review newReview) {
+    }
+
+    /**
+     * Adds a {@link Review} to a {@link Submission}.
      * <p>
-     * The review will always be added to the latest paper. It has to be submitted
-     * within the given timeline and one reviewer can onl submit one review per paper.
+     * The {@code Review} will always be added to the latest {@link Paper}.
+     * It has to be submitted
+     * within the given timeline and one reviewer can only submit one {@code Review}
+     * per {@code Paper}.
      * </p>
      *
-     * @param submission The submission to which the review is submitted.
-     * @param review     The review that is submitted.
-     * @param file       The file containing the pdf review itself.
-     * @param reviewer   The reviewer attempting to submit.
+     * @param review The {@code Review} that is submitted.
+     *               Must be filled with a valid
+     *               reviewerId, paperId and submissionId.
+     * @param file   The {@link FileDTO} containing the pdf review itself.
      */
-    public void addReview(Submission submission, Review review, FileDTO file, User reviewer) {
+    public void add(Review review, FileDTO file) {
 
     }
 
     /**
-     * Removes a review.
+     * Removes a {@link Review}.
+     * <p>
+     * If the {@code User} removing the review is not
+     * the reviewer himself an email will be dispatched to the
+     * reviewer informing him about this action.
+     * The {@link de.lases.business.util.EmailUtil} utility will
+     * be used for this.
+     * </p>
      *
-     * @param review The review that is to be removed.
+     * @param review The {@code Review} that is to be removed. Must be filled with a valid
+     *               reviewerId, paperId and submissionId.
+     * @param user The {@link User} who removes the {@code Review}.
+     *             Must contain a valid id.
      */
-    public void removeReview(Review review) {
+    public void remove(Review review, User user) {
     }
 
     /**
-     * Gets all reviews that can be viewed by a given user.
+     * Gets all {@link Review}s that can be viewed by a given {@link User}.
      * For example, a reviewer can only view his own reviews.
      *
-     * @param submission           The submission from which the reviews are requested.
-     * @param user                 The user who requests to see the reviews.
+     * @param submission           The {@link Submission} from which the reviews are requested.
+     * @param user                 The {@code User} who requests to see the {@code Reviews}.
      * @param resultListParameters The parameters, that control filtering and
      *                             sorting of the resulting list.
      * @return The requested reviews, which the given user is allowed to view.
@@ -68,12 +101,13 @@ public class ReviewService implements Serializable {
     }
 
     /**
-     * Gets the file containing the reviews pdf.
+     * Gets the {@link FileDTO} containing the {@code Review}'s pdf.
      *
-     * @param review The review containing the requested file.
-     * @return The requested file.
+     * @param review The {@code Review} containing the requested file.
+     *               Must contain a valid id.
+     * @return The requested {@code File}.
      */
-    public FileDTO downloadFile(Review review) {
+    public FileDTO getFile(Review review) {
         return null;
     }
 }

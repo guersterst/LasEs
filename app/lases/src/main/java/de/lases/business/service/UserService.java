@@ -1,6 +1,10 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.*;
+import de.lases.persistence.exception.DataNotWrittenException;
+import de.lases.persistence.exception.DatasourceQueryFailedException;
+import de.lases.persistence.exception.InvalidFieldsException;
+import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
@@ -27,12 +31,12 @@ public class UserService implements Serializable {
     private Transaction transaction;
 
     /**
-     * Gets a {@code User}-DTO.
+     * Gets a {@code User}.
      *
-     * @param user A {@link User}-DTO that should contain an existing id value.
+     * @param user A {@link User}-DTO, that should contain an existing id value.
      * @return A {@code User}-DTO filled with all available fields.
      */
-    public User getUser(User user) throws IllegalArgumentException {
+    public User get(User user) throws IllegalArgumentException {
         return null;
     }
 
@@ -40,28 +44,29 @@ public class UserService implements Serializable {
      * Manipulates a user.
      *
      * @param newUser A {@link User}-DTO filled with the fields that are desired to be changed.
-     *                <p></p>
-     * All fields filled with legal values will be overwritten, the rest are ignored.
-     * It should contain an existing id value.
-     *                <p></p>
-     * When the email address is changed the verification process is initiated
-     * using the {@code EmailUtil} utility.
+     *                <p>
+     *                All fields filled with legal values will be overwritten, the rest are ignored.
+     *                It should contain an existing id value.
+     *                When the email address is changed the verification process is initiated
+     *                using the {@code EmailUtil} utility.
+     *                </p>
      */
-    public void editUser(User newUser) throws IllegalArgumentException {
+    public void change(User newUser) throws IllegalArgumentException {
     }
 
     /**
-     * Deletes a {@code User} from the applications data.
+     * Deletes a {@code User} from the application's data.
      *
      * @param user A {@link User}-DTO containing a valid id.
      */
-    public void deleteUser(User user) {
+    public void remove(User user) {
     }
 
     /**
      * Determines whether an email is already in use in this applications.
      *
-     * @param user A {@link User}-DTO containing a valid id and an email-adress.
+     * @param user The {@link User} to be removed,
+     *             containing a valid id or email-address.
      * @return {@code true}, if the email does already exist. {@code false} otherwise.
      */
     public boolean emailExists(User user) {
@@ -69,60 +74,78 @@ public class UserService implements Serializable {
     }
 
     /**
-     * Sets a users avatar.
+     * Sets a user's avatar.
      * <p>
-     * The avatar is parsed into a thumbnail.
+     * The avatar is parsed into a thumbnail using the
+     * {@link de.lases.business.util.AvatarUtil} utility.
+     * </p>
      *
      * @param avatar The {@link FileDTO} containing the image as a byte-array.
+     * @param user   The {@link User} whose avatar is being set.
+     *               Must contain a valid id.
      */
-    public void setAvatar(FileDTO avatar) {
+    public void setAvatar(FileDTO avatar, User user) {
     }
 
     /**
-     * Gets the users' avatar.
+     * Gets the user's avatar.
      *
-     * @return The users' avatar as a byte-array, wrapped by a {@code FileDTO}.
+     * @param user The {@link User} whose avatar is being requested.
+     *             Must contain a valid id.
+     * @return The user's avatar as a byte-array, wrapped by a {@code FileDTO}.
      */
-    public FileDTO getAvatar() {
+    public FileDTO getAvatar(User user) {
         return null;
     }
 
     /**
-     * Deletes a users' avatar.
+     * Deletes a user's avatar.
      *
-     * @param user A {@link User}-DTO containing a valid id.
+     * @param user The {@link User} whose avatar is being deleted.
+     *             Must contain a valid id.
      */
     public void deleteAvatar(User user) {
     }
 
     /**
-     * Gets a sorted and filtered list of users.
+     * Adds an area of expertise, e.g. a {@link ScienceField} to a {@link User}.
      *
-     * @param privilege The view privileges of the calling user.
-     * @param resultListParams Parameters, that control filtering and sorting of the resulting list.
-     * @return A list of {@link User}-DTOs.
+     * @param user         The user who receives a new {@code ScienceField}.
+     *                     Must contain a valid id.
+     * @param scienceField A {@code ScienceField} containing a valid id.
      */
-    public List<User> getUsers(Privilege privilege, ResultListParameters resultListParams) {
-        return null;
+    public static void addScienceField(User user, ScienceField scienceField) {
     }
 
     /**
-     * Verifies a user's email-address using the {@code EmailUtil} utility.
+     * Removes an area of expertise, e.g. a {@link ScienceField} from a {@link User}.
      *
-     * @param verification A {@code Verification}-DTO. Must conatain a valid id and a validationRandom.
-     * @return {@code true} if the verification process was succesful. {@code false} otherwise.
+     * @param user         The user who loses a {@code ScienceField}.
+     *                     Must contain a valid id.
+     * @param scienceField A {@code ScienceField} containing a valid id.
      */
-    public boolean verify(Verification verification) {
-        return false;
+    public static void removeScienceField(User user, ScienceField scienceField) {
+    }
+
+    /**
+     * Gets a sorted and filtered list of users.
+     *
+     * @param privilege        The view privileges of the calling user.
+     * @param resultListParams Parameters, that control filtering and sorting of the resulting list.
+     * @return A list of {@link User}-DTOs.
+     */
+    public List<User> getList(Privilege privilege, ResultListParameters resultListParams) {
+        return null;
     }
 
     /**
      * Determines whether a users email-address is already verified.
      *
-     * @param user A {@link User}-DTO which should contain a valid id.
-     * @return {@code true} if the user is verified. {@code false otherwise}.
+     * @param user The {@link User} whose {@link Verification} is requested.
+     *             Must contain a valid id.
+     * @return A fully filled {@code Verification} dto.
      */
-    public boolean isVerified(User user) {
-        return false;
+    public Verification getVerification(User user) {
+        return null;
     }
 }
