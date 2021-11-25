@@ -46,7 +46,7 @@ public class LifeTimeListener implements ServletContextListener {
     /**
      * On startup we initialize the resources used by the system.
      *
-     * Specifically we read the resource bundle and config file and start:
+     * Specifically we read the config file and start:
      * <ul>
      *     <li> The datasource, specifically the connection pool </li>
      *     <li> The messaging service </li>
