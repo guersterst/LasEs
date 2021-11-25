@@ -3,22 +3,16 @@ package de.lases.business.internal;
 import jakarta.enterprise.context.ApplicationScoped;
 
 /**
- * Executes periodic cleanup jobs from the database.
+ * Cleans up the email verifications in the database every 12 hours.
  */
 @ApplicationScoped
 public class PeriodicWorker implements Runnable {
 
     /**
-     * Performs cleanup of data, that is no longer in needed.
+     * Cleans up the email verifications in the database every 12 hours.
      */
     @Override
     public void run() {
-    }
-
-    /**
-     * Performs a clean shut down of {@code this}.
-     */
-    public void shutdown() {
     }
 
 }
