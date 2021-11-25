@@ -86,11 +86,18 @@ public class SubmissionService implements Serializable {
      * </ul>
      * </p>
      *
-     * @param newSubmission A {@link Submission}-DTO filled with the fields that are desired to be changed.
-     *                      <p>
-     *                      All fields filled with legal values will be overwritten, the rest are ignored.
-     *                      It should contain an existing id value.
-     *                      </p>
+     * @param newSubmission A {@link Submission}-DTO. The required fields are:
+     *                      <ul>
+     *                      <li> id </li>
+     *                      <li> scientificForumId </li>
+     *                      <li> authorId </li>
+     *                      <li> editorId </li>
+     *                      <li> title </li>
+     *                      <li> state </li>
+     *                      <li> submissionTime </li>
+     *                      </ul>
+     *                      If empty they will be deleted other fields are optional
+     *                      and will not be deleted if empty.
      */
     public void change(Submission newSubmission) {
     }

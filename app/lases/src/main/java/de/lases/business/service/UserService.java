@@ -38,17 +38,22 @@ public class UserService implements Serializable {
     }
 
     /**
-     * Manipulates a user.
+     * Updates a user.
      *
-     * @param newUser A {@link User}-DTO filled with the fields that are desired to be changed.
-     *                <p>
-     *                All fields filled with legal values will be overwritten, the rest are ignored.
-     *                It should contain an existing id value.
-     *                When the email address is changed the verification process is initiated
-     *                using the {@code EmailUtil} utility.
-     *                </p>
+     * @param newUser A {@link User}-DTO. The required fields are:
+     *                <ul>
+     *                <li> id </li>
+     *                <li> a hashed password and a password salt </li>
+     *                <li> the first name </li>
+     *                <li> the last name </li>
+     *                <li> the email address </li>
+     *                </ul>
+     *                         If empty they will be deleted other fields are optional
+     *                         and will not be deleted if empty.
+     *                   When the email address is changed the verification process is initiated
+     *                   using the {@code EmailUtil} utility.
      */
-    public void change(User newUser) throws IllegalArgumentException {
+    public void change(User newUser) {
     }
 
     /**
@@ -138,10 +143,10 @@ public class UserService implements Serializable {
     /**
      * Gets a list of all {@link User}s involved with a certain {@link Submission}.
      *
-     * @param privilege The role of the requested {@code User}s.
-     *                  May be {@code REVIEWER} for reviewers,
-     *                  {@code AUTHOR} for (co)-authors.
-     *                  {@code ADMIN} and {@code EDITOR} are not supported.
+     * @param privilege  The role of the requested {@code User}s.
+     *                   May be {@code REVIEWER} for reviewers,
+     *                   {@code AUTHOR} for (co)-authors.
+     *                   {@code ADMIN} and {@code EDITOR} are not supported.
      * @param submission The submission the users should stand in a
      *                   relationship with. Must be filled with a valid id.
      * @return A list of {@code User}s involved with a {@code Submission} in a certain role.

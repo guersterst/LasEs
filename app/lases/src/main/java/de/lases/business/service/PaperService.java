@@ -58,14 +58,13 @@ public class PaperService {
     /**
      * Updates a paper.
      *
-     * @param paper A {@link Paper}-DTO filled with the fields that are desired to be changed.
+     * @param paper A fully filled {@link Paper}-DTO.
      *              <p>
-     *              All fields filled with legal values will be overwritten, the rest are ignored.
+     *              All fields filled with legal values will be overwritten.
      *              It should contain an existing id value.
      *              </p>
      */
     public void change(Paper paper) {
-
     }
 
     /**

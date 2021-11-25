@@ -40,9 +40,9 @@ public class ReviewService implements Serializable {
     /**
      * Updates a {@link Review}.
      *
-     * @param newReview A {@link Review} filled with the fields that are desired to be changed.
+     * @param newReview A fully filled {@link Review}.
      *                  <p>
-     *                  All fields filled with legal values will be overwritten, the rest are ignored.
+     *                  All fields filled with legal values will be overwritten.
      *                  It should contain an existing id value.
      *                  </p>
      */

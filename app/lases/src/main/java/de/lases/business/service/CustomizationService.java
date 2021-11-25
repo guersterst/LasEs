@@ -27,7 +27,7 @@ public class CustomizationService {
     /**
      * Sets the application's settings, that determine its look and feel.
      *
-     * @param systemSettings The system's settings.
+     * @param systemSettings The filled {@link SystemSettings}.
      */
     public void change(SystemSettings systemSettings) {
     }

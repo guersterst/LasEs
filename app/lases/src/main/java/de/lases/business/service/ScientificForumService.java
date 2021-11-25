@@ -41,10 +41,10 @@ public class ScientificForumService implements Serializable {
     /**
      * Updates a scientific forum.
      *
-     * @param newForum The new data of the scientific forum.
+     * @param newForum A {@link ScientificForum}
      *                 <p>
-     *                 All fields filled with legal values will be overwritten, the rest are ignored.
-     *                 It should contain an existing id value.
+     *                 All fields filled with legal values will be overwritten.
+     *                 It should contain an existing id and name.
      *                 </p>
      */
     public void change(ScientificForum newForum) {
