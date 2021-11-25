@@ -33,7 +33,7 @@ Abhängigkeiten, wie zum Beispiel Einreichungen, die zu einem Nutzer gehören, w
 
 Durch \emph{IS-A} werden in ER-Diagrammen verschiedene Arten eines Typs definiert. Diese können dann in der \emph{DDL} unterschiedlich übersetzt werden.
 
-In unserem Fall wird die Rechtezuordnung der registrierten Nutzer durch jeweils eigene Entities \texttt{Administrator, Editor} und \texttt{Reviewer} anstatt einer Enumeration modelliert, da ein Nutzer mehrere Aufgaben in LasEs wahrnehmen kann.
+Anstatt einer Enumeration wird in unserem Fall die Rechtezuordnung der registrierten Nutzer durch ein \emph{boolean} für Administratorrechte und durch Relationen für Gutachter und Editor modelliert, da ein Nutzer mehrere Aufgaben in LasEs wahrnehmen kann.
 
 Die Unterscheidung zwischen Journalen und Konferenzen findet nur durch eine gesetzte oder \emph{NULL} Deadline statt, da sich beide funktional nicht weiter unterscheiden.
 
@@ -44,35 +44,24 @@ Hier werden die einzelnen Entities in der \emph{Data Definition Language} beschr
 \begin{lstlisting}[caption={DDL von Nutzern}]
 CREATE TABLE "user" (
 	id SERIAL PRIMARY KEY NOT NULL,
-	email_address VARCHAR UNIQUE NOT NULL,
-	firstname VARCHAR NOT NULL,
-	lastname VARCHAR NOT NULL,
-	title VARCHAR,
-	employer VARCHAR,
+	email_address VARCHAR(70) UNIQUE NOT NULL,
+	is_administrator BOOLEAN NOT NULL,
+	firstname VARCHAR(50) NOT NULL,
+	lastname VARCHAR(50) NOT NULL,
+	title VARCHAR(20),
+	employer VARCHAR(100),
 	birthdate DATE,
 	avatar_thumbnail BYTEA,
 	is_registered BOOLEAN NOT NULL,
-	password_hash VARCHAR,
-	password_salt VARCHAR,
+	-- 128 Bit, Base64 encoded
+	password_hash VARCHAR(24),
+	-- 16 Byte Salt, Base64 encoded
+	password_salt VARCHAR(24),
 
-	CONSTRAINT valid_name CHECK (length(firstname) >= 1 AND length(lastname) >= 1),
+	CONSTRAINT valid_name CHECK (length(firstname) >= 1
+	AND length(lastname) >= 1),
 	CONSTRAINT valid_birthdate CHECK (birthdate < CURRENT_DATE),
 	CONSTRAINT email_address_pattern CHECK (email_address LIKE '_%@_%._%')
-);
-
-CREATE TABLE reviewer(
-	id INTEGER PRIMARY KEY NOT NULL,
-	FOREIGN KEY (id) REFERENCES "user"(id) ON DELETE CASCADE
-);
-
-CREATE TABLE editor(
-	id INTEGER PRIMARY KEY NOT NULL,
-	FOREIGN KEY (id) REFERENCES "user"(id) ON DELETE CASCADE
-);
-
-CREATE TABLE administrator(
-	id INTEGER PRIMARY KEY NOT NULL,
-	FOREIGN KEY (id) REFERENCES "user"(id) ON DELETE CASCADE
 );
 \end{lstlisting}
 
@@ -80,7 +69,7 @@ CREATE TABLE administrator(
 CREATE TABLE verification (
 	id INTEGER NOT NULL,
 	validation_random VARCHAR,
-	verified BOOLEAN,
+	is_verified BOOLEAN,
 	timestamp_validation_started TIMESTAMP,
 	unvalidated_email_address VARCHAR,
 
@@ -92,37 +81,37 @@ CREATE TABLE verification (
 \begin{lstlisting}[caption={DDL von wissenschaftlichen Foren}]
 CREATE TABLE scientific_forum(
 	id SERIAL PRIMARY KEY NOT NULL,
-	name VARCHAR UNIQUE NOT NULL,
-	description VARCHAR,
-	url VARCHAR,
-	review_manual VARCHAR,
+	name VARCHAR(200) UNIQUE NOT NULL,
+	description VARCHAR(500),
+	url VARCHAR(150),
+	review_manual VARCHAR(500),
 	timestamp_deadline TIMESTAMP
 );
 \end{lstlisting}
 
 \begin{lstlisting}[caption={DDL von Fachgebieten}]
 CREATE TABLE science_field(
-	name VARCHAR PRIMARY KEY NOT NULL
+	name VARCHAR(30) PRIMARY KEY NOT NULL
 );
 \end{lstlisting}
 \begin{lstlisting}[caption={DDL von Einreichungen}]
 CREATE TYPE submission_state AS ENUM (
 	'SUBMITTED',
 	'REVISION_REQUIRED',
-	'REJECTED'
 	'ACCEPTED',
+	'REJECTED'
 );
 
 CREATE TABLE submission (
 	id SERIAL PRIMARY KEY NOT NULL,
-	title VARCHAR NOT NULL,
+	title VARCHAR(200) NOT NULL,
 	state submission_state NOT NULL,
 	timestamp_submission TIMESTAMP,
 	requires_revision BOOLEAN NOT NULL DEFAULT FALSE,
 	timestamp_deadline_revision TIMESTAMP,
 
 	author_id INTEGER REFERENCES "user"(id) ON DELETE CASCADE,
-	editor_id INTEGER REFERENCES editor(id) ON DELETE SET NULL,
+	editor_id INTEGER REFERENCES "user"(id) ON DELETE SET NULL,
 	forum_id INTEGER REFERENCES scientific_forum(id) ON DELETE CASCADE
 );
 \end{lstlisting}
@@ -142,7 +131,7 @@ CREATE TABLE paper (
 
 \begin{lstlisting}[caption={DDL von Gutachten}]
 CREATE TABLE review (
-	reviewer_id INTEGER REFERENCES reviewer(id) ON DELETE CASCADE,
+	reviewer_id INTEGER REFERENCES "user"(id) ON DELETE CASCADE,
 	version INTEGER NOT NULL,
 	submission_id INTEGER NOT NULL,
 
@@ -153,17 +142,17 @@ CREATE TABLE review (
 	pdf_file BYTEA,
 
 	PRIMARY KEY (submission_id, version, reviewer_id),
-	FOREIGN KEY (submission_id, version)
-	REFERENCES paper(submission_id, version) ON DELETE CASCADE
+	FOREIGN KEY (submission_id, version) REFERENCES
+	paper(submission_id, version) ON DELETE CASCADE
 );
 \end{lstlisting}
 
 \begin{lstlisting}[caption={DDL von den Systemeinstellungen}]
 CREATE TABLE system(
 	id INTEGER PRIMARY KEY,
-	company_name VARCHAR,
-	welcome_heading VARCHAR,
-	welcome_description VARCHAR,
+	company_name VARCHAR(100),
+	welcome_heading VARCHAR(200),
+	welcome_description VARCHAR(500),
 	imprint VARCHAR,
 	logo_image BYTEA
 );
@@ -174,8 +163,8 @@ CREATE TABLE system(
 Um die E-Mail-Adressen unabhängig von der Groß- oder Kleinschreibung in der Datenbank tatsächlich \emph{UNIQUE} zu halten benötigt es in PostgreSQL einen eigenen Index, da das \emph{UNIQUE} Schlüsselwort selbst \emph{case-sensitive} ist.\\
 
 \begin{lstlisting}[caption={DDL des UNIQUE Index auf E-Mail-Adressen}]
-CREATE UNIQUE INDEX email_unique_case_insensitive
-	ON "user" (LOWER(email_address));
+CREATE UNIQUE INDEX email_unique_case_insensitive ON "user"
+	(LOWER(email_address));
 \end{lstlisting}
 
 \subsection{Relationships}
@@ -211,7 +200,7 @@ CREATE TABLE member_of(
 	scientific_forum_id INTEGER NOT NULL,
 
 	PRIMARY KEY (editor_id, scientific_forum_id),
-	FOREIGN KEY (editor_id) REFERENCES editor(id) ON DELETE CASCADE,
+	FOREIGN KEY (editor_id) REFERENCES "user"(id) ON DELETE CASCADE,
 	FOREIGN KEY (scientific_forum_id) REFERENCES scientific_forum(id)
 	ON DELETE CASCADE
 );
@@ -219,7 +208,7 @@ CREATE TABLE member_of(
 
 \begin{lstlisting}[caption={DDL der begutachtenden Gutachter}]
 CREATE TYPE review_task_state AS ENUM (
-	'PENDING',
+	'NO_DECISION',
 	'ACCEPTED',
 	'REJECTED'
 );
@@ -231,7 +220,7 @@ CREATE TABLE reviewed_by(
 	timestamp_deadline TIMESTAMP,
 
 	PRIMARY KEY (reviewer_id, submission_id),
-	FOREIGN KEY (reviewer_id) REFERENCES reviewer(id) ON DELETE CASCADE,
+	FOREIGN KEY (reviewer_id) REFERENCES "user"(id) ON DELETE CASCADE,
 	FOREIGN KEY (submission_id) REFERENCES submission(id) ON DELETE CASCADE
 );
 \end{lstlisting}

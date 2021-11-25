@@ -11,8 +11,11 @@ Nach Erstellung der \code{UIMessage} wird ein Event gefeuert mit:
     Event<UIMessage>#fire()
 \end{lstlisting}
 }
-Dieses wird vom \code{UIMessageGenerator} observed, welcher dann eine \code{FacesMessage} hinzufügt,
+Dieses wird vom \code{UIMessageGenerator} observed, welcher dann eine \code{FacesMessage}\footnotemark hinzufügt,
 die nach dem Hochladen auf der Einreichungsseite angezeigt wird.
+
+\footnotetext{Der Text für FacesMessages wird aus dem messages-Resource-Bundle gelesen.
+Dafür wird (mithilfe einer get-Methode mit \code{@Produces}-Annotation im \code{MessageBundleProducer}) das Bundle injected.}
 
 \begin{figure}[H]
     \centering

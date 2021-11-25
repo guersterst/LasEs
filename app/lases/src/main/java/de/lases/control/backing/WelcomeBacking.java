@@ -40,7 +40,6 @@ public class WelcomeBacking {
     @PostConstruct
     public void init() {
     }
-
     /**
      * Check the entered login data and either show an error message or go
      * to the homepage (and log the user in).
