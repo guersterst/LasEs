@@ -48,13 +48,15 @@ public class UserRepository {
      * @param transaction The transaction to use.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
+     * @throws KeyExistsException If the email address of the added user
+     *                            already exists in the datasource.
      * @throws InvalidFieldsException If one of the required fields of the
      *                                scientific forum is null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static void add(User user, Transaction transaction)
-            throws DataNotWrittenException {
+            throws DataNotWrittenException, KeyExistsException {
     }
 
     /**
@@ -74,13 +76,16 @@ public class UserRepository {
      *                           provided id or email.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
+     * @throws KeyExistsException If the new email address of the user
+     *                            already exists in the datasource.
      * @throws InvalidFieldsException If one of the required fields of the user
      *                                is null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static void change(User user, Transaction transaction)
-            throws NotFoundException, DataNotWrittenException {
+            throws NotFoundException, DataNotWrittenException,
+            KeyExistsException {
     }
 
     /**

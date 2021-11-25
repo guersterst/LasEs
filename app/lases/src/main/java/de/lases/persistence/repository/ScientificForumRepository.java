@@ -59,6 +59,8 @@ public class ScientificForumRepository {
      * @param transaction The transaction to use.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
+     * @throws KeyExistsException If the name of the added forum
+     *                            already exists in the datasource.
      * @throws InvalidFieldsException If one of the required fields of the
      *                                scientific forum is null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
@@ -66,7 +68,7 @@ public class ScientificForumRepository {
      */
     public static void add(ScientificForum scientificForum,
                            Transaction transaction)
-            throws DataNotWrittenException {
+            throws DataNotWrittenException, KeyExistsException {
     }
 
     /**
@@ -79,6 +81,8 @@ public class ScientificForumRepository {
      *                           provided id.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
+     * @throws KeyExistsException If the new name of the changed forum
+     *                            already exists in the datasource.
      * @throws InvalidFieldsException If one of the required fields of the
      *                                scientific forum is null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
@@ -86,7 +90,8 @@ public class ScientificForumRepository {
      */
     public static void change(ScientificForum scientificForum,
                               Transaction transaction)
-            throws NotFoundException, DataNotWrittenException {
+            throws NotFoundException, DataNotWrittenException,
+            KeyExistsException {
     }
 
     /**
