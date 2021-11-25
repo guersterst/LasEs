@@ -1,7 +1,6 @@
 package de.lases.global.transport;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * Represents a submission.
@@ -10,7 +9,7 @@ public class Submission implements Cloneable {
 
     private int scientificForumId;
 
-    private int id;
+    private Integer id;
 
     private boolean revisionRequired;
 
@@ -39,16 +38,17 @@ public class Submission implements Cloneable {
         this.scientificForumId = scientificForumId;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
     /**
      * Set the id of this submission.
+     * Integer is used instead of int in order to be able to determine if the property is set.
      *
      * @param id The id.
      */
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
