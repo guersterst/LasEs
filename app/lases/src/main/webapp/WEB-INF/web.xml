@@ -29,7 +29,7 @@
     </context-param>
 
     <welcome-file-list>
-        <welcome-file>facelets/anonymous/welcome.xhtml</welcome-file>
+        <welcome-file>views/anonymous/welcome.xhtml</welcome-file>
     </welcome-file-list>
 
     <resource-env-ref>

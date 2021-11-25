@@ -9,7 +9,12 @@
     <application>
         <locale-config>
             <default-locale>en</default-locale>
+            <supported-locale>de</supported-locale>
         </locale-config>
+        <resource-bundle>
+            <base-name>resource_bundles.labels</base-name>
+            <var>labels</var>
+        </resource-bundle>
     </application>
 
     <lifecycle>
