@@ -48,8 +48,6 @@ public class ProfileBacking implements Serializable {
 
     private User adminPasswordInPopup;
 
-    private boolean popupShown;
-
     /**
      * Initializes the dto objects and gets the global list of science fields
      * from the datasource.
@@ -109,8 +107,9 @@ public class ProfileBacking implements Serializable {
      * science fields. If the user changed his email address, a verification
      * email will be sent to that address and a messge will be shown that asks
      * the user to check his inbox.
-     * If the user was elevated to admin, a popup menu will ask for confirmation
-     * again.
+     * If the user was elevated to admin, the admins' password will be checked
+     * and the form will only be submitted if it is correct. Otherwise, an
+     * error message will be shown.
      */
     public void submitChanges() {
     }
@@ -142,15 +141,9 @@ public class ProfileBacking implements Serializable {
     }
 
     /**
-     * Abort the changes made to the user.
+     * Abort the changes made to the user and show a fresh profile page.
      */
-    public void abortInPopup() {
-    }
-
-    /**
-     * Save the changes made to the user.
-     */
-    public void saveInPopup() {
+    public void abort() {
     }
 
     /**
@@ -239,7 +232,7 @@ public class ProfileBacking implements Serializable {
      *
      * @return User that holds the admin password.
      */
-    public User getAdminPasswordInPopup() {
+    public User getAdminPassword() {
         return adminPasswordInPopup;
     }
 
@@ -249,7 +242,7 @@ public class ProfileBacking implements Serializable {
      *
      * @param adminPasswordInPopup User that holds the admin password.
      */
-    public void setAdminPasswordInPopup(User adminPasswordInPopup) {
+    public void setAdminPassword(User adminPasswordInPopup) {
         this.adminPasswordInPopup = adminPasswordInPopup;
     }
 
@@ -260,15 +253,6 @@ public class ProfileBacking implements Serializable {
      */
     public List<ScienceField> getScienceFields() {
         return scienceFields;
-    }
-
-    /**
-     * Tells if the popup is currently displayed on the screen.
-     *
-     * @return Is the popup currently displayed on the screen?
-     */
-    public boolean isPopupShown() {
-        return popupShown;
     }
 
     /**
