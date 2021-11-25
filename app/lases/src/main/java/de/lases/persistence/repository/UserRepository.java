@@ -34,7 +34,13 @@ public class UserRepository {
     /**
      * Adds a user to the repository.
      *
-     * @param user A user dto with all required field.
+     * @param user A user dto with all required fields. Required are:
+     *             <ul>
+     *             <li> a hashed password and a password salt </li>
+     *             <li> the first name </li>
+     *             <li> the last name </li>
+     *             <li> the email address </li>
+     *             </ul>
      * @param transaction The transaction to use.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
@@ -52,7 +58,14 @@ public class UserRepository {
     /**
      * Changes the given user in the repository.
      *
-     * @param user A user dto with all required fields.
+     * @param user A user dto with all required fields. Required are:
+     *             <ul>
+     *             <li> a hashed password and a password salt </li>
+     *             <li> the first name </li>
+     *             <li> the last name </li>
+     *             <li> the email address </li>
+     *             </ul>
+     *             The rest of the fields will be deleted if left empty.
      * @param transaction The transaction to use.
      * @throws NotFoundException If there is no user with the
      *                           provided id or email.
@@ -104,8 +117,8 @@ public class UserRepository {
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
-    private Verification getVerification(User user, Transaction transaction)
-            throws NotFoundException{
+    public Verification getVerification(User user, Transaction transaction)
+            throws NotFoundException {
         return null;
     }
 
