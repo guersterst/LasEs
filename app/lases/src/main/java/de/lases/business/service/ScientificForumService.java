@@ -57,7 +57,8 @@ public class ScientificForumService implements Serializable {
      * using the {@link de.lases.business.util.EmailUtil} utility.
      * </p>
      *
-     * @param forum         The {@link ScientificForum}-DTO containing all necessary data.
+     * @param forum         The {@link ScientificForum}-DTO containing at least a name and
+     *                      description.
      * @param scienceFields The scientific fields, which this forum is specialized in.
      * @param editors       The editors of this forum.
      */

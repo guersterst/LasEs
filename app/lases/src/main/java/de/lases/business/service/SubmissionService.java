@@ -47,14 +47,14 @@ public class SubmissionService implements Serializable {
      * </p>
      *
      * @param submission The submission's data in a {@link Submission}.
-     *                   Be cautious, this must contain a valid forum's id.
-     * @param reviewers  The desired reviewers as proper {@code User}-DTOs or exclusively containing
+     *                   Must contain a valid forum's id, authorId, editorId, state and title.
+     * @param reviewers  The desired reviewers as proper {@code User}-DTOs with id's or exclusively containing
      *                   an email-address.
-     * @param coauthors  The desired co-athors as proper {@link User}-DTOs or exclusively containing
+     * @param coAuthors  The desired co-athors as proper {@link User}-DTOs with id's or exclusively containing
      *                   an email-address.
      */
-    public void create(Submission submission, List<User> reviewers,
-                                 List<User> coauthors) {
+    public void add(Submission submission, List<User> reviewers,
+                    List<User> coAuthors) {
 
     }
 
@@ -79,7 +79,8 @@ public class SubmissionService implements Serializable {
      * using the {@link de.lases.business.util.EmailUtil}-utility.
      * <ul>
      * <li> The submitter and all co-authors are informed
-     * about an accept or reject decision</li>
+     * about an accept or reject decision </li>
+     * <li> The submitter will be informed if a revision is demanded.</li>
      * <li> When changed, the new editor will be informed.</li>
      * <li> The submitter about a required revision. </li>
      * </ul>
@@ -92,19 +93,6 @@ public class SubmissionService implements Serializable {
      *                      </p>
      */
     public void change(Submission newSubmission) {
-    }
-
-    //todo remove
-
-    /**
-     * Sets the editor of a submission.
-     * <p></p>
-     * When changed, the new editor is informed
-     * by email using the {@link de.lases.business.util.EmailUtil} utility.
-     *
-     * @param submission The {@link Submission}-DTO with a valid editor.
-     */
-    public void setEditor(Submission submission) {
     }
 
     /**
@@ -166,18 +154,6 @@ public class SubmissionService implements Serializable {
     public void realeaseReview(Review review, Submission submission) {
     }
 
-    //todo remove
-    // ist schon in change doc integriert
-
-    /**
-     * Adds the requirement of a new revision to a given submission.
-     * // email -> change()
-     *
-     * @param submission The submission for which a revision is requested.
-     */
-    public void requireRevision(Submission submission) {
-    }
-
     /**
      * Adds a co-author.
      *
@@ -188,8 +164,6 @@ public class SubmissionService implements Serializable {
      */
     public void addCoAuthor(Submission submission, User coAuthor) {
     }
-
-    //todo necessary
 
     /**
      * Determines whether a user has permission to view a submission

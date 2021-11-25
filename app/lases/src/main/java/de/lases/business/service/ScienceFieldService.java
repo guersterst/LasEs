@@ -39,7 +39,7 @@ public class ScienceFieldService implements Serializable {
     /**
      * Adds a {@link ScienceField} to the database.
      *
-     * @param field The scientific field's data.
+     * @param field All the scientific field's data.
      */
     public void add(ScienceField field) {
     }

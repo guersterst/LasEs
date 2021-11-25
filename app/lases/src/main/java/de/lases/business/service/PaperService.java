@@ -28,7 +28,7 @@ public class PaperService {
      * A {@link Paper} may be the paper associated with a submission or a revision.
      * </p>
      *
-     * @param paper      A {@code Paper} containing a valid id of the requested paper.
+     * @param paper A {@code Paper} containing a valid id of the requested paper.
      * @return A fully filled {@link Paper}.
      */
     public Paper get(Paper paper) {
@@ -36,17 +36,17 @@ public class PaperService {
     }
 
     /**
-     * Adds a paper to a submission.
+     * Adds a {@link Paper} to a submission.
      * <p>
      * Whether this is a submission-pdf or a revision-pdf is determined internally.
      * If this is a revision the editor will be informed by mail about this,
      * using the {@link de.lases.business.util.EmailUtil}-utility.
      * </p>
      *
-     * @param file       The file to be added.
-     * @param submission The submission, to which the file is being added.
+     * @param file The {@link FileDTO} to be added with the paper,
+     *             containing a {@code byte[]} with the pdf.
+     * @param paper The filled {@link Paper} to be added.
      */
-    //todo nur Paper übergeben
     public void add(FileDTO file, Paper paper) {
     }
 
@@ -69,6 +69,7 @@ public class PaperService {
      * The editor will be informed by mail about this,
      * using the {@link de.lases.business.util.EmailUtil}-utility.
      * </p>
+     *
      * @param paper A {@link Paper}-DTO containing a valid paper- and submission id.
      */
     public void remove(Paper paper) {

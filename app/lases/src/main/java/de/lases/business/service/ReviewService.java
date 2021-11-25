@@ -60,8 +60,8 @@ public class ReviewService implements Serializable {
      *
      * @param review The {@code Review} that is submitted.
      *               Must be filled with a valid
-     *               reviewerId, paperId and submissionId.
-     * @param file   The {@link FileDTO} containing the pdf review itself.
+     *               reviewerId, paperVersion and submissionId.
+     * @param file   The {@link FileDTO} containing the pdf review itself..
      */
     public void add(Review review, FileDTO file) {
 
