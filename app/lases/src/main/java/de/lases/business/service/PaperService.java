@@ -33,39 +33,38 @@ public class PaperService {
      * A {@link Paper} may be the paper associated with a submission or a revision.
      * </p>
      *
-     * @param submission The submission to which the paper belongs containing a valid id.
-     * @param paper      A {@code Paper} containing a valid id.
+     * @param paper A {@code Paper} containing a valid id of the requested paper.
      * @return A fully filled {@link Paper}.
      */
-    public Paper get(Submission submission, Paper paper) {
+    public Paper get(Paper paper) {
         return null;
     }
 
     /**
-     * Adds a paper to a submission.
+     * Adds a {@link Paper} to a submission.
      * <p>
      * Whether this is a submission-pdf or a revision-pdf is determined internally.
      * If this is a revision the editor will be informed by mail about this,
      * using the {@link de.lases.business.util.EmailUtil}-utility.
      * </p>
      *
-     * @param file       The file to be added.
-     * @param submission The submission, to which the file is being added.
+     * @param file The {@link FileDTO} to be added with the paper,
+     *             containing a {@code byte[]} with the pdf.
+     * @param paper The filled {@link Paper} to be added.
      */
-    public void add(FileDTO file, Submission submission) {
+    public void add(FileDTO file, Paper paper) {
     }
 
     /**
      * Updates a paper.
      *
-     * @param paper A {@link Paper}-DTO filled with the fields that are desired to be changed.
+     * @param paper A fully filled {@link Paper}-DTO.
      *              <p>
-     *              All fields filled with legal values will be overwritten, the rest are ignored.
+     *              All fields filled with legal values will be overwritten.
      *              It should contain an existing id value.
      *              </p>
      */
     public void change(Paper paper) {
-
     }
 
     /**
@@ -74,6 +73,7 @@ public class PaperService {
      * The editor will be informed by mail about this,
      * using the {@link de.lases.business.util.EmailUtil}-utility.
      * </p>
+     *
      * @param paper A {@link Paper}-DTO containing a valid paper- and submission id.
      */
     public void remove(Paper paper) {
@@ -122,8 +122,7 @@ public class PaperService {
      * @param user       The user who requests the papers, containing a valid view-privilege.
      * @return The submissions paper, which was least recently uploaded.
      */
-    public Paper getLatest(Submission submission, User user)
-            throws NotFoundException {
+    public Paper getLatest(Submission submission, User user) {
         return null;
     }
 }

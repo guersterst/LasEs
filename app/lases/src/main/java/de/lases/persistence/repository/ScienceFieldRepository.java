@@ -143,11 +143,12 @@ public class ScienceFieldRepository {
     /**
      * Checks if a science field with the given name exists in the repository.
      *
-     * @param name The name to check.
+     * @param scienceField The {@link ScienceField} to check.
+     *                    Must contain either an id or a name.
      * @param transaction The transaction to use.
      * @return Does the given name exist as science field in the repository.
      */
-    public static boolean isScienceField(String name, Transaction transaction) {
+    public static boolean isScienceField(ScienceField scienceField, Transaction transaction) {
         return false;
     }
 

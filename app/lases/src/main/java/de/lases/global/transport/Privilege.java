@@ -24,5 +24,10 @@ public enum Privilege {
     /**
      * A user that is authenticated in the system.
      */
-    AUTHENTICATED
+    AUTHENTICATED,
+
+    /**
+     * A user that is an author or a co-author to a certain submission.
+     */
+    AUTHOR
 }

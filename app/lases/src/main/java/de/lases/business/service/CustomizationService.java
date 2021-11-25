@@ -27,7 +27,7 @@ public class CustomizationService {
     /**
      * Sets the application's settings, that determine its look and feel.
      *
-     * @param systemSettings The system's settings.
+     * @param systemSettings The filled {@link SystemSettings}.
      */
     public void change(SystemSettings systemSettings) {
     }
@@ -40,9 +40,9 @@ public class CustomizationService {
     }
 
     /**
-     * Initiates the creation of the database schema.
+     * Initiates the creation of the datasource's schema.
      */
-    public void createDbSchema() {
+    public void createDataSourceSchema() {
     }
 
     /**

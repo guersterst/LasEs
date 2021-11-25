@@ -1,6 +1,8 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.*;
+import de.lases.persistence.exception.DatasourceQueryFailedException;
+import de.lases.persistence.exception.InvalidFieldsException;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
@@ -39,10 +41,10 @@ public class ScientificForumService implements Serializable {
     /**
      * Updates a scientific forum.
      *
-     * @param newForum The new data of the scientific forum.
+     * @param newForum A {@link ScientificForum}
      *                 <p>
-     *                 All fields filled with legal values will be overwritten, the rest are ignored.
-     *                 It should contain an existing id value.
+     *                 All fields filled with legal values will be overwritten.
+     *                 It should contain an existing id and name.
      *                 </p>
      */
     public void change(ScientificForum newForum) {
@@ -55,7 +57,8 @@ public class ScientificForumService implements Serializable {
      * using the {@link de.lases.business.util.EmailUtil} utility.
      * </p>
      *
-     * @param forum         The {@link ScientificForum}-DTO containing all necessary data.
+     * @param forum         The {@link ScientificForum}-DTO containing at least a name and
+     *                      description.
      * @param scienceFields The scientific fields, which this forum is specialized in.
      * @param editors       The editors of this forum.
      */
@@ -135,14 +138,13 @@ public class ScientificForumService implements Serializable {
     }
 
     /**
-     * Returns the {@code ScientificForum}, to which a given {@code Submission} was submitted to.
+     * Determines whether a {@link ScientificForum} already exists.
      *
-     * @param submission The {@link Submission} for which the {@link ScientificForum}
-     *                   is requested.
-     * @return The requested {@code ScientificForum} for a {@code Submission}.
+     * @param scientificForum A {@code ScientificForum} that must be filled
+     *                        with a valid id or a name.
+     * @return {@code true} if this {@link ScientificForum} exists and {@code false} otherwise.
      */
-    public ScientificForum getScientificForumForSubmission(Submission submission) {
-        return null;
+    public static boolean exists(ScientificForum scientificForum) {
+        return false;
     }
-
 }

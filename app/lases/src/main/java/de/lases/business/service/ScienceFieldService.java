@@ -33,26 +33,15 @@ public class ScienceFieldService implements Serializable {
      * @return The fully filled requested {@code ScienceField}.
      */
     public ScienceField get(ScienceField scienceField) {
-    return null;
+        return null;
     }
 
     /**
      * Adds a {@link ScienceField} to the database.
      *
-     * @param field The scientific field's data.
+     * @param field All the scientific field's data.
      */
     public void add(ScienceField field) {
-    }
-
-    /**
-     * Determines whether a {@link ScienceField} is already represented in the database.
-     *
-     * @param scienceField The {@code ScienceField}, which is to be evaluated.
-     *                     Must contain a valid id.
-     * @return {@code true} if this scientific field already exists, {@code false} otherwise.
-     */
-    public boolean exists(ScienceField scienceField) {
-        return false;
     }
 
     /**
@@ -67,28 +56,24 @@ public class ScienceFieldService implements Serializable {
     /**
      * Gets a list all {@link ScienceField} that belong to the specified {@link ScientificForum}.
      *
-     * @param forum The {@code ScientificForum} whose fields of epertise are requested.
-     *             Must contain a valid id.
+     * @param forum                The {@code ScientificForum} whose fields of epertise are requested.
+     *                             Must contain a valid id.
      * @param resultListParameters The parameters, that control filtering and sorting of the resulting list.
      * @return All scientific fields in which a given {@code ScientificForum} has expertise.
      */
-    public static List<ScienceField> getList(ScientificForum forum,
-                                             ResultListParameters
-                                                     resultListParameters) {
+    public static List<ScienceField> getList(ScientificForum forum, ResultListParameters resultListParameters) {
         return null;
     }
 
     /**
      * Gets a list of all {@link ScienceField}s, in which a given {@link User} has expertise.
      *
-     * @param user The {@code User}, whose {@code ScienceField}s are requested.
-     *             Must contain a valid id.
+     * @param user                 The {@code User}, whose {@code ScienceField}s are requested.
+     *                             Must contain a valid id.
      * @param resultListParameters The parameters, that control filtering and sorting of the resulting list.
      * @return All scientific fields in which a given {@code User} has expertise.
      */
-    public static List<ScienceField> getList(User user, Transaction transaction,
-                                             ResultListParameters
-                                                     resultListParameters) {
+    public static List<ScienceField> getList(User user, ResultListParameters resultListParameters) {
         return null;
     }
 
@@ -100,5 +85,16 @@ public class ScienceFieldService implements Serializable {
      */
     public static List<ScienceField> getList(ResultListParameters resultListParameters) {
         return null;
+    }
+
+    /**
+     * Checks if a given {@code ScienceField} already exists.
+     *
+     * @param scienceField The {@link ScienceField} to evaluate.
+     *                     Must contain a name or an id.
+     * @return {@code true} if this scientific field already exists, {@code false} otherwise.
+     */
+    public boolean exists(ScienceField scienceField) {
+        return false;
     }
 }

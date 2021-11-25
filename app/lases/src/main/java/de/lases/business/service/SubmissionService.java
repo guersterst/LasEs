@@ -1,10 +1,7 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.*;
-import de.lases.persistence.exception.DataNotCompleteException;
-import de.lases.persistence.exception.DatasourceQueryFailedException;
-import de.lases.persistence.exception.InvalidQueryParamsException;
-import de.lases.persistence.exception.NotFoundException;
+import de.lases.persistence.exception.*;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
@@ -46,18 +43,18 @@ public class SubmissionService implements Serializable {
      * <p>
      * The selected editor, reviewers and co-authors are informed about this
      * using the {@link de.lases.business.util.EmailUtil} utility.
-     * Do not forget to also add a paper using {@link PaperService#add(FileDTO, Submission)}.
+     * Do not forget to also add a paper using {@link PaperService#add(FileDTO, Paper)}.
      * </p>
      *
      * @param submission The submission's data in a {@link Submission}.
-     *                   Be cautious, this must contain a valid forum's id.
-     * @param reviewers  The desired reviewers as proper {@code User}-DTOs or exclusively containing
+     *                   Must contain a valid forum's id, authorId, editorId, state and title.
+     * @param reviewers  The desired reviewers as proper {@code User}-DTOs with id's or exclusively containing
      *                   an email-address.
-     * @param coauthors  The desired co-athors as proper {@link User}-DTOs or exclusively containing
+     * @param coAuthors  The desired co-athors as proper {@link User}-DTOs with id's or exclusively containing
      *                   an email-address.
      */
-    public void createSubmission(Submission submission, List<User> reviewers,
-                                 List<User> coauthors) {
+    public void add(Submission submission, List<User> reviewers,
+                    List<User> coAuthors) {
 
     }
 
@@ -70,7 +67,7 @@ public class SubmissionService implements Serializable {
      *
      * @param submission A {@link Submission}-DTO containing a valid id.
      */
-    public void removeSubmission(Submission submission) {
+    public void remove(Submission submission) {
     }
 
 
@@ -82,32 +79,27 @@ public class SubmissionService implements Serializable {
      * using the {@link de.lases.business.util.EmailUtil}-utility.
      * <ul>
      * <li> The submitter and all co-authors are informed
-     * about an accept or reject decision</li>
+     * about an accept or reject decision </li>
+     * <li> The submitter will be informed if a revision is demanded.</li>
      * <li> When changed, the new editor will be informed.</li>
      * <li> The submitter about a required revision. </li>
      * </ul>
      * </p>
      *
-     * @param newSubmission A {@link Submission}-DTO filled with the fields that are desired to be changed.
-     *                      <p>
-     *                      All fields filled with legal values will be overwritten, the rest are ignored.
-     *                      It should contain an existing id value.
-     *                      </p>
+     * @param newSubmission A {@link Submission}-DTO. The required fields are:
+     *                      <ul>
+     *                      <li> id </li>
+     *                      <li> scientificForumId </li>
+     *                      <li> authorId </li>
+     *                      <li> editorId </li>
+     *                      <li> title </li>
+     *                      <li> state </li>
+     *                      <li> submissionTime </li>
+     *                      </ul>
+     *                      If empty they will be deleted other fields are optional
+     *                      and will not be deleted if empty.
      */
     public void change(Submission newSubmission) {
-    }
-
-    //todo remove
-
-    /**
-     * Sets the editor of a submission.
-     * <p></p>
-     * When changed, the new editor is informed
-     * by email using the {@link de.lases.business.util.EmailUtil} utility.
-     *
-     * @param submission The {@link Submission}-DTO with a valid editor.
-     */
-    public void setEditor(Submission submission) {
     }
 
     /**
@@ -140,6 +132,14 @@ public class SubmissionService implements Serializable {
     }
 
     /**
+     * Updates the given {@code ReviewedBy} in the repository.
+     *
+     * @param reviewedBy The fully filled {@link ReviewedBy}.
+     */
+    public void changeReviewedBy(ReviewedBy reviewedBy) {
+    }
+
+    /**
      * Removes a reviewer.
      * <p>
      * If successful the reviewer is informed by email using the
@@ -161,18 +161,6 @@ public class SubmissionService implements Serializable {
     public void realeaseReview(Review review, Submission submission) {
     }
 
-    //todo remove
-    // ist schon in change doc integriert
-
-    /**
-     * Adds the requirement of a new revision to a given submission.
-     * // email -> change()
-     *
-     * @param submission The submission for which a revision is requested.
-     */
-    public void requireRevision(Submission submission) {
-    }
-
     /**
      * Adds a co-author.
      *
@@ -183,8 +171,6 @@ public class SubmissionService implements Serializable {
      */
     public void addCoAuthor(Submission submission, User coAuthor) {
     }
-
-    //todo necessary
 
     /**
      * Determines whether a user has permission to view a submission

@@ -145,7 +145,7 @@ public class SubmissionRepository {
      *                             parameters from the pagination like
      *                             filtering, sorting or number of elements.
      * @return A list of fully filled submission dtos for all reviews that
-     *         belong to the specified user in the specified rol.
+     *         belong to the specified user in the specified role.
      * @throws DataNotCompleteException If the list is truncated.
      * @throws NotFoundException If there is no user with the provided id.
      * @throws DatasourceQueryFailedException If the datasource cannot be
