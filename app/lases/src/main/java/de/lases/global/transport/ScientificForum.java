@@ -1,14 +1,13 @@
 package de.lases.global.transport;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * Represents a scientific forum.
  */
 public class ScientificForum implements Cloneable {
 
-    private int id;
+    private Integer id;
 
     private String description;
 
@@ -20,16 +19,17 @@ public class ScientificForum implements Cloneable {
 
     private String name;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
     /**
      * Set the id of the scientific forum.
+     * Integer is used instead of int in order to be able to determine if the property is set.
      *
      * @param id The id of the scientific forum.
      */
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

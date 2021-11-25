@@ -10,7 +10,7 @@ public class User implements Cloneable {
 
     private int verificationId;
 
-    private int id;
+    private Integer id;
 
     private List<Privilege> privileges;
 
@@ -63,16 +63,17 @@ public class User implements Cloneable {
         this.verificationId = verificationId;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
     /**
      * Set the id of this user.
+     * Integer is used instead of int in order to be able to determine if the property is set.
      *
      * @param id The user id.
      */
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
