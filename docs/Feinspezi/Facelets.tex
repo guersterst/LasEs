@@ -485,7 +485,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	\ftable{delete-submission-popup}{Sollte ein Benutzer seine eigene Einreichung, bzw. ein Administrator eine Einreichung löschen wollen, so erscheint hier ein eine Warnung, um auf die Folgen seines Handelns hinzuweisen.}{
 		\fentry{delete-warning-otxt}{<h:outputText>}{Warnhinweis zum Löschen eines Profils.}{value="\#\{texts.deleteWarning\}"}{/}{/}
 		
-		\fentry{agree-delet-cbtn}{<h:commandButton>}{Entgültiges Löschen des Profils.}{value="\#{labels.agree}" \newline action="\#\{submissionBacking.delete\}"}{/}{/}
+		\fentry{agree-delet-cbtn}{<h:commandButton>}{Entgültiges Löschen des Profils.}{value="\#{labels.agree}" \newline action="\#\{submissionBacking.deleteSubmission\}"}{/}{/}
 	}
 \end{samepage}
 
@@ -738,7 +738,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	\ftable{delete-forum-popup}{Sollte ein Administrator ein Forum löschen wollen, so erscheint hier ein eine Warnung, um auf die Folgen seines Handelns hinzuweisen.}{
 		\fentry{delete-warning-otxt}{<h:outputText>}{Warnhinweis zum Löschen eines Profils.}{value="\#\{texts.deleteWarning\}"}{/}{/}
 		
-		\fentry{agree-delet-cbtn}{<h:commandButton>}{Entgültiges Löschen des Profils.}{value="\#{labels.agree}" \newline action="\#\{scientificForumBacking.delete¸\}"}{/}{/}
+		\fentry{agree-delet-cbtn}{<h:commandButton>}{Entgültiges Löschen des Profils.}{value="\#{labels.agree}" \newline action="\#\{scientificForumBacking.deleteForum¸\}"}{/}{/}
 	}
 \end{samepage}
 
