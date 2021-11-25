@@ -428,9 +428,9 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{reviewer-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Namen des Gutachters.}{paginator="\#\{submissionBacking.reviewPagination\}"\newline columnNamei18n="\#\{labels.reviewerName\}"}{rendered="\#\{submissionBacking.loggedInUserIsEditor \&\& submissionBacking.loggedInUserIsReviewer\}"}{/}
 
-		\fentry{reviewer-lnk}{<h:link>}{Namen des Gutachters.}{value="\#\{submissionBacking.getReviewerForReview(var)\}" \newline outcome="/views/authenticated/profile" \newline includeViewParams="true"}{rendered="\#\{submissionBacking.loggedInUserIsEditor \&\& submissionBacking.loggedInUserIsReviewer\}"}{/}{/}
+		\fentry{reviewer-lnk}{<h:link>}{Namen des Gutachters.}{value="\#\{submissionBacking.getReviewerForReview(var)\}" \newline outcome="/views/authenticated/profile" \newline includeViewParams="true"}{rendered="\#\{submissionBacking.loggedInUserIsEditor \&\& submissionBacking.loggedInUserIsReviewer\}"}{/}
 
-		\fentry{/}{<f:param>}{Parameter für id des Profil.}{value="\#\{submissionBacking.getReviewerForReview(var).id\}" name="id"}{/}{/}
+		\fentry{/}{<f:param>}{Parameter für id des Profil.}{value="\#\{submissionBacking.getReviewerForReview(var).id\}" name=''id"}{/}{/}
 
 		\fentry{date-ssc}{<ssc:sortsearchcolumn>}{Spalte für das Abgabedatum des Gutachtens.}{paginator="\#\{submissionBacking.reviewPagination\}"\newline columnNamei18n="\#\{labels.date\}"}{/}{/}
 
