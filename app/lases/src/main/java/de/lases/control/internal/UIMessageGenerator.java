@@ -12,9 +12,13 @@ import jakarta.inject.Inject;
  */
 public class UIMessageGenerator {
 
-    @Inject
     FacesContext facesContext;
 
+    /**
+     * Construct an {@link UIMessageGenerator}.
+     *
+     * @param facesContext The {@link FacesContext}.
+     */
     @Inject
     public UIMessageGenerator(FacesContext facesContext) {
         this.facesContext = facesContext;

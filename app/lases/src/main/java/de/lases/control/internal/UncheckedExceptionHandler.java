@@ -16,6 +16,12 @@ import jakarta.faces.event.ExceptionQueuedEventContext;
  */
 public class UncheckedExceptionHandler extends ExceptionHandlerWrapper {
 
+    /**
+     * Constructs an {@link UncheckedExceptionHandler}.
+     * Should only be used by the according {@link UncheckedExceptionHandlerFactory}.
+     *
+     * @param wrapped The wrapped {@link ExceptionHandler}.
+     */
     public UncheckedExceptionHandler(ExceptionHandler wrapped) {
         super(wrapped);
     }
