@@ -1,12 +1,8 @@
 package de.lases.control.internal;
 
-import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.inject.Produces;
 
-import java.io.Serial;
-import java.io.Serializable;
 import java.util.PropertyResourceBundle;
-import java.util.ResourceBundle;
 
 /**
  * Provides the message bundle to the business layer.

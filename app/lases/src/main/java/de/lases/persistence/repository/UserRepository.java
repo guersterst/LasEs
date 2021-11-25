@@ -43,18 +43,18 @@ public class UserRepository {
      *             </ul>
      *             If {@code isNotRegistered} is true, then the password and
      *             password salt are not required.
+     *             (The id must not be specified, as the repository will
+     *             create the id)
      * @param transaction The transaction to use.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
-     * @throws KeyExistsException If there is already a user with
-     *                            the same id or email.
      * @throws InvalidFieldsException If one of the required fields of the
      *                                scientific forum is null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static void add(User user, Transaction transaction)
-            throws DataNotWrittenException, KeyExistsException {
+            throws DataNotWrittenException {
     }
 
     /**
@@ -63,6 +63,7 @@ public class UserRepository {
      *
      * @param user A user dto with all required fields. Required are:
      *             <ul>
+     *             <li> id </li>
      *             <li> a hashed password and a password salt </li>
      *             <li> the first name </li>
      *             <li> the last name </li>
@@ -73,16 +74,13 @@ public class UserRepository {
      *                           provided id or email.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
-     * @throws KeyExistsException If there is already a user with
-     *                            the same id or email.
      * @throws InvalidFieldsException If one of the required fields of the user
      *                                is null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static void change(User user, Transaction transaction)
-            throws NotFoundException, DataNotWrittenException,
-            KeyExistsException {
+            throws NotFoundException, DataNotWrittenException {
     }
 
     /**

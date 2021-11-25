@@ -55,17 +55,10 @@ public class ScientificForumRepository {
     /**
      * Adds a scientific forum to the repository.
      *
-     * @param scientificForum A scientific forum dto filled with the required
-     *                        fields. Required are:
-     *                        <ul>
-     *                        <li> id </li>
-     *                        <li> name </li>
-     *                        </ul>
+     * @param scientificForum A scientific forum dto filled with a name
      * @param transaction The transaction to use.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
-     * @throws KeyExistsException If there is already a scientific forum with
-     *                            the same id.
      * @throws InvalidFieldsException If one of the required fields of the
      *                                scientific forum is null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
@@ -73,19 +66,14 @@ public class ScientificForumRepository {
      */
     public static void add(ScientificForum scientificForum,
                            Transaction transaction)
-            throws DataNotWrittenException, KeyExistsException {
+            throws DataNotWrittenException {
     }
 
     /**
      * Changes the given scientific forum in the repository. All fields that
      * are not required will be deleted if left empty.
      *
-     * @param scientificForum A scientificForum dto with all required fields.
-     *                        Required are:
-     *                        <ul>
-     *                        <li> id </li>
-     *                        <li> name </li>
-     *                        </ul>
+     * @param scientificForum A scientificForum dto with an id and a name.
      * @param transaction The transaction to use.
      * @throws NotFoundException If there is no scientific forum with the
      *                           provided id.

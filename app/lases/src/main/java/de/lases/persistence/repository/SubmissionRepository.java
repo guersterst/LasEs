@@ -32,32 +32,51 @@ public class SubmissionRepository {
     /**
      * Adds a submission to the repository.
      *
-     * @param submission A fully filled submission dto.
+     * @param submission A submission dto filled with the required fields.
+     *                   Required is:
+     *                   <ul>
+     *                   <li> scientificForumId </li>
+     *                   <li> authorId </li>
+     *                   <li> editorId </li>
+     *                   <li> title </li>
+     *                   <li> state </li>
+     *                   <li> submissionTime </li>
+     *                   </ul>
+     *                   (The id must not be specified, as the repository will
+     *                   create the id)
      * @param transaction The transaction to use.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
-     * @throws KeyExistsException If there is already a submission with
-     *                            the same id.
-     * @throws InvalidFieldsException If one of the fields of the submission is
-     *                                null.
+     * @throws InvalidFieldsException If one of the required fields of the
+     *                                submission is null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static void add(Submission submission, Transaction transaction)
-            throws DataNotWrittenException, KeyExistsException {
+            throws DataNotWrittenException {
     }
 
     /**
      * Changes the given submission in the repository.
      *
-     * @param submission A fully filled submission dto.
+     * @param submission A submission dto filled with the required fields.
+     *                   Required is:
+     *                   <ul>
+     *                   <li> id </li>
+     *                   <li> scientificForumId </li>
+     *                   <li> authorId </li>
+     *                   <li> editorId </li>
+     *                   <li> title </li>
+     *                   <li> state </li>
+     *                   <li> submissionTime </li>
+     *                   </ul>
      * @param transaction The transaction to use.
      * @throws NotFoundException If there is no submission with the
      *                           provided id.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
-     * @throws InvalidFieldsException If one of the fields of the submission
-     *                                is null.
+     * @throws InvalidFieldsException If one of the required fields of the
+     *                                submission is null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
