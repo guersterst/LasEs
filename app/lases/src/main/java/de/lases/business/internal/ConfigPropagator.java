@@ -1,5 +1,6 @@
 package de.lases.business.internal;
 
+import de.lases.global.transport.FileDTO;
 import de.lases.persistence.repository.ConfigReader;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -19,10 +20,11 @@ public class ConfigPropagator {
     /**
      * Sets the configured properties of the application.
      *
-     * @param inputStream The properties to be set.
+     * @param configFile The configuration properties to be set
+     *                   as a {@link FileDTO} encapsulating an {@code InputStream}.
      */
-    public void setProperties(InputStream inputStream) {
-        configReader.setProperties(inputStream);
+    public void setProperties(FileDTO configFile) {
+        configReader.setProperties(configFile);
 
     }
 

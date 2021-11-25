@@ -1,6 +1,7 @@
 package de.lases.control.internal;
 
 import de.lases.business.internal.ConfigPropagator;
+import de.lases.global.transport.FileDTO;
 import jakarta.inject.Inject;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
@@ -61,6 +62,8 @@ public class LifeTimeListener implements ServletContextListener {
 
     private void initializeAppConfig(ServletContext sctx) {
         InputStream is = sctx.getResourceAsStream(APPLICATION_CONFIG_PATH);
-        configPropagator.setProperties(is);
+        FileDTO configFile = new FileDTO();
+        configFile.setInputStream(is);
+        configPropagator.setProperties(configFile);
     }
 }

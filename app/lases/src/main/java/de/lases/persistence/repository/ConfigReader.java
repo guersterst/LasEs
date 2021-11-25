@@ -1,5 +1,6 @@
 package de.lases.persistence.repository;
 
+import de.lases.global.transport.FileDTO;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import java.io.IOException;
@@ -17,9 +18,11 @@ public class ConfigReader {
     /**
      * Sets the configured properties of the application.
      *
-     * @param inputStream The properties to be set.
+     * @param configFile The configuration properties to be set
+     *                   as a {@link FileDTO} encapsulating an {@code InputStream}.
      */
-    public void setProperties(InputStream inputStream) {
+    public void setProperties(FileDTO configFile) {
+        InputStream inputStream = configFile.getInputStream();
         try {
             this.props = loadProperties(inputStream);
         } catch (IOException e) {
