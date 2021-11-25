@@ -50,7 +50,7 @@ activate sb
     sb -> si ++ : getUser()
     return User sessionUsr
     sb -> usr ** : User()
-    sb -> usr ++ : setId(int sessionUsr.getId())
+    sb -> usr ++ : setId(sessionUsr.getId())
     return
     sb -> sub ** : Submission()
 return
@@ -61,30 +61,32 @@ note right of user
     requestParams
     (URL-Parameter)
 end note
-user -> sub ++ : setId(int subId)
+user -> sub ++ : setId(subId)
 return
 
+user -> sb ++ : preRenderViewListener(event)
+return
 
 user -> sb ++ : onLoad() //[via viewAction]//
-    sb -> ssvc ++ : canView(Submission sub, User usr)
+    sb -> ssvc ++ : canView(sub, usr)
     return true
 
-    sb -> ssvc : getSubmission(Submission sub)
+    sb -> ssvc : getSubmission(sub)
     activate ssvc
         ssvc -> t1 ** : Transaction()
         activate t1
             t1 -> cp : __getInstance()__
             activate cp
-            return ConnectionPool cp
+            return cp
             t1 -> cp : getConnection()
             activate cp
             return Connection conn
         return
-        ssvc -> sr : __get(Submission sub, Transaction t1)__
+        ssvc -> sr : __get(sub, t1)__
         activate sr
             sr -> sub : getId()
             activate sub
-            return int id
+            return id
             sr -> t1 ++ : getConnection()
             return
         note right of sr
@@ -97,7 +99,7 @@ user -> sb ++ : onLoad() //[via viewAction]//
         return <font color=red><b>DataSourceNotFoundException e</b></font> (unchecked)
 
         ssvc -> t1 ++ : abort()
-            t1 -> cp ++ : releaseConnection(Connection conn)
+            t1 -> cp ++ : releaseConnection(conn)
             return
         return
 
@@ -111,7 +113,7 @@ user -> eh ++ : handle()
     from resource bundle
     end note
 
-    eh -> msg ** : ErrorMessage(String errMsg, String stacktrace)
+    eh -> msg ** : ErrorMessage(errMsg, stacktrace)
 
     eh -> epb **
     eh -> epb ++ : setErrorMessage(msg)
