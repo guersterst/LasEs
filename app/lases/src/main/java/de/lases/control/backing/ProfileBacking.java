@@ -99,8 +99,7 @@ public class ProfileBacking implements Serializable {
      * not
      *
      * @param event The component system event that happens before rendering
-     *              the view param. Can be used to check the view param for
-     *              validity
+     *              the view param.
      * @throws IllegalUserFlowException If there is no integer provided as view
      *                                  param
      */
