@@ -1,8 +1,13 @@
 package de.lases.control.internal;
 
+import de.lases.business.internal.ConfigPropagator;
+import jakarta.inject.Inject;
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
+
+import java.io.InputStream;
 
 /**
  * Listens for startup and shutdown of the system and executes initialization
@@ -10,6 +15,12 @@ import jakarta.servlet.annotation.WebListener;
  */
 @WebListener
 public class LifeTimeListener implements ServletContextListener {
+
+
+    @Inject
+    private ConfigPropagator configPropagator;
+
+    private final static String APPLICATION_CONFIG_PATH = "/WEB-INF/config/config.properties";
 
     /**
      * On shutdown we make sure all used resources are closed gracefully.
@@ -40,11 +51,16 @@ public class LifeTimeListener implements ServletContextListener {
      *     <li> The logger </li>
      * </ul>
      *
-     * @param event The startup event.
+     * @param sce The startup event.
      */
     @Override
-    public void contextInitialized(ServletContextEvent event) {
-        // TODO Automatisch erstellter Methoden-Stub
+    public void contextInitialized(final ServletContextEvent sce) {
+        ServletContext sctx = sce.getServletContext();
+        initializeAppConfig(sctx);
+    }
 
+    private void initializeAppConfig(ServletContext sctx) {
+        InputStream is = sctx.getResourceAsStream(APPLICATION_CONFIG_PATH);
+        configPropagator.setProperties(is);
     }
 }
