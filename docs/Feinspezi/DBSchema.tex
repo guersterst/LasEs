@@ -45,7 +45,7 @@ Hier werden die einzelnen Entities in der \emph{Data Definition Language} beschr
 CREATE TABLE "user" (
 	id SERIAL PRIMARY KEY NOT NULL,
 	email_address VARCHAR(70) UNIQUE NOT NULL,
-	administrator BOOLEAN NOT NULL,
+	is_administrator BOOLEAN NOT NULL,
 	firstname VARCHAR(50) NOT NULL,
 	lastname VARCHAR(50) NOT NULL,
 	title VARCHAR(20),
@@ -69,7 +69,7 @@ CREATE TABLE "user" (
 CREATE TABLE verification (
 	id INTEGER NOT NULL,
 	validation_random VARCHAR,
-	verified BOOLEAN,
+	is_verified BOOLEAN,
 	timestamp_validation_started TIMESTAMP,
 	unvalidated_email_address VARCHAR,
 

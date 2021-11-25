@@ -1,7 +1,7 @@
 CREATE TABLE "user" (
 	id SERIAL PRIMARY KEY NOT NULL,
 	email_address VARCHAR(70) UNIQUE NOT NULL,
-	administrator BOOLEAN NOT NULL,
+	is_administrator BOOLEAN NOT NULL,
 	firstname VARCHAR(50) NOT NULL,
 	lastname VARCHAR(50) NOT NULL,
 	title VARCHAR(20),
