@@ -1,5 +1,6 @@
 package de.lases.control.backing;
 
+import de.lases.business.internal.ConfigPropagator;
 import de.lases.business.service.RegistrationService;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
@@ -20,6 +21,9 @@ public class RegistrationBacking {
 
     @Inject
     private SessionInformation sessionInformation;
+
+    @Inject
+    private ConfigPropagator configPropagator;
 
     private User newUser;
 

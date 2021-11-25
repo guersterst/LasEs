@@ -1,11 +1,13 @@
 package de.lases.control.validation;
 
+import de.lases.business.internal.ConfigPropagator;
 import de.lases.global.transport.FileDTO;
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.validator.FacesValidator;
 import jakarta.faces.validator.Validator;
 import jakarta.faces.validator.ValidatorException;
+import jakarta.inject.Inject;
 import jakarta.servlet.http.Part;
 
 /**
@@ -14,6 +16,9 @@ import jakarta.servlet.http.Part;
  */
 @FacesValidator
 public class PDFValidator implements Validator<FileDTO> {
+
+    @Inject
+    private ConfigPropagator configPropagator;
 
     /**
      * Validates a pdf as specified in the class description.
