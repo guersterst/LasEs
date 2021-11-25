@@ -1,6 +1,8 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.*;
+import de.lases.persistence.exception.DatasourceQueryFailedException;
+import de.lases.persistence.exception.InvalidFieldsException;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
@@ -132,5 +134,16 @@ public class ScientificForumService implements Serializable {
      */
     public List<ScientificForum> getList(ResultListParameters resultListParams) {
         return null;
+    }
+
+    /**
+     * Determines whether a {@link ScientificForum} already exists.
+     *
+     * @param scientificForum A {@code ScientificForum} that must be filled
+     *                        with a valid id or a name.
+     * @return {@code true} if this {@link ScientificForum} exists and {@code false} otherwise.
+     */
+    public static boolean exists(ScientificForum scientificForum) {
+        return false;
     }
 }
