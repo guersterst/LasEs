@@ -124,16 +124,19 @@ public class UserRepository {
     }
 
     /**
-     * Takes a user dto that is filled with a valid id or a valid email address
-     * and a fully filled verification dto and adds the verification to the
-     * use.
+     * Takes a verification dto that is filled with a valid userId and adds the
+     * verification to the user.
      *
-     * @param user
-     * @param verification
-     * @param transaction
+     * @param verification A fully filled Verification dto.
+     * @param transaction The transaction to use.
+     * @throws NotFoundException If there is no user with the
+     *                           provided userId.
+     * @throws DatasourceQueryFailedException If the datasource cannot be
+     *                                        queried.
      */
-    public static void setVerification(User user, Verification verification,
-                                       Transaction transaction) {
+    public static void setVerification(Verification verification,
+                                       Transaction transaction)
+            throws NotFoundException{
 
     }
 
