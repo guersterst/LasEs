@@ -1,10 +1,7 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.*;
-import de.lases.persistence.exception.DataNotCompleteException;
-import de.lases.persistence.exception.DatasourceQueryFailedException;
-import de.lases.persistence.exception.InvalidQueryParamsException;
-import de.lases.persistence.exception.NotFoundException;
+import de.lases.persistence.exception.*;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
@@ -137,6 +134,14 @@ public class SubmissionService implements Serializable {
      */
     public ReviewedBy getReviewedBy(Submission submission, User reviewer) {
         return null;
+    }
+
+    /**
+     * Updates the given {@code ReviewedBy} in the repository.
+     *
+     * @param reviewedBy The fully filled {@link ReviewedBy}.
+     */
+    public void changeReviewedBy(ReviewedBy reviewedBy) {
     }
 
     /**
