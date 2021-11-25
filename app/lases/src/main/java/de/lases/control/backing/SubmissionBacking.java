@@ -246,6 +246,15 @@ public class SubmissionBacking implements Serializable {
     }
 
     /**
+     * Delete this submission and go to the homepage.
+     *
+     * @return Go to the homepage.
+     */
+    public String deleteSubmission() {
+
+    }
+
+    /**
      * Get the {@code Part} file where the revision PDF can be uploaded.
      *
      * @return The file where the revision can be uploaded.
