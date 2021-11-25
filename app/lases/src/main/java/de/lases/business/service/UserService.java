@@ -1,10 +1,7 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.*;
-import de.lases.persistence.exception.DataNotWrittenException;
-import de.lases.persistence.exception.DatasourceQueryFailedException;
-import de.lases.persistence.exception.InvalidFieldsException;
-import de.lases.persistence.exception.NotFoundException;
+import de.lases.persistence.exception.*;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
@@ -128,12 +125,39 @@ public class UserService implements Serializable {
     }
 
     /**
-     * Gets a sorted and filtered list of users.
+     * Gets a sorted and filtered list of {@link User}s.
      *
      * @param resultListParams Parameters, that control filtering and sorting of the resulting list.
      * @return A list of {@link User}-DTOs.
      */
     public List<User> getList(ResultListParameters resultListParams) {
+        return null;
+    }
+
+
+    /**
+     * Gets a list of all {@link User}s involved with a certain {@link Submission}.
+     *
+     * @param privilege The role of the requested {@code User}s.
+     *                  May be {@code REVIEWER} for reviewers,
+     *                  {@code AUTHOR} for (co)-authors.
+     *                  {@code ADMIN} and {@code EDITOR} are not supported.
+     * @param submission The submission the users should stand in a
+     *                   relationship with. Must be filled with a valid id.
+     * @return A list of {@code User}s involved with a {@code Submission} in a certain role.
+     */
+    public static List<User> getList(Submission submission, Privilege privilege) {
+        return null;
+    }
+
+    /**
+     * Gets all {@link User}s that are editors of a specific {@link ScientificForum}.
+     *
+     * @param scientificForum The forum where the editors are required. Must
+     *                        contain a valid id.
+     * @return A list of editors for a certain forum.
+     */
+    public static List<User> getList(ScientificForum scientificForum) {
         return null;
     }
 
