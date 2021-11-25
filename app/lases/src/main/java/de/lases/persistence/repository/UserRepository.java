@@ -43,11 +43,13 @@ public class UserRepository {
      *             </ul>
      *             If {@code isNotRegistered} is true, then the password and
      *             password salt are not required.
+     *             (The id must not be specified, as the repository will
+     *             create the id)
      * @param transaction The transaction to use.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
-     * @throws KeyExistsException If there is already a user with
-     *                            the same id or email.
+     * @throws KeyExistsException If the email address of the added user
+     *                            already exists in the datasource.
      * @throws InvalidFieldsException If one of the required fields of the
      *                                scientific forum is null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
@@ -58,24 +60,26 @@ public class UserRepository {
     }
 
     /**
-     * Changes the given user in the repository.
+     * Changes the given user in the repository. All fields that are not
+     * required will be deleted if left empty.
      *
      * @param user A user dto with all required fields. Required are:
      *             <ul>
+     *             <li> id </li>
      *             <li> a hashed password and a password salt </li>
      *             <li> the first name </li>
      *             <li> the last name </li>
      *             <li> the email address </li>
      *             </ul>
-     *             The rest of the fields will be deleted if left empty.
      * @param transaction The transaction to use.
      * @throws NotFoundException If there is no user with the
      *                           provided id or email.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
-     * @throws KeyExistsException If there is already a user with
-     *                            the same id or email.
-     * @throws InvalidFieldsException If one of the fields of the user is null.
+     * @throws KeyExistsException If the new email address of the user
+     *                            already exists in the datasource.
+     * @throws InvalidFieldsException If one of the required fields of the user
+     *                                is null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
@@ -125,6 +129,23 @@ public class UserRepository {
     }
 
     /**
+     * Takes a verification dto that is filled with a valid userId and adds the
+     * verification to the user.
+     *
+     * @param verification A fully filled Verification dto.
+     * @param transaction The transaction to use.
+     * @throws NotFoundException If there is no user with the
+     *                           provided userId.
+     * @throws DatasourceQueryFailedException If the datasource cannot be
+     *                                        queried.
+     */
+    public static void setVerification(Verification verification,
+                                       Transaction transaction)
+            throws NotFoundException{
+
+    }
+
+    /**
      * Gets a list of all users.
      *
      * @param transaction The transaction to use.
@@ -141,6 +162,55 @@ public class UserRepository {
     public static List<User> getList(Transaction transaction,
                                      ResultListParameters resultListParameters)
             throws DataNotCompleteException {
+        return null;
+    }
+
+    /**
+     * Gets a list of all users that fulfil a specific role in regard to a
+     * specific submission
+     *
+     * @param transaction The transaction to use.
+     * @param privilege The role the users must fulfil in regard to the
+     *                  specified submission. Must be REVIEWER for reviewers
+     *                  and AUTHENTICATED for (co)-authors.
+     *                  ADMIN adn EDITOR is not supported.
+     * @param submission The submission the users should stand in a
+     *                   relationship with. Must be filled with a valid id.
+     * @return A list of fully filled user dtos.
+     * @throws DataNotCompleteException If the list is truncated.
+     * @throws DatasourceQueryFailedException If the datasource cannot be
+     *                                        queried.
+     * @throws InvalidFieldsException If the privilege is ADMIN or EDITOR.
+     * @throws NotFoundException If there is no submission with the specified
+     *                           id.
+     * @throws InvalidQueryParamsException If the resultListParameters contain
+     *                                     an erroneous option.
+     */
+    public static List<User> getList(Transaction transaction,
+                                     Submission submission,
+                                     Privilege privilege)
+            throws DataNotCompleteException, NotFoundException {
+        return null;
+    }
+
+    /**
+     * Gets a list of all users that are editor of a specific scientific forum.
+     *
+     * @param transaction The transaction to use.
+     * @param scientificForum The forum the users must be editor of. Must
+     *                        contain a valid id.
+     * @return A list of fully filled user dtos.
+     * @throws DataNotCompleteException If the list is truncated.
+     * @throws DatasourceQueryFailedException If the datasource cannot be
+     *                                        queried.
+     * @throws NotFoundException If there is no scientific forum with the
+     *                           specified id.
+     * @throws InvalidQueryParamsException If the resultListParameters contain
+     *                                     an erroneous option.
+     */
+    public static List<User> getList(Transaction transaction,
+                                     ScientificForum scientificForum)
+            throws DataNotCompleteException, NotFoundException {
         return null;
     }
 
@@ -205,29 +275,35 @@ public class UserRepository {
     }
 
     /**
-     * Get the image file for the avatar.
+     * Get the avatar image file for the avatar of the specified user.
      *
+     * @param user A user dto with a valid id.
      * @param transaction The transaction to use.
      * @return A file containing the logo.
+     * @throws NotFoundException If there is no user with the specified id.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
-    public static FileDTO getAvatar(Transaction transaction) {
+    public static FileDTO getAvatar(User user, Transaction transaction)
+            throws NotFoundException {
         return null;
     }
 
     /**
-     * Sets the avatar.
+     * Sets the avatar for the specified user.
      *
+     * @param user A suer dto with a valid id.
      * @param avatar A file dto filled with an image file.
      * @param transaction The transaction to use.
+     * @throws NotFoundException If there is no user with the specified id.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
-    public static void setAvatar(FileDTO avatar, Transaction transaction)
-            throws DataNotWrittenException {
+    public static void setAvatar(User user, FileDTO avatar,
+                                 Transaction transaction)
+            throws DataNotWrittenException, NotFoundException {
     }
 
 }

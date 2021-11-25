@@ -31,19 +31,18 @@ public class ReviewRepository {
     /**
      * Adds a review to the repository.
      *
-     * @param review A fully filled review dto.
+     * @param review A fully filled review dto. (The id must not be specified,
+     *               as the repository will create the id)
      * @param transaction The transaction to use.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
-     * @throws KeyExistsException If there is already a reviewer with the same
-     *                            ids.
      * @throws InvalidFieldsException If one of the fields of the review is
      *                                null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static void add(Review review, Transaction transaction)
-            throws DataNotWrittenException, KeyExistsException {
+            throws DataNotWrittenException {
     }
 
     /**

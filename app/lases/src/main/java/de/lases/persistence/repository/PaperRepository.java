@@ -31,11 +31,11 @@ public class PaperRepository {
     /**
      * Adds a paper to the repository.
      *
-     * @param paper       A fully filled paper dto.
+     * @param paper       A fully filled paper dto. (The id must not be
+     *                    specified, as the repository will create the id)
      * @param transaction The transaction to use.
      * @throws DataNotWrittenException        If writing the data to the repository
      *                                        fails.
-     * @throws KeyExistsException             If there is already a paper with the same id
      *                                        and submission id in the repository.
      * @throws InvalidFieldsException         If one of the fields of the paper is
      *                                        null.
@@ -43,8 +43,7 @@ public class PaperRepository {
      *                                        queried.
      */
     public static void add(Paper paper, Transaction transaction)
-            throws DataNotWrittenException,
-            KeyExistsException {
+            throws DataNotWrittenException {
     }
 
     /**

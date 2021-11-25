@@ -11,8 +11,6 @@ public class Submission implements Cloneable {
 
     private Integer id;
 
-    private boolean revisionRequired;
-
     private int authorId;
 
     private int editorId;
@@ -53,7 +51,7 @@ public class Submission implements Cloneable {
     }
 
     public boolean isRevisionRequired() {
-        return revisionRequired;
+        return false;
     }
 
     /**
@@ -62,7 +60,6 @@ public class Submission implements Cloneable {
      * @param revisionRequired Is a revision required?
      */
     public void setRevisionRequired(boolean revisionRequired) {
-        this.revisionRequired = revisionRequired;
     }
 
     public int getAuthorId() {

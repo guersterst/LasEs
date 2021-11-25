@@ -8229,7 +8229,7 @@
 <text x="12163" y="955" clip-path="url(#clipPath1480)" fill="black" stroke="none" font-weight="bold" xml:space="preserve">Review</text>
 <text x="12165" font-size="9" y="972" clip-path="url(#clipPath1481)" fill="black" stroke="none" xml:space="preserve">Attribut</text>
 <text x="12081" y="988" clip-path="url(#clipPath1482)" fill="black" stroke="none" xml:space="preserve">- paperVersion : int</text>
-<text x="12081" y="1005" clip-path="url(#clipPath1483)" fill="black" stroke="none" xml:space="preserve">- submissionid : int</text>
+<text x="12081" y="1005" clip-path="url(#clipPath1483)" fill="black" stroke="none" xml:space="preserve">- submissionId : int</text>
 <text x="12081" y="1022" clip-path="url(#clipPath1484)" fill="black" stroke="none" xml:space="preserve">- reviewerId : int</text>
 <text x="12081" y="1039" clip-path="url(#clipPath1485)" fill="black" stroke="none" xml:space="preserve">- timestampUpdloaded : LocalDateTime</text>
 <text x="12081" y="1056" clip-path="url(#clipPath1486)" fill="black" stroke="none" xml:space="preserve">- visible : boolean</text>

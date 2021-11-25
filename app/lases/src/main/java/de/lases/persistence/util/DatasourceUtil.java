@@ -1,6 +1,8 @@
 package de.lases.persistence.util;
 
 import de.lases.global.transport.ConnectionState;
+import de.lases.persistence.exception.DatasourceNotFoundException;
+import de.lases.persistence.exception.DatasourceQueryFailedException;
 
 /**
  * Offers methods for managing the datasource.
@@ -13,6 +15,16 @@ public class DatasourceUtil {
      * their email address but did not do so within 1 hour.
      */
     public static void cleanUpVerifications() {
+    }
+
+    /**
+     * Creates the schema of the datasource.
+     *
+     * @throws DatasourceNotFoundException If the datasource cannot be
+     *                                     reached.
+     */
+    public static void createDatasource() {
+
     }
 
     /**
