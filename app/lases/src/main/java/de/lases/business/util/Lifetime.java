@@ -6,7 +6,7 @@ package de.lases.business.util;
 public class Lifetime {
 
     /**
-     * Initiates the system's required startup operations and adds a shutdown hook.
+     * Initiates the system's required startup.
      */
     public static void startup() {
 

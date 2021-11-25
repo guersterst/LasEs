@@ -58,7 +58,8 @@ public class UserRepository {
     }
 
     /**
-     * Changes the given user in the repository.
+     * Changes the given user in the repository. All fields that are not
+     * required will be deleted if left empty.
      *
      * @param user A user dto with all required fields. Required are:
      *             <ul>
@@ -67,7 +68,6 @@ public class UserRepository {
      *             <li> the last name </li>
      *             <li> the email address </li>
      *             </ul>
-     *             The rest of the fields will be deleted if left empty.
      * @param transaction The transaction to use.
      * @throws NotFoundException If there is no user with the
      *                           provided id or email.
@@ -75,7 +75,8 @@ public class UserRepository {
      *                                 fails.
      * @throws KeyExistsException If there is already a user with
      *                            the same id or email.
-     * @throws InvalidFieldsException If one of the fields of the user is null.
+     * @throws InvalidFieldsException If one of the required fields of the user
+     *                                is null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
@@ -122,6 +123,20 @@ public class UserRepository {
     public Verification getVerification(User user, Transaction transaction)
             throws NotFoundException {
         return null;
+    }
+
+    /**
+     * Takes a user dto that is filled with a valid id or a valid email address
+     * and a fully filled verification dto and adds the verification to the
+     * use.
+     *
+     * @param user
+     * @param verification
+     * @param transaction
+     */
+    public static void setVerification(User user, Verification verification,
+                                       Transaction transaction) {
+
     }
 
     /**
@@ -205,14 +220,15 @@ public class UserRepository {
     }
 
     /**
-     * Get the image file for the avatar.
+     * Get the image file for the avatar of the specified user.
      *
+     * @param
      * @param transaction The transaction to use.
      * @return A file containing the logo.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
-    public static FileDTO getAvatar(Transaction transaction) {
+    public static FileDTO getAvatar(User user, Transaction transaction) {
         return null;
     }
 

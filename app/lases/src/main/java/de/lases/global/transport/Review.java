@@ -9,7 +9,7 @@ public class Review implements Cloneable {
 
     private int paperVersion;
 
-    private int submissionid;
+    private int submissionId;
 
     private int reviewerId;
 
@@ -34,17 +34,17 @@ public class Review implements Cloneable {
         this.paperVersion = paperVersion;
     }
 
-    public int getSubmissionid() {
-        return submissionid;
+    public int getSubmissionId() {
+        return submissionId;
     }
 
     /**
      * Set the id of the submission this review belongs to.
      *
-     * @param submissionid Id of the submission.
+     * @param submissionId Id of the submission.
      */
-    public void setSubmissionid(int submissionid) {
-        this.submissionid = submissionid;
+    public void setSubmissionId(int submissionId) {
+        this.submissionId = submissionId;
     }
 
     public int getReviewerId() {

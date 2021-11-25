@@ -251,7 +251,7 @@ public class SubmissionBacking implements Serializable {
      * @return Go to the homepage.
      */
     public String deleteSubmission() {
-
+        return null;
     }
 
     /**

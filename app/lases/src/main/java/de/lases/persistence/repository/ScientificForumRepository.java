@@ -55,14 +55,19 @@ public class ScientificForumRepository {
     /**
      * Adds a scientific forum to the repository.
      *
-     * @param scientificForum A fully filled scientific forum dto.
+     * @param scientificForum A scientific forum dto filled with the required
+     *                        fields. Required are:
+     *                        <ul>
+     *                        <li> id </li>
+     *                        <li> name </li>
+     *                        </ul>
      * @param transaction The transaction to use.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
      * @throws KeyExistsException If there is already a scientific forum with
      *                            the same id.
-     * @throws InvalidFieldsException If one of the fields of the scientific
-     *                                forum is null.
+     * @throws InvalidFieldsException If one of the required fields of the
+     *                                scientific forum is null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
@@ -72,16 +77,22 @@ public class ScientificForumRepository {
     }
 
     /**
-     * Changes the given scientific forum in the repository.
+     * Changes the given scientific forum in the repository. All fields that
+     * are not required will be deleted if left empty.
      *
-     * @param scientificForum A fully filled scientificForum dto.
+     * @param scientificForum A scientificForum dto with all required fields.
+     *                        Required are:
+     *                        <ul>
+     *                        <li> id </li>
+     *                        <li> name </li>
+     *                        </ul>
      * @param transaction The transaction to use.
      * @throws NotFoundException If there is no scientific forum with the
      *                           provided id.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
-     * @throws InvalidFieldsException If one of the fields of the scientific
-     *                                forum is null.
+     * @throws InvalidFieldsException If one of the required fields of the
+     *                                scientific forum is null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
