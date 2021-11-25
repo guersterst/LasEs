@@ -490,14 +490,10 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \end{samepage}
 
 
-
-%% Ab hier sind Bastis hinzugefügte Änderungen
-
-
 \begin{samepage}
 
 	\ftable{newSubmission}{\textbf{newSubmission.xhtml} Hier können neue Paper eingereicht werden.}{
-		\fentry{submission-title-itxt}{<h:inputText>}{Titel des abzugebenden Papers.}{value="\#\{newSubmissionBacking.newSubmission.title\}"}{/}{required="true" \newline requiredMessage=\newline "\#\{message.titleSub\}" \newline maxLength="\#\{Const.SUBMISSION\_TITLE\_MAX\}"}
+		\fentry{submission-title-itxt}{<h:inputText>}{Titel des abzugebenden Papers.}{value="\#\{newSubmissionBacking.newSubmission.title\}"}{/}{required="true" \newline requiredMessage=\newline "\#\{message.titleSub\}" \newline maxLength=\newline"\#\{Const.SUBMISSION\_TITLE\_MAX\}"}
 
 		\fentry{forum-name-itxt}{<h:inputText>}{Name des Forums, bei welchem abgegeben wird.}{value="\#\{newSubmissionBacking.newSubmission.forumInput.name\}"}{/}{required="true" \newline requiredMessage=\newline "\#\{message.forum\}"}
 
@@ -660,7 +656,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{delete-forum-cbtn}{<h:commandButton>}{Löschen eines Forums.}{value="\#\{labels.delete\}" \newline onclick="PF('dlg').show()"}{rendered="\#\{scientificForumBacking.sessionInformation.user.admin\}"}{/}
 
-		\fentry{forum-name-itxt}{inputText}{Name des Forums.}{value="\#\{scientificForumBacking.scientificForum.name\}"}{readonly="\#\{!scientificForumBacking.loggedInUserIsEditor\}"}{required="true" \newline requiredMessage=\newline "\#\{message.forumName\}" \newline maxLength="\#\{Const.FORUM\_NAME\_MAX\}"}
+		\fentry{forum-name-itxt}{inputText}{Name des Forums.}{value="\#\{scientificForumBacking.scientificForum.name\}"}{readonly="\#\{!scientificForumBacking.loggedInUserIsEditor\}"}{required="true" \newline requiredMessage=\newline "\#\{message.forumName\}" \newline maxLength=\newline"\#\{Const.FORUM\_NAME\_MAX\}"}
 
 		\fentry{editor-lst}{<h:dataTable>}{Liste der verantwortliche Editoren.}{value="\#\{scientificForumBacking.editors\}"\newline title="\#\{help.managingEditors\}"}{/}{/}
 
@@ -835,11 +831,11 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{change-logo-ifile}{<h:inputFile>}{Hochladen eines neuen Logos.}{title="\#\{help.uploadNewLogo\}"\newline value="\#\{administrationBacking.uploadedImage\}"}{rendered="\#\{administrationBacking.sessionInformation.user.admin\}"}{/}
 
-		\fentry{welcome-heading-itxt}{<h:inputText>}{Angabe einer Überschrift auf der \emph{welcomepage}}{value="\#\{administrationBacking.systemSettings.headlineWelcomePage\}"}{rendered="\#\{administrationBacking.sessionInformation.user.admin\}" }{required="true" \newline requiredMessage=\newline "\#\{message.welcomeHeading\}" \newline maxLength="\#\{Const.WELCOME\_HEADING\_MAX\}"}
+		\fentry{welcome-heading-itxt}{<h:inputText>}{Angabe einer Überschrift auf der \emph{welcomepage}}{value="\#\{administrationBacking.systemSettings.headlineWelcomePage\}"}{rendered="\#\{administrationBacking.sessionInformation.user.admin\}" }{required="true" \newline requiredMessage=\newline "\#\{message.welcomeHeading\}" \newline maxLength=\newline"\#\{Const.WELCOME\_HEADING\_MAX\}"}
 
-		\fentry{welcome-text-itxt}{<h:inputTextArea>}{Angabe eines Textes auf der \emph{welcomepage}}{value="\#\{administrationBacking.systemSettings.shortMessageWelcomePage\}"}{rendered="\#\{administrationBacking.sessionInformation.user.admin\}"}{required="true" \newline requiredMessage=\newline "\#\{message.welcomeText\}" \newline maxLength="\#\{Const.WELCOME\_DESCRIPTION\_MAX\}"}
+		\fentry{welcome-text-itxt}{<h:inputTextArea>}{Angabe eines Textes auf der \emph{welcomepage}}{value="\#\{administrationBacking.systemSettings.shortMessageWelcomePage\}"}{rendered="\#\{administrationBacking.sessionInformation.user.admin\}"}{required="true" \newline requiredMessage=\newline "\#\{message.welcomeText\}" \newline maxLength=\newline"\#\{Const.WELCOME\_DESCRIPTION\_MAX\}"}
 
-		\fentry{institution-itxt}{<h:inputText>}{Angabe des Namens der Einrichtung.}{value="\#\{administrationBacking.systemSettings.companyName\}"}{rendered="\#\{administrationBacking.sessionInformation.user.admin\}"}{required="true" \newline requiredMessage=\newline "\#\{message.institution\}" \newline maxLength="\#\{Const.SYSTEM\_COMPANY\_NAME\_MAX\}"}
+		\fentry{institution-itxt}{<h:inputText>}{Angabe des Namens der Einrichtung.}{value="\#\{administrationBacking.systemSettings.companyName\}"}{rendered="\#\{administrationBacking.sessionInformation.user.admin\}"}{required="true" \newline requiredMessage=\newline "\#\{message.institution\}" \newline maxLength=\newline"\#\{Const.SYSTEM\_COMPANY\_NAME\_MAX\}"}
 
 		\fentry{imprint-itxt}{<h:inputTextArea>}{Angabe des Impressums der Einrichtung.}{value="\#\{administrationBacking.systemSettings.imprint\}"}{rendered="\#\{administrationBacking.sessionInformation.user.admin\}"}{required="true" \newline requiredMessage=\newline "\#\{message.imprint\}"}
 
@@ -874,7 +870,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 	\fentry{url-itxt}{<h:inputText>}{Link zur Konferenz oder zum Journal.}{value="\#\{newScientificForumBacking.newScientificForum.url\}"}{rendered="\#{newScientificForumBacking.sessionInformation.user.admin}"}{maxLength="\#\{Const.FORUM\_URL\_MAX\}"}
 
-	\fentry{review-manual-itxt}{<h:inputTextArea>}{Angabe einer Anleitung für eine Begutachtung.}{value="\#\{newScientificForumBacking.newScientificForum.reviewManual\}"}{rendered="\#{newScientificForumBacking.sessionInformation.user.admin}"}{required="true" \newline requiredMessage=\newline "\#\{message.manual\}" \newline maxLength="\#\{Const.REVIEW\_MANUAL\_MAX\}"}
+	\fentry{review-manual-itxt}{<h:inputTextArea>}{Angabe einer Anleitung für eine Begutachtung.}{value="\#\{newScientificForumBacking.newScientificForum.reviewManual\}"}{rendered="\#{newScientificForumBacking.sessionInformation.user.admin}"}{required="true" \newline requiredMessage=\newline "\#\{message.manual\}" \newline maxLength=\newline"\#\{Const.REVIEW\_MANUAL\_MAX\}"}
 
 	\fentry{science-field-list}{<h:outputText>}{Liste der ausgewählten Fachgebiete.}{value="\#\{newScientificForumBacking.selectedScienceFields\}"}{rendered="\#{newScientificForumBacking.sessionInformation.user.admin}"}{/}
 
@@ -882,7 +878,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 	\fentry{/}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{value="\#\{newScientificForumBacking.scienceFields\}"}{rendered="\#{newScientificForumBacking.sessionInformation.user.admin}"}{/}
 
-	\fentry{new-science-field-itxt}{<h:inputText>}{Hinzufügen neuer Fachgebiete.}{value="\#\{newScientificForumBacking.newScienceFieldInput.name\}"}{rendered="\#{newScientificForumBacking.sessionInformation.user.admin}"}{required="true" \newline requiredMessage=\newline "\#\{message.newScienceField\}" \newline maxLength="\#\{Const.SCIENCE\_FIELD\}"}
+	\fentry{new-science-field-itxt}{<h:inputText>}{Hinzufügen neuer Fachgebiete.}{value="\#\{newScientificForumBacking.newScienceFieldInput.name\}"}{rendered="\#{newScientificForumBacking.sessionInformation.user.admin}"}{required="true" \newline requiredMessage=\newline "\#\{message.newScienceField\}" \newline maxLength=\newline"\#\{Const.SCIENCE\_FIELD\}"}
 
 	\fentry{add-science-field-btn}{<h:commandButton>}{Ausführen der Hinzufüge-Aktion.}{value="\#\{labels.add\}"\newline action="\#\{newScientificForumBacking.addScienceField\}"}{rendered="\#{newScientificForumBacking.sessionInformation.user.admin}"}{/}
 
