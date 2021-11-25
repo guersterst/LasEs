@@ -41,6 +41,8 @@ public class UserRepository {
      *             <li> the last name </li>
      *             <li> the email address </li>
      *             </ul>
+     *             If {@code isNotRegistered} is true, then the password and
+     *             password salt are not required.
      * @param transaction The transaction to use.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
