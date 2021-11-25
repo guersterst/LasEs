@@ -40,24 +40,6 @@ public class WelcomeBacking {
     @PostConstruct
     public void init() {
     }
-
-    /* ************************************************
-     * Teständerungen
-     */
-    private String testString = "keine änderung";
-
-    public String getTestString() {
-        return testString;
-    }
-
-    public void setTestString(String testString) {
-        this.testString = testString;
-    }
-
-    public void stringChanger() {
-        testString = "geaendert";
-    }
-    // ************************************************
     /**
      * Check the entered login data and either show an error message or go
      * to the homepage (and log the user in).
