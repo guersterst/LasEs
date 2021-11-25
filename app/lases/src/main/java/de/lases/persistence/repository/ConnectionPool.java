@@ -47,6 +47,8 @@ class ConnectionPool {
 
     /**
      * Shuts down the connection pool, freeing all connections.
+     *
+     * @throws IllegalStateException If the pool is not yet initialized.
      */
     public static synchronized void shutDown() {
 
