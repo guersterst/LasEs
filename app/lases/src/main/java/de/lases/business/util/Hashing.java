@@ -19,6 +19,7 @@ public class Hashing {
 
     /**
      * Hashes a password.
+     * -Welcher Algo: Thomas dokument
      *
      * @param password The password to be hashed.
      * @param salt The salt for increased entropy.

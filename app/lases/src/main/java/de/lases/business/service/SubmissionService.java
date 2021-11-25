@@ -46,7 +46,7 @@ public class SubmissionService implements Serializable {
      * <p>
      * The selected editor, reviewers and co-authors are informed about this
      * using the {@link de.lases.business.util.EmailUtil} utility.
-     * Do not forget to also add a paper using {@link PaperService#add(FileDTO, Submission)}.
+     * Do not forget to also add a paper using {@link PaperService#add(FileDTO, Paper)}.
      * </p>
      *
      * @param submission The submission's data in a {@link Submission}.
@@ -56,7 +56,7 @@ public class SubmissionService implements Serializable {
      * @param coauthors  The desired co-athors as proper {@link User}-DTOs or exclusively containing
      *                   an email-address.
      */
-    public void createSubmission(Submission submission, List<User> reviewers,
+    public void create(Submission submission, List<User> reviewers,
                                  List<User> coauthors) {
 
     }
@@ -70,7 +70,7 @@ public class SubmissionService implements Serializable {
      *
      * @param submission A {@link Submission}-DTO containing a valid id.
      */
-    public void removeSubmission(Submission submission) {
+    public void remove(Submission submission) {
     }
 
 

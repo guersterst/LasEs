@@ -40,9 +40,9 @@ public class CustomizationService {
     }
 
     /**
-     * Initiates the creation of the database schema.
+     * Initiates the creation of the datasource's schema.
      */
-    public void createDbSchema() {
+    public void createDataSourceSchema() {
     }
 
     /**

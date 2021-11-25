@@ -133,16 +133,4 @@ public class ScientificForumService implements Serializable {
     public List<ScientificForum> getList(ResultListParameters resultListParams) {
         return null;
     }
-
-    /**
-     * Returns the {@code ScientificForum}, to which a given {@code Submission} was submitted to.
-     *
-     * @param submission The {@link Submission} for which the {@link ScientificForum}
-     *                   is requested.
-     * @return The requested {@code ScientificForum} for a {@code Submission}.
-     */
-    public ScientificForum getScientificForumForSubmission(Submission submission) {
-        return null;
-    }
-
 }

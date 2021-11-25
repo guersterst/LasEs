@@ -28,11 +28,10 @@ public class PaperService {
      * A {@link Paper} may be the paper associated with a submission or a revision.
      * </p>
      *
-     * @param submission The submission to which the paper belongs containing a valid id.
-     * @param paper      A {@code Paper} containing a valid id.
+     * @param paper      A {@code Paper} containing a valid id of the requested paper.
      * @return A fully filled {@link Paper}.
      */
-    public Paper get(Submission submission, Paper paper) {
+    public Paper get(Paper paper) {
         return null;
     }
 
@@ -47,7 +46,8 @@ public class PaperService {
      * @param file       The file to be added.
      * @param submission The submission, to which the file is being added.
      */
-    public void add(FileDTO file, Submission submission) {
+    //todo nur Paper übergeben
+    public void add(FileDTO file, Paper paper) {
     }
 
     /**
@@ -117,8 +117,7 @@ public class PaperService {
      * @param user       The user who requests the papers, containing a valid view-privilege.
      * @return The submissions paper, which was least recently uploaded.
      */
-    public Paper getLatest(Submission submission, User user)
-            throws NotFoundException {
+    public Paper getLatest(Submission submission, User user) {
         return null;
     }
 }

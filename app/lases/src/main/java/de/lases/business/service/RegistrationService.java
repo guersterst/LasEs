@@ -53,6 +53,7 @@ public class RegistrationService {
      * @param user The user's data.
      * @return The user with all their data, if successful, and {@code null} otherwise.
      */
+    //todo Em-Mail Verification is not initiated.
     public User registerByAdmin(User user) {
         return null;
     }
