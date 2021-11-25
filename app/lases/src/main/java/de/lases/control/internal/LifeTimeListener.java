@@ -21,7 +21,8 @@ public class LifeTimeListener implements ServletContextListener {
     @Inject
     private ConfigPropagator configPropagator;
 
-    private final static String APPLICATION_CONFIG_PATH = "/WEB-INF/config/config.properties";
+    private final static String APPLICATION_CONFIG_PATH =
+            "/WEB-INF/config/config.properties";
 
     /**
      * On shutdown we make sure all used resources are closed gracefully.
@@ -45,7 +46,7 @@ public class LifeTimeListener implements ServletContextListener {
     /**
      * On startup we initialize the resources used by the system.
      *
-     * Specifically we read the config file and start:
+     * Specifically we read the resource bundle and config file and start:
      * <ul>
      *     <li> The datasource, specifically the connection pool </li>
      *     <li> The messaging service </li>

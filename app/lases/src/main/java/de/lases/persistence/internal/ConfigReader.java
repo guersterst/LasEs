@@ -1,6 +1,8 @@
 package de.lases.persistence.internal;
 
 import de.lases.global.transport.FileDTO;
+import de.lases.persistence.exception.ConfigNotReadableException;
+import de.lases.persistence.exception.InvalidFieldsException;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import java.io.IOException;
@@ -19,7 +21,12 @@ public class ConfigReader {
      * Sets the configured properties of the application.
      *
      * @param configFile The configuration properties to be set
-     *                   as a {@link FileDTO} encapsulating an {@code InputStream}.
+     *                   as a {@link FileDTO} encapsulating an
+     *                   {@code InputStream}.
+     * @throws InvalidFieldsException If the file dto does not have an input
+     *                                stream.
+     * @throws ConfigNotReadableException If the configuration file cannot
+     *                                    be read.
      */
     public void setProperties(FileDTO configFile) {
         InputStream inputStream = configFile.getInputStream();
