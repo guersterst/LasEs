@@ -1,11 +1,9 @@
 package de.lases.business.internal;
 
 import de.lases.global.transport.FileDTO;
-import de.lases.persistence.repository.ConfigReader;
+import de.lases.persistence.internal.ConfigReader;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-
-import java.io.InputStream;
 
 /**
  * Provides access to the configuration by propagating

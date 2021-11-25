@@ -1,4 +1,4 @@
-package de.lases.persistence.repository;
+package de.lases.persistence.internal;
 
 import de.lases.global.transport.FileDTO;
 import jakarta.enterprise.context.ApplicationScoped;
