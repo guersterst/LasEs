@@ -20,7 +20,8 @@ end box
 'end box
 box "control.internal"
     participant "si:SessionInformation" as si << @SessionScoped >>
-    participant ":UncheckedExceptionHandler" as eh << @SessionScoped >>
+    participant ":UncheckedExceptionHandlerFactory" as ehf
+    participant "eh:UncheckedExceptionHandler" as eh
 end box
 box "control.validation"
 end box
@@ -105,6 +106,9 @@ user -> sb ++ : onLoad() //[via viewAction]//
 
     return <font color=red><b>DataSourceNotFoundException e
 return <font color=red><b>DataSourceNotFoundException e
+
+user -> ehf ++ : getExceptionHandler()
+return eh
 
 user -> eh ++ : handle()
     note right of eh
