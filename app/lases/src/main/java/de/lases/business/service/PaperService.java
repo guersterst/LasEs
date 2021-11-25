@@ -8,6 +8,8 @@ import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 
 import java.util.List;
+import java.util.PropertyResourceBundle;
+import java.util.ResourceBundle;
 
 /**
  * Provides functionality for handling papers in {@link Submission}s.
@@ -21,6 +23,9 @@ public class PaperService {
 
     @Inject
     private Transaction transaction;
+
+    public PaperService() {
+    }
 
     /**
      * Gets a paper.
