@@ -106,8 +106,11 @@ public class ProfileBacking implements Serializable {
 
     /**
      * Save the changes to the user profile excluding profile picture and
-     * science fields. If the user was elevated to admin, a popup menu will
-     * ask for confirmation again.
+     * science fields. If the user changed his email address, a verification
+     * email will be sent to that address and a messge will be shown that asks
+     * the user to check his inbox.
+     * If the user was elevated to admin, a popup menu will ask for confirmation
+     * again.
      */
     public void submitChanges() {
     }
