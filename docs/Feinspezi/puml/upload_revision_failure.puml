@@ -64,6 +64,8 @@ end note
 user -> sub ++ : setId(int subId)
 return
 
+user -> sb ++ : preRenderViewListener()
+return
 
 user -> sb ++ : onLoad() //[via viewAction]//
     sb -> ssvc ++ : canView(Submission sub, User usr)
