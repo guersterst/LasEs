@@ -64,7 +64,7 @@ end note
 user -> sub ++ : setId(subId)
 return
 
-user -> sb ++ : preRenderViewListener()
+user -> sb ++ : preRenderViewListener(event)
 return
 
 user -> sb ++ : onLoad() //[via viewAction]//
