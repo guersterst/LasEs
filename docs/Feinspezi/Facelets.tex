@@ -250,7 +250,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 		\fentry{failed-otxt}{<h:outputText>}{Text zur keiner erfolgreichen Verifizierung.}{value="\#\{texts.fialed\}"}{rendered="\#\{not verificationBacking.verification.verified\}"}{/}
 
-		\fentry{go-to-home-cbtn}{<h:commandButton>}{Button zur Weiterleitung auf die Homepage bei erfolgreicher Verifizierung. Ansonsten wird auf \emph{welcome.xhtml} weiter geleitet.}{/}{/}
+		\fentry{go-to-home-cbtn}{<h:commandButton>}{Button zur Weiterleitung auf die Homepage bei erfolgreicher Verifizierung. Ansonsten wird auf \emph{welcome.xhtml} weiter geleitet.}{value="\#\{labels.goToHome\}" \newline action="\#\{verificationBacking.goToHome\}"}{/}{/}
 
 	}
 \end{samepage}
@@ -282,7 +282,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 \begin{samepage}
 
-	\ftable{homepage}{\textbf{homepage.xhtml} Startseite die den Überblick über alle Einreichungen, aufgeteilt in Reiter, beinhaltet.}{
+	\ftable{homepage}{\textbf{homepage.xhtml} \label{fclt:homepage} Startseite die den Überblick über alle Einreichungen, aufgeteilt in Reiter, beinhaltet.}{
 		\fentry{your-submission-clnk}{<h:commandLink>}{Reiter zum Anzeigen der eigenen Einreichungen.}{value="\#\{labels.yourSubmission\}" \newline action="\#\{homepageBacking\newline.showOwnSubmissionsTab\}" \newline title="\#\{help.yourSubmissions\}"}{/}{/}
 
 		\fentry{your-reviews-clnk}{<h:commandLink>}{Reiter zum Anzeigen der zu begutachtenden Einreichungen}{value="\#\{labels.yourReviews\}" \newline action="\#\{homepageBacking\newline.showSubmissionToReviewTab\}" \newline title="\#\{help.yourReviews\}"}{rendered="\#\{homepageBacking.sessionInformation.user.reviewer\}"}{/}
@@ -529,9 +529,9 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 		\begin{tabular}{|l|}
 
 			\hline
-			Wird nach den eigenen Einreichungen, nach denen, die man begutachtet oder nach Einreichungen in eigener editorialer Verantwortung \\ gesucht, so erscheinen die Listen im gleichen Schema wie auch auf der Homepage.
-			Ergibt die Suche eine Liste von User, so wird diese \\ wie in der Userliste für den Administrator und dem Editor angezeigt.
-			Ist das Ziel der Suche, wissenschaftliche Foren zu finden, so erhält \\ man bei passender Eingabe eine Liste im selben Format wie diejenige auf der Seite der Forumsliste. \\\hline
+			Wird nach den eigenen Einreichungen, nach denen, die man begutachtet oder nach Einreichungen in eigener editorialer Verantwortung \\ gesucht, so erscheinen die Listen im gleichen Schema wie auch auf der \hyperref[fclt:homepage]{Homepage}.
+			Ergibt die Suche eine Liste von User, so wird diese \\ wie in der \hyperref[fclt:userList]{Userliste} für den Administrator und dem Editor angezeigt.
+			Ist das Ziel der Suche, wissenschaftliche Foren zu finden, so erhält \\ man bei passender Eingabe eine Liste im selben Format wie diejenige auf der Seite der \hyperref[fclt:forumList]{Forumsliste}. \\\hline
 		\end{tabular}
 	\end{table}
 
@@ -540,7 +540,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 \begin{samepage}
 
-	\ftable{scientificForumList}{\textbf{scientificForumList.xhtml} Hier erhalten die Nutzer eine Übersicht über alle wissenschaftliche Foren.}{
+	\ftable{scientificForumList}{\textbf{scientificForumList.xhtml} \label{fclt:forumList} Hier erhalten die Nutzer eine Übersicht über alle wissenschaftliche Foren.}{
 		\fentry{date-select-slctom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{scientificForumListBacking.scientificForumPagination.resultListParameters.dateSelect\}"}{/}{/}
 
 		\fentry{/}{<f:selectItems>}{Liste der Auswahlmöglichkeiten}{value="\#\{scientificForumListBacking.dateSelects\}" \newline var=''"select" \newline itemLabel="\#\{labels['dateSelect.' += select]\}" \newline itemValue="\#\{select\}"}{/}{/}
@@ -763,7 +763,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 \begin{samepage}
 
 
-	\ftable{userList}{\textbf{userList.xhtml} Editoren und Administratoren erhalten hier einen Überblick über alle Nutzer. Die Seiten sind paginiert.}{
+	\ftable{userList}{\textbf{userList.xhtml} \label{fclt:userList} Editoren und Administratoren erhalten hier einen Überblick über alle Nutzer. Die Seiten sind paginiert.}{
 		\fentry{user-pg}{<pg:pagination>}{Paginierte Liste aller Nutzer}{paginator="\#\{userListBacking.userPagination\}"}{rendered="\#\{userListBacking.sessionInformation.user.editor\}"}{/}
 
 		\fentry{rol-ssc}{<ssc:sortsearchcolumn>}{Spalte für die Nutzerrolle}{paginator="\#\{userListBacking.userPagination\}"\newline columnNamei18n="\#\{labels.role\}"}{rendered="\#\{userListBacking.sessionInformation.user.editor\}"}{/}
