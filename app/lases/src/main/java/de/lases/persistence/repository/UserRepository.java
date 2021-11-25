@@ -275,30 +275,35 @@ public class UserRepository {
     }
 
     /**
-     * Get the image file for the avatar of the specified user.
+     * Get the avatar image file for the avatar of the specified user.
      *
-     * @param
+     * @param user A user dto with a valid id.
      * @param transaction The transaction to use.
      * @return A file containing the logo.
+     * @throws NotFoundException If there is no user with the specified id.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
-    public static FileDTO getAvatar(User user, Transaction transaction) {
+    public static FileDTO getAvatar(User user, Transaction transaction)
+            throws NotFoundException {
         return null;
     }
 
     /**
-     * Sets the avatar.
+     * Sets the avatar for the specified user.
      *
+     * @param user A suer dto with a valid id.
      * @param avatar A file dto filled with an image file.
      * @param transaction The transaction to use.
+     * @throws NotFoundException If there is no user with the specified id.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
-    public static void setAvatar(FileDTO avatar, Transaction transaction)
-            throws DataNotWrittenException {
+    public static void setAvatar(User user, FileDTO avatar,
+                                 Transaction transaction)
+            throws DataNotWrittenException, NotFoundException {
     }
 
 }
