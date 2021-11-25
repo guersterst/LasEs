@@ -172,8 +172,8 @@ public class UserRepository {
      * @param transaction The transaction to use.
      * @param privilege The role the users must fulfil in regard to the
      *                  specified submission. Must be REVIEWER for reviewers
-     *                  and AUTHENTICATED for (co)-authors.
-     *                  ADMIN adn EDITOR is not supported.
+     *                  and AUTHOR for (co)-authors.
+     *                  ADMIN and EDITOR are not supported.
      * @param submission The submission the users should stand in a
      *                   relationship with. Must be filled with a valid id.
      * @return A list of fully filled user dtos.

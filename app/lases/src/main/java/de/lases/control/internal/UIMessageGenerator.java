@@ -1,16 +1,20 @@
 package de.lases.control.internal;
 
 import de.lases.global.transport.*;
+import jakarta.enterprise.context.SessionScoped;
 import jakarta.enterprise.event.Observes;
 import jakarta.enterprise.inject.Any;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 
+import java.io.Serializable;
+
 /**
  * Handles the delivery of ui-messages to the application's user.
  */
-public class UIMessageGenerator {
+@SessionScoped
+public class UIMessageGenerator implements Serializable {
 
     FacesContext facesContext;
 
