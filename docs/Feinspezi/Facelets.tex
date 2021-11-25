@@ -388,7 +388,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 \begin{samepage}
 
-	\ftable{paperPagination}{\emph{paperPagination} enthält die Spalten: Version, Datum, Sichtbarkeit(E) und Download.Die Elemente der Liste, der unterschiedlichen Versionen der Einreichung, sieht wie folgt aus:}{
+	\ftable{submission-pg-paper}{\emph{paperPagination} enthält die Spalten: Version, Datum, Sichtbarkeit(E) und Download.Die Elemente der Liste, der unterschiedlichen Versionen der Einreichung, sieht wie folgt aus:}{
 		\fentry{paper-pg}{<pg:pagination>}{Liste aller eignen Einreichungen.}{paginator="\#\{submissionBacking.paperPagination\}"}{/}{/}
 
 		\fentry{version-ssc}{<ssc:sortsearchcolumn>}{Spalte für die Version des Papers.}{paginator="\#\{submissionBacking.paperPagination\}"\newline columnNamei18n="\#\{labels.paperVersion\}"}{/}{/}
@@ -421,7 +421,7 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 \begin{samepage}
 
-	\ftable{reviewPagination}{\emph{reviewPagination} enthält die Spalten: Gutachter, Datum, Status, Empfehlung, Kommentar und Download.
+	\ftable{submission-pg-review}{\emph{reviewPagination} enthält die Spalten: Gutachter, Datum, Status, Empfehlung, Kommentar und Download.
 		Ist ein Gutachten freigeschaltet, so erhält auch ein Nutzer Leserechte.
 		Die Elemente der Liste von Gutachten sind folgende:}{
 		\fentry{review-pg}{<pg:pagination>}{Liste aller oder der eignen Gutachten.}{paginator="\#\{submissionBacking.reviewPagination\}"}{/}{/}
