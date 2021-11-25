@@ -130,11 +130,10 @@ public class UserService implements Serializable {
     /**
      * Gets a sorted and filtered list of users.
      *
-     * @param privilege        The view privileges of the calling user.
      * @param resultListParams Parameters, that control filtering and sorting of the resulting list.
      * @return A list of {@link User}-DTOs.
      */
-    public List<User> getList(Privilege privilege, ResultListParameters resultListParams) {
+    public List<User> getList(ResultListParameters resultListParams) {
         return null;
     }
 
