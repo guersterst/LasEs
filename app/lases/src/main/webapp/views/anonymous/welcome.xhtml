@@ -10,7 +10,7 @@
 </f:metadata>
 <h:head>
     <title>LasEs</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrap.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+    <link rel="styleSheet" href="resources/design/bootstrap/css/bootstrap.min.css"/>
 </h:head>
 
 
@@ -64,7 +64,7 @@
                     <h:outputText value="dialog jaja?"/>
                     mEEEXDN xD
                     <p:commandButton value="Close" onclick="PF('dlg').hide();"/>
-                    <h:commandButton value="action and close" action="#{welcomeBacking.stringChanger}" onclick="PF('dlg').hide();"/>
+                    <h:commandButton class="btn btn-primary" value="action and close" action="#{welcomeBacking.stringChanger}" onclick="PF('dlg').hide();"/>
                 </p:dialog>
             </h:form>
 
@@ -81,7 +81,7 @@
                         <h4>
                             <h:outputText value="#{labels['appName']}"/>
                         </h4>
-                        <h:inputText id="email-itxt" value="#{welcomeBacking.loginInput.emailAddress}" required="true"
+                        <h:inputText class="form-control" id="email-itxt" value="#{welcomeBacking.loginInput.emailAddress}" required="true"
                                      requiredMessage="#{message.email}">
                             <!--<f:validator/>
                             <f:validator/>-->
@@ -91,8 +91,8 @@
                                        required="true" requiredMessage="#{message.password}">
                             <f:validateLength minimum="8" maximum="100"/>
                         </h:inputSecret>
-                        <div>
-                            <h:commandButton id="login-cbtn" value="Login" action="#{welcomeBacking.login}"/>
+                        <div class="">
+                            <h:commandButton class="btn btn-primary" id="login-cbtn" value="Login" action="#{welcomeBacking.login}"/>
                         </div>
                         <div>
                             <h:commandButton id="register-cbtn" value="Register"
