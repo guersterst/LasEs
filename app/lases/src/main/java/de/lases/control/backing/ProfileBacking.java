@@ -106,16 +106,30 @@ public class ProfileBacking implements Serializable {
     public void preRenderViewListener(ComponentSystemEvent event) {}
 
     /**
-     * Save the changes to the user profile excluding profile picture and
-     * science fields. If the user changed his email address, a verification
-     * email will be sent to that address and a messge will be shown that asks
-     * the user to check his inbox.
-     * If the user was elevated to admin, the admins' password will be checked
-     * and the form will only be submitted if it is correct. Otherwise, an
-     * error message will be shown.
+     * Save the changes to the user profile excluding profile picture,
+     * science fields and admin rights. If the user changed his email address,
+     * a verification email will be sent to that address and a message will be
+     * shown that asks the user to check his inbox.
      */
     public void submitChanges() {
     }
+
+    /**
+     * Save the changes to the user's admin status. This can only be done by
+     * an admin who is editing someone's profile. He must enter his password
+     * to complete this action. If he did enter his valid password, the admin
+     * status will be changed. If the password is wrong, an error message will
+     * be displayed.
+     */
+    public void submitAdminChanges() {
+
+    }
+    /**
+     * Abort the changes made to the user and show a fresh profile page.
+     */
+    public void abort() {
+    }
+
 
     /**
      * Set a new avatar for the user.
@@ -141,12 +155,6 @@ public class ProfileBacking implements Serializable {
      * @param field The science field to be removed.
      */
     public void deleteScienceField(ScienceField field) {
-    }
-
-    /**
-     * Abort the changes made to the user and show a fresh profile page.
-     */
-    public void abort() {
     }
 
     /**
