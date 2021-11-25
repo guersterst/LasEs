@@ -1,8 +1,10 @@
 package de.lases.control.internal;
 
-import jakarta.faces.context.ExceptionHandler;
 import jakarta.faces.context.ExceptionHandlerFactory;
 
+/**
+ * Factory class for the construction of a custom {@link UncheckedExceptionHandler}.
+ */
 public class UncheckedExceptionHandlerFactory extends ExceptionHandlerFactory {
     private final ExceptionHandlerFactory parent;
 
@@ -11,6 +13,11 @@ public class UncheckedExceptionHandlerFactory extends ExceptionHandlerFactory {
         this.parent = parent;
     }
 
+    /**
+     * Gets an {@link UncheckedExceptionHandler}.
+     *
+     * @return The requested {@code UncheckedExceptionHandler}.
+     */
     @Override
     public UncheckedExceptionHandler getExceptionHandler() {
         return new UncheckedExceptionHandler(parent.getExceptionHandler());
