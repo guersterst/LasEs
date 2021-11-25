@@ -351,6 +351,8 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 		\fentry{pre-render-evnt}{<f:event>}{Abprüfen des View-Parameters.}{type="preRenderView" listener="\#\{submissionBacking.preRenderViewListener\}"}{/}{/}
 
 		\fentry{/}{<f:viewAction>}{Laden der entsprechenden Einreichung.}{action="\#\{submissionBacking.onLoad\}"}{/}{/}
+		
+		\fentry{delete-sub-cbtn}{<h:commandButton>}{Löschen einer Einreichung.}{value="\#\{labels.delete\}" \newline oncklick="PF('dlg').show();"}{rendered="\#\{submissionBacking.isViewerSubmitter\}"}{/}
 
 		\fentry{upload-revision-ifile}{<h:inputFile>}{Upload einer Revision.}{value="\#\{submissionBacking.uploadedRevisionPDF\}" }{rendered="\#\{submissionBacking.isViewerSubmitter\}"}{required="true" \newline requiredMessage=\newline"\#\{message.inputFile\}"}
 
@@ -479,6 +481,14 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 \end{samepage}
 
+\begin{samepage}
+	\ftable{delete-submission-popup}{Sollte ein Benutzer seine eigene Einreichung, bzw. ein Administrator eine Einreichung löschen wollen, so erscheint hier ein eine Warnung, um auf die Folgen seines Handelns hinzuweisen.}{
+		\fentry{delete-warning-otxt}{<h:outputText>}{Warnhinweis zum Löschen eines Profils.}{value="\#\{texts.deleteWarning\}"}{/}{/}
+		
+		\fentry{agree-delet-cbtn}{<h:commandButton>}{Entgültiges Löschen des Profils.}{value="\#{labels.agree}" \newline action="\#\{submissionBacking.delete\}"}{/}{/}
+	}
+\end{samepage}
+
 
 
 %% Ab hier sind Bastis hinzugefügte Änderungen
@@ -555,7 +565,6 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 
 \begin{samepage}
 
-	%%\todo{wie hier url von bild wissen?}
 
 \ftable{profile}{\textbf{profile.xhtml} Die Profilseite eines angemeldeten Nutzers ist nur vom Nutzer selbst und vom Administrator editierbar.
 	Ein Editor besitzt nur Leserechte. Alle zuvor gespeicherten Angaben werden in den jeweiligen Feldern angezeigt.}{
@@ -577,6 +586,8 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	\fentry{role-otxt}{<h:outputText>}{Angabe der Rolle eines Nutzers}{?}{/}{/}
 
 	\fentry{is-admin-cbx}{<h:selectBooleanCheckbox>}{Zuteilung der Rolle des Administrators.}{value="\#\{profileBacking.user.admin\}"}{rendered="\#\{profileBacking.sessionInformation.admin\}"}{/}
+	
+	\fentry{is-admin-cbtn}{<h:commandbutton>}{Speichert Rollenänderung.}{value="\#\{labels.changeRole\}" \newline onclick="PF('dlg').show();"}{rendered="\#\{profileBacking.sessionInformation.user.admin\}"}{/}
 
 	\fentry{title-itxt}{<h:inputText>}{Titel des Nutzenden.}{value="\#\{profileBacking.user.title\}"}{readonly="\#\{!profileBacking.hasViewerEditRights\}"}{maxLength="\#\{Const.TITLE\_MAX\}"}
 
@@ -613,106 +624,123 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 }
 \end{samepage}
 
+\begin{samepage}
+	\ftable{admin-confirmation-popup}{Sollte ein Administrator einem anderen Nutzer die Rolle des Administrators zuweisen oder entziehen, so erscheint beim Auslösen des Change-Role-Buttons ein Popup-Dialog.
+		In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Passwort zu bestätigen.}{
+		
+		\fentry{password-admin-iscrt}{<h:inputSecret>}{Angabe eines Passworts.}{value="\#\{profileBacking.adminPasswordInPopup.passwordNotHashed\}"}{/}{passwordValidator \newline required="true" \newline requiredMessage=\newline "\#\{message.password\}"}
+		
+		\fentry{admin-note-otxt}{<h:outputText>}{Hinweis zur Veränderung der Adminrolle.}{value="\#\{labels.adminNote\}"}{/}{/}
+		
+		\fentry{abort-cbtn}{<h:commandButton>}{Abbruch der Änderung.}{value="Close"\newline action="\#\{profileBacking.abort\}"}{/}{/}
+		
+		\fentry{save-cbtn}{<h:commandbutton>}{Speichert Rollenänderung.}{value=''Submit" \newline action="\#\{profileBacking.submitAdminChanges\}"}{/}{/}
+		
+	}
+\end{samepage}
 
+\begin{samepage}
+	\ftable{delete-profile-popup}{Sollte ein Benutzer sein eigenes  Profil, bzw. ein Administrator einen anderen Benutzer, löschen wollen, so erscheint hier ein eine Warnung, um auf die Folgen seines Handelns hinzuweisen.}{
+		\fentry{delete-warning-otxt}{<h:outputText>}{Warnhinweis zum Löschen eines Profils.}{value="\#\{texts.deleteWarning\}"}{/}{/}
+		
+		\fentry{agree-delet-cbtn}{<h:commandButton>}{Entgültiges Löschen des Profils.}{value="\#{labels.agree}" \newline action="\#\{profileBacking.deleteProfile\}"}{/}{/}
+	}
+\end{samepage}
 
-\ftable{admin-confirmation-popup}{Sollte ein Administrator einem anderen Nutzer die Rolle des Administrators zuweisen oder entziehen, so erscheint beim Auslösen des Save-Buttons ein Popup-Dialog.
-	In diesem Fenster wird der Administrator angewiesen, die Änderung mit seinem Passwort zu bestätigen.}{
+\begin{samepage}
+	\ftable{scientificForum}{\textbf{scientificForum.xhtml} Die Ansicht eines Forums dient zur Ausgabe von Informationen über die jeweilige Konferenz oder das jeweilige Journal.
+		Das Anzeigen und Filtern der Tabellen \emph{editorialPagination}, \emph{reviewPagination} und \emph{submissionPagination} wird genauso gehandhabt, wie auf \emph{homepage.xhtml}.
+		Ausnahme dabei ist die Spalte Forum, welche hier nicht angezeigt wird.}{
+		
+		\fentry{/}{<f:viewParam>}{URL Parameter holen}{name="\#\{'id'\}"\newline value="\#\{scientificForumBacking.scientificForum.id\}"}{/}{required="true"}
+		
+		\fentry{pre-render-evnt}{<f:event>}{Abprüfen des View-Parameters.}{type="preRenderView" listener="\#\{scientificForumBacking.preRenderViewListener\}"}{/}{/}
+		
+		\fentry{/}{<f:viewAction>}{Action Methode ausführen.}{action="\#\{scientificForumBacking.onLoad\}"}{/}{/}
+		
+		\fentry{delete-forum-cbtn}{<h:commandButton>}{Löschen eines Forums.}{value="\#\{labels.delete\}" \newline onclick="PF('dlg').show()"}{rendered="\#\{scientificForumBacking.sessionInformation.user.admin\}"}{/}
+		
+		\fentry{forum-name-itxt}{inputText}{Name des Forums.}{value="\#\{scientificForumBacking.scientificForum.name\}"}{readonly="\#\{!scientificForumBacking.loggedInUserIsEditor\}"}{required="true" \newline requiredMessage=\newline "\#\{message.forumName\}" \newline maxLength="\#\{Const.FORUM\_NAME\_MAX\}"}
+		
+		\fentry{editor-lst}{<h:dataTable>}{Liste der verantwortliche Editoren.}{value="\#\{scientificForumBacking.editors\}"\newline title="\#\{help.managingEditors\}"}{/}{/}
+		
+		\fentry{new-editor-itxt}{<h:inputText>}{Angabe der E-Mail eines Editors.}{value="\#\{scientificForumBacking.newEditorInput.emailAddress\}"}{rendered="\#\{scientificForumBacking.loggedInUserIsEditor\}"}{emailAddressExistsValidator \newline emailAddressLayoutValidator, required="true"\newline requiredMessage=\newline "\#\{message.email\}" }
+		
+		\fentry{add-editor-cbtn}{<h:commandButton>}{Füge Editor zur Liste hinzu.}{value="\#\{labels.add\}"\newline action="\#\{scientificForumBacking.addEditor\}"}{rendered="\#\{scientificForumBacking.loggedInUserIsEditor\}"}{/}
+		
+		\fentry{remove-editor-cbtn}{<h:commandButton>}{Lösche ausgewählten Editor.}{value="\#\{labels.remove\}"\newline action="\#\{scientificForumBacking.removeEditor\}"}{rendered="\#\{scientificForumBacking.loggedInUserIsEditor\}"}{/}
+		
+		\fentry{deadline-itxt}{<h:inputText>}{Deadline des Forums.}{value="\#\{scientificForumBacking.scientificForum.deadline\}"}{readonly="\#\{!scientificForumBacking.loggedInUserIsEditor\}"}{required="true" \newline requiredMessage=\newline "\#\{message.deadline\}"}
+		
+		\fentry{description-itxt}{inputTextArea}{Kurzbeschreibung des Forums.}{value="\#\{scientificForumBacking.scientificForum.description\}"}{readonly="\#\{!scientificForumBacking.loggedInUserIsEditor\}"}{required="true" \newline requiredMessage=\newline "\#\{message.description\}" \newline maxLength="\#\{Const.FORUM\_DESCRIPTION\_MAX\}"}
+		
+		\fentry{url-lnk}{<h:outputLink>}{Link zur Konferenz oder zum Journal.}{value="\#\{scientificForumBacking.scientificForum.url\}"}{/}{/}
+		
+		\fentry{change-url-itxt}{inputText}{Angabe einer neuen URL.}{value="\#\{scientificForumBacking.scientificForum.url\}"}{rendered="\#\{scientificForumBacking.loggedInUserIsEditor\}"}{maxLength="\#\{Const.FORUM\_URL\_MAX\}"}
+		
+		\fentry{review-manual-itxt}{<h:inputTextArea>}{Anleitung für eine Begutachtung.}{value="\#\{scientificForumBacking.scientificForum.reviewManual\}"}{readonly="\#\{!scientificForumBacking.loggedInUserIsEditor\}"}{maxLength="\#\{Const.REVIEW\_MANUA\_MAX\}"}
+		
+		\fentry{science-field-dtbl}{<h:dataTable>}{Fachgebiet des Forums.}{value="\#\{scientificForumBacking.selectedScienceFields\}"}{/}{/}
+		
+		\fentry{new-science-field}{<p:selectOneListbox>}{Hinzufügen eines neuen Fachgebietes.}{value="\#\{scientificForumBacking.selectedScienceFieldInput\}"}{rendered="\#\{!scientificForumBacking.loggedInUserIsEditor\}"}{/}
+		
+		\fentry{field-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{value="\#\{scientificForumBacking.scienceFields\}"}{/}{/}
+		
+		\fentry{add-science-field-cbtn}{<h:commandButton>}{Speichern des neuen Fachgebietes.}{value="\#\{labels.add\}"\newline action="\#\{scientificForumBacking.\newline
+			addScienceField\}"}{rendered="\#\{!scientificForumBacking.loggedInUserIsEditor\}"}{/}
+		
+		\fentry{remove-science-field-cbtn}{commandButton}{Löschen eines Fachgebietes.}{value="\#\{labels.remove\}"\newline action="\#\{scientificForumBacking.\newline
+			removeScienceField\}"}{rendered="\#\{!scientificForumBacking.loggedInUserIsEditor\}"}{/}
+		
+		\fentry{save-cbtn}{<h:commandButton>}{Speichere Veränderungen.}{value="\#\{labels.save\}"\newline action="\#\{scientificForumBacking.submitChanges\}"}{rendered="\#\{!scientificForumBacking.loggedInUserIsEditor\}"}{/}
+	}
+\end{samepage}
 
-	\fentry{password-admin-iscrt}{<h:inputSecret>}{Angabe eines Passworts.}{value="\#\{profileBacking.adminPasswordInPopup.passwordNotHashed\}"}{/}{passwordValidator \newline required="true" \newline requiredMessage=\newline "\#\{message.password\}"}
-
-	\fentry{admin-note-otxt}{<h:outputText>}{Hinweis zur Veränderung der Adminrolle.}{value="\#\{labels.adminNote\}"}{/}{/}
-
-	\fentry{abort-cbtn}{<h:commandButton>}{Abbruch der Änderung.}{value="\#\{labels.save\}"\newline action="\#\{profileBacking.saveInPopup\}"}{/}{/}
-
-	\fentry{save-cbtn}{<h:commandButton>}{Speichern aller Änderungen.}{value="\#\{labels.abort\}"\newline action="\#\{profileBacking.abortInPopup\}"}{/}{/}
-
-}
-
-\ftable{delete-profile-popup}{Sollte ein Benutzer sein eigenes  Profil, bzw. ein Administrator einen anderen Benutzer, löschen wollen, so erscheint hier ein eine Warnung, um auf die Folgen seines Handelns hinzuweisen.}{
-	\fentry{delete-warning-otxt}{<h:outputText>}{Warnhinweis zum Löschen eines Profils.}{value="\#\{texts.deleteWarning\}"}{/}{/}
-
-	\fentry{agree-delet-cbtn}{<h:commandButton>}{Entgültiges Löschen des Profils.}{value="\#{labels.agree}" \newline action="\#\{profileBacking.deleteProfile\}"}{/}{/}
-}
-
-\ftable{scientificForum}{\textbf{scientificForum.xhtml} Die Ansicht eines Forums dient zur Ausgabe von Informationen über die jeweilige Konferenz oder das jeweilige Journal.
-	Das Anzeigen und Filtern der Tabellen \emph{editorialPagination}, \emph{reviewPagination} und \emph{submissionPagination} wird genauso gehandhabt, wie auf \emph{homepage.xhtml}.
-	Ausnahme dabei ist die Spalte Forum, welche hier nicht angezeigt wird.}{
-
-	\fentry{/}{<f:viewParam>}{URL Parameter holen}{name="\#\{'id'\}"\newline value="\#\{scientificForumBacking.scientificForum.id\}"}{/}{required="true"}
+\begin{samepage}
 	
-	\fentry{pre-render-evnt}{<f:event>}{Abprüfen des View-Parameters.}{type="preRenderView" listener="\#\{scientificForumBacking.preRenderViewListener\}"}{/}{/}
+	\ftable{scientificForum-pg-submission}{Tabelle der Einreichungen zu diesem \emph{Scientific Forum.}}{
+		\fentry{submission-pg}{<pg:pagination>}{Paginierte Liste aller Einreichungen, die der Nutzer eingereicht hat.}{paginator="\#\{scientificForumBacking.submissionPagination\}"}{/}{/}
+		
+		\fentry{title-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Titel des Papers.}{paginator="\#\{scientificForumBacking.submissionPagination\}"\newline columnNamei18n="\#\{labels.submissionTitle\}"}{/}{/}
+		
+		\fentry{title-otxt}{<h:outputText>}{Titel der Einreichung.}{value="\#\{var.title\}"}{/}{/}
+		
+		\fentry{date-ssc}{<ssc:sortsearchcolumn>}{Spalte für das Abgabedatum der Einreichung.}{paginator="\#\{scientificForumBacking.submissionPagination\}"\newline columnNamei18n="\#\{labels.date\}"}{/}{/}
+		
+		\fentry{deadline-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{scientificForumBacking.submissionPagination.resultListParameters.dateSelect\}" title="\#\{help.deadlineSelect\}"}{/}{/}
+		
+		\fentry{deadline-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{value="\#\{scientificForumBacking.dateSelects\}" \newline var=''select" \newline itemLabel="\#\{labels['dateSelect.' += select]\}" \newline itemValue="\#\{select\}"}{/}{/}
+		
+		\fentry{date-otxt}{<h:outputText>}{Abgabedatum der Einreichung.}{value="\#\{var.submissionTime\}"}{/}{convertDateTime \newline type="localDate"}
+		
+		\fentry{deadline-ssc}{<ssc:sortsearchcolumn>}{Spalte für die Deadline der Revision.}{paginator="\#\{scientificForumBacking.submissionPagination\}"\newline columnNamei18n="\#\{labels.deadline\}"}{/}{/}
+		
+		\fentry{deadline-otxt}{<h:outputText>}{Deadline für eine Revision.}{value="\#\{var.deadlineRevision\}"}{/}{convertDateTime \newline type="localDate"}
+		
+		\fentry{state-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Status der Einreichung.}{paginator="\#\{scientificForumBacking.submissionPagination\}"\newline columnNamei18n="\#\{labels.stateSub\}"}{/}{/}
+		
+		\fentry{state-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Status.}{value="\#\{scientificForumBacking.submissionPagination.resultListParameters.submissionState\}" title="\#\{help.stateSubSelect\}"}{/}{/}
+		
+		\fentry{state-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{value="\#\{scientificForumBacking.submissionStates\}" \newline var=''select" \newline itemLabel="\#\{labels['subStateSelect.' += select]\}" \newline itemValue="\#\{select\}"}{/}{/}
+		
+		\fentry{state-otxt}{<h:outputText>}{Status der Einreichung.}{value="\#\{var.state\}"}{/}{/}
+		
+		\multicolumn{6}{c}{Weitere Paginierungen mit den gleichen Spalten wie in der vorherigen Tabelle:} \\ %das hline verursacht keine probleme, wird sind in einem tabular
+		\hline
+		
+		\fentry{review-pg}{<pg:pagination>}{Paginierte Liste aller Einreichungen, die der Gutachter bearbeitet.}{paginator="\#\{scientificForumBacking.reviewedPagination\}"}{rendered="\#\{scientificForumBacking.loggedInUserIsReviewer\}"}{/}
+		
+		\fentry{editorial-pg}{<pg:pagination>}{Paginierte Liste aller Einreichungen, die der Editor verwaltet.}{paginator="\#\{scientificForumBacking.editedPagination\}"}{rendered="\#\{!scientificForumBacking.loggedInUserIsEditor\}"}{/}
+	}
+\end{samepage}
 
-	\fentry{/}{<f:viewAction>}{Action Methode ausführen.}{action="\#\{scientificForumBacking.onLoad\}"}{/}{/}
-
-	\fentry{forum-name-itxt}{inputText}{Name des Forums.}{value="\#\{scientificForumBacking.scientificForum.name\}"}{readonly="\#\{!scientificForumBacking.loggedInUserIsEditor\}"}{required="true" \newline requiredMessage=\newline "\#\{message.forumName\}" \newline maxLength="\#\{Const.FORUM\_NAME\_MAX\}"}
-
-	\fentry{editor-lst}{<h:dataTable>}{Liste der verantwortliche Editoren.}{value="\#\{scientificForumBacking.editors\}"\newline title="\#\{help.managingEditors\}"}{/}{/}
-
-	\fentry{new-editor-itxt}{<h:inputText>}{Angabe der E-Mail eines Editors.}{value="\#\{scientificForumBacking.newEditorInput.emailAddress\}"}{rendered="\#\{scientificForumBacking.loggedInUserIsEditor\}"}{emailAddressExistsValidator \newline emailAddressLayoutValidator, required="true"\newline requiredMessage=\newline "\#\{message.email\}" }
-
-	\fentry{add-editor-cbtn}{<h:commandButton>}{Füge Editor zur Liste hinzu.}{value="\#\{labels.add\}"\newline action="\#\{scientificForumBacking.addEditor\}"}{rendered="\#\{scientificForumBacking.loggedInUserIsEditor\}"}{/}
-
-	\fentry{remove-editor-cbtn}{<h:commandButton>}{Lösche ausgewählten Editor.}{value="\#\{labels.remove\}"\newline action="\#\{scientificForumBacking.removeEditor\}"}{rendered="\#\{scientificForumBacking.loggedInUserIsEditor\}"}{/}
-
-	\fentry{deadline-itxt}{<h:inputText>}{Deadline des Forums.}{value="\#\{scientificForumBacking.scientificForum.deadline\}"}{readonly="\#\{!scientificForumBacking.loggedInUserIsEditor\}"}{required="true" \newline requiredMessage=\newline "\#\{message.deadline\}"}
-
-	\fentry{description-itxt}{inputTextArea}{Kurzbeschreibung des Forums.}{value="\#\{scientificForumBacking.scientificForum.description\}"}{readonly="\#\{!scientificForumBacking.loggedInUserIsEditor\}"}{required="true" \newline requiredMessage=\newline "\#\{message.description\}" \newline maxLength="\#\{Const.FORUM\_DESCRIPTION\_MAX\}"}
-
-	\fentry{url-lnk}{<h:outputLink>}{Link zur Konferenz oder zum Journal.}{value="\#\{scientificForumBacking.scientificForum.url\}"}{/}{/}
-
-	\fentry{change-url-itxt}{inputText}{Angabe einer neuen URL.}{value="\#\{scientificForumBacking.scientificForum.url\}"}{rendered="\#\{scientificForumBacking.loggedInUserIsEditor\}"}{maxLength="\#\{Const.FORUM\_URL\_MAX\}"}
-
-	\fentry{review-manual-itxt}{<h:inputTextArea>}{Anleitung für eine Begutachtung.}{value="\#\{scientificForumBacking.scientificForum.reviewManual\}"}{readonly="\#\{!scientificForumBacking.loggedInUserIsEditor\}"}{maxLength="\#\{Const.REVIEW\_MANUA\_MAX\}"}
-
-	\fentry{science-field-dtbl}{<h:dataTable>}{Fachgebiet des Forums.}{value="\#\{scientificForumBacking.selectedScienceFields\}"}{/}{/}
-
-	\fentry{new-science-field}{<p:selectOneListbox>}{Hinzufügen eines neuen Fachgebietes.}{value="\#\{scientificForumBacking.selectedScienceFieldInput\}"}{rendered="\#\{!scientificForumBacking.loggedInUserIsEditor\}"}{/}
-
-	\fentry{field-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{value="\#\{scientificForumBacking.scienceFields\}"}{/}{/}
-
-	\fentry{add-science-field-cbtn}{<h:commandButton>}{Speichern des neuen Fachgebietes.}{value="\#\{labels.add\}"\newline action="\#\{scientificForumBacking.\newline
-		addScienceField\}"}{rendered="\#\{!scientificForumBacking.loggedInUserIsEditor\}"}{/}
-
-	\fentry{remove-science-field-cbtn}{commandButton}{Löschen eines Fachgebietes.}{value="\#\{labels.remove\}"\newline action="\#\{scientificForumBacking.\newline
-		removeScienceField\}"}{rendered="\#\{!scientificForumBacking.loggedInUserIsEditor\}"}{/}
-
-	\fentry{save-cbtn}{<h:commandButton>}{Speichere Veränderungen.}{value="\#\{labels.save\}"\newline action="\#\{scientificForumBacking.submitChanges\}"}{rendered="\#\{!scientificForumBacking.loggedInUserIsEditor\}"}{/}
-}
-
-\ftable{scientificForum-pg-submission}{Tabelle der Einreichungen zu diesem \emph{Scientific Forum.}}{
-	\fentry{submission-pg}{<pg:pagination>}{Paginierte Liste aller Einreichungen, die der Nutzer eingereicht hat.}{paginator="\#\{scientificForumBacking.submissionPagination\}"}{/}{/}
-
-	\fentry{title-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Titel des Papers.}{paginator="\#\{scientificForumBacking.submissionPagination\}"\newline columnNamei18n="\#\{labels.submissionTitle\}"}{/}{/}
-
-	\fentry{title-otxt}{<h:outputText>}{Titel der Einreichung.}{value="\#\{var.title\}"}{/}{/}
-
-	\fentry{date-ssc}{<ssc:sortsearchcolumn>}{Spalte für das Abgabedatum der Einreichung.}{paginator="\#\{scientificForumBacking.submissionPagination\}"\newline columnNamei18n="\#\{labels.date\}"}{/}{/}
-
-	\fentry{deadline-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Datums.}{value="\#\{scientificForumBacking.submissionPagination.resultListParameters.dateSelect\}" title="\#\{help.deadlineSelect\}"}{/}{/}
-
-	\fentry{deadline-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{value="\#\{scientificForumBacking.dateSelects\}" \newline var=''select" \newline itemLabel="\#\{labels['dateSelect.' += select]\}" \newline itemValue="\#\{select\}"}{/}{/}
-
-	\fentry{date-otxt}{<h:outputText>}{Abgabedatum der Einreichung.}{value="\#\{var.submissionTime\}"}{/}{convertDateTime \newline type="localDate"}
-
-	\fentry{deadline-ssc}{<ssc:sortsearchcolumn>}{Spalte für die Deadline der Revision.}{paginator="\#\{scientificForumBacking.submissionPagination\}"\newline columnNamei18n="\#\{labels.deadline\}"}{/}{/}
-
-	\fentry{deadline-otxt}{<h:outputText>}{Deadline für eine Revision.}{value="\#\{var.deadlineRevision\}"}{/}{convertDateTime \newline type="localDate"}
-
-	\fentry{state-ssc}{<ssc:sortsearchcolumn>}{Spalte für den Status der Einreichung.}{paginator="\#\{scientificForumBacking.submissionPagination\}"\newline columnNamei18n="\#\{labels.stateSub\}"}{/}{/}
-
-	\fentry{state-scltom}{<h:selectOneMenu>}{Auswahl der Filtermöglichkeit eines Status.}{value="\#\{scientificForumBacking.submissionPagination.resultListParameters.submissionState\}" title="\#\{help.stateSubSelect\}"}{/}{/}
-
-	\fentry{state-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{value="\#\{scientificForumBacking.submissionStates\}" \newline var=''select" \newline itemLabel="\#\{labels['subStateSelect.' += select]\}" \newline itemValue="\#\{select\}"}{/}{/}
-
-	\fentry{state-otxt}{<h:outputText>}{Status der Einreichung.}{value="\#\{var.state\}"}{/}{/}
-
-	\multicolumn{6}{c}{Weitere Paginierungen mit den gleichen Spalten wie in der vorherigen Tabelle:} \\ %das hline verursacht keine probleme, wird sind in einem tabular
-	\hline
-
-	\fentry{review-pg}{<pg:pagination>}{Paginierte Liste aller Einreichungen, die der Gutachter bearbeitet.}{paginator="\#\{scientificForumBacking.reviewedPagination\}"}{rendered="\#\{scientificForumBacking.loggedInUserIsReviewer\}"}{/}
-
-	\fentry{editorial-pg}{<pg:pagination>}{Paginierte Liste aller Einreichungen, die der Editor verwaltet.}{paginator="\#\{scientificForumBacking.editedPagination\}"}{rendered="\#\{!scientificForumBacking.loggedInUserIsEditor\}"}{/}
-}
+\begin{samepage}
+	\ftable{delete-forum-popup}{Sollte ein Administrator ein Forum löschen wollen, so erscheint hier ein eine Warnung, um auf die Folgen seines Handelns hinzuweisen.}{
+		\fentry{delete-warning-otxt}{<h:outputText>}{Warnhinweis zum Löschen eines Profils.}{value="\#\{texts.deleteWarning\}"}{/}{/}
+		
+		\fentry{agree-delet-cbtn}{<h:commandButton>}{Entgültiges Löschen des Profils.}{value="\#{labels.agree}" \newline action="\#\{scientificForumBacking.delete¸\}"}{/}{/}
+	}
+\end{samepage}
 
 \subsubsection{Gutachter}$~$
 
