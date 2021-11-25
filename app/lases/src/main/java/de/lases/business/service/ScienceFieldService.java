@@ -45,17 +45,6 @@ public class ScienceFieldService implements Serializable {
     }
 
     /**
-     * Determines whether a {@link ScienceField} is already represented in the database.
-     *
-     * @param scienceField The {@code ScienceField}, which is to be evaluated.
-     *                     Must contain a valid id.
-     * @return {@code true} if this scientific field already exists, {@code false} otherwise.
-     */
-    public boolean exists(ScienceField scienceField) {
-        return false;
-    }
-
-    /**
      * Removes a {@link ScienceField} from the database.
      *
      * @param field The {@code ScienceField} to be removed.
@@ -100,5 +89,16 @@ public class ScienceFieldService implements Serializable {
      */
     public static List<ScienceField> getList(ResultListParameters resultListParameters) {
         return null;
+    }
+
+    /**
+     * Checks if a given {@code ScienceField} already exists.
+     *
+     * @param scienceField The {@link ScienceField} to evaluate.
+     *                     Must contain a name or an id.
+     * @return {@code true} if this scientific field already exists, {@code false} otherwise.
+     */
+    public boolean exists(ScienceField scienceField) {
+        return false;
     }
 }
