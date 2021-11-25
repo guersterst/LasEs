@@ -20,6 +20,7 @@ class ConnectionPool {
      * Get a connection out of the connection pool.
      *
      * @return A connection.
+     * @throws IllegalStateException If the pool is not yet initialized.
      */
     synchronized Connection getConnection() {
         return null;
@@ -29,6 +30,10 @@ class ConnectionPool {
      * Return a connection back to the connection pool.
      *
      * @param connection The connection to return.
+     * @throws IllegalStateException If the pool is not yet initialized.
+     * @throws IllegalArgumentException If the provided connection is not
+     *                                  managed by the connection pool and
+     *                                  thus cannot be returned.
      */
     synchronized void releaseConnection(Connection connection) {
     }
@@ -36,7 +41,14 @@ class ConnectionPool {
     /**
      * Initialize the connection pool.
      */
-    public static void init() {
+    public static synchronized void init() {
+
+    }
+
+    /**
+     * Shuts down the connection pool, freeing all connections.
+     */
+    public static synchronized void shutDown() {
 
     }
 
