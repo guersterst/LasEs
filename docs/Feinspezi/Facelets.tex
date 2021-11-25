@@ -851,6 +851,8 @@ Zur Vereinheitlichung der Namensgebung der Komponenten in den Facelets verfahren
 	\fentry{science-field-list}{<h:outputText>}{Liste der ausgewählten Fachgebiete.}{value="\#\{newScientificForumBacking.selectedScienceFields\}"}{render="\#{newScientificForumBacking.sessionInformation.user.admin}"}{/}
 
 	\fentry{science-field-list}{<p:selectOneListbox>}{Auswahl von Fachgebieten.}{value="\#\{newScientificForumBacking.scienceFields\}"}{render="\#{newScientificForumBacking.sessionInformation.user.admin}"}{/}
+	
+	\fentry{field-lst}{<f:selectItems>}{Liste des Auswahlmöglichkeiten}{value="\#\{newScientificForumBacking.scienceFields\}"}{render="\#{newScientificForumBacking.sessionInformation.user.admin}"}{/}
 
 	\fentry{new-science-field-itxt}{<h:inputText>}{Hinzufügen neuer Fachgebiete.}{value="\#\{newScientificForumBacking.newScienceFieldInput.name\}"}{render="\#{newScientificForumBacking.sessionInformation.user.admin}"}{required="true" \newline requiredMessage=\newline "\#\{message.newScienceField\}" \newline maxLength="\#\{Const.SCIENCE\_FIELD\}"}
 
