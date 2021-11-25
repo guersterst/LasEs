@@ -36,19 +36,18 @@ public class ScienceFieldRepository {
     /**
      * Adds a science field to the repository.
      *
-     * @param scienceField A fully filled science field dto.
+     * @param scienceField A fully filled science field dto. (The id must not be
+     *                     specified, as the repository will create the id)
      * @param transaction The transaction to use.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
-     * @throws KeyExistsException If there is already a science field with the
-     *                            same id.
      * @throws InvalidFieldsException If one of the fields of the science field
      *                                is null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static void add(ScienceField scienceField, Transaction transaction)
-            throws DataNotWrittenException, KeyExistsException {
+            throws DataNotWrittenException {
     }
 
     /**
@@ -144,11 +143,12 @@ public class ScienceFieldRepository {
     /**
      * Checks if a science field with the given name exists in the repository.
      *
-     * @param name The name to check.
+     * @param scienceField The {@link ScienceField} to check.
+     *                    Must contain either an id or a name.
      * @param transaction The transaction to use.
      * @return Does the given name exist as science field in the repository.
      */
-    public static boolean isScienceField(String name, Transaction transaction) {
+    public static boolean isScienceField(ScienceField scienceField, Transaction transaction) {
         return false;
     }
 

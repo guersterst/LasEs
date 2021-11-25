@@ -4,9 +4,11 @@ import de.lases.business.service.ScienceFieldService;
 import de.lases.business.service.ScientificForumService;
 import de.lases.business.service.SubmissionService;
 import de.lases.business.service.UserService;
+import de.lases.control.exception.IllegalUserFlowException;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
+import jakarta.faces.event.ComponentSystemEvent;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -47,18 +49,6 @@ public class ScientificForumBacking implements Serializable {
 
     private ScienceField selectedScienceFieldInput;
 
-    private SubmissionState stateFilterSelectSub;
-
-    private SubmissionState stateFilterSelectEdit;
-
-    private SubmissionState stateFilterSelectReview;
-
-    private DateSelect dateFilterSelectSub;
-
-    private DateSelect dateFilterSelectReview;
-
-    private DateSelect dateFilterSelectEdit;
-
     private Pagination<Submission> submissionPagination;
 
     private Pagination<Submission> reviewedPagination;
@@ -72,17 +62,81 @@ public class ScientificForumBacking implements Serializable {
     private List<ScienceField> scienceFields;
 
     /**
-     * Initialized the dtos.
+     * Initialize the dtos and load data from the datasource where possible.
+     * Create objects for:
+     * <ul>
+     *     <li>
+     *         this scientific forum
+     *     </li>
+     *     <li>
+     *         The user input for a new editor
+     *     </li>
+     *     <li>
+     *         the science field input
+     *     </li>
+     *     <li>
+     *         the list of editors for this scientific forum
+     *     </li>
+     *     <li>
+     *         the list of science fields for this scientific forum
+     *     </li>
+     *     <li>
+     *         the list of global science fields
+     *     </li>
+     *     <li>
+     *         the own submission pagination.
+     *     </li>
+     *     <li>
+     *         the reviewed submission pagination.
+     *     </li>
+     *     <li>
+     *         the edited submission pagination.
+     *     </li>
+     * </ul>
+     * Additionally, load the global list of science fields from the datasource.
      */
     @PostConstruct
     public void init() {
     }
 
     /**
-     * Gets the id of the scientific forum in question from view params and
-     * loads the data needed to display the page.
+     * Gets the id of the scientific forum in question from view params (after
+     * being called by a view action) and loads the data needed to display the
+     * page from the datasource:
+     * <ul>
+     *     <li>
+     *         th dto for this scientific forum
+     *     </li>
+     *     <li>
+     *         the list of editors for this scientific forum
+     *     </li>
+     *     <li>
+     *         the list of science fields for this scientific forum
+     *     </li>
+     *     <li>
+     *         the first page of the own submission pagination.
+     *     </li>
+     *     <li>
+     *         the fist page of the reviewed submission pagination.
+     *     </li>
+     *     <li>
+     *         the first page of the edited submission pagination.
+     *     </li>
+     * </ul>
      */
-    public void onLoad() { }
+    public void onLoad() {
+    }
+
+    /**
+     * Checks if the view param is an integer and throws an exception if it is
+     * not
+     *
+     * @param event The component system event that happens before rendering
+     *              the view param.
+     * @throws IllegalUserFlowException If there is no integer provided as view
+     *                                  param
+     */
+    public void preRenderViewListener(ComponentSystemEvent event) {}
 
     /**
      * Delete the scientific forum and got to the homepage.
@@ -126,147 +180,6 @@ public class ScientificForumBacking implements Serializable {
      * editor or scientific forum list.
      */
     public void submitChanges() {
-    }
-
-    /**
-     * Check if the current viewer of the page is an editor of this forum.
-     * Based on users being compared by ids. (Might be different objects).
-     * @return true if viewer is a managing editor.
-     */
-    public boolean isViewerEditor() {
-        return editors.contains(sessionInformation.getUser());
-    }
-
-    public ScientificForum getScientificForum() {
-        return scientificForum;
-    }
-
-    /**
-     * Set the dto that represents this scientific forum.
-     *
-     * @param scientificForum The new scientific forum.
-     */
-    public void setScientificForum(ScientificForum scientificForum) {
-        this.scientificForum = scientificForum;
-    }
-
-    public User getNewEditorInput() {
-        return newEditorInput;
-    }
-
-    /**
-     * Set the user that is selected to be added as an editor.
-     *
-     * @param newEditorInput The user that ought to become an editor on submit.
-     */
-    public void setNewEditorInput(User newEditorInput) {
-        this.newEditorInput = newEditorInput;
-    }
-
-    public ScienceField getSelectedScienceFieldInput() {
-        return selectedScienceFieldInput;
-    }
-
-    /**
-     * Set the science field that is selected to be added as a science field.
-     *
-     * @param selectedScienceFieldInput The science field that ought to be
-     *                                  added on submit.
-     */
-    public void setSelectedScienceFieldInput(
-            ScienceField selectedScienceFieldInput) {
-        this.selectedScienceFieldInput = selectedScienceFieldInput;
-    }
-
-    public SubmissionState getStateFilterSelectSub() {
-        return stateFilterSelectSub;
-    }
-
-    /**
-     * Set the {@code SubmissionState} which the user wants to filter for the
-     * table with his own submissions.
-     *
-     * @param stateFilterSelectSub The submission state the user wants to filter
-     *                             after.
-     */
-    public void setStateFilterSelectSub(SubmissionState stateFilterSelectSub) {
-        this.stateFilterSelectSub = stateFilterSelectSub;
-    }
-
-    public SubmissionState getStateFilterSelectEdit() {
-        return stateFilterSelectEdit;
-    }
-
-    /**
-     * Set the {@code SubmissionState} which the user wants to filter for the
-     * table with his edited submissions.
-     *
-     * @param stateFilterSelectEdit The submission state the user wants to
-     *                              filter after.
-     */
-    public void setStateFilterSelectEdit(SubmissionState stateFilterSelectEdit) {
-        this.stateFilterSelectEdit = stateFilterSelectEdit;
-    }
-
-    public SubmissionState getStateFilterSelectReview() {
-        return stateFilterSelectReview;
-    }
-
-    /**
-     * Set the {@code SubmissionState} which the user wants to filter for the
-     * table with his reviewed submissions.
-     *
-     * @param stateFilterSelectReview The submission state the user wants to
-     *                                filter after.
-     */
-    public void setStateFilterSelectReview(
-            SubmissionState stateFilterSelectReview) {
-        this.stateFilterSelectReview = stateFilterSelectReview;
-    }
-
-    public DateSelect getDateFilterSelectSub() {
-        return dateFilterSelectSub;
-    }
-
-    /**
-     * Set the selected filter option for filtering own submissions after
-     * date.
-     *
-     * @param dateFilterSelectSub The selected filter option for filtering
-     *                            own submissions after date.
-     */
-    public void setDateFilterSelectSub(DateSelect dateFilterSelectSub) {
-        this.dateFilterSelectSub = dateFilterSelectSub;
-    }
-
-    public DateSelect getDateFilterSelectReview() {
-        return dateFilterSelectReview;
-    }
-
-    /**
-     * Set the selected filter option for filtering reviewed submissions after
-     * date.
-     *
-     * @param dateFilterSelectReview The selected filter option for filtering
-     *                               reviewed submissions after date.
-     */
-    public void setDateFilterSelectReview(DateSelect dateFilterSelectReview) {
-        this.dateFilterSelectReview = dateFilterSelectReview;
-    }
-
-    public DateSelect getDateFilterSelectEdit() {
-        return dateFilterSelectEdit;
-    }
-
-    /**
-     * Set the selected filter option for filtering edited submissions after
-     * date.
-     *
-     * @param dateFilterSelectEdit The selected filter option for filtering
-     *                             edited submissions after date.
-     */
-    public void setDateFilterSelectEdit(DateSelect dateFilterSelectEdit) {
-        this.dateFilterSelectEdit = dateFilterSelectEdit;
     }
 
     /**
@@ -350,6 +263,24 @@ public class ScientificForumBacking implements Serializable {
      */
     public DateSelect[] getDateSelects() {
         return DateSelect.values();
+    }
+
+    /**
+     * Return if the logged-in user is editor of this scientific forum.
+     *
+     * @return Is the logged-in user editor of this scientific forum?
+     */
+    public boolean loggedInUserIsEditor() {
+        return false;
+    }
+
+    /**
+     * Return if the logged-in user is reviewer of this scientific forum.
+     *
+     * @return Is the logged-in user reviewer of this scientific forum?
+     */
+    public boolean loggedInUserIsReviewer() {
+        return false;
     }
 
 }

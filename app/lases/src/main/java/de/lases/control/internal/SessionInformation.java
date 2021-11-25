@@ -7,27 +7,34 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Encapsulates all information that is needed for the management of the
+ * session. More specifically, it holds the role of the user and his locale. It
+ * also offers a way to invalidate a session.
+ */
 @SessionScoped
 public class SessionInformation implements Serializable {
     private User user;
     private Locale locale;
 
-    public void invalidateSession() {
-    }
-
+    /**
+     * Get the user that is currently logged in. The user dto must be filled
+     * out with his id.
+     *
+     * @return A user dto with an id.
+     */
     public User getUser() {
         return user;
     }
 
+    /**
+     * Set the user that is currently logged in. This will also change the
+     * sessionId to avoid session fixation.
+     *
+     * @param user A user dto filled with an id for the user that is logged in.
+     */
     public void setUser(User user) {
         this.user = user;
     }
 
-    public Locale getLocale() {
-        return locale;
-    }
-
-    public void setLocale(Locale locale) {
-        this.locale = locale;
-    }
 }

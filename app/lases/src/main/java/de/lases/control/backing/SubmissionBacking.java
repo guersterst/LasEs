@@ -4,9 +4,11 @@ import de.lases.business.service.ReviewService;
 import de.lases.business.service.SubmissionService;
 import de.lases.business.service.UserService;
 import de.lases.control.exception.IllegalAccessException;
+import de.lases.control.exception.IllegalUserFlowException;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
+import jakarta.faces.event.ComponentSystemEvent;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -42,19 +44,10 @@ public class SubmissionBacking implements Serializable {
     @Inject
     private NewReviewBacking newReviewBacking;
 
-    @Inject ToolbarBacking toolbarBacking;
+    @Inject
+    ToolbarBacking toolbarBacking;
 
     private Part uploadedRevisionPDF;
-
-    private DateSelect dateFilterSelectPaper;
-
-    private DateSelect dateFilterSelectReview;
-
-    private boolean visibleFilterInputPaper;
-
-    private boolean visibleFilterInputReview;
-
-    private boolean recommendationFilterInputReview;
 
     private Submission submission;
 
@@ -73,20 +66,85 @@ public class SubmissionBacking implements Serializable {
     private Paper newestPaper;
 
     /**
-     * Initialize the dtos needed for displaying this page.
+     * Initialize the dtos.
+     * Create the objects for:
+     * <ul>
+     *     <li>
+     *         the revision upload pdf
+     *     </li>
+     *     <li>
+     *         The submission this page is about
+     *     </li>
+     *     <li>
+     *         the scientific forum this paper was submitted into
+     *     </li>
+     *     <li>
+     *         the list of co-authors for this submission
+     *     </li>
+     *     <li>
+     *         the pagination for papers
+     *     </li>
+     *     <li>
+     *         the pagination for reviews
+     *     </li>
+     *     <li>
+     *         the reviewed by object
+     *     </li>
+     *     <li>
+     *         the newest paper in the submission
+     *     </li>
+     * </ul>
+     * No data can be loaded form the datasource at this point. (See the
+     * {@code onLoad() method}).
      */
     @PostConstruct
     public void init() {
     }
 
     /**
-     * Get the correct submission from the view param and load all data that
-     * should be displayed.
+     * Get the correct submission id from the view param (will be called in a
+     * view action) and load all data that should be displayed from the
+     * datasource:
+     * <ul>
+     *     <li>
+     *         The submission this page is about
+     *     </li>
+     *     <li>
+     *         the scientific forum this submission was submitted into
+     *     </li>
+     *     <li>
+     *         the list of co-authors for this submission
+     *     </li>
+     *     <li>
+     *         the pagination for papers
+     *     </li>
+     *     <li>
+     *         the pagination for reviews
+     *     </li>
+     *     <li>
+     *         the reviewed by object
+     *     </li>
+     *     <li>
+     *         the newest paper in the submission
+     *     </li>
+     * </ul>
      *
      * @throws IllegalAccessException If the user has no access rights for this
      *                                submission
      */
-    public void onLoad() throws IllegalAccessException { }
+    public void onLoad() {
+    }
+
+    /**
+     * Checks if the view param is an integer and throws an exception if it is
+     * not
+     *
+     * @param event The component system event that happens before rendering
+     *              the view param.
+     * @throws IllegalUserFlowException If there is no integer provided as view
+     *                                  param
+     */
+    public void preRenderViewListener(ComponentSystemEvent event) {}
 
     /**
      * Set the state of the submission, which can be SUBMITTED,
@@ -96,6 +154,7 @@ public class SubmissionBacking implements Serializable {
     }
 
     // TODO: hier IOException? Ueberhaupt an den Service deligieren?
+
     /**
      * Download the PDF belonging to a specific review.
      *
@@ -186,6 +245,20 @@ public class SubmissionBacking implements Serializable {
     public void uploadPDF() {
     }
 
+    /**
+     * Delete this submission and go to the homepage.
+     *
+     * @return Go to the homepage.
+     */
+    public String deleteSubmission() {
+        return null;
+    }
+
+    /**
+     * Get the {@code Part} file where the revision PDF can be uploaded.
+     *
+     * @return The file where the revision can be uploaded.
+     */
     public Part getUploadedRevisionPDF() {
         return uploadedRevisionPDF;
     }
@@ -197,79 +270,6 @@ public class SubmissionBacking implements Serializable {
      */
     public void setUploadedRevisionPDF(Part uploadedRevisionPDF) {
         this.uploadedRevisionPDF = uploadedRevisionPDF;
-    }
-
-    public DateSelect getDateFilterSelectPaper() {
-        return dateFilterSelectPaper;
-    }
-
-    /**
-     * Set the selected filter option for filtering papers after date.
-     *
-     * @param dateFilterSelectPaper The selected filter option for filtering
-     *                              papers after date.
-     */
-    public void setDateFilterSelectPaper(DateSelect dateFilterSelectPaper) {
-        this.dateFilterSelectPaper = dateFilterSelectPaper;
-    }
-
-    public DateSelect getDateFilterSelectReview() {
-        return dateFilterSelectReview;
-    }
-
-    /**
-     * Set the selected filter option for filtering reviews after date.
-     *
-     * @param dateFilterSelectReview The selected filter option for filtering
-     *                               reviews after date.
-     */
-    public void setDateFilterSelectReview(DateSelect dateFilterSelectReview) {
-        this.dateFilterSelectReview = dateFilterSelectReview;
-    }
-
-    public boolean isVisibleFilterInputPaper() {
-        return visibleFilterInputPaper;
-    }
-
-    /**
-     * Set the selected filter option for filtering papers after visibility.
-     *
-     * @param visibleFilterInputPaper The selected filter option for filtering
-     *                                papers after visibility.
-     */
-    public void setVisibleFilterInputPaper(boolean visibleFilterInputPaper) {
-        this.visibleFilterInputPaper = visibleFilterInputPaper;
-    }
-
-    public boolean isVisibleFilterInputReview() {
-        return visibleFilterInputReview;
-    }
-
-    /**
-     * Set the selected filter option for filtering reviews after visibility.
-     *
-     * @param visibleFilterInputReview The selected filter option for filtering
-     *                                 reviews after visibility.
-     */
-    public void setVisibleFilterInputReview(boolean visibleFilterInputReview) {
-        this.visibleFilterInputReview = visibleFilterInputReview;
-    }
-
-    public boolean isRecommendationFilterInputReview() {
-        return recommendationFilterInputReview;
-    }
-
-    /**
-     * Set the selected filter option for filtering reviews after reviewer
-     * recommendation.
-     *
-     * @param recommendationFilterInputReview The selected filter option for
-     *                                        filtering reviews after reviewer
-     *                                        recommendation.
-     */
-    public void setRecommendationFilterInputReview(
-            boolean recommendationFilterInputReview) {
-        this.recommendationFilterInputReview = recommendationFilterInputReview;
     }
 
     /**
@@ -379,6 +379,24 @@ public class SubmissionBacking implements Serializable {
      */
     public Paper getNewestPaper() {
         return newestPaper;
+    }
+
+    /**
+     * Return if the logged-in user is editor of this submission.
+     *
+     * @return Is the logged-in user editor of this submission?
+     */
+    public boolean loggedInUserIsEditor() {
+        return false;
+    }
+
+    /**
+     * Return if the logged-in user is reviewer of this submission.
+     *
+     * @return Is the logged-in user reviewer of this submission?
+     */
+    public boolean loggedInUserIsReviewer() {
+        return false;
     }
 
 }

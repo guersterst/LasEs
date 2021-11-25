@@ -7,7 +7,6 @@ de.lases.control.internal
 de.lases.control.validation
 de.lases.global.config
 de.lases.global.transport
-de.lases.jsfconfig
 de.lases.persistence.exception
 de.lases.persistence.repository
 de.lases.persistence.util

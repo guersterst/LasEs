@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
  * Stores information about the review-request relationship of a submission and
  * a user (the reviewer).
  */
-public class ReviewedBy {
+public class ReviewedBy implements Cloneable {
 
     private int reviewerId;
 
@@ -69,4 +69,30 @@ public class ReviewedBy {
         this.hasAccepted = hasAccepted;
     }
 
+    /**
+     * Create a deep copy of the original object.
+     *
+     * @return A deep copy.
+     */
+    @Override
+    public ReviewedBy clone() {
+        try {
+            ReviewedBy clone = (ReviewedBy) super.clone();
+            // TODO: copy mutable state here, so the clone can't change the internals of the original
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
+
+    /**
+     * Check equality by comparing reviewerId and submissionId.
+     *
+     * @param object The object to compare to.
+     * @return Is the provided object equal to this ReviewedBy?
+     */
+    @Override
+    public boolean equals(Object object) {
+        return false;
+    }
 }

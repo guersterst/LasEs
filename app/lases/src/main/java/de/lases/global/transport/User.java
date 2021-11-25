@@ -6,11 +6,11 @@ import java.util.List;
 /**
  * Represents a user.
  */
-public class User {
+public class User implements Cloneable {
 
     private int verificationId;
 
-    private int id;
+    private Integer id;
 
     private List<Privilege> privileges;
 
@@ -35,35 +35,6 @@ public class User {
     private boolean isNotRegistered;
 
     private int numberOfSubmissions;
-
-    /**
-     * Return if the user is an editor.
-     *
-     * @return Is the user an editor.
-     */
-    public boolean isEditor() { return false; }
-
-    /**
-     * Add or remove editor privileges to the user.
-     *
-     * @param isEditor Should the user be an editor.
-     */
-    public void setEditor(boolean isEditor) { }
-
-    /**
-     * Return if the user is a reviewer.
-     *
-     * @return Is the user a reviewer.
-     */
-    public
-    boolean isReviewer() { return false; }
-
-    /**
-     * Add or remove reviewer privileges to the user.
-     *
-     * @param isReviewer Should the user be a reviewer.
-     */
-    public void setReviewer(boolean isReviewer) { }
 
     /**
      * Return if the user is an admin.
@@ -92,16 +63,17 @@ public class User {
         this.verificationId = verificationId;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
     /**
      * Set the id of this user.
+     * Integer is used instead of int in order to be able to determine if the property is set.
      *
      * @param id The user id.
      */
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -257,11 +229,7 @@ public class User {
      */
     @Override
     public boolean equals(Object object) {
-        if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
-        if (!super.equals(object)) return false;
-        User user = (User) object;
-        return id == user.id;
+        return false;
     }
 
     /**
@@ -285,5 +253,21 @@ public class User {
      */
     public void setNumberOfSubmissions(int numberOfSubmissions) {
         this.numberOfSubmissions = numberOfSubmissions;
+    }
+
+    /**
+     * Create a deep copy of the original object.
+     *
+     * @return A deep copy.
+     */
+    @Override
+    public User clone() {
+        try {
+            User clone = (User) super.clone();
+            // TODO: copy mutable state here, so the clone can't change the internals of the original
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

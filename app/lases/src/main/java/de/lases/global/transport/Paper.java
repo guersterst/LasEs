@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 /**
  * Represents a paper.
  */
-public class Paper {
+public class Paper implements Cloneable {
 
     private int submissionId;
 
@@ -65,5 +65,32 @@ public class Paper {
      */
     public void setVisible(boolean visible) {
         this.visible = visible;
+    }
+
+    /**
+     * Create a deep copy of the original object.
+     *
+     * @return A deep copy.
+     */
+    @Override
+    public Paper clone() {
+        try {
+            Paper clone = (Paper) super.clone();
+            // TODO: copy mutable state here, so the clone can't change the internals of the original
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
+
+    /**
+     * Check equality by comparing version and submission id.
+     *
+     * @param object The object to compare to.
+     * @return Is the provided object equal to this paper?
+     */
+    @Override
+    public boolean equals(Object object) {
+        return false;
     }
 }

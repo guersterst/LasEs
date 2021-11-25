@@ -35,16 +35,34 @@ public class ScientificForumRepository {
     }
 
     /**
+     * Takes a scientific forum dto that is filled with an id or a
+     * name and returns if this scientific forum exists.
+     *
+     * @param scientificForum A {@code ScientificForum} dto that must be filled
+     *                        with an id or name.
+     * @param transaction The transaction to use.
+     * @return Does this scientific forum exist?
+     * @throws InvalidFieldsException If both name and id are provided, but they
+     *                                belong to two different scientific forums.
+     * @throws DatasourceQueryFailedException If the datasource cannot be
+     *                                        queried.
+     */
+    public static boolean exists(ScientificForum scientificForum,
+                                 Transaction transaction) {
+        return false;
+    }
+
+    /**
      * Adds a scientific forum to the repository.
      *
-     * @param scientificForum A fully filled scientific forum dto.
+     * @param scientificForum A scientific forum dto filled with a name
      * @param transaction The transaction to use.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
-     * @throws KeyExistsException If there is already a scientific forum with
-     *                            the same id.
-     * @throws InvalidFieldsException If one of the fields of the scientific
-     *                                forum is null.
+     * @throws KeyExistsException If the name of the added forum
+     *                            already exists in the datasource.
+     * @throws InvalidFieldsException If one of the required fields of the
+     *                                scientific forum is null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
@@ -54,22 +72,26 @@ public class ScientificForumRepository {
     }
 
     /**
-     * Changes the given scientific forum in the repository.
+     * Changes the given scientific forum in the repository. All fields that
+     * are not required will be deleted if left empty.
      *
-     * @param scientificForum A fully filled scientificForum dto.
+     * @param scientificForum A scientificForum dto with an id and a name.
      * @param transaction The transaction to use.
      * @throws NotFoundException If there is no scientific forum with the
      *                           provided id.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
-     * @throws InvalidFieldsException If one of the fields of the scientific
-     *                                forum is null.
+     * @throws KeyExistsException If the new name of the changed forum
+     *                            already exists in the datasource.
+     * @throws InvalidFieldsException If one of the required fields of the
+     *                                scientific forum is null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static void change(ScientificForum scientificForum,
                               Transaction transaction)
-            throws NotFoundException, DataNotWrittenException {
+            throws NotFoundException, DataNotWrittenException,
+            KeyExistsException {
     }
 
     /**
@@ -193,17 +215,5 @@ public class ScientificForumRepository {
                                           Transaction transaction)
             throws NotFoundException, DataNotWrittenException{
     }
-
-    /**
-     * Returns the scientific forum that belongs to a specific submission.
-     *
-     * @param submission The submission to which the forum should be returned.
-     * @return The scientific forum for the given submission.
-     */
-    public ScientificForum getScientificForumForSubmission(
-            Submission submission) {
-        return null;
-    }
-
 
 }

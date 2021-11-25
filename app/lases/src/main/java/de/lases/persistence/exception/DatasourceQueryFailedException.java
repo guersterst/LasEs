@@ -11,6 +11,21 @@ public class DatasourceQueryFailedException extends RuntimeException {
     private static final long serialVersionUID = 8679228847181645272L;
 
     /**
+     * Constructs an exception.
+     */
+    public DatasourceQueryFailedException() {
+    }
+
+    /**
+     * Constructs an exception with a message.
+     *
+     * @param message Error message.
+     */
+    public DatasourceQueryFailedException(String message) {
+        super(message);
+    }
+
+    /**
      * Constructs an exception with a message and a cause.
      *
      * @param message Error message.

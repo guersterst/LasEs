@@ -27,12 +27,11 @@ public class ScientificForumListBacking implements Serializable {
     @Inject
     private ScientificForumService scientificForumService;
 
-    private DateSelect deadlineFilterSelect;
-
     private Pagination<ScientificForum> scientificForumPagination;
 
     /**
-     * Initialize the list by getting the first page from the data source.
+     * Initialize the scientific forum pagination and load the first page from
+     * the datasource.
      */
     @PostConstruct
     public void init() {
@@ -42,20 +41,6 @@ public class ScientificForumListBacking implements Serializable {
      * Apply the selected deadline filter.
      */
     public void applyFilters() {
-    }
-
-    public DateSelect getDeadlineFilterSelect() {
-        return deadlineFilterSelect;
-    }
-
-    /**
-     * Set the selected filter option for filtering forums after deadline
-     *
-     * @param deadlineFilterSelect The selected filter option for filtering
-     *                            forums after deadline.
-     */
-    public void setDeadlineFilterSelect(DateSelect deadlineFilterSelect) {
-        this.deadlineFilterSelect = deadlineFilterSelect;
     }
 
     /**

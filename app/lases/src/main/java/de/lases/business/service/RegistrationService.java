@@ -23,24 +23,38 @@ public class RegistrationService {
 
     /**
      * Registers and creates a regular user in the database.
-     * <p></p>
+     * <p>
      * The email verification process is initiated using the
      * {@code EmailUtil} utility.
+     * </p>
      *
      * @param user The user's data.
+     *             <p>
+     *             Must contain a valid email-address, that is not already in use.
+     *             A password that will be hashed using the {@link de.lases.business.util.Hashing}-utility
+     *             and a name and surname.
+     *             </p>
+     * @return The user with all their data, if successful, and {@code null} otherwise.
      */
-    public void selfRegister(User user) {
-
+    public User selfRegister(User user) {
+        return null;
     }
 
     /**
      * Registers and creates a user in the database.
+     *
+     * <p>
      * This user may be an admin.
+     * Must contain a valid email-address, that is not already in use.
+     * A password that will be hashed using the {@link de.lases.business.util.Hashing}-utility
+     * and a name and surname.
+     * </p>
      *
      * @param user The user's data.
+     * @return The user with all their data, if successful, and {@code null} otherwise.
      */
-    public void registerByAdmin(User user) {
-
+    public User registerByAdmin(User user) {
+        return null;
     }
 
 }

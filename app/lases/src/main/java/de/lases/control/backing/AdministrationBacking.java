@@ -1,6 +1,7 @@
 package de.lases.control.backing;
 
 import de.lases.business.service.CustomizationService;
+import de.lases.control.exception.IllegalAccessException;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
@@ -23,7 +24,10 @@ public class AdministrationBacking {
     private Part uploadedLogo;
 
     /**
-     * Loads the current system settings from the backend.
+     * Loads the current system settings from the datasource.
+     *
+     * @throws IllegalAccessException If the accessing user is not an
+     *                                administrator.
      */
     @PostConstruct
     public void init() {
@@ -49,6 +53,11 @@ public class AdministrationBacking {
         return null;
     }
 
+    /**
+     * Gets the system settings as saved in this bean.
+     *
+     * @return The current system settings.
+     */
     public SystemSettings getSystemSettings() {
         return systemSettings;
     }
@@ -62,6 +71,11 @@ public class AdministrationBacking {
         this.systemSettings = systemSettings;
     }
 
+    /**
+     * Get the logo as saved in this bean.
+     *
+     * @return The uploaded logo.
+     */
     public Part getUploadedLogo() {
         return uploadedLogo;
     }

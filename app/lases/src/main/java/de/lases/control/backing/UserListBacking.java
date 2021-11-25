@@ -31,7 +31,14 @@ public class UserListBacking implements Serializable {
     private Pagination<User> userPagination;
 
     /**
-     * Set up the pagination and show the first page.
+     * Initialize the user pagination and load the first page from the
+     * datasource.
+     *
+     * @throws de.lases.control.exception.IllegalAccessException If the user
+     *                                                           accessing this
+     *                                                           page is not
+     *                                                           an admin or
+     *                                                           editor.
      */
     @PostConstruct
     public void init() {

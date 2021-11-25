@@ -1,11 +1,14 @@
 package de.lases.control.backing;
 
+import de.lases.business.internal.ConfigPropagator;
 import de.lases.business.service.ScienceFieldService;
-import de.lases.business.service.SubmissionService;
 import de.lases.business.service.UserService;
+import de.lases.control.exception.IllegalUserFlowException;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
+import de.lases.control.exception.IllegalAccessException;
 import jakarta.annotation.PostConstruct;
+import jakarta.faces.event.ComponentSystemEvent;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -35,6 +38,9 @@ public class ProfileBacking implements Serializable {
     @Inject
     private ScienceFieldService scienceFieldService;
 
+    @Inject
+    private ConfigPropagator configPropagator;
+
     private Part uploadedAvatar;
 
     private User user;
@@ -47,11 +53,28 @@ public class ProfileBacking implements Serializable {
 
     private User adminPasswordInPopup;
 
-    private boolean popupShown;
-
     /**
      * Initializes the dto objects and gets the global list of science fields
      * from the datasource.
+     * The following objects are initialized by this method:
+     * <ul>
+     *     <li> The uploaded avatar </li>
+     *     <li> The user object of the profile </li>
+     *     <li>
+     *         the list of science fields of the user this profile is about
+     *     </li>
+     *     <li>
+     *         the list of global science fields
+     *     </li>
+     *     <li>
+     *         the science field that is currently selected to be added
+     *     </li>
+     *     <li>
+     *         the user for the admin password input
+     *     </li>
+     * </ul>
+     * @throws IllegalAccessException If someone tries to access a profile that
+     *                                does not belong to him.
      */
     @PostConstruct
     public void init() {
@@ -60,16 +83,54 @@ public class ProfileBacking implements Serializable {
     /**
      * Get the user id from the view param and load their data from the
      * datasource. This method should be called by a view action.
+     * The following data is loaded from the datasource by this method:
+     * <ul>
+     *     <li>
+     *         The user object of this profile
+     *     </li>
+     *     <li>
+     *         the list of science fields of the user
+     *     </li>
+     * </ul>
      */
     public void onLoad() { }
 
     /**
-     * Save the changes to the user profile excluding profile picture and
-     * science fields. If the user was elevated to admin, a popup menu will
-     * ask for confirmation again.
+     * Checks if the view param is an integer and throws an exception if it is
+     * not
+     *
+     * @param event The component system event that happens before rendering
+     *              the view param.
+     * @throws IllegalUserFlowException If there is no integer provided as view
+     *                                  param
+     */
+    public void preRenderViewListener(ComponentSystemEvent event) {}
+
+    /**
+     * Save the changes to the user profile excluding profile picture,
+     * science fields and admin rights. If the user changed his email address,
+     * a verification email will be sent to that address and a message will be
+     * shown that asks the user to check his inbox.
      */
     public void submitChanges() {
     }
+
+    /**
+     * Save the changes to the user's admin status. This can only be done by
+     * an admin who is editing someone's profile. He must enter his password
+     * to complete this action. If he did enter his valid password, the admin
+     * status will be changed. If the password is wrong, an error message will
+     * be displayed.
+     */
+    public void submitAdminChanges() {
+
+    }
+    /**
+     * Abort the changes made to the user and show a fresh profile page.
+     */
+    public void abort() {
+    }
+
 
     /**
      * Set a new avatar for the user.
@@ -98,18 +159,6 @@ public class ProfileBacking implements Serializable {
     }
 
     /**
-     * Abort the changes made to the user.
-     */
-    public void abortInPopup() {
-    }
-
-    /**
-     * Save the changes made to the user.
-     */
-    public void saveInPopup() {
-    }
-
-    /**
      * Delete the of the user.
      *
      * @return Go to the welcome page.
@@ -125,7 +174,11 @@ public class ProfileBacking implements Serializable {
      */
     public int getNumberOfSubmissions() { return -1; }
 
-
+    /**
+     * Get the avatar that the user uploaded.
+     *
+     * @return The avatar that the user uploaded.
+     */
     public Part getUploadedAvatar() {
         return uploadedAvatar;
     }
@@ -139,6 +192,11 @@ public class ProfileBacking implements Serializable {
         this.uploadedAvatar = uploadedAvatar;
     }
 
+    /**
+     * Get the user whose profile this is.
+     *
+     * @return The user whose profile this is.
+     */
     public User getUser() {
         return user;
     }
@@ -161,6 +219,11 @@ public class ProfileBacking implements Serializable {
         return usersScienceFields;
     }
 
+    /**
+     * Set the science field that is selected to be added.
+     *
+     * @return The science field that is selected to be added.
+     */
     public ScienceField getSelectedScienceField() {
         return selectedScienceField;
     }
@@ -175,7 +238,13 @@ public class ProfileBacking implements Serializable {
         this.selectedScienceField = selectedScienceField;
     }
 
-    public User getAdminPasswordInPopup() {
+    /**
+     * Get the user that holds the password the admin has to enter on the
+     * pop-up.
+     *
+     * @return User that holds the admin password.
+     */
+    public User getAdminPassword() {
         return adminPasswordInPopup;
     }
 
@@ -185,7 +254,7 @@ public class ProfileBacking implements Serializable {
      *
      * @param adminPasswordInPopup User that holds the admin password.
      */
-    public void setAdminPasswordInPopup(User adminPasswordInPopup) {
+    public void setAdminPassword(User adminPasswordInPopup) {
         this.adminPasswordInPopup = adminPasswordInPopup;
     }
 
@@ -196,15 +265,6 @@ public class ProfileBacking implements Serializable {
      */
     public List<ScienceField> getScienceFields() {
         return scienceFields;
-    }
-
-    /**
-     * Tells if the popup is currently displayed on the screen.
-     *
-     * @return Is the popup currently displayed on the screen?
-     */
-    public boolean isPopupShown() {
-        return popupShown;
     }
 
     /**

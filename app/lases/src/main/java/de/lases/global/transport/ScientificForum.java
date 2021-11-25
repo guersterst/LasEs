@@ -1,14 +1,13 @@
 package de.lases.global.transport;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * Represents a scientific forum.
  */
-public class ScientificForum {
+public class ScientificForum implements Cloneable {
 
-    private int id;
+    private Integer id;
 
     private String description;
 
@@ -20,16 +19,17 @@ public class ScientificForum {
 
     private String name;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
     /**
      * Set the id of the scientific forum.
+     * Integer is used instead of int in order to be able to determine if the property is set.
      *
      * @param id The id of the scientific forum.
      */
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -96,5 +96,32 @@ public class ScientificForum {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * Create a deep copy of the original object.
+     *
+     * @return A deep copy.
+     */
+    @Override
+    public ScientificForum clone() {
+        try {
+            ScientificForum clone = (ScientificForum) super.clone();
+            // TODO: copy mutable state here, so the clone can't change the internals of the original
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
+
+    /**
+     * Check equality by comparing ids.
+     *
+     * @param object The object to compare to.
+     * @return Is the provided object equal to this scfientific forum?
+     */
+    @Override
+    public boolean equals(Object object) {
+        return false;
     }
 }

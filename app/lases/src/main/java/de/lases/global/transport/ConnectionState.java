@@ -1,7 +1,8 @@
 package de.lases.global.transport;
 
 /**
- * Encapsulates information about the state of the database connection.
+ * Encapsulates information about the state of the datasource connection in
+ * order to show it to the admin on the first setup page.
  */
 public class ConnectionState {
 

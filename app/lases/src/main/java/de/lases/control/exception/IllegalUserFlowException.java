@@ -11,6 +11,12 @@ public class IllegalUserFlowException extends RuntimeException {
     private static final long serialVersionUID = 5268923976706134722L;
 
     /**
+     * Constructs an exception.
+     */
+    public IllegalUserFlowException() {
+    }
+
+    /**
      * Constructs an exception with a message.
      *
      * @param message Error message.

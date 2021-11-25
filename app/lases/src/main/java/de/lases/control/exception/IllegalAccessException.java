@@ -10,6 +10,12 @@ public class IllegalAccessException extends RuntimeException {
     private static final long serialVersionUID = -7108331422615826777L;
 
     /**
+     * Constructs an exception.
+     */
+    public IllegalAccessException() {
+    }
+
+    /**
      * Constructs an exception with a message.
      *
      * @param message Error message.

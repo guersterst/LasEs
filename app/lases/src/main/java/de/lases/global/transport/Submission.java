@@ -1,18 +1,15 @@
 package de.lases.global.transport;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * Represents a submission.
  */
-public class Submission {
+public class Submission implements Cloneable {
 
     private int scientificForumId;
 
-    private int id;
-
-    private boolean revisionRequired;
+    private Integer id;
 
     private int authorId;
 
@@ -39,21 +36,22 @@ public class Submission {
         this.scientificForumId = scientificForumId;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
     /**
      * Set the id of this submission.
+     * Integer is used instead of int in order to be able to determine if the property is set.
      *
      * @param id The id.
      */
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
     public boolean isRevisionRequired() {
-        return revisionRequired;
+        return false;
     }
 
     /**
@@ -62,7 +60,6 @@ public class Submission {
      * @param revisionRequired Is a revision required?
      */
     public void setRevisionRequired(boolean revisionRequired) {
-        this.revisionRequired = revisionRequired;
     }
 
     public int getAuthorId() {
@@ -142,5 +139,32 @@ public class Submission {
      */
     public void setSubmissionTime(LocalDateTime submissionTime) {
         this.submissionTime = submissionTime;
+    }
+
+    /**
+     * Create a deep copy of the original object.
+     *
+     * @return A deep copy.
+     */
+    @Override
+    public Submission clone() {
+        try {
+            Submission clone = (Submission) super.clone();
+            // TODO: copy mutable state here, so the clone can't change the internals of the original
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
+
+    /**
+     * Check equality by comparing ids.
+     *
+     * @param object The object to compare to.
+     * @return Is the provided object equal to this submission?
+     */
+    @Override
+    public boolean equals(Object object) {
+        return false;
     }
 }

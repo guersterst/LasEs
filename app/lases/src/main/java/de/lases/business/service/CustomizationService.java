@@ -1,8 +1,7 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.ConnectionState;
-import de.lases.global.transport.File;
-import de.lases.global.transport.Style;
+import de.lases.global.transport.FileDTO;
 import de.lases.global.transport.SystemSettings;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
@@ -26,24 +25,24 @@ public class CustomizationService {
 
 
     /**
-     * Sets the applications settings determining the look and feel.
+     * Sets the application's settings, that determine its look and feel.
      *
-     * @param systemSettings The system's settings.
+     * @param systemSettings The filled {@link SystemSettings}.
      */
     public void change(SystemSettings systemSettings) {
     }
 
     /**
-     * @return The current settings of the system.
+     * @return The current settings of the system, that determine its look and feel.
      */
     public SystemSettings get() {
         return null;
     }
 
     /**
-     * Initiates the creation of the database schema.
+     * Initiates the creation of the datasource's schema.
      */
-    public void createDbSchema() {
+    public void createDataSourceSchema() {
     }
 
     /**
@@ -60,13 +59,13 @@ public class CustomizationService {
      *
      * @param logo The applications logo.
      */
-    public void setLogo(File logo) {
+    public void setLogo(FileDTO logo) {
     }
 
     /**
      * @return The logo of the application.
      */
-    public File getLogo() {
+    public FileDTO getLogo() {
         return null;
     }
 }

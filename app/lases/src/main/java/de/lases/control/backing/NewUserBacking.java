@@ -25,13 +25,14 @@ public class NewUserBacking {
     private User newUser;
 
     /**
-     * Checks if the user accessing this site is really an administrator.
+     * Checks if the user accessing this site is really an administrator and
+     * initialized the dto for the new user.
      *
-     * @throws IllegalAccessException If the accessing user id not an
+     * @throws IllegalAccessException If the accessing user is not an
      *                                administrator.
      */
     @PostConstruct
-    public void init() throws IllegalAccessException {
+    public void init() {
 
     }
 
@@ -53,6 +54,12 @@ public class NewUserBacking {
         return null;
     }
 
+    /**
+     * Get the {@code User} object that hols all information about the new user
+     * the administrator has entered.
+     *
+     * @return The new user that should be added.
+     */
     public User getNewUser() {
         return newUser;
     }
