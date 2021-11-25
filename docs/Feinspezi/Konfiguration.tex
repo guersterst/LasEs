@@ -2,20 +2,18 @@
 
 JSF lässt sich auf verschiedenste Art \& Weisen konfigurieren, wie beispielsweise
 mithilfe der \emph{faces-config.xml}.
-Die Lases-Anwendung bietet nebenher weitere selbstdefinierte Konfigurationsmöglichkeiten an.
-Die Konfigurationsdateien befinden sich im \emph{webapp/WEB-INF/classes} Verzeichnis.
-\newline\newline
-Die Konfigurationsdateien werden intern in \emph{Properties}-Pakete umgewandelt,
-wobei jedes \emph{Properties}-Paket eine semantische Aufgabe übernimmt.
-So dient beispielsweise die \emph{mail.properties} der Konfiguration des Mailing.
-Wenn ein Paket bestimmte \emph{Properties} auslagert,
-so landen diese in der Anwendungskonfiguration \emph{config.properties}.
+Die Lases-Anwendung bietet zusätzlich weitere selbstdefinierte Konfigurationsmöglichkeiten an.
+Die Konfigurationsdateien befinden sich im \texttt{webapp/WEB-INF/config} Verzeichnis.\newline
+Die Aufteilung erfolgt in zwei Konfigurationsdateien: \texttt{config.properties} für allgemeine Konfigurationen bezüglich dem System, E-Mail und Datenbank und \texttt{logger.properties} für das Logging der Anwendung.
 %todo letzten teil kürzen zB letzten satz zu kofig der anw auslagern
 
-\subsection{Konfiguration der Anwendung}
-Die Anwendung kann auf einige Weisen personalisiert konfiguriert werden.
-Hierzu dient die \emph{config.properties}-Datei,
-welche zentrale Parameter der Anwendung definiert.
+\subsection{Konfiguration der Anwendung durch \texttt{config.properties}}
+Die Anwendung kann auf einige Weisen personalisiert werden.
+Damit LasEs Mails versenden und Mailto-Links generieren kann,
+müssen einige Konfigurationsentscheidungen getroffen werden.
+Für einen persistenten Datenbankzugriff, muss dieser ebenfalls konfiguriert werden.
+Nennenswert sind außerdem die Konfigurationsentscheidungen bezüglich der SSL-Verschlüsselung.\newline
+Die Konfigurationsdatei ist ein einzelne Abschnitte gegliedert, um die Konfigurationsbereiche von einander zu trennen.\newline
 
 \begin{lstlisting}[language=XML, caption = Die Anwendungskonfiguration \emph{config.properties}]
 # The configuration for the LasEs application.
@@ -33,33 +31,17 @@ MAX_AVATAR_FILE_SIZE_MB = 5
 MAX_PAGINATION_LIST_LENGTH = 25
 
 # Allows for easier debug and test handling of the application.
-# For example, stacktraces will be displayed in error-pages and the email-verification process
-# is shortened for easier testing.
+# For example, stacktraces will be displayed in error-pages
+# and the email-verification process is shortened for easier testing.
 DEBUG_AND_TEST_MODE = true
 
 #------------------- MAIL -------------------------------#
 
 MAIL_ADDRESS_FROM = system@lases.de
 
-#------------------- DATABASE ---------------------------#
+SMTP_USERNAME = garstenaue@fim.uni-passau.de
 
-# The URL with which the database can be accessed.
-DB_URL = jdbc:postgresql://bueno.fim.uni-passau.de/sep21g02
-
-# The database driver.
-DB_DRIVER = org.postgresql.Driver
-\end{lstlisting}
-
-\subsubsection{Konfiguration des Mailings}
-Damit die LasEs-Anwendung Mails versenden und Mailto-Links generieren kann
-müssen einige Konfigurationsentscheidungen getroffen werden.
-Hierzu dient die \emph{mail.properties}-Datei.
-
-\begin{lstlisting}[language=XML, caption = Die Mailingkonfiguration \emph{mail.properties}]
-# The configuration for the mailing API.
-# The convention to follow is: <key> = <value>.
-
-#------------------- SMTP ---------------------------#
+SMTP_PASSWORD = my_secure_password
 
 mail.smtp.host = mail.fim.uni-passau.de
 
@@ -68,29 +50,23 @@ mail.smtp.port = 587
 mail.smtp.auth = true
 
 mail.smtp.starttls.enable = true
-\end{lstlisting}
 
-\subsubsection{Konfiguration der Datenbank}
-Damit die LasEs-Anwendung einen persistenten Datenbankzugriff besitzen kann,
-muss dieser konfiguriert werden. Nennenswert sind ebenfalls die
-Konfigurationsentscheidungen bezüglich der SSL-Verschlüsselung.
-Hierzu dient die \emph{database.properties}-Datei.
-
-\begin{lstlisting}[language=XML, caption = Die Datenbankkonfiguration \emph{database.properties}]
+#------------------- DATABASE ---------------------------#
 # The configuration for the database.
-# The convention to follow is: <key> = <value>.
 # For documentation see:
 # https://jdbc.postgresql.org/documentation/head/connect.html
 
-#------------------- ACCESS ------------------------#
+# The URL with which the database can be accessed.
+DB_URL = jdbc:postgresql://bueno.fim.uni-passau.de/sep21g02
+
+# The database driver.
+DB_DRIVER = org.postgresql.Driver
 
 # The username for database access.
 user = sep21g02
 
 # The password for database access.
 password = ieQu2aeShoon
-
-#------------------- SSL ---------------------------#
 
 # Is SSL protection being used.
 ssl = true
@@ -109,19 +85,23 @@ wird der \emph{Logger} konfiguriert.
 # For documentation see:
 # https://docs.oracle.com/en/java/javase/16/docs/api/java.logging/java/util/logging/FileHandler.html
 # and https://docs.oracle.com/en/java/javase/16/docs/api/java.logging/java/util/logging/ConsoleHandler.html
-
 #------------------- LOGGING ---------------------------#
 
 # The handler for logging.
-handlers= java.util.logging.FileHandler
+handlers = java.util.logging.FileHandler, java.util.logging.ConsoleHandler
 
 # The level of logs that are to be logged. With 'Info' all logs
 # with higher priority will also be logged.
-.level= INFO
+.level = INFO
 
+#------------------- FILE ------------------------------#
 # The directory where the logs will be placed.
-# We need help deciding where this should be.
-java.util.logging.FileHandler.pattern = %h/lases%u.log
+# todo or direct path (or try without lases folder bc im uncertain if it will be created automatically)
+#todo alternative %h/apache-tomcat-10.0.11/logs/lases/lases%u.log
+#todo hier könnte die tomcat verion faxen machen -> auf deine einstellen
+#todo weiter faxen (or try without lases folder bc im uncertain if it will be created automatically)
+#todo wenn wir uns für die 2te alternative entscheiden sollten wir die tomcat version mitm pflichtenheft abchecken
+java.util.logging.FileHandler.pattern = ${catalina.base}/logs/lases%u.log
 \end{lstlisting}
 
 \subsubsection{Sprachkonfiguration}
