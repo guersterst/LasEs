@@ -166,6 +166,55 @@ public class UserRepository {
     }
 
     /**
+     * Gets a list of all users that fulfil a specific role in regard to a
+     * specific submission
+     *
+     * @param transaction The transaction to use.
+     * @param privilege The role the users must fulfil in regard to the
+     *                  specified submission. Must be REVIEWER for reviewers
+     *                  and AUTHENTICATED for (co)-authors.
+     *                  ADMIN adn EDITOR is not supported.
+     * @param submission The submission the users should stand in a
+     *                   relationship with. Must be filled with a valid id.
+     * @return A list of fully filled user dtos.
+     * @throws DataNotCompleteException If the list is truncated.
+     * @throws DatasourceQueryFailedException If the datasource cannot be
+     *                                        queried.
+     * @throws InvalidFieldsException If the privilege is ADMIN or EDITOR.
+     * @throws NotFoundException If there is no submission with the specified
+     *                           id.
+     * @throws InvalidQueryParamsException If the resultListParameters contain
+     *                                     an erroneous option.
+     */
+    public static List<User> getList(Transaction transaction,
+                                     Submission submission,
+                                     Privilege privilege)
+            throws DataNotCompleteException, NotFoundException {
+        return null;
+    }
+
+    /**
+     * Gets a list of all users that are editor of a specific scientific forum.
+     *
+     * @param transaction The transaction to use.
+     * @param scientificForum The forum the users must be editor of. Must
+     *                        contain a valid id.
+     * @return A list of fully filled user dtos.
+     * @throws DataNotCompleteException If the list is truncated.
+     * @throws DatasourceQueryFailedException If the datasource cannot be
+     *                                        queried.
+     * @throws NotFoundException If there is no scientific forum with the
+     *                           specified id.
+     * @throws InvalidQueryParamsException If the resultListParameters contain
+     *                                     an erroneous option.
+     */
+    public static List<User> getList(Transaction transaction,
+                                     ScientificForum scientificForum)
+            throws DataNotCompleteException, NotFoundException {
+        return null;
+    }
+
+    /**
      * Adds the specified science field to the specified scientific user.
      *
      * @param user A user dto with a valid id or email.
