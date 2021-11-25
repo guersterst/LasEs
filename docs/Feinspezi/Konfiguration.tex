@@ -31,7 +31,7 @@ MAX_AVATAR_FILE_SIZE_MB = 5
 MAX_PAGINATION_LIST_LENGTH = 25
 
 # Allows for easier debug and test handling of the application.
-# For example, stacktraces will be displayed in error-pages
+# For example, the stacktrace will be displayed in error-pages
 # and the email-verification process is shortened for easier testing.
 DEBUG_AND_TEST_MODE = true
 
@@ -96,11 +96,6 @@ handlers = java.util.logging.FileHandler, java.util.logging.ConsoleHandler
 
 #------------------- FILE ------------------------------#
 # The directory where the logs will be placed.
-# todo or direct path (or try without lases folder bc im uncertain if it will be created automatically)
-#todo alternative %h/apache-tomcat-10.0.11/logs/lases/lases%u.log
-#todo hier könnte die tomcat verion faxen machen -> auf deine einstellen
-#todo weiter faxen (or try without lases folder bc im uncertain if it will be created automatically)
-#todo wenn wir uns für die 2te alternative entscheiden sollten wir die tomcat version mitm pflichtenheft abchecken
 java.util.logging.FileHandler.pattern = ${catalina.base}/logs/lases%u.log
 \end{lstlisting}
 
