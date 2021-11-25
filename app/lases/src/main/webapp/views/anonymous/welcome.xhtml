@@ -54,7 +54,19 @@
                 <br/>
 
             </h:form>
-            
+
+            <h:outputText value="#{welcomeBacking.testString}"/>
+            <br/>
+
+            <h:commandButton value="DIALOG FÜR STEFAN" type="button" onclick="PF('dlg').show();"/>
+            <h:form>
+                <p:dialog header="Wichtiger hinweis" appendToBody="true" widgetVar="dlg" modal="true">
+                    <h:outputText value="dialog jaja?"/>
+                    mEEEXDN xD
+                    <p:commandButton value="Close" onclick="PF('dlg').hide();"/>
+                    <h:commandButton value="action and close" action="#{welcomeBacking.stringChanger}" onclick="PF('dlg').hide();"/>
+                </p:dialog>
+            </h:form>
 
 
             <div class="card-body">
