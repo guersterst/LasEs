@@ -1,10 +1,12 @@
 package de.lases.control.backing;
 
 import de.lases.business.service.UserService;
+import de.lases.control.exception.IllegalUserFlowException;
 import de.lases.control.internal.*;
 import de.lases.global.transport.Verification;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.event.ComponentSystemEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
@@ -41,6 +43,18 @@ public class VerificationBacking { // y
     public void onLoad() {
 
     }
+
+    /**
+     * Checks if the view param is an integer and throws an exception if it is
+     * not
+     *
+     * @param event The component system event that happens before rendering
+     *              the view param. Can be used to check the view param for
+     *              validity
+     * @throws IllegalUserFlowException If there is no integer provided as view
+     *                                  param
+     */
+    public void preRenderViewListener(ComponentSystemEvent event) {}
 
     /**
      * Go to homepage if the user is now verified, go to welcome page if not.

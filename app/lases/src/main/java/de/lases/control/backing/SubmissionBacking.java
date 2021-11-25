@@ -4,9 +4,11 @@ import de.lases.business.service.ReviewService;
 import de.lases.business.service.SubmissionService;
 import de.lases.business.service.UserService;
 import de.lases.control.exception.IllegalAccessException;
+import de.lases.control.exception.IllegalUserFlowException;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
+import jakarta.faces.event.ComponentSystemEvent;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -132,6 +134,18 @@ public class SubmissionBacking implements Serializable {
      */
     public void onLoad() {
     }
+
+    /**
+     * Checks if the view param is an integer and throws an exception if it is
+     * not
+     *
+     * @param event The component system event that happens before rendering
+     *              the view param. Can be used to check the view param for
+     *              validity
+     * @throws IllegalUserFlowException If there is no integer provided as view
+     *                                  param
+     */
+    public void preRenderViewListener(ComponentSystemEvent event) {}
 
     /**
      * Set the state of the submission, which can be SUBMITTED,
