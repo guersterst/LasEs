@@ -45,7 +45,7 @@ public class SubmissionBacking implements Serializable {
     private NewReviewBacking newReviewBacking;
 
     @Inject
-    ToolbarBacking toolbarBacking;
+    private ToolbarBacking toolbarBacking;
 
     private Part uploadedRevisionPDF;
 
@@ -159,6 +159,7 @@ public class SubmissionBacking implements Serializable {
      * Download the PDF belonging to a specific review.
      *
      * @param review The review to download.
+     * @throws IOException If the download fails.
      */
     public void downloadReview(Review review) throws IOException {
     }
@@ -175,6 +176,7 @@ public class SubmissionBacking implements Serializable {
      * Download the PDF belonging to a specific paper.
      *
      * @param paper The paper to download.
+     * @throws IOException If the download fails.
      */
     public void downloadPaper(Paper paper) throws IOException {
     }

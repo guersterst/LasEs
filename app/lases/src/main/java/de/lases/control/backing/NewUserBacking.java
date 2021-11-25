@@ -20,7 +20,7 @@ public class NewUserBacking {
     private RegistrationService registrationService;
 
     @Inject
-    SessionInformation sessionInformation;
+    private SessionInformation sessionInformation;
 
     private User newUser;
 

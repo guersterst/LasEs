@@ -44,6 +44,8 @@ public abstract class Pagination<T> {
 
     /**
      * Needs to be overwritten to calculate the correct number of pages in that pagination.
+     *
+     * @return The number of pages in the pagination.
      */
     protected abstract Integer calculateNumberPages();
 
