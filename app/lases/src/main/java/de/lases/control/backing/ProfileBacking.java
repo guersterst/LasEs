@@ -1,5 +1,6 @@
 package de.lases.control.backing;
 
+import de.lases.business.internal.ConfigPropagator;
 import de.lases.business.service.ScienceFieldService;
 import de.lases.business.service.UserService;
 import de.lases.control.exception.IllegalUserFlowException;
@@ -35,6 +36,9 @@ public class ProfileBacking implements Serializable {
 
     @Inject
     private ScienceFieldService scienceFieldService;
+
+    @Inject
+    private ConfigPropagator configPropagator;
 
     private Part uploadedAvatar;
 
@@ -95,8 +99,7 @@ public class ProfileBacking implements Serializable {
      * not
      *
      * @param event The component system event that happens before rendering
-     *              the view param. Can be used to check the view param for
-     *              validity
+     *              the view param.
      * @throws IllegalUserFlowException If there is no integer provided as view
      *                                  param
      */

@@ -1,9 +1,11 @@
 package de.lases.control.backing;
 
+import de.lases.business.internal.ConfigPropagator;
 import de.lases.global.transport.ErrorMessage;
 import de.lases.global.transport.UIMessage;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 /**
@@ -12,6 +14,9 @@ import jakarta.inject.Named;
 @RequestScoped
 @Named
 public class ErrorPageBacking {
+
+    @Inject
+    private ConfigPropagator configPropagator;
 
     private ErrorMessage errorMessage;
 

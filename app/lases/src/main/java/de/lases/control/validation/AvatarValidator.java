@@ -1,11 +1,13 @@
 package de.lases.control.validation;
 
+import de.lases.business.internal.ConfigPropagator;
 import de.lases.global.transport.FileDTO;
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.validator.FacesValidator;
 import jakarta.faces.validator.Validator;
 import jakarta.faces.validator.ValidatorException;
+import jakarta.inject.Inject;
 
 /**
  * Validator for the avatar file. Validates an avatar in the following way:
@@ -25,6 +27,9 @@ import jakarta.faces.validator.ValidatorException;
  */
 @FacesValidator
 public class AvatarValidator implements Validator<FileDTO> {
+
+    @Inject
+    private ConfigPropagator configPropagator;
 
     /**
      * Validates an avatar as specified in the class description.
