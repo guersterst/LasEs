@@ -5,8 +5,8 @@ de.lases.control.backing
 de.lases.control.exception
 de.lases.control.internal
 de.lases.control.validation
-de.lases.global.config
 de.lases.global.transport
 de.lases.persistence.exception
+de.lases.persistence.internal
 de.lases.persistence.repository
 de.lases.persistence.util
