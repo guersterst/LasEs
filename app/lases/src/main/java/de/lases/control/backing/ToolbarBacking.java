@@ -30,7 +30,7 @@ public class ToolbarBacking implements Serializable {
     private SessionInformation sessionInformation;
 
     @Inject
-    SubmissionService submissionService;
+    private SubmissionService submissionService;
 
     private Submission submission;
 
@@ -133,6 +133,11 @@ public class ToolbarBacking implements Serializable {
     public void rejectSubmission() {
     } // y
 
+    /**
+     * Get the submission belonging to this page.
+     *
+     * @return The submission belonging to this page.
+     */
     public Submission getSubmission() {
         return submission;
     }
@@ -146,6 +151,11 @@ public class ToolbarBacking implements Serializable {
         this.submission = submission;
     }
 
+    /**
+     * Get the user that is input as a reviewer.
+     *
+     * @return The new reviewer.
+     */
     public User getReviewerInput() {
         return reviewerInput;
     }
@@ -159,6 +169,11 @@ public class ToolbarBacking implements Serializable {
         this.reviewerInput = reviewerInput;
     }
 
+    /**
+     * Get the user that is input as a reviewer.
+     *
+     * @return The new reviewer.
+     */
     public ReviewedBy getReviewedByInput() {
         return reviewedByInput;
     }
@@ -173,6 +188,11 @@ public class ToolbarBacking implements Serializable {
         this.reviewedByInput = reviewedByInput;
     }
 
+    /**
+     * Get the user that is currently entered as the new editor.
+     *
+     * @return The user that is supposed to become the new editor.
+     */
     public User getEditorInput() {
         return editorInput;
     }

@@ -48,7 +48,8 @@ public class SystemSettings implements Cloneable {
     /**
      * Set the headline that should be displayed on the welcome page.
      *
-     * @param headlineWelcomePage
+     * @param headlineWelcomePage The headline that should be displayed on the
+     *                            welcome page.
      */
     public void setHeadlineWelcomePage(String headlineWelcomePage) {
         this.headlineWelcomePage = headlineWelcomePage;

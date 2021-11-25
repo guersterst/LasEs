@@ -16,7 +16,7 @@ import java.io.Serializable;
 @SessionScoped
 public class UIMessageGenerator implements Serializable {
 
-    FacesContext facesContext;
+    private FacesContext facesContext;
 
     /**
      * Construct an {@link UIMessageGenerator}.

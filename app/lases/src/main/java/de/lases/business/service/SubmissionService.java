@@ -74,7 +74,6 @@ public class SubmissionService implements Serializable {
     /**
      * Manipulates a submission.
      *
-     * <p>
      * Some manipulations will cause an email to be dispatched
      * using the {@link de.lases.business.util.EmailUtil}-utility.
      * <ul>
@@ -84,7 +83,6 @@ public class SubmissionService implements Serializable {
      * <li> When changed, the new editor will be informed.</li>
      * <li> The submitter about a required revision. </li>
      * </ul>
-     * </p>
      *
      * @param newSubmission A {@link Submission}-DTO. The required fields are:
      *                      <ul>

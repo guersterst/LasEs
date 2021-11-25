@@ -24,9 +24,6 @@ public class PaperService {
     @Inject
     private Transaction transaction;
 
-    public PaperService() {
-    }
-
     /**
      * Gets a paper.
      * <p>
