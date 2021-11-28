@@ -1,5 +1,6 @@
 package de.lases.control.internal;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import de.lases.global.transport.*;
@@ -15,7 +16,7 @@ public abstract class Pagination<T> {
     /**
      * Paginated items.
      */
-    private List<T> entries;
+    private List<T> entries = new LinkedList<>();
 
     /**
      * Meta-information about this pagination.
@@ -122,5 +123,14 @@ public abstract class Pagination<T> {
      */
     public List<T> getEntries() {
         return entries;
+    }
+
+    /**
+     * Set the entries.
+     *
+     * @param entries List of generic type.
+     */
+    public void setEntries(List<T> entries) {
+        this.entries = entries;
     }
 }

@@ -10,6 +10,7 @@ import jakarta.inject.Named;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * Backing bean for the homepage.
@@ -74,6 +75,21 @@ public class HomepageBacking implements Serializable {
      */
     @PostConstruct
     public void init() {
+        submissionPagination = new Pagination<>("submission-title") {
+            @Override
+            public void loadData() {
+                Submission ok = new Submission();
+                ok.setTitle("ok");
+                Submission aha = new Submission();
+                aha.setTitle("aha");
+                //setEntries(Arrays.asList(ok, aha));
+            }
+
+            @Override
+            protected Integer calculateNumberPages() {
+                return null;
+            }
+        };
     }
 
     /**

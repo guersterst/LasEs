@@ -10,10 +10,11 @@
 
 
 <composite:implementation>
-    <h:commandButton action="#{cc.attrs.paginator.loadData}"/>
+    <h:commandButton value="Apply Filters" action="#{cc.attrs.paginator.loadData}"/>
     <h:dataTable value="#{cc.attrs.paginator.entries}" var="var">
         <composite:insertChildren/>
     </h:dataTable>
+    <h:outputText value="No entries." rendered="#{cc.attrs.paginator.entries.isEmpty()}"/>
     <h:panelGrid columns="5">
         <h:commandButton value="First" action="#{cc.attrs.paginator.firstPage}"/>
         <h:commandButton value="Back" action="#{cc.attrs.paginator.previousPage}"/>
