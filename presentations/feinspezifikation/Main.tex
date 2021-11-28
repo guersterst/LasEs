@@ -54,6 +54,9 @@
         Somit ist das Produkt günstiger für Sie.
     \end{frame}
 
+
+    \section{Ordner- & Paketstruktur}
+
     \begin{frame}{Ordnerstruktur}
         Übersichtlichkeit und Zugriffskontrolle
         \centering
@@ -69,7 +72,9 @@
             \item Tests nach Paketen, Performance und Selenium unterteilt, (Feine Unterteilung der Testpakete)
             um zu modularem Testing anzuregen.
         \end{itemize}
-        \pause
+    \end{frame}
+
+    \begin{frame}{Paketdiagramm}
         \centering
         \includegraphics[height=1.1\textheight]{graphics/Paketdiagramm (15)}
         \begin{itemize}
@@ -84,25 +89,101 @@
     \end{frame}
 
 
-    \section{Facelet}
-    \begin{frame}{Lastenheft}
-        \centering
-        \includegraphics[height=1.1\textheight]{../../docs/Lastenheft/lastenheft}
+    \section{Datenfluss}
+    %todo vorher facelets erklären
+    Beispiel des Upload einer Revision
+    mit Exkursen anhand derer typische Klassenspezifikationen klar werden sollen.
+    \begin{frame}
+        \begin{itemize}
+            \item init() des @ViewScoped SubmissionBacking-Bean
+            %todo sq_init, doc_init
+            -> Instanziierung aller benötigten DTOs:
+            -User mit ID aus Session %todo hier session
+            -Submission
+            \item Setzen der ID der Submission mit <f:viewParam>
+            %todo fac_viewParam
+            \item Überprüfen der ID der Submission mit %todo preRenderViewParam
+            \item onLoad()
+            %todo doc_ get, doc_getRepo, fac_load()
+            -> Laden der Daten in die DTOs
+            %todo hier dtos erklären
+            -> Mittels @Dependent SubmissionService doc_get: übergabe der submission id
+            welcher durch viewParam erhalten wurde
+            -> Datenbankzugriff mittels SubmissionRepository:
+            -> benutzt Transaktion um ACID sicherzustellen
+            %todo Hier Services und Repos erklären
+            \item Upload
+            -Validator
+            - sonst analog
+            - UIMessage
+            - vllt noch auf transactions eingehen
+        \end{itemize}
     \end{frame}
 
-    \subsection{Datenfluss}
-    \begin{frame}{Lücken und Unklarheiten}
 
-        Typische Klasse \textbf{Persistenzschicht} : \emph{SubmissionRepository}.
+    \section{Facelets}
+    \begin{frame}{submission.xhtml}
+        \begin{itemize}
+            %todo hier möglicherweise jew. beispiel aus tabelle
+            \item 'rendered='
+            -> Personalisierte Seiten für bestimmte Nutzerrollen
+            \item 'required=' + 'requiredMessage='
+            -> mit message aus RessourceBundle %todo wie?
+            \item Custom Validatoren %todo javadoc screen
+            \item z.B. <h:commandButtons> für action-Methoden
+            \item z.B. <h:outputText> um DTO-Daten darzustellen
+            \item Pagination, Lists (<f:param>) %todo
+            -> unsere Pagination ist leistungsfähig und adaptierbar an persönlich Verwendung
+            durch hervorragende Sortierbarkeit und Filterbarkeit
+            -> Sie können ihr Produkt an Profis verkaufen
+            \item <f:viewParam>
+            -> Erhalten Id der Einreichung
+            -> %todo was genau?
+            \item <f:event>
+            -> Abprüfen (Validieren?) des view-param
+            \item <f:viewAction>
+            -> Starten der onLoad(), befüllen der DTOs
+            %todo wann wir viewaction gestartet
+            %todo wieso so? wieso hat sich das geändert?
+        \end{itemize}
+    \end{frame}
+
+
+    \section{Datenfluss}
+
+    \begin{frame}{Typische Klasse \textbf{Kontrollschicht}:}
+        \emph{SubmissionBacking}.
         \pause
         \begin{itemize}
-            \item Keine Attribute
-            \item Nur statische Methoden
-            \item (Fast) jede Entität besitzt ein Repository.
-            Fast zur Vereinfachung des Entwurfs.
-            \item Bietet add(Submission, Transaction), change(Submission, Transaction)
-            -> inheitliche und übersichtliche Interfaces:
-            und get(Submission, Transaction) an.
+            \item init()
+            Initialisierung aller benötigten DTOs
+            \item onLoad() (<f:viewAction)
+            Befüllen der DTOs mithilfe id aus View-Param
+            -> Grund der Aufteilung: damit Daten aus View-Param ausgelesen werden können.
+            \item Notwenidge Getter & Setter %todo wo sind die Setter
+            \item Versch. view-action Methoden
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Typische Klasse \textbf{Transportschicht}:}
+        \emph{Submission}
+        \pause
+        \begin{itemize}
+            \item simple, globale POJOs
+            -> Auslagern der Geschäftslogik
+            -> keine flachen Param in Businessdaten (Sub, Review ...)
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Typische Klasse \textbf{Businessschicht}:}
+        \emph{SubmissionService}.
+        \pause
+        \begin{itemize}
+            \item informiert den Nutzer über Fehlerhaften Zustand aus unteren Schichten und in der Geschäftslogik
+            über Events welche in der oberen Schicht zu FacesMessages umgewandelt werden
+            \item Bietet ebenfalls add(Submission), change(Submission)
+            und get(Submission) an.
+            \item -> einheitliche und übersichtliche Interfaces:
             Obwohl Methodensignatur selbe Parameter: verschiedene Funktionsweise.
             Add: alle req. fields ohne id
             change: id + req. fields
@@ -110,19 +191,7 @@
             -> Datenfluss ohne flache Parameter, gekapselt in DTOs
             -> Dieses DTO muss jeweils nur die Daten enthalten, welche zum Zeitpunkt des Aufrufs
             zur Verfügung stehen und die Daten welche zur Verarbeitung benötigt werden.
-            \item Um das im Interface widerzuspiegeln gibt die JavaDoc das jeweils genau vor.
-            \item Hier RaceConditions?
-        \end{itemize}
-
-        Typische Klasse \textbf{Businessschiht} : \emph{SubmissionService}.
-        \pause
-        \begin{itemize}
-            \item informiert den Nutzer über Fehlerhaften Zustand aus unteren Schichten und in der Geschäftslogik
-            über Events welche in der oberen Schicht zu FacesMessages  umgewandelt werden
-            \item Bietet ebenfalls add(Submission), change(Submission)
-            und get(Submission) an.
-            \item Hohe Überdeckung zu Persistenzschicht, einheitliche und übersichtiliche Interfaces:
-            \item Leichtere Implementation und Zurechtfinden.
+            \item Hohe Überdeckung zu Persistenzschicht, einheitliche und übersichtliche Interfaces:
             \item verwendet Transaktionen:
             \item um ACID Eigenschaften sicherzustellen: Atomarität, Konsistenz, Isolation, Dauerhaftigkeit
             ?und Race-Conditions zu vermeiden?
@@ -130,121 +199,152 @@
         \end{itemize}
     \end{frame}
 
-    \subsection{Gespeicherte Sessioninformationen}
-    \begin{frame}{Attribute}
+
+    \begin{frame}{Typische Klasse \textbf{Persistenzschicht}:}
+        \emph{SubmissionRepository}.
+        \pause
         \begin{itemize}
-            \item User-DTO mit ID
-            -Immer nur mit ID? Wieso nur Id? (Auf mehr Daten kann man sich nicht verlassen, dass diese vorhanden sind: Minimum)
-            -Welche Elemente gerendert werden ist immer davon Abhängig wer eine bestimmte Seite sieht.
-            -Sicherheit: Hat diese Session Zugriff auf best. Seite?
-            - Wieso nicht mehr in Session (Privilege z.B.)
+            \item Keine Attribute und nur statische Methoden
+            \item angeboten zu fast jeder Entität
+            \item Bietet bspw. add(Submission, Transaction), change(Submission, Transaction)
+            und get(Submission, Transaction) an.
+            \item Hier RaceConditions?
+        \end{itemize}
+
+        \begin{frame}{Session}
+            \begin{itemize}
+                \item User-DTO mit ID
+                -Immer nur mit ID? Wieso nur Id? (Auf mehr Daten kann man sich nicht verlassen, dass diese vorhanden sind: Minimum)
+                -Welche Elemente gerendert werden ist immer davon Abhängig wer eine bestimmte Seite sieht.
+                -Sicherheit: Hat diese Session Zugriff auf best. Seite?
+                - Wieso nicht mehr in Session (Privilege z.B.)
+                \pause
+                \item Locale zur Internationalisierbarkeit.
+                - Ist Locale abfragbar? Sparen wir uns hiermit Anfragen an den Browser?
+            \end{itemize}
+
+            Nun möchte ich Ihnen ein Beispiel liefern wie dieser Entwurf zu einem nahtlos ineinandergreifenden
+            Datenfluss führt:
+            \begin{frame}{Beispiel: Hochladen einer Revision}
+            \end{frame}
+        \end{frame}
+
+        \subsection{Gespeicherte Sessioninformationen}
+
+
+        \section{Konfiguration}
+        \begin{frame}{Allgemeine Konfiguration}
+            Hier ein kurzer Blick auf die allgemeine Konfiguration
+            -Validatorenkonfiguration (Filesizes)
+            -Pagination
+            -Debug
+            -Mail
+            -DB
+            \centering
+            \includegraphics[height=0.75\textheight]{../../docs/Pflichtenheft/graphics/Homepage-png}
+        \end{frame}
+
+        \begin{frame}{Loggerkonfiguration}
+            -.log Files sowie Consolelogger zum Debugging
+            \centering
+            \includegraphics[height=0.75\textheight]{../../docs/Pflichtenheft/graphics/Submission-png}
+        \end{frame}
+
+
+        \section{Fehlerfall}
+        \begin{frame}
+            \begin{itemize}
+                \item Unchecked Exception fliegt durch %todo bild seq
+                \item %todo javadoc excHandler und excBB
+                \item
+                \item
+            \item %todo erreich man die alte Seite durch zurück Pfeil?
+            \end{itemize}
+        \end{frame}
+
+
+        \section{Libraries}
+        \begin{frame}{Basis}
+            Es gibt 137,000 python libraries, zu Java habe ich keine Zahlen gefunden aber sind vermutlich noch viel mehr.
+            Diese würden uns vermutlich viele QOL Features anbieten.
+            Damit man für das Hosten Anwendung kein eigenes Rechenzentrum anmieten muss,
+            haben wir uns für ein paar wenige entschieden.
+            Wir garantieren Ihnen: Unsere Anwendung wird ein Leichtgewicht.
+            Was nicht bedeutet, dass es nicht mit Schwergewichtsboxern mithalten kann.
+            \begin{itemize}
+                \item Mojarra v3.0.1
+                \item JBoss Weld v4.0.2
+                \item PostGreSQL JDBC v42.3.1
+                \item Jakarta Mail API v2.0.1
+            \end{itemize}
+        \end{frame}
+
+        \begin{frame}{Quality of Life}
+            \begin{itemize}
+                \item Primefaces v10.0.0
+                \item Bootstrap v5.1.3
+            \end{itemize}
+        \end{frame}
+
+        \begin{frame}{Testing}
+            \begin{itemize}
+                \item JUnit v5.8.1
+                \item Mockito v4.0.0
+                \item Selenium v4.0.0
+            \end{itemize}
+        \end{frame}
+
+
+        \section{Navigationsstruktur}
+        \begin{frame}{Navigationsgraph}
+            \centering
+            \includegraphics[height=0.8\textheight]{../../docs/Pflichtenheft/graphics/benutzerFlussyEd-png}
+        \end{frame}
+
+
+        \section{Erweiterbarkeit}
+
+        \begin{frame}{Erweiterbarkeit}
             \pause
-            \item Locale zur Internationalisierbarkeit.
-            - Ist Locale abfragbar? Sparen wir uns hiermit Anfragen an den Browser?
-        \end{itemize}
-    \end{frame}
+            \begin{itemize}
+                \item Anforderung von Revisionen
+                \pause
+                \item Mehrsprachige Anwendung
+            \end{itemize}
+        \end{frame}
 
-
-    \section{Konfiguration}
-    \begin{frame}{Allgemeine Konfiguration}
-        Hier ein kurzer Blick auf die allgemeine Konfiguration
-        -Validatorenkonfiguration (Filesizes)
-        -Pagination
-        -Debug
-        -Mail
-        -DB
-        \centering
-        \includegraphics[height=0.75\textheight]{../../docs/Pflichtenheft/graphics/Homepage-png}
-    \end{frame}
-
-    \begin{frame}{Loggerkonfiguration}
-        -.log Files sowie Consolelogger zum Debugging
-        \centering
-        \includegraphics[height=0.75\textheight]{../../docs/Pflichtenheft/graphics/Submission-png}
-    \end{frame}
-
-
-    \section{Libraries}
-    \begin{frame}{Basis}
-        Es gibt 137,000 python libraries, zu Java habe ich keine Zahlen gefunden aber sind vermutlich noch viel mehr.
-        Diese würden uns vermutlich viele QOL Features anbieten.
-        Damit man für das Hosten Anwendung kein eigenes Rechenzentrum anmieten muss, haben wir uns für ein paar wenige entschieden.
-        Wir garantieren Ihnen: Unsere Anwendung wird ein Leichtgewicht.
-        Was nicht bedeutet, dass es nicht mit Schwergewichtsboxern mithalten kann.
-        \begin{itemize}
-            \item Mojarra v3.0.1
-            \item JBoss Weld v4.0.2
-            \item PostGreSQL JDBC v42.3.1
-            \item Jakarta Mail API v2.0.1
-        \end{itemize}
-    \end{frame}
-
-    \begin{frame}{Quality of Life}
-        \begin{itemize}
-            \item Primefaces v10.0.0
-            \item Bootstrap v5.1.3
-        \end{itemize}
-    \end{frame}
-
-    \begin{frame}{Testing}
-        \begin{itemize}
-            \item JUnit v5.8.1
-            \item Mockito v4.0.0
-            \item Selenium v4.0.0
-        \end{itemize}
-    \end{frame}
-
-
-    \section{Navigationsstruktur}
-    \begin{frame}{Navigationsgraph}
-        \centering
-        \includegraphics[height=0.8\textheight]{../../docs/Pflichtenheft/graphics/benutzerFlussyEd-png}
-    \end{frame}
-
-
-    \section{Erweiterbarkeit}
-
-    \begin{frame}{Erweiterbarkeit}
-        \pause
-        \begin{itemize}
-            \item Anforderung von Revisionen
+        \begin{frame}{Abgrenzungskriterien}
             \pause
-            \item Mehrsprachige Anwendung
-        \end{itemize}
-    \end{frame}
+            \begin{itemize}
+                \item Eigene Anwendung zur Betrachtung der Paper
+                \pause
+                \item Keine Publikationssoftware oder Lizenzierung
+            \end{itemize}
+        \end{frame}
 
-    \begin{frame}{Abgrenzungskriterien}
-        \pause
-        \begin{itemize}
-            \item Eigene Anwendung zur Betrachtung der Paper
+
+        \section{Testing}
+        \begin{frame}{Testabläufe}
             \pause
-            \item Keine Publikationssoftware oder Lizenzierung
-        \end{itemize}
-    \end{frame}
+            Setup:
+            \begin{itemize}
+                \item mehrere Nutzer
+                \item Testmodus (für E-Mailbestätigungen)
+            \end{itemize}
 
+            \pause
 
-    \section{Testing}
-    \begin{frame}{Testabläufe}
-        \pause
-        Setup:
-        \begin{itemize}
-            \item mehrere Nutzer
-            \item Testmodus (für E-Mailbestätigungen)
-        \end{itemize}
+            Ablauf:
+            \begin{itemize}
+                \item Anlegen einer Konferenz \textbf{(Administrator)}
+                \item Einreichung von Paper mit Ko-Autor \textbf{(Nutzer)}
+                \item Editor kümmert sich um Gutachteraquirierung \textbf{(Editor \& Gutachter)}
+            \end{itemize}
+        \end{frame}
 
-        \pause
+        \begin{frame}{Diskussion}
+            \centering
+            \includegraphics[width=0.7\linewidth]{../../docs/Pflichtenheft/graphics/LasEs-logo}
+        \end{frame}
 
-        Ablauf:
-        \begin{itemize}
-            \item Anlegen einer Konferenz \textbf{(Administrator)}
-            \item Einreichung von Paper mit Ko-Autor \textbf{(Nutzer)}
-            \item Editor kümmert sich um Gutachteraquirierung \textbf{(Editor \& Gutachter)}
-        \end{itemize}
-    \end{frame}
-
-    \begin{frame}{Diskussion}
-        \centering
-        \includegraphics[width=0.7\linewidth]{../../docs/Pflichtenheft/graphics/LasEs-logo}
-    \end{frame}
-
-\end{document}
+    \end{document}
