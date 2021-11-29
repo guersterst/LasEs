@@ -206,7 +206,6 @@
 
     % Die benötigten Daten werden wiederum aus der Persistenzschicht geholt.
     % Genauer gesagt aus dem SubmissionRepository - einer typischen Klasse dieser Schicht.
-
     \begin{frame}{Typische Klasse \textbf{Persistenzschicht}:}
         \emph{SubmissionRepository}
         \centering
@@ -236,30 +235,37 @@
         \end{itemize}
     \end{frame}
 
+    \section{Fehlerfall}
 
-    \begin{frame}{Datenfluss - Teil 1}
+    \begin{frame}{Auftreten einer unchecked Exception}
+        \centering
+        \includegraphics[height=1.1\textheight]{graphics/exc/seq_ex}
         \begin{itemize}
-            \item init() des @ViewScoped SubmissionBacking-Bean
-            %todo sq_init, doc_init
-            \item Setzen der ID der Submission mit <f:viewParam>
-            %todo fac_viewParam
-            \item Überprüfen der ID der Submission mit %todo preRenderViewParam
-            \item onLoad()
-            %todo doc_ get, doc_getRepo, fac_load()
-            -> Laden der Daten in die DTOs
-            %todo hier dtos erklären
-            -> Mittels @Dependent SubmissionService doc_get: übergabe der submission id
-            welcher durch viewParam erhalten wurde
-            -> Datenbankzugriff mittels SubmissionRepository:
-            -> benutzt Transaktion um ACID sicherzustellen
-            %todo Hier Services und Repos erklären
-            \item Upload
-            -Validator
-            - sonst analog
-            - UIMessage
-            - vllt noch auf transactions eingehen
+            % Exception landet im FacesContext
+            % Siehe Konstruktoren: wird mit Message befüllt
+            \item DataSourceNotFoundException
+            \centering
+            \includegraphics[height=1.1\textheight]{graphics/exc/doc_ex}
+
+            % Aufgegriffen vom UncheckedExceptionHandler
+            % Leitet weiter auf ErrorPage
+            % Erstellt ErrorMsg und übergibt diese an das BB
+            \item UncheckedExceptionHandler
+            \centering
+            \includegraphics[height=1.1\textheight]{graphics/exc/doc_handle}
+            \centering
+            \includegraphics[height=1.1\textheight]{graphics/exc/doc_errormsg}
+            \centering
+            \includegraphics[height=1.1\textheight]{graphics/exc/doc_backing}
+
+            %todo kann man machen muss man aber nicht
+            %todo erreich man die alte Seite durch zurück Pfeil?
+            %todo zwei simultan? unchecked 2x o. unchecked + checked
+            %todo -> Prototyp ausprobieren
         \end{itemize}
     \end{frame}
+
+    \section{Gespeicherte Sessioninformationen}
 
     \begin{frame}{Session}
         \begin{itemize}
@@ -279,7 +285,6 @@
         \end{frame}
     \end{frame}
 
-    \subsection{Gespeicherte Sessioninformationen}
 
 
     \section{Konfiguration}
@@ -298,18 +303,6 @@
         -.log Files sowie Consolelogger zum Debugging
         \centering
         \includegraphics[height=0.75\textheight]{../../docs/Pflichtenheft/graphics/Submission-png}
-    \end{frame}
-
-
-    \section{Fehlerfall}
-    \begin{frame}
-        \begin{itemize}
-            \item Unchecked Exception fliegt durch %todo bild seq
-            \item %todo javadoc excHandler und excBB
-            \item
-            \item
-            \item %todo erreich man die alte Seite durch zurück Pfeil?
-        \end{itemize}
     \end{frame}
 
 
@@ -345,53 +338,7 @@
     \end{frame}
 
 
-    \section{Navigationsstruktur}
-    \begin{frame}{Navigationsgraph}
-        \centering
-        \includegraphics[height=0.8\textheight]{../../docs/Pflichtenheft/graphics/benutzerFlussyEd-png}
-    \end{frame}
-
-
-    \section{Erweiterbarkeit}
-
-    \begin{frame}{Erweiterbarkeit}
-        \pause
-        \begin{itemize}
-            \item Anforderung von Revisionen
-            \pause
-            \item Mehrsprachige Anwendung
-        \end{itemize}
-    \end{frame}
-
-    \begin{frame}{Abgrenzungskriterien}
-        \pause
-        \begin{itemize}
-            \item Eigene Anwendung zur Betrachtung der Paper
-            \pause
-            \item Keine Publikationssoftware oder Lizenzierung
-        \end{itemize}
-    \end{frame}
-
-
-    \section{Testing}
-    \begin{frame}{Testabläufe}
-        \pause
-        Setup:
-        \begin{itemize}
-            \item mehrere Nutzer
-            \item Testmodus (für E-Mailbestätigungen)
-        \end{itemize}
-
-        \pause
-
-        Ablauf:
-        \begin{itemize}
-            \item Anlegen einer Konferenz \textbf{(Administrator)}
-            \item Einreichung von Paper mit Ko-Autor \textbf{(Nutzer)}
-            \item Editor kümmert sich um Gutachteraquirierung \textbf{(Editor \& Gutachter)}
-        \end{itemize}
-    \end{frame}
-
+    \section{Discussion}
     \begin{frame}{Diskussion}
         \centering
         \includegraphics[width=0.7\linewidth]{../../docs/Pflichtenheft/graphics/LasEs-logo}
