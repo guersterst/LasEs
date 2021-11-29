@@ -162,7 +162,45 @@
 
 
             \item Notwendige Getter & Setter %todo wo sind die Setter
-            \item Versch. notwendige view-action Methoden %todo img übersicht opt
+            \item Versch. notwendige action Methoden %todo img übersicht opt
+        \end{itemize}
+    \end{frame}
+
+    % Für diese action-Methoden und für unser Beispiel die onLoad() benötigen wir nun Zugriff auf
+    % die Daten und die Businesslogik, welche durch den SubmissionService zur Verfügung gestellt wird
+
+    \begin{frame}{Typische Klasse \textbf{Businessschicht}:}
+        \emph{SubmissionService}
+        \centering
+        \includegraphics[height=1.1\textheight]{graphics/backing/doc_service}
+        \pause
+        \begin{itemize}
+            % Für das Laden der DTOs wird ein get() benötigt.
+            \item get()
+            \item add()
+            \centering
+            \includegraphics[height=1.1\textheight]{graphics/backing/doc_get_add}
+            \item change()
+            \centering
+            \includegraphics[height=1.1\textheight]{graphics/backing/doc_change}
+            %-> einheitliche und übersichtliche Interfaces:
+            % Beachte: obwohl Methodensignatur selbe Parameter: verschiedene Anforderungen.
+            % -> in javadoc spezifiziert
+            % -> Ermöglicht Datenfluss ohne flache Parameter, gekapselt in DTOs
+
+            \item einheitliche und übersichtliche Interfaces
+            \item Hohe Überdeckung zu Persistenzschicht
+
+            \item Event<UIMessage>
+            % informiert den Nutzer über fehlerhaften Zustand aus unteren Schichten und in der Geschäftslogik
+            % werden zu FacesMessages umgewandelt
+            % -> Vorteil der Modulariät und Vermeidung von Coderedundanzen
+            % -> günstigeres Produkt für Sie!
+
+            \item %Todo woanders?
+            \item verwendet Transaktionen:
+            \item um ACID Eigenschaften sicherzustellen: Atomarität, Konsistenz, Isolation, Dauerhaftigkeit
+            ?und Race-Conditions zu vermeiden?
         \end{itemize}
     \end{frame}
 
@@ -190,55 +228,6 @@
             - vllt noch auf transactions eingehen
         \end{itemize}
     \end{frame}
-
-    \begin{frame}{Typische Klasse \textbf{Kontrollschicht}:}
-        \emph{SubmissionBacking}
-        \pause
-        \begin{itemize}
-            \item init()
-            Initialisierung aller benötigten DTOs
-            \item onLoad() (<f:viewAction)
-            Befüllen der DTOs mithilfe id aus View-Param
-            -> Grund der Aufteilung: damit Daten aus View-Param ausgelesen werden können.
-            \item Notwenidge Getter & Setter %todo wo sind die Setter
-            \item Versch. view-action Methoden
-        \end{itemize}
-    \end{frame}
-
-    \begin{frame}{Typische Klasse \textbf{Transportschicht}:}
-        \emph{Submission}
-        \pause
-        \begin{itemize}
-            \item simple, globale POJOs
-            -> Auslagern der Geschäftslogik
-            -> keine flachen Param in Businessdaten (Sub, Review ...)
-        \end{itemize}
-    \end{frame}
-
-    \begin{frame}{Typische Klasse \textbf{Businessschicht}:}
-        \emph{SubmissionService}.
-        \pause
-        \begin{itemize}
-            \item informiert den Nutzer über Fehlerhaften Zustand aus unteren Schichten und in der Geschäftslogik
-            über Events welche in der oberen Schicht zu FacesMessages umgewandelt werden
-            \item Bietet ebenfalls add(Submission), change(Submission)
-            und get(Submission) an.
-            \item -> einheitliche und übersichtliche Interfaces:
-            Obwohl Methodensignatur selbe Parameter: verschiedene Funktionsweise.
-            Add: alle req. fields ohne id
-            change: id + req. fields
-            get: nur id
-            -> Datenfluss ohne flache Parameter, gekapselt in DTOs
-            -> Dieses DTO muss jeweils nur die Daten enthalten, welche zum Zeitpunkt des Aufrufs
-            zur Verfügung stehen und die Daten welche zur Verarbeitung benötigt werden.
-            \item Hohe Überdeckung zu Persistenzschicht, einheitliche und übersichtliche Interfaces:
-            \item verwendet Transaktionen:
-            \item um ACID Eigenschaften sicherzustellen: Atomarität, Konsistenz, Isolation, Dauerhaftigkeit
-            ?und Race-Conditions zu vermeiden?
-            \item @Dependent-Scoped
-        \end{itemize}
-    \end{frame}
-
 
     \begin{frame}{Typische Klasse \textbf{Persistenzschicht}:}
         \emph{SubmissionRepository}.
