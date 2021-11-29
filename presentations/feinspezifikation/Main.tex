@@ -197,10 +197,42 @@
             % -> Vorteil der Modulariät und Vermeidung von Coderedundanzen
             % -> günstigeres Produkt für Sie!
 
-            \item %Todo woanders?
+            \item %Todo woanders? : bei race-conditions
             \item verwendet Transaktionen:
             \item um ACID Eigenschaften sicherzustellen: Atomarität, Konsistenz, Isolation, Dauerhaftigkeit
             ?und Race-Conditions zu vermeiden?
+        \end{itemize}
+    \end{frame}
+
+    % Die benötigten Daten werden wiederum aus der Persistenzschicht geholt.
+    % Genauer gesagt aus dem SubmissionRepository - einer typischen Klasse dieser Schicht.
+
+    \begin{frame}{Typische Klasse \textbf{Persistenzschicht}:}
+        \emph{SubmissionRepository}
+        \centering
+        \includegraphics[height=1.1\textheight]{graphics/repo/doc_repo}
+        \pause
+        \begin{itemize}
+            % Enthält ausschließlich statische Methoden
+            % Welche aus der DB DTOs erstellen und ausliefern.
+            \item statische Methoden
+            \centering
+            \includegraphics[height=1.1\textheight]{graphics/repo/doc_static}
+
+            % Bietet ebenfalls ähnliche Methoden wie Services an:
+            % -> einheitliche, leichte Interfaces für Sie
+            \item add()
+            \centering
+            \includegraphics[height=1.1\textheight]{graphics/repo/doc_add}
+            \item get()
+            \centering
+            \includegraphics[height=1.1\textheight]{graphics/repo/doc_get}
+            \item change()
+            \centering
+            \includegraphics[height=1.1\textheight]{graphics/repo/doc_change}
+
+            %todo gibt es hier mehr zu sagen?
+            %todo hier race-conditions?
         \end{itemize}
     \end{frame}
 
@@ -229,151 +261,140 @@
         \end{itemize}
     \end{frame}
 
-    \begin{frame}{Typische Klasse \textbf{Persistenzschicht}:}
-        \emph{SubmissionRepository}.
-        \pause
+    \begin{frame}{Session}
         \begin{itemize}
-            \item Keine Attribute und nur statische Methoden
-            \item angeboten zu fast jeder Entität
-            \item Bietet bspw. add(Submission, Transaction), change(Submission, Transaction)
-            und get(Submission, Transaction) an.
-            \item Hier RaceConditions?
+            \item User-DTO mit ID
+            -Immer nur mit ID? Wieso nur Id? (Auf mehr Daten kann man sich nicht verlassen, dass diese vorhanden sind: Minimum)
+            -Welche Elemente gerendert werden ist immer davon Abhängig wer eine bestimmte Seite sieht.
+            -Sicherheit: Hat diese Session Zugriff auf best. Seite?
+            - Wieso nicht mehr in Session (Privilege z.B.)
+            \pause
+            \item Locale zur Internationalisierbarkeit.
+            - Ist Locale abfragbar? Sparen wir uns hiermit Anfragen an den Browser?
         \end{itemize}
 
-        \begin{frame}{Session}
-            \begin{itemize}
-                \item User-DTO mit ID
-                -Immer nur mit ID? Wieso nur Id? (Auf mehr Daten kann man sich nicht verlassen, dass diese vorhanden sind: Minimum)
-                -Welche Elemente gerendert werden ist immer davon Abhängig wer eine bestimmte Seite sieht.
-                -Sicherheit: Hat diese Session Zugriff auf best. Seite?
-                - Wieso nicht mehr in Session (Privilege z.B.)
-                \pause
-                \item Locale zur Internationalisierbarkeit.
-                - Ist Locale abfragbar? Sparen wir uns hiermit Anfragen an den Browser?
-            \end{itemize}
-
-            Nun möchte ich Ihnen ein Beispiel liefern wie dieser Entwurf zu einem nahtlos ineinandergreifenden
-            Datenfluss führt:
-            \begin{frame}{Beispiel: Hochladen einer Revision}
-            \end{frame}
+        Nun möchte ich Ihnen ein Beispiel liefern wie dieser Entwurf zu einem nahtlos ineinandergreifenden
+        Datenfluss führt:
+        \begin{frame}{Beispiel: Hochladen einer Revision}
         \end{frame}
+    \end{frame}
 
-        \subsection{Gespeicherte Sessioninformationen}
-
-
-        \section{Konfiguration}
-        \begin{frame}{Allgemeine Konfiguration}
-            Hier ein kurzer Blick auf die allgemeine Konfiguration
-            -Validatorenkonfiguration (Filesizes)
-            -Pagination
-            -Debug
-            -Mail
-            -DB
-            \centering
-            \includegraphics[height=0.75\textheight]{../../docs/Pflichtenheft/graphics/Homepage-png}
-        \end{frame}
-
-        \begin{frame}{Loggerkonfiguration}
-            -.log Files sowie Consolelogger zum Debugging
-            \centering
-            \includegraphics[height=0.75\textheight]{../../docs/Pflichtenheft/graphics/Submission-png}
-        \end{frame}
+    \subsection{Gespeicherte Sessioninformationen}
 
 
-        \section{Fehlerfall}
-        \begin{frame}
-            \begin{itemize}
-                \item Unchecked Exception fliegt durch %todo bild seq
-                \item %todo javadoc excHandler und excBB
-                \item
-                \item
+    \section{Konfiguration}
+    \begin{frame}{Allgemeine Konfiguration}
+        Hier ein kurzer Blick auf die allgemeine Konfiguration
+        -Validatorenkonfiguration (Filesizes)
+        -Pagination
+        -Debug
+        -Mail
+        -DB
+        \centering
+        \includegraphics[height=0.75\textheight]{../../docs/Pflichtenheft/graphics/Homepage-png}
+    \end{frame}
+
+    \begin{frame}{Loggerkonfiguration}
+        -.log Files sowie Consolelogger zum Debugging
+        \centering
+        \includegraphics[height=0.75\textheight]{../../docs/Pflichtenheft/graphics/Submission-png}
+    \end{frame}
+
+
+    \section{Fehlerfall}
+    \begin{frame}
+        \begin{itemize}
+            \item Unchecked Exception fliegt durch %todo bild seq
+            \item %todo javadoc excHandler und excBB
+            \item
+            \item
             \item %todo erreich man die alte Seite durch zurück Pfeil?
-            \end{itemize}
-        \end{frame}
+        \end{itemize}
+    \end{frame}
 
 
-        \section{Libraries}
-        \begin{frame}{Basis}
-            Es gibt 137,000 python libraries, zu Java habe ich keine Zahlen gefunden aber sind vermutlich noch viel mehr.
-            Diese würden uns vermutlich viele QOL Features anbieten.
-            Damit man für das Hosten Anwendung kein eigenes Rechenzentrum anmieten muss,
-            haben wir uns für ein paar wenige entschieden.
-            Wir garantieren Ihnen: Unsere Anwendung wird ein Leichtgewicht.
-            Was nicht bedeutet, dass es nicht mit Schwergewichtsboxern mithalten kann.
-            \begin{itemize}
-                \item Mojarra v3.0.1
-                \item JBoss Weld v4.0.2
-                \item PostGreSQL JDBC v42.3.1
-                \item Jakarta Mail API v2.0.1
-            \end{itemize}
-        \end{frame}
+    \section{Libraries}
+    \begin{frame}{Basis}
+        Es gibt 137,000 python libraries, zu Java habe ich keine Zahlen gefunden aber sind vermutlich noch viel mehr.
+        Diese würden uns vermutlich viele QOL Features anbieten.
+        Damit man für das Hosten Anwendung kein eigenes Rechenzentrum anmieten muss,
+        haben wir uns für ein paar wenige entschieden.
+        Wir garantieren Ihnen: Unsere Anwendung wird ein Leichtgewicht.
+        Was nicht bedeutet, dass es nicht mit Schwergewichtsboxern mithalten kann.
+        \begin{itemize}
+            \item Mojarra v3.0.1
+            \item JBoss Weld v4.0.2
+            \item PostGreSQL JDBC v42.3.1
+            \item Jakarta Mail API v2.0.1
+        \end{itemize}
+    \end{frame}
 
-        \begin{frame}{Quality of Life}
-            \begin{itemize}
-                \item Primefaces v10.0.0
-                \item Bootstrap v5.1.3
-            \end{itemize}
-        \end{frame}
+    \begin{frame}{Quality of Life}
+        \begin{itemize}
+            \item Primefaces v10.0.0
+            \item Bootstrap v5.1.3
+        \end{itemize}
+    \end{frame}
 
-        \begin{frame}{Testing}
-            \begin{itemize}
-                \item JUnit v5.8.1
-                \item Mockito v4.0.0
-                \item Selenium v4.0.0
-            \end{itemize}
-        \end{frame}
-
-
-        \section{Navigationsstruktur}
-        \begin{frame}{Navigationsgraph}
-            \centering
-            \includegraphics[height=0.8\textheight]{../../docs/Pflichtenheft/graphics/benutzerFlussyEd-png}
-        \end{frame}
+    \begin{frame}{Testing}
+        \begin{itemize}
+            \item JUnit v5.8.1
+            \item Mockito v4.0.0
+            \item Selenium v4.0.0
+        \end{itemize}
+    \end{frame}
 
 
-        \section{Erweiterbarkeit}
+    \section{Navigationsstruktur}
+    \begin{frame}{Navigationsgraph}
+        \centering
+        \includegraphics[height=0.8\textheight]{../../docs/Pflichtenheft/graphics/benutzerFlussyEd-png}
+    \end{frame}
 
-        \begin{frame}{Erweiterbarkeit}
+
+    \section{Erweiterbarkeit}
+
+    \begin{frame}{Erweiterbarkeit}
+        \pause
+        \begin{itemize}
+            \item Anforderung von Revisionen
             \pause
-            \begin{itemize}
-                \item Anforderung von Revisionen
-                \pause
-                \item Mehrsprachige Anwendung
-            \end{itemize}
-        \end{frame}
+            \item Mehrsprachige Anwendung
+        \end{itemize}
+    \end{frame}
 
-        \begin{frame}{Abgrenzungskriterien}
+    \begin{frame}{Abgrenzungskriterien}
+        \pause
+        \begin{itemize}
+            \item Eigene Anwendung zur Betrachtung der Paper
             \pause
-            \begin{itemize}
-                \item Eigene Anwendung zur Betrachtung der Paper
-                \pause
-                \item Keine Publikationssoftware oder Lizenzierung
-            \end{itemize}
-        \end{frame}
+            \item Keine Publikationssoftware oder Lizenzierung
+        \end{itemize}
+    \end{frame}
 
 
-        \section{Testing}
-        \begin{frame}{Testabläufe}
-            \pause
-            Setup:
-            \begin{itemize}
-                \item mehrere Nutzer
-                \item Testmodus (für E-Mailbestätigungen)
-            \end{itemize}
+    \section{Testing}
+    \begin{frame}{Testabläufe}
+        \pause
+        Setup:
+        \begin{itemize}
+            \item mehrere Nutzer
+            \item Testmodus (für E-Mailbestätigungen)
+        \end{itemize}
 
-            \pause
+        \pause
 
-            Ablauf:
-            \begin{itemize}
-                \item Anlegen einer Konferenz \textbf{(Administrator)}
-                \item Einreichung von Paper mit Ko-Autor \textbf{(Nutzer)}
-                \item Editor kümmert sich um Gutachteraquirierung \textbf{(Editor \& Gutachter)}
-            \end{itemize}
-        \end{frame}
+        Ablauf:
+        \begin{itemize}
+            \item Anlegen einer Konferenz \textbf{(Administrator)}
+            \item Einreichung von Paper mit Ko-Autor \textbf{(Nutzer)}
+            \item Editor kümmert sich um Gutachteraquirierung \textbf{(Editor \& Gutachter)}
+        \end{itemize}
+    \end{frame}
 
-        \begin{frame}{Diskussion}
-            \centering
-            \includegraphics[width=0.7\linewidth]{../../docs/Pflichtenheft/graphics/LasEs-logo}
-        \end{frame}
+    \begin{frame}{Diskussion}
+        \centering
+        \includegraphics[width=0.7\linewidth]{../../docs/Pflichtenheft/graphics/LasEs-logo}
+    \end{frame}
 
-    \end{document}
+\end{document}
