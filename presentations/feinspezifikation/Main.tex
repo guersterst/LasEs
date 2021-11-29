@@ -76,100 +76,114 @@
 
     \begin{frame}{Paketdiagramm}
         \centering
-        \includegraphics[height=0.7\textheight]{graphics/Paketdiagramm (15)}
-            % Größtenteils gleichgeblieben. Änderungen aus Punkt 1 wurden übernommen.
-            % Wir haben besonders darauf geachtet:
-            % Klare Trennung der Schichten, verständliche Interfaces und v.a. schwache Kopplung!
-            %  Wir garantieren: Sie können diese Anwendung noch sehr lange verwenden,
-            % alle schichtenspezifischen Technolgien wie z.B. die PostGres-Datenbank
-            % oder Facelets von JSF sind komplett und problemlos austauschbar!
+        \includegraphics[height=0.8\textheight]{graphics/Paketdiagramm (15)}
+        % Größtenteils gleichgeblieben. Änderungen aus Punkt 1 wurden übernommen.
+        % Wir haben besonders darauf geachtet:
+        % Klare Trennung der Schichten, verständliche Interfaces und v.a. schwache Kopplung!
+        %  Wir garantieren: Sie können diese Anwendung noch sehr lange verwenden,
+        % alle schichtenspezifischen Technolgien wie z.B. die PostGres-Datenbank
+        % oder Facelets von JSF sind komplett und problemlos austauschbar!
     \end{frame}
 
 
     \section{Datenfluss}
-    % Beispiel des Upload einer Revision
+    % Nun möchte ich Ihnen Beispielhaft zeigen, wie diese Architektur im Detail zusammenspielt.
+    % Ausschnitthaftes Veispiel des Aufbaus der Seite zur Einreichung einer Darstellung
     % mit Exkursen anhand derer typische Klassenspezifikationen klar werden sollen.
     % Beginnen wir mit dem notwendigen Facelet.
-    \begin{frame}{submission.xhtml}
-        \begin{itemize}
-            %Ziel: Welche Elemente verwenden wir:
-            %-> Personalisierte Seiten für bestimmte Nutzerrollen
-            \item 'rendered='
-            \centering
-            \includegraphics[height=1.1\textheight]{graphics/facelet/fac_rendered}
 
-            %-> Zur Eingabevalidation erstens
-            \item 'required=' + 'requiredMessage='
-            \centering
-            \includegraphics[height=1.1\textheight]{graphics/facelet/fac_required}
-            %-> mit message aus RessourceBundle
-
-            %-> Zur Eingabevalidation zweitens
-            \item Custom Validatoren
-            \centering
-            \includegraphics[height=1.1\textheight]{graphics/facelet/doc_validator}
-
-            % -> sonst enthalten sie das übliche
-            \item z.B. <h:commandButtons> für action-Methoden %todo img opt
-            \item z.B. <h:outputText> um DTO-Daten darzustellen %todo img opt
-
-            % Generische Pagination, die mit jedem DTO befüllbar ist
-            % abstrakte Methode loaddata() mit welcher individuell und vielfältig
-            % die Pagination für jeden Verwendung bestimmt werden kann
-            % Außerdem ist unsere Pagination leistungsfähig und adaptierbar an persönlich Verwendung
-            % durch hervorragende Sortierbarkeit und Filterbarkeit
-            %-> Sie können ihr Produkt an Profis verkaufen, es ist für professionelle Verwendung geeignet
-            \item Pagination
-            \centering
-            \includegraphics[height=1.1\textheight]{graphics/facelet/pagination/doc_pag}
-            \centering
-            \includegraphics[height=1.1\textheight]{graphics/facelet/pagination/doc_loaddata}
-            \centering
-            \includegraphics[height=1.1\textheight]{graphics/facelet/pagination/fac_pag}
-
-            % -> Der Aufbau der Daten die im Facelet angezeigt werden erfolgt folgendermaßen:
-            % -> Erhalten der Id der Einreichung
-            \item <f:viewParam>
-            \centering
-            \includegraphics[height=1.1\textheight]{graphics/facelet/fac_viewParam}
-
-            % -> Dieses wird mithilfe validiert
-            \item <f:event>
-            \centering
-            \includegraphics[height=1.1\textheight]{graphics/facelet/fac_event}
-
-            % -> Schließlich: Starten der onLoad() zum Befüllen der DTOs
-            \item <f:viewAction>
-            \centering
-            \includegraphics[height=1.1\textheight]{graphics/facelet/fac_onLoad}
-        \end{itemize}
+    %todo hier überscichtseite für allg. kommentare vllt submission mockup
+    \begin{frame}{\textbf{Typisches Facelet:} submission.xhtml}
+        %Ziel: Welche Elemente verwenden wir:
+        %-> Personalisierte Seiten für bestimmte Nutzerrollen
+        \textbf{Element:} 'rendered='
+        \newline\newline
+        \centering
+        \includegraphics[height=0.3\textheight]{graphics/facelet/fac_rendered}
+    \end{frame}
+    \begin{frame}{\textbf{Typisches Facelet:} submission.xhtml}
+        %-> Zur Eingabevalidation erstens
+        %-> mit message aus RessourceBundle
+        \textbf{Element:}'required=' + 'requiredMessage='
+        \newline\newline
+        \centering
+        \includegraphics[height=0.3\textheight]{graphics/facelet/fac_required}
+    \end{frame}
+    \begin{frame}{\textbf{Typisches Facelet:} submission.xhtml}
+        %-> Zur Eingabevalidation zweitens
+        \textbf{Element:} Validatoren
+        \newline\newline
+        \centering
+        \includegraphics[height=0.4\textheight]{graphics/facelet/doc_validator}
+    \end{frame}
+    \begin{frame}{\textbf{Typisches Facelet:} submission.xhtml}
+        % Generische Pagination, die mit jedem DTO befüllbar ist
+        % abstrakte Methode loaddata() mit welcher individuell und vielfältig
+        % die Pagination für jeden Verwendung bestimmt werden kann
+        \textbf{Element:} Pagination
+        \newline\newline
+        \centering
+        \includegraphics[height=0.5\textheight]{graphics/facelet/pagination/doc_pag}
+    \end{frame}
+    \begin{frame}{\textbf{Typisches Facelet:} submission.xhtml}
+        % Abstrakte Methode loaddata() mit welcher individuell und vielfältig
+        % die Pagination für jeden Verwendung bestimmt werden kann}
+        \textbf{Element:} Pagination
+        \newline\newline
+        \centering
+        \includegraphics[height=0.2\textheight]{graphics/facelet/pagination/doc_loaddata}
+    \end{frame}
+    \begin{frame}{\textbf{Typisches Facelet:} submission.xhtml}
+        % Außerdem ist unsere Pagination leistungsfähig und adaptierbar an persönlich Verwendung
+        % durch hervorragende Sortierbarkeit und Filterbarkeit
+        %-> Sie können ihr Produkt an Profis verkaufen, es ist für professionelle Verwendung geeignet
+        \textbf{Element:} Pagination
+        \newline\newline
+        \centering
+        \includegraphics[height=0.1\textheight]{graphics/facelet/pagination/fac_pag}
+    \end{frame}
+    \begin{frame}{\textbf{Typisches Facelet:} submission.xhtml}
+        % -> Der Aufbau der Daten die im Facelet angezeigt werden erfolgt folgendermaßen:
+        % -> Erhalten der Id der Einreichung
+        \textbf{Datenfluss:} <f:viewParam>
+        \newline\newline
+        \centering
+        \includegraphics[height=0.1\textheight]{graphics/facelet/fac_viewParam}
+    \end{frame}
+    \begin{frame}{\textbf{Typisches Facelet:} submission.xhtml}
+        % -> Dieses wird mithilfe eines Events validiert, sodass keine Korruption der URL möglich ist
+        \textbf{Datenfluss:} <f:event>
+        \newline\newline
+        \centering
+\&       \includegraphics[height=0.1\textheight]{graphics/facelet/fac_event}
+        %todo include doc bb methode
+    \end{frame}
+    \begin{frame}{\textbf{Typisches Facelet:} submission.xhtml}
+        % -> Schließlich: Starten der onLoad() zum Befüllen der DTOs
+        \textbf{Datenfluss:} <f:viewAction>
+        \newline\newline
+        \centering
+        \includegraphics[height=0.1\textheight]{graphics/facelet/fac_onLoad}
     \end{frame}
 
     % Nun liegt die Arbeit beim zugehörigen Backing Bean.
-    \begin{frame}{Typische Klasse \textbf{Kontrollschicht}:}
-        \emph{SubmissionBacking}
+    \begin{frame}{Typische Klasse \textbf{Kontrollschicht}: \emph{SubmissionBacking}}
         \centering
-        \includegraphics[height=1.1\textheight]{graphics/backing/doc_backing}
-        \pause
-        \begin{itemize}
-            % Zuerst werden dessen nötige DTOs initalisiert
-            % -> Instanziierung aller benötigten DTOs z.B.:
-            %            -User mit ID aus Session
-            %            -Submission
-            \item init()
-            \centering
-            \includegraphics[height=1.1\textheight]{graphics/backing/doc_init}
-
-            % Befüllen der DTOs mithilfe id aus <f:viewParam>
-            % Getriggert durch vorheriges <f:viewAction>
-            \item onLoad()
-            \centering
-            \includegraphics[height=1.1\textheight]{graphics/backing/doc_onLoad}
-
-
-            \item Notwendige Getter \& Setter
-            \item Versch. notwendige action Methoden %todo img übersicht opt
-        \end{itemize}
+        \includegraphics[height=0.7\textheight]{graphics/backing/doc_backing}
+    \end{frame}
+    \begin{frame}{Typische Klasse der \textbf{Kontrollschicht}: \emph{SubmissionBacking}}
+        % Zuerst werden dessen nötige DTOs initalisiert
+        % -> Instanziierung aller benötigten DTOs z.B.:
+        %            -User mit ID aus Session
+        %            -Submission
+        \centering
+        \includegraphics[height=0.6\textheight]{graphics/backing/doc_init}
+    \end{frame}
+    \begin{frame}{Typische Klasse \textbf{Kontrollschicht}: \emph{SubmissionBacking}}
+        % Befüllen der DTOs mithilfe id aus <f:viewParam>
+        % Getriggert durch vorheriges <f:viewAction>
+        \centering
+        \includegraphics[height=0.6\textheight]{graphics/backing/doc_onLoad}
     \end{frame}
 
     % Für diese action-Methoden und für unser Beispiel die onLoad() benötigen wir nun Zugriff auf
@@ -273,7 +287,7 @@
     \end{frame}
 
 
-    \section{Gespeicherte Sessioninformationen}
+    \section{Session}
     \begin{frame}{Session}
         \begin{itemize}
             \item User\-DTO mit ID
