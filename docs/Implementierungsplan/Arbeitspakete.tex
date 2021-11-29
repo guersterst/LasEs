@@ -1,8 +1,47 @@
+%%%%%% BEGIN MACROS %%%%%%
+\newcommand{\atable}[3]{\begin{longtable}{llllll}
+                            \caption{#2}\label{tab:#1} \\
+                            \toprule
+                            \textbf{Arbeitspaket} & \textbf{Start} & \textbf{Ende} & \textbf{Aufwand} & \textbf{Bearbeiter:in} & \textbf{Artefakte}
+                            \\
+                            \midrule
+                            \endfirsthead
+
+                            \caption{#2 \emph{(Fortsetzung)}}\\
+                            \toprule
+                            \textbf{Arbeitspaket} & \textbf{Start} & \textbf{Ende} & \textbf{Aufwand} & \textbf{Bearbeiter:in} & \textbf{Artefakte}
+                            \\
+                            \midrule
+                            \endhead
+
+                            \multicolumn{6}{r}{{Fortsetzung auf der nächsten Seite}}
+                            \endfoot
+
+                            \bottomrule
+                            \endlastfoot
+
+                            #3
+\end{longtable}
+}
+
+\newcommand{\aentry}[6]{\footnotesize#1 & \footnotesize#2 & \footnotesize#3 & \footnotesize#4 & \footnotesize#5 & \footnotesize\makecell{#6}\\\midrule}
+%%%%%% END MACROS %%%%%%
+
+\renewcommand{\cellalign}{cl}
+
+%\begin{landscape}
+
 \subsection{Milestone 1}
 \localauthor{Stefanie Gürster}
+\atable{milestone1}{Milestone 1}{
+    \aentry{Submission}{10.12.2021}{20.12.2021}{5~h}{Joergen Sprenger}{submission.xhtml\\SubmissionBacking\\SubmissionService\\SubmissionRepository}
+    \aentry{Submission}{10.12.2021}{20.12.2021}{5~h}{Joergen Sprenger}{submission.xhtml\\SubmissionBacking\\SubmissionService\\SubmissionRepository}
+}
 
 \subsection{Milestone 2}
 \localauthor{Sebastian Vogt}
 
 \subsection{Milestone 3}
 \localauthor{Johannes Garstenauer}
+
+%\end{landscape}
