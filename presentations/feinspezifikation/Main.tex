@@ -90,16 +90,87 @@
 
 
     \section{Datenfluss}
-    %todo vorher facelets erklären
-    Beispiel des Upload einer Revision
-    mit Exkursen anhand derer typische Klassenspezifikationen klar werden sollen.
-    \begin{frame}
+    %Beispiel des Upload einer Revision
+    %mit Exkursen anhand derer typische Klassenspezifikationen klar werden sollen.
+    % Beginnen wir mit dem notwendigen Facelet.
+    \begin{frame}{submission.xhtml}
+        \begin{itemize}
+            %Ziel: Welche Elemente verwenden wir:
+            %-> Personalisierte Seiten für bestimmte Nutzerrollen
+            \item 'rendered='
+            \centering
+            \includegraphics[height=1.1\textheight]{graphics/facelet/fac_rendered}
+
+            %-> Zur Eingabevalidation erstens
+            \item 'required=' + 'requiredMessage='
+            \centering
+            \includegraphics[height=1.1\textheight]{graphics/facelet/fac_required}
+            %-> mit message aus RessourceBundle %todo wie?
+            %-> Zur Eingabevalidation zweitens
+            \item Custom Validatoren
+            \centering
+            \includegraphics[height=1.1\textheight]{graphics/facelet/doc_validator}
+
+            % -> sonst enthalten sie das übliche
+            \item z.B. <h:commandButtons> für action-Methoden %todo img opt
+            \item z.B. <h:outputText> um DTO-Daten darzustellen %todo img opt
+            \item Pagination, Lists (<f:param>) %todo wie?
+            -> unsere Pagination ist leistungsfähig und adaptierbar an persönlich Verwendung
+            durch hervorragende Sortierbarkeit und Filterbarkeit
+            -> Sie können ihr Produkt an Profis verkaufen
+
+            % -> Der Aufbau der Daten die im Facelet angezeigt werden erfolgt folgendermaßen:
+            % -> Erhalten der Id der Einreichung
+            \item <f:viewParam> %todo wie?
+            \centering
+            \includegraphics[height=1.1\textheight]{graphics/facelet/fac_viewParam}
+
+            % -> Dieses wird mithilfe ... validiert
+            \item <f:event>
+            \centering
+            \includegraphics[height=1.1\textheight]{graphics/facelet/fac_event}
+
+            % -> Schließlich: Starten der onLoad() zum befüllen der DTOs
+            \item <f:viewAction>
+            \centering
+            \includegraphics[height=1.1\textheight]{graphics/facelet/fac_onLoad}
+            %todo wieso so? wieso hat sich das geändert?
+        \end{itemize}
+    \end{frame}
+
+    % Nun liegt die Arbeit beim zugehörigen Backing Bean.
+    \begin{frame}{Typische Klasse \textbf{Kontrollschicht}:}
+        \emph{SubmissionBacking}
+        \centering
+        \includegraphics[height=1.1\textheight]{graphics/backing/doc_backing}
+        \pause
+        \begin{itemize}
+            % Zuerst werden dessen nötige DTOs initalisiert
+            % -> Instanziierung aller benötigten DTOs z.B.:
+            %            -User mit ID aus Session
+            %            -Submission
+            \item init()
+            \centering
+            \includegraphics[height=1.1\textheight]{graphics/backing/doc_init}
+
+            % Befüllen der DTOs mithilfe id aus <f:viewParam>
+            % Getriggert durch vorheriges <f:viewAction>
+            % -> %todo grund design
+            \item onLoad()
+            \centering
+            \includegraphics[height=1.1\textheight]{graphics/backing/doc_onLoad}
+
+
+            \item Notwendige Getter & Setter %todo wo sind die Setter
+            \item Versch. notwendige view-action Methoden %todo img übersicht opt
+        \end{itemize}
+    \end{frame}
+
+
+    \begin{frame}{Datenfluss - Teil 1}
         \begin{itemize}
             \item init() des @ViewScoped SubmissionBacking-Bean
             %todo sq_init, doc_init
-            -> Instanziierung aller benötigten DTOs:
-            -User mit ID aus Session %todo hier session
-            -Submission
             \item Setzen der ID der Submission mit <f:viewParam>
             %todo fac_viewParam
             \item Überprüfen der ID der Submission mit %todo preRenderViewParam
@@ -120,39 +191,8 @@
         \end{itemize}
     \end{frame}
 
-
-    \section{Facelets}
-    \begin{frame}{submission.xhtml}
-        \begin{itemize}
-            %todo hier möglicherweise jew. beispiel aus tabelle
-            \item 'rendered='
-            -> Personalisierte Seiten für bestimmte Nutzerrollen
-            \item 'required=' + 'requiredMessage='
-            -> mit message aus RessourceBundle %todo wie?
-            \item Custom Validatoren %todo javadoc screen
-            \item z.B. <h:commandButtons> für action-Methoden
-            \item z.B. <h:outputText> um DTO-Daten darzustellen
-            \item Pagination, Lists (<f:param>) %todo
-            -> unsere Pagination ist leistungsfähig und adaptierbar an persönlich Verwendung
-            durch hervorragende Sortierbarkeit und Filterbarkeit
-            -> Sie können ihr Produkt an Profis verkaufen
-            \item <f:viewParam>
-            -> Erhalten Id der Einreichung
-            -> %todo was genau?
-            \item <f:event>
-            -> Abprüfen (Validieren?) des view-param
-            \item <f:viewAction>
-            -> Starten der onLoad(), befüllen der DTOs
-            %todo wann wir viewaction gestartet
-            %todo wieso so? wieso hat sich das geändert?
-        \end{itemize}
-    \end{frame}
-
-
-    \section{Datenfluss}
-
     \begin{frame}{Typische Klasse \textbf{Kontrollschicht}:}
-        \emph{SubmissionBacking}.
+        \emph{SubmissionBacking}
         \pause
         \begin{itemize}
             \item init()
