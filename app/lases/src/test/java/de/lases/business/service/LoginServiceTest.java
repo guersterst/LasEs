@@ -16,8 +16,9 @@ import static org.mockito.Mockito.mockStatic;
 class LoginServiceTest {
 
     private static final String SECURE_EXAMPLE_PASSWORD = "Affe123!";
-    private static final String VERY_RANDOM_SALT_BASE64 = "ABCDEFABCDEFABCDEFABCDEF";
-    private static final String SECURE_PASSWORD_HASH_BASE64 = "";
+    private static final String VERY_RANDOM_SALT_BASE64 = "QWZmZW4gc2luZCBzdXBlcg==";
+    // PBKDF2WithHmacSHA256, 128 bit, 75000 iterations. https://gist.github.com/schicho/616fb9529b624000a577344388ce3f3b
+    private static final String SECURE_PASSWORD_HASH_BASE64 = "YXirI3Xsv1hhne/qI+um6Q==";
 
     @Test
     void testGet() throws NotFoundException {
