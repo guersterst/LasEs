@@ -1,5 +1,7 @@
 package de.lases.persistence.repository;
 
+import jakarta.inject.Inject;
+
 import java.sql.Connection;
 
 /**
@@ -10,12 +12,15 @@ public class Transaction {
     private Connection connection;
 
     /**
+     * Create a new Transaction.
+     */
+    public Transaction() {
+    }
+
+    /**
      * Abort the transaction.
      */
     public void abort() {
-        // begin: Code nur fuer diagramm
-        ConnectionPool connPool = new ConnectionPool();
-        // end: Code nur fuer diagramm
     }
 
     /**
