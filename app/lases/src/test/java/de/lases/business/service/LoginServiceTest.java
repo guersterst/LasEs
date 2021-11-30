@@ -1,22 +1,14 @@
 package de.lases.business.service;
 
-import de.lases.global.transport.Submission;
 import de.lases.global.transport.User;
-import de.lases.persistence.exception.NotFoundException;
-import de.lases.persistence.repository.SubmissionRepository;
-import de.lases.persistence.repository.Transaction;
 import de.lases.persistence.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.lang.reflect.Field;
-import java.sql.Connection;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.any;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mockStatic;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,19 +22,38 @@ class LoginServiceTest {
     @Test
     void testLoginSuccess() {
         User UserJustLogin = new User();
-        UserJustLogin.setPasswordNotHashed(SECURE_EXAMPLE_PASSWORD);
         UserJustLogin.setId(1);
+        UserJustLogin.setPasswordNotHashed(SECURE_EXAMPLE_PASSWORD);
 
-        User UserSuccessLogin = new User();
-        UserSuccessLogin.setPasswordHashed(SECURE_PASSWORD_HASH_BASE64);
-        UserSuccessLogin.setId(1);
+        User UserInDBWithID1 = new User();
+        UserInDBWithID1.setId(1);
+        UserInDBWithID1.setPasswordHashed(SECURE_PASSWORD_HASH_BASE64);
 
         LoginService loginService = new LoginService();
 
         try(MockedStatic<UserRepository> mockedStatic = mockStatic(UserRepository.class)) {
-            mockedStatic.when(() -> UserRepository.get(UserJustLogin, null)).thenReturn(UserSuccessLogin);
+            mockedStatic.when(() -> UserRepository.get(UserJustLogin, null)).thenReturn(UserInDBWithID1);
 
-            assertEquals(UserSuccessLogin,loginService.login(UserJustLogin));
+            assertEquals(UserInDBWithID1,loginService.login(UserJustLogin));
+        }
+    }
+
+    @Test
+    void testLoginFail() {
+        User UserJustLogin = new User();
+        UserJustLogin.setId(1);
+        UserJustLogin.setPasswordNotHashed("incorrectPassword");
+
+        User UserInDBWithID1 = new User();
+        UserInDBWithID1.setId(1);
+        UserInDBWithID1.setPasswordHashed(SECURE_PASSWORD_HASH_BASE64);
+
+        LoginService loginService = new LoginService();
+
+        try(MockedStatic<UserRepository> mockedStatic = mockStatic(UserRepository.class)) {
+            mockedStatic.when(() -> UserRepository.get(UserJustLogin, null)).thenReturn(UserInDBWithID1);
+
+            assertNull(loginService.login(UserJustLogin));
         }
     }
 }
