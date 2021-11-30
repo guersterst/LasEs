@@ -32,11 +32,6 @@
         \titlepage
     \end{frame}
 
-    \begin{frame}{Gliederung}
-        \tableofcontents
-    \end{frame}
-
-
 %    \section{Änderungen}
 %    \begin{frame}{Evolution}
 %        Vereinfachungen \& Übersichtlickeit
@@ -57,7 +52,7 @@
     \section{Struktur}
     \begin{frame}{Ordnerstruktur}
         %todo nebeneinander & lesbar
-        \includegraphics[height=0.5\textheight]{graphics/w2_folder_final_smaller}
+        \includegraphics[height=0.8\textheight]{graphics/w2_folder_final_smaller}
         \begin{itemize}
             %Labels, Tooltips und UI-Nachrichten in mehreren jew. einsprachigen Resource-Bundles.
             %-> bietet Internationalisierbarkeit und leichtes Hinzufügen neuer Sprachen.
@@ -88,7 +83,7 @@
 
     \section{Datenfluss}
     % Nun möchte ich Ihnen Beispielhaft zeigen, wie diese Architektur im Detail zusammenspielt.
-    % Ausschnitthaftes Veispiel des Aufbaus der Seite zur Einreichung einer Darstellung
+    % Ausschnitthaftes Beispiel des Aufbaus der Seite zur Einreichung einer Darstellung
     % mit Exkursen anhand derer typische Klassenspezifikationen klar werden sollen.
     % Beginnen wir mit dem notwendigen Facelet.
 
@@ -111,6 +106,7 @@
     \end{frame}
     \begin{frame}{\textbf{Typisches Facelet:} submission.xhtml}
         %-> Zur Eingabevalidation zweitens
+        %todo switch DateInFutureTimeValidator
         \textbf{Element:} Validatoren
         \newline\newline
         \centering
@@ -155,7 +151,7 @@
         \textbf{Datenfluss:} <f:event>
         \newline\newline
         \centering
-\&       \includegraphics[height=0.1\textheight]{graphics/facelet/fac_event}
+        \includegraphics[height=0.1\textheight]{graphics/facelet/fac_event}
         %todo include doc bb methode
     \end{frame}
     \begin{frame}{\textbf{Typisches Facelet:} submission.xhtml}
@@ -183,180 +179,154 @@
         % Befüllen der DTOs mithilfe id aus <f:viewParam>
         % Getriggert durch vorheriges <f:viewAction>
         \centering
-        \includegraphics[height=0.6\textheight]{graphics/backing/doc_onLoad}
+        \includegraphics[height=0.5\textheight]{graphics/backing/doc_onLoad}
     \end{frame}
 
-    % Für diese action-Methoden und für unser Beispiel die onLoad() benötigen wir nun Zugriff auf
-    % die Daten und die Businesslogik, welche durch den SubmissionService zur Verfügung gestellt wird
-
-    \begin{frame}{Typische Klasse \textbf{Businessschicht}:}
-        \emph{SubmissionService}
+    \begin{frame}{Typische Klasse \textbf{Businessschicht}: \emph{SubmissionService}}
+        % Für diese action-Methoden und für unser Beispiel die onLoad() benötigen wir nun Zugriff auf
+        % die Daten und die Businesslogik, welche durch den SubmissionService zur Verfügung gestellt wird
+        %todo hier besonders auf DTO-Spezifikation für Methoden eingehen
         \centering
-        \includegraphics[height=1.1\textheight]{graphics/service/doc_service}
-        \pause
-        \begin{itemize}
-            % Für das Laden der DTOs wird ein get() benötigt.
-            \item get()
-            \item add()
-            \centering
-            \includegraphics[height=1.1\textheight]{graphics/service/doc_get_add}
-            \item change()
-            \centering
-            \includegraphics[height=1.1\textheight]{graphics/service/doc_change}
-            %-> einheitliche und übersichtliche Interfaces:
-            % Beachte: obwohl Methodensignatur selbe Parameter: verschiedene Anforderungen.
-            % -> in javadoc spezifiziert
-            % -> Ermöglicht Datenfluss ohne flache Parameter, gekapselt in DTOs
-
-            \item einheitliche und übersichtliche Interfaces
-            \item Hohe Überdeckung zu Persistenzschicht
-
-            \item Event<UIMessage>
-            % informiert den Nutzer über fehlerhaften Zustand aus unteren Schichten und in der Geschäftslogik
-            % werden zu FacesMessages umgewandelt
-            % -> Vorteil der Modulariät und Vermeidung von Coderedundanzen
-            % -> günstigeres Produkt für Sie!
-
-            \item %Todo woanders? : bei race-conditions
-            \item verwendet Transaktionen:
-            \item um ACID Eigenschaften sicherzustellen: Atomarität, Konsistenz, Isolation, Dauerhaftigkeit
-            ?und Race-Conditions zu vermeiden?
-        \end{itemize}
+        \includegraphics[height=0.5\textheight]{graphics/service/doc_service}
+    \end{frame}
+    \begin{frame}{Typische Klasse \textbf{Businessschicht}: \emph{SubmissionService}}
+        % Für das Laden der DTOs wird ein get() benötigt.
+        % Weiterhin angeboten werden jeweils immer die Methoden
+        \centering
+        \includegraphics[height=0.6\textheight]{graphics/service/doc_get_add}
+    \end{frame}
+    \begin{frame}{Typische Klasse \textbf{Businessschicht}: \emph{SubmissionService}}
+        %todo remove?
+        \centering
+        \includegraphics[height=0.6\textheight]{graphics/service/doc_change}
+        %-> einheitliche und übersichtliche Interfaces:
+        % Beachte: obwohl Methodensignatur selbe Parameter: verschiedene Anforderungen.
+        % -> in javadoc spezifiziert
+        % -> Ermöglicht Datenfluss ohne flache Parameter, gekapselt in DTOs
+        % Hohe Überdeckung zu Persistenzschicht
+    \end{frame}
+    \begin{frame}{Typische Klasse \textbf{Businessschicht}: \emph{SubmissionService}}
+        Event<UIMessage>\#fire()
+        \centering
+        \includegraphics[height=0.3\textheight]{graphics/service/doc_uim}
+        %todo hier besonders auf annotationen/listeners einegehn
+        % informiert den Nutzer über fehlerhaften Zustand aus unteren Schichten und in der Geschäftslogik
+        % werden zu FacesMessages umgewandelt
+        % -> Vorteil der Modulariät und Vermeidung von Coderedundanzen
+        % -> günstigeres Produkt für Sie!
     \end{frame}
 
-    % Die benötigten Daten werden wiederum aus der Persistenzschicht geholt.
-    % Genauer gesagt aus dem SubmissionRepository - einer typischen Klasse dieser Schicht.
-    \begin{frame}{Typische Klasse \textbf{Persistenzschicht}:}
-        \emph{SubmissionRepository}
+    \begin{frame}{Typische Klasse \textbf{Persistenzschicht}: \emph{SubmissionRepository}}
+        % Die benötigten Daten werden wiederum aus der Persistenzschicht geholt.
+        % Genauer gesagt aus dem SubmissionRepository - einer typischen Klasse dieser Schicht.
         \centering
-        \includegraphics[height=1.1\textheight]{graphics/repo/doc_repo}
-        \pause
-        \begin{itemize}
-            % Enthält ausschließlich statische Methoden
-            % Welche aus der DB DTOs erstellen und ausliefern.
-            \item statische Methoden
-            \centering
-            \includegraphics[height=1.1\textheight]{graphics/repo/doc_static}
-
-            % Bietet ebenfalls ähnliche Methoden wie Services an:
-            % -> einheitliche, leichte Interfaces für Sie
-            \item add()
-            \centering
-            \includegraphics[height=1.1\textheight]{graphics/repo/doc_add}
-            \item get()
-            \centering
-            \includegraphics[height=1.1\textheight]{graphics/repo/doc_get}
-            \item change()
-            \centering
-            \includegraphics[height=1.1\textheight]{graphics/repo/doc_change}
-
-            %todo gibt es hier mehr zu sagen?
-            %todo hier race-conditions?
-        \end{itemize}
+        \includegraphics[height=0.4\textheight]{graphics/repo/doc_repo}
+    \end{frame}
+    \begin{frame}{Typische Klasse \textbf{Persistenzschicht}: \emph{SubmissionRepository}}
+        % Enthält ausschließlich statische Methoden
+        % Welche aus der DB DTOs erstellen und ausliefern.
+        % Einheitlichketi -> Ebenfalls wieder get add change
+        \centering
+        \includegraphics[height=0.5\textheight]{graphics/repo/doc_static}
     \end{frame}
 
 
     \section{Fehlerfall}
-
+    % Wir haben checked Exceptions via Event-Architektur besprochen.
+    % Was kann noch schiefgehen?
+    % -> Race Conditions.
+    % Wir verwenden serialisierte JDBC Transactions um diesen Vorzubegugen.
+    % Wenn sie trzdm vorkommen, kapseln wir sie in semantische Exceptions
+    % und starten dass Error-Handling
+    % Hier ein Beispiel.
     \begin{frame}{Auftreten einer unchecked Exception}
+        %todo weiter links
         \centering
-        \includegraphics[height=1.1\textheight]{graphics/exc/seq_ex}
-        \begin{itemize}
-            % Exception landet im FacesContext
-            % Siehe Konstruktoren: wird mit Message befüllt
-            \item DataSourceNotFoundException
-            \centering
-            \includegraphics[height=1.1\textheight]{graphics/exc/doc_ex}
-
-            % Aufgegriffen vom UncheckedExceptionHandler
-            % Leitet weiter auf ErrorPage
-            % Erstellt ErrorMsg und übergibt diese an das BB
-            \item UncheckedExceptionHandler
-            \centering
-            \includegraphics[height=1.1\textheight]{graphics/exc/doc_handle}
-            \centering
-            \includegraphics[height=1.1\textheight]{graphics/exc/doc_errormsg}
-            \centering
-            \includegraphics[height=1.1\textheight]{graphics/exc/doc_backing}
-
-            %todo kann man machen muss man aber nicht
-            %todo erreich man die alte Seite durch zurück Pfeil?
-            %todo zwei simultan? unchecked 2x o. unchecked + checked
-            %todo -> Prototyp ausprobieren
-        \end{itemize}
+        \includegraphics[height=0.4\textheight]{graphics/exc/seq_ex}
     \end{frame}
-
-
-    \section{Session}
-    \begin{frame}{Session}
-        \begin{itemize}
-            \item User\-DTO mit ID
-            %-Immer nur mit ID? Wieso nur Id? (Auf mehr Daten kann man sich nicht verlassen, dass diese vorhanden sind: Minimum)
-            %-Welche Elemente gerendert werden ist immer davon Abhängig wer eine bestimmte Seite sieht.
-            %-Sicherheit: Hat diese Session Zugriff auf best. Seite?
-            %- Wieso nicht mehr in Session (Privilege z.B.)
-            \pause
-            \item Locale zur Internationalisierbarkeit.
-            %- Ist Locale abfragbar? Sparen wir uns hiermit Anfragen an den Browser?
-        \end{itemize}
-    \end{frame}
-
-
-    \section{Konfiguration}
-    \begin{frame}{Allgemeine Konfiguration}
-        Hier ein kurzer Blick auf die allgemeine Konfiguration
-        -Validatorenkonfiguration (Filesizes)
-        -Pagination
-        -Debug
-        -Mail
-        -DB
+    \begin{frame}{Auftreten einer unchecked Exception}
+        % Exception landet im FacesContext
+        % Siehe Konstruktoren: wird mit Message befüllt
         \centering
-        \includegraphics[height=0.75\textheight]{../../docs/Pflichtenheft/graphics/Homepage-png}
+        \includegraphics[height=0.6\textheight]{graphics/exc/doc_ex}
     \end{frame}
-
-    \begin{frame}{Loggerkonfiguration}
-        -.log Files sowie Consolelogger zum Debugging
+    \begin{frame}{UncheckedExceptionHandler}
+        % Aufgegriffen vom UncheckedExceptionHandler
+        % Leitet weiter auf ErrorPage
         \centering
-        \includegraphics[height=0.75\textheight]{../../docs/Pflichtenheft/graphics/Submission-png}
+        \includegraphics[height=0.4\textheight]{graphics/exc/doc_handle}
     \end{frame}
-
-
-    \section{Libraries}
-    \begin{frame}{Basis}
-        Es gibt 137,000 python libraries, zu Java habe ich keine Zahlen gefunden aber sind vermutlich noch viel mehr.
-        Diese würden uns vermutlich viele QOL Features anbieten.
-        Damit man für das Hosten Anwendung kein eigenes Rechenzentrum anmieten muss,
-        haben wir uns für ein paar wenige entschieden.
-        Wir garantieren Ihnen: Unsere Anwendung wird ein Leichtgewicht.
-        Was nicht bedeutet, dass es nicht mit Schwergewichtsboxern mithalten kann.
-        \begin{itemize}
-            \item Mojarra v3.0.1
-            \item JBoss Weld v4.0.2
-            \item PostGreSQL JDBC v42.3.1
-            \item Jakarta Mail API v2.0.1
-        \end{itemize}
-    \end{frame}
-
-    \begin{frame}{Quality of Life}
-        \begin{itemize}
-            \item Primefaces v10.0.0
-            \item Bootstrap v5.1.3
-        \end{itemize}
-    \end{frame}
-
-    \begin{frame}{Testing}
-        \begin{itemize}
-            \item JUnit v5.8.1
-            \item Mockito v4.0.0
-            \item Selenium v4.0.0
-        \end{itemize}
-    \end{frame}
-
-
-    \section{Discussion}
-    \begin{frame}{Diskussion}
+    \begin{frame}{UncheckedExceptionHandler}
+        % Erstellt ErrorMsg und übergibt diese an das BB
         \centering
-        \includegraphics[width=0.7\linewidth]{../../docs/Pflichtenheft/graphics/LasEs-logo}
+        \includegraphics[height=0.5\textheight]{graphics/exc/doc_errormsg}
     \end{frame}
+    \begin{frame}{UncheckedExceptionHandler}+
+        % Falls development modus, dann zusätzlich der stacktrace
+        \centering
+        \includegraphics[height=0.6\textheight]{graphics/exc/doc_backing}
+    \end{frame}
+
+%\section{Session}
+%\begin{frame}{Session}
+%    \begin{itemize}
+%        \item User\-DTO mit ID
+        %-Immer nur mit ID? Wieso nur Id? (Auf mehr Daten kann man sich nicht verlassen, dass diese vorhanden sind: Minimum)
+        %-Welche Elemente gerendert werden ist immer davon Abhängig wer eine bestimmte Seite sieht.
+        %-Sicherheit: Hat diese Session Zugriff auf best. Seite?
+        %- Wieso nicht mehr in Session (Privilege z.B.)
+%        \pause
+%        \item Locale zur Internationalisierbarkeit.
+        %- Ist Locale abfragbar? Sparen wir uns hiermit Anfragen an den Browser?
+%    \end{itemize}
+%\end{frame}
+
+
+\section{Konfiguration}
+\begin{frame}{Allgemeine Konfiguration}
+    Hier ein kurzer Blick auf die allgemeine Konfiguration
+    -Validatorenkonfiguration (Filesizes)
+    -Pagination
+    -Debug
+    -Mail
+    -DB
+\end{frame}
+
+\begin{frame}{Loggerkonfiguration}
+    -.log Files sowie Consolelogger zum Debugging
+\end{frame}
+
+
+\section{Libraries}
+\begin{frame}{Basis}a
+    \begin{itemize}
+        \item Mojarra v3.0.1
+        \item JBoss Weld v4.0.2
+        \item PostGreSQL JDBC v42.3.1
+        \item Jakarta Mail API v2.0.1
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Quality of Life}
+    \begin{itemize}
+        \item Primefaces v10.0.0
+        \item Bootstrap v5.1.3
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Testing}
+    \begin{itemize}
+        \item JUnit v5.8.1
+        \item Mockito v4.0.0
+        \item Selenium v4.0.0
+    \end{itemize}
+\end{frame}
+
+
+\section{Diskussion}
+\begin{frame}{Diskussion}
+    \centering
+    \includegraphics[width=0.7\linewidth]{../../docs/Pflichtenheft/graphics/LasEs-logo}
+\end{frame}
 
 \end{document}
