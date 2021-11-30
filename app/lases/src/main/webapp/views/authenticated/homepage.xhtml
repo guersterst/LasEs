@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:pg="http://xmlns.jcp.org/jsf/composite/pagination"
-      xmlns:col="http://xmlns.jcp.org/jsf/composite/sortsearchcolumn"
+      xmlns:pg="http://xmlns.jcp.org/jsf/composite/templates/composites/pagination"
+      xmlns:col="http://xmlns.jcp.org/jsf/composite/templates/composites/sortsearchcolumn"
       xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
@@ -14,45 +13,57 @@
 </h:head>
 
 <h:body>
-    <h:form>
-        <h:outputText value="Test" title="Hallo"/>
-    </h:form>
+
+    <f:metadata>
+        <f:viewAction action="#{homepageBacking.submissionPagination.loadData}"/>
+    </f:metadata>
+
+
+    <h1>Welcome to LasEs</h1>
     <div class="list-container">
         <div class="list-form">
-
-
             <div class="list-body">
+
                 <h:form>
-                    <pg:pagination paginator="#{submissionBacking.paperPagination}">
+                    <pg:pagination paginator="#{homepageBacking.submissionPagination}">
                         <h:column>
                             <f:facet name="header">
                                 <col:sortsearchcolumn paginator="#{homepageBacking.submissionPagination}"
-                                                      columnIdent="paper-title" columnNo="0" columnNamei18n="Title"/>
+                                                      columnIdentifier="submission-title" columnNamei18n="Title"/>
                             </f:facet>
-                            <h:outputText value="#{var.forumName}"/>
-                            <h:commandButton action="#{submissionBacking.reviewedBy.timestampDeadline}"
+                            <h:outputText value="#{var.title}"/>
                         </h:column>
+
                         <h:column>
                             <f:facet name="header">
                                 <col:sortsearchcolumn columnNamei18n="Date"
                                                       paginator="#{homepageBacking.submissionPagination}"
-                                                      columnIdent="submit-date" columnNo="2"/>
-                                <h:selectOneMenu value="#{homepageBacking.dateFilterSelectSub}">
+                                                      columnIdentifier="submisson-date"/>
+                                <h:selectOneMenu value="#{homepageBacking.submissionPagination.resultListParameters.dateSelect}">
                                     <f:selectItem itemValue="Future" itemLabel="Future"/>
                                     <f:selectItem itemValue="Past" itemLabel="Past"/>
                                     <f:selectItem itemValue="All" itemLabel="All"/>
                                 </h:selectOneMenu>
                             </f:facet>
-                            <h:outputText value=""/>
+                            <h:outputText value="#{var.submissionTime}"/>
                         </h:column>
+
                         <h:column>
                             <f:facet name="header">
-
+                                <col:sortsearchcolumn columnNamei18n="State"
+                                                      paginator="#{homepageBacking.submissionPagination}"
+                                                      columnIdentifier="submission-state"/>
+                                <h:selectOneMenu value="#{homepageBacking.submissionPagination.resultListParameters.submissionState}">
+                                    <f:selectItem itemValue="Future" itemLabel="Future"/>
+                                    <f:selectItem itemValue="Past" itemLabel="Past"/>
+                                    <f:selectItem itemValue="All" itemLabel="All"/>
+                                </h:selectOneMenu>
                             </f:facet>
+                            <h:outputText value="#{var.submissionTime}"/>
                         </h:column>
-
                     </pg:pagination>
                 </h:form>
+
             </div>
         </div>
     </div>
