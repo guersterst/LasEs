@@ -7,6 +7,8 @@ import java.sql.Connection;
  */
 class ConnectionPool {
 
+    private static final ConnectionPool instance = new ConnectionPool();
+
     /**
      * Get the connection pool.
      *
