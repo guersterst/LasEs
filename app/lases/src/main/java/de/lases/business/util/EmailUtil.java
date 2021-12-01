@@ -37,8 +37,11 @@ public class EmailUtil {
      * @param subject The subject of the email.
      * @param body The body of the email.
      * @return A link leading to a mailto e-mail.
+     *
+     * @throws IllegalArgumentException when invalid strings are input.
      */
-    public static String generateMailToLink(String[] recipients, String[] cc, String subject, String body) {
+    public static String generateMailToLink(String[] recipients, String[] cc, String subject, String body) throws IllegalArgumentException
+    {
         return null;
     }
 
