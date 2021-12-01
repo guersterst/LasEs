@@ -9,6 +9,7 @@ import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mockStatic;
 
@@ -28,7 +29,7 @@ class SubmissionServiceTest {
         sub.setId(EXAMPLE_SUBMISSION_ID);
 
         try (MockedStatic<SubmissionRepository> repo = mockStatic(SubmissionRepository.class)) {
-            repo.when(() -> SubmissionRepository.get(sub, any())).thenReturn(submissionFromRepo);
+            repo.when(() -> SubmissionRepository.get(eq(sub), any())).thenReturn(submissionFromRepo);
 
             SubmissionService submissionService = new SubmissionService();
             Submission gotten = submissionService.get(sub);
@@ -51,7 +52,7 @@ class SubmissionServiceTest {
         sub.setId(EXAMPLE_SUBMISSION_ID + 1);
 
         try (MockedStatic<SubmissionRepository> repo = mockStatic(SubmissionRepository.class)) {
-            repo.when(() -> SubmissionRepository.get(sub, any())).thenReturn(submissionFromRepo);
+            repo.when(() -> SubmissionRepository.get(eq(sub), any())).thenReturn(submissionFromRepo);
         }
 
         SubmissionService submissionService = new SubmissionService();
