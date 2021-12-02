@@ -9,6 +9,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mockStatic;
 
 @ExtendWith(MockitoExtension.class)
@@ -31,10 +33,10 @@ class LoginServiceTest {
 
         LoginService loginService = new LoginService();
 
-        try(MockedStatic<UserRepository> mockedStatic = mockStatic(UserRepository.class)) {
-            mockedStatic.when(() -> UserRepository.get(UserJustLogin, null)).thenReturn(UserInDBWithID1);
+        try (MockedStatic<UserRepository> mockedStatic = mockStatic(UserRepository.class)) {
+            mockedStatic.when(() -> UserRepository.get(eq(UserJustLogin), any())).thenReturn(UserInDBWithID1);
 
-            assertEquals(UserInDBWithID1,loginService.login(UserJustLogin));
+            assertEquals(UserInDBWithID1, loginService.login(UserJustLogin));
         }
     }
 
@@ -50,8 +52,8 @@ class LoginServiceTest {
 
         LoginService loginService = new LoginService();
 
-        try(MockedStatic<UserRepository> mockedStatic = mockStatic(UserRepository.class)) {
-            mockedStatic.when(() -> UserRepository.get(UserJustLogin, null)).thenReturn(UserInDBWithID1);
+        try (MockedStatic<UserRepository> mockedStatic = mockStatic(UserRepository.class)) {
+            mockedStatic.when(() -> UserRepository.get(eq(UserJustLogin), any())).thenReturn(UserInDBWithID1);
 
             assertNull(loginService.login(UserJustLogin));
         }
