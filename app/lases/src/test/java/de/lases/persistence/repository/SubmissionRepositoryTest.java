@@ -47,14 +47,11 @@ class SubmissionRepositoryTest {
 
         SubmissionRepository.add(submission1, transaction);
         SubmissionRepository.add(submission2, transaction);
-        transaction.commit();
 
-        transaction = new Transaction();
         List<Submission> authoredList = SubmissionRepository
                 .getList(user, Privilege.AUTHOR, transaction, null);
         List<Submission> editedList = SubmissionRepository
                 .getList(user, Privilege.EDITOR, transaction, null);
-        transaction.commit();
 
         assertAll(
                 () -> assertEquals(1, authoredList.size()),
@@ -62,6 +59,7 @@ class SubmissionRepositoryTest {
                 () -> assertEquals(1, editedList.size()),
                 () -> assertEquals(EXAMPLE_SUBMISSION_TITLE_2, editedList.get(0).getTitle())
         );
+        transaction.abort();
     }
 
     @Test
@@ -100,7 +98,7 @@ class SubmissionRepositoryTest {
 
         assertEquals(1, SubmissionRepository.countSubmissions(user, transaction));
 
-        transaction.commit();
+        transaction.abort();
     }
     
 }
