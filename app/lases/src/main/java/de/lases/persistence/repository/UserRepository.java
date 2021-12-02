@@ -123,7 +123,7 @@ public class UserRepository {
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
-    public Verification getVerification(User user, Transaction transaction)
+    public static Verification getVerification(User user, Transaction transaction)
             throws NotFoundException {
         return null;
     }
