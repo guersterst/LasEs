@@ -116,7 +116,7 @@ public class UserService implements Serializable {
      *                     Must contain a valid id.
      * @param scienceField A {@code ScienceField} containing a valid id.
      */
-    public static void addScienceField(User user, ScienceField scienceField) {
+    public void addScienceField(User user, ScienceField scienceField) {
     }
 
     /**
@@ -126,7 +126,7 @@ public class UserService implements Serializable {
      *                     Must contain a valid id.
      * @param scienceField A {@code ScienceField} containing a valid id.
      */
-    public static void removeScienceField(User user, ScienceField scienceField) {
+    public void removeScienceField(User user, ScienceField scienceField) {
     }
 
     /**
@@ -151,7 +151,7 @@ public class UserService implements Serializable {
      *                   relationship with. Must be filled with a valid id.
      * @return A list of {@code User}s involved with a {@code Submission} in a certain role.
      */
-    public static List<User> getList(Submission submission, Privilege privilege) {
+    public List<User> getList(Submission submission, Privilege privilege) {
         return null;
     }
 
@@ -162,7 +162,7 @@ public class UserService implements Serializable {
      *                        contain a valid id.
      * @return A list of editors for a certain forum.
      */
-    public static List<User> getList(ScientificForum scientificForum) {
+    public List<User> getList(ScientificForum scientificForum) {
         return null;
     }
 
