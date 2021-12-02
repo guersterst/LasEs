@@ -30,7 +30,7 @@ class PasswordValidatorTest {
 
         // test strings that do not adhere to the password policy:
         String validPassword1 = "1aA;'";
-        String validPassword2 = "12345678;";
+        String validPassword2 = "12345678";
         String validPassword3 = "Aa;" + "0".repeat(98);
         assertAll(
                 () -> assertThrows(ValidatorException.class, () -> validator.validate(null, null, validPassword1)),
