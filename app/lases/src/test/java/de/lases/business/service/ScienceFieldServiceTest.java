@@ -4,6 +4,9 @@ import de.lases.global.transport.ResultListParameters;
 import de.lases.global.transport.ScienceField;
 import de.lases.global.transport.User;
 import de.lases.persistence.repository.ScienceFieldRepository;
+import de.lases.persistence.repository.UserRepository;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
@@ -16,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mockStatic;
 
 @ExtendWith(MockitoExtension.class)
 public class ScienceFieldServiceTest {
@@ -23,6 +27,16 @@ public class ScienceFieldServiceTest {
     private static final String NAME_MATH_SF = "Math";
 
     static MockedStatic<ScienceFieldRepository> mockedStatic;
+
+    @BeforeAll
+    static void mockRepository() {
+        mockedStatic = mockStatic(ScienceFieldRepository.class);
+    }
+
+    @AfterAll
+    static void closeMock() {
+        mockedStatic.close();
+    }
 
     @Test
     void testAddScienceField() {
