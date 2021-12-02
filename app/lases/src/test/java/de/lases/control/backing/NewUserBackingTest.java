@@ -22,6 +22,7 @@ class NewUserBackingTest {
         RegistrationService mockService
                 = Mockito.mock(RegistrationService.class);
         User user = new User();
+
         Field serviceField
                 = NewUserBacking.class.getDeclaredField("registrationService");
         serviceField.setAccessible(true);

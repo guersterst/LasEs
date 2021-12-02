@@ -39,7 +39,7 @@ class SubmissionBackingTest {
     }
 
     @Test
-    void testInitAndOneLoadIllegal() {
+    void testInitAndOnLoadIllegal() {
         Submission sub = new Submission();
         sub.setId(EXAMPLE_SUBMISSION_ID);
         // User with no rights to view the submission
