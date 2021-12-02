@@ -105,7 +105,7 @@ public class ScientificForumBacking implements Serializable {
      * page from the datasource:
      * <ul>
      *     <li>
-     *         th dto for this scientific forum
+     *         the dto for this scientific forum
      *     </li>
      *     <li>
      *         the list of editors for this scientific forum
@@ -117,7 +117,7 @@ public class ScientificForumBacking implements Serializable {
      *         the first page of the own submission pagination.
      *     </li>
      *     <li>
-     *         the fist page of the reviewed submission pagination.
+     *         the first page of the reviewed submission pagination.
      *     </li>
      *     <li>
      *         the first page of the edited submission pagination.

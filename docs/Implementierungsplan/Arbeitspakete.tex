@@ -2,14 +2,14 @@
 \newcommand{\atable}[3]{\begin{longtable}{llllll}
                             \caption{#2}\label{tab:#1} \\
                             \toprule
-                            \textbf{Arbeitspaket} & \textbf{Start} & \textbf{Ende} & \textbf{Aufwand} & \textbf{Bearbeiter:in} & \textbf{Artefakte}
+                            \makecell{\textbf{Arbeitspaket}} & \makecell{\textbf{Start}} & \makecell{\textbf{Ende}} & \makecell{\textbf{Aufwand}} & \makecell{\textbf{Bearbeiter:in}} & \makecell{\textbf{Artefakte}}
                             \\
                             \midrule
                             \endfirsthead
 
                             \caption{#2 \emph{(Fortsetzung)}}\\
                             \toprule
-                            \textbf{Arbeitspaket} & \textbf{Start} & \textbf{Ende} & \textbf{Aufwand} & \textbf{Bearbeiter:in} & \textbf{Artefakte}
+                            \makecell{\textbf{Arbeitspaket}} & \makecell{\textbf{Start}} & \makecell{\textbf{Ende}} & \makecell{\textbf{Aufwand}} & \makecell{\textbf{Bearbeiter:in}} & \makecell{\textbf{Artefakte}}
                             \\
                             \midrule
                             \endhead
@@ -23,23 +23,225 @@
                             #3
 \end{longtable}
 }
-
-\newcommand{\aentry}[6]{\footnotesize#1 & \footnotesize#2 & \footnotesize#3 & \footnotesize#4 & \footnotesize#5 & \footnotesize\makecell{#6}\\\midrule}
+\newcommand{\aentry}[6]{\footnotesize\makecell{#1} & \footnotesize\makecell{#2} & \footnotesize\makecell{#3} & \footnotesize\makecell{#4} & \footnotesize\makecell{#5} & \footnotesize\makecell{#6}\\\midrule}
 %%%%%% END MACROS %%%%%%
 
 \renewcommand{\cellalign}{cl}
 
-%\begin{landscape}
+\begin{landscape}
+
+\subsection{Konventionen}
+\localauthor{Stefanie Gürster}
+Um die Tabellen im folgenden übersichtlicher zu gestalten, werden einzelne Methoden immer nur dann verwendet, wenn nur einzelne Methoden implementiert werden. Sind alle Methoden zu implementieren, so sind diese nicht explizit genannt.
+
+Außerdem beinhaltet ein Arbeitspaket immer auch die dazugehörige Beschreibung im Handbuch.
 
 \subsection{Milestone 1}
 \localauthor{Stefanie Gürster}
 \atable{milestone1}{Milestone 1}{
-    \aentry{Submission}{10.12.2021}{20.12.2021}{5~h}{Joergen Sprenger}{submission.xhtml\\SubmissionBacking\\SubmissionService\\SubmissionRepository}
-    \aentry{Submission}{10.12.2021}{20.12.2021}{5~h}{Joergen Sprenger}{submission.xhtml\\SubmissionBacking\\SubmissionService\\SubmissionRepository}
+	\aentry{Facelet: NewSubmisson}{6.12.10\\10:00 Uhr}{8.12.2021\\16:00 Uhr}{10~h}{Sebastian Vogt}{\textbf{NewSessionBacking} \\ \textbf{SubmissionService} \\.add()\\.addCoAuthor()\\ \textbf{SubmissionRepository} \\.add()\\.addCoAuthor()\\ \textbf{Submission} \\ \textbf{ScientificForum} \\ \textbf{PaperService} \\)\\.add()\\ \textbf{PaperRepository} \\.add()\\ \textbf{Paper}\\ \textbf{PDFValidator} \\ \textbf{ForumNameExistsValidator}}
+
+	\aentry{Hashing}{6.12.2021\\17:00 Uhr}{7.12.2021\\14:00 Uhr}{3~h}{Sebastian Vogt}{\textbf{Hashing}}
+
+	\aentry{Connection Pool}{9.12.2021\\8:00 Uhr}{9.12.2021\\19:00 Uhr}{6~h}{Sebastian Vogt}{\textbf{ConnectionPool} \\ \textbf{ConnectionState} \\ \textbf{Transaction} \\ \textbf{DataSourceUtil}}
+
+    \aentry{SQL Datenschema}{6.12.2021\\10:00 Uhr}{6.12.2021\\11:00 Uhr}{0,5~h}{Johann Schicho}{createPaper.sql\\createReCoAuthored.sql\\createReIntrests.sql\\createReMemberOf.sql\\createReviewedBy.sql\\createReTopics.sql\\createReview.sql\\createScienceField.sql\\createScientificForum.sql\\createSubmission.sql\\createSystem.sql\\createUser.sql\\createVerification.sql}
+
+    \aentry{Pagination}{6.12.2021\\11:00 Uhr}{6.12.2021\\15:00 Uhr}{2~h}{Johann Schicho}{pagination.xhtml\\ \textbf{Pagination} \\ \textbf{ResultListParameters} \\ \textbf{DateSelect} \\ \textbf{SubmissionState} \\ \textbf{SortOrder} \\ \textbf{DateTimeInFutureValidator}}
+
+    \aentry{Template: SortSearchColumn}{6.12.2021\\15:00 uhr}{6.12.2021\\16:00 Uhr}{1~h}{Johann Schicho}{sortSearchColumn.xhtml}
+
+    \aentry{Faclet: Welcome}{6.12.2021\\16:00 Uhr}{7.12.2021\\14:00 Uhr}{5~h}{Johann Schicho}{welcome.xhtml\\ \textbf{WelcomeBacking} \\ \textbf{LoginService} \\ \textbf{SystemSettings} \\ \textbf{SystemSettingsRepository} \\.getSettings()}
+
+    \aentry{LifeTime}{7.12.2021\\14:00Uhr}{8.12.2021\\15:00 Uhr}{7~h}{Johann Schicho}{\textbf{LifeTime} \\.startUp()\\.shutDown()}
+
+    \aentry{UserGetLists}{8.12.2021\\15:00 Uhr}{9.12.2021\\16:00Uhr}{5~h}{Johann Schicho}{\textbf{UserService} \\.getList()\\ \textbf{UserRepository} \\.getList()}
+
+    \aentry{LifeTime: Logger}{6.12.2021\\10:00 Uhr}{6.12.2021\\14:00 Uhr}{3~h}{Thomas Kirz}{\textbf{LifeTimeListener} \\ \textbf{LifeTime} \\ .startUp()}
+
+    \aentry{Facelet: Homepage}{6.12.2021\\14:00 Uhr}{9.12.2021\\19:00 Uhr}{13~h}{Thomas Kirz}{hompage.xhtml\\ \textbf{HomePageBacking} \\ \textbf{SubmissionService} \\.get()\\.canView()\\.getList()\\ \textbf{SubmissionRepository} \\.get()\\.getList()\\ \textbf{ScientificForumService} \\.get()\\ \textbf{ScientificForumRepository} \\.get()\\ \textbf{ScientificForum} \\ \textbf{Privilege}}
+
+    \aentry{Message Bundle Producer}{6.12.2021\\17:00 Uhr}{7.12.2021\\10:00 Uhr}{2~h}{Thomas Kirz}{\textbf{MessageBundleProducer}}
+
+    \aentry{Exceptions}{7.12.2021\\10:00 Uhr}{7.10.2021\\11:00 Uhr}{0,5~h}{Thomas Kirz}{\textbf{IllegalAccessException} \\ \textbf{IllegalFlowException} \\ \textbf{ConfigNotReadableException} \\ \textbf{DataNotCompleteException} \\ \textbf{DataNotWrittenException} \\ \textbf{DatasourceConfigurationException} \\ \textbf{DatasourceNotFoundException} \\ \textbf{DatasourceQueryFailedException} \\ \textbf{EmailServiceFailedException} \\ \textbf{EmailTransmissionFailedException} \\ \textbf{InvalidFieldsException} \\ \textbf{InvalidQueryParamsException} \\ \textbf{KeyExistsException} \\ \textbf{LogsNotWritableException} \\ \textbf{NotFoundException}}
+
+    \aentry{Template: Main}{6.12.2021\\10:00 Uhr}{7.12.2021\\16:00 Uhr}{2~h}{Stefanie Gürster}{main.xhtml}
+
+    \aentry{Facelet: Submission ohne Gutachten}{6.12.2021\\16:00 Uhr}{9.12.2021\\18:00 Uhr}{17~h}{Stefanie Gürster}{submission.xhtml\\ \textbf{SubmissionBacking} \\.init()\\.onload()\\.preRenderViewListener\\.setState()\\.downloadPaper()\\.upLoadReview()\\.applyFilters()\\.releaseRevision()\\.getAuthorForPaper()\\.uploadPDF()\\.deleteSubmission()\\.getUploadedRevisionPDF()\\.setUploadesRevisionPDF()\\.getSubmission()\\ .getScientificForum()\\.getCoAuthors()\\.getAuthor()\\.getPaperPagination()\\.getSessionInformation()\\.IsViewerSubmitter()\\.getSubmissionStates()\\.getDateSelects()\\.getNewestPaper()\\.loggedInUserIsEditor()\\.LoggedInUserReviewer()}
+
+    \aentry{Fortsetzung Submission ohne Review}{}{}{}{Stefanie Gürster}{ \textbf{UserService} \\.get()\\.getList()\\ \textbf{SubmissionService} \\.remove()\\.change()\\.releaseReview()\\.removeCoAuthor()\\ \textbf{SubmissionRepository} \\.remove()\\.change()\\.removeCoAuthor()\\ \textbf{PaperService} \\.remove()\\.getList()\\.getLatest()\\.change()\\.reviewedBy()\\ \textbf{PaperRepository} \\.get()\\.change()\\.getList()\\.getPDF()\\.setPDF()\\.getNewestPaperForSubmission()\\ \textbf{URLValidator} \\ \textbf{AcceptanceStatus} \\ \textbf{ReviewedBy} \\ \textbf{ReviewedByRepository} \\.get()}
+
+    \aentry{SessionInformation}{6.12.2021\\10:00 Uhr}{6.12.2021\\14:00 Uhr}{2~h}{Johannes Garstenauer}{\textbf{SessionInformation}\\ \textbf{User}\\ \textbf{UserService} \\.get()\\ \textbf{UserRepository} \\.get()}
+
+    \aentry{TrespassListener}{6.12.2021\\14:00 Uhr}{6.12.2021\\19:00 Uhr}{4~h}{Johannes Garstenauer}{\textbf{TrespassListener}}
+
+    \aentry{UIMessage Generator}{7.12.2021\\10:00Uhr}{7.12.2021\\17:00 Uhr}{5~h}{Johannes Garstenauer}{\textbf{UIMessageGenerator} \\ \textbf{UIMessage} \\ \textbf{MessageCategory}}
+
+    \aentry{Templates: Header, Footer}{7.12.2021\\17:00 Uhr}{8.12.2021\\16:00 Uhr}{4~h}{Johannes Garstenauer}{footer.xhtml \\ navigation.xhtml\\ \textbf{ImageServlet} \\ \textbf{FileDTo} \\ \textbf{CustomizationService} \\.setLogo()\\.getLogo()\\ \textbf{AvatarUtil}}
+
+    \aentry{Config Reader}{8.12.2021\\16:00 Uhr}{9.12.2021\\14:00 Uhr}{3~h}{Johannes Garstenauer}{\textbf{ConfigPropagator} \\ \textbf{ConfigReader}}
 }
 
 \subsection{Milestone 2}
+\subsubsection{Arbeitpakete}
 \localauthor{Sebastian Vogt}
+\atable{milestone2}{Milestone 2} {
+    \aentry{ScienceFields}{13.12.2021\\ 10:00}{13.12.2021\\ 20:00}{5~h}{Sebastian Vogt}{
+        \textbf{ScienceFieldService} \\
+        \textbf{ScienceFieldRepository} \\
+        \textbf{ScienceField}
+    }
+    \aentry{Profile}{14.12.2021\\ 08:00}{16.12.2021\\ 11:30}{12~h}{Sebastian Vogt}{
+        profile.xhtml\\
+        \textbf{ProfileBacking} \\
+        \textbf{AvatarValidator} \\
+        \textbf{ScienceField} \\
+        \textbf{UserService} \\
+        .getAvatar() \\
+        .change() \\
+        .setAvatar() \\
+        .addScienceField() \\
+        .removeScienceField() \\
+        .remove() \\
+        \textbf{UserRepository} \\
+        .getAvatar() \\
+        .change() \\
+        .setAvatar() \\
+        .addScienceField() \\
+        .removeScienceField() \\
+        .remove() \\
+        \textbf{SubmissionService}\\
+        .countSubmissions() \\
+        \textbf{SubmissionRepository} \\
+        .countSubmissions()
+    }
+    \aentry{NewReview}{13.12.2021\\ 14:00}{13.12.2021\\ 18:00}{4~h}{Johann Schicho}{
+        newReview.xhtml\\
+        \textbf{NewReviewBacking} \\
+        \textbf{ReviewService} \\
+        .add() \\
+        \textbf{ReviewRepository} \\
+        .add() \\
+        .setPDF() \\
+    }
+    \aentry{Submission: Reviews}{13.12.2021\\ 18:00}{15.12.2021\\ 15:00}{10~h}{Johann Schicho}{
+        submission.xhtml\\
+        \textbf{Review}\\
+        \textbf{SubmissionBacking}\\
+        .downloadReview()\\
+        .releaseReview()\\
+        .acceptReviewing()\\
+        .declineReviewing()\\
+        .getReviewerForReview()\\
+        .getReviewPagination()\\
+        .getReviewedBy()\\
+        \textbf{ReviewService}\\
+        .get()\\
+        .change()\\
+        .remove()\\
+        .getList()\\
+        .getFile()\\
+        \textbf{ReviewRepository}\\
+        .get()\\
+        .change()\\
+        .remove()\\
+        .getList()\\
+        .getPDF()\\
+    }
+    \aentry{NewScientificForum}{16.12.2021\\ 10:00}{16.12.2021\\ 15:30}{4~h}{Johann Schicho}{
+        newScientificForum.xhtml\\
+        \textbf{newScientificForumBacking}\\
+        \textbf{ScientificForumService}\\
+        .add()\\
+        \textbf{ScientificForumRepository}\\
+        .add()
+    }
+    \aentry{Registration}{13.12.2021 \\ 14:00}{14.12.2021 \\ 17:00}{10~h}{Thomas Kirz}{
+        registration.xhtml \\
+        \textbf{RegistrationBacking} \\
+        \textbf{EmailAddressLayoutValidator} \\
+        \textbf{EmailAddressUnoccupiedValidator} \\
+        \textbf{PasswordValidator} \\
+        \textbf{EmailAddressExistsValidator} \\
+        \textbf{RegistrationService} \\
+        .register() \\
+        \textbf{UserService} \\
+        .emailExists() \\
+        \textbf{UserRepository} \\
+        .add() \\
+        .emailExists()
+    }
+    \aentry{Verification}{15.12.2021\\ 13:00}{16.12.2021\\17:00}{10~h}{Thomas Kirz}{
+        verification.xhtml \\
+        \textbf{VerificationBacking} \\
+        \textbf{Verification} \\
+        \textbf{UserService} \\
+        .getVerification() \\
+        \textbf{UserRepository} \\
+        .getVerification() \\
+        .setVerification()
+    }
+    \aentry{Administration}{13.12.2021\\10:00}{14.12.2021\\14:00}{6~h}{Stefanie Gürster}{
+        administration.xhtml\\
+        \textbf{AdministrationBacking} \\
+        \textbf{SystemSettingsRepository} \\
+        \textbf{CustomizationService}
+    }
+    \aentry{Toolbar}{14.12.2021\\ 15:00}{16.12.2021\\ 19:00}{10~h}{Stefanie Gürster}{
+        toolbar.xhtml\\
+        \textbf{ToolbarBacking}\\
+        \textbf{SubmissionService}\\
+        .addReviewer()\\
+        .removeReviewer()\\
+        \textbf{SubmissionRepository}\\
+        .addReviewer()\\
+        .removeReviewer()\\
+        \textbf{ReviewedByRepository}\\
+        .get()
+    }
+    \aentry{ScientificForum}{13.12.2021\\ 16:00}{15.12.2021\\18:00}{15~h}{Johannes \\ Garstenauer}{
+        scientificForum.xhtml \\
+        \textbf{ScientificForumBacking}\\
+        \textbf{ScientificForum}\\
+        \textbf{ForumNameExistsValidator}\\
+        \textbf{ScientificForumService}\\
+        .remove()\\
+        .addEditor()\\
+        .addScienceField()\\
+        .removeEditor()\\
+        .removeScienceField()\\
+        .change()\\
+        .getEditor()\\
+        .exists()\\
+        \textbf{ScientificForumRepository}\\
+        .remove() \\
+        .addEditor()\\
+        .addScienceField()\\
+        .removeEditor()\\
+        .removeScienceField()\\
+        .change()\\
+        .exists()
+    }
+    \aentry{ScientificForumList}{16.12.2021\\ 13:00}{16.12.2021 \\18:00}{5~h}{Johannes \\ Garstenauer}{
+        scientificForumList.xhtml\\
+        \textbf{ScientificForumListBacking}\\
+        \textbf{ScientificForumService}\\
+        .getList()\\
+        \textbf{ScientificForumRepository}\\
+        .getList()
+    }
+}
+\subsubsection{Stundenanzahl}
+\begin{center}
+\begin{tabular}{ c c }
+    \textbf{Teammitglied} & \textbf{Stundenanzahl}\\
+    Sebastian Vogt & 17~h\\
+    Johann Schicho & 18~h\\
+    Thomas Kirz & 20~h\\
+    Stefanie Gürster & 16~h\\
+    Johannes Garstenauer & 20~h
+\end{tabular}
+\end{center}
 
 \subsection{Milestone 3}
 \localauthor{Johannes Garstenauer}
@@ -58,4 +260,4 @@
     \aentry{Periodische Datenbankarbeiten}{03.01.2022\\10 Uhr}{04.01.2022\\18 Uhr}{4~h}{Johann Schicho}{\textbf{PeriodicWorker}\\\textbf{DataSourceUtil}
         \\.cleanupVerficiations()}
 }
-%\end{landscape}
+\end{landscape}
