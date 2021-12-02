@@ -98,7 +98,7 @@ public class UserRepositoryGetListTest {
             });
 
             // All return values are based on the number of previous rst.next() calls.
-            when(rst.getString("id")).thenAnswer(I -> userTestData.get(i[0]).getId());
+            when(rst.getInt("id")).thenAnswer(I -> userTestData.get(i[0]).getId());
             when(rst.getString("email_address")).thenAnswer(I -> userTestData.get(i[0]).getEmailAddress());
             when(rst.getString("is_administrator")).thenAnswer(I -> userTestData.get(i[0]).isAdmin());
             when(rst.getString("firstname")).thenAnswer(I -> userTestData.get(i[0]).getFirstName());
