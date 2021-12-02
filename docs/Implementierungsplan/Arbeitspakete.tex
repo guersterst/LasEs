@@ -40,76 +40,12 @@
 \subsection{Milestone 2}
 \localauthor{Sebastian Vogt}
 \atable{milestone2}{Milestone 2} {
-    \aentry{Submission: Reviews}{?}{?}{10~h}{Johann Schicho}{
-        submission.xhtml\\
-        \textbf{Review}\\
-        \textbf{SubmissionBacking}\\
-        .downloadReview()\\
-        .releaseReview()\\
-        .acceptReviewing()\\
-        .declineReviewing()\\
-        .getReviewerForReview()\\
-        .getReviewPagination()\\
-        .getReviewedBy()\\
-        \textbf{ReviewService}\\
-        .get()\\
-        .change()\\
-        .remove()\\
-        .getList()\\
-        .getFile()\\
-        \textbf{ReviewRepository}\\
-        .get()\\
-        .change()\\
-        .remove()\\
-        .getList()\\
-        .getPDF()\\
-    }
-    \aentry{ScienceFields}{?}{?}{5~h}{Sebastian Vogt}{
+    \aentry{ScienceFields}{Montag}{Dienstag}{5~h}{Sebastian Vogt}{
         \textbf{ScienceFieldService} \\
         \textbf{ScienceFieldRepository} \\
         \textbf{ScienceField}
     }
-    \aentry{NewReview}{?}{?}{4~h}{Johann Schicho}{
-        newReview.xhtml\\
-        \textbf{NewReviewBacking} \\
-        \textbf{ReviewService} \\
-        .add() \\
-        \textbf{ReviewRepository} \\
-        .add() \\
-        .setPDF() \\
-    }
-    \aentry{Registration}{?}{?}{10~h}{Thomas Kirz}{
-        registration.xhtml \\
-        \textbf{RegistrationBacking} \\
-        \textbf{EmailAddressLayoutValidator} \\
-        \textbf{EmailAddressUnoccupiedValidator} \\
-        \textbf{PasswordValidator} \\
-        \textbf{EmailAddressExistsValidator} \\
-        \textbf{RegistrationService} \\
-        .register() \\
-        \textbf{UserService} \\
-        .emailExists() \\
-        \textbf{UserRepository} \\
-        .add() \\
-        .emailExists() \\
-    }
-    \aentry{Verification}{?}{?}{10~h}{Thomas Kirz}{
-        verification.xhtml \\
-        \textbf{VerificationBacking} \\
-        \textbf{UserService} \\
-        .getVerification() \\
-        \textbf{UserRepository} \\
-        .getVerification() \\
-        .setVerification() \\
-        \textbf{Verification} \\
-    }
-    \aentry{Administration}{?}{?}{6~h}{Stefanie Gürster}{
-        administration.xhtml\\
-        \textbf{AdministrationBacking} \\
-        \textbf{SystemSettingsRepository} \\
-        \textbf{CustomizationService}
-    }
-    \aentry{Profile}{?}{?}{12~h}{Sebastian Vogt}{
+    \aentry{Profile}{Dienstag}{Donnerstag}{12~h}{Sebastian Vogt}{
         profile.xhtml\\
         \textbf{ProfileBacking} \\
         \textbf{AvatarValidator} \\
@@ -133,7 +69,91 @@
         .countSubmissions() \\
         \textbf{ScienceField}
     }
-    \aentry{ScientificForum}{?}{?}{15~h}{Johannes \\ Garstenauer}{
+    \aentry{NewReview}{Montag}{Montag}{4~h}{Johann Schicho}{
+        newReview.xhtml\\
+        \textbf{NewReviewBacking} \\
+        \textbf{ReviewService} \\
+        .add() \\
+        \textbf{ReviewRepository} \\
+        .add() \\
+        .setPDF() \\
+    }
+    \aentry{Submission: Reviews}{Montag}{Mittwoch}{10~h}{Johann Schicho}{
+        submission.xhtml\\
+        \textbf{Review}\\
+        \textbf{SubmissionBacking}\\
+        .downloadReview()\\
+        .releaseReview()\\
+        .acceptReviewing()\\
+        .declineReviewing()\\
+        .getReviewerForReview()\\
+        .getReviewPagination()\\
+        .getReviewedBy()\\
+        \textbf{ReviewService}\\
+        .get()\\
+        .change()\\
+        .remove()\\
+        .getList()\\
+        .getFile()\\
+        \textbf{ReviewRepository}\\
+        .get()\\
+        .change()\\
+        .remove()\\
+        .getList()\\
+        .getPDF()\\
+    }
+    \aentry{NewScientificForum}{Mittwoch}{Donnerstag}{4~h}{Johann Schicho}{
+        newScientificForum.xhtml\\
+        \textbf{newScientificForumBacking}\\
+        \textbf{ScientificForumService}\\
+        .add()\\
+        \textbf{ScientificForumRepository}\\
+        .add()
+    }
+    \aentry{Registration}{Montag}{Dienstag}{10~h}{Thomas Kirz}{
+        registration.xhtml \\
+        \textbf{RegistrationBacking} \\
+        \textbf{EmailAddressLayoutValidator} \\
+        \textbf{EmailAddressUnoccupiedValidator} \\
+        \textbf{PasswordValidator} \\
+        \textbf{EmailAddressExistsValidator} \\
+        \textbf{RegistrationService} \\
+        .register() \\
+        \textbf{UserService} \\
+        .emailExists() \\
+        \textbf{UserRepository} \\
+        .add() \\
+        .emailExists() \\
+    }
+    \aentry{Verification}{Mittwoch}{Donnerstag}{10~h}{Thomas Kirz}{
+        verification.xhtml \\
+        \textbf{VerificationBacking} \\
+        \textbf{UserService} \\
+        .getVerification() \\
+        \textbf{UserRepository} \\
+        .getVerification() \\
+        .setVerification() \\
+        \textbf{Verification} \\
+    }
+    \aentry{Administration}{Montag}{Dienstag}{6~h}{Stefanie Gürster}{
+        administration.xhtml\\
+        \textbf{AdministrationBacking} \\
+        \textbf{SystemSettingsRepository} \\
+        \textbf{CustomizationService}
+    }
+    \aentry{Toolbar}{Dienstag}{Donnerstag}{10~h}{Stefanie Gürster}{
+        toolbar.xhtml\\
+        \textbf{ToolbarBacking}\\
+        \textbf{SubmissionService}\\
+        .addReviewer()\\
+        .removeReviewer()\\
+        \textbf{SubmissionRepository}\\
+        .addReviewer()\\
+        .removeReviewer()\\
+        \textbf{ReviewedByRepository}\\
+        .get() \\
+    }
+    \aentry{ScientificForum}{Montag}{Mittwoch}{15~h}{Johannes \\ Garstenauer}{
         scientificForum.xhtml \\
         \textbf{ScientificForumBacking}\\
         \textbf{ScientificForum}\\
@@ -156,27 +176,7 @@
         .change()\\
         .exists()
     }
-    \aentry{Toolbar}{?}{?}{10~h}{Stefanie Gürster}{
-        toolbar.xhtml\\
-        \textbf{ToolbarBacking}\\
-        \textbf{SubmissionService}\\
-        .addReviewer()\\
-        .removeReviewer()\\
-        \textbf{SubmissionRepository}\\
-        .addReviewer()\\
-        .removeReviewer()\\
-        \textbf{ReviewedByRepository}\\
-        .get() \\
-    }
-    \aentry{NewScientificForum}{?}{?}{10~h}{Stefanie Gürster}{
-        newScientificForum.xhtml\\
-        \textbf{newScientificForumBacking}\\
-        \textbf{ScientificForumService}\\
-        .add()\\
-        \textbf{ScientificForumRepository}\\
-        .add()
-    }
-    \aentry{ScientificForumList}{?}{?}{5~h}{Johannes \\ Garstenauer}{
+    \aentry{ScientificForumList}{Donnerstag}{Donnerstag}{5~h}{Johannes \\ Garstenauer}{
         scientificForumList.xhtml\\
         \textbf{ScientificForumListBacking}\\
         \textbf{ScientificForumService}\\
