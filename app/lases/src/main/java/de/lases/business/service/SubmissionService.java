@@ -156,7 +156,7 @@ public class SubmissionService implements Serializable {
      * @param review     The review to be released.
      * @param submission The submission containing that review.
      */
-    public void realeaseReview(Review review, Submission submission) {
+    public void releaseReview(Review review, Submission submission) {
     }
 
     /**
