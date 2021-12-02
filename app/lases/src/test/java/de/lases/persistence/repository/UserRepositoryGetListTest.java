@@ -73,7 +73,7 @@ public class UserRepositoryGetListTest {
         params.setSortColumn("firstname");
         params.setSortOrder(SortOrder.ASCENDING);
 
-        Transaction transaction = new Transaction();
+        Transaction mockTransaction = mock(Transaction.class);
         Connection mockConnection = mock(Connection.class);
         Statement mockStmt = mock(Statement.class);
         ResultSet rst = mock(ResultSet.class);
@@ -114,12 +114,9 @@ public class UserRepositoryGetListTest {
             e.printStackTrace();
         }
 
-        // Inject our mocked connection into the  transaction with reflection.
-        Field connectionField
-                = Transaction.class.getDeclaredField("connection");
-        connectionField.setAccessible(true);
-        connectionField.set(transaction, mockConnection);
+        // get the modified connection from transaction.
+        when(mockTransaction.getConnection()).thenReturn(mockConnection);
 
-        assertEquals(userTestData, UserRepository.getList(transaction, params));
+        assertEquals(userTestData, UserRepository.getList(mockTransaction, params));
     }
 }
