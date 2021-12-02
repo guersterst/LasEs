@@ -1,15 +1,3 @@
-package de.lases.persistence.repository;
-
-import de.lases.global.transport.FileDTO;
-import de.lases.global.transport.SystemSettings;
-import de.lases.persistence.exception.DataNotWrittenException;
-import de.lases.persistence.exception.InvalidFieldsException;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 class SystemSettingsRepositoryTest {
 
     private static SystemSettings systemSettings;
@@ -31,15 +19,15 @@ class SystemSettingsRepositoryTest {
                                     SystemSettings systemSettings2) {
         return
                 systemSettings1.getImprint()
-                .equals(systemSettings2.getImprint())
-                && systemSettings1.getCompanyName()
-                .equals(systemSettings2.getCompanyName())
-                && systemSettings1.getHeadlineWelcomePage()
-                .equals(systemSettings2.getHeadlineWelcomePage())
-                && systemSettings1.getMessageWelcomePage()
-                .equals(systemSettings2.getMessageWelcomePage())
-                && systemSettings1.getStyle()
-                .equals(systemSettings2.getStyle());
+                        .equals(systemSettings2.getImprint())
+                        && systemSettings1.getCompanyName()
+                        .equals(systemSettings2.getCompanyName())
+                        && systemSettings1.getHeadlineWelcomePage()
+                        .equals(systemSettings2.getHeadlineWelcomePage())
+                        && systemSettings1.getMessageWelcomePage()
+                        .equals(systemSettings2.getMessageWelcomePage())
+                        && systemSettings1.getStyle()
+                        .equals(systemSettings2.getStyle());
     }
 
     @Test
@@ -56,7 +44,7 @@ class SystemSettingsRepositoryTest {
         systemSettings.setImprint(null);
         assertThrows(InvalidFieldsException.class, () -> {
             SystemSettingsRepository.updateSettings(systemSettings,
-                        transaction);
+                    transaction);
         });
         systemSettings.setImprint(oldImprint);
     }

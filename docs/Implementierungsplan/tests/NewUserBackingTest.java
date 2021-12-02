@@ -1,14 +1,3 @@
-package de.lases.control.backing;
-
-import de.lases.business.service.RegistrationService;
-import de.lases.global.transport.User;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.lang.reflect.Field;
-
 @ExtendWith(MockitoExtension.class)
 class NewUserBackingTest {
 
