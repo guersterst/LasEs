@@ -1,6 +1,7 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.*;
+import de.lases.persistence.repository.ReviewRepository;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
@@ -26,6 +27,9 @@ public class ReviewService implements Serializable {
 
     @Inject
     private Transaction transaction;
+
+    @Inject
+    private ReviewRepository reviewRepository;
 
     /**
      * Gets a {@link Review}.

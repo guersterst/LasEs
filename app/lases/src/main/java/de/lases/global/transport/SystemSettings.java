@@ -13,7 +13,7 @@ public class SystemSettings implements Cloneable {
 
     private String messageWelcomePage;
 
-    private Style style;
+    private String style;
 
     public String getImprint() {
         return imprint;
@@ -69,17 +69,16 @@ public class SystemSettings implements Cloneable {
         this.messageWelcomePage = messageWelcomePage;
     }
 
-    public Style getStyle() {
+    public String getStyle() {
         return style;
     }
 
     /**
-     * Set the global style option for the application. For all choices refer
-     * to {@link Style}
+     * Set the global style option for the application as a css name.
      *
      * @param style The global style of the application.
      */
-    public void setStyle(Style style) {
+    public void setStyle(String style) {
         this.style = style;
     }
 
