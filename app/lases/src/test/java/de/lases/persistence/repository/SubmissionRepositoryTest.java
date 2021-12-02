@@ -1,9 +1,10 @@
 package de.lases.persistence.repository;
 
 import de.lases.global.transport.Privilege;
+import de.lases.global.transport.ResultListParameters;
 import de.lases.global.transport.Submission;
 import de.lases.global.transport.User;
-import de.lases.persistence.exception.DataNotWrittenException;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -15,10 +16,17 @@ class SubmissionRepositoryTest {
 
     private static final int EXAMPLE_SUBMISSION_ID_1 = 1;
     private static final int EXAMPLE_SUBMISSION_ID_2 = 2;
-    private static final int EXAMPLE_REVIEW_VERSION = 3;
-    private static final int EXAMPLE_USER_ID = 6;
+    private static int EXAMPLE_USER_ID;
     private static final String EXAMPLE_SUBMISSION_TITLE_1 = "Submission title";
     private static final String EXAMPLE_SUBMISSION_TITLE_2 = "Different title";
+
+    @BeforeAll
+    void addUser() throws Exception {
+        Transaction transaction = new Transaction();
+        UserRepository.add(new User(), transaction);
+        EXAMPLE_USER_ID = UserRepository.getList(transaction, new ResultListParameters()).get(0).getId();
+        transaction.commit();
+    }
 
     @Test
     void testAddAndGetList() throws Exception {
