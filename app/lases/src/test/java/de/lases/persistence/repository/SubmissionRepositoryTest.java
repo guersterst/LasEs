@@ -40,6 +40,6 @@ class SubmissionRepositoryTest {
         transaction.commit();
 
         transaction = new Transaction();
-        List<Submission> authoredList = SubmissionRepository.getList(user, Privilege.AUTHOR, transaction, null)
+        List<Submission> authoredList = SubmissionRepository.getList(user, Privilege.AUTHOR, transaction, null);
     }
 }
