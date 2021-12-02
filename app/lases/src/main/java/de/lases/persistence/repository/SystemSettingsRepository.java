@@ -60,6 +60,8 @@ public class SystemSettingsRepository {
      * @param transaction The transaction to use.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
+     * @throws InvalidFieldsException If the file dto does not contain a byte
+     *                                array.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */

@@ -40,9 +40,12 @@ public class ReviewRepository {
      *                                null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     * @throws NotFoundException If there is no submission with the given
+     *                           submissionId or the submission has no
+     *                           reviewer with the given reviewerId.
      */
     public static void add(Review review, Transaction transaction)
-            throws DataNotWrittenException {
+            throws DataNotWrittenException, NotFoundException {
     }
 
     /**
