@@ -12,13 +12,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.mockStatic;
 
 @ExtendWith(MockitoExtension.class)
 public class ScientificForumServiceTest {
@@ -138,6 +138,7 @@ public class ScientificForumServiceTest {
 
         List<User> editors = forumService.getEditors(forum);
         assertAll(
+
                 // Assert that the user editor is contained somewhere within
                 // the list of editors
                 () -> assertTrue(() -> {
@@ -148,6 +149,7 @@ public class ScientificForumServiceTest {
                     }
                     return false;
                 }),
+
                 // Assert that the user anotherEditor is contained somewhere within
                 // the list of editors
                 () -> assertTrue(() -> {
