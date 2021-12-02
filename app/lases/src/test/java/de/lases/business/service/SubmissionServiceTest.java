@@ -10,6 +10,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatcher;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -47,7 +48,7 @@ class SubmissionServiceTest {
     }
 
     @Test
-    void testGet() throws NotFoundException {
+    void testGet() {
         Submission sub = new Submission();
         sub.setId(EXAMPLE_SUBMISSION_ID);
 
@@ -88,7 +89,7 @@ class SubmissionServiceTest {
 
         submissionService.releaseReview(review, submission);
 
-        subRepo.verify(() -> SubmissionRepository.change(eq(submission), any(Transaction.class)), times(1));
+        reviewRepo.verify(() -> ReviewRepository.change(eq(review), any(Transaction.class)), times(1));
     }
 
 }
