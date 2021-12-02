@@ -40,7 +40,30 @@
 \subsection{Milestone 2}
 \localauthor{Sebastian Vogt}
 \atable{milestone2}{Milestone 2} {
-    \aentry{Submission: Reviews}{?}{?}{10~h}{Johann Schicho}{?}
+    \aentry{Submission: Reviews}{?}{?}{10~h}{Johann Schicho}{
+        submission.xhtml\\
+        \textbf{Review}\\
+        \textbf{SubmissionBacking}\\
+        .downloadReview()\\
+        .releaseReview()\\
+        .acceptReviewing()\\
+        .declineReviewing()\\
+        .getReviewerForReview()\\
+        .getReviewPagination()\\
+        .getReviewedBy()\\
+        \textbf{ReviewService}\\
+        .get()\\
+        .change()\\
+        .remove()\\
+        .getList()\\
+        .getFile()\\
+        \textbf{ReviewRepository}\\
+        .get()\\
+        .change()\\
+        .remove()\\
+        .getList()\\
+        .getPDF()\\
+    }
     \aentry{ScienceFields}{?}{?}{5~h}{Sebastian Vogt}{
         \textbf{ScienceFieldService} \\
         \textbf{ScienceFieldRepository} \\
@@ -55,11 +78,9 @@
         .add() \\
         .setPDF() \\
     }
-    \aentry{Registration, Verification}{?}{?}{20~h}{Thomas Kirz}{
-        verification.xhtml \\
+    \aentry{Registration}{?}{?}{10~h}{Thomas Kirz}{
         registration.xhtml \\
         \textbf{RegistrationBacking} \\
-        \textbf{VerificationBacking} \\
         \textbf{EmailAddressLayoutValidator} \\
         \textbf{EmailAddressUnoccupiedValidator} \\
         \textbf{PasswordValidator} \\
@@ -67,13 +88,19 @@
         \textbf{RegistrationService} \\
         .register() \\
         \textbf{UserService} \\
-        .getVerification() \\
         .emailExists() \\
         \textbf{UserRepository} \\
         .add() \\
+        .emailExists() \\
+    }
+    \aentry{Verification}{?}{?}{10~h}{Thomas Kirz}{
+        verification.xhtml \\
+        \textbf{VerificationBacking} \\
+        \textbf{UserService} \\
+        .getVerification() \\
+        \textbf{UserRepository} \\
         .getVerification() \\
         .setVerification() \\
-        .emailExists() \\
         \textbf{Verification} \\
     }
     \aentry{Administration}{?}{?}{6~h}{Stefanie Gürster}{
