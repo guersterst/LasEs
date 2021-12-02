@@ -1,5 +1,6 @@
 package de.lases.business.service;
 
+import de.lases.business.util.EmailUtil;
 import de.lases.business.util.Hashing;
 import de.lases.global.transport.User;
 import org.junit.jupiter.api.AfterAll;
@@ -9,8 +10,7 @@ import org.mockito.MockedStatic;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mockStatic;
 
 class RegistrationServiceTest {
@@ -22,15 +22,18 @@ class RegistrationServiceTest {
     private static final String EXAMPLE_HASH = "thisissuppposedtobeahash";
 
     private static MockedStatic<Hashing> mockedHashing;
+    private static MockedStatic<EmailUtil> mockedEmailUtil;
 
     @BeforeAll
-    static void mockHashing() {
+    static void mockStaticClasses() {
         mockedHashing = mockStatic(Hashing.class);
+        mockedEmailUtil = mockStatic(EmailUtil.class);
     }
 
     @AfterAll
-    static void closeHashingMock() {
+    static void closeMocks() {
         mockedHashing.close();
+        mockedEmailUtil.close();
     }
 
     @Test
@@ -50,6 +53,8 @@ class RegistrationServiceTest {
         registrationService.selfRegister(user);
         User registeredUser = userService.get(user);
 
+        mockedEmailUtil.verify(() -> EmailUtil.sendEmail(
+                anyString(), new String[]{EXAMPLE_EMAIL_ADDRESS}, any(String[].class), anyString(), anyString()));
         assertAll(
                 () -> assertEquals(EXAMPLE_EMAIL_ADDRESS, registeredUser.getEmailAddress()),
                 () -> assertEquals(EXAMPLE_HASH, registeredUser.getPasswordHashed())
