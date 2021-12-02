@@ -23,7 +23,6 @@
                             #3
 \end{longtable}
 }
-
 \newcommand{\aentry}[6]{\footnotesize\makecell{#1} & \footnotesize\makecell{#2} & \footnotesize\makecell{#3} & \footnotesize\makecell{#4} & \footnotesize\makecell{#5} & \footnotesize\makecell{#6}\\\midrule}
 %%%%%% END MACROS %%%%%%
 
@@ -84,9 +83,164 @@ Außerdem beinhaltet ein Arbeitspaket immer auch die dazugehörige Beschreibung 
 }
 
 \subsection{Milestone 2}
+\subsubsection{Arbeitpakete}
 \localauthor{Sebastian Vogt}
-
-\subsection{Milestone 3}
-\localauthor{Johannes Garstenauer}
+\atable{milestone2}{Milestone 2} {
+    \aentry{ScienceFields}{13.12.2021\\ 10:00}{13.12.2021\\ 20:00}{5~h}{Sebastian Vogt}{
+        \textbf{ScienceFieldService} \\
+        \textbf{ScienceFieldRepository} \\
+        \textbf{ScienceField}
+    }
+    \aentry{Profile}{14.12.2021\\ 08:00}{16.12.2021\\ 11:30}{12~h}{Sebastian Vogt}{
+        profile.xhtml\\
+        \textbf{ProfileBacking} \\
+        \textbf{AvatarValidator} \\
+        \textbf{UserService} \\
+        .getAvatar() \\
+        .change() \\
+        .setAvatar() \\
+        .addScienceField() \\
+        .removeScienceField() \\
+        .remove() \\
+        \textbf{UserRepository} \\
+        .getAvatar() \\
+        .change() \\
+        .setAvatar() \\
+        .addScienceField() \\
+        .removeScienceField() \\
+        .remove() \\
+        \textbf{SubmissionService}\\
+        .countSubmissions() \\
+        \textbf{SubmissionRepository} \\
+        .countSubmissions() \\
+        \textbf{ScienceField}
+    }
+    \aentry{NewReview}{13.12.2021\\ 14:00}{13.12.2021\\ 18:00}{4~h}{Johann Schicho}{
+        newReview.xhtml\\
+        \textbf{NewReviewBacking} \\
+        \textbf{ReviewService} \\
+        .add() \\
+        \textbf{ReviewRepository} \\
+        .add() \\
+        .setPDF() \\
+    }
+    \aentry{Submission: Reviews}{13.12.2021\\ 18:00}{15.12.2021\\ 15:00}{10~h}{Johann Schicho}{
+        submission.xhtml\\
+        \textbf{Review}\\
+        \textbf{SubmissionBacking}\\
+        .downloadReview()\\
+        .releaseReview()\\
+        .acceptReviewing()\\
+        .declineReviewing()\\
+        .getReviewerForReview()\\
+        .getReviewPagination()\\
+        .getReviewedBy()\\
+        \textbf{ReviewService}\\
+        .get()\\
+        .change()\\
+        .remove()\\
+        .getList()\\
+        .getFile()\\
+        \textbf{ReviewRepository}\\
+        .get()\\
+        .change()\\
+        .remove()\\
+        .getList()\\
+        .getPDF()\\
+    }
+    \aentry{NewScientificForum}{16.12.2021\\ 10:00}{16.12.2021\\ 15:30}{4~h}{Johann Schicho}{
+        newScientificForum.xhtml\\
+        \textbf{newScientificForumBacking}\\
+        \textbf{ScientificForumService}\\
+        .add()\\
+        \textbf{ScientificForumRepository}\\
+        .add()
+    }
+    \aentry{Registration}{13.12.2021 \\ 14:00}{14.12.2021 \\ 17:00}{10~h}{Thomas Kirz}{
+        registration.xhtml \\
+        \textbf{RegistrationBacking} \\
+        \textbf{EmailAddressLayoutValidator} \\
+        \textbf{EmailAddressUnoccupiedValidator} \\
+        \textbf{PasswordValidator} \\
+        \textbf{EmailAddressExistsValidator} \\
+        \textbf{RegistrationService} \\
+        .register() \\
+        \textbf{UserService} \\
+        .emailExists() \\
+        \textbf{UserRepository} \\
+        .add() \\
+        .emailExists() \\
+    }
+    \aentry{Verification}{15.12.2021\\ 13:00}{16.12.2021\\17:00}{10~h}{Thomas Kirz}{
+        verification.xhtml \\
+        \textbf{VerificationBacking} \\
+        \textbf{UserService} \\
+        .getVerification() \\
+        \textbf{UserRepository} \\
+        .getVerification() \\
+        .setVerification() \\
+        \textbf{Verification} \\
+    }
+    \aentry{Administration}{13.12.2021\\10:00}{14.12.2021\\14:00}{6~h}{Stefanie Gürster}{
+        administration.xhtml\\
+        \textbf{AdministrationBacking} \\
+        \textbf{SystemSettingsRepository} \\
+        \textbf{CustomizationService}
+    }
+    \aentry{Toolbar}{14.12.2021\\ 15:00}{16.12.2021\\ 19:00}{10~h}{Stefanie Gürster}{
+        toolbar.xhtml\\
+        \textbf{ToolbarBacking}\\
+        \textbf{SubmissionService}\\
+        .addReviewer()\\
+        .removeReviewer()\\
+        \textbf{SubmissionRepository}\\
+        .addReviewer()\\
+        .removeReviewer()\\
+        \textbf{ReviewedByRepository}\\
+        .get() \\
+    }
+    \aentry{ScientificForum}{13.12.2021\\ 16:00}{15.12.2021\\18:00}{15~h}{Johannes \\ Garstenauer}{
+        scientificForum.xhtml \\
+        \textbf{ScientificForumBacking}\\
+        \textbf{ScientificForum}\\
+        \textbf{ForumNameExistsValidator}\\
+        \textbf{ScientificForumService}\\
+        .remove()\\
+        .addEditor()\\
+        .addScienceField()\\
+        .removeEditor()\\
+        .removeScienceField()\\
+        .change()\\
+        .getEditor()\\
+        .exists()\\
+        \textbf{ScientificForumRepository}\\
+        .remove() \\
+        .addEditor()\\
+        .addScienceField()\\
+        .removeEditor()\\
+        .removeScienceField()\\
+        .change()\\
+        .exists()
+    }
+    \aentry{ScientificForumList}{16.12.2021\\ 13:00}{16.12.2021 \\18:00}{5~h}{Johannes \\ Garstenauer}{
+        scientificForumList.xhtml\\
+        \textbf{ScientificForumListBacking}\\
+        \textbf{ScientificForumService}\\
+        .getList()\\
+        \textbf{ScientificForumRepository}\\
+        .getList()
+    }
+}
+\subsubsection{Stundenanzahl}
+\begin{center}
+\begin{tabular}{ c c }
+    \textbf{Teammitglied} & \textbf{Stundenanzahl}\\
+    Sebastian Vogt & 17~h\\
+    Johann Schicho & 18~h\\
+    Thomas Kirz & 20~h\\
+    Stefanie Gürster & 16~h\\
+    Johannes Garstenauer & 20~h
+\end{tabular}
+\end{center}
 
 \end{landscape}

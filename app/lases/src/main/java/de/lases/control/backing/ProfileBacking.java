@@ -2,6 +2,7 @@ package de.lases.control.backing;
 
 import de.lases.business.internal.ConfigPropagator;
 import de.lases.business.service.ScienceFieldService;
+import de.lases.business.service.SubmissionService;
 import de.lases.business.service.UserService;
 import de.lases.control.exception.IllegalUserFlowException;
 import de.lases.control.internal.*;
@@ -37,6 +38,9 @@ public class ProfileBacking implements Serializable {
 
     @Inject
     private ScienceFieldService scienceFieldService;
+
+    @Inject
+    private SubmissionService submissionService;
 
     @Inject
     private ConfigPropagator configPropagator;
