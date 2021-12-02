@@ -18,11 +18,11 @@ public class EmailUtil {
     /**
      * Sends an email to a given recipient.
      *
-     * @param sender The senders email address.
+     * @param sender     The senders email address.
      * @param recipients The recipients email addresses.
-     * @param cc The recipients in carbon-copy.
-     * @param subject The subject of the email.
-     * @param body The body of the email.
+     * @param cc         The recipients in carbon-copy.
+     * @param subject    The subject of the email.
+     * @param body       The body of the email.
      * @throws EmailTransmissionFailedException Thrown when an issue with the transmission of the email has occurred.
      */
     public static void sendEmail(String sender, String[] recipients, String[] cc, String subject, String body)
@@ -33,15 +33,12 @@ public class EmailUtil {
      * Generates a mailto link.
      *
      * @param recipients The recipients email addresses.
-     * @param cc The recipients in carbon-copy.
-     * @param subject The subject of the email.
-     * @param body The body of the email.
+     * @param cc         The recipients in carbon-copy.
+     * @param subject    The subject of the email.
+     * @param body       The body of the email.
      * @return A link leading to a mailto e-mail.
-     *
-     * @throws IllegalArgumentException when invalid strings are input.
      */
-    public static String generateMailToLink(String[] recipients, String[] cc, String subject, String body) throws IllegalArgumentException
-    {
+    public static String generateMailToLink(String[] recipients, String[] cc, String subject, String body) {
         return null;
     }
 
