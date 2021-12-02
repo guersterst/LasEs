@@ -16,7 +16,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 public class ScienceFieldServiceTest {
@@ -65,6 +64,6 @@ public class ScienceFieldServiceTest {
 
         mockedStatic.when(() -> ScienceFieldRepository.getList(eq(user), any(), eq(params))).thenReturn(userScienceFields);
 
-        assertEquals(userScienceFields, ScienceFieldService.getList(user,params));
+        assertEquals(userScienceFields, ScienceFieldService.getList(user, params));
     }
 }
