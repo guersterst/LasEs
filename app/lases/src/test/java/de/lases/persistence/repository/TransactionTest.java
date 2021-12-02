@@ -35,6 +35,8 @@ class TransactionTest {
         Mockito.verify(mockConnection).commit();
     }
 
+    // TODO: Das was die tests machen ist eigentlich nicht so spezifiziert
+
     @Test
     void testAbortPossible() {
         Transaction transaction = new Transaction();
