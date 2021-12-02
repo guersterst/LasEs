@@ -24,7 +24,8 @@ public class ReviewServiceTest {
         reviewService = new ReviewService();
 
         // Mock get to return a review if the ids are correct.
-        reviewRepoMocked.when(() -> ReviewRepository.get(eq(review), any(Transaction.class))).thenReturn(review);
+        reviewRepoMocked.when(() -> ReviewRepository.get(eq(review),
+                any(Transaction.class))).thenReturn(review);
     }
 
     @BeforeEach

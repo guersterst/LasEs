@@ -11,7 +11,8 @@ public class ScientificForumServiceTest {
     // The required DTOs and their values
     private static ScientificForum forum;
     private static final Integer EXAMPLE_FORUM_ID = 1;
-    private static final String EXAMPLE_FORUM_NAME = "Advances in Neural Information Processing Systems";
+    private static final String EXAMPLE_FORUM_NAME = "Advances in Neural Information " +
+            "Processing Systems";
     private static final String EXAMPLE_FORUM_NAME_ALTERNATIVE =
             "Proceedings of the IEEE International Conference on Computer Vision";
     private static final String EXAMPLE_FORUM_DESCRIPTION = "Lorem ipsum dolor sit";
@@ -115,7 +116,8 @@ public class ScientificForumServiceTest {
 
         // Mock the underlying repository function.
         List<User> tempEditorsList = Arrays.asList(anotherEditor, editor);
-        userRepoMock.when(() -> UserRepository.getList(any(Transaction.class), eq(forum))).thenReturn(tempEditorsList);
+        userRepoMock.when(() -> UserRepository.getList(any(Transaction.class),
+                eq(forum))).thenReturn(tempEditorsList);
 
         List<User> editors = forumService.getEditors(forum);
         assertAll(

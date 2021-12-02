@@ -23,8 +23,10 @@ public class PaperServiceTest {
         paperService = new PaperService();
 
         // Mock get to return a paper or file if the ids are correct.
-        paperRepoMocked.when(() -> PaperRepository.get(eq(paper), any(Transaction.class))).thenReturn(paper);
-        paperRepoMocked.when(() -> PaperRepository.getPDF(eq(paper), any(Transaction.class))).thenReturn(fileDTO);
+        paperRepoMocked.when(() -> PaperRepository.get(eq(paper),
+                any(Transaction.class))).thenReturn(paper);
+        paperRepoMocked.when(() -> PaperRepository.getPDF(eq(paper),
+                any(Transaction.class))).thenReturn(fileDTO);
     }
 
     @BeforeEach
