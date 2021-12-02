@@ -293,7 +293,8 @@ public class UserRepository {
      * Sets the avatar for the specified user.
      *
      * @param user A suer dto with a valid id.
-     * @param avatar A file dto filled with an image file.
+     * @param avatar A file dto filled with an image file. If the dto or the
+     *               image itself are null, the current avatar will be deleted.
      * @param transaction The transaction to use.
      * @throws NotFoundException If there is no user with the specified id.
      * @throws DataNotWrittenException If writing the data to the repository
