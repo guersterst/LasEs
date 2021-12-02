@@ -1,0 +1,85 @@
+\lstset{
+    language=Java,
+    basicstyle=\ttfamily\selectfont\scriptsize,
+}
+
+\newcommand{\testlisting}[1]{\lstinputlisting[label={lst:#1},caption={#1.java}]{tests/#1.java}}
+
+Es folgen Beispiele für Whitebox-Tests für verschiedene Arbeitspakete aus allen Milestones.
+Sie sollen repräsentativ sein für bei der Implementierung entstehende Tests, sind aber nicht zwingend vollständige
+Test-Suites für die jeweiligen Klassen oder Arbeitspakete.
+
+\subsection{Milestone 1}\label{subsec:milestone1}
+
+\subsubsection{Arbeitspaket \emph{Submission}}
+\localauthor{Thomas Kirz}
+\testlisting{SubmissionBackingTest}
+\testlisting{SubmissionServiceTest}
+\testlisting{SubmissionRepositoryTest}
+
+\subsubsection{Arbeitspaket \emph{Welcome}}
+\localauthor{Johann Schicho}
+\testlisting{LoginServiceTest}
+
+\subsubsection{Arbeitspaket \emph{UserGetLists}}
+\localauthor{Johann Schicho}
+\testlisting{UserRepositoryGetListTest}
+
+\subsubsection{Arbeitspaket \emph{ConnectionPool}}
+\localauthor{Sebastian Vogt}
+\testlisting{TransactionTest}
+\testlisting{ConnectionPoolTest}
+
+\subsubsection{Arbeitspaket \emph{Crypto}}
+\localauthor{Stefanie Gürster}
+\testlisting{HashingTest}
+
+\susubsection{Arbeitspaket \emph{NewSubmission}}
+\localauthor{Johannes Garstenauer}
+\testlisting{ScientificForumServiceTest}
+
+\susubsection{Arbeitspaket \emph{NewSubmission}}
+\localauthor{Johannes Garstenauer}
+\testlisting{PaperServiceTest}
+
+\subsection{Milestone 2}\label{subsec:milestone2}
+
+\subsubsection{Arbeitspaket \emph{Registration}}
+\localauthor{Thomas Kirz}
+\testlisting{PasswordValidatorTest}
+\testlisting{RegistrationServiceTest}
+\testlisting{UserRepositoryTest}
+
+\subsubsection{Arbeitspaket \emph{Profile}}
+\localauthor{Johann Schicho}
+\testlisting{ProfileBackingTest}
+
+\subsubsection{Arbeitspaket \emph{Administration}}
+\localauthor{Sebastian Vogt}
+\testlisting{SystemSettingsRepositoryTest}
+
+\subsubsection{Arbeitspaket \emph{Science Field}}
+\localauthor{Stefanie Gürster}
+\testlisting{ScienceFieldServiceTest}
+
+\subsection{Milestone 3}\label{subsec:milestone3}
+
+\subsubsection{Arbeitspaket \emph{ErrorPage}}
+\testlisting{ErrorPageBackingTest}
+\testlisting{ErrorMessageTest}
+
+\subsubsection{Arbeitspaket \emph{Email}}
+\localauthor{Johann Schicho}
+\testlisting{EmailUtilTest}
+
+\subsubsection{Arbeitspaket \emph{NewUser}}
+\localauthor{Sebastian Vogt}
+\testlisting{NewUserBackingTest}
+
+\subsubsection{Arbeitspaket \emph{UserList}}
+\localauthor{Stefanie Gürster}
+\testlisting{UserServiceTest}
+
+\susubsection{Arbeitspaket \emph{NewReview}}
+\localauthor{Johannes Garstenauer}
+\testlisting{ReviewServiceTest}
