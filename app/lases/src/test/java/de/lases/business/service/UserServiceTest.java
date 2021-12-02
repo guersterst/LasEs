@@ -1,6 +1,7 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.User;
+import de.lases.global.transport.Verification;
 import de.lases.persistence.repository.UserRepository;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -10,6 +11,7 @@ import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -67,5 +69,28 @@ public class UserServiceTest {
         userService.change(newUser);
 
         assertEquals(newUser, userService.get(oldUser));
+    }
+
+    @Test
+    void testChangeEmailVerified() {
+        User user = new User();
+        user.setId(1);
+        user.setEmailAddress("stefanie@gmail.com");
+
+        User changedEmail = new User();
+        changedEmail.setId(1);
+        changedEmail.setEmailAddress("st@gmail.com");
+
+        Verification verification = new Verification();
+        verification.setUserId(1);
+        verification.setVerified(false);
+
+        mockedRepo.when(() -> UserRepository.getVerification(eq(user), any())).thenReturn(verification);
+
+        mockedRepo.when(() -> UserRepository.get(eq(user), any())).thenReturn(changedEmail);
+
+        userService.change(changedEmail);
+
+        assertFalse(userService.getVerification(user).isVerified());
     }
 }
