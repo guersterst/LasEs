@@ -16,12 +16,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class TransactionTest {
 
-    /*
-     * Ich weiß halt nicht ob das gut ist, das testet ja internes verhalten.
-     */
     @Test
-    void testCommitCommits() throws NoSuchFieldException, IllegalAccessException,
-            SQLException {
+    void testCommitCommitsOnConnection() throws NoSuchFieldException,
+            IllegalAccessException, SQLException {
         Transaction transaction = new Transaction();
         Connection mockConnection = Mockito.mock(Connection.class);
 
@@ -36,51 +33,19 @@ class TransactionTest {
     }
 
     @Test
-    void testAbortPossible() {
+    void testAbortAbortsOnConnection() throws NoSuchFieldException,
+            IllegalAccessException, SQLException {
         Transaction transaction = new Transaction();
-        assertDoesNotThrow(transaction::abort);
+        Connection mockConnection = Mockito.mock(Connection.class);
 
-    }
+        // Inject our mock connection with reflection
+        Field connectionField
+                = Transaction.class.getDeclaredField("connection");
+        connectionField.setAccessible(true);
+        connectionField.set(transaction, mockConnection);
 
-    @Test
-    void testCommitPossible() {
-        Transaction transaction = new Transaction();
-        assertDoesNotThrow(transaction::commit);
-    }
-
-    @Test
-    void cannotCommitAfterAbort() {
-        Transaction transaction = new Transaction();
         transaction.abort();
-        assertThrows(IllegalStateException.class, transaction::commit);
-    }
-
-    @Test
-    void cannotCommitTwice() {
-        Transaction transaction = new Transaction();
-        transaction.commit();
-        assertThrows(IllegalStateException.class, transaction::commit);
-    }
-
-    @Test
-    void cannotAbortTwice() {
-        Transaction transaction = new Transaction();
-        transaction.abort();
-        assertThrows(IllegalStateException.class, transaction::abort);
-    }
-
-    @Test
-    void cannotGetConnectionAfterAbort() {
-        Transaction transaction = new Transaction();
-        transaction.abort();
-        assertThrows(IllegalStateException.class, transaction::getConnection);
-    }
-
-    @Test
-    void cannotGetConnectionAfterCommit() {
-        Transaction transaction = new Transaction();
-        transaction.commit();
-        assertThrows(IllegalStateException.class, transaction::getConnection);
+        Mockito.verify(mockConnection).rollback();
     }
 
 }
