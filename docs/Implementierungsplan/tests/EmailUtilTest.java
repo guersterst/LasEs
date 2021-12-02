@@ -1,9 +1,3 @@
-package de.lases.business.util;
-
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 public class EmailUtilTest {
 
     private static final String emailSubjectCCnoBody = "mailto:info@example.com?subject=important&cc=cc@example.com";
