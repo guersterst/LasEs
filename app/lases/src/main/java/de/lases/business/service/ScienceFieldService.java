@@ -29,10 +29,10 @@ public class ScienceFieldService implements Serializable {
     /**
      * Gets a {@link ScienceField}.
      *
-     * @param scienceField A {@code ScienceField} containing a valid id.
-     * @return The fully filled requested {@code ScienceField}.
+     * @param name A {@code String} name of a scienceField.
+     * @return The fully filled requested {@code ScienceField} or null if it doesn't exist.
      */
-    public ScienceField get(ScienceField scienceField) {
+    public ScienceField get(String name) {
         return null;
     }
 

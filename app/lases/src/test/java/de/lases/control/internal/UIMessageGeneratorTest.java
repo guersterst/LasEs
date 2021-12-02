@@ -16,20 +16,22 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
-
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 public class UIMessageGeneratorTest {
 
     @Mock
-    SubmissionService mockedService;
+    SubmissionService mockedSubmissionService;
 
-    @Inject
-    Event<UIMessage> uiMessageEvent;
-
-    @Inject
+    @Mock
     FacesContext facesContext;
+
+    @Mock
+    Event<UIMessage> uiMessageEvent;
 
     static UIMessage uiMessage;
 
@@ -41,7 +43,7 @@ public class UIMessageGeneratorTest {
 
     @Test
     void eventFiredTest() {
-        Mockito.when(mockedService.get(Mockito.any(Submission.class))).thenAnswer(
+        when(mockedSubmissionService.get(Mockito.any(Submission.class))).thenAnswer(
                 invocationOnMock -> {
                     uiMessageEvent.fire(uiMessage);
                     return null;
