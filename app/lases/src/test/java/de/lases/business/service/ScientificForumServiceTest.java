@@ -72,7 +72,7 @@ public class ScientificForumServiceTest {
         forum.setDescription(EXAMPLE_FORUM_DESCRIPTION);
 
 
-        // Add the forum.
+        // Add the forum for a complete procedure. The result of this will not be verified.
         ScientificForumService forumService = new ScientificForumService();
         forumService.add(forum, null, null);
 
@@ -100,6 +100,13 @@ public class ScientificForumServiceTest {
     }
 
     @Test
-    void testExists() {
+    void testGetAllForums() {
+
+
+
+        ScientificForumService forumService = new ScientificForumService();
+        assertAll(
+                () -> assertEquals()
+        );
     }
 }
