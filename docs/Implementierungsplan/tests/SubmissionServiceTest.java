@@ -19,9 +19,11 @@ class SubmissionServiceTest {
         user.setId(EXAMPLE_USER_ID);
 
         subRepo = mockStatic(SubmissionRepository.class);
-        subRepo.when(() -> SubmissionRepository.get(eq(submissionFromRepo), any(Transaction.class)))
+        subRepo.when(() -> SubmissionRepository.get(
+                eq(submissionFromRepo), any(Transaction.class)))
                 .thenReturn(submissionFromRepo);
-        subRepo.when(() -> SubmissionRepository.getList(eq(user), Privilege.AUTHOR, any(Transaction.class), any()))
+        subRepo.when(() -> SubmissionRepository.getList(
+                eq(user), Privilege.AUTHOR, any(Transaction.class), any()))
                 .thenReturn(new Submission[]{submissionFromRepo});
 
         reviewRepo = mockStatic(ReviewRepository.class);
@@ -58,7 +60,8 @@ class SubmissionServiceTest {
 
         submissionService.releaseReview(review, submission);
 
-        reviewRepo.verify(() -> ReviewRepository.change(eq(review), any(Transaction.class)), times(1));
+        reviewRepo.verify(() -> ReviewRepository.change(
+                eq(review), any(Transaction.class)), times(1));
     }
 
     @Test

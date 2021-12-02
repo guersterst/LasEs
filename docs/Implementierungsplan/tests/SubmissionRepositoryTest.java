@@ -10,7 +10,8 @@ class SubmissionRepositoryTest {
     void addUser() throws Exception {
         Transaction transaction = new Transaction();
         UserRepository.add(new User(), transaction);
-        EXAMPLE_USER_ID = UserRepository.getList(transaction, new ResultListParameters()).get(0).getId();
+        EXAMPLE_USER_ID = UserRepository.getList(
+                transaction, new ResultListParameters()).get(0).getId();
         transaction.commit();
     }
 
@@ -59,7 +60,8 @@ class SubmissionRepositoryTest {
         submission.setTitle(EXAMPLE_SUBMISSION_TITLE_1);
         SubmissionRepository.add(submission, transaction);
         transaction.abort();
-        List<Submission> authoredList = SubmissionRepository.getList(new User(), Privilege.AUTHOR, transaction, null);
+        List<Submission> authoredList = SubmissionRepository.getList(
+                new User(), Privilege.AUTHOR, transaction, null);
         assertEquals(0, authoredList.size());
     }
 
