@@ -32,7 +32,7 @@ public class User implements Cloneable {
 
     private String passwordSalt;
 
-    private boolean isNotRegistered;
+    private boolean isRegistered;
 
     private int numberOfSubmissions;
 
@@ -194,17 +194,17 @@ public class User implements Cloneable {
         this.passwordSalt = passwordSalt;
     }
 
-    public boolean isNotRegistered() {
-        return isNotRegistered;
+    public boolean isRegistered() {
+        return isRegistered;
     }
 
     /**
      * Decide if the user is registered or not.
      *
-     * @param notRegistered Is the user not registered?
+     * @param registered Is the user not registered?
      */
-    public void setNotRegistered(boolean notRegistered) {
-        isNotRegistered = notRegistered;
+    public void setRegistered(boolean registered) {
+        isRegistered = registered;
     }
 
     public List<Privilege> getPrivileges() {
