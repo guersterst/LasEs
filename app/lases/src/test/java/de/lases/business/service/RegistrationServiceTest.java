@@ -2,6 +2,7 @@ package de.lases.business.service;
 
 import de.lases.business.util.Hashing;
 import de.lases.global.transport.User;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
@@ -27,7 +28,7 @@ class RegistrationServiceTest {
         mockedHashing = mockStatic(Hashing.class);
     }
 
-    @BeforeAll
+    @AfterAll
     static void closeHashingMock() {
         mockedHashing.close();
     }
