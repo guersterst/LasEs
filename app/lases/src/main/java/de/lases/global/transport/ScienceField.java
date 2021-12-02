@@ -7,22 +7,7 @@ import java.util.List;
  */
 public class ScienceField implements Cloneable {
 
-    private int id;
-
     private String name;
-
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * Set the id of the science field.
-     *
-     * @param id The id of the science field.
-     */
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
