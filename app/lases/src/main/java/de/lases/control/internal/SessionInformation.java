@@ -19,7 +19,7 @@ public class SessionInformation implements Serializable {
 
     /**
      * Get the user that is currently logged in. The user dto must be filled
-     * out with his id.
+     * out with his id and privileges.
      *
      * @return A user dto with an id.
      */
