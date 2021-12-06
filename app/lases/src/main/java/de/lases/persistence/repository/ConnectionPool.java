@@ -1,5 +1,6 @@
 package de.lases.persistence.repository;
 
+import de.lases.persistence.exception.DatasourceQueryFailedException;
 import de.lases.persistence.exception.DepletedResourceException;
 
 import java.sql.Connection;
@@ -114,11 +115,7 @@ public class ConnectionPool {
         getInstance().initialized = true;
         List<Connection> pool = new ArrayList<>(INITIAL_POOL_SIZE);
         for (int i = 0; i < INITIAL_POOL_SIZE; i++) {
-            try {
-                pool.add(createConnection(DB_URL, DB_USER, DB_PASSWORD));
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
+            pool.add(createConnection(DB_URL, DB_USER, DB_PASSWORD));
         }
         getInstance().addConnections(pool);
         logger.info("DB Connection Pool started");
@@ -153,8 +150,7 @@ public class ConnectionPool {
     }
 
     private static Connection createConnection(
-            String url, String user, String password)
-            throws SQLException {
+            String url, String user, String password) {
         try {
             Class.forName(DB_DRIVER);
         }
@@ -167,10 +163,15 @@ public class ConnectionPool {
         props.setProperty("ssl", "true");
         props.setProperty("sslfactory",
                 "org.postgresql.ssl.DefaultJavaSSLFactory");
-        Connection connection =
-                DriverManager.getConnection(url, user, password);
-        connection.setAutoCommit(false);
-        return connection;
+        try {
+            Connection connection =
+                    DriverManager.getConnection(url, user, password);
+            connection.setAutoCommit(false);
+            return connection;
+        } catch(SQLException ex) {
+            throw new DatasourceQueryFailedException("Connection could not"
+                    + "be created.", ex);
+        }
     }
 
     private void checkInitialized() {
