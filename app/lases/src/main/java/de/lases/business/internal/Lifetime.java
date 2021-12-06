@@ -1,6 +1,7 @@
 package de.lases.business.internal;
 
 import de.lases.persistence.exception.ConfigNotReadableException;
+import de.lases.persistence.repository.ConnectionPool;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,6 +29,7 @@ public class Lifetime {
      */
     public static void startup(InputStream loggerConfigStream) {
         initializeLogger(loggerConfigStream);
+        initializeDBPool();
     }
 
     /**
@@ -53,6 +55,10 @@ public class Lifetime {
         } catch (IOException e) {
             throw new ConfigNotReadableException("Could not read logger config file", e);
         }
+    }
+
+    private static void initializeDBPool() {
+        ConnectionPool.init();
     }
 
 
