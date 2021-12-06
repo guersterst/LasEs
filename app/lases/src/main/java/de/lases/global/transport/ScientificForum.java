@@ -107,7 +107,11 @@ public class ScientificForum implements Cloneable {
     public ScientificForum clone() {
         try {
             ScientificForum clone = (ScientificForum) super.clone();
-            // TODO: copy mutable state here, so the clone can't change the internals of the original
+
+            /*
+             * Nothing to do here, since all references of ScientificForum are
+             * immutable.
+             */
             return clone;
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
@@ -122,6 +126,13 @@ public class ScientificForum implements Cloneable {
      */
     @Override
     public boolean equals(Object object) {
-        return false;
+        if (object == this) {
+            return true;
+        }
+        if (!(object instanceof ScientificForum)) {
+            return false;
+        }
+        ScientificForum forum = (ScientificForum) object;
+        return forum.getId().equals(this.getId());
     }
 }
