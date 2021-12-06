@@ -223,7 +223,7 @@ public class SubmissionService implements Serializable {
      *                             filtering, sorting or number of elements.
      * @return A list of all {@link Submission}s that belong to a given scientific forum.
      */
-    public static List<Submission> getList(ScientificForum scientificForum,
+    public List<Submission> getList(ScientificForum scientificForum,
                                            ResultListParameters
                                                    resultListParameters) {
         return null;
