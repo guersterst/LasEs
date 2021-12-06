@@ -9,7 +9,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.sql.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 /**
@@ -86,6 +88,7 @@ public class UserRepository {
             if (userResult.next()) {
                 result = createUserFromResultSet(userResult, submissionAndEditorResult, user);
 
+                /*
                 if (userResult.next()) {
 
                     // There cannot be two results of such a query.
@@ -94,6 +97,8 @@ public class UserRepository {
                     logger.severe(msg);
                     throw new InvalidFieldsException(msg);
                 }
+
+                 */
             } else {
                 String msg = "Error while loading a user with the id: " + user.getId()
                         + " and email: " + user.getEmailAddress();
@@ -117,7 +122,11 @@ public class UserRepository {
         result.setAdmin(userResult.getBoolean("is_administrator"));
         result.setFirstName(userResult.getString("firstname"));
         result.setLastName(userResult.getString("lastname"));
-        result.setDateOfBirth(userResult.getDate("birthdate").toLocalDate());
+
+        Date birthDate = userResult.getDate("birthdate");
+        if (birthDate != null) {
+            result.setDateOfBirth(birthDate.toLocalDate());
+        }
         result.setPasswordHashed(userResult.getString("password_hash"));
         result.setRegistered(userResult.getBoolean("is_registered"));
 
@@ -133,13 +142,25 @@ public class UserRepository {
         if (result.isRegistered()) {
             privileges.add(Privilege.AUTHENTICATED);
         }
-        if (submissionAndEditorResult.getInt("editor_id") != 0) {
-            privileges.add(Privilege.EDITOR);
+
+        // TODO extra result columns are not found
+        try {
+            if (submissionAndEditorResult.getInt("editor_id") != 0) {
+                privileges.add(Privilege.EDITOR);
+            }
+        } catch (SQLException ex) {
+
+            // Do nothing.
         }
         result.setPrivileges(privileges);
 
         // Number of submissions
-        result.setNumberOfSubmissions(submissionAndEditorResult.getInt("number_of_submissions"));
+        try {
+            result.setNumberOfSubmissions(submissionAndEditorResult.getInt("number_of_submissions"));
+        } catch (SQLException ex) {
+
+            // Do nothing.
+        }
         return result;
     }
 

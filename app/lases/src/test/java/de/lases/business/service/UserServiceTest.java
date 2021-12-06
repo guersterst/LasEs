@@ -2,6 +2,7 @@ package de.lases.business.service;
 
 import de.lases.global.transport.User;
 import de.lases.global.transport.Verification;
+import de.lases.persistence.repository.ConnectionPool;
 import de.lases.persistence.repository.UserRepository;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -50,9 +51,22 @@ public class UserServiceTest {
 
     @Test
     void testGetUserNoMocks() {
+        ConnectionPool.init();
         User user = new User();
-        user.setEmailAddress("peter@gmail.com");
+        user.setId(1);
         assertEquals(userService.get(user).getFirstName(), "Peter");
+    }
+
+    @Test
+    void testGetUserNumberOfSubmissions() {
+        ConnectionPool.init();
+
+    }
+
+    @Test
+    void testGetUserIsEditor() {
+        ConnectionPool.init();
+
     }
 
     @Test
