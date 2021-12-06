@@ -19,6 +19,10 @@
             <base-name>resource_bundles.help</base-name>
             <var>help</var>
         </resource-bundle>
+        <resource-bundle>
+            <base-name>resource_bundles.message</base-name>
+            <var>message</var>
+        </resource-bundle>
     </application>
 
     <lifecycle>

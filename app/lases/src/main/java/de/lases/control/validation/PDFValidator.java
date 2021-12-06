@@ -20,17 +20,26 @@ public class PDFValidator implements Validator<FileDTO> {
     @Inject
     private ConfigPropagator configPropagator;
 
+    private int convertLength = 1024;
+    private int fileLength;
+    private int fileMax = Integer.parseInt(configPropagator.getProperty("MAX_PDF_FILE_SIZE_MB"));
+
     /**
      * Validates a pdf as specified in the class description.
      *
      * @param facesContext FacesContext for the request we are processing
-     * @param uiComponent UIComponent we are checking for correctness
-     * @param fileDTO the file to validate
+     * @param uiComponent  UIComponent we are checking for correctness
+     * @param fileDTO      the file to validate
      * @throws ValidatorException if validation fails
      */
     @Override
     public void validate(FacesContext facesContext, UIComponent uiComponent,
                          FileDTO fileDTO) throws ValidatorException {
+        fileLength = fileDTO.getFile().length;
 
+        double fileSizeMB = (((double) fileLength / convertLength) / convertLength);
+        if (fileSizeMB >= 20.0){
+
+        }
     }
 }

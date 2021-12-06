@@ -2,7 +2,8 @@
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
     <f:metadata>
         <f:viewParam value="#{submissionBacking.submission.id}" name="id"/>
         <!--TODO:evtl mit parameter übergabe-->
@@ -11,8 +12,9 @@
     </f:metadata>
 
     <!--Title of a Submission as Title of the page.-->
-    <ui:define name="title">#{''.concat(labels.appName).concat(" - ").concat(submissionBacking.submission.title)}</ui:define>
-    
+    <ui:define
+            name="title">#{''.concat(labels.appName).concat(" - ").concat(submissionBacking.submission.title)}</ui:define>
+
     <!--Content of submission.xhtml.-->
     <ui:define name="content">
         <div class="container-fluid">
@@ -26,8 +28,34 @@
                     <div class="container" id="container-submission">
                         <div class="card" id="toolbox">
                             <div class="card-body">
+
                                 <!--rendered="#{submissionBacking.isViewerSubmitter()}"-->
-                                <h:commandButton id="delete-sub-cbtn" title="#{help.deleteSubmission}" value="#{labels.deleteButton}" onclick="PF('dlg').show()"/>
+                                <h:commandButton styleClass="btn" id="delete-sub-cbtn" title="#{help.deleteSubmission}"
+                                                 value="#{labels.deleteButton}" onclick="PF('dlg').show()"/>
+                                <p:dialog id="delete-sub-dlg" widgetVar="dlg">
+                                    <div class="text-center">
+                                        <h:outputText id="delete-warning-otxt" value="#{message.deleteWarningOtxt}"/>
+                                    </div>
+                                    <br/>
+                                    <div class="text-center">
+                                        <h:commandButton styleClass="btn" id="agree-delete-cbtn"
+                                                         value="#{labels.agreeButton}"/>
+                                    </div>
+                                </p:dialog>
+
+                                <!--Upload a revision.-->
+                                <h:form id="uploadFile" enctype="multipart/form-data">
+                                    <!--rendered="#{submissionBacking.isViewerSubmitter()}"-->
+                                    <h:inputFile id="upload-revision-ifile" value="#{submissionBacking.uploadedRevisionPDF}" required="true" requiredMessage="#{message.inputFile}">
+                                        <f:validator validatorId="PDFValidator"/>
+                                    </h:inputFile>
+                                    <br/>
+                                    <h:message for="upload-revision-ifile"/>
+                                    <!--rendered="#{submissionBacking.isViewerSubmitter()}"-->
+                                    <h:commandLink id="upload-clnk" styleClass="btn" value="#{labels.uploadSubButton}"
+                                                   action="#{submissionBacking.uploadPDF()}" includeViewParams="true"
+                                                   title="#{help.uploadRevision}"/>
+                                </h:form>
                             </div>
                         </div>
                     </div>
