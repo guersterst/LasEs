@@ -39,7 +39,7 @@ public class UserService implements Serializable {
 
             //TODO MessageBundleProducer
             //TODO Logger
-            //TODO Alternative Reaktion: UIMessage: Try that again.
+            //TODO Alternative Reaktion: UIMessage: Try that again. -> Ich denke wenig sinnvoll
             //TODO Alternative Reaktion: Reload userId from Session (ist das sinnvoll/praktikabel/löst das ein Problem)
                 // -> Wie würde man das überhaupt umsetzen? Exception an BB?
             throw new IllegalArgumentException("idMissing");
@@ -61,8 +61,8 @@ public class UserService implements Serializable {
             }
 
             //TODO ist es sinnvoll hier den leeren User als Alternative zurückzugeben.
-                // Alternative Reaktion: null
-            return Objects.requireNonNullElse(result, user);
+            //return Objects.requireNonNullElse(result, user);
+            return result;
         }
     }
 
