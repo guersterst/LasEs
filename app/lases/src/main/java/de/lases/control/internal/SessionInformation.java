@@ -17,7 +17,6 @@ import java.util.Locale;
 @Named
 public class SessionInformation implements Serializable {
     private User user;
-    private Locale locale;
 
     /**
      * Get the user that is currently logged in. The user dto must be filled
