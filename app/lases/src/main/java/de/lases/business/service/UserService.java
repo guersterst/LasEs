@@ -3,6 +3,7 @@ package de.lases.business.service;
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
 import de.lases.persistence.repository.Transaction;
+import de.lases.persistence.repository.UserRepository;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
@@ -10,6 +11,7 @@ import jakarta.inject.Inject;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Provides all functionality for creating, manipulating or receiving information about users in the application.
@@ -24,17 +26,45 @@ public class UserService implements Serializable {
     @Inject
     private Event<UIMessage> uiMessageEvent;
 
-    @Inject
-    private Transaction transaction;
-
     /**
      * Gets a {@code User}.
      *
      * @param user A {@link User}-DTO, that should contain an existing id value.
      * @return A {@code User}-DTO filled with all available fields.
      */
-    public User get(User user) throws IllegalArgumentException {
-        return null;
+    public User get(User user)  {
+
+        //TODO PLEASE VIEW THIS IMPLEMENTATION AS A PROPOSED TEMPLATE FOR ALL FURTHER SERVICE METHODS:
+        //TODO THIS TEMPLATE MAY BE SUBJECT TO CHANGE AND DISCUSSION
+        if (user.getId() == null) {
+
+            //TODO MessageBundleProducer
+            //TODO Logger
+            //TODO Alternative Reaktion: UIMessage: Try that again.
+            //TODO Alternative Reaktion: Reload userId from Session (ist das sinnvoll/praktikabel/löst das ein Problem)
+                // -> Wie würde man das überhaupt umsetzen? Exception an BB?
+            throw new IllegalArgumentException("Something went horribly wrong!");
+        } else {
+            Transaction transaction = new Transaction();
+
+            User result = null;
+            try {
+                result = UserRepository.get(user, transaction);
+            } catch (NotFoundException e) {
+
+                //TODO Employ MessageBundleProducer
+                //TODO Logger
+                uiMessageEvent.fire(new UIMessage("Data access error: A user could not be found",
+                        MessageCategory.INFO));
+                transaction.abort();
+            } finally {
+                transaction.commit();
+            }
+
+            //TODO ist es sinnvoll hier den leeren User als Alternative zurückzugeben.
+                // Alternative Reaktion: null
+            return Objects.requireNonNullElse(result, user);
+        }
     }
 
     /**
