@@ -1,5 +1,6 @@
 package de.lases.persistence.repository;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -15,6 +16,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class TransactionTest {
+
+    @BeforeAll
+    static void initConnectionPool() {
+        ConnectionPool.init();
+    }
 
     @Test
     void testCommitCommitsOnConnection() throws NoSuchFieldException,
