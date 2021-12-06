@@ -1,7 +1,8 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.*;
-import de.lases.persistence.exception.*;
+import de.lases.persistence.exception.NotFoundException;
+import de.lases.persistence.repository.SubmissionRepository;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
@@ -10,7 +11,7 @@ import jakarta.inject.Inject;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Objects;
+import java.util.PropertyResourceBundle;
 
 /**
  * Provides functionality regarding the management and handling of submissions.
@@ -28,6 +29,9 @@ public class SubmissionService implements Serializable {
     @Inject
     private Transaction transaction;
 
+    @Inject
+    private PropertyResourceBundle msg;
+
     /**
      * Gets a submission.
      *
@@ -35,7 +39,23 @@ public class SubmissionService implements Serializable {
      * @return The submission's data.
      */
     public Submission get(Submission submission) {
-        return null;
+        if (submission.getId() == null) {
+            throw new IllegalArgumentException("Submission id must not be null.");
+        }
+
+        Submission result = null;
+        Transaction t = new Transaction();
+        try {
+            result = SubmissionRepository.get(submission, t);
+            t.commit();
+        } catch (NotFoundException e) {
+            uiMessageEvent.fire(new UIMessage(
+                    msg.getString("error.requestedSubmissionDoesNotExist"),
+                    MessageCategory.ERROR));
+            t.abort();
+        }
+
+        return result;
     }
 
     /**
