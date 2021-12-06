@@ -115,7 +115,10 @@ public class ConnectionPool {
         props.setProperty("ssl", "true");   // necessary!
         props.setProperty("sslfactory",
                 "org.postgresql.ssl.DefaultJavaSSLFactory");
-        return DriverManager.getConnection(url, user, password);
+        Connection connection =
+                DriverManager.getConnection(url, user, password);
+        connection.setAutoCommit(false);
+        return connection;
     }
 
     private void checkInitialized() {
