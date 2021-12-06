@@ -1,5 +1,7 @@
 package de.lases.persistence.repository;
 
+import de.lases.persistence.exception.DatasourceQueryFailedException;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -23,7 +25,7 @@ public class ConnectionPool {
     private static final String DB_URL
             = "jdbc:postgresql://" + DB_HOST + "/" + DB_NAME;
 
-    private List<Connection> connectionPool;
+    private List<Connection> freeConnections;
     private List<Connection> usedConnections = new ArrayList<>();
 
     private static final ConnectionPool instance = new ConnectionPool();
@@ -47,8 +49,8 @@ public class ConnectionPool {
      */
     synchronized Connection getConnection() {
         checkInitialized();
-        Connection connection = connectionPool
-                .remove(connectionPool.size() - 1);
+        Connection connection = freeConnections
+                .remove(freeConnections.size() - 1);
         usedConnections.add(connection);
         return connection;
     }
@@ -65,7 +67,7 @@ public class ConnectionPool {
     synchronized void releaseConnection(Connection connection) {
         checkInitialized();
         if (usedConnections.contains(connection)) {
-            connectionPool.add(connection);
+            freeConnections.add(connection);
             usedConnections.remove(connection);
         } else {
             throw new IllegalArgumentException("The connection was never part"
@@ -97,6 +99,15 @@ public class ConnectionPool {
      * @throws IllegalStateException If the pool is not yet initialized.
      */
     public static synchronized void shutDown() {
+        for (Connection conn: instance.freeConnections) {
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                throw new DatasourceQueryFailedException("The connection cannot"
+                        + "be closed");
+            }
+        }
+
         getInstance().initialized = false;
     }
 
@@ -128,7 +139,7 @@ public class ConnectionPool {
     }
 
     private void addConnections(List<Connection> connections) {
-        this.connectionPool = connections;
+        this.freeConnections = connections;
     }
 
 }
