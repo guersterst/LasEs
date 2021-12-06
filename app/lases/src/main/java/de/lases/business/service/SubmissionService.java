@@ -12,6 +12,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 import java.util.PropertyResourceBundle;
+import java.util.logging.Logger;
 
 /**
  * Provides functionality regarding the management and handling of submissions.
@@ -25,11 +26,10 @@ public class SubmissionService implements Serializable {
     @Serial
     private static final long serialVersionUID = 3347910586400642643L;
 
-    @Inject
-    private Event<UIMessage> uiMessageEvent;
+    private Logger l = Logger.getLogger(SubmissionService.class.getName());
 
     @Inject
-    private Transaction transaction;
+    private Event<UIMessage> uiMessageEvent;
 
     @Inject
     private PropertyResourceBundle msg;
@@ -42,6 +42,7 @@ public class SubmissionService implements Serializable {
      */
     public Submission get(Submission submission) {
         if (submission.getId() == null) {
+            l.severe("The passed Submission-DTO does not contain an id.");
             throw new IllegalArgumentException("Submission id must not be null.");
         }
 
@@ -50,7 +51,9 @@ public class SubmissionService implements Serializable {
         try {
             result = SubmissionRepository.get(submission, t);
             t.commit();
+            l.finer("Submission with id " + submission.getId() + " retrieved.");
         } catch (NotFoundException e) {
+            l.severe("Submission not found.");
             uiMessageEvent.fire(new UIMessage(
                     msg.getString("error.requestedSubmissionDoesNotExist"),
                     MessageCategory.ERROR));
