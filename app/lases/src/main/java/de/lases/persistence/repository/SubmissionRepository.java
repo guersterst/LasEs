@@ -3,13 +3,20 @@ package de.lases.persistence.repository;
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Offers get/add/change/remove operations on a submission and the
  * possibility to get lists of submissions.
  */
 public class SubmissionRepository {
+
+    private static final Logger l = Logger.getLogger(SubmissionRepository.class.getName());
 
     /**
      * Takes a scientific forum dto that is filled with a valid id and returns
@@ -26,7 +33,52 @@ public class SubmissionRepository {
      */
     public static Submission get(Submission submission, Transaction transaction)
             throws NotFoundException {
-        return null;
+        if (submission.getId() == null) {
+            l.severe("The passed Submission-DTO does not contain an id.");
+            throw new IllegalArgumentException("Submission id must not be null.");
+        }
+
+        Connection conn = transaction.getConnection();
+        String sql = "SELECT * FROM submission WHERE id = ?";
+
+        Submission result;
+        ResultSet resultSet;
+
+        try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+            preparedStatement.setInt(1, submission.getId());
+            resultSet = preparedStatement.executeQuery();
+
+            // Attempt to create a submission from the result set.
+            if (resultSet.next()) {
+                result = createSubmissionFromResultSet(resultSet);
+                l.finer("Successfully retrieved submission with id " + submission.getId() + "from database.");
+            } else {
+                throw new NotFoundException("No submission with id " + submission.getId() + " found.");
+            }
+        } catch (SQLException e) {
+            throw new DatasourceQueryFailedException(e.getMessage(), e);
+        }
+
+        return result;
+    }
+
+    private static Submission createSubmissionFromResultSet(ResultSet resultSet) throws SQLException {
+        Submission sub = new Submission();
+
+        // retrieve required fields
+        sub.setId(resultSet.getInt("id"));
+        sub.setTitle(resultSet.getString("title"));
+        sub.setState(SubmissionState.valueOf(resultSet.getString("state")));
+        sub.setSubmissionTime(resultSet.getTimestamp("submission_time").toLocalDateTime());
+        sub.setRevisionRequired(resultSet.getBoolean("requires_revision"));
+        sub.setDeadlineRevision(resultSet.getTimestamp("deadline_revision").toLocalDateTime());
+        sub.setEditorId(resultSet.getInt("editor_id"));
+
+        // retrieve optional fields
+        sub.setAuthorId(resultSet.getInt("author_id"));
+        sub.setScientificForumId(resultSet.getInt("forum_id"));
+
+        return sub;
     }
 
     /**
