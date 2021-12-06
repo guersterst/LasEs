@@ -1,6 +1,7 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.*;
+import de.lases.persistence.exception.DataNotCompleteException;
 import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.repository.SubmissionRepository;
 import de.lases.persistence.repository.Transaction;
@@ -219,7 +220,28 @@ public class SubmissionService implements Serializable {
      * @return The resulting list of submissions, which a user is involved in.
      */
     public List<Submission> getList(Privilege privilege, User user, ResultListParameters resultParams) {
-        return null;
+        if (user.getId() == null) {
+            l.severe("The passed User-DTO has no id.");
+            throw new IllegalArgumentException("User id must not be null.");
+        }
+
+        List<Submission> result = null;
+        Transaction t = new Transaction();
+        try {
+            result = SubmissionRepository.getList(user, privilege, t, resultParams);
+            t.commit();
+            l.finer("List of submissions retrieved.");
+        } catch (DataNotCompleteException e) {
+            //TODO How to handle?
+        } catch (NotFoundException e) {
+            l.severe("User to get submissions for not found.");
+            uiMessageEvent.fire(new UIMessage(
+                    msg.getString("error.findingSubmissionListFailed"),
+                    MessageCategory.ERROR));
+            t.abort();
+        }
+
+        return result;
     }
 
     /**
@@ -236,22 +258,64 @@ public class SubmissionService implements Serializable {
      */
     public List<Submission> getList(ScientificForum scientificForum, User user, Privilege privilege,
                                     ResultListParameters resultParams) {
-        return null;
+        if (user.getId() == null || scientificForum.getId() == null) {
+            l.severe("A passed DTO is not sufficiently filled.");
+            throw new IllegalArgumentException("User and ScientificForum id must not be null.");
+        }
+
+        List<Submission> result = null;
+        Transaction t = new Transaction();
+        try {
+            result = SubmissionRepository.getList(user, privilege, scientificForum, t, resultParams);
+            t.commit();
+            l.finer("List of submissions retrieved.");
+        } catch (DataNotCompleteException e) {
+            //TODO How to handle?
+        } catch (NotFoundException e) {
+            l.severe("User or ScientificForum to get submissions for not found.");
+            uiMessageEvent.fire(new UIMessage(
+                    msg.getString("error.findingSubmissionListFailed"),
+                    MessageCategory.ERROR));
+            t.abort();
+        }
+
+        return result;
     }
 
     /**
      * Gets a list all submissions that belong to a given scientific forum.
      *
      * @param scientificForum      A {@link ScientificForum} with a valid id.
-     * @param resultListParameters The {@link ResultListParameters} that results
+     * @param resultParams The {@link ResultListParameters} that results
      *                             parameters from the pagination like
      *                             filtering, sorting or number of elements.
      * @return A list of all {@link Submission}s that belong to a given scientific forum.
      */
     public List<Submission> getList(ScientificForum scientificForum,
                                            ResultListParameters
-                                                   resultListParameters) {
-        return null;
+                                                   resultParams) {
+        if (scientificForum.getId() == null) {
+            l.severe("The passed ScientificForum-DTO is not sufficiently filled.");
+            throw new IllegalArgumentException("ScientificForum id must not be null.");
+        }
+
+        List<Submission> result = null;
+        Transaction t = new Transaction();
+        try {
+            result = SubmissionRepository.getList(scientificForum, t, resultParams);
+            t.commit();
+            l.finer("List of submissions retrieved.");
+        } catch (DataNotCompleteException e) {
+            //TODO How to handle?
+        } catch (NotFoundException e) {
+            l.severe("ScientificForum to get submissions for not found.");
+            uiMessageEvent.fire(new UIMessage(
+                    msg.getString("error.findingSubmissionListFailed"),
+                    MessageCategory.ERROR));
+            t.abort();
+        }
+
+        return result;
     }
 
     /**
