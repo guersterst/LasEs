@@ -1,6 +1,6 @@
 package de.lases.persistence.repository;
 
-import de.lases.persistence.exception.DatasourceQueryFailedException;
+import de.lases.persistence.exception.DepletedResourceException;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -21,10 +22,17 @@ public class ConnectionPool {
     private static final String DB_USER = "sep21g02";
     private static final String DB_PASSWORD = "ieQu2aeShoon";
 
+    private static final Logger logger
+            = Logger.getLogger(Transaction.class.getName());
+
+    // TODO: Pool Size and Timeout into config file.
+
     /**
      * The initial number of free connections.
      */
     public static final int INITIAL_POOL_SIZE = 10;
+
+    private static final int TIMEOUT = 3000;
 
     private static final String DB_URL
             = "jdbc:postgresql://" + DB_HOST + "/" + DB_NAME;
@@ -53,6 +61,24 @@ public class ConnectionPool {
      */
     synchronized Connection getConnection() {
         checkInitialized();
+
+        long timestamp = System.currentTimeMillis() + TIMEOUT;
+
+        while (freeConnections.isEmpty()) {
+            try {
+                this.wait(Math.max(timestamp - System.currentTimeMillis(), 1));
+            } catch(InterruptedException ex) {
+                logger.log(Level.WARNING, ex.getMessage());
+                throw new DepletedResourceException("Connection pool has no "
+                        + "more connections");
+            }
+
+            if (timestamp <= System.currentTimeMillis()) {
+                throw new DepletedResourceException("Connection pool has no "
+                        + "more connections");
+            }
+        }
+
         Connection connection = freeConnections
                 .remove(freeConnections.size() - 1);
         usedConnections.add(connection);
@@ -73,6 +99,7 @@ public class ConnectionPool {
         if (usedConnections.contains(connection)) {
             freeConnections.add(connection);
             usedConnections.remove(connection);
+            notifyAll();
         } else {
             throw new IllegalArgumentException("The connection was never part"
                     + "of the connection pool");
@@ -103,11 +130,12 @@ public class ConnectionPool {
      * @throws IllegalStateException If the pool is not yet initialized.
      */
     public static synchronized void shutDown() {
+        instance.usedConnections.forEach(instance::releaseConnection);
         for (Connection conn: instance.freeConnections) {
             try {
                 conn.close();
             } catch (SQLException ex) {
-                throw new DatasourceQueryFailedException("The connection cannot"
+                throw new DepletedResourceException("The connection cannot"
                         + "be closed");
             }
         }
@@ -136,7 +164,7 @@ public class ConnectionPool {
         Properties props = new Properties();
         props.setProperty("user", DB_USER);
         props.setProperty("password", DB_PASSWORD);
-        props.setProperty("ssl", "true");   // necessary!
+        props.setProperty("ssl", "true");
         props.setProperty("sslfactory",
                 "org.postgresql.ssl.DefaultJavaSSLFactory");
         Connection connection =

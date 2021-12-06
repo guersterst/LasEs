@@ -60,17 +60,21 @@ class TransactionTest {
 
     @Test
     void testCommitReturnsConnection() {
+        int numberOfFreeConnectionAtBeginning =
+                ConnectionPool.getInstance().getNumberOfFreeConnections();
         Transaction transaction = new Transaction();
         transaction.commit();
-        assertEquals(ConnectionPool.INITIAL_POOL_SIZE,
+        assertEquals(numberOfFreeConnectionAtBeginning,
                 ConnectionPool.getInstance().getNumberOfFreeConnections());
     }
 
     @Test
     void testAbortReturnsConnection() {
+        int numberOfFreeConnectionAtBeginning =
+                ConnectionPool.getInstance().getNumberOfFreeConnections();
         Transaction transaction = new Transaction();
         transaction.abort();
-        assertEquals(ConnectionPool.INITIAL_POOL_SIZE,
+        assertEquals(numberOfFreeConnectionAtBeginning,
                 ConnectionPool.getInstance().getNumberOfFreeConnections());
     }
 

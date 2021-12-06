@@ -24,9 +24,6 @@ public class UserService implements Serializable {
     @Inject
     private Event<UIMessage> uiMessageEvent;
 
-    @Inject
-    private Transaction transaction;
-
     /**
      * Gets a {@code User}.
      *

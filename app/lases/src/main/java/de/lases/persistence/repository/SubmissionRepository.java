@@ -21,7 +21,7 @@ public class SubmissionRepository {
      * @return A fully filled {@code Submission} dto.
      * @throws NotFoundException If there is no submission with the
      *                           provided id.
-     * @throws DatasourceQueryFailedException If the datasource cannot be
+     * @throws DepletedResourceException If the datasource cannot be
      *                                        queried.
      */
     public static Submission get(Submission submission, Transaction transaction)
@@ -49,7 +49,7 @@ public class SubmissionRepository {
      *                                 fails.
      * @throws InvalidFieldsException If one of the required fields of the
      *                                submission is null.
-     * @throws DatasourceQueryFailedException If the datasource cannot be
+     * @throws DepletedResourceException If the datasource cannot be
      *                                        queried.
      */
     public static void add(Submission submission, Transaction transaction)
@@ -77,7 +77,7 @@ public class SubmissionRepository {
      *                                 fails.
      * @throws InvalidFieldsException If one of the required fields of the
      *                                submission is null.
-     * @throws DatasourceQueryFailedException If the datasource cannot be
+     * @throws DepletedResourceException If the datasource cannot be
      *                                        queried.
      */
     public static void change(Submission submission, Transaction transaction)
@@ -95,7 +95,7 @@ public class SubmissionRepository {
      *                           the repository.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails
-     * @throws DatasourceQueryFailedException If the datasource cannot be
+     * @throws DepletedResourceException If the datasource cannot be
      *                                        queried.
      */
     public static void remove(Submission submission, Transaction transaction)
@@ -120,7 +120,7 @@ public class SubmissionRepository {
      * @throws DataNotCompleteException If the list is truncated.
      * @throws NotFoundException If there is no user with the provided id or no
      *                           scientific forum with the provided id.
-     * @throws DatasourceQueryFailedException If the datasource cannot be
+     * @throws DepletedResourceException If the datasource cannot be
      *                                        queried.
      * @throws InvalidQueryParamsException If the resultListParameters contain
      *                                     an erroneous option.
@@ -148,7 +148,7 @@ public class SubmissionRepository {
      *         belong to the specified user in the specified role.
      * @throws DataNotCompleteException If the list is truncated.
      * @throws NotFoundException If there is no user with the provided id.
-     * @throws DatasourceQueryFailedException If the datasource cannot be
+     * @throws DepletedResourceException If the datasource cannot be
      *                                        queried.
      * @throws InvalidQueryParamsException If the resultListParameters contain
      *                                     an erroneous option.
@@ -176,7 +176,7 @@ public class SubmissionRepository {
      * @throws DataNotCompleteException If the list is truncated.
      * @throws NotFoundException If there is no scientific forum with the
      *                           provided id.
-     * @throws DatasourceQueryFailedException If the datasource cannot be
+     * @throws DepletedResourceException If the datasource cannot be
      *                                        queried.
      * @throws InvalidQueryParamsException If the resultListParameters contain
      *                                     an erroneous option.
@@ -200,7 +200,7 @@ public class SubmissionRepository {
      *                           provided id.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
-     * @throws DatasourceQueryFailedException If the datasource cannot be
+     * @throws DepletedResourceException If the datasource cannot be
      *                                        queried.
      */
     public static void addCoAuthor(Submission submission, User user,
@@ -219,7 +219,7 @@ public class SubmissionRepository {
      *                           provided id.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
-     * @throws DatasourceQueryFailedException If the datasource cannot be
+     * @throws DepletedResourceException If the datasource cannot be
      *                                        queried.
      */
     public static void addReviewer(Submission submission, User user,
@@ -240,7 +240,7 @@ public class SubmissionRepository {
      *                           a co-author for the provided submission.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
-     * @throws DatasourceQueryFailedException If the datasource cannot be
+     * @throws DepletedResourceException If the datasource cannot be
      *                                        queried.
      */
     public static void removeCoAuthor(Submission submission, User user,
@@ -261,7 +261,7 @@ public class SubmissionRepository {
      *                           a reviewer for the provided submission.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
-     * @throws DatasourceQueryFailedException If the datasource cannot be
+     * @throws DepletedResourceException If the datasource cannot be
      *                                        queried.
      */
     public static void removeReviewer(Submission submission, User user,
@@ -276,7 +276,7 @@ public class SubmissionRepository {
      * @param transaction The transaction to use.
      * @return The number of submission the specified user authored.
      * @throws NotFoundException If there is no user with the provided id.
-     * @throws DatasourceQueryFailedException If the datasource cannot be
+     * @throws DepletedResourceException If the datasource cannot be
      *                                        queried.
      */
     public static int countSubmissions(User user, Transaction transaction)

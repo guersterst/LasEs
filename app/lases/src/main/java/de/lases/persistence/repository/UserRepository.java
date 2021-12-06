@@ -23,7 +23,7 @@ public class UserRepository {
      *                           provided id or email.
      * @throws InvalidFieldsException If both id and email are provided, but
      *                                they belong to two different users.
-     * @throws DatasourceQueryFailedException If the datasource cannot be
+     * @throws DepletedResourceException If the datasource cannot be
      *                                        queried.
      */
     public static User get(User user, Transaction transaction)
@@ -52,7 +52,7 @@ public class UserRepository {
      *                            already exists in the datasource.
      * @throws InvalidFieldsException If one of the required fields of the
      *                                scientific forum is null.
-     * @throws DatasourceQueryFailedException If the datasource cannot be
+     * @throws DepletedResourceException If the datasource cannot be
      *                                        queried.
      */
     public static void add(User user, Transaction transaction)
@@ -80,7 +80,7 @@ public class UserRepository {
      *                            already exists in the datasource.
      * @throws InvalidFieldsException If one of the required fields of the user
      *                                is null.
-     * @throws DatasourceQueryFailedException If the datasource cannot be
+     * @throws DepletedResourceException If the datasource cannot be
      *                                        queried.
      */
     public static void change(User user, Transaction transaction)
@@ -101,7 +101,7 @@ public class UserRepository {
      *                                 fails.
      * @throws InvalidFieldsException If both id and email are provided, but
      *                                they belong to two different users.
-     * @throws DatasourceQueryFailedException If the datasource cannot be
+     * @throws DepletedResourceException If the datasource cannot be
      *                                        queried.
      */
     public static void remove(User user, Transaction transaction)
@@ -120,7 +120,7 @@ public class UserRepository {
      *                           provided id or email.
      * @throws InvalidFieldsException If both id and email are provided, but
      *                                they belong to two different users.
-     * @throws DatasourceQueryFailedException If the datasource cannot be
+     * @throws DepletedResourceException If the datasource cannot be
      *                                        queried.
      */
     public static Verification getVerification(User user, Transaction transaction)
@@ -136,7 +136,7 @@ public class UserRepository {
      * @param transaction The transaction to use.
      * @throws NotFoundException If there is no user with the
      *                           provided userId.
-     * @throws DatasourceQueryFailedException If the datasource cannot be
+     * @throws DepletedResourceException If the datasource cannot be
      *                                        queried.
      */
     public static void setVerification(Verification verification,
@@ -154,7 +154,7 @@ public class UserRepository {
      *                             filtering, sorting or number of elements.
      * @return A list of fully filled user dtos.
      * @throws DataNotCompleteException If the list is truncated.
-     * @throws DatasourceQueryFailedException If the datasource cannot be
+     * @throws DepletedResourceException If the datasource cannot be
      *                                        queried.
      * @throws InvalidQueryParamsException If the resultListParameters contain
      *                                     an erroneous option.
@@ -178,7 +178,7 @@ public class UserRepository {
      *                   relationship with. Must be filled with a valid id.
      * @return A list of fully filled user dtos.
      * @throws DataNotCompleteException If the list is truncated.
-     * @throws DatasourceQueryFailedException If the datasource cannot be
+     * @throws DepletedResourceException If the datasource cannot be
      *                                        queried.
      * @throws InvalidFieldsException If the privilege is ADMIN or EDITOR.
      * @throws NotFoundException If there is no submission with the specified
@@ -201,7 +201,7 @@ public class UserRepository {
      *                        contain a valid id.
      * @return A list of fully filled user dtos.
      * @throws DataNotCompleteException If the list is truncated.
-     * @throws DatasourceQueryFailedException If the datasource cannot be
+     * @throws DepletedResourceException If the datasource cannot be
      *                                        queried.
      * @throws NotFoundException If there is no scientific forum with the
      *                           specified id.
@@ -227,7 +227,7 @@ public class UserRepository {
      *                                 fails.
      * @throws InvalidFieldsException If both id and email are provided, but
      *                                they belong to two different users.
-     * @throws DatasourceQueryFailedException If the datasource cannot be
+     * @throws DepletedResourceException If the datasource cannot be
      *                                        queried.
      */
     public static void addScienceField(User user, ScienceField scienceField,
@@ -250,7 +250,7 @@ public class UserRepository {
      *                                 fails.
      * @throws InvalidFieldsException If both id and email are provided, but
      *                                they belong to two different users.
-     * @throws DatasourceQueryFailedException If the datasource cannot be
+     * @throws DepletedResourceException If the datasource cannot be
      *                                        queried.
      */
     public static void removeScienceField(User user, ScienceField scienceField,
@@ -267,7 +267,7 @@ public class UserRepository {
      *         repository.
      * @throws InvalidFieldsException If the email address of the supplied user
      *                                is null.
-     * @throws DatasourceQueryFailedException If the datasource cannot be
+     * @throws DepletedResourceException If the datasource cannot be
      *                                        queried.
      */
     public static boolean emailExists(User user, Transaction transaction) {
@@ -281,7 +281,7 @@ public class UserRepository {
      * @param transaction The transaction to use.
      * @return A file containing the logo.
      * @throws NotFoundException If there is no user with the specified id.
-     * @throws DatasourceQueryFailedException If the datasource cannot be
+     * @throws DepletedResourceException If the datasource cannot be
      *                                        queried.
      */
     public static FileDTO getAvatar(User user, Transaction transaction)
@@ -299,7 +299,7 @@ public class UserRepository {
      * @throws NotFoundException If there is no user with the specified id.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
-     * @throws DatasourceQueryFailedException If the datasource cannot be
+     * @throws DepletedResourceException If the datasource cannot be
      *                                        queried.
      */
     public static void setAvatar(User user, FileDTO avatar,
