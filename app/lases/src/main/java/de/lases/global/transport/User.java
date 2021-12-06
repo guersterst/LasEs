@@ -1,6 +1,7 @@
 package de.lases.global.transport;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -268,7 +269,7 @@ public class User implements Cloneable {
     public User clone() {
         try {
             User clone = (User) super.clone();
-            // TODO: copy mutable state here, so the clone can't change the internals of the original
+            clone.privileges = List.copyOf(this.privileges);
             return clone;
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
