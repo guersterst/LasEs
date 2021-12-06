@@ -16,6 +16,8 @@ import java.util.PropertyResourceBundle;
 /**
  * Provides functionality regarding the management and handling of submissions.
  * In case of an unexpected state, a {@link UIMessage} event will be fired.
+ *
+ * @author Thomas Kirz
  */
 @Dependent
 public class SubmissionService implements Serializable {
