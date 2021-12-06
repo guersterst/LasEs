@@ -27,7 +27,7 @@ public class SubmissionService implements Serializable {
     @Serial
     private static final long serialVersionUID = 3347910586400642643L;
 
-    private Logger l = Logger.getLogger(SubmissionService.class.getName());
+    private final Logger l = Logger.getLogger(SubmissionService.class.getName());
 
     @Inject
     private Event<UIMessage> uiMessageEvent;
