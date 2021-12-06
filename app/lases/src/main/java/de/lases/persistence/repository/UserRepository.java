@@ -45,28 +45,53 @@ public class UserRepository {
             throw new IllegalArgumentException("idMissing");
         }
 
+        String sql_number_of_submissions_and_editor_info = """
+                 SELECT (SELECT COUNT(*)
+                 FROM submission, "user"
+                 WHERE "user".id = submission.author_id
+                   AND "user".id = ?) as number_of_submissions,
+                (SELECT member_of.editor_id
+                 FROM "user", member_of
+                 WHERE "user".id = ?
+                   AND member_of.editor_id = "user".id) as editor_id
+                                 """;
+
+        String sql_user = """
+                SELECT *
+                FROM "user"
+                WHERE "user".id = ? OR "user".email_address = ?
+                """;
+
         Connection conn = transaction.getConnection();
-        String sql = "SELECT * FROM user, member_of WHERE id =? OR email_address =? AND user.id = member_of.editor_id";
-        //SELECT * FROM user, member_of WHERE id =? OR email_address =? AND user.id = member_of.editor_id
         User result;
-        ResultSet resultSet;
 
-        // Attempt to query for the user.
-        try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
-            preparedStatement.setInt(1, user.getId());
-            preparedStatement.setString(2, user.getEmailAddress());
-            resultSet = preparedStatement.executeQuery();
+        try {
 
-            // Attempt to create a user from the query result.
-            if (resultSet.next()) {
-                result = createUserFromResultSet(resultSet, user);
+            // Attempt to query for the user.
+            ResultSet userResult;
+            PreparedStatement userStatement = conn.prepareStatement(sql_user);
+            userStatement.setInt(1, user.getId());
+            userStatement.setString(2, user.getEmailAddress());
+            userResult = userStatement.executeQuery();
 
-                if (resultSet.next()) {
+            // Attempt to query for the user's editor status and number of submissions.
+            ResultSet submissionAndEditorResult;
+            PreparedStatement extraStatement = conn.prepareStatement(sql_number_of_submissions_and_editor_info);
+            extraStatement.setInt(1, user.getId());
+            extraStatement.setInt(2, user.getId());
+            submissionAndEditorResult = extraStatement.executeQuery();
+
+
+            // Attempt to create a user from the query results.
+            if (userResult.next()) {
+                result = createUserFromResultSet(userResult, submissionAndEditorResult, user);
+
+                if (userResult.next()) {
 
                     // There cannot be two results of such a query.
                     //todo messageBundle
                     logger.severe("There are two results of a unique user query. The parameters were"
-                    + " id: " + user.getId() + ", email: " + user.getEmailAddress());
+                            + " id: " + user.getId() + ", email: " + user.getEmailAddress());
                     throw new InvalidFieldsException("There are two results of a unique user query. The parameters were"
                             + " id: " + user.getId() + ", email: " + user.getEmailAddress());
                 }
@@ -82,24 +107,24 @@ public class UserRepository {
         return result;
     }
 
-    private static User createUserFromResultSet(ResultSet resultSet, User user) throws SQLException {
+    private static User createUserFromResultSet(ResultSet userResult, ResultSet submissionAndEditorResult, User user) throws SQLException {
 
         // Regular required data about a user.
         //TODO replace with array.
         User result = new User();
-        result.setId(resultSet.getInt("id"));
-        result.setVerificationId(resultSet.getInt("id"));
-        result.setEmailAddress(resultSet.getString("email_address"));
-        result.setAdmin(resultSet.getBoolean("is_administrator"));
-        result.setFirstName(resultSet.getString("firstname"));
-        result.setLastName(resultSet.getString("lastname"));
-        result.setDateOfBirth(resultSet.getDate("birthdate").toLocalDate());
-        result.setPasswordHashed(resultSet.getString("password_hash"));
-        result.setRegistered(resultSet.getBoolean("is_registered"));
+        result.setId(userResult.getInt("id"));
+        result.setVerificationId(userResult.getInt("id"));
+        result.setEmailAddress(userResult.getString("email_address"));
+        result.setAdmin(userResult.getBoolean("is_administrator"));
+        result.setFirstName(userResult.getString("firstname"));
+        result.setLastName(userResult.getString("lastname"));
+        result.setDateOfBirth(userResult.getDate("birthdate").toLocalDate());
+        result.setPasswordHashed(userResult.getString("password_hash"));
+        result.setRegistered(userResult.getBoolean("is_registered"));
 
         // Optional data about a user.
-        result.setTitle(resultSet.getString("title"));
-        result.setEmployer(resultSet.getString("employer"));
+        result.setTitle(userResult.getString("title"));
+        result.setEmployer(userResult.getString("employer"));
 
         // Set the list of all relevant global privileges.
         List<Privilege> privileges = new ArrayList<>();
@@ -109,13 +134,13 @@ public class UserRepository {
         if (result.isRegistered()) {
             privileges.add(Privilege.AUTHENTICATED);
         }
-        if (resultSet.getInt("editor_id") == user.getId()) {
+        if (submissionAndEditorResult.getInt("editor_id") != 0) {
             privileges.add(Privilege.EDITOR);
         }
         result.setPrivileges(privileges);
 
         // Number of submissions
-        // TODO necessary?
+        result.setNumberOfSubmissions(submissionAndEditorResult.getInt("number_of_submissions"));
         return result;
     }
 
