@@ -22,7 +22,7 @@ public class SessionInformation implements Serializable {
      * Get the user that is currently logged in. The user dto must be filled
      * out with his id and privileges.
      *
-     * @return A user dto with an id.
+     * @return A user dto with an id and privileges.
      */
     public User getUser() {
         return user;
@@ -32,7 +32,7 @@ public class SessionInformation implements Serializable {
      * Set the user that is currently logged in. This will also change the
      * sessionId to avoid session fixation.
      *
-     * @param user A user dto filled with an id for the user that is logged in.
+     * @param user A user dto filled with an id and privileges for the user that is logged.
      */
     public void setUser(User user) {
         this.user = user;
