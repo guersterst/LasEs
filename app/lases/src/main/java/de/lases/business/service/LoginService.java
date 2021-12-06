@@ -1,5 +1,7 @@
 package de.lases.business.service;
 
+import de.lases.persistence.exception.DatasourceQueryFailedException;
+import de.lases.persistence.exception.InvalidFieldsException;
 import de.lases.persistence.exception.NotFoundException;
 import jakarta.enterprise.context.Dependent;
 import jakarta.faces.component.UIMessage;
@@ -35,10 +37,11 @@ public class LoginService {
             // return matchingEmailUser
             // else
             // uiMessage
+            return matchingEmailUser; // to test
+        } catch (NotFoundException | DatasourceQueryFailedException | InvalidFieldsException e) {
             return null;
-        } catch (NotFoundException e) {
-            // uiMessage
-            return null;
+        } finally {
+            transaction.commit();
         }
     }
 }
