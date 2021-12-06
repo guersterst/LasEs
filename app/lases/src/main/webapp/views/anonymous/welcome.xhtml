@@ -1,49 +1,39 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui" xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-<f:metadata>
-    <f:loadBundle var="labels" basename="resource_bundles.labels"/>
-</f:metadata>
-<h:head>
-    <ui:define name="title">LasEs - Login</ui:define>
-    <h:outputStylesheet name="design/bootstrap/css/bootstrap.min.css"/>
-</h:head>
+<!--Please take care about following: Don not add something outside of ui:composition. JSF would just ignore this-->
+<ui:composition template="/resources/templates/main.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui" xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <ui:define name="title">#{''.concat(labels.appName).concat(' - ').concat(labels.login)}</ui:define>
+
+    <ui:define name="content">
+        <h:outputText id="welcome-heading-otxt" value="#{welcomeBacking.systemSettings.headlineWelcomePage}"
+                      escape="false"/>
+
+        <h:outputText id="welcome-otxt" value="#{welcomeBacking.systemSettings.messageWelcomePage}" escape="false"/>
+
+        <div id="login-div">
+            <h:form>
+                <h:inputText id="email-itxt" value="#{welcomeBacking.loginInput.emailAddress}"
+                             a:placeholder="#{help.yourEmail}" required="true"
+                             requiredMessage="#{message.emailNeeded}"/>
+                <h:inputSecret id="password-iscrt" value="#{welcomeBacking.loginInput.passwordNotHashed}"
+                               a:placeholder="#{help.password}" required="true"
+                               requiredMessage="#{message.passwordNeeded}"/>
+
+                <h:commandButton id="login-cbtn" value="#{labels.login}" action="#{welcomeBacking.login()}"
+                                 title="#{labels.login}" styleClass="btn btn-primary"/>
+            </h:form>
+        </div>
+
+        <div>
+            <h:commandButton id="register-cbtn" value="#{labels.register}" action="#{welcomeBacking.goToRegister()}"
+                             title="#{help.goToRegister}"/>
+        </div>
+
+    </ui:define>
+</ui:composition>
 
 
-<h:body>
-    <!--Please take care about following: Don not add something outside of ui:composition. JSF would just ignore this-->
-    <ui:composition template="/resources/templates/main.xhtml">
-        <ui:define name="content">
-            <h:outputText id="welcome-heading-otxt" value="#{welcomeBacking.systemSettings.headlineWelcomePage}"
-                          escape="false"/>
-
-            <h:outputText id="welcome-otxt" value="#{welcomeBacking.systemSettings.messageWelcomePage}" escape="false"/>
-
-            <div id="login-div">
-                <h:form>
-                    <h:inputText id="email-itxt" value="#{welcomeBacking.loginInput.emailAddress}"
-                                 a:placeholder="#{help.yourEmail}" required="true"
-                                 requiredMessage="#{message.emailNeeded}"/>
-                    <h:inputSecret id="password-iscrt" value="#{welcomeBacking.loginInput.passwordNotHashed}"
-                                   a:placeholder="#{help.password}" required="true"
-                                   requiredMessage="#{message.passwordNeeded}"/>
-
-                    <h:commandButton id="login-cbtn" value="#{labels.login}" action="#{welcomeBacking.login()}"
-                                     title="#{labels.login}" styleClass="btn btn-primary"/>
-                </h:form>
-            </div>
-
-            <div>
-                <h:commandButton id="register-cbtn" value="#{labels.register}" action="#{welcomeBacking.goToRegister()}"
-                                 title="#{help.goToRegister}"/>
-            </div>
-
-        </ui:define>
-    </ui:composition>
-
-
-</h:body>
-</html>

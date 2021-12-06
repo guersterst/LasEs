@@ -1,61 +1,56 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+<ui:composition template="/resources/templates/main.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 >
-<f:metadata>
-    <f:importConstants type="de.lases.control.internal.Constants" var="Const"/>
-</f:metadata>
-<h:head>
+    <f:metadata>
+        <f:importConstants type="de.lases.control.internal.Constants" var="Const"/>
+    </f:metadata>
     <title>LasEs - Register</title>
     <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css"/>
-</h:head>
-<h:body>
-    <ui:composition template="/resources/templates/main.xhtml">
-        <ui:define name="content">
-            <div class="container-fluid">
-                <div>
-                    <h2>Registrierung</h2>
-                </div>
-                <div>
-                    <h:form id="register-frm">
-                        <h6>Titel</h6>
-                        <h:inputText id="title-itxt" value="#{registrationBacking.newUser.title}"
-                                     title="#{help.title}"/>
-                        <h6>Vorname</h6>
-                        <h:inputText id="first-name-itxt" value="#{registrationBacking.newUser.firstName}"
-                                     title="#{help.firstName}" required="true"
-                                     requiredMessage="#{message.firstName}" maxlength="#{Const.FIRST_NAME_MAX}"/>
-                        <h6>Nachname</h6>
-                        <h:inputText id="last-name-itxt" value="#{registrationBacking.newUser.passwordNotHashed}"
-                                     title="#{help.lastName}" required="true"
-                                     requiredMessage="#{message.lastName}" maxlength="#{Const.LAST_NAME_MAX}"/>
-                        <h6>Passwort</h6>
-                        <h:inputSecret id="password-iscrt" value="#{registrationBacking.newUser.passwordNotHashed}"
-                                       title="#{help.password}" required="true"
-                                       requiredMessage="#{message.password}">
-                            <!-- <f:validator for="password-iscrt"/>-->
-                        </h:inputSecret>
-                        <h:inputText id="email-itxt" value="#{registrationBacking.newUser.emailAddress}"
-                                     title="#{help.email}" required="true"
-                                     requiredMessage="#{message.email}" maxlength="#{Const.EMAIL_MAX}">
-                            <!--<f:validator/>
-                            <f:validator/>-->
-                        </h:inputText>
-                        <div>
-                            <h:commandButton id="register-cbtn" value="#{label.register}"
-                                             action="#{registrationBacking.register}"/>
-                        </div>
-                        <div>
-                            <h:link id="welcomepage-lnk" value="#{label.welcome}" outcome="/facelets/anonymous/welcome"
-                                    title="#{help.welcomepage}"/>
-                        </div>
-                    </h:form>
-                </div>
+    <ui:define name="title">LasEs-Registration</ui:define>
+    <ui:define name="content">
+        <div class="container-fluid">
+            <div>
+                <h2>Registrierung</h2>
             </div>
-        </ui:define>
-    </ui:composition>
+            <div>
+                <h:form id="register-frm">
+                    <h6>Titel</h6>
+                    <h:inputText id="title-itxt" value="#{registrationBacking.newUser.title}"
+                                 title="#{help.title}"/>
+                    <h6>Vorname</h6>
+                    <h:inputText id="first-name-itxt" value="#{registrationBacking.newUser.firstName}"
+                                 title="#{help.firstName}" required="true"
+                                 requiredMessage="#{message.firstName}" maxlength="#{Const.FIRST_NAME_MAX}"/>
+                    <h6>Nachname</h6>
+                    <h:inputText id="last-name-itxt" value="#{registrationBacking.newUser.passwordNotHashed}"
+                                 title="#{help.lastName}" required="true"
+                                 requiredMessage="#{message.lastName}" maxlength="#{Const.LAST_NAME_MAX}"/>
+                    <h6>Passwort</h6>
+                    <h:inputSecret id="password-iscrt" value="#{registrationBacking.newUser.passwordNotHashed}"
+                                   title="#{help.password}" required="true"
+                                   requiredMessage="#{message.password}">
+                        <!-- <f:validator for="password-iscrt"/>-->
+                    </h:inputSecret>
+                    <h:inputText id="email-itxt" value="#{registrationBacking.newUser.emailAddress}"
+                                 title="#{help.email}" required="true"
+                                 requiredMessage="#{message.email}" maxlength="#{Const.EMAIL_MAX}">
+                        <!--<f:validator/>
+                        <f:validator/>-->
+                    </h:inputText>
+                    <div>
+                        <h:commandButton id="register-cbtn" value="#{label.register}"
+                                         action="#{registrationBacking.register}"/>
+                    </div>
+                    <div>
+                        <h:link id="welcomepage-lnk" value="#{label.welcome}" outcome="/facelets/anonymous/welcome"
+                                title="#{help.welcomepage}"/>
+                    </div>
+                </h:form>
+            </div>
+        </div>
+    </ui:define>
 
-</h:body>
-</html>
+</ui:composition>
