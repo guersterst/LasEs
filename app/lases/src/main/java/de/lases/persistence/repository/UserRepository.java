@@ -10,12 +10,15 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Offers get/add/change/remove operations on a user and the
  * possibility to get lists of users.
  */
 public class UserRepository {
+
+    private static final Logger logger = Logger.getLogger(UserRepository.class.getName());
 
     /**
      * Takes a user dto that is filled with a valid id or a valid
@@ -36,16 +39,15 @@ public class UserRepository {
             throws NotFoundException {
         if (user.getId() == null && user.getEmailAddress() == null) {
 
-            //TODO MessageBundleProducer
-            //TODO Logger
-
             // Throw an exception when neither an id nor a valid email address exist.
+            //TODO MessageBundleProducer
+            logger.severe("The id and email are missing. Therefor no user object can be queried.");
             throw new IllegalArgumentException("idMissing");
         }
 
         Connection conn = transaction.getConnection();
-        String sql = "SELECT * FROM user WHERE id =? OR email_address =?";
-
+        String sql = "SELECT * FROM user, member_of WHERE id =? OR email_address =? AND user.id = member_of.editor_id";
+        //SELECT * FROM user, member_of WHERE id =? OR email_address =? AND user.id = member_of.editor_id
         User result;
         ResultSet resultSet;
 
@@ -57,22 +59,33 @@ public class UserRepository {
 
             // Attempt to create a user from the query result.
             if (resultSet.next()) {
-                result = createUserFromResultSet(resultSet);
+                result = createUserFromResultSet(resultSet, user);
+
+                if (resultSet.next()) {
+
+                    // There cannot be two results of such a query.
+                    //todo messageBundle
+                    logger.severe("There are two results of a unique user query. The parameters were"
+                    + " id: " + user.getId() + ", email: " + user.getEmailAddress());
+                    throw new InvalidFieldsException("There are two results of a unique user query. The parameters were"
+                            + " id: " + user.getId() + ", email: " + user.getEmailAddress());
+                }
             } else {
+                logger.fine("Error while loadding a user with the id: " + user.getId()
+                        + " and email: " + user.getEmailAddress());
+                //TODO messageBundleProducer
                 throw new NotFoundException("dataNotFound");
             }
         } catch (SQLException ex) {
-            // TODO what is a fitting unchecked exception here?
             throw new DatasourceQueryFailedException(ex.getMessage());
         }
-
-
         return result;
     }
 
-    private static User createUserFromResultSet(ResultSet resultSet) throws SQLException {
+    private static User createUserFromResultSet(ResultSet resultSet, User user) throws SQLException {
 
         // Regular required data about a user.
+        //TODO replace with array.
         User result = new User();
         result.setId(resultSet.getInt("id"));
         result.setVerificationId(resultSet.getInt("id"));
@@ -88,7 +101,7 @@ public class UserRepository {
         result.setTitle(resultSet.getString("title"));
         result.setEmployer(resultSet.getString("employer"));
 
-        // Set the list of privileges.
+        // Set the list of all relevant global privileges.
         List<Privilege> privileges = new ArrayList<>();
         if (result.isAdmin()) {
             privileges.add(Privilege.ADMIN);
@@ -96,12 +109,10 @@ public class UserRepository {
         if (result.isRegistered()) {
             privileges.add(Privilege.AUTHENTICATED);
         }
+        if (resultSet.getInt("editor_id") == user.getId()) {
+            privileges.add(Privilege.EDITOR);
+        }
         result.setPrivileges(privileges);
-
-        //TODO necessary as a privilege in User?
-        //Privilege.AUTHOR from: submission, author_id
-        //Privilege.EDITOR from member_of, editor_id
-        //Privilege.REVIEWER from reviewd_by, reviewer_id
 
         // Number of submissions
         // TODO necessary?

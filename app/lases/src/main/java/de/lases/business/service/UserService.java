@@ -12,6 +12,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 /**
  * Provides all functionality for creating, manipulating or receiving information about users in the application.
@@ -26,6 +27,8 @@ public class UserService implements Serializable {
     @Inject
     private Event<UIMessage> uiMessageEvent;
 
+    private static final Logger logger = Logger.getLogger(UserService.class.getName());
+
     /**
      * Gets a {@code User}.
      *
@@ -38,9 +41,9 @@ public class UserService implements Serializable {
         if (user.getId() == null && user.getEmailAddress() == null) {
 
             //TODO MessageBundleProducer
-            //TODO Logger
 
             // Throw an exception when neither an id nor a valid email address exist.
+            logger.severe("The id and email are missing. Therefor no user object can be queried.");
             throw new IllegalArgumentException("idMissing");
         } else {
             Transaction transaction = new Transaction();
@@ -52,9 +55,10 @@ public class UserService implements Serializable {
             } catch (NotFoundException ex) {
 
                 //TODO Employ MessageBundleProducer
-                //TODO Logger
                 uiMessageEvent.fire(new UIMessage(ex.getMessage(),
                         MessageCategory.ERROR));
+                logger.fine("Error while loadding a user with the id: " + user.getId()
+                        + " and email: " + user.getEmailAddress());
                 transaction.abort();
             }
             return result;

@@ -49,6 +49,13 @@ public class UserServiceTest {
     }
 
     @Test
+    void getUserNoMocks() {
+        User user = new User();
+        user.setEmailAddress("peter@gmail.com");
+        assertEquals(userService.get(user).getFirstName(), "Peter");
+    }
+
+    @Test
     void testChangeUserName() {
         User newUser = new User();
         newUser.setId(1);
