@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -49,8 +50,6 @@ public class UserRepository {
         String sql = """
                 SELECT * FROM user WHERE id = '%d' OR email_address = '%s';
                 """.formatted(user.getId(), user.getEmailAddress());
-
-        // TODO hier duplikate?
         // EXIST ANY (SELECT * FROM reviewed_by WHERE reviewd_by.id = '%d'
 
         User result = null;
@@ -69,7 +68,7 @@ public class UserRepository {
                 result = createUserFromResultSet(resultSet);
             }
         } catch (SQLException ex) {
-            //TODO fitting unchecked exception.
+            //TODO What is a fitting unchecked exception.
         }
 
         return result;
@@ -77,9 +76,7 @@ public class UserRepository {
 
     private static User createUserFromResultSet(ResultSet resultSet) throws SQLException {
 
-        //TODO get full user dto or everything from the db entity user?
-        //TODO Assuming it's the first...
-
+        // Regular required data about a user.
         User result = new User();
         result.setId(resultSet.getInt("id"));
         result.setVerificationId(resultSet.getInt("id"));
@@ -91,16 +88,27 @@ public class UserRepository {
         result.setPasswordHashed(resultSet.getString("password_hash"));
         result.setRegistered(resultSet.getBoolean("is_registered"));
 
-        //TODO needed?
-        //result.setPasswordSalt();
-
-        // Optional
+        // Optional data about a user.
         result.setTitle(resultSet.getString("title"));
         result.setEmployer(resultSet.getString("employer"));
 
-        // From unions
-        // isVerified
-        //TODO list of privileges
+        // Set the list of privileges.
+        List<Privilege> privileges = new ArrayList<>();
+        if (result.isAdmin()) {
+            privileges.add(Privilege.ADMIN);
+        }
+        if (result.isRegistered()) {
+            privileges.add(Privilege.AUTHENTICATED);
+        }
+        result.setPrivileges(privileges);
+
+        //TODO necessary as a privilege in User?
+        //Privilege.AUTHOR from: submission, author_id
+        //Privilege.EDITOR from member_of, editor_id
+        //Privilege.REVIEWER from reviewd_by, reviewer_id
+
+        // Number of submissions
+        // TODO necessary?
         return result;
     }
 
