@@ -32,10 +32,9 @@ public class UserService implements Serializable {
      * @param user A {@link User}-DTO, that should contain an existing id value.
      * @return A {@code User}-DTO filled with all available fields.
      */
+    //TODO PLEASE VIEW THIS IMPLEMENTATION AS A PROPOSED TEMPLATE FOR ALL FURTHER SERVICE METHODS:
+    //TODO THIS TEMPLATE MAY BE SUBJECT TO CHANGE AND DISCUSSION
     public User get(User user)  {
-
-        //TODO PLEASE VIEW THIS IMPLEMENTATION AS A PROPOSED TEMPLATE FOR ALL FURTHER SERVICE METHODS:
-        //TODO THIS TEMPLATE MAY BE SUBJECT TO CHANGE AND DISCUSSION
         if (user.getId() == null) {
 
             //TODO MessageBundleProducer
@@ -43,7 +42,7 @@ public class UserService implements Serializable {
             //TODO Alternative Reaktion: UIMessage: Try that again.
             //TODO Alternative Reaktion: Reload userId from Session (ist das sinnvoll/praktikabel/löst das ein Problem)
                 // -> Wie würde man das überhaupt umsetzen? Exception an BB?
-            throw new IllegalArgumentException("Something went horribly wrong!");
+            throw new IllegalArgumentException("idMissing");
         } else {
             Transaction transaction = new Transaction();
 
@@ -54,8 +53,8 @@ public class UserService implements Serializable {
 
                 //TODO Employ MessageBundleProducer
                 //TODO Logger
-                uiMessageEvent.fire(new UIMessage("Data access error: A user could not be found",
-                        MessageCategory.INFO));
+                uiMessageEvent.fire(new UIMessage("dataNotFound",
+                        MessageCategory.ERROR));
                 transaction.abort();
             } finally {
                 transaction.commit();
