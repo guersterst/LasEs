@@ -47,7 +47,7 @@
                                 <h:form id="uploadFile" enctype="multipart/form-data">
                                     <!--rendered="#{submissionBacking.isViewerSubmitter()}"-->
                                     <h:inputFile id="upload-revision-ifile" value="#{submissionBacking.uploadedRevisionPDF}" required="true" requiredMessage="#{message.inputFile}">
-                                        <f:validator validatorId="PDFValidator"/>
+                                        <f:validator validatorId="pdfValidator"/>
                                     </h:inputFile>
                                     <br/>
                                     <h:message for="upload-revision-ifile"/>
