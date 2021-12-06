@@ -40,6 +40,9 @@ public class WelcomeBacking {
     @PostConstruct
     public void init() {
         loginInput = new User();
+        systemSettings = new SystemSettings();
+        systemSettings.setHeadlineWelcomePage("LassEs beste Siete");
+        systemSettings.setMessageWelcomePage("Benutz ddas laal");
     }
     /**
      * Check the entered login data and either show an error message or go
@@ -48,7 +51,7 @@ public class WelcomeBacking {
      * @return Go to the homepage on success and nowhere on failure.
      */
     public String login() {
-        return "homepage";
+        return "/views/authenticated/homepage";
     }
 
     /**
@@ -57,7 +60,7 @@ public class WelcomeBacking {
      * @return Go to the register page.
      */
     public String goToRegister() {
-        return "register";
+        return "/views/anonymous/register";
     }
 
     /**
