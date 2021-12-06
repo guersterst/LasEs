@@ -25,8 +25,6 @@ public class SubmissionService implements Serializable {
     @Inject
     private Event<UIMessage> uiMessageEvent;
 
-    @Inject
-    private Transaction transaction;
 
     /**
      * Gets a submission.

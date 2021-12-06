@@ -18,8 +18,6 @@ public class PaperService {
     @Inject
     private Event<UIMessage> uiMessageEvent;
 
-    @Inject
-    private Transaction transaction;
 
     /**
      * Gets a paper.

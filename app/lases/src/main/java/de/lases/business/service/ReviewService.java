@@ -25,8 +25,7 @@ public class ReviewService implements Serializable {
     @Inject
     private Event<UIMessage> uiMessageEvent;
 
-    @Inject
-    private Transaction transaction;
+
 
     @Inject
     private ReviewRepository reviewRepository;

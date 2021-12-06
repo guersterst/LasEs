@@ -66,11 +66,6 @@ public class Transaction {
     Connection getConnection() {
         if (transactionOver)
             throw new IllegalStateException("Transaction is already over");
-        try {
-            connection.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         return connection;
     }
 

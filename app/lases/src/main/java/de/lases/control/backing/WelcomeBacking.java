@@ -49,7 +49,7 @@ public class WelcomeBacking {
      * @return Go to the homepage on success and nowhere on failure.
      */
     public String login() {
-        return "/views/authenticated/homepage";
+        return "/views/authenticated/homepage?faces-redirect=true";
     }
 
     /**

@@ -25,8 +25,6 @@ public class ScientificForumService implements Serializable {
     @Inject
     private Event<UIMessage> uiMessageEvent;
 
-    @Inject
-    private Transaction transaction;
 
     /**
      * Gets a scientific forum.
