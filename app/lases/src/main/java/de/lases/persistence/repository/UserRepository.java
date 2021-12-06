@@ -40,9 +40,9 @@ public class UserRepository {
         if (user.getId() == null && user.getEmailAddress() == null) {
 
             // Throw an exception when neither an id nor a valid email address exist.
-            //TODO MessageBundleProducer
-            logger.severe("The id and email are missing. Therefor no user object can be queried.");
-            throw new IllegalArgumentException("idMissing");
+            String msg = "The id and email are missing. Therefor no user object can be queried.";
+            logger.severe(msg);
+            throw new IllegalArgumentException(msg);
         }
 
         String sql_number_of_submissions_and_editor_info = """
@@ -89,17 +89,16 @@ public class UserRepository {
                 if (userResult.next()) {
 
                     // There cannot be two results of such a query.
-                    //todo messageBundle
-                    logger.severe("There are two results of a unique user query. The parameters were"
-                            + " id: " + user.getId() + ", email: " + user.getEmailAddress());
-                    throw new InvalidFieldsException("There are two results of a unique user query. The parameters were"
-                            + " id: " + user.getId() + ", email: " + user.getEmailAddress());
+                    String msg = "There are two results of a unique user query. The parameters were"
+                            + " id: " + user.getId() + ", email: " + user.getEmailAddress();
+                    logger.severe(msg);
+                    throw new InvalidFieldsException(msg);
                 }
             } else {
-                logger.fine("Error while loadding a user with the id: " + user.getId()
-                        + " and email: " + user.getEmailAddress());
-                //TODO messageBundleProducer
-                throw new NotFoundException("dataNotFound");
+                String msg = "Error while loading a user with the id: " + user.getId()
+                        + " and email: " + user.getEmailAddress();
+                logger.fine(msg);
+                throw new NotFoundException(msg);
             }
         } catch (SQLException ex) {
             throw new DatasourceQueryFailedException(ex.getMessage());

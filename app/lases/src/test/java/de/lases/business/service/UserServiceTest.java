@@ -49,7 +49,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void getUserNoMocks() {
+    void testGetUserNoMocks() {
         User user = new User();
         user.setEmailAddress("peter@gmail.com");
         assertEquals(userService.get(user).getFirstName(), "Peter");
