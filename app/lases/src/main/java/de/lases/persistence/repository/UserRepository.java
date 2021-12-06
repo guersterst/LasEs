@@ -34,9 +34,7 @@ public class UserRepository {
      */
     public static User get(User user, Transaction transaction)
             throws NotFoundException {
-        if (user.getId() == null && (user.getEmailAddress() == null || !emailExists(user, transaction))) { // TODO
-            // darf ich hier einfach dieselebe transaction übergeben? -> atomarität verletzt. Im Zweifel diese
-            // Abfrage einfach weglassen.
+        if (user.getId() == null && user.getEmailAddress() == null) {
 
             //TODO MessageBundleProducer
             //TODO Logger
@@ -46,30 +44,28 @@ public class UserRepository {
         }
 
         Connection conn = transaction.getConnection();
-        //TODO Replace format with prepared statement
-        String sql = """
-                SELECT * FROM user WHERE id = '%d' OR email_address = '%s';
-                """.formatted(user.getId(), user.getEmailAddress());
-        // EXIST ANY (SELECT * FROM reviewed_by WHERE reviewd_by.id = '%d'
+        String sql = "SELECT * FROM user WHERE id =? OR email_address =?";
 
-        User result = null;
+        User result;
         ResultSet resultSet;
 
         // Attempt to query for the user.
         try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
-             resultSet = preparedStatement.executeQuery();
-        } catch (SQLException ex) {
-            throw new NotFoundException("dataNotFound");
-        }
+            preparedStatement.setInt(1, user.getId());
+            preparedStatement.setString(2, user.getEmailAddress());
+            resultSet = preparedStatement.executeQuery();
 
-        // Attempt to create a user from the query result.
-        try {
+            // Attempt to create a user from the query result.
             if (resultSet.next()) {
                 result = createUserFromResultSet(resultSet);
+            } else {
+                throw new NotFoundException("dataNotFound");
             }
         } catch (SQLException ex) {
-            //TODO What is a fitting unchecked exception.
+            // TODO what is a fitting unchecked exception here?
+            throw new DatasourceQueryFailedException(ex.getMessage());
         }
+
 
         return result;
     }
