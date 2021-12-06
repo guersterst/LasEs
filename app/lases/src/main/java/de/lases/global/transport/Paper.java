@@ -76,7 +76,11 @@ public class Paper implements Cloneable {
     public Paper clone() {
         try {
             Paper clone = (Paper) super.clone();
-            // TODO: copy mutable state here, so the clone can't change the internals of the original
+
+            /*
+             * Nothing to do here, since all references of Paper are
+             * immutable.
+             */
             return clone;
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
@@ -91,6 +95,14 @@ public class Paper implements Cloneable {
      */
     @Override
     public boolean equals(Object object) {
-        return false;
+        if (object == this) {
+            return true;
+        }
+        if (!(object instanceof Paper)) {
+            return false;
+        }
+        Paper paper = (Paper) object;
+        return paper.versionNumber == this.versionNumber
+                && paper.getSubmissionId() == this.getSubmissionId();
     }
 }

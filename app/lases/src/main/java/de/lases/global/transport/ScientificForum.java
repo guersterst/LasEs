@@ -132,7 +132,7 @@ public class ScientificForum implements Cloneable {
         if (!(object instanceof ScientificForum)) {
             return false;
         }
-        ScientificForum submission = (ScientificForum) object;
-        return submission.getId().equals(this.getId());
+        ScientificForum forum = (ScientificForum) object;
+        return forum.getId().equals(this.getId());
     }
 }
