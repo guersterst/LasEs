@@ -23,6 +23,8 @@ public class Submission implements Cloneable {
 
     private LocalDateTime submissionTime;
 
+    private boolean revisionRequired;
+
     public int getScientificForumId() {
         return scientificForumId;
     }
@@ -51,7 +53,7 @@ public class Submission implements Cloneable {
     }
 
     public boolean isRevisionRequired() {
-        return false;
+        return revisionRequired;
     }
 
     /**
@@ -60,6 +62,7 @@ public class Submission implements Cloneable {
      * @param revisionRequired Is a revision required?
      */
     public void setRevisionRequired(boolean revisionRequired) {
+        this.revisionRequired = revisionRequired;
     }
 
     public int getAuthorId() {
@@ -150,7 +153,11 @@ public class Submission implements Cloneable {
     public Submission clone() {
         try {
             Submission clone = (Submission) super.clone();
-            // TODO: copy mutable state here, so the clone can't change the internals of the original
+
+            /*
+             * Nothing to do here, since all references of Submission are
+             * immutable.
+             */
             return clone;
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
@@ -165,6 +172,13 @@ public class Submission implements Cloneable {
      */
     @Override
     public boolean equals(Object object) {
-        return false;
+        if (object == this) {
+            return true;
+        }
+        if (!(object instanceof Submission)) {
+            return false;
+        }
+        Submission submission = (Submission) object;
+        return submission.getId().equals(this.getId());
     }
 }

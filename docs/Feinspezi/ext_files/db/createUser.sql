@@ -12,7 +12,7 @@ CREATE TABLE "user" (
 	-- 128 Bit, Base64 encoded
 	password_hash VARCHAR(24),
 	-- 16 Byte Salt, Base64 encoded
-	password_salt VARCHAR(24),
+	password_salt VARCHAR(24)
 	
 	CONSTRAINT valid_name CHECK (length(firstname) >= 1 AND length(lastname) >= 1),
 	CONSTRAINT valid_birthdate CHECK (birthdate < CURRENT_DATE),
