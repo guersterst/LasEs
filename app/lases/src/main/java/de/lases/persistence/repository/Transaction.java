@@ -3,6 +3,7 @@ package de.lases.persistence.repository;
 import jakarta.inject.Inject;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  * Transactions for repository operations.
@@ -12,9 +13,16 @@ public class Transaction {
     private Connection connection;
 
     /**
+     * Is the transaction already aborted or commited?
+     */
+    private boolean transactionOver;
+
+    /**
      * Create a new Transaction.
      */
     public Transaction() {
+        connection = ConnectionPool.getInstance().getConnection();
+        transactionOver = false;
     }
 
     /**
@@ -22,6 +30,15 @@ public class Transaction {
      * @throws IllegalStateException When the transaction is already over.
      */
     public void abort() {
+        if (transactionOver)
+            throw new IllegalStateException("Transaction is already over");
+        try {
+            connection.rollback();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        transactionOver = true;
+        ConnectionPool.getInstance().releaseConnection(connection);
     }
 
     /**
@@ -29,7 +46,15 @@ public class Transaction {
      * @throws IllegalStateException When the transaction is already over.
      */
     public void commit() {
-
+        if (transactionOver)
+            throw new IllegalStateException("Transaction is already over");
+        try {
+            connection.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        transactionOver = true;
+        ConnectionPool.getInstance().releaseConnection(connection);
     }
 
     /**
@@ -39,7 +64,14 @@ public class Transaction {
      * @throws IllegalStateException When the transaction is already over.
      */
     Connection getConnection() {
-        return null;
+        if (transactionOver)
+            throw new IllegalStateException("Transaction is already over");
+        try {
+            connection.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return connection;
     }
 
 }
