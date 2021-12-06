@@ -229,7 +229,11 @@ public class User implements Cloneable {
      */
     @Override
     public boolean equals(Object object) {
-        return false;
+        if (object instanceof User user) {
+            return this.getId().equals(user.getId());
+        } else {
+            return false;
+        }
     }
 
     /**
