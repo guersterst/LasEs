@@ -49,7 +49,14 @@ public class WelcomeBacking {
      * @return Go to the homepage on success and nowhere on failure.
      */
     public String login() {
-        return "/views/authenticated/homepage?faces-redirect=true";
+        User loginUser = loginService.login(loginInput);
+        if (loginUser != null) {
+            sessionInformation.setUser(loginUser);
+            return "/views/authenticated/homepage?faces-redirect=true";
+        } else {
+            // UIMessage and stay on login page
+            return null;
+        }
     }
 
     /**
