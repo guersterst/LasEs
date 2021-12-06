@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<!-- include themes here.-->
+<h:head>
+    <h:outputStylesheet name="" library="design"/>
+</h:head>
+
+<h:body>
+    <div id="page">
+        
+        <!--Includes navigaton.-->
+        <div id="navigation">
+            <ui:insert name="navigation">
+                <ui:include src="navigation.xhtml"></ui:include>
+            </ui:insert>
+        </div>
+        
+        <!--Includes welcomepage for default-->
+        <div id="content">
+            <ui:insert name="content">
+                <ui:include src="../../views/anonymous/welcome.xhtml"></ui:include>
+            </ui:insert>
+        </div>
+        <!--Includes footer-->
+        <div id="footer">
+            <ui:insert name="footer">
+                <ui:include src="footer.xhtml"></ui:include>
+            </ui:insert>
+        </div>
+        
+    </div>
+</h:body>
+
+</html>
