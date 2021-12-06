@@ -29,19 +29,21 @@ public class UserService implements Serializable {
     /**
      * Gets a {@code User}.
      *
-     * @param user A {@link User}-DTO, that should contain an existing id value.
+     * @param user A {@link User}-DTO, that should contain an existing id or email value.
      * @return A {@code User}-DTO filled with all available fields.
      */
     //TODO PLEASE VIEW THIS IMPLEMENTATION AS A PROPOSED TEMPLATE FOR ALL FURTHER SERVICE METHODS:
     //TODO THIS TEMPLATE MAY BE SUBJECT TO CHANGE AND DISCUSSION
     public User get(User user)  {
-        if (user.getId() == null) {
+        if (user.getId() == null && (user.getEmailAddress() == null || !emailExists(user))) {
 
             //TODO MessageBundleProducer
             //TODO Logger
             //TODO Alternative Reaktion: UIMessage: Try that again. -> Ich denke wenig sinnvoll
             //TODO Alternative Reaktion: Reload userId from Session (ist das sinnvoll/praktikabel/löst das ein Problem)
                 // -> Wie würde man das überhaupt umsetzen? Exception an BB?
+
+            // Throw an exception when neither an id nor a valid email address exist.
             throw new IllegalArgumentException("idMissing");
         } else {
             Transaction transaction = new Transaction();
