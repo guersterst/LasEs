@@ -39,6 +39,7 @@ public class WelcomeBacking {
      */
     @PostConstruct
     public void init() {
+        loginInput = new User();
     }
     /**
      * Check the entered login data and either show an error message or go
@@ -47,7 +48,7 @@ public class WelcomeBacking {
      * @return Go to the homepage on success and nowhere on failure.
      */
     public String login() {
-        return "welcome";
+        return "homepage";
     }
 
     /**
