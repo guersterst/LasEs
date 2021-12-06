@@ -35,13 +35,10 @@ public class UserService implements Serializable {
     //TODO PLEASE VIEW THIS IMPLEMENTATION AS A PROPOSED TEMPLATE FOR ALL FURTHER SERVICE METHODS:
     //TODO THIS TEMPLATE MAY BE SUBJECT TO CHANGE AND DISCUSSION
     public User get(User user)  {
-        if (user.getId() == null && (user.getEmailAddress() == null || !emailExists(user))) {
+        if (user.getId() == null && user.getEmailAddress() == null) {
 
             //TODO MessageBundleProducer
             //TODO Logger
-            //TODO Alternative Reaktion: UIMessage: Try that again. -> Ich denke wenig sinnvoll
-            //TODO Alternative Reaktion: Reload userId from Session (ist das sinnvoll/praktikabel/löst das ein Problem)
-                // -> Wie würde man das überhaupt umsetzen? Exception an BB?
 
             // Throw an exception when neither an id nor a valid email address exist.
             throw new IllegalArgumentException("idMissing");
@@ -51,19 +48,15 @@ public class UserService implements Serializable {
             User result = null;
             try {
                 result = UserRepository.get(user, transaction);
-            } catch (NotFoundException e) {
+                transaction.commit();
+            } catch (NotFoundException ex) {
 
                 //TODO Employ MessageBundleProducer
                 //TODO Logger
-                uiMessageEvent.fire(new UIMessage("dataNotFound",
+                uiMessageEvent.fire(new UIMessage(ex.getMessage(),
                         MessageCategory.ERROR));
                 transaction.abort();
-            } finally {
-                transaction.commit();
             }
-
-            //TODO ist es sinnvoll hier den leeren User als Alternative zurückzugeben.
-            //return Objects.requireNonNullElse(result, user);
             return result;
         }
     }
@@ -103,6 +96,8 @@ public class UserService implements Serializable {
      * @return {@code true}, if the email does already exist. {@code false} otherwise.
      */
     public boolean emailExists(User user) {
+
+        //TODO when this is implemented please inform Johannes.
         return false;
     }
 
