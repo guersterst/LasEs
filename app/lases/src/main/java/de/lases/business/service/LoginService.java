@@ -1,5 +1,6 @@
 package de.lases.business.service;
 
+import de.lases.persistence.exception.NotFoundException;
 import jakarta.enterprise.context.Dependent;
 import jakarta.faces.component.UIMessage;
 import de.lases.global.transport.*;
@@ -26,6 +27,18 @@ public class LoginService {
      * @return The user with all their data, if successful, and {@code null} otherwise.
      */
     public User login(User user) {
-        return null;
+        Transaction transaction = new Transaction();
+        try {
+            User matchingEmailUser = UserRepository.get(user, transaction);
+            // Hashing
+            // if User.hash == matchingEmailUser.hash
+            // return matchingEmailUser
+            // else
+            // uiMessage
+            return null;
+        } catch (NotFoundException e) {
+            // uiMessage
+            return null;
+        }
     }
 }
