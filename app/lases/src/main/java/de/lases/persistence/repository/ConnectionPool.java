@@ -6,11 +6,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 /**
  * Holds a set of open database connections that can be used by the program.
  */
-class ConnectionPool {
+public class ConnectionPool {
 
     private static final String DB_DRIVER = "org.postgresql.Driver";
     private static final String DB_HOST = "bueno.fim.uni-passau.de";
@@ -76,6 +77,7 @@ class ConnectionPool {
      * Initialize the connection pool.
      */
     public static synchronized void init() {
+        Logger logger = Logger.getLogger(ConnectionPool.class.getName());
         getInstance().initialized = true;
         List<Connection> pool = new ArrayList<>(INITIAL_POOL_SIZE);
         for (int i = 0; i < INITIAL_POOL_SIZE; i++) {
@@ -86,6 +88,7 @@ class ConnectionPool {
             }
         }
         getInstance().addConnections(pool);
+        logger.info("DB Connection Pool started");
     }
 
     /**
