@@ -10,6 +10,10 @@
 <h:head>
 </h:head>
 
+<!--Inorder to include a page you have to use ui:composition and ui:define -->
+<!--ui:composition with template="../../resources/template/main.xhtml-->
+<!--ui:define overrides the default-->
+<!--See welcome.xhtml. It already includes welcome.xhtml right-->
 <h:body>
     <div id="page">
         
@@ -20,7 +24,7 @@
             </ui:insert>
         </div>
         
-        <!--Includes welcomepage for default-->
+        <!--Includes content for default-->
         <div id="content">
             <ui:insert name="content">
                 <ui:include src="content.xhtml"></ui:include>
