@@ -40,9 +40,7 @@ public class WelcomeBacking {
     @PostConstruct
     public void init() {
         loginInput = new User();
-        systemSettings = new SystemSettings();
-        systemSettings.setHeadlineWelcomePage("LassEs beste Siete");
-        systemSettings.setMessageWelcomePage("Benutz ddas laal");
+        systemSettings = customizationService.get();
     }
     /**
      * Check the entered login data and either show an error message or go
