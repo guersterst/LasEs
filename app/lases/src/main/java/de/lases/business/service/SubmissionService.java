@@ -35,6 +35,9 @@ public class SubmissionService implements Serializable {
     @Inject
     private PropertyResourceBundle msg;
 
+    @Inject
+    private UserService userService;
+
     /**
      * Gets a submission.
      *
@@ -205,7 +208,16 @@ public class SubmissionService implements Serializable {
      * @return {@code false} if view access is restricted, {@code true} otherwise.
      */
     public boolean canView(Submission submission, User user) {
-        return false;
+        user = userService.get(user);
+        ScientificForum forum = new ScientificForum();
+        forum.setId(submission.getScientificForumId());
+
+        // Check if the user is admin, editor of the forum
+        // or review or author of the submission
+        return user.isAdmin()
+                || userService.getList(forum).contains(user)
+                || userService.getList(submission, Privilege.REVIEWER).contains(user)
+                || userService.getList(submission, Privilege.AUTHOR).contains(user);
     }
 
 
@@ -285,15 +297,14 @@ public class SubmissionService implements Serializable {
     /**
      * Gets a list all submissions that belong to a given scientific forum.
      *
-     * @param scientificForum      A {@link ScientificForum} with a valid id.
-     * @param resultParams The {@link ResultListParameters} that results
-     *                             parameters from the pagination like
-     *                             filtering, sorting or number of elements.
+     * @param scientificForum A {@link ScientificForum} with a valid id.
+     * @param resultParams    The {@link ResultListParameters} that results
+     *                        parameters from the pagination like
+     *                        filtering, sorting or number of elements.
      * @return A list of all {@link Submission}s that belong to a given scientific forum.
      */
     public List<Submission> getList(ScientificForum scientificForum,
-                                           ResultListParameters
-                                                   resultParams) {
+                                    ResultListParameters resultParams) {
         if (scientificForum.getId() == null) {
             l.severe("The passed ScientificForum-DTO is not sufficiently filled.");
             throw new IllegalArgumentException("ScientificForum id must not be null.");
