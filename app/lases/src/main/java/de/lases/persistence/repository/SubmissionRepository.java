@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -44,9 +45,9 @@ public class SubmissionRepository {
         Submission result;
         ResultSet resultSet;
 
-        try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
-            preparedStatement.setInt(1, submission.getId());
-            resultSet = preparedStatement.executeQuery();
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, submission.getId());
+            resultSet = stmt.executeQuery();
 
             // Attempt to create a submission from the result set.
             if (resultSet.next()) {
@@ -182,8 +183,50 @@ public class SubmissionRepository {
                                            Transaction transaction,
                                            ResultListParameters
                                                    resultListParameters)
-            throws DataNotCompleteException, NotFoundException{
-        return null;
+            throws DataNotCompleteException, NotFoundException {
+        if (user.getId() == null && scientificForum.getId() == null) {
+            l.severe("A passed DTO is not sufficiently filled.");
+            throw new IllegalArgumentException("User ScientificForum id must not be null.");
+        }
+
+        Connection conn = transaction.getConnection();
+
+        ResultSet resultSet;
+        List<Submission> result = new ArrayList<>();
+
+        if (privilege == Privilege.ADMIN) {
+            return getList(scientificForum, transaction, resultListParameters);
+        } else {
+            String sql = switch (privilege) {
+                case EDITOR -> """
+                        SELECT * FROM submission
+                        WHERE forum_id = ? AND editor_id = ?""";
+                case REVIEWER -> """
+                        SELECT * FROM submission
+                        WHERE forum_id = ?
+                        AND EXISTS (SELECT 1 FROM reviewed_by rb
+                                    WHERE rb.submission_id = submission.id
+                                    AND rb.reviewer_id = ?)""";
+                default -> """
+                        SELECT * FROM submission
+                        WHERE forum_id = ? AND author_id = ?""";
+            };
+
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setInt(1, scientificForum.getId());
+                stmt.setInt(2, user.getId());
+                resultSet = stmt.executeQuery();
+
+                // Attempt to create a list of submissions from the result set.
+                while (resultSet.next()) {
+                    result.add(createSubmissionFromResultSet(resultSet));
+                }
+                l.finer("Retrieved a list of submissions from the database.");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return result;
+        }
     }
 
     /**
@@ -238,6 +281,21 @@ public class SubmissionRepository {
                                            ResultListParameters
                                                    resultListParameters)
             throws DataNotCompleteException, NotFoundException {
+//        String sql = """
+//                    SELECT * FROM submission
+//                    WHERE forum_id = ?""";
+//        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+//            stmt.setInt(1, scientificForum.getId());
+//            resultSet = stmt.executeQuery();
+//
+//            // Attempt to create a list of submissions from the result set.
+//            while (resultSet.next()) {
+//                result.add(createSubmissionFromResultSet(resultSet));
+//            }
+//            l.finer("Retrieved a list of submissions from the database.");
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
         return null;
     }
 
