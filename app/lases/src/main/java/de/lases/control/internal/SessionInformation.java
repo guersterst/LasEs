@@ -2,6 +2,7 @@ package de.lases.control.internal;
 
 import de.lases.global.transport.*;
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.inject.Named;
 
 import java.io.Serializable;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.Locale;
  * also offers a way to invalidate a session.
  */
 @SessionScoped
+@Named
 public class SessionInformation implements Serializable {
     private User user;
     private Locale locale;
