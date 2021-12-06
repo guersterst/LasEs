@@ -20,7 +20,11 @@ public class ConnectionPool {
     private static final String DB_NAME = "sep21g02t";
     private static final String DB_USER = "sep21g02";
     private static final String DB_PASSWORD = "ieQu2aeShoon";
-    private static final int INITIAL_POOL_SIZE = 10;
+
+    /**
+     * The initial number of free connections.
+     */
+    public static final int INITIAL_POOL_SIZE = 10;
 
     private static final String DB_URL
             = "jdbc:postgresql://" + DB_HOST + "/" + DB_NAME;
@@ -109,6 +113,15 @@ public class ConnectionPool {
         }
 
         getInstance().initialized = false;
+    }
+
+    /**
+     * Get the number of remaining connections in the pool.
+     *
+     * @return The number of remaining connections in the pool.
+     */
+    public int getNumberOfFreeConnections() {
+        return freeConnections.size();
     }
 
     private static Connection createConnection(
