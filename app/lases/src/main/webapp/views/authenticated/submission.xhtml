@@ -1,17 +1,39 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:composition template="/resources/templates/main.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <f:metadata>
+        <f:viewParam value="#{submissionBacking.submission.id}" name="id"/>
+        <!--TODO:evtl mit parameter übergabe-->
+        <f:event type="preRenderView" listener="#{submissionBacking.preRenderViewListener}"/>
+        <f:viewAction action="#{submissionBacking.onLoad()}"/>
+    </f:metadata>
 
-<h:head>
-    <title></title>
-</h:head>
+    <!--Title of a Submission as Title of the page.-->
+    <ui:define name="title">#{''.concat(labels.appName).concat(" - ").concat(submissionBacking.submission.title)}</ui:define>
+    
+    <!--Content of submission.xhtml.-->
+    <ui:define name="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-1">
+                    <div class="container" id="container-toolbar">
+                        <ui:include src="/resources/templates/toolbar.xhtml"></ui:include>
+                    </div>
+                </div>
+                <div class="col-md-10">
+                    <div class="container" id="container-submission">
+                        <div class="card" id="toolbox">
+                            <div class="card-body">
+                                <!--rendered="#{submissionBacking.isViewerSubmitter()}"-->
+                                <h:commandButton id="delete-sub-cbtn" title="#{help.deleteSubmission}" value="#{labels.deleteButton}" onclick="PF('dlg').show()"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ui:define>
 
-<h:body>
-
-</h:body>
-
-</html>
+</ui:composition>

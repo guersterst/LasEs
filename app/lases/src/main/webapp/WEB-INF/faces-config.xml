@@ -15,6 +15,10 @@
             <base-name>resource_bundles.labels</base-name>
             <var>labels</var>
         </resource-bundle>
+        <resource-bundle>
+            <base-name>resource_bundles.help</base-name>
+            <var>help</var>
+        </resource-bundle>
     </application>
 
     <lifecycle>
