@@ -55,7 +55,7 @@ public class UserService implements Serializable {
             } catch (NotFoundException ex) {
                 uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataNotFound"),
                         MessageCategory.ERROR));
-                logger.fine(ex.getMessage());
+                logger.warning(ex.getMessage());
                 transaction.abort();
             }
             return result;

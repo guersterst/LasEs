@@ -41,6 +41,7 @@ public class UserRepository {
             throw new IllegalArgumentException(msg);
         }
 
+
         String sql_number_of_submissions_and_editor_info = """
                  SELECT (SELECT COUNT(*)
                  FROM submission, "user"
@@ -59,6 +60,7 @@ public class UserRepository {
                 """;
 
 
+        System.out.println("1");
         User result;
         try {
             Connection conn = transaction.getConnection();
@@ -77,7 +79,7 @@ public class UserRepository {
             extraStatement.setInt(2, user.getId());
             submissionAndEditorResult = extraStatement.executeQuery();
 
-
+            System.out.println("2");
             // Attempt to create a user from the query results.
             if (userResult.next() && submissionAndEditorResult.next()) {
                 result = createUserFromResultSet(userResult, submissionAndEditorResult);
