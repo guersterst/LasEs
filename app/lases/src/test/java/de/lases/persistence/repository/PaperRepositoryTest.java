@@ -1,5 +1,6 @@
 package de.lases.persistence.repository;
 
+import de.lases.global.transport.FileDTO;
 import de.lases.global.transport.Paper;
 import de.lases.persistence.exception.DataNotWrittenException;
 import org.junit.jupiter.api.AfterAll;
@@ -17,6 +18,8 @@ class PaperRepositoryTest {
 
     private static Paper paper;
 
+    private static FileDTO pdf;
+
     private static Transaction transaction;
 
     @BeforeAll
@@ -26,6 +29,8 @@ class PaperRepositoryTest {
         paper.setUploadTime(LocalDateTime.now());
         paper.setVersionNumber(2);
         paper.setVisible(false);
+        pdf = new FileDTO();
+        pdf.setFile(new byte[]{1, 2, 3, 4});
     }
 
     @BeforeAll
@@ -41,7 +46,13 @@ class PaperRepositoryTest {
     @AfterAll
     static void rollbackTransaction() {
         transaction.abort();
+        ConnectionPool.shutDown();
     }
+
+//    @AfterAll
+//    static void shutdownConnectionPool() {
+//        ConnectionPool.shutDown();
+//    }
 
     @Test
     void testAdd() throws SQLException, DataNotWrittenException {
@@ -54,7 +65,7 @@ class PaperRepositoryTest {
         int i = 0;
         while (resultSet.next()) { i++; }
 
-        PaperRepository.add(paper, transaction);
+        PaperRepository.add(paper, pdf, transaction);
 
         ResultSet resultSet2 = stmt.executeQuery();
         int j = 0;

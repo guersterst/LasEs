@@ -41,6 +41,7 @@ public class PaperRepository {
      *
      * @param paper       A fully filled paper dto. (The id must not be
      *                    specified, as the repository will create the id)
+     * @param pdf The pdf file belonging to the paper
      * @param transaction The transaction to use.
      * @throws DataNotWrittenException        If writing the data to the repository
      *                                        fails.
@@ -50,7 +51,7 @@ public class PaperRepository {
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
-    public static void add(Paper paper, Transaction transaction)
+    public static void add(Paper paper, FileDTO pdf, Transaction transaction)
             throws DataNotWrittenException {
         Connection conn = transaction.getConnection();
         try {
@@ -63,8 +64,7 @@ public class PaperRepository {
             stmt.setInt(2, paper.getSubmissionId());
             stmt.setTimestamp(3, Timestamp.valueOf(paper.getUploadTime()));
             stmt.setBoolean(4, paper.isVisible());
-            // TODO: sollte hier null möglich sein?, oder sollte ich meine Schnittstelle ändern?
-            stmt.setBytes(5, new byte[]{});
+            stmt.setBytes(5, pdf.getFile());
             stmt.executeUpdate();
         } catch (SQLException ex) {
             if (ex instanceof SQLNonTransientException) {
@@ -160,23 +160,6 @@ public class PaperRepository {
     public static FileDTO getPDF(Paper paper, Transaction transaction)
             throws NotFoundException {
         return null;
-    }
-
-    /**
-     * Sets the PDF belonging to a specified paper.
-     *
-     * @param paper       A paper dto filled with a valid paper id and submission id.
-     * @param pdf         A file dto filled with a pdf file.
-     * @param transaction The transaction to use.
-     * @throws DataNotWrittenException        If writing the data to the repository
-     *                                        fails.
-     * @throws NotFoundException              If there is no paper with the provided id and
-     *                                        submission id.
-     * @throws DatasourceQueryFailedException If the datasource cannot be
-     *                                        queried.
-     */
-    public static void setPDF(Paper paper, FileDTO pdf, Transaction transaction)
-            throws DataNotWrittenException, NotFoundException {
     }
 
     /**
