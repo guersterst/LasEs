@@ -66,4 +66,15 @@ public class PaperServiceNoMockTest {
 
         assertEquals(changed, paper);
     }
+/*
+    @Test
+    void testRemove() {
+        //paperService.add(pdf, paper);
+        paperService.remove(paper);
+        Paper find = paperService.get(paper);
+
+        assertEquals(null, find);
+    }
+    
+ */
 }
