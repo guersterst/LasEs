@@ -2,6 +2,7 @@ package de.lases.business.service;
 
 import de.lases.global.transport.FileDTO;
 import de.lases.global.transport.Paper;
+import de.lases.persistence.repository.ConnectionPool;
 import de.lases.persistence.repository.PaperRepository;
 import de.lases.persistence.repository.Transaction;
 import org.junit.jupiter.api.AfterAll;
@@ -62,6 +63,16 @@ public class PaperServiceTest {
 
         // Close the mocks
         paperRepoMocked.close();
+    }
+
+    @BeforeAll
+    static void initConnectionPool() {
+        ConnectionPool.init();
+    }
+
+    @AfterAll
+    static void rollbackTransaction() {
+        ConnectionPool.shutDown();
     }
 
     @Test

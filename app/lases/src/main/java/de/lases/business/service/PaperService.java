@@ -60,7 +60,8 @@ public class PaperService {
                 String message = resourceBundle.getString("paperNotFound");
                 uiMessageEvent.fire(new UIMessage(message, MessageCategory.ERROR));
 
-                logger.fine("Error while loading a paper with the id: " + paper.getSubmissionId());
+                logger.fine("Error while loading a paper with the submission id: " + paper.getSubmissionId()
+                        + " and version number: " + paper.getVersionNumber());
 
                 transaction.abort();
 
