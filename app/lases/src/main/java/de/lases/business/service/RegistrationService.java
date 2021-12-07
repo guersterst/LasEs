@@ -18,8 +18,6 @@ public class RegistrationService {
     @Inject
     private Event<UIMessage> uiMessageEvent;
 
-
-
     /**
      * Registers and creates a regular user in the database.
      * <p>

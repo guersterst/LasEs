@@ -4,6 +4,7 @@ import de.lases.global.transport.FileDTO;
 import de.lases.global.transport.SystemSettings;
 import de.lases.persistence.exception.DataNotWrittenException;
 import de.lases.persistence.exception.DatasourceQueryFailedException;
+import de.lases.persistence.exception.DepletedResourceException;
 import de.lases.persistence.exception.InvalidFieldsException;
 
 import java.sql.*;

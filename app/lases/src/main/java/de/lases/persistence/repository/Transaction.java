@@ -1,9 +1,12 @@
 package de.lases.persistence.repository;
 
-import jakarta.inject.Inject;
+import de.lases.persistence.exception.DatasourceQueryFailedException;
+import de.lases.persistence.exception.DepletedResourceException;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Transactions for repository operations.
@@ -11,6 +14,9 @@ import java.sql.SQLException;
 public class Transaction {
 
     private Connection connection;
+
+    private static final Logger logger
+            = Logger.getLogger(Transaction.class.getName());
 
     /**
      * Is the transaction already aborted or commited?
@@ -35,7 +41,16 @@ public class Transaction {
         try {
             connection.rollback();
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException ex) {
+                logSQLException(ex);
+            }
+            logSQLException(e);
+            throw new DatasourceQueryFailedException("Transaction cannot"
+                    + "be rolled back", e);
         }
         transactionOver = true;
         ConnectionPool.getInstance().releaseConnection(connection);
@@ -51,7 +66,16 @@ public class Transaction {
         try {
             connection.commit();
         } catch (SQLException e) {
-            e.printStackTrace();
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                    connection.close();
+                } catch (SQLException ex) {
+                    logSQLException(ex);
+                }
+            }
+            logSQLException(e);
+            throw new DatasourceQueryFailedException("Commit failed");
         }
         transactionOver = true;
         ConnectionPool.getInstance().releaseConnection(connection);
@@ -67,6 +91,17 @@ public class Transaction {
         if (transactionOver)
             throw new IllegalStateException("Transaction is already over");
         return connection;
+    }
+
+    private void logSQLException(SQLException sqlException) {
+        logger.log(Level.SEVERE,
+                """
+                Message: %s
+                SQLState: %s
+                Vendor error code: %s
+                """.formatted(sqlException.getMessage(),
+                        sqlException.getSQLState(), sqlException.getErrorCode())
+                );
     }
 
 }

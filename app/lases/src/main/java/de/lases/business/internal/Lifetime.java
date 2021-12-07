@@ -44,7 +44,7 @@ public class Lifetime {
      * </ul>
      */
     public static void shutdown() {
-
+        ConnectionPool.shutDown();
     }
 
     private static void initializeLogger(InputStream loggerConfigStream) {

@@ -2,7 +2,6 @@ package de.lases.persistence.util;
 
 import de.lases.global.transport.ConnectionState;
 import de.lases.persistence.exception.DatasourceNotFoundException;
-import de.lases.persistence.exception.DatasourceQueryFailedException;
 
 /**
  * Offers methods for managing the datasource.
