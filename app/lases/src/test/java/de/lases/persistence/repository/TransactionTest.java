@@ -1,5 +1,6 @@
 package de.lases.persistence.repository;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +21,11 @@ class TransactionTest {
     @BeforeAll
     static void initConnectionPool() {
         ConnectionPool.init();
+    }
+
+    @AfterAll
+    static void shutDownConnectionPool() {
+        ConnectionPool.shutDown();
     }
 
     @Test
@@ -50,6 +56,26 @@ class TransactionTest {
 
         transaction.abort();
         Mockito.verify(mockConnection).rollback();
+    }
+
+    @Test
+    void testCommitReturnsConnection() {
+        int numberOfFreeConnectionAtBeginning =
+                ConnectionPool.getInstance().getNumberOfFreeConnections();
+        Transaction transaction = new Transaction();
+        transaction.commit();
+        assertEquals(numberOfFreeConnectionAtBeginning,
+                ConnectionPool.getInstance().getNumberOfFreeConnections());
+    }
+
+    @Test
+    void testAbortReturnsConnection() {
+        int numberOfFreeConnectionAtBeginning =
+                ConnectionPool.getInstance().getNumberOfFreeConnections();
+        Transaction transaction = new Transaction();
+        transaction.abort();
+        assertEquals(numberOfFreeConnectionAtBeginning,
+                ConnectionPool.getInstance().getNumberOfFreeConnections());
     }
 
 }

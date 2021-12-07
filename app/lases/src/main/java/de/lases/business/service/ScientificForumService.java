@@ -1,9 +1,6 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.*;
-import de.lases.persistence.exception.DatasourceQueryFailedException;
-import de.lases.persistence.exception.InvalidFieldsException;
-import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
@@ -24,9 +21,6 @@ public class ScientificForumService implements Serializable {
 
     @Inject
     private Event<UIMessage> uiMessageEvent;
-
-    @Inject
-    private Transaction transaction;
 
     /**
      * Gets a scientific forum.

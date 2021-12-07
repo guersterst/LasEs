@@ -17,9 +17,6 @@ public class LoginService {
     @Inject
     private Event<UIMessage> uiMessageEvent;
 
-    @Inject
-    private Transaction transaction;
-
     /**
      * Authenticates a user
      * by comparing their identifier (e-mail address or id)
