@@ -2,6 +2,7 @@ package de.lases.persistence.repository;
 
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
+import de.lases.persistence.util.DatasourceUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Offers get/add/change/remove operations on a user and the
@@ -323,22 +325,71 @@ public class UserRepository {
     /**
      * Gets a list of all users that are editor of a specific scientific forum.
      *
-     * @param transaction The transaction to use.
+     * @param transaction     The transaction to use.
      * @param scientificForum The forum the users must be editor of. Must
      *                        contain a valid id.
      * @return A list of fully filled user dtos.
-     * @throws DataNotCompleteException If the list is truncated.
+     * @throws DataNotCompleteException       If the list is truncated.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
-     * @throws NotFoundException If there is no scientific forum with the
-     *                           specified id.
-     * @throws InvalidQueryParamsException If the resultListParameters contain
-     *                                     an erroneous option.
+     * @throws NotFoundException              If there is no scientific forum with the
+     *                                        specified id.
+     * @throws InvalidQueryParamsException    If the resultListParameters contain
+     *                                        an erroneous option.
      */
     public static List<User> getList(Transaction transaction,
                                      ScientificForum scientificForum)
-            throws DataNotCompleteException, NotFoundException {
-        return null;
+            throws DataNotCompleteException, DatasourceQueryFailedException,
+            NotFoundException, InvalidQueryParamsException {
+        if (transaction == null || scientificForum == null) {
+            throw new InvalidQueryParamsException("Parameter was null");
+        }
+
+        Integer id = scientificForum.getId();
+        Connection conn = transaction.getConnection();
+        List<User> userList = new LinkedList<>();
+
+        try {
+            PreparedStatement exists = conn.prepareStatement(
+                    "SELECT * FROM scientific_forum WHERE id = ?"
+            );
+            exists.setInt(1, id);
+            ResultSet rsExists = exists.executeQuery();
+            if (!rsExists.next()) {
+                throw new NotFoundException("No Scientific Forum with ID: " + id);
+            }
+
+            PreparedStatement ps = conn.prepareStatement(
+                    "SELECT u.* FROM \"user\" u, scientific_forum sf, member_of mo WHERE sf.id = ? " +
+                            "AND u.id = mo.editor_id AND mo.scientific_forum_id = sf.id"
+            );
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                User user = new User();
+                user.setId(rs.getInt("id"));
+                user.setPrivileges(getUserPrivileges(user, transaction));
+                // We know the user must be an editor
+                user.getPrivileges().add(Privilege.EDITOR);
+
+                user.setTitle(rs.getString("title"));
+                user.setFirstName(rs.getString("firstname"));
+                user.setLastName(rs.getString("lastname"));
+                user.setEmailAddress(rs.getString("email_address"));
+                java.sql.Date birthdate = rs.getDate("birthdate");
+                if (birthdate != null) {
+                    user.setDateOfBirth(birthdate.toLocalDate());
+                }
+                user.setEmployer(rs.getString("employer"));
+
+                userList.add(user);
+            }
+            return userList;
+        } catch (SQLException e) {
+            // todo: log once branch is updooted
+            throw new DatasourceQueryFailedException();
+        }
     }
 
     /**

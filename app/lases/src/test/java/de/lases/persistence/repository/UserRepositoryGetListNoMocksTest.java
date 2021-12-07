@@ -1,8 +1,10 @@
 package de.lases.persistence.repository;
 
 import de.lases.global.transport.Privilege;
+import de.lases.global.transport.ScientificForum;
 import de.lases.global.transport.Submission;
 import de.lases.global.transport.User;
+import de.lases.persistence.exception.DataNotCompleteException;
 import de.lases.persistence.exception.NotFoundException;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -62,5 +64,33 @@ public class UserRepositoryGetListNoMocksTest {
                 () -> assertEquals(1, userList.size()),
                 () -> assertTrue(userList.contains(edith))
         );
+    }
+
+    @Test
+    void testGetListOfEditors() throws DataNotCompleteException, NotFoundException {
+        ScientificForum sf = new ScientificForum();
+        sf.setId(1);
+
+        User edith = new User();
+        edith.setId(1001);
+        User peter = new User();
+        peter.setId(1);
+
+        List<User> userList = UserRepository.getList(transaction, sf);
+
+        assertAll(
+                () -> assertEquals(2, userList.size()),
+                () -> assertTrue(userList.contains(edith)),
+                () -> assertTrue(userList.contains(peter))
+        );
+    }
+
+    @Test
+    void testGetListOfEditorsInvalidForum() {
+        ScientificForum sf = new ScientificForum();
+        sf.setId(-1234);
+
+        assertThrows(NotFoundException.class,
+                () -> UserRepository.getList(transaction, sf));
     }
 }
