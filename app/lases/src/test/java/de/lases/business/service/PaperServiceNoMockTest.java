@@ -54,4 +54,16 @@ public class PaperServiceNoMockTest {
 
         assertEquals(paper, gotten);
     }
+
+    @Test
+    void testChange() {
+        //paperService.add(pdf, paper);
+
+        Paper changed = paper.clone();
+        changed.setVisible(true);
+
+        paperService.change(changed);
+
+        assertEquals(changed, paper);
+    }
 }

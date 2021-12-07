@@ -146,6 +146,39 @@ public class PaperService {
      *              </p>
      */
     public void change(Paper paper) {
+        if (paper.getSubmissionId() == null && paper.getVersionNumber() == null) {
+
+            logger.severe("The id of the paper is not valid. Therefore no paper object can be queried.");
+
+            String message = resourceBundle.getString("idMissing");
+            throw new IllegalArgumentException(message);
+
+        } else {
+            Transaction transaction = new Transaction();
+
+            try {
+
+                PaperRepository.change(paper, transaction);
+                transaction.commit();
+
+            } catch (DataNotWrittenException exception) {
+
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotWritten"), MessageCategory.ERROR));
+                logger.log(Level.WARNING, exception.getMessage());
+
+                transaction.abort();
+
+            } catch (NotFoundException exception) {
+
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("paperNotFound"), MessageCategory.ERROR));
+                logger.fine("Error while loading a paper with the submission id: " + paper.getSubmissionId()
+                        + " and version number: " + paper.getVersionNumber());
+
+                transaction.abort();
+
+            }
+        }
+
     }
 
     /**
