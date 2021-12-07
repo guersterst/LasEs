@@ -81,7 +81,7 @@ public class ScientificForum implements Cloneable {
      *
       * @param deadline Deadline for new submissions.
      */
-    void setDeadline(LocalDateTime deadline) {
+    public void setDeadline(LocalDateTime deadline) {
         this.deadline = deadline;
     }
 
