@@ -1,5 +1,7 @@
 package de.lases.control.internal;
 
+import com.sun.jdi.InvalidLineNumberException;
+import de.lases.control.exception.IllegalAccessException;
 import de.lases.global.transport.Privilege;
 import jakarta.enterprise.inject.spi.CDI;
 import jakarta.faces.component.UIViewRoot;
@@ -11,6 +13,7 @@ import jakarta.faces.event.PhaseListener;
 import jakarta.inject.Inject;
 
 import java.io.Serial;
+import java.util.PropertyResourceBundle;
 
 /**
  * Listens for the restore view phase and checks the user's rights to access
@@ -20,6 +23,7 @@ public class TrespassListener implements PhaseListener {
 
     @Serial
     private static final long serialVersionUID = -1137139795334466811L;
+
 
     /**
      * Gets the is of the phase this listener is interested in.
@@ -74,20 +78,18 @@ public class TrespassListener implements PhaseListener {
         //TODO throw control exceptions and let unchecked exc handler handle navigation?
 
         if (!isRegistered && !viewId.contains("/anonymous/")) {
-          //not allowed
+
+            // Illegal access to a site which is visible to registered users only.
+            navigateToLogin();
         } else if (!isEditor && !isAdmin && viewId.contains("/editor/")) {
-            // tschö
+
+            // Illegal access to a site which is visible to editors and admins only.
+            throw new IllegalAccessException();
         } else if (!isAdmin && viewId.contains("/admin/")) {
-            //tschö
+
+            // Illegal access to a site which is visible to admins only.
+            throw new IllegalAccessException();
         }
-
-
-        // NOT AUTH
-        // /authenticated /reviewer
-        // NOT EDTIOR OR ADMIN
-        // /editor
-        // NOT ADMIN
-        // /admin
     }
 
     private static void navigateToLogin() {
