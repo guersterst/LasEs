@@ -62,6 +62,7 @@ public class SubmissionRepository {
                 result = createSubmissionFromResultSet(resultSet);
                 l.finer("Successfully retrieved submission with id " + submission.getId() + "from database.");
             } else {
+                l.warning("No submission with id " + submission.getId() + " found in database.");
                 throw new NotFoundException("No submission with id " + submission.getId() + " found.");
             }
         } catch (SQLException e) {
