@@ -7,6 +7,7 @@ import jakarta.faces.context.FacesContext;
 import jakarta.inject.Named;
 import jakarta.servlet.http.HttpServletRequest;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
@@ -19,6 +20,10 @@ import java.util.Locale;
 @SessionScoped
 @Named
 public class SessionInformation implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 3862713300005056314L;
+
     private User user;
 
     /**
