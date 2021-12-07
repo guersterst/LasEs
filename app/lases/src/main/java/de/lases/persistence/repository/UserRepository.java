@@ -3,15 +3,9 @@ package de.lases.persistence.repository;
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.LocalDate;
+import java.sql.*;
 import java.util.ArrayList;
-import java.sql.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.logging.Logger;
 
 /**
@@ -85,10 +79,9 @@ public class UserRepository {
 
 
             // Attempt to create a user from the query results.
-            if (userResult.next()) {
-                result = createUserFromResultSet(userResult, submissionAndEditorResult, user);
+            if (userResult.next() && submissionAndEditorResult.next()) {
+                result = createUserFromResultSet(userResult, submissionAndEditorResult);
 
-                /*
                 if (userResult.next()) {
 
                     // There cannot be two results of such a query.
@@ -97,8 +90,6 @@ public class UserRepository {
                     logger.severe(msg);
                     throw new InvalidFieldsException(msg);
                 }
-
-                 */
             } else {
                 String msg = "Error while loading a user with the id: " + user.getId()
                         + " and email: " + user.getEmailAddress();
@@ -111,10 +102,9 @@ public class UserRepository {
         return result;
     }
 
-    private static User createUserFromResultSet(ResultSet userResult, ResultSet submissionAndEditorResult, User user) throws SQLException {
+    private static User createUserFromResultSet(ResultSet userResult, ResultSet submissionAndEditorResult) throws SQLException {
 
-        // Regular required data about a user.
-        //TODO replace with array.
+        // Regular required user data.
         User result = new User();
         result.setId(userResult.getInt("id"));
         result.setVerificationId(userResult.getInt("id"));
@@ -143,7 +133,7 @@ public class UserRepository {
             privileges.add(Privilege.AUTHENTICATED);
         }
 
-        // TODO extra result columns are not found
+        // Set the extra data gathered from other database entities.
         try {
             if (submissionAndEditorResult.getInt("editor_id") != 0) {
                 privileges.add(Privilege.EDITOR);
@@ -154,7 +144,6 @@ public class UserRepository {
         }
         result.setPrivileges(privileges);
 
-        // Number of submissions
         try {
             result.setNumberOfSubmissions(submissionAndEditorResult.getInt("number_of_submissions"));
         } catch (SQLException ex) {

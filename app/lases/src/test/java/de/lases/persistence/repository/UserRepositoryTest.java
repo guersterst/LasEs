@@ -38,10 +38,13 @@ class UserRepositoryTest {
         ConnectionPool.init();
         User user = new User();
         user.setId(1);
+        Transaction t = new Transaction();
         try {
-            assertNotNull(UserRepository.get(user, new Transaction()));
+            assertNotNull(UserRepository.get(user, t));
         } catch (NotFoundException ex) {
             //
+        } finally {
+            t.commit();
         }
     }
 }
