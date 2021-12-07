@@ -4,6 +4,7 @@ import de.lases.control.exception.IllegalAccessException;
 import de.lases.global.transport.MessageCategory;
 import de.lases.global.transport.Privilege;
 import de.lases.global.transport.UIMessage;
+import de.lases.global.transport.User;
 import jakarta.enterprise.event.Event;
 import jakarta.enterprise.inject.spi.CDI;
 import jakarta.faces.application.NavigationHandler;
@@ -17,6 +18,7 @@ import jakarta.inject.Inject;
 
 import java.io.Serial;
 import java.util.PropertyResourceBundle;
+import java.util.logging.Logger;
 
 /**
  * Listens for the restore view phase and checks the user's rights to access
@@ -32,6 +34,9 @@ public class TrespassListener implements PhaseListener {
 
     @Inject
     private PropertyResourceBundle propertyResourceBundle;
+
+    private final Logger logger = Logger.getLogger(TrespassListener.class.getName());
+
     /**
      * Gets the is of the phase this listener is interested in.
      *
@@ -39,7 +44,7 @@ public class TrespassListener implements PhaseListener {
      */
     @Override
     public PhaseId getPhaseId() {
-        return null;
+        return PhaseId.RESTORE_VIEW;
     }
 
     /**
@@ -78,10 +83,11 @@ public class TrespassListener implements PhaseListener {
         }
 
         //TODO what if user null
+        User user = sessionInformation.getUser();
 
-        boolean isRegistered = sessionInformation.getUser().isRegistered();
-        boolean isAdmin = sessionInformation.getUser().isAdmin();
-        boolean isEditor = sessionInformation.getUser().getPrivileges().contains(Privilege.EDITOR);
+        boolean isRegistered = user.isRegistered();
+        boolean isAdmin = user.isAdmin();
+        boolean isEditor = user.getPrivileges().contains(Privilege.EDITOR);
 
         //TODO throw control exceptions and let unchecked exc handler handle navigation?
 
@@ -89,14 +95,20 @@ public class TrespassListener implements PhaseListener {
 
             // Illegal access to a site which is visible to registered users only.
             navigateToLogin(fctxt);
+            logger.warning("The unregistered user with the id: " + user.getId() + " tried illegally access "
+                    + "a page using the url: " + viewId);
         } else if (!isEditor && !isAdmin && viewId.contains("/editor/")) {
 
             // Illegal access to a site which is visible to editors and admins only.
-            throw new IllegalAccessException();
+            logger.warning("The non-editor or non-admin user with the id: " + user.getId() + " tried to illegally "
+                    + "access a page using the url: " + viewId);
+            throw new IllegalAccessException(propertyResourceBundle.getString("illegalAccess"));
         } else if (!isAdmin && viewId.contains("/admin/")) {
 
             // Illegal access to a site which is visible to admins only.
-            throw new IllegalAccessException();
+            logger.warning("The non-admin user with the id: " + user.getId() + " tried to illegally "
+                    + "access a page using the url: " + viewId);
+            throw new IllegalAccessException(propertyResourceBundle.getString("illegalAccess"));
         }
     }
 
