@@ -5,9 +5,7 @@ import de.lases.global.transport.Paper;
 import de.lases.persistence.exception.DataNotWrittenException;
 import de.lases.persistence.exception.InvalidFieldsException;
 import de.lases.persistence.exception.NotFoundException;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -21,8 +19,6 @@ class PaperRepositoryTest {
     private static Paper paper;
 
     private static FileDTO pdf;
-
-    private static Transaction transaction;
 
     @BeforeAll
     static void initPaper() {
@@ -40,17 +36,6 @@ class PaperRepositoryTest {
         ConnectionPool.init();
     }
 
-    @BeforeAll
-    static void startTransaction() {
-        transaction = new Transaction();
-    }
-
-    @AfterAll
-    static void rollbackTransaction() {
-        transaction.abort();
-        ConnectionPool.shutDown();
-    }
-
 //    @AfterAll
 //    static void shutdownConnectionPool() {
 //        ConnectionPool.shutDown();
@@ -58,6 +43,7 @@ class PaperRepositoryTest {
 
     @Test
     void testGetPaper() throws SQLException, NotFoundException, DataNotWrittenException {
+        Transaction transaction = new Transaction();
         PaperRepository.add(paper,pdf, transaction);
 
         Connection connection = transaction.getConnection();
@@ -81,10 +67,12 @@ class PaperRepositoryTest {
         }
 
         assertEquals(resultPaper, PaperRepository.get(resultPaper, transaction));
+        transaction.abort();
     }
 
     @Test
     void testAdd() throws SQLException, DataNotWrittenException {
+        Transaction transaction = new Transaction();
         Connection conn = transaction.getConnection();
         PreparedStatement stmt = conn.prepareStatement(
                 """
@@ -105,10 +93,12 @@ class PaperRepositoryTest {
         }
 
         assertEquals(1, j - i);
+        transaction.abort();
     }
 
     @Test
     void testNull() {
+        Transaction transaction = new Transaction();
         assertAll(
                 () -> {
                     assertThrows(InvalidFieldsException.class,
@@ -121,6 +111,7 @@ class PaperRepositoryTest {
                                     transaction));
                 }
         );
+        transaction.abort();
     }
 
 }
