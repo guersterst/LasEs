@@ -129,6 +129,7 @@ public class PaperService {
             transaction.abort();
             return;
         }
+        transaction.commit();
     }
 
     /**
