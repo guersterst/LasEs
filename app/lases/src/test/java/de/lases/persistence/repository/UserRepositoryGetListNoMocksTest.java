@@ -31,7 +31,7 @@ public class UserRepositoryGetListNoMocksTest {
     }
 
     @Test
-    void testGetListUsersForSubmissionAuthors() throws NotFoundException {
+    void testGetListUsersForSubmissionAuthors() throws NotFoundException, DataNotCompleteException {
         Submission submission = new Submission();
         submission.setId(666);
 
@@ -51,7 +51,7 @@ public class UserRepositoryGetListNoMocksTest {
     }
 
     @Test
-    void testGetListUsersForSubmissionReviewers() throws NotFoundException {
+    void testGetListUsersForSubmissionReviewers() throws NotFoundException, DataNotCompleteException {
         Submission submission = new Submission();
         submission.setId(666);
 
