@@ -45,7 +45,6 @@ public class PaperRepository {
      * @param transaction The transaction to use.
      * @throws DataNotWrittenException        If writing the data to the repository
      *                                        fails.
-     *                                        and submission id in the repository.
      * @throws InvalidFieldsException         If one of the fields of the paper is
      *                                        null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
@@ -54,6 +53,16 @@ public class PaperRepository {
     public static void add(Paper paper, FileDTO pdf, Transaction transaction)
             throws DataNotWrittenException {
         Connection conn = transaction.getConnection();
+
+        if (paper.getUploadTime() == null) {
+            throw new InvalidFieldsException("The upload time of the paper "
+                    + "must not be null!");
+        }
+        if (pdf.getFile() == null) {
+            throw new InvalidFieldsException("The file in the pdf must not "
+                    + "be null!");
+        }
+
         try {
             PreparedStatement stmt = conn.prepareStatement(
                     """
@@ -66,6 +75,7 @@ public class PaperRepository {
             stmt.setBoolean(4, paper.isVisible());
             stmt.setBytes(5, pdf.getFile());
             stmt.executeUpdate();
+
         } catch (SQLException ex) {
             if (ex instanceof SQLNonTransientException) {
                 logger.log(Level.SEVERE, "Non transient");
@@ -74,7 +84,7 @@ public class PaperRepository {
             } else if (ex instanceof SQLRecoverableException) {
                 logger.log(Level.SEVERE, "Recoverable");
             } else if (ex instanceof PSQLException) {
-                logger.log(Level.SEVERE, "PSQLExeption");
+                logger.log(Level.SEVERE, "PSQLException");
             }
             DatasourceUtil.logSQLException(ex, logger);
         }

@@ -3,6 +3,7 @@ package de.lases.persistence.repository;
 import de.lases.global.transport.FileDTO;
 import de.lases.global.transport.Paper;
 import de.lases.persistence.exception.DataNotWrittenException;
+import de.lases.persistence.exception.InvalidFieldsException;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,7 @@ class PaperRepositoryTest {
         paper = new Paper();
         paper.setSubmissionId(5);
         paper.setUploadTime(LocalDateTime.now());
-        paper.setVersionNumber(2);
+        paper.setVersionNumber(3);
         paper.setVisible(false);
         pdf = new FileDTO();
         pdf.setFile(new byte[]{1, 2, 3, 4});
@@ -73,4 +74,21 @@ class PaperRepositoryTest {
 
         assertEquals(1, j - i);
     }
+
+    @Test
+    void testNull() {
+        assertAll(
+                () -> {
+                    assertThrows(InvalidFieldsException.class,
+                            () -> PaperRepository.add(paper, new FileDTO(),
+                                    transaction));
+                },
+                () -> {
+                    assertThrows(InvalidFieldsException.class,
+                            () -> PaperRepository.add(new Paper(), pdf,
+                                    transaction));
+                }
+        );
+    }
+
 }
