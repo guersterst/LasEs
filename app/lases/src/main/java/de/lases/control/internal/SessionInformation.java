@@ -2,7 +2,10 @@ package de.lases.control.internal;
 
 import de.lases.global.transport.*;
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.faces.context.ExternalContext;
+import jakarta.faces.context.FacesContext;
 import jakarta.inject.Named;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.io.Serializable;
 import java.util.List;
@@ -36,6 +39,12 @@ public class SessionInformation implements Serializable {
      */
     public void setUser(User user) {
         this.user = user;
+
+        // Change the session's id in order to prevent session fixation.
+       ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+       if (externalContext.getSession(false) != null) {
+           ((HttpServletRequest) externalContext.getRequest()).changeSessionId();
+       }
     }
 
 }
