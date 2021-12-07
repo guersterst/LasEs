@@ -167,7 +167,7 @@ public class PaperService {
             } catch (NotFoundException exception) {
 
                 uiMessageEvent.fire(new UIMessage(resourceBundle.getString("paperNotFound"), MessageCategory.ERROR));
-                logger.fine("Error while loading a paper with the submission id: " + paper.getSubmissionId()
+                logger.fine("Error while changing a paper with the submission id: " + paper.getSubmissionId()
                         + " and version number: " + paper.getVersionNumber());
 
                 transaction.abort();
@@ -210,7 +210,7 @@ public class PaperService {
             } catch (NotFoundException exception) {
 
                 uiMessageEvent.fire(new UIMessage(resourceBundle.getString("paperNotFound"), MessageCategory.ERROR));
-                logger.fine("Error while loading a paper with the submission id: " + paper.getSubmissionId()
+                logger.fine("Error while removing a paper with the submission id: " + paper.getSubmissionId()
                         + " and version number: " + paper.getVersionNumber());
 
                 transaction.abort();
@@ -227,7 +227,31 @@ public class PaperService {
      * @return The requested file.
      */
     public FileDTO getFile(Paper paper) {
-        return null;
+        if (paper.getSubmissionId() == null && paper.getVersionNumber() == null) {
+
+            logger.severe("The id of the paper is not valid. Therefore no paper object can be queried.");
+            throw new IllegalArgumentException(resourceBundle.getString("idMissing"));
+
+        } else {
+            Transaction transaction = new Transaction();
+            FileDTO file = null;
+
+            try {
+
+                file = PaperRepository.getPDF(paper, transaction);
+                transaction.commit();
+
+            }  catch (NotFoundException exception) {
+
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("paperNotFound"), MessageCategory.ERROR));
+                logger.fine("Error while loading a file of a paper with the submission id: " + paper.getSubmissionId()
+                        + " and version number: " + paper.getVersionNumber());
+
+                transaction.abort();
+
+            }
+            return file;
+        }
     }
 
     /**
@@ -266,12 +290,4 @@ public class PaperService {
         return null;
     }
 
-    private boolean validPaperId(Paper paper) {
-        if (paper.getSubmissionId() == null && paper.getVersionNumber() == null) {
-
-            logger.severe("The id of the paper is not valid. Therefore no paper object can be queried.");
-            return false;
-        }
-        return true;
-    }
 }

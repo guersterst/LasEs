@@ -77,4 +77,14 @@ public class PaperServiceNoMockTest {
     }
 
  */
+
+    @Test
+    void testGetPDF() {
+        FileDTO paperFile = new FileDTO();
+        paperFile.setFile(new byte[0]);
+        FileDTO fileDTO = paperService.getFile(paper);
+        int length = fileDTO.getFile().length;
+
+        assertEquals(paperFile.getFile().length, length);
+    }
 }
