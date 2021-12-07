@@ -1,15 +1,23 @@
 package de.lases.persistence.repository;
 
+import java.sql.*;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
+import de.lases.persistence.util.DatasourceUtil;
+import org.postgresql.util.PSQLException;
 
 /**
  * Offers get/add/change/remove operations on a paper and the possibility to
  * get lists of papers.
  */
 public class PaperRepository {
+
+    private static final Logger logger
+            = Logger.getLogger(PaperRepository.class.getName());
 
     /**
      * Takes a paper dto that is filled out with a valid id and submission id
@@ -44,6 +52,32 @@ public class PaperRepository {
      */
     public static void add(Paper paper, Transaction transaction)
             throws DataNotWrittenException {
+        Connection conn = transaction.getConnection();
+        try {
+            PreparedStatement stmt = conn.prepareStatement(
+                    """
+                INSERT INTO paper
+                VALUES (?, ?, ?, ?, ?)
+                """);
+            stmt.setInt(1, paper.getVersionNumber());
+            stmt.setInt(2, paper.getSubmissionId());
+            stmt.setTimestamp(3, Timestamp.valueOf(paper.getUploadTime()));
+            stmt.setBoolean(4, paper.isVisible());
+            // TODO: sollte hier null möglich sein?, oder sollte ich meine Schnittstelle ändern?
+            stmt.setBytes(5, new byte[]{});
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            if (ex instanceof SQLNonTransientException) {
+                logger.log(Level.SEVERE, "Non transient");
+            } else if (ex instanceof SQLTransientException) {
+                logger.log(Level.SEVERE, "Transient");
+            } else if (ex instanceof SQLRecoverableException) {
+                logger.log(Level.SEVERE, "Recoverable");
+            } else if (ex instanceof PSQLException) {
+                logger.log(Level.SEVERE, "PSQLExeption");
+            }
+            DatasourceUtil.logSQLException(ex, logger);
+        }
     }
 
     /**
