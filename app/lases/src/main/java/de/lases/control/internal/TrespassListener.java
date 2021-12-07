@@ -54,7 +54,7 @@ public class TrespassListener implements PhaseListener {
      */
     @Override
     public void beforePhase(PhaseEvent event) {
-        // no op
+        // No op
     }
 
     /**
@@ -63,33 +63,25 @@ public class TrespassListener implements PhaseListener {
      * error page.
      *
      * @param event The event that just happened.
+     * @throws IllegalAccessException If there is an attempt to access a page to which the user does not have
+     * access with his current roles.
+     *
      */
     @Override
     public void afterPhase(PhaseEvent event) {
         FacesContext fctxt = event.getFacesContext();
-        ExternalContext ectxt = fctxt.getExternalContext();
-
-        SessionInformation sessionInformation
-                = CDI.current().select(SessionInformation.class).get();
-
-        UIViewRoot viewRoot = fctxt.getViewRoot();
-        String viewId = null;
-        if (viewRoot != null) {
-            viewId = viewRoot.getViewId();
-
-            //TODO what if viewRoot null?
-            // -> just throw Error
-            //TODO is case sensitive?
-        }
-
-        //TODO what if user null
+        SessionInformation sessionInformation = CDI.current().select(SessionInformation.class).get();
         User user = sessionInformation.getUser();
 
+        UIViewRoot viewRoot = fctxt.getViewRoot();
+        if (viewRoot == null || user == null) {
+            throw new IllegalAccessException(propertyResourceBundle.getString("illegalAccess"));
+        }
+
+        String viewId = viewRoot.getViewId();
         boolean isRegistered = user.isRegistered();
         boolean isAdmin = user.isAdmin();
         boolean isEditor = user.getPrivileges().contains(Privilege.EDITOR);
-
-        //TODO throw control exceptions and let unchecked exc handler handle navigation?
 
         if (!isRegistered && !viewId.contains("/anonymous/")) {
 
