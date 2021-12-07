@@ -12,6 +12,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
+import java.util.PropertyResourceBundle;
 import java.util.logging.Logger;
 
 /**
@@ -29,36 +30,32 @@ public class UserService implements Serializable {
 
     private static final Logger logger = Logger.getLogger(UserService.class.getName());
 
+    @Inject
+    private PropertyResourceBundle propertyResourceBundle;
+
     /**
      * Gets a {@code User}.
      *
      * @param user A {@link User}-DTO, that should contain an existing id or email value.
      * @return A {@code User}-DTO filled with all available fields.
      */
-    //TODO PLEASE VIEW THIS IMPLEMENTATION AS A PROPOSED TEMPLATE FOR ALL FURTHER SERVICE METHODS:
-    //TODO THIS TEMPLATE MAY BE SUBJECT TO CHANGE AND DISCUSSION
     public User get(User user)  {
         if (user.getId() == null && user.getEmailAddress() == null) {
 
-            //TODO MessageBundleProducer
-
             // Throw an exception when neither an id nor a valid email address exist.
             logger.severe("The id and email are missing. Therefor no user object can be queried.");
-            throw new IllegalArgumentException("idMissing");
+            throw new IllegalArgumentException(propertyResourceBundle.getString("idMissing"));
         } else {
-            Transaction transaction = new Transaction();
 
+            Transaction transaction = new Transaction();
             User result = null;
             try {
                 result = UserRepository.get(user, transaction);
                 transaction.commit();
             } catch (NotFoundException ex) {
-
-                //TODO Employ MessageBundleProducer
-                uiMessageEvent.fire(new UIMessage(ex.getMessage(),
+                uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataNotFound"),
                         MessageCategory.ERROR));
-                logger.fine("Error while loadding a user with the id: " + user.getId()
-                        + " and email: " + user.getEmailAddress());
+                logger.fine(ex.getMessage());
                 transaction.abort();
             }
             return result;
