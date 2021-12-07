@@ -105,7 +105,7 @@ class PaperRepositoryTest {
         statement.setInt(2, changed.getVersionNumber());
         statement.setInt(3, changed.getSubmissionId());
 
-        PaperRepository.change(changed,transaction);
+        PaperRepository.change(changed, transaction);
 
         assertEquals(changed, paper);
     }
@@ -166,7 +166,7 @@ class PaperRepositoryTest {
             i++;
         }
 
-        PaperRepository.remove(paper,transaction);
+        PaperRepository.remove(paper, transaction);
 
         ResultSet resultSet2 = stmt.executeQuery();
         int j = 0;
@@ -175,6 +175,15 @@ class PaperRepositoryTest {
         }
 
         assertEquals(1, i - j);
+    }
+
+    @Test
+    void testFileSize() throws SQLException, NotFoundException, DataNotWrittenException {
+        PaperRepository.add(paper,pdf,transaction);
+        FileDTO fileDTO = PaperRepository.getPDF(paper,transaction);
+        int fileLength = fileDTO.getFile().length;
+
+        assertEquals(pdf.getFile().length, fileLength);
     }
 
 }

@@ -45,7 +45,6 @@ public class PaperRepository {
         }
 
         Connection connection = transaction.getConnection();
-        Paper resultPaper = new Paper();
 
         try {
             PreparedStatement statement = connection.prepareStatement("""
@@ -58,10 +57,14 @@ public class PaperRepository {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
+                Paper resultPaper = new Paper();
+
                 resultPaper.setSubmissionId(resultSet.getInt("submission_id"));
                 resultPaper.setVisible(resultSet.getBoolean("is_visible"));
                 resultPaper.setVersionNumber(resultSet.getInt("version"));
                 resultPaper.setUploadTime(resultSet.getTimestamp("timestamp_upload").toLocalDateTime());
+
+                return resultPaper;
             } else {
                 logger.fine("Loading paper with the submission id: " + paper.getSubmissionId()
                         + " and version number: " + paper.getVersionNumber());
@@ -72,8 +75,6 @@ public class PaperRepository {
             DatasourceUtil.logSQLException(exception, logger);
             throw new DatasourceQueryFailedException("A data source exception occurred.", exception);
         }
-
-        return resultPaper;
     }
 
     /**
@@ -265,7 +266,46 @@ public class PaperRepository {
      *                                        queried.
      */
     public static FileDTO getPDF(Paper paper, Transaction transaction) throws NotFoundException {
-        return null;
+
+        if (paper.getSubmissionId() == null) {
+            throw new InvalidFieldsException("The submission id of the paper must not be null.");
+        }
+
+        if (paper.getVersionNumber() == null) {
+            throw new InvalidFieldsException("The version number of the paper must not be null.");
+        }
+
+        Connection connection = transaction.getConnection();
+
+        try {
+
+            PreparedStatement statement = connection.prepareStatement(
+                    """
+                            SELECT pdf_file
+                            FROM paper
+                            WHERE version = ? AND submission_id = ?
+                            """
+            );
+            statement.setInt(1, paper.getVersionNumber());
+            statement.setInt(2, paper.getSubmissionId());
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                FileDTO file = new FileDTO();
+                file.setFile(resultSet.getBytes("pdf_file"));
+                return file;
+
+            } else {
+                logger.fine("Loading paper with the submission id: " + paper.getSubmissionId()
+                        + " and version number: " + paper.getVersionNumber());
+                throw new NotFoundException();
+            }
+
+        } catch (SQLException exception) {
+            DatasourceUtil.logSQLException(exception, logger);
+            throw new DatasourceQueryFailedException("A datasource exception occurred while removing a paper.", exception);
+        }
     }
 
     /**
