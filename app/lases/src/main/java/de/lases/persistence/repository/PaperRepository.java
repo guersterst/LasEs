@@ -133,6 +133,37 @@ public class PaperRepository {
      *                                        queried.
      */
     public static void change(Paper paper, Transaction transaction) throws NotFoundException, DataNotWrittenException {
+        Connection connection = transaction.getConnection();
+
+        if (paper.getSubmissionId() == null) {
+            throw new InvalidFieldsException("The submission id of the paper must not be null.");
+        }
+
+        if (paper.getVersionNumber() == null) {
+            throw new InvalidFieldsException("The version number of the paper must not be null.");
+        }
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(
+                    """
+                            UPDATE paper
+                            SET is_visible = ?
+                            WHERE version = ? AND submission_id = ?
+                            """
+            );
+            statement.setBoolean(1, paper.isVisible());
+            statement.setInt(2, paper.getVersionNumber());
+            statement.setInt(3, paper.getSubmissionId());
+
+            if (statement.executeUpdate() == 0) {
+                logger.fine("Changing paper with the submission id: " + paper.getSubmissionId()
+                        + " and version number: " + paper.getVersionNumber());
+                throw new NotFoundException();
+            }
+        } catch (SQLException exception) {
+            DatasourceUtil.logSQLException(exception, logger);
+            throw new DatasourceQueryFailedException("A datasource exception occurred while changing paper data.", exception);
+        }
     }
 
     /**

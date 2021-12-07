@@ -58,7 +58,7 @@ class PaperRepositoryTest {
 
     @Test
     void testGetPaper() throws SQLException, NotFoundException, DataNotWrittenException {
-        PaperRepository.add(paper,pdf, transaction);
+        PaperRepository.add(paper, pdf, transaction);
 
         Connection connection = transaction.getConnection();
         PreparedStatement statement = connection.prepareStatement(
@@ -81,6 +81,30 @@ class PaperRepositoryTest {
         }
 
         assertEquals(resultPaper, PaperRepository.get(resultPaper, transaction));
+    }
+
+    @Test
+    void testChange() throws SQLException, DataNotWrittenException, NotFoundException {
+        Connection connection = transaction.getConnection();
+        PaperRepository.add(paper, pdf, transaction);
+
+        Paper changed = paper.clone();
+        changed.setVisible(true);
+
+        PreparedStatement statement = connection.prepareStatement(
+                """
+                        UPDATE paper
+                        SET is_visible = ?
+                        WHERE version = ? AND submission_id = ?
+                        """
+        );
+        statement.setBoolean(1, changed.isVisible());
+        statement.setInt(2, changed.getVersionNumber());
+        statement.setInt(3, changed.getSubmissionId());
+
+        PaperRepository.change(changed,transaction);
+
+        assertEquals(changed, paper);
     }
 
     @Test
