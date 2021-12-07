@@ -107,6 +107,7 @@ public class ScientificForum implements Cloneable {
     @Override
     public ScientificForum clone() {
         try {
+            // All fields are immutable
             return (ScientificForum) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();

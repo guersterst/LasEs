@@ -1,9 +1,21 @@
 package de.lases.business.internal;
 
+import de.lases.persistence.exception.ConfigNotReadableException;
+import de.lases.persistence.repository.ConnectionPool;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
+
 /**
  * Handles and propagates the system's start and shutdown.
+ *
+ * @author Johann Schicho
  */
 public class Lifetime {
+
+    private static final Logger l = Logger.getLogger(Lifetime.class.getName());
 
     /**
      * On startup the resources used by the system are initialized.
@@ -14,9 +26,12 @@ public class Lifetime {
      *     <li> the messaging service </li>
      *     <li> and the logger. </li>
      * </ul>
+     *
+     * @param loggerConfigStream The logger config file.
      */
-    public static void startup() {
-
+    public static void startup(InputStream loggerConfigStream) {
+        initializeLogger(loggerConfigStream);
+        initializeDBPool();
     }
 
     /**
@@ -31,7 +46,22 @@ public class Lifetime {
      * </ul>
      */
     public static void shutdown() {
-
+        ConnectionPool.shutDown();
     }
+
+    private static void initializeLogger(InputStream loggerConfigStream) {
+        // initialize logger with logger config file
+        try {
+            LogManager.getLogManager().readConfiguration(loggerConfigStream);
+            l.info("Logger initialized");
+        } catch (IOException e) {
+            throw new ConfigNotReadableException("Could not read logger config file", e);
+        }
+    }
+
+    private static void initializeDBPool() {
+        ConnectionPool.init();
+    }
+
 
 }

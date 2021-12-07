@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<!-- include themes here.-->
+<h:head>
+    <title>
+        <ui:insert name="title">LasEs</ui:insert>
+    </title>
+    <h:outputStylesheet name="design/bootstrap/css/bootstrap.min.css"/>
+</h:head>
+
+<!--Inorder to include a page you have to use ui:composition and ui:define -->
+<!--ui:composition with template="../../resources/template/main.xhtml-->
+<!--ui:define overrides the default-->
+<!--See welcome.xhtml. It already includes welcome.xhtml right-->
+<h:body>
+    <div id="page">
+        
+        <!--Includes navigaton.-->
+        <div id="navigation">
+            <ui:insert name="navigation">
+                <ui:include src="navigation.xhtml"></ui:include>
+            </ui:insert>
+        </div>
+        
+        <!--Includes content for default-->
+        <div id="content">
+            <ui:insert name="content">
+                <ui:include src="content.xhtml"></ui:include>
+            </ui:insert>
+        </div>
+        <!--Includes footer-->
+        <div id="footer">
+            <ui:insert name="footer">
+                <ui:include src="footer.xhtml"></ui:include>
+            </ui:insert>
+        </div>
+        
+    </div>
+</h:body>
+
+</html>
