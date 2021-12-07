@@ -65,6 +65,8 @@ public class TrespassListener implements PhaseListener {
             //TODO is case sensitive?
         }
 
+        //TODO what if user null
+
         boolean isRegistered = sessionInformation.getUser().isRegistered();
         boolean isAdmin = sessionInformation.getUser().isAdmin();
         boolean isEditor = sessionInformation.getUser().getPrivileges().contains(Privilege.EDITOR);
@@ -73,23 +75,16 @@ public class TrespassListener implements PhaseListener {
 
         if (!isRegistered && !viewId.contains("/anonymous/")) {
           //not allowed
-        }
-        if (!isEditor && !isAdmin && viewId.contains("/admin/")) {
+        } else if (!isEditor && !isAdmin && viewId.contains("/editor/")) {
             // tschö
-        }
-
-
-
-
-
-        else if ((viewId.contains("/authenticated/") || viewId.contains("/reviewer/"))) {
-
+        } else if (!isAdmin && viewId.contains("/admin/")) {
+            //tschö
         }
 
 
         // NOT AUTH
         // /authenticated /reviewer
-        // NOT EDTIOR
+        // NOT EDTIOR OR ADMIN
         // /editor
         // NOT ADMIN
         // /admin
