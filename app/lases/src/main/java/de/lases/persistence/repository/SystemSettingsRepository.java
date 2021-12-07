@@ -3,6 +3,7 @@ package de.lases.persistence.repository;
 import de.lases.global.transport.FileDTO;
 import de.lases.global.transport.SystemSettings;
 import de.lases.persistence.exception.DataNotWrittenException;
+import de.lases.persistence.exception.DatasourceQueryFailedException;
 import de.lases.persistence.exception.DepletedResourceException;
 import de.lases.persistence.exception.InvalidFieldsException;
 
@@ -21,7 +22,7 @@ public class SystemSettingsRepository {
      *                                 fails.
      * @throws InvalidFieldsException If one of the fields of the system
      *                                settings is null.
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static void updateSettings(SystemSettings systemSettings,
@@ -34,7 +35,7 @@ public class SystemSettingsRepository {
      *
      * @param transaction The transaction to use.
      * @return A fully filled {@code SystemSettings} dto.
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static SystemSettings getSettings(Transaction transaction) {
@@ -46,7 +47,7 @@ public class SystemSettingsRepository {
      *
      * @param transaction The transaction to use.
      * @return A file containing the logo.
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static FileDTO getLogo(Transaction transaction) {
@@ -62,7 +63,7 @@ public class SystemSettingsRepository {
      *                                 fails.
      * @throws InvalidFieldsException If the file dto does not contain a byte
      *                                array.
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static void setLogo(FileDTO logo, Transaction transaction)

@@ -20,7 +20,7 @@ public class ReviewRepository {
      * @param transaction The transaction to use.
      * @return A fully filled review dto.
      * @throws NotFoundException If there is no review with the provided ids.
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static Review get(Review review, Transaction transaction)
@@ -38,7 +38,7 @@ public class ReviewRepository {
      *                                 fails.
      * @throws InvalidFieldsException If one of the fields of the review is
      *                                null.
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      * @throws NotFoundException If there is no submission with the given
      *                           submissionId or the submission has no
@@ -59,7 +59,7 @@ public class ReviewRepository {
      *                                 fails.
      * @throws InvalidFieldsException If one of the fields of the review is
      *                                null.
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static void change(Review review, Transaction transaction)
@@ -77,7 +77,7 @@ public class ReviewRepository {
      *                           repository.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static void remove(Review review, Transaction transaction)
@@ -100,7 +100,7 @@ public class ReviewRepository {
      * @throws DataNotCompleteException If the list is truncated.
      * @throws NotFoundException If there is no submission with the provided id
      *                           or there is no user with the provided id.
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      * @throws InvalidQueryParamsException If the resultListParameters contain
      *                                     an erroneous option.
@@ -120,7 +120,7 @@ public class ReviewRepository {
      * @param transaction The transaction to use.
      * @return A file containing the PDF for the specified review.
      * @throws NotFoundException If there is no review with the provided ids.
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static FileDTO getPDF(Paper review, Transaction transaction)
@@ -138,7 +138,7 @@ public class ReviewRepository {
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
      * @throws NotFoundException If there is no review with the provided ids.
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static void setPDF(Review review, FileDTO pdf, Transaction transaction)

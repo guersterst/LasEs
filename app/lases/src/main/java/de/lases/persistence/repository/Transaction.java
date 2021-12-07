@@ -1,5 +1,6 @@
 package de.lases.persistence.repository;
 
+import de.lases.persistence.exception.DatasourceQueryFailedException;
 import de.lases.persistence.exception.DepletedResourceException;
 
 import java.sql.Connection;
@@ -48,7 +49,7 @@ public class Transaction {
                 logSQLException(ex);
             }
             logSQLException(e);
-            throw new DepletedResourceException("Transaction cannot"
+            throw new DatasourceQueryFailedException("Transaction cannot"
                     + "be rolled back", e);
         }
         transactionOver = true;
@@ -74,7 +75,7 @@ public class Transaction {
                 }
             }
             logSQLException(e);
-            throw new DepletedResourceException("Commit failed");
+            throw new DatasourceQueryFailedException("Commit failed");
         }
         transactionOver = true;
         ConnectionPool.getInstance().releaseConnection(connection);

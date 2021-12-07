@@ -23,7 +23,7 @@ public class ScienceFieldRepository {
      *                           id or name.
      * @throws InvalidFieldsException If both name and id are provided, but they
      *                                belong to two different science fields.
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static ScienceField get(ScienceField scienceField,
@@ -42,7 +42,7 @@ public class ScienceFieldRepository {
      *                                 fails.
      * @throws InvalidFieldsException If one of the fields of the science field
      *                                is null.
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static void add(ScienceField scienceField, Transaction transaction)
@@ -60,7 +60,7 @@ public class ScienceFieldRepository {
      *                           the repository.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static void remove(ScienceField scienceField, Transaction transaction)
@@ -81,7 +81,7 @@ public class ScienceFieldRepository {
      * @throws DataNotCompleteException If the list is truncated.
      * @throws NotFoundException If there is no scientific forum with the provided
      *                           id.
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      * @throws InvalidQueryParamsException If the resultListParameters contain
      *                                     an erroneous option.
@@ -106,7 +106,7 @@ public class ScienceFieldRepository {
      *         belong to the specified user.
      * @throws DataNotCompleteException If the list is truncated.
      * @throws NotFoundException If there is no user with the provided id.
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      * @throws InvalidQueryParamsException If the resultListParameters contain
      *                                     an erroneous option.
@@ -127,7 +127,7 @@ public class ScienceFieldRepository {
      *                             filtering, sorting or number of elements.
      * @return A list of fully filled science field dtos.
      * @throws DataNotCompleteException If the list is truncated.
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      * @throws InvalidQueryParamsException If the resultListParameters contain
      *                                     an erroneous option.

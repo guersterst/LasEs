@@ -1,10 +1,7 @@
 package de.lases.persistence.repository;
 
 import de.lases.global.transport.*;
-import de.lases.persistence.exception.DataNotWrittenException;
-import de.lases.persistence.exception.DepletedResourceException;
-import de.lases.persistence.exception.InvalidFieldsException;
-import de.lases.persistence.exception.NotFoundException;
+import de.lases.persistence.exception.*;
 
 /**
  * Offers get/change operations on the relationship between reviewer and
@@ -24,7 +21,7 @@ public class ReviewedByRepository {
      * @throws NotFoundException If there is no submission with the provided id,
      *                           there is no user with the provided id or there
      *                           is no
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static ReviewedBy get(Submission submission, User user,
@@ -44,7 +41,7 @@ public class ReviewedByRepository {
      *                                 fails.
      * @throws InvalidFieldsException If one of the fields of the
      *                                provided {@code ReviewedBy} dto is null.
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static void change(ReviewedBy reviewedBy, Transaction transaction)

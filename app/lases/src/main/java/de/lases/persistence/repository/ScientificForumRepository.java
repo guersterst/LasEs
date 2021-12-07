@@ -23,7 +23,7 @@ public class ScientificForumRepository {
      *                           provided id or name.
      * @throws InvalidFieldsException If both name and id are provided, but they
      *                                belong to two different scientific forums.
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static ScientificForum get(ScientificForum scientificForum,
@@ -42,7 +42,7 @@ public class ScientificForumRepository {
      * @return Does this scientific forum exist?
      * @throws InvalidFieldsException If both name and id are provided, but they
      *                                belong to two different scientific forums.
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static boolean exists(ScientificForum scientificForum,
@@ -61,7 +61,7 @@ public class ScientificForumRepository {
      *                            already exists in the datasource.
      * @throws InvalidFieldsException If one of the required fields of the
      *                                scientific forum is null.
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static void add(ScientificForum scientificForum,
@@ -83,7 +83,7 @@ public class ScientificForumRepository {
      *                            already exists in the datasource.
      * @throws InvalidFieldsException If one of the required fields of the
      *                                scientific forum is null.
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static void change(ScientificForum scientificForum,
@@ -103,7 +103,7 @@ public class ScientificForumRepository {
      *                           the repository.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static void remove(ScientificForum scientificForum,
@@ -120,7 +120,7 @@ public class ScientificForumRepository {
      *                             filtering, sorting or number of elements.
      * @return A list of fully filled scientific forum dtos.
      * @throws DataNotCompleteException If the list is truncated.
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      * @throws InvalidQueryParamsException If the resultListParameters contain
      *                                     an erroneous option.
@@ -143,7 +143,7 @@ public class ScientificForumRepository {
      *                           provided id.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static void addEditor(ScientificForum scientificForum, User editor,
@@ -162,7 +162,7 @@ public class ScientificForumRepository {
      *                           the provided id.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static void addScienceField(ScientificForum scientificForum,
@@ -184,7 +184,7 @@ public class ScientificForumRepository {
      *                           an editor for the provided forum.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static void removeEditor(ScientificForum scientificForum,
@@ -205,7 +205,7 @@ public class ScientificForumRepository {
      *                           is not part of the provided field.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static void removeScienceField(ScientificForum scientificForum,

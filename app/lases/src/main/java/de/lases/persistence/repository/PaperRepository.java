@@ -20,7 +20,7 @@ public class PaperRepository {
      * @return A fully filled paper dto.
      * @throws NotFoundException              If there is no paper with the provided id and
      *                                        submission id.
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static Paper get(Paper paper, Transaction transaction)
@@ -39,7 +39,7 @@ public class PaperRepository {
      *                                        and submission id in the repository.
      * @throws InvalidFieldsException         If one of the fields of the paper is
      *                                        null.
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static void add(Paper paper, Transaction transaction)
@@ -56,7 +56,7 @@ public class PaperRepository {
      * @throws DataNotWrittenException        If writing the data to the repository
      *                                        fails.
      * @throws InvalidFieldsException         If one of the fields of the paper is null.
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static void change(Paper paper, Transaction transaction)
@@ -75,7 +75,7 @@ public class PaperRepository {
      *                                        repository.
      * @throws DataNotWrittenException        If writing the data to the repository
      *                                        fails.
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static void remove(Paper paper, Transaction transaction)
@@ -99,7 +99,7 @@ public class PaperRepository {
      * to the specified submission.
      * @throws DataNotCompleteException       If the list is truncated.
      * @throws NotFoundException              If there is no submission with the provided id.
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      * @throws InvalidQueryParamsException    If the resultListParameters contain
      *                                        an erroneous option.
@@ -120,7 +120,7 @@ public class PaperRepository {
      * @return A file containing the PDF for the specified paper.
      * @throws NotFoundException              If there is no paper with the provided id and
      *                                        submission id.
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static FileDTO getPDF(Paper paper, Transaction transaction)
@@ -138,7 +138,7 @@ public class PaperRepository {
      *                                        fails.
      * @throws NotFoundException              If there is no paper with the provided id and
      *                                        submission id.
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static void setPDF(Paper paper, FileDTO pdf, Transaction transaction)
@@ -155,7 +155,7 @@ public class PaperRepository {
      * @param transaction The transaction to use.
      * @return A fully filled paper dto.
      * @throws NotFoundException              If there is no submission with the provided id.
-     * @throws DepletedResourceException If the datasource cannot be
+     * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public Paper getNewestPaperForSubmission(Submission submission,

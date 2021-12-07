@@ -132,7 +132,7 @@ public class ConnectionPool {
             try {
                 conn.close();
             } catch (SQLException ex) {
-                throw new DepletedResourceException("The connection cannot"
+                throw new DatasourceQueryFailedException("The connection cannot"
                         + "be closed");
             }
         }
