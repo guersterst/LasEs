@@ -33,6 +33,15 @@ public class PaperRepository {
      */
     public static Paper get(Paper paper, Transaction transaction) throws NotFoundException {
 
+        //TODO
+        if (paper.getSubmissionId() == null) {
+            throw new InvalidFieldsException("The submission id of the paper must not be null.");
+        }
+
+        if (paper.getVersionNumber() == null) {
+            throw new InvalidFieldsException("The version number of the paper must not be null.");
+        }
+
         Connection connection = transaction.getConnection();
         Paper resultPaper = new Paper();
 
@@ -58,20 +67,8 @@ public class PaperRepository {
             }
 
         } catch (SQLException exception) {
-            //TODO: Richtiges Handling. Muss noch überarbeitet werden.
-            if (exception instanceof SQLNonTransientException) {
-                logger.log(Level.SEVERE, "non transient");
-            } else if (exception instanceof SQLTransientException) {
-                logger.log(Level.SEVERE, "Transient");
-            } else if (exception instanceof SQLRecoverableException) {
-                logger.log(Level.SEVERE, "Recoverable");
-            } else if (exception instanceof PSQLException) {
-                logger.log(Level.SEVERE, "PSQLExeption");
-            }
             DatasourceUtil.logSQLException(exception, logger);
-
-            throw new DatasourceQueryFailedException("Data source query failed while loading a paper with the submission id: "
-                    + paper.getSubmissionId() + " and  version number: " + paper.getVersionNumber());
+            throw new DatasourceQueryFailedException("A data source exception occurred.", exception);
         }
 
         return resultPaper;

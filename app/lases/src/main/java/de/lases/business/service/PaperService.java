@@ -44,7 +44,7 @@ public class PaperService {
      * @return A fully filled {@link Paper}.
      */
     public Paper get(Paper paper) {
-        if (paper.getSubmissionId() == null) {
+        if (paper.getSubmissionId() == null && paper.getVersionNumber() == null) {
 
             logger.severe("The id of the paper is not valid. Therefore no paper object can be queried.");
 
