@@ -12,6 +12,9 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * @author Stefanie Gürster
+ */
 public class PaperServiceNoMockTest {
     private static Paper paper;
 

@@ -12,6 +12,8 @@ import de.lases.persistence.util.DatasourceUtil;
 import org.postgresql.util.PSQLException;
 
 /**
+ * @author Stefanie Guerster, Sebastian Vogt
+ *
  * Offers get/add/change/remove operations on a paper and the possibility to
  * get lists of papers.
  */

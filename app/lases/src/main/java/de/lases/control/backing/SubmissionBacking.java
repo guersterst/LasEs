@@ -20,6 +20,8 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
+ * @author Stefanie Gürster
+ *
  * Backing bean for the submission page.
  */
 @ViewScoped

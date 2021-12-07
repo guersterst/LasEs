@@ -16,6 +16,9 @@ import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * @author Stefanie Gürster, Sebastian Vogt
+ */
 class PaperRepositoryTest {
 
     private static Paper paper;

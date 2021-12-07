@@ -19,6 +19,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * @author Stefanie Gürster, Sebastian Vogt
+ *
  * Provides functionality for handling papers in {@link Submission}s.
  * In case of an unexpected state, a {@link UIMessage} event will be fired.
  */
