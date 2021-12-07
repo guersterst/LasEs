@@ -1,9 +1,12 @@
 package de.lases.control.internal;
 
-import com.sun.jdi.InvalidLineNumberException;
 import de.lases.control.exception.IllegalAccessException;
+import de.lases.global.transport.MessageCategory;
 import de.lases.global.transport.Privilege;
+import de.lases.global.transport.UIMessage;
+import jakarta.enterprise.event.Event;
 import jakarta.enterprise.inject.spi.CDI;
+import jakarta.faces.application.NavigationHandler;
 import jakarta.faces.component.UIViewRoot;
 import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
@@ -24,7 +27,11 @@ public class TrespassListener implements PhaseListener {
     @Serial
     private static final long serialVersionUID = -1137139795334466811L;
 
+    @Inject
+    private Event<UIMessage> uiMessageEvent;
 
+    @Inject
+    private PropertyResourceBundle propertyResourceBundle;
     /**
      * Gets the is of the phase this listener is interested in.
      *
@@ -64,6 +71,7 @@ public class TrespassListener implements PhaseListener {
         String viewId = null;
         if (viewRoot != null) {
             viewId = viewRoot.getViewId();
+
             //TODO what if viewRoot null?
             // -> just throw Error
             //TODO is case sensitive?
@@ -80,7 +88,7 @@ public class TrespassListener implements PhaseListener {
         if (!isRegistered && !viewId.contains("/anonymous/")) {
 
             // Illegal access to a site which is visible to registered users only.
-            navigateToLogin();
+            navigateToLogin(fctxt);
         } else if (!isEditor && !isAdmin && viewId.contains("/editor/")) {
 
             // Illegal access to a site which is visible to editors and admins only.
@@ -92,7 +100,12 @@ public class TrespassListener implements PhaseListener {
         }
     }
 
-    private static void navigateToLogin() {
+    private void navigateToLogin(FacesContext facesContext) {
+        uiMessageEvent.fire(new UIMessage(
+                propertyResourceBundle.getString("unauthenticatedAccess"), MessageCategory.ERROR));
 
+        NavigationHandler nav = facesContext.getApplication().getNavigationHandler();
+        nav.handleNavigation(facesContext, null, "welcome.xhtml?faces-redirect=true");
+        facesContext.responseComplete();
     }
 }
