@@ -78,7 +78,7 @@ public class PaperRepository {
         } catch (SQLException ex) {
             DatasourceUtil.logSQLException(ex, logger);
             String sqlState = ex.getSQLState();
-            throw new DatasourceQueryFailedException("An SQL exception"
+            throw new DatasourceQueryFailedException("A datasource exception"
                     + "occurred", ex);
         }
     }

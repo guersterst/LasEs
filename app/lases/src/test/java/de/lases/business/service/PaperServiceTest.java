@@ -2,6 +2,7 @@ package de.lases.business.service;
 
 import de.lases.global.transport.FileDTO;
 import de.lases.global.transport.Paper;
+import de.lases.persistence.repository.ConnectionPool;
 import de.lases.persistence.repository.PaperRepository;
 import de.lases.persistence.repository.Transaction;
 import org.junit.jupiter.api.AfterAll;
@@ -44,6 +45,13 @@ public class PaperServiceTest {
         // Mock get to return a paper or file if the ids are correct.
         paperRepoMocked.when(() -> PaperRepository.get(eq(paper), any(Transaction.class))).thenReturn(paper);
         paperRepoMocked.when(() -> PaperRepository.getPDF(eq(paper), any(Transaction.class))).thenReturn(fileDTO);
+
+        ConnectionPool.init();
+    }
+
+    @AfterAll
+    static void shutDown() {
+        ConnectionPool.shutDown();
     }
 
     @BeforeEach
