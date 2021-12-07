@@ -3,6 +3,13 @@ package de.lases.persistence.repository;
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -170,27 +177,147 @@ public class UserRepository {
      * specific submission
      *
      * @param transaction The transaction to use.
-     * @param privilege The role the users must fulfil in regard to the
-     *                  specified submission. Must be REVIEWER for reviewers
-     *                  and AUTHOR for (co)-authors.
-     *                  ADMIN and EDITOR are not supported.
-     * @param submission The submission the users should stand in a
-     *                   relationship with. Must be filled with a valid id.
+     * @param privilege   The role the users must fulfil in regard to the
+     *                    specified submission. Must be REVIEWER for reviewers
+     *                    and AUTHOR for (co)-authors.
+     *                    ADMIN and EDITOR are not supported.
+     * @param submission  The submission the users should stand in a
+     *                    relationship with. Must be filled with a valid id.
      * @return A list of fully filled user dtos.
-     * @throws DataNotCompleteException If the list is truncated.
+     * @throws DataNotCompleteException       If the list is truncated.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
-     * @throws InvalidFieldsException If the privilege is ADMIN or EDITOR.
-     * @throws NotFoundException If there is no submission with the specified
-     *                           id.
-     * @throws InvalidQueryParamsException If the resultListParameters contain
-     *                                     an erroneous option.
+     * @throws InvalidFieldsException         If the privilege is ADMIN or EDITOR.
+     * @throws NotFoundException              If there is no submission with the specified
+     *                                        id.
+     * @throws InvalidQueryParamsException    If the resultListParameters contain
+     *                                        an erroneous option.
      */
     public static List<User> getList(Transaction transaction,
                                      Submission submission,
                                      Privilege privilege)
-            throws DataNotCompleteException, NotFoundException {
-        return null;
+            throws DatasourceQueryFailedException, NotFoundException {
+
+        Integer submissionId = submission.getId();
+        Connection conn = transaction.getConnection();
+
+        List<User> userList = new LinkedList<>();
+
+        switch (privilege) {
+            case AUTHOR -> {
+                try {
+                    PreparedStatement ps = conn.prepareStatement(
+                            "SELECT u.* FROM \"user\" u, submission s, co_authored c " +
+                                    "WHERE u.id = s.author_id OR (u.id = c.user_id AND  c.submission_id = s.id) " +
+                                    "AND submission_id = ?"
+                    );
+                    ps.setInt(1, submissionId);
+                    ResultSet rs = ps.executeQuery();
+
+                    while (rs.next()) {
+                        User user = new User();
+                        user.setId(rs.getInt("id"));
+                        user.setPrivileges(getUserPrivileges(user, transaction));
+                        user.setTitle(rs.getString("title"));
+                        user.setFirstName(rs.getString("firstname"));
+                        user.setLastName(rs.getString("lastname"));
+                        user.setEmailAddress(rs.getString("email_address"));
+                        java.sql.Date birthdate = rs.getDate("birthdate");
+                        if (birthdate != null) {
+                            user.setDateOfBirth(birthdate.toLocalDate());
+                        }
+                        user.setEmployer(rs.getString("employer"));
+
+                        userList.add(user);
+                    }
+                    return userList;
+                } catch (SQLException e) {
+                    throw new DatasourceQueryFailedException();
+                }
+            }
+            case REVIEWER -> {
+                try {
+                    PreparedStatement ps = conn.prepareStatement(
+                            "SELECT u.* FROM \"user\" u, submission s, reviewed_by rb " +
+                                    "WHERE u.id = rb.reviewer_id AND rb.submission_id = s.id " +
+                                    "AND submission_id = ?"
+                    );
+                    ps.setInt(1, submissionId);
+                    ResultSet rs = ps.executeQuery();
+
+                    while (rs.next()) {
+                        User user = new User();
+                        user.setId(rs.getInt("id"));
+                        user.setPrivileges(getUserPrivileges(user, transaction));
+                        user.setTitle(rs.getString("title"));
+                        user.setFirstName(rs.getString("firstname"));
+                        user.setLastName(rs.getString("lastname"));
+                        user.setEmailAddress(rs.getString("email_address"));
+                        java.sql.Date birthdate = rs.getDate("birthdate");
+                        if (birthdate != null) {
+                            user.setDateOfBirth(birthdate.toLocalDate());
+                        }
+                        user.setEmployer(rs.getString("employer"));
+
+                        userList.add(user);
+                    }
+                    return userList;
+                } catch (SQLException e) {
+                    throw new DatasourceQueryFailedException();
+                }
+            }
+            default -> {
+                return userList;
+            }
+        }
+    }
+
+    /**
+     * Get the Privileges of a certain user. ID must be set.
+     * ONLY EDITOR, REVIEWER AND ADMIN ARE CHECKED.
+     *
+     * @param user        user with a set ID.
+     * @param transaction some transaction
+     * @return List of Privileges.
+     */
+    private static List<Privilege> getUserPrivileges(User user, Transaction transaction) throws DatasourceQueryFailedException {
+        Integer id = user.getId();
+        Connection conn = transaction.getConnection();
+
+        List<Privilege> privileges = new LinkedList<>();
+
+        try {
+            PreparedStatement psEditor = conn.prepareStatement(
+                    "SELECT u.id FROM \"user\" u WHERE EXISTS(SELECT * FROM member_of mo WHERE u.id = mo.editor_id AND u.id = ?)"
+            );
+            PreparedStatement psReviewer = conn.prepareStatement(
+                    "SELECT u.id FROM \"user\" u WHERE EXISTS(SELECT * FROM reviewed_by rb WHERE u.id = rb.reviewer_id AND u.id = ?)"
+            );
+            PreparedStatement psAdmin = conn.prepareStatement(
+                    "SELECT  u.id FROM \"user\" u WHERE u.is_administrator = true AND u.id = ?"
+            );
+
+            psEditor.setInt(1, id);
+            ResultSet rs = psEditor.executeQuery();
+            if (rs.next()) {
+                privileges.add(Privilege.EDITOR);
+            }
+
+            psReviewer.setInt(1, id);
+            rs = psReviewer.executeQuery();
+            if (rs.next()) {
+                privileges.add(Privilege.EDITOR);
+            }
+
+            psAdmin.setInt(1, id);
+            rs = psAdmin.executeQuery();
+            if (rs.next()) {
+                privileges.add(Privilege.ADMIN);
+            }
+            return privileges;
+        } catch (SQLException e) {
+            throw new DatasourceQueryFailedException();
+        }
     }
 
     /**

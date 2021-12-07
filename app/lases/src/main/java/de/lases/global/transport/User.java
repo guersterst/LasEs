@@ -10,31 +10,31 @@ public class User implements Cloneable {
 
     private int verificationId;
 
-    private Integer id;
+    private Integer id; // SQL: id
 
-    private List<Privilege> privileges;
+    private List<Privilege> privileges; // SQL implicit
 
-    private String title;
+    private String title; // SQL: title
 
-    private String firstName;
+    private String firstName; // SQL: firstname
 
-    private String lastName;
+    private String lastName; // SQL: lastname
 
-    private String emailAddress;
+    private String emailAddress; // SQL: email_address
 
-    private LocalDate dateOfBirth;
+    private LocalDate dateOfBirth; // SQL: birthdate
 
-    private String employer;
+    private String employer; // SQL: employer
 
     private String passwordNotHashed;
 
-    private String passwordHashed;
+    private String passwordHashed; // SQL: password_hash
 
-    private String passwordSalt;
+    private String passwordSalt; // SQL: password_salt
 
-    private boolean isRegistered;
+    private boolean isRegistered; // SQL: is_registered
 
-    private int numberOfSubmissions;
+    private int numberOfSubmissions; // SQL implicit
 
     /**
      * Return if the user is an admin.
