@@ -198,12 +198,28 @@ public class UserRepository {
     public static List<User> getList(Transaction transaction,
                                      Submission submission,
                                      Privilege privilege)
-            throws DatasourceQueryFailedException, NotFoundException {
+            throws DataNotCompleteException, InvalidFieldsException, NotFoundException {
+        if (transaction == null || submission == null || privilege == null) {
+            throw new InvalidFieldsException();
+        }
 
         Integer submissionId = submission.getId();
         Connection conn = transaction.getConnection();
 
         List<User> userList = new LinkedList<>();
+
+        try {
+            PreparedStatement exists = conn.prepareStatement(
+                    "SELECT * FROM submission WHERE id = ?"
+            );
+            exists.setInt(1, submissionId);
+            ResultSet rsExists = exists.executeQuery();
+            if (!rsExists.next()) {
+                throw new NotFoundException("No Submission with ID: " + submissionId);
+            }
+        } catch (SQLException e) {
+            throw new DatasourceQueryFailedException();
+        }
 
         switch (privilege) {
             case AUTHOR -> {
@@ -339,8 +355,7 @@ public class UserRepository {
      */
     public static List<User> getList(Transaction transaction,
                                      ScientificForum scientificForum)
-            throws DataNotCompleteException, DatasourceQueryFailedException,
-            NotFoundException, InvalidQueryParamsException {
+            throws DataNotCompleteException, NotFoundException, InvalidQueryParamsException {
         if (transaction == null || scientificForum == null) {
             throw new InvalidQueryParamsException("Parameter was null");
         }

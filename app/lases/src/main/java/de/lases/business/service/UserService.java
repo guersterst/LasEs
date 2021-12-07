@@ -1,15 +1,20 @@
 package de.lases.business.service;
 
+import de.lases.control.internal.LifeTimeListener;
+import de.lases.control.internal.UIMessageGenerator;
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
 import de.lases.persistence.repository.Transaction;
+import de.lases.persistence.repository.UserRepository;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Provides all functionality for creating, manipulating or receiving information about users in the application.
@@ -149,7 +154,22 @@ public class UserService implements Serializable {
      * @return A list of {@code User}s involved with a {@code Submission} in a certain role.
      */
     public List<User> getList(Submission submission, Privilege privilege) {
-        return null;
+        Transaction transaction = new Transaction();
+        Logger l = Logger.getLogger(UserService.class.getName());
+        List<User> userList = new LinkedList<>();
+
+        try {
+            userList = UserRepository.getList(transaction, submission, privilege);
+        } catch (NotFoundException e) {
+            l.info(e.getMessage());
+            uiMessageEvent.fire(new UIMessage("This submission does not exist.", MessageCategory.ERROR));
+        } catch (DataNotCompleteException e) {
+            l.info(e.getMessage());
+            uiMessageEvent.fire(new UIMessage("Could not fetch data.", MessageCategory.WARNING));
+        } finally {
+            transaction.commit();
+        }
+        return userList;
     }
 
     /**
@@ -160,7 +180,22 @@ public class UserService implements Serializable {
      * @return A list of editors for a certain forum.
      */
     public List<User> getList(ScientificForum scientificForum) {
-        return null;
+        Transaction transaction = new Transaction();
+        Logger l = Logger.getLogger(UserService.class.getName());
+        List<User> userList = new LinkedList<>();
+
+        try {
+            userList = UserRepository.getList(transaction, scientificForum);
+        } catch (DataNotCompleteException e) {
+            l.info(e.getMessage());
+            uiMessageEvent.fire(new UIMessage("Could not fetch data.", MessageCategory.WARNING));
+        } catch (NotFoundException e) {
+            l.info(e.getMessage());
+            uiMessageEvent.fire(new UIMessage("This forum does not exist.", MessageCategory.ERROR));
+        } finally {
+            transaction.commit();
+        }
+        return userList;
     }
 
     /**
