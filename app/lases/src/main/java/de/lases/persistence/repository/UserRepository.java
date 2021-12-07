@@ -58,10 +58,10 @@ public class UserRepository {
                 WHERE "user".id = ? OR "user".email_address = ?
                 """;
 
-        Connection conn = transaction.getConnection();
-        User result;
 
+        User result;
         try {
+            Connection conn = transaction.getConnection();
 
             // Attempt to query for the user.
             ResultSet userResult;
@@ -139,7 +139,6 @@ public class UserRepository {
                 privileges.add(Privilege.EDITOR);
             }
         } catch (SQLException ex) {
-
             // Do nothing.
         }
         result.setPrivileges(privileges);
@@ -147,7 +146,6 @@ public class UserRepository {
         try {
             result.setNumberOfSubmissions(submissionAndEditorResult.getInt("number_of_submissions"));
         } catch (SQLException ex) {
-
             // Do nothing.
         }
         return result;
