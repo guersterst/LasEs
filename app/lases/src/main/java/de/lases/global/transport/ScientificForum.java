@@ -1,6 +1,7 @@
 package de.lases.global.transport;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * Represents a scientific forum.
@@ -106,9 +107,7 @@ public class ScientificForum implements Cloneable {
     @Override
     public ScientificForum clone() {
         try {
-            ScientificForum clone = (ScientificForum) super.clone();
-            // TODO: copy mutable state here, so the clone can't change the internals of the original
-            return clone;
+            return (ScientificForum) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }
@@ -118,10 +117,14 @@ public class ScientificForum implements Cloneable {
      * Check equality by comparing ids.
      *
      * @param object The object to compare to.
-     * @return Is the provided object equal to this scfientific forum?
+     * @return Is the provided object equal to this scientific forum?
      */
     @Override
     public boolean equals(Object object) {
-        return false;
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+
+        ScientificForum that = (ScientificForum) object;
+        return Objects.equals(id, that.id);
     }
 }
