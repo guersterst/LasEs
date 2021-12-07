@@ -50,11 +50,14 @@ public class DatasourceUtil {
                                        Logger logger) {
         logger.log(Level.SEVERE,
                 """
-                Message: %s
-                SQLState: %s
-                Vendor error code: %s
-                """.formatted(sqlException.getMessage(),
-                        sqlException.getSQLState(), sqlException.getErrorCode())
+                SQLException with the following attributes:
+                - Class: %s
+                - Message: %s
+                - SQLState: %s
+                - Vendor error code: %s
+                """.formatted(sqlException.getClass(),
+                        sqlException.getMessage(), sqlException.getSQLState(),
+                        sqlException.getErrorCode())
         );
     }
 
