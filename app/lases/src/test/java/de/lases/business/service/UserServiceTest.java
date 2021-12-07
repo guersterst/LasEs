@@ -43,7 +43,7 @@ public class UserServiceTest {
         fullData.setFirstName("Fabi");
         fullData.setLastName("Dorfner");
 
-        mockedRepo.when(() -> UserRepository.get(eq(onlyId), any())).thenReturn(fullData);
+        //mockedRepo.when(() -> UserRepository.get(eq(onlyId), any())).thenReturn(fullData);
 
         assertEquals(fullData, userService.get(onlyId));
     }
