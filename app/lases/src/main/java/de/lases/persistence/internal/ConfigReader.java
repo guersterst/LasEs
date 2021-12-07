@@ -39,6 +39,7 @@ public class ConfigReader {
         } else {
             try {
                 this.props = loadProperties(configFile.getInputStream());
+                logger.info("The configuration's properties were set.");
             } catch (IOException e) {
                 logger.severe("The properties from the configuration could not be set due to a failure"
                         + "in loading.");
