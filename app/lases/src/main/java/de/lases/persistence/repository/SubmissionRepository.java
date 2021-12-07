@@ -186,7 +186,7 @@ public class SubmissionRepository {
             throws DataNotCompleteException, NotFoundException {
         if (user.getId() == null || scientificForum.getId() == null) {
             l.severe("A passed DTO is not sufficiently filled.");
-            throw new IllegalArgumentException("User ScientificForum id must not be null.");
+            throw new IllegalArgumentException("User and ScientificForum id must not be null.");
         }
 
         Connection conn = transaction.getConnection();
