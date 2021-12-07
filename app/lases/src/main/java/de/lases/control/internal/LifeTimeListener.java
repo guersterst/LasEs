@@ -21,7 +21,6 @@ import java.util.logging.Logger;
 @WebListener
 public class LifeTimeListener implements ServletContextListener {
 
-
     @Inject
     private ConfigPropagator configPropagator;
 
@@ -34,7 +33,7 @@ public class LifeTimeListener implements ServletContextListener {
 
     /**
      * On shutdown we make sure all used resources are closed gracefully.
-     *
+     * <p>
      * We perform all already started operations on the following
      * resources and then make sure to free them properly:
      * <ul>
@@ -48,12 +47,12 @@ public class LifeTimeListener implements ServletContextListener {
     @Override
     public void contextDestroyed(ServletContextEvent event) {
         // TODO Automatisch erstellter Methoden-Stub
-
+        Lifetime.shutdown();
     }
 
     /**
      * On startup we initialize the resources used by the system.
-     *
+     * <p>
      * Specifically we read the config file and start:
      * <ul>
      *     <li> The datasource, specifically the connection pool </li>
@@ -76,6 +75,4 @@ public class LifeTimeListener implements ServletContextListener {
         configFile.setInputStream(is);
         configPropagator.setProperties(configFile);
     }
-
-
 }
