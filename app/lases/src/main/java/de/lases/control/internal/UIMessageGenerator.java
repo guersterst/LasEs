@@ -8,6 +8,7 @@ import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -16,17 +17,8 @@ import java.io.Serializable;
 @SessionScoped
 public class UIMessageGenerator implements Serializable {
 
-    private FacesContext facesContext;
-
-    /**
-     * Construct an {@link UIMessageGenerator}.
-     *
-     * @param facesContext The {@link FacesContext}.
-     */
-    @Inject
-    public UIMessageGenerator(FacesContext facesContext) {
-        this.facesContext = facesContext;
-    }
+    @Serial
+    private static final long serialVersionUID = 1796702584306481539L;
 
     /**
      * Creates {@link FacesMessage}s from {@link UIMessage}s and inserts them into
