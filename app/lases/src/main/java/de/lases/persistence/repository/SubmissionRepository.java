@@ -17,6 +17,8 @@ import java.util.logging.Logger;
 /**
  * Offers get/add/change/remove operations on a submission and the
  * possibility to get lists of submissions.
+ *
+ * @author Thomas Kirz
  */
 public class SubmissionRepository {
 
