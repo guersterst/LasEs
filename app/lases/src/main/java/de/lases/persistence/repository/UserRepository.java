@@ -208,8 +208,8 @@ public class UserRepository {
                 try {
                     PreparedStatement ps = conn.prepareStatement(
                             "SELECT u.* FROM \"user\" u, submission s, co_authored c " +
-                                    "WHERE u.id = s.author_id OR (u.id = c.user_id AND  c.submission_id = s.id) " +
-                                    "AND submission_id = ?"
+                                    "WHERE ((u.id = s.author_id) OR (u.id = c.user_id AND  c.submission_id = s.id)) " +
+                                    "AND s.id = ?"
                     );
                     ps.setInt(1, submissionId);
                     ResultSet rs = ps.executeQuery();

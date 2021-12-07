@@ -224,12 +224,17 @@ public class User implements Cloneable {
     /**
      * Check equality by comparing ids.
      *
-     * @param object The object to compare to.
+     * @param o The object to compare to.
      * @return Is the provided object equal to this user?
      */
     @Override
-    public boolean equals(Object object) {
-        return false;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        return id.equals(user.id);
     }
 
     /**
