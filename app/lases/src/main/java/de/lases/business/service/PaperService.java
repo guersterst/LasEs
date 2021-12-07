@@ -1,12 +1,17 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.*;
+import de.lases.persistence.exception.NotFoundException;
+import de.lases.persistence.repository.PaperRepository;
+import de.lases.persistence.repository.SubmissionRepository;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 
 import java.util.List;
+import java.util.PropertyResourceBundle;
+import java.util.logging.Logger;
 
 /**
  * Provides functionality for handling papers in {@link Submission}s.
@@ -18,6 +23,11 @@ public class PaperService {
     @Inject
     private Event<UIMessage> uiMessageEvent;
 
+    @Inject
+    private PropertyResourceBundle resourceBundle;
+
+    private static final Logger logger = Logger.getLogger(PaperService.class.getName());
+
     /**
      * Gets a paper.
      * <p>
@@ -28,7 +38,35 @@ public class PaperService {
      * @return A fully filled {@link Paper}.
      */
     public Paper get(Paper paper) {
-        return null;
+        if (paper.getSubmissionId() == null) {
+
+            logger.severe("The id of the paper is not valid. Therefore no paper object can be queried.");
+
+            String message = resourceBundle.getString("idMissing");
+            throw new IllegalArgumentException(message);
+
+        } else {
+
+            Transaction transaction = new Transaction();
+            Paper resultPaper = null;
+
+            try {
+
+                resultPaper = PaperRepository.get(paper, transaction);
+                transaction.commit();
+
+            } catch (NotFoundException exception) {
+
+                String message = resourceBundle.getString("paperNotFound");
+                uiMessageEvent.fire(new UIMessage(message, MessageCategory.ERROR));
+
+                logger.fine("Error while loading a paper with the id: " + paper.getSubmissionId());
+
+                transaction.abort();
+
+            }
+            return resultPaper;
+        }
     }
 
     /**
