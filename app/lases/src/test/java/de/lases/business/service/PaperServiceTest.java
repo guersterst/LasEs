@@ -90,14 +90,6 @@ public class PaperServiceTest {
 
         Paper gotten = paperService.get(paper);
 
-        /*assertAll(
-                () -> assertEquals(5, gotten.getSubmissionId()),
-                () -> assertEquals(LocalDateTime.now(), gotten.getUploadTime()),
-                () -> assertEquals(3, gotten.getVersionNumber()),
-                () -> assertEquals(false, gotten.isVisible())
-        );
-
-         */
         assertEquals(paper, gotten);
     }
 
