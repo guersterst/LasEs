@@ -281,21 +281,32 @@ public class SubmissionRepository {
                                            ResultListParameters
                                                    resultListParameters)
             throws DataNotCompleteException, NotFoundException {
-//        String sql = """
-//                    SELECT * FROM submission
-//                    WHERE forum_id = ?""";
-//        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-//            stmt.setInt(1, scientificForum.getId());
-//            resultSet = stmt.executeQuery();
-//
-//            // Attempt to create a list of submissions from the result set.
-//            while (resultSet.next()) {
-//                result.add(createSubmissionFromResultSet(resultSet));
-//            }
-//            l.finer("Retrieved a list of submissions from the database.");
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
+        if (scientificForum.getId() == null) {
+            l.severe("Passed User-DTO is not sufficiently filled.");
+            throw new IllegalArgumentException("User ScientificForum id must not be null.");
+        }
+
+        Connection conn = transaction.getConnection();
+
+        ResultSet resultSet;
+        List<Submission> result = new ArrayList<>();
+
+        String sql = """
+                    SELECT * FROM submission
+                    WHERE forum_id = ?
+                    """;
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, scientificForum.getId());
+            resultSet = stmt.executeQuery();
+
+            // Attempt to create a list of submissions from the result set.
+            while (resultSet.next()) {
+                result.add(createSubmissionFromResultSet(resultSet));
+            }
+            l.finer("Retrieved a list of submissions from the database.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
