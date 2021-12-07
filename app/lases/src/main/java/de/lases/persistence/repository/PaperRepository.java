@@ -75,18 +75,11 @@ public class PaperRepository {
             stmt.setBoolean(4, paper.isVisible());
             stmt.setBytes(5, pdf.getFile());
             stmt.executeUpdate();
-
         } catch (SQLException ex) {
-            if (ex instanceof SQLNonTransientException) {
-                logger.log(Level.SEVERE, "Non transient");
-            } else if (ex instanceof SQLTransientException) {
-                logger.log(Level.SEVERE, "Transient");
-            } else if (ex instanceof SQLRecoverableException) {
-                logger.log(Level.SEVERE, "Recoverable");
-            } else if (ex instanceof PSQLException) {
-                logger.log(Level.SEVERE, "PSQLException");
-            }
             DatasourceUtil.logSQLException(ex, logger);
+            String sqlState = ex.getSQLState();
+            throw new DatasourceQueryFailedException("An SQL exception"
+                    + "occurred", ex);
         }
     }
 
