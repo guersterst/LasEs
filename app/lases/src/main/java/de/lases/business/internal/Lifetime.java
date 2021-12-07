@@ -10,6 +10,8 @@ import java.util.logging.Logger;
 
 /**
  * Handles and propagates the system's start and shutdown.
+ *
+ * @author Johann Schicho
  */
 public class Lifetime {
 
