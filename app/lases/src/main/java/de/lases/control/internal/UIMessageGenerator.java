@@ -32,7 +32,7 @@ public class UIMessageGenerator implements Serializable {
      */
     public void display(@Observes @Any UIMessage uiMessage) {
         FacesMessage facesMessage = new FacesMessage(convertCategory(uiMessage.getCategory()), uiMessage.getMessage(),
-                uiMessage.getMessage());
+                null);
         FacesContext.getCurrentInstance().addMessage(null, facesMessage);
     }
 
