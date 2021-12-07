@@ -184,7 +184,7 @@ public class SubmissionRepository {
                                            ResultListParameters
                                                    resultListParameters)
             throws DataNotCompleteException, NotFoundException {
-        if (user.getId() == null && scientificForum.getId() == null) {
+        if (user.getId() == null || scientificForum.getId() == null) {
             l.severe("A passed DTO is not sufficiently filled.");
             throw new IllegalArgumentException("User ScientificForum id must not be null.");
         }
