@@ -150,4 +150,31 @@ class PaperRepositoryTest {
         );
     }
 
+    @Test
+    void testRemove() throws SQLException, DataNotWrittenException, NotFoundException {
+        Connection conn = transaction.getConnection();
+
+        PaperRepository.add(paper, pdf, transaction);
+
+        PreparedStatement stmt = conn.prepareStatement(
+                """
+                        SELECT * FROM paper
+                        """);
+        ResultSet resultSet = stmt.executeQuery();
+        int i = 0;
+        while (resultSet.next()) {
+            i++;
+        }
+
+        PaperRepository.remove(paper,transaction);
+
+        ResultSet resultSet2 = stmt.executeQuery();
+        int j = 0;
+        while (resultSet2.next()) {
+            j++;
+        }
+
+        assertEquals(1, i - j);
+    }
+
 }

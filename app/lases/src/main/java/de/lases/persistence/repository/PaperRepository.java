@@ -13,7 +13,7 @@ import org.postgresql.util.PSQLException;
 
 /**
  * @author Stefanie Guerster, Sebastian Vogt
- *
+ * <p>
  * Offers get/add/change/remove operations on a paper and the possibility to
  * get lists of papers.
  */
@@ -135,8 +135,6 @@ public class PaperRepository {
      *                                        queried.
      */
     public static void change(Paper paper, Transaction transaction) throws NotFoundException, DataNotWrittenException {
-        Connection connection = transaction.getConnection();
-
         if (paper.getSubmissionId() == null) {
             throw new InvalidFieldsException("The submission id of the paper must not be null.");
         }
@@ -145,7 +143,17 @@ public class PaperRepository {
             throw new InvalidFieldsException("The version number of the paper must not be null.");
         }
 
+        Connection connection = transaction.getConnection();
+
         try {
+            ResultSet resultSet = findPaper(paper, connection);
+
+            if (!resultSet.next()) {
+                logger.fine("Changing paper with the submission id: " + paper.getSubmissionId()
+                        + " and version number: " + paper.getVersionNumber());
+                throw new NotFoundException();
+            }
+
             PreparedStatement statement = connection.prepareStatement(
                     """
                             UPDATE paper
@@ -157,11 +165,8 @@ public class PaperRepository {
             statement.setInt(2, paper.getVersionNumber());
             statement.setInt(3, paper.getSubmissionId());
 
-            if (statement.executeUpdate() == 0) {
-                logger.fine("Changing paper with the submission id: " + paper.getSubmissionId()
-                        + " and version number: " + paper.getVersionNumber());
-                throw new NotFoundException();
-            }
+            statement.executeUpdate();
+
         } catch (SQLException exception) {
             DatasourceUtil.logSQLException(exception, logger);
             throw new DatasourceQueryFailedException("A datasource exception occurred while changing paper data.", exception);
@@ -183,6 +188,43 @@ public class PaperRepository {
      *                                        queried.
      */
     public static void remove(Paper paper, Transaction transaction) throws NotFoundException, DataNotWrittenException {
+
+        if (paper.getSubmissionId() == null) {
+            throw new InvalidFieldsException("The submission id of the paper must not be null.");
+        }
+
+        if (paper.getVersionNumber() == null) {
+            throw new InvalidFieldsException("The version number of the paper must not be null.");
+        }
+
+        Connection connection = transaction.getConnection();
+
+        try {
+
+            ResultSet resultSet = findPaper(paper, connection);
+
+            if (!resultSet.next()) {
+                logger.fine("Removing paper with the submission id: " + paper.getSubmissionId()
+                        + " and version number: " + paper.getVersionNumber());
+                throw new NotFoundException();
+            }
+
+            PreparedStatement statement = connection.prepareStatement(
+                    """
+                            DELETE FROM paper
+                            WHERE version = ? AND submission_id = ?
+                            """
+            );
+            statement.setInt(1, paper.getVersionNumber());
+            statement.setInt(2, paper.getSubmissionId());
+
+            statement.executeUpdate();
+
+        } catch (SQLException exception) {
+            DatasourceUtil.logSQLException(exception, logger);
+            throw new DatasourceQueryFailedException("A datasource exception occurred while removing a paper.", exception);
+        }
+
     }
 
     /**
@@ -241,6 +283,22 @@ public class PaperRepository {
      */
     public Paper getNewestPaperForSubmission(Submission submission, User user, Transaction transaction) throws NotFoundException {
         return null;
+    }
+
+    //TODO
+    private static ResultSet findPaper(Paper paper, Connection connection) throws SQLException {
+
+        PreparedStatement find = connection.prepareStatement(
+                """
+                        SELECT *
+                        FROM paper
+                        WHERE version = ? AND submission_id = ?
+                        """
+        );
+        find.setInt(1, paper.getVersionNumber());
+        find.setInt(2, paper.getSubmissionId());
+
+        return find.executeQuery();
     }
 
 }
