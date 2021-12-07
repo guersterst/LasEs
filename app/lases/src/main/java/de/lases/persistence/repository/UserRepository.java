@@ -59,8 +59,6 @@ public class UserRepository {
                 WHERE "user".id = ? OR "user".email_address = ?
                 """;
 
-
-        System.out.println("1");
         User result;
         try {
             Connection conn = transaction.getConnection();
@@ -79,7 +77,6 @@ public class UserRepository {
             extraStatement.setInt(2, user.getId());
             submissionAndEditorResult = extraStatement.executeQuery();
 
-            System.out.println("2");
             // Attempt to create a user from the query results.
             if (userResult.next() && submissionAndEditorResult.next()) {
                 result = createUserFromResultSet(userResult, submissionAndEditorResult);

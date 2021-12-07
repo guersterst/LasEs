@@ -63,17 +63,6 @@ public class UserService implements Serializable {
         }
     }
 
-    public static void main(String[] args) {
-        ConnectionPool.init();
-        User user = new User();
-        user.setId(1);
-        UserService userService = new UserService();
-
-            User result = userService.get(user);
-
-
-    }
-
     /**
      * Updates a user.
      *
