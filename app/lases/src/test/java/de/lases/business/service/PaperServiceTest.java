@@ -72,6 +72,16 @@ public class PaperServiceTest {
         paperRepoMocked.close();
     }
 
+    @BeforeAll
+    static void initConnectionPool() {
+        ConnectionPool.init();
+    }
+
+    @AfterAll
+    static void rollbackTransaction() {
+        ConnectionPool.shutDown();
+    }
+
     @Test
     void testGet() {
         paperService.add(fileDTO, paper);

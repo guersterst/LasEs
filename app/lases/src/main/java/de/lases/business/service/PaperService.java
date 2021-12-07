@@ -27,9 +27,9 @@ public class PaperService {
     private Event<UIMessage> uiMessageEvent;
 
     @Inject
-    private PropertyResourceBundle propertyResourceBundle;
+    private PropertyResourceBundle resourceBundle;
 
-    private Logger logger = Logger.getLogger(PaperService.class.getName());
+    private static final Logger logger = Logger.getLogger(PaperService.class.getName());
 
     /**
      * Gets a paper.
@@ -41,7 +41,36 @@ public class PaperService {
      * @return A fully filled {@link Paper}.
      */
     public Paper get(Paper paper) {
-        return null;
+        if (paper.getSubmissionId() == null) {
+
+            logger.severe("The id of the paper is not valid. Therefore no paper object can be queried.");
+
+            String message = resourceBundle.getString("idMissing");
+            throw new IllegalArgumentException(message);
+
+        } else {
+
+            Transaction transaction = new Transaction();
+            Paper resultPaper = null;
+
+            try {
+
+                resultPaper = PaperRepository.get(paper, transaction);
+                transaction.commit();
+
+            } catch (NotFoundException exception) {
+
+                String message = resourceBundle.getString("paperNotFound");
+                uiMessageEvent.fire(new UIMessage(message, MessageCategory.ERROR));
+
+                logger.fine("Error while loading a paper with the submission id: " + paper.getSubmissionId()
+                        + " and version number: " + paper.getVersionNumber());
+
+                transaction.abort();
+
+            }
+            return resultPaper;
+        }
     }
 
     /**
@@ -74,7 +103,7 @@ public class PaperService {
             paperList = PaperRepository.getList(submission, transaction,
                     user, new ResultListParameters());
         } catch (DataNotCompleteException e) {
-            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString(
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString(
                     "dataNotWritten"), MessageCategory.ERROR));
             logger.log(Level.WARNING, e.getMessage());
             transaction.abort();
@@ -94,7 +123,7 @@ public class PaperService {
             PaperRepository.add(paper, file, transaction);
         } catch (DataNotWrittenException e) {
             uiMessageEvent.fire(new UIMessage(
-                    propertyResourceBundle.getString("dataNotWritten"),
+                    resourceBundle.getString("dataNotWritten"),
                     MessageCategory.ERROR));
             logger.log(Level.WARNING, e.getMessage());
             transaction.abort();

@@ -99,6 +99,8 @@ public class SubmissionBacking implements Serializable {
      */
     @PostConstruct
     public void init() {
+        submission = new Submission();
+
     }
 
     /**
