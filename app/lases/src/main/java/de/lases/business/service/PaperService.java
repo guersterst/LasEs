@@ -1,6 +1,9 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.*;
+
+import de.lases.persistence.exception.DataNotCompleteException;
+import de.lases.persistence.exception.DataNotWrittenException;
 import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.repository.PaperRepository;
 import de.lases.persistence.repository.SubmissionRepository;
@@ -11,6 +14,8 @@ import jakarta.inject.Inject;
 
 import java.util.List;
 import java.util.PropertyResourceBundle;
+
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -27,6 +32,7 @@ public class PaperService {
     private PropertyResourceBundle resourceBundle;
 
     private static final Logger logger = Logger.getLogger(PaperService.class.getName());
+
 
     /**
      * Gets a paper.
@@ -83,6 +89,49 @@ public class PaperService {
      * @param paper The filled {@link Paper} to be added.
      */
     public void add(FileDTO file, Paper paper) {
+        Transaction transaction = new Transaction();
+
+        // Create the submission dto for checking if the added paper is the
+        // first one added to the submission.
+        Submission submission = new Submission();
+        submission.setId(paper.getSubmissionId());
+
+        // Create an admin to get full access to the list of added papers
+        User user = new User();
+        user.setAdmin(true);
+
+        List<Paper> paperList;
+
+        try {
+            paperList = PaperRepository.getList(submission, transaction,
+                    user, new ResultListParameters());
+        } catch (DataNotCompleteException e) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString(
+                    "dataNotWritten"), MessageCategory.ERROR));
+            logger.log(Level.WARNING, e.getMessage());
+            transaction.abort();
+            return;
+        } catch (NotFoundException e) {
+            throw new IllegalArgumentException("the submission specified in the"
+                    + "paper DTO was not found", e);
+        }
+
+        assert paperList != null;
+        if (!paperList.isEmpty()) {
+            logger.log(Level.INFO, "Sending email to an editor.");
+            // TODO: Email senden oder a ned in develop mode.
+        }
+
+        try {
+            PaperRepository.add(paper, file, transaction);
+        } catch (DataNotWrittenException e) {
+            uiMessageEvent.fire(new UIMessage(
+                    resourceBundle.getString("dataNotWritten"),
+                    MessageCategory.ERROR));
+            logger.log(Level.WARNING, e.getMessage());
+            transaction.abort();
+            return;
+        }
     }
 
     /**
@@ -129,7 +178,7 @@ public class PaperService {
      * </p>
      *
      * @param submission           The submission for which the submissions are requested. Must contain a valid id.
-     * @param user                 The user who requests the papers, containing a valid view-privilege.
+     * @param user                 The user who requests the papers, with its id and the "isAdmin" information.
      * @param resultListParameters The parameters, that control filtering and sorting of the resulting list.
      * @return The list of papers of this submission the given user has access to.
      */

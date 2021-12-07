@@ -4,6 +4,7 @@ import de.lases.global.transport.FileDTO;
 import de.lases.global.transport.Paper;
 import de.lases.persistence.exception.DataNotWrittenException;
 import de.lases.persistence.exception.NotFoundException;
+import de.lases.persistence.exception.InvalidFieldsException;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -105,4 +106,21 @@ class PaperRepositoryTest {
 
         assertEquals(1, j - i);
     }
+
+    @Test
+    void testNull() {
+        assertAll(
+                () -> {
+                    assertThrows(InvalidFieldsException.class,
+                            () -> PaperRepository.add(paper, new FileDTO(),
+                                    transaction));
+                },
+                () -> {
+                    assertThrows(InvalidFieldsException.class,
+                            () -> PaperRepository.add(new Paper(), pdf,
+                                    transaction));
+                }
+        );
+    }
+
 }
