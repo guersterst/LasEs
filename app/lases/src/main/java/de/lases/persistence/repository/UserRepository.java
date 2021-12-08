@@ -64,9 +64,29 @@ public class UserRepository {
                 WHERE "user".id = ? OR "user".email_address = ?
                 """;
 
+        String find_by_email = """
+                SELECT id
+                FROM "user"
+                WHERE LOWER(email_address) = ?
+                """;
+
         User result;
         try {
             Connection conn = transaction.getConnection();
+
+            // first find user by email if no ID is given.
+            if (user.getId() == null) {
+                PreparedStatement ps = conn.prepareStatement(find_by_email);
+                ps.setString(1, user.getEmailAddress().toLowerCase());
+
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    user.setId(rs.getInt("id"));
+                } else {
+                    logger.finest("No user found for address: " + user.getEmailAddress());
+                    throw new NotFoundException("No user found for email-address: " + user.getEmailAddress());
+                }
+            }
 
             // Attempt to query for the user.
             ResultSet userResult;
@@ -80,6 +100,7 @@ public class UserRepository {
             PreparedStatement extraStatement = conn.prepareStatement(sql_number_of_submissions_and_editor_info);
             extraStatement.setInt(1, user.getId());
             extraStatement.setInt(2, user.getId());
+
             submissionAndEditorResult = extraStatement.executeQuery();
 
             // Attempt to create a user from the query results.
