@@ -5,6 +5,7 @@ import de.lases.persistence.exception.DataNotCompleteException;
 import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.repository.SubmissionRepository;
 import de.lases.persistence.repository.Transaction;
+import de.lases.persistence.repository.UserRepository;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
@@ -204,16 +205,47 @@ public class SubmissionService implements Serializable {
      *
      * @param submission The {@link Submission}, with a valid id, to be viewed.
      * @param user       The {@link User} whose view access is being determined.
-     *                   Must contain a view-privilege.
+     *                   Must contain an id.
      * @return {@code false} if view access is restricted, {@code true} otherwise.
      */
     public boolean canView(Submission submission, User user) {
-        user = userService.get(user);
+        if (submission.getId() == null || user.getId() == null) {
+            l.severe("Submission and user id must not be null.");
+            throw new IllegalArgumentException("Submission and user id must not be null.");
+        }
+
+        // load user from database
+        Transaction t = new Transaction();
+        try {
+            user = UserRepository.get(user, t);
+            l.finer("User with id " + user.getId() + " retrieved.");
+        } catch (NotFoundException e) {
+            l.severe("User with id " + user.getId() + " not found.");
+            uiMessageEvent.fire(new UIMessage(
+                    msg.getString("error.loadingSubmissionFailed"),
+                    MessageCategory.ERROR));
+            t.abort();
+            return false;
+        }
+
+        // load submission from database
+        try {
+            submission = SubmissionRepository.get(submission, t);
+            l.finer("Submission with id " + submission.getId() + " retrieved.");
+        } catch (NotFoundException e) {
+            l.severe("Submission with id " + submission.getId() + " not found.");
+            uiMessageEvent.fire(new UIMessage(
+                    msg.getString("error.loadingSubmissionFailed"),
+                    MessageCategory.ERROR));
+            t.abort();
+            return false;
+        }
+
         ScientificForum forum = new ScientificForum();
         forum.setId(submission.getScientificForumId());
 
         // Check if the user is admin, editor of the forum
-        // or review or author of the submission
+        // or reviewer or author of the submission
         return user.isAdmin()
                 || userService.getList(forum).contains(user)
                 || userService.getList(submission, Privilege.REVIEWER).contains(user)
