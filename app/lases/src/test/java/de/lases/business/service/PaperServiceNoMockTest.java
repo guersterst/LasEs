@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * @author Stefanie Gürster
@@ -27,7 +28,7 @@ public class PaperServiceNoMockTest {
         paper = new Paper();
         paper.setSubmissionId(5);
         paper.setUploadTime(LocalDateTime.now());
-        paper.setVersionNumber(2);
+        paper.setVersionNumber(3);
         paper.setVisible(false);
 
         pdf = new FileDTO();
@@ -48,16 +49,19 @@ public class PaperServiceNoMockTest {
 
     @Test
     void testGet() {
-        //paperService.add(pdf, paper);
+        paperService.add(pdf, paper);
 
         Paper gotten = paperService.get(paper);
 
         assertEquals(paper, gotten);
+
+        // remove the paper again so the test will run through more than once
+        paperService.remove(paper);
     }
 
     @Test
     void testChange() {
-        //paperService.add(pdf, paper);
+        paperService.add(pdf, paper);
 
         Paper changed = paper.clone();
         changed.setVisible(true);
@@ -65,26 +69,28 @@ public class PaperServiceNoMockTest {
         paperService.change(changed);
 
         assertEquals(changed, paper);
-    }
-/*
-    @Test
-    void testRemove() {
-        //paperService.add(pdf, paper);
+
+        // remove the paper again so the test will run through more than once
         paperService.remove(paper);
-        Paper find = paperService.get(paper);
-
-        assertEquals(null, find);
     }
 
- */
+//    @Test
+//    void testRemove() {
+//        paperService.add(pdf, paper);
+//        paperService.remove(paper);
+//        Paper find = paperService.get(paper);
+//
+//        assertNull(find);
+//    }
 
-    @Test
-    void testGetPDF() {
-        FileDTO paperFile = new FileDTO();
-        paperFile.setFile(new byte[0]);
-        FileDTO fileDTO = paperService.getFile(paper);
-        int length = fileDTO.getFile().length;
 
-        assertEquals(paperFile.getFile().length, length);
-    }
+//    @Test
+//    void testGetPDF() {
+//        FileDTO paperFile = new FileDTO();
+//        paperFile.setFile(new byte[0]);
+//        FileDTO fileDTO = paperService.getFile(paper);
+//        int length = fileDTO.getFile().length;
+//
+//        assertEquals(paperFile.getFile().length, length);
+//    }
 }

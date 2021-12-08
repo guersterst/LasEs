@@ -113,10 +113,15 @@ public class PaperService {
                     + "paper DTO was not found", e);
         }
 
-        assert paperList != null;
-        if (!paperList.isEmpty()) {
-            logger.log(Level.INFO, "Sending email to an editor.");
-            // TODO: Email senden oder a ned in develop mode.
+        // TODO: Sobald die richtige Methode implementiert ist hier ein assert anstatt ein if einbauen!
+        if (paperList == null) {
+            logger.log(Level.SEVERE, "paperList is still null, probably because the paperGetList method is not" +
+                    "implemented yet!");
+        } else {
+            if (!paperList.isEmpty()) {
+                logger.log(Level.INFO, "Sending email to an editor.");
+                // TODO: Email senden oder a ned in develop mode.
+            }
         }
 
         try {
