@@ -271,6 +271,11 @@ public class SubmissionRepository {
             stmt.executeUpdate();
         } catch (SQLException ex) {
             DatasourceUtil.logSQLException(ex, logger);
+
+            // 23503: Foreign key constraint violated
+            if (ex.getSQLState().equals("23503")) {
+                throw new NotFoundException("Either the specified user or submission does not exist");
+            }
             throw new DatasourceQueryFailedException("A datasource exception"
                     + "occurred", ex);
         }

@@ -121,7 +121,6 @@ class SubmissionRepositoryTest {
         transaction.abort();
     }
 
-    @Test
     void testAddAndGetList() throws Exception {
         Transaction transaction = new Transaction();
 
@@ -155,7 +154,6 @@ class SubmissionRepositoryTest {
         transaction.abort();
     }
 
-    @Test
     void testAddAndAbort() throws Exception {
         Transaction transaction = new Transaction();
         Submission submission = new Submission();
@@ -169,7 +167,6 @@ class SubmissionRepositoryTest {
     }
 
     // add two submissions and test countSubmissions()
-    @Test
     void testCountSubmissions() throws Exception {
         User user = new User();
         user.setId(EXAMPLE_USER_ID);
