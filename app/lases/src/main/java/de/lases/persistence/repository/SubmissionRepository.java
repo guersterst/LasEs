@@ -229,6 +229,11 @@ public class SubmissionRepository {
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setInt(1, scientificForum.getId());
                 stmt.setInt(2, user.getId());
+                int i = 3;
+                for (String value : resultListParameters.getFilterColumns().values()) {
+                    stmt.setString(i, "%" + value + "%");
+                }
+                stmt.setString(i, "%" + resultListParameters.getGlobalSearchWord() + "%");
                 resultSet = stmt.executeQuery();
 
                 // Attempt to create a list of submissions from the result set.
@@ -303,6 +308,11 @@ public class SubmissionRepository {
             if (privilege != Privilege.ADMIN) {
                 stmt.setInt(1, user.getId());
             }
+            int i = 2;
+            for (String value : resultListParameters.getFilterColumns().values()) {
+                stmt.setString(i, "%" + value + "%");
+            }
+            stmt.setString(i, "%" + resultListParameters.getGlobalSearchWord() + "%");
             resultSet = stmt.executeQuery();
 
             // Attempt to create a list of submissions from the result set.
@@ -359,6 +369,11 @@ public class SubmissionRepository {
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, scientificForum.getId());
+            int i = 2;
+            for (String value : resultListParameters.getFilterColumns().values()) {
+                stmt.setString(i, "%" + value + "%");
+            }
+            stmt.setString(i, "%" + resultListParameters.getGlobalSearchWord() + "%");
             resultSet = stmt.executeQuery();
 
             // Attempt to create a list of submissions from the result set.
@@ -467,6 +482,12 @@ public class SubmissionRepository {
         return 0;
     }
 
+    /**
+     * Generates a suffix to a SQL query string that incorporates the result list parameters.
+     * Adds <code>params.getFilterColumns().size()</code> query parameters to the SQL query
+     * to be filled with patterns for values of the filter columns and one query parameter for the
+     * global search word.
+     */
     private static String generateResultListParametersSQLSuffix(ResultListParameters params) {
         StringBuilder sb = new StringBuilder();
 
@@ -490,13 +511,15 @@ public class SubmissionRepository {
         // Filter according to filter columns parameter.
         params.getFilterColumns().forEach((column, value) -> {
             if (columnNames.contains(column)) {
-                sb.append(" AND ").append(column).append(" LIKE '%").append(value).append("%'\n");
+                sb.append(" AND ").append(column).append(" LIKE ?\n");
+            } else {
+                throw new InvalidQueryParamsException("Invalid filter column: " + column);
             }
         });
 
         // Filter according to global search word.
         if (!"".equals(params.getGlobalSearchWord())) {
-            sb.append(" AND (title LIKE '%").append(params.getGlobalSearchWord()).append("%'\n");
+            sb.append(" AND title LIKE ?\n");
         }
 
         // Sort according to sort column parameter
