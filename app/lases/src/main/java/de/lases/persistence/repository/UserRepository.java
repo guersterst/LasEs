@@ -36,9 +36,8 @@ public class UserRepository {
         if (user.getId() == null && user.getEmailAddress() == null) {
 
             // Throw an exception when neither an id nor a valid email address exist.
-            String msg = "The id and email are missing. Therefor no user object can be queried.";
-            logger.severe(msg);
-            throw new IllegalArgumentException(msg);
+            logger.severe("The id and email are missing. Therefor no user object can be queried.");
+            throw new InvalidFieldsException();
         }
 
 
@@ -84,10 +83,9 @@ public class UserRepository {
                 if (userResult.next()) {
 
                     // There cannot be two results of such a query.
-                    String msg = "There are two results of a unique user query. The parameters were"
-                            + " id: " + user.getId() + ", email: " + user.getEmailAddress();
-                    logger.severe(msg);
-                    throw new InvalidFieldsException(msg);
+                    logger.severe("There are two results of a unique user query. The parameters were"
+                            + " id: " + user.getId() + ", email: " + user.getEmailAddress());
+                    throw new InvalidFieldsException();
                 }
             } else {
                 String msg = "Error while loading a user with the id: " + user.getId()

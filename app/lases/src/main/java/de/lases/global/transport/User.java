@@ -45,7 +45,8 @@ public class User implements Cloneable {
     public boolean isAdmin() { return false; }
 
     /**
-     * Add or remove admin privileges to the user.
+     * Set the flag whether this user is an admin.
+     * This does not change the {@link User#privileges}.
      *
      * @param isAdmin Should teh use be an admin.
      */

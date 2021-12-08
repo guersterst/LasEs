@@ -45,7 +45,7 @@ public class UserService implements Serializable {
 
             // Throw an exception when neither an id nor a valid email address exist.
             logger.severe("The id and email are missing. Therefor no user object can be queried.");
-            throw new IllegalArgumentException(propertyResourceBundle.getString("idMissing"));
+            throw new InvalidFieldsException();
         } else {
 
             Transaction transaction = new Transaction();
@@ -53,6 +53,7 @@ public class UserService implements Serializable {
             try {
                 result = UserRepository.get(user, transaction);
                 transaction.commit();
+                logger.finest("Successfully fetched a user with the id: " + user.getId());
             } catch (NotFoundException ex) {
                 uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataNotFound"),
                         MessageCategory.ERROR));
