@@ -48,17 +48,16 @@ public class SubmissionService implements Serializable {
     /**
      * Creates a new submission.
      * <p>
-     * The selected editor, reviewers and co-authors are informed about this
+     * The selected editor and co-authors are informed about this
      * using the {@link de.lases.business.util.EmailUtil} utility.
      * Do not forget to also add a paper using {@link PaperService#add(FileDTO, Paper)}.
      * </p>
      *
      * @param submission The submission's data in a {@link Submission}.
      *                   Must contain a valid forum's id, authorId, editorId, state and title.
-     * @param reviewers  The desired reviewers as proper {@code User}-DTOs with an email-address.
      * @param coAuthors  The desired co-athors as proper {@link User}-DTOs with an email-address.
      */
-    public void add(Submission submission, List<User> reviewers, List<User> coAuthors) {
+    public void add(Submission submission, List<User> coAuthors) {
         Transaction transaction = new Transaction();
 
         User editor = new User();
@@ -77,18 +76,14 @@ public class SubmissionService implements Serializable {
         // assert editor != null;
         // assert editor.getEmailAddress() != null;
 
-        if (!reviewers.stream().allMatch((user) -> user.getEmailAddress() != null)) {
-            throw new InvalidFieldsException("There where reviewers without an email address!");
-        }
         if (!coAuthors.stream().allMatch((user) -> user.getEmailAddress() != null)) {
             throw new InvalidFieldsException("There where co-authors without an email address!");
         }
 
-        List<String> reviewerEmails = reviewers.stream().map(User::getEmailAddress).toList();
         List<String> coAuthorEmails = coAuthors.stream().map(User::getEmailAddress).toList();
 
         // TODO: Das auch einkommentieren!
-        // sendEmailsForAddSubmission(editor.getEmailAddress(), reviewerEmails, coAuthorEmails);
+        // sendEmailsForAddSubmission(editor.getEmailAddress(), coAuthorEmails);
 
         try {
             SubmissionRepository.add(submission, transaction);
@@ -104,8 +99,7 @@ public class SubmissionService implements Serializable {
         transaction.commit();
     }
 
-    private void sendEmailsForAddSubmission(String emailEditor, List<String> emailsReviewers,
-                                            List<String> emailsCoAuthors) {
+    private void sendEmailsForAddSubmission(String emailEditor, List<String> emailsCoAuthors) {
         logger.log(Level.SEVERE, "PLEASE IMPLEMENT ME! (sending emails)");
     }
 
