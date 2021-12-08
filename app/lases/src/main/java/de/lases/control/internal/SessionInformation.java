@@ -2,6 +2,7 @@ package de.lases.control.internal;
 
 import de.lases.global.transport.*;
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.inject.Named;
 
 import java.io.Serializable;
 import java.util.List;
@@ -13,15 +14,15 @@ import java.util.Locale;
  * also offers a way to invalidate a session.
  */
 @SessionScoped
+@Named
 public class SessionInformation implements Serializable {
     private User user;
-    private Locale locale;
 
     /**
      * Get the user that is currently logged in. The user dto must be filled
      * out with his id and privileges.
      *
-     * @return A user dto with an id.
+     * @return A user dto with an id and privileges.
      */
     public User getUser() {
         return user;
@@ -31,7 +32,7 @@ public class SessionInformation implements Serializable {
      * Set the user that is currently logged in. This will also change the
      * sessionId to avoid session fixation.
      *
-     * @param user A user dto filled with an id for the user that is logged in.
+     * @param user A user dto filled with an id and privileges for the user that is logged.
      */
     public void setUser(User user) {
         this.user = user;
