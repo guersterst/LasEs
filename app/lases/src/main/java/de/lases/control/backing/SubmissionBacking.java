@@ -340,10 +340,12 @@ public class SubmissionBacking implements Serializable {
     public void uploadPDF() {
 
         try {
+            // Get the file as byte[].
             byte[] input = uploadedRevisionPDF.getInputStream().readAllBytes();
             FileDTO file = new FileDTO();
             file.setFile(input);
 
+            // Put revision pdf into a new paper.
             Paper revision = new Paper();
             revision.setVisible(false);
             revision.setSubmissionId(submission.getId());
