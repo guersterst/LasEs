@@ -90,6 +90,10 @@ public class SubmissionRepository {
      */
     public static void change(Submission submission, Transaction transaction)
             throws NotFoundException, DataNotWrittenException {
+        if (submission.getId() == null) {
+
+        }
+
     }
 
     /**
@@ -110,6 +114,7 @@ public class SubmissionRepository {
             throws NotFoundException, DataNotWrittenException {
 
         if (submission.getId() == null) {
+            logger.severe("Invalid submission id while try to remove a submission.");
             throw new IllegalArgumentException("the submission id must not be null while removing it.");
         }
 

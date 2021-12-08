@@ -43,10 +43,12 @@ public class PaperRepository {
 
         //TODO: brauch ich eigentlich überall?
         if (paper.getSubmissionId() == null) {
+            logger.severe("Invalid submission id while try to load a paper.");
             throw new InvalidFieldsException("The submission id of the paper must not be null.");
         }
 
         if (paper.getVersionNumber() == null) {
+            logger.severe("Invalid version number while try to change a paper.");
             throw new InvalidFieldsException("The version number of the paper must not be null.");
         }
 
@@ -143,10 +145,12 @@ public class PaperRepository {
      */
     public static void change(Paper paper, Transaction transaction) throws NotFoundException, DataNotWrittenException {
         if (paper.getSubmissionId() == null) {
+            logger.severe("Invalid submission id while try to change a paper.");
             throw new InvalidFieldsException("The submission id of the paper must not be null.");
         }
 
         if (paper.getVersionNumber() == null) {
+            logger.severe("Invalid version number while try to change a paper.");
             throw new InvalidFieldsException("The version number of the paper must not be null.");
         }
 
@@ -155,11 +159,12 @@ public class PaperRepository {
         try {
             ResultSet resultSet = findPaper(paper, connection);
 
-            if (!resultSet.next()) {
-                logger.fine("Changing paper with the submission id: " + paper.getSubmissionId()
-                        + " and version number: " + paper.getVersionNumber());
-                throw new NotFoundException();
-            }
+        } catch (SQLException exception) {
+            logger.fine("Searching paper failed. Tried to change paper");
+            throw new NotFoundException();
+        }
+
+        try {
 
             PreparedStatement statement = connection.prepareStatement(
                     """
@@ -198,6 +203,7 @@ public class PaperRepository {
 
         //TODO: nicht dokumentiert
         if (paper.getSubmissionId() == null) {
+            logger.severe("Invalid submisison id when tried to remove paper");
             throw new IllegalArgumentException("The submission id of the paper must not be null.");
         }
 
@@ -415,10 +421,12 @@ public class PaperRepository {
 
         //TODO: nicht dokumentiert
         if (paper.getSubmissionId() == null) {
+            logger.severe("Invalid submission id when tried to get file.");
             throw new InvalidFieldsException("The submission id of the paper must not be null.");
         }
 
         if (paper.getVersionNumber() == null) {
+            logger.severe("Invalid version number wehn tried to get file.");
             throw new InvalidFieldsException("The version number of the paper must not be null.");
         }
 
@@ -470,6 +478,7 @@ public class PaperRepository {
      */
     public static Paper getNewestPaperForSubmission(Submission submission, User user, Transaction transaction) throws NotFoundException {
         if (submission.getId() == null) {
+            logger.severe("Invalid submission id when tried to get newest paper.");
             throw new InvalidFieldsException("The id of a submission must not be null.");
         }
 
