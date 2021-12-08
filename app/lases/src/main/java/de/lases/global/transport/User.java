@@ -2,6 +2,7 @@ package de.lases.global.transport;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Represents a user.
@@ -41,14 +42,17 @@ public class User implements Cloneable {
      *
      * @return Is the user an admin.
      */
-    public boolean isAdmin() { return false; }
+    public boolean isAdmin() {
+        return false;
+    }
 
     /**
      * Add or remove admin privileges to the user.
      *
      * @param isAdmin Should teh use be an admin.
      */
-    public void setAdmin(boolean isAdmin) { }
+    public void setAdmin(boolean isAdmin) {
+    }
 
     public int getVerificationId() {
         return verificationId;
@@ -230,11 +234,12 @@ public class User implements Cloneable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
 
-        User user = (User) o;
-
-        return id.equals(user.id);
+        if (o instanceof User user) {
+            return Objects.equals(id, user.id);
+        } else {
+            return false;
+        }
     }
 
     /**
