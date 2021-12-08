@@ -14,8 +14,7 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class SubmissionRepositoryTest {
 
@@ -79,7 +78,6 @@ class SubmissionRepositoryTest {
 
     @Test
     void testAddCoAuthorBasic() throws SQLException, DataNotWrittenException, NotFoundException {
-
         Submission submission = new Submission();
         submission.setId(671);
 
@@ -107,6 +105,20 @@ class SubmissionRepositoryTest {
         }
         transaction.abort();
         assertEquals(1, j - i);
+    }
+
+    @Test
+    void testAddCoAuthorNotFoundException() throws DataNotWrittenException, NotFoundException {
+        Submission submission = new Submission();
+        Transaction transaction = new Transaction();
+        // Diese Submission sollte nicht existieren in der Datenbank
+        submission.setId(900);
+
+        User user = new User();
+        user.setId(69);
+
+        assertThrows(NotFoundException.class, () -> SubmissionRepository.addCoAuthor(submission, user, transaction));
+        transaction.abort();
     }
 
     @Test
