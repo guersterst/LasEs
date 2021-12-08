@@ -2,18 +2,24 @@ package de.lases.persistence.repository;
 
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
+import de.lases.persistence.internal.ConfigReader;
+import jakarta.enterprise.inject.spi.CDI;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Date;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
  * Offers get/add/change/remove operations on a user and the
  * possibility to get lists of users.
+ *
+ * @author Johann Schicho
+ * @author Johannes Garstenauer
  */
 public class UserRepository {
 
+    private static final List<String> userListColumnNames = List.of("user_role", "firstname", "lastname", "email_address", "employer");
     private static final Logger logger = Logger.getLogger(UserRepository.class.getName());
 
     /**
@@ -278,9 +284,103 @@ public class UserRepository {
      */
     public static List<User> getList(Transaction transaction,
                                      ResultListParameters resultListParameters)
-            throws DataNotCompleteException {
-        return null;
+            throws DataNotCompleteException, InvalidQueryParamsException {
+        if (transaction == null || resultListParameters == null) {
+            logger.severe("Invalid Parameters for getList(). Parameter is null.");
+            throw new InvalidQueryParamsException();
+        }
+
+        Connection conn = transaction.getConnection();
+        List<User> userList = new LinkedList<>();
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(generateResultListParametersUserListSQL(resultListParameters));
+
+            // Set values here for protection against sql injections.
+            // See comments in generateResultListParametersUserListSQL()
+            final int[] i = {1};
+
+            // Filtering
+            for (String userListColumnName : userListColumnNames) {
+                String value = resultListParameters.getFilterColumns().get(userListColumnName);
+                ps.setString(i[0], Objects.requireNonNullElse("%" + value + "%", "%"));
+                i[0]++;
+            }
+            // Global Search Word
+            for (String ignored : userListColumnNames) {
+                ps.setString(i[0], "%" + resultListParameters.getGlobalSearchWord() + "%");
+                i[0]++;
+            }
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                User user = new User();
+                user.setId(rs.getInt("id"));
+                Privilege.getPrivilege(rs.getString("user_role"))
+                        .ifPresentOrElse(value -> user.setPrivileges(List.of(value)),
+                                () -> user.setPrivileges(new LinkedList<>()));
+                user.setTitle(rs.getString("title"));
+                user.setFirstName(rs.getString("firstname"));
+                user.setLastName(rs.getString("lastname"));
+                user.setEmailAddress(rs.getString("email_address"));
+                java.sql.Date birthdate = rs.getDate("birthdate");
+                if (birthdate != null) {
+                    user.setDateOfBirth(birthdate.toLocalDate());
+                }
+                user.setEmployer(rs.getString("employer"));
+                user.setRegistered(rs.getBoolean("is_registered"));
+                user.setNumberOfSubmissions(rs.getInt("count_submission"));
+
+                userList.add(user);
+            }
+        } catch (SQLException e) {
+            throw new DatasourceQueryFailedException();
+        }
+        return userList;
     }
+
+    private static String generateResultListParametersUserListSQL(ResultListParameters params) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("SELECT * FROM user_data WHERE TRUE");
+
+        // Filter according to filter columns parameter.
+        userListColumnNames.forEach(column -> sb.append(" AND").append(column).append(" LIKE ?\n"));
+
+        // Filter according to global search word.
+        if (!"".equals(params.getGlobalSearchWord())) {
+            sb.append(" AND (");
+            sb.append(" user_role LIKE ?\n");
+            sb.append(" OR firstname LIKE ?\n"); // sb.append(" firstname LIKE '%").append(params.getGlobalSearchWord()).append("%'\n");
+            sb.append(" OR lastname LIKE ?\n"); // ...
+            sb.append(" OR email_address LIKE ?\n");// sb.append(" OR (lastname LIKE '%").append(params.getGlobalSearchWord()).append("%'\n");
+            sb.append(" OR employer LIKE ?\n"); // sb.append(" OR (employer LIKE '%").append(params.getGlobalSearchWord()).append("%'\n");
+
+            sb.append(")");
+        }
+
+        // Sort according to sort column parameter
+        if (!"".equals(params.getSortColumn()) && userListColumnNames.contains(params.getSortColumn())) {
+            sb.append("ORDER BY ")
+                    .append(params.getSortColumn())
+                    .append(" ")
+                    .append(params.getSortOrder() == SortOrder.ASCENDING ? "ASC" : "DESC")
+                    .append("\n");
+        }
+
+        // Set limit and offset
+        ConfigReader configReader = CDI.current().select(ConfigReader.class).get();
+        int paginationLength = Integer.parseInt(configReader.getProperty("MAX_PAGINATION_LENGTH"));
+        sb.append("LIMIT ").append(paginationLength)
+                .append("OFFSET ").append(paginationLength * params.getPageNo());
+
+        // Add semicolon to end of query
+        sb.append(";");
+
+        return sb.toString();
+    }
+
 
     /**
      * Gets a list of all users that fulfil a specific role in regard to a
@@ -306,8 +406,144 @@ public class UserRepository {
     public static List<User> getList(Transaction transaction,
                                      Submission submission,
                                      Privilege privilege)
-            throws DataNotCompleteException, NotFoundException {
-        return null;
+            throws DataNotCompleteException, InvalidFieldsException, NotFoundException {
+        if (transaction == null || submission == null || privilege == null) {
+            throw new InvalidFieldsException();
+        }
+
+        Integer submissionId = submission.getId();
+        Connection conn = transaction.getConnection();
+
+        List<User> userList = new LinkedList<>();
+
+        try {
+            PreparedStatement exists = conn.prepareStatement(
+                    "SELECT * FROM submission WHERE id = ?"
+            );
+            exists.setInt(1, submissionId);
+            ResultSet rsExists = exists.executeQuery();
+            if (!rsExists.next()) {
+                throw new NotFoundException("No Submission with ID: " + submissionId);
+            }
+        } catch (SQLException e) {
+            throw new DatasourceQueryFailedException();
+        }
+
+        switch (privilege) {
+            case AUTHOR -> {
+                try {
+                    PreparedStatement ps = conn.prepareStatement(
+                            "SELECT u.* FROM \"user\" u, submission s, co_authored c " +
+                                    "WHERE ((u.id = s.author_id) OR (u.id = c.user_id AND  c.submission_id = s.id)) " +
+                                    "AND s.id = ?"
+                    );
+                    ps.setInt(1, submissionId);
+                    ResultSet rs = ps.executeQuery();
+
+                    while (rs.next()) {
+                        User user = new User();
+                        user.setId(rs.getInt("id"));
+                        user.setPrivileges(getUserPrivileges(user, transaction));
+                        user.setTitle(rs.getString("title"));
+                        user.setFirstName(rs.getString("firstname"));
+                        user.setLastName(rs.getString("lastname"));
+                        user.setEmailAddress(rs.getString("email_address"));
+                        java.sql.Date birthdate = rs.getDate("birthdate");
+                        if (birthdate != null) {
+                            user.setDateOfBirth(birthdate.toLocalDate());
+                        }
+                        user.setEmployer(rs.getString("employer"));
+
+                        userList.add(user);
+                    }
+                    return userList;
+                } catch (SQLException e) {
+                    throw new DatasourceQueryFailedException();
+                }
+            }
+            case REVIEWER -> {
+                try {
+                    PreparedStatement ps = conn.prepareStatement(
+                            "SELECT u.* FROM \"user\" u, submission s, reviewed_by rb " +
+                                    "WHERE u.id = rb.reviewer_id AND rb.submission_id = s.id " +
+                                    "AND submission_id = ?"
+                    );
+                    ps.setInt(1, submissionId);
+                    ResultSet rs = ps.executeQuery();
+
+                    while (rs.next()) {
+                        User user = new User();
+                        user.setId(rs.getInt("id"));
+                        user.setPrivileges(getUserPrivileges(user, transaction));
+                        user.setTitle(rs.getString("title"));
+                        user.setFirstName(rs.getString("firstname"));
+                        user.setLastName(rs.getString("lastname"));
+                        user.setEmailAddress(rs.getString("email_address"));
+                        java.sql.Date birthdate = rs.getDate("birthdate");
+                        if (birthdate != null) {
+                            user.setDateOfBirth(birthdate.toLocalDate());
+                        }
+                        user.setEmployer(rs.getString("employer"));
+
+                        userList.add(user);
+                    }
+                    return userList;
+                } catch (SQLException e) {
+                    throw new DatasourceQueryFailedException();
+                }
+            }
+            default -> {
+                return userList;
+            }
+        }
+    }
+
+    /**
+     * Get the Privileges of a certain user. ID must be set.
+     * ONLY EDITOR, REVIEWER AND ADMIN ARE CHECKED.
+     *
+     * @param user        user with a set ID.
+     * @param transaction some transaction
+     * @return List of Privileges.
+     */
+    private static List<Privilege> getUserPrivileges(User user, Transaction transaction) throws DatasourceQueryFailedException {
+        Integer id = user.getId();
+        Connection conn = transaction.getConnection();
+
+        List<Privilege> privileges = new LinkedList<>();
+
+        try {
+            PreparedStatement psEditor = conn.prepareStatement(
+                    "SELECT u.id FROM \"user\" u WHERE EXISTS(SELECT * FROM member_of mo WHERE u.id = mo.editor_id AND u.id = ?)"
+            );
+            PreparedStatement psReviewer = conn.prepareStatement(
+                    "SELECT u.id FROM \"user\" u WHERE EXISTS(SELECT * FROM reviewed_by rb WHERE u.id = rb.reviewer_id AND u.id = ?)"
+            );
+            PreparedStatement psAdmin = conn.prepareStatement(
+                    "SELECT  u.id FROM \"user\" u WHERE u.is_administrator = true AND u.id = ?"
+            );
+
+            psEditor.setInt(1, id);
+            ResultSet rs = psEditor.executeQuery();
+            if (rs.next()) {
+                privileges.add(Privilege.EDITOR);
+            }
+
+            psReviewer.setInt(1, id);
+            rs = psReviewer.executeQuery();
+            if (rs.next()) {
+                privileges.add(Privilege.EDITOR);
+            }
+
+            psAdmin.setInt(1, id);
+            rs = psAdmin.executeQuery();
+            if (rs.next()) {
+                privileges.add(Privilege.ADMIN);
+            }
+            return privileges;
+        } catch (SQLException e) {
+            throw new DatasourceQueryFailedException();
+        }
     }
 
     /**
@@ -327,8 +563,56 @@ public class UserRepository {
      */
     public static List<User> getList(Transaction transaction,
                                      ScientificForum scientificForum)
-            throws DataNotCompleteException, NotFoundException {
-        return null;
+            throws DataNotCompleteException, NotFoundException, InvalidQueryParamsException {
+        if (transaction == null || scientificForum == null) {
+            throw new InvalidQueryParamsException("Parameter was null");
+        }
+
+        Integer id = scientificForum.getId();
+        Connection conn = transaction.getConnection();
+        List<User> userList = new LinkedList<>();
+
+        try {
+            PreparedStatement exists = conn.prepareStatement(
+                    "SELECT * FROM scientific_forum WHERE id = ?"
+            );
+            exists.setInt(1, id);
+            ResultSet rsExists = exists.executeQuery();
+            if (!rsExists.next()) {
+                throw new NotFoundException("No Scientific Forum with ID: " + id);
+            }
+
+            PreparedStatement ps = conn.prepareStatement(
+                    "SELECT u.* FROM \"user\" u, scientific_forum sf, member_of mo WHERE sf.id = ? " +
+                            "AND u.id = mo.editor_id AND mo.scientific_forum_id = sf.id"
+            );
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                User user = new User();
+                user.setId(rs.getInt("id"));
+                user.setPrivileges(getUserPrivileges(user, transaction));
+                // We know the user must be an editor
+                user.getPrivileges().add(Privilege.EDITOR);
+
+                user.setTitle(rs.getString("title"));
+                user.setFirstName(rs.getString("firstname"));
+                user.setLastName(rs.getString("lastname"));
+                user.setEmailAddress(rs.getString("email_address"));
+                java.sql.Date birthdate = rs.getDate("birthdate");
+                if (birthdate != null) {
+                    user.setDateOfBirth(birthdate.toLocalDate());
+                }
+                user.setEmployer(rs.getString("employer"));
+
+                userList.add(user);
+            }
+            return userList;
+        } catch (SQLException e) {
+            // todo: log once branch is updooted
+            throw new DatasourceQueryFailedException();
+        }
     }
 
     /**
