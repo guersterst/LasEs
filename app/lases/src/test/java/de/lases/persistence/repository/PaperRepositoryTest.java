@@ -24,7 +24,15 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class PaperRepositoryTest {
 
+    /**
+     * A paper that is not supposed to be in the test db already.
+     */
     private static Paper paper;
+
+    /**
+     * A paper that is supposed to be in the test db already.
+     */
+    private static Paper paperNonExistent;
 
     private static FileDTO pdf;
 
@@ -33,10 +41,13 @@ class PaperRepositoryTest {
         paper = new Paper();
         paper.setSubmissionId(5);
         paper.setUploadTime(LocalDateTime.now());
-        paper.setVersionNumber(3);
+        paper.setVersionNumber(2);
         paper.setVisible(false);
         pdf = new FileDTO();
         pdf.setFile(new byte[]{1, 2, 3, 4});
+
+        paperNonExistent = paper.clone();
+        paperNonExistent.setVersionNumber(3);
     }
 
     @BeforeAll
@@ -81,9 +92,9 @@ class PaperRepositoryTest {
     void testChange() throws SQLException, DataNotWrittenException, NotFoundException {
         Transaction transaction = new Transaction();
         Connection connection = transaction.getConnection();
-        PaperRepository.add(paper, pdf, transaction);
+        PaperRepository.add(paperNonExistent, pdf, transaction);
 
-        Paper changed = paper.clone();
+        Paper changed = paperNonExistent.clone();
         changed.setVisible(true);
 
         PreparedStatement statement = connection.prepareStatement(
@@ -99,7 +110,7 @@ class PaperRepositoryTest {
 
         PaperRepository.change(changed, transaction);
 
-        assertEquals(changed, paper);
+        assertEquals(changed, paperNonExistent);
         transaction.abort();
     }
 
@@ -117,7 +128,7 @@ class PaperRepositoryTest {
             i++;
         }
 
-        PaperRepository.add(paper, pdf, transaction);
+        PaperRepository.add(paperNonExistent, pdf, transaction);
 
         ResultSet resultSet2 = stmt.executeQuery();
         int j = 0;
@@ -152,7 +163,7 @@ class PaperRepositoryTest {
         Transaction transaction = new Transaction();
         Connection conn = transaction.getConnection();
 
-        PaperRepository.add(paper, pdf, transaction);
+        PaperRepository.add(paperNonExistent, pdf, transaction);
 
         PreparedStatement stmt = conn.prepareStatement(
                 """
@@ -179,8 +190,8 @@ class PaperRepositoryTest {
     @Test
     void testFileSize() throws SQLException, NotFoundException, DataNotWrittenException {
         Transaction transaction = new Transaction();
-        PaperRepository.add(paper,pdf,transaction);
-        FileDTO fileDTO = PaperRepository.getPDF(paper,transaction);
+        PaperRepository.add(paperNonExistent,pdf,transaction);
+        FileDTO fileDTO = PaperRepository.getPDF(paperNonExistent,transaction);
         int fileLength = fileDTO.getFile().length;
 
         assertEquals(pdf.getFile().length, fileLength);
