@@ -507,6 +507,7 @@ public class SubmissionRepository {
                 sb.append("OR ");
             }
         }
+        sb.append(")");
 
         // Sort according to sort column parameter
         if (!"".equals(params.getSortColumn()) && columnNames.contains(params.getSortColumn())) {
@@ -519,7 +520,7 @@ public class SubmissionRepository {
 
         // Set limit and offset
         ConfigReader configReader = CDI.current().select(ConfigReader.class).get();
-        int paginationLength = Integer.parseInt(configReader.getProperty("MAX_PAGINATION_LENGTH"));
+        int paginationLength = Integer.parseInt(configReader.getProperty("MAX_PAGINATION_LIST_LENGTH"));
         sb.append("LIMIT ").append(paginationLength)
                 .append("OFFSET ").append(paginationLength * params.getPageNo());
 
