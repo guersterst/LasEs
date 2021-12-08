@@ -1,5 +1,7 @@
 package de.lases.global.transport;
 
+import java.util.Optional;
+
 /**
  * Represents a user privilege.
  */
@@ -29,5 +31,14 @@ public enum Privilege {
     /**
      * A user that is an author or a co-author to a certain submission.
      */
-    AUTHOR
+    AUTHOR;
+
+    public static Optional<Privilege> getPrivilege(String dbIdentifier) {
+        return switch (dbIdentifier) {
+            case "admin" -> Optional.of(ADMIN);
+            case "editor" -> Optional.of(EDITOR);
+            case "reviewer" -> Optional.of(REVIEWER);
+            default -> Optional.empty();
+        };
+    }
 }
