@@ -20,9 +20,6 @@ public class CustomizationService {
     @Inject
     private Event<UIMessage> uiMessageEvent;
 
-    @Inject
-    private Transaction transaction;
-
 
     /**
      * Sets the application's settings, that determine its look and feel.
