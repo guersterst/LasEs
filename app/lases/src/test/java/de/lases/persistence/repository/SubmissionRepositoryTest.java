@@ -6,6 +6,10 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -39,7 +43,7 @@ class SubmissionRepositoryTest {
 //    }
 
     @Test
-    void testAddSubmission() throws DataNotWrittenException {
+    void testAddSubmission() throws DataNotWrittenException, SQLException {
         Submission submission = new Submission();
         submission.setScientificForumId(1);
         submission.setAuthorId(4);
@@ -49,8 +53,27 @@ class SubmissionRepositoryTest {
         submission.setSubmissionTime(LocalDateTime.now());
 
         Transaction transaction = new Transaction();
+        Connection conn = transaction.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(
+                """
+                        SELECT * FROM submission
+                        """);
+        ResultSet resultSet = stmt.executeQuery();
+        int i = 0;
+        while (resultSet.next()) {
+            i++;
+        }
+
         SubmissionRepository.add(submission, transaction);
-        transaction.commit();
+
+        ResultSet resultSet2 = stmt.executeQuery();
+        int j = 0;
+        while (resultSet2.next()) {
+            j++;
+        }
+
+        assertEquals(1, j - i);
+        transaction.abort();
     }
 
     @Test
