@@ -9,7 +9,7 @@ public class Paper implements Cloneable {
 
     private Integer submissionId;
 
-    private int versionNumber;
+    private Integer versionNumber;
 
     private LocalDateTime uploadTime;
 
@@ -28,7 +28,7 @@ public class Paper implements Cloneable {
         this.submissionId = submissionId;
     }
 
-    public int getVersionNumber() {
+    public Integer getVersionNumber() {
         return versionNumber;
     }
 

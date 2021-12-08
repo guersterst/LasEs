@@ -17,6 +17,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * @author Stefanie Gürster, Sebastian Vogt
+ * <p>
  * Provides functionality for handling papers in {@link Submission}s.
  * In case of an unexpected state, a {@link UIMessage} event will be fired.
  */
@@ -41,12 +43,10 @@ public class PaperService {
      * @return A fully filled {@link Paper}.
      */
     public Paper get(Paper paper) {
-        if (paper.getSubmissionId() == null) {
+        if (paper.getSubmissionId() == null && paper.getVersionNumber() == null) {
 
             logger.severe("The id of the paper is not valid. Therefore no paper object can be queried.");
-
-            String message = resourceBundle.getString("idMissing");
-            throw new IllegalArgumentException(message);
+            throw new IllegalArgumentException(resourceBundle.getString("idMissing"));
 
         } else {
 
@@ -81,8 +81,8 @@ public class PaperService {
      * using the {@link de.lases.business.util.EmailUtil}-utility.
      * </p>
      *
-     * @param file The {@link FileDTO} to be added with the paper,
-     *             containing a {@code byte[]} with the pdf.
+     * @param file  The {@link FileDTO} to be added with the paper,
+     *              containing a {@code byte[]} with the pdf.
      * @param paper The filled {@link Paper} to be added.
      */
     public void add(FileDTO file, Paper paper) {
@@ -142,6 +142,37 @@ public class PaperService {
      *              </p>
      */
     public void change(Paper paper) {
+        if (paper.getSubmissionId() == null && paper.getVersionNumber() == null) {
+
+            logger.severe("The id of the paper is not valid. Therefore no paper object can be queried.");
+            throw new IllegalArgumentException(resourceBundle.getString("idMissing"));
+
+        } else {
+            Transaction transaction = new Transaction();
+
+            try {
+
+                PaperRepository.change(paper, transaction);
+                transaction.commit();
+
+            } catch (DataNotWrittenException exception) {
+
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotWritten"), MessageCategory.ERROR));
+                logger.log(Level.WARNING, exception.getMessage());
+
+                transaction.abort();
+
+            } catch (NotFoundException exception) {
+
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("paperNotFound"), MessageCategory.ERROR));
+                logger.fine("Error while changing a paper with the submission id: " + paper.getSubmissionId()
+                        + " and version number: " + paper.getVersionNumber());
+
+                transaction.abort();
+
+            }
+        }
+
     }
 
     /**
@@ -155,6 +186,36 @@ public class PaperService {
      */
     public void remove(Paper paper) {
 
+        if (paper.getSubmissionId() == null && paper.getVersionNumber() == null) {
+
+            logger.severe("The id of the paper is not valid. Therefore no paper object can be queried.");
+            throw new IllegalArgumentException(resourceBundle.getString("idMissing"));
+
+        } else {
+            Transaction transaction = new Transaction();
+
+            try {
+
+                PaperRepository.remove(paper, transaction);
+                transaction.commit();
+
+            } catch (DataNotWrittenException exception) {
+
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotWritten"), MessageCategory.ERROR));
+                logger.log(Level.WARNING, exception.getMessage());
+
+                transaction.abort();
+            } catch (NotFoundException exception) {
+
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("paperNotFound"), MessageCategory.ERROR));
+                logger.fine("Error while removing a paper with the submission id: " + paper.getSubmissionId()
+                        + " and version number: " + paper.getVersionNumber());
+
+                transaction.abort();
+
+            }
+        }
+
     }
 
     /**
@@ -164,7 +225,31 @@ public class PaperService {
      * @return The requested file.
      */
     public FileDTO getFile(Paper paper) {
-        return null;
+        if (paper.getSubmissionId() == null && paper.getVersionNumber() == null) {
+
+            logger.severe("The id of the paper is not valid. Therefore no paper object can be queried.");
+            throw new IllegalArgumentException(resourceBundle.getString("idMissing"));
+
+        } else {
+            Transaction transaction = new Transaction();
+            FileDTO file = null;
+
+            try {
+
+                file = PaperRepository.getPDF(paper, transaction);
+                transaction.commit();
+
+            }  catch (NotFoundException exception) {
+
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("paperNotFound"), MessageCategory.ERROR));
+                logger.fine("Error while loading a file of a paper with the submission id: " + paper.getSubmissionId()
+                        + " and version number: " + paper.getVersionNumber());
+
+                transaction.abort();
+
+            }
+            return file;
+        }
     }
 
     /**
@@ -202,4 +287,5 @@ public class PaperService {
     public Paper getLatest(Submission submission, User user) {
         return null;
     }
+
 }

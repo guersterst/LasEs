@@ -12,6 +12,8 @@ import de.lases.persistence.util.DatasourceUtil;
 import org.postgresql.util.PSQLException;
 
 /**
+ * @author Stefanie Guerster, Sebastian Vogt
+ * <p>
  * Offers get/add/change/remove operations on a paper and the possibility to
  * get lists of papers.
  */
@@ -33,8 +35,16 @@ public class PaperRepository {
      */
     public static Paper get(Paper paper, Transaction transaction) throws NotFoundException {
 
+        //TODO
+        if (paper.getSubmissionId() == null) {
+            throw new InvalidFieldsException("The submission id of the paper must not be null.");
+        }
+
+        if (paper.getVersionNumber() == null) {
+            throw new InvalidFieldsException("The version number of the paper must not be null.");
+        }
+
         Connection connection = transaction.getConnection();
-        Paper resultPaper = new Paper();
 
         try {
             PreparedStatement statement = connection.prepareStatement("""
@@ -47,10 +57,14 @@ public class PaperRepository {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
+                Paper resultPaper = new Paper();
+
                 resultPaper.setSubmissionId(resultSet.getInt("submission_id"));
                 resultPaper.setVisible(resultSet.getBoolean("is_visible"));
                 resultPaper.setVersionNumber(resultSet.getInt("version"));
                 resultPaper.setUploadTime(resultSet.getTimestamp("timestamp_upload").toLocalDateTime());
+
+                return resultPaper;
             } else {
                 logger.fine("Loading paper with the submission id: " + paper.getSubmissionId()
                         + " and version number: " + paper.getVersionNumber());
@@ -58,23 +72,9 @@ public class PaperRepository {
             }
 
         } catch (SQLException exception) {
-            //TODO: Richtiges Handling. Muss noch überarbeitet werden.
-            if (exception instanceof SQLNonTransientException) {
-                logger.log(Level.SEVERE, "non transient");
-            } else if (exception instanceof SQLTransientException) {
-                logger.log(Level.SEVERE, "Transient");
-            } else if (exception instanceof SQLRecoverableException) {
-                logger.log(Level.SEVERE, "Recoverable");
-            } else if (exception instanceof PSQLException) {
-                logger.log(Level.SEVERE, "PSQLExeption");
-            }
             DatasourceUtil.logSQLException(exception, logger);
-
-            throw new DatasourceQueryFailedException("Data source query failed while loading a paper with the submission id: "
-                    + paper.getSubmissionId() + " and  version number: " + paper.getVersionNumber());
+            throw new DatasourceQueryFailedException("A data source exception occurred.", exception);
         }
-
-        return resultPaper;
     }
 
     /**
@@ -136,6 +136,42 @@ public class PaperRepository {
      *                                        queried.
      */
     public static void change(Paper paper, Transaction transaction) throws NotFoundException, DataNotWrittenException {
+        if (paper.getSubmissionId() == null) {
+            throw new InvalidFieldsException("The submission id of the paper must not be null.");
+        }
+
+        if (paper.getVersionNumber() == null) {
+            throw new InvalidFieldsException("The version number of the paper must not be null.");
+        }
+
+        Connection connection = transaction.getConnection();
+
+        try {
+            ResultSet resultSet = findPaper(paper, connection);
+
+            if (!resultSet.next()) {
+                logger.fine("Changing paper with the submission id: " + paper.getSubmissionId()
+                        + " and version number: " + paper.getVersionNumber());
+                throw new NotFoundException();
+            }
+
+            PreparedStatement statement = connection.prepareStatement(
+                    """
+                            UPDATE paper
+                            SET is_visible = ?
+                            WHERE version = ? AND submission_id = ?
+                            """
+            );
+            statement.setBoolean(1, paper.isVisible());
+            statement.setInt(2, paper.getVersionNumber());
+            statement.setInt(3, paper.getSubmissionId());
+
+            statement.executeUpdate();
+
+        } catch (SQLException exception) {
+            DatasourceUtil.logSQLException(exception, logger);
+            throw new DatasourceQueryFailedException("A datasource exception occurred while changing paper data.", exception);
+        }
     }
 
     /**
@@ -153,6 +189,43 @@ public class PaperRepository {
      *                                        queried.
      */
     public static void remove(Paper paper, Transaction transaction) throws NotFoundException, DataNotWrittenException {
+
+        if (paper.getSubmissionId() == null) {
+            throw new InvalidFieldsException("The submission id of the paper must not be null.");
+        }
+
+        if (paper.getVersionNumber() == null) {
+            throw new InvalidFieldsException("The version number of the paper must not be null.");
+        }
+
+        Connection connection = transaction.getConnection();
+
+        try {
+
+            ResultSet resultSet = findPaper(paper, connection);
+
+            if (!resultSet.next()) {
+                logger.fine("Removing paper with the submission id: " + paper.getSubmissionId()
+                        + " and version number: " + paper.getVersionNumber());
+                throw new NotFoundException();
+            }
+
+            PreparedStatement statement = connection.prepareStatement(
+                    """
+                            DELETE FROM paper
+                            WHERE version = ? AND submission_id = ?
+                            """
+            );
+            statement.setInt(1, paper.getVersionNumber());
+            statement.setInt(2, paper.getSubmissionId());
+
+            statement.executeUpdate();
+
+        } catch (SQLException exception) {
+            DatasourceUtil.logSQLException(exception, logger);
+            throw new DatasourceQueryFailedException("A datasource exception occurred while removing a paper.", exception);
+        }
+
     }
 
     /**
@@ -193,7 +266,46 @@ public class PaperRepository {
      *                                        queried.
      */
     public static FileDTO getPDF(Paper paper, Transaction transaction) throws NotFoundException {
-        return null;
+
+        if (paper.getSubmissionId() == null) {
+            throw new InvalidFieldsException("The submission id of the paper must not be null.");
+        }
+
+        if (paper.getVersionNumber() == null) {
+            throw new InvalidFieldsException("The version number of the paper must not be null.");
+        }
+
+        Connection connection = transaction.getConnection();
+
+        try {
+
+            PreparedStatement statement = connection.prepareStatement(
+                    """
+                            SELECT pdf_file
+                            FROM paper
+                            WHERE version = ? AND submission_id = ?
+                            """
+            );
+            statement.setInt(1, paper.getVersionNumber());
+            statement.setInt(2, paper.getSubmissionId());
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                FileDTO file = new FileDTO();
+                file.setFile(resultSet.getBytes("pdf_file"));
+                return file;
+
+            } else {
+                logger.fine("Loading paper with the submission id: " + paper.getSubmissionId()
+                        + " and version number: " + paper.getVersionNumber());
+                throw new NotFoundException();
+            }
+
+        } catch (SQLException exception) {
+            DatasourceUtil.logSQLException(exception, logger);
+            throw new DatasourceQueryFailedException("A datasource exception occurred while removing a paper.", exception);
+        }
     }
 
     /**
@@ -211,6 +323,22 @@ public class PaperRepository {
      */
     public Paper getNewestPaperForSubmission(Submission submission, User user, Transaction transaction) throws NotFoundException {
         return null;
+    }
+
+    //TODO
+    private static ResultSet findPaper(Paper paper, Connection connection) throws SQLException {
+
+        PreparedStatement find = connection.prepareStatement(
+                """
+                        SELECT *
+                        FROM paper
+                        WHERE version = ? AND submission_id = ?
+                        """
+        );
+        find.setInt(1, paper.getVersionNumber());
+        find.setInt(2, paper.getSubmissionId());
+
+        return find.executeQuery();
     }
 
 }

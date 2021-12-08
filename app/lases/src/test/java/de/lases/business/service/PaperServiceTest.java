@@ -13,6 +13,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.any;
@@ -72,25 +74,23 @@ public class PaperServiceTest {
         paperRepoMocked.close();
     }
 
-    @BeforeAll
-    static void initConnectionPool() {
-        ConnectionPool.init();
-    }
-
-    @AfterAll
-    static void rollbackTransaction() {
-        ConnectionPool.shutDown();
-    }
-
     @Test
     void testGet() {
+        Paper paper = new Paper();
+        paper = new Paper();
+        paper.setSubmissionId(5);
+        paper.setUploadTime(LocalDateTime.now());
+        paper.setVersionNumber(3);
+        paper.setVisible(false);
+
+        FileDTO pdf = new FileDTO();
+        pdf.setFile(new byte[]{1, 2, 3, 4});
+
         paperService.add(fileDTO, paper);
 
         Paper gotten = paperService.get(paper);
-        assertAll(
-                () -> assertEquals(EXAMPLE_SUBMISSION_ID, gotten.getSubmissionId()),
-                () -> assertEquals(EXAMPLE_VERSION_NUMBER, gotten.getVersionNumber())
-        );
+
+        assertEquals(paper, gotten);
     }
 
     @Test

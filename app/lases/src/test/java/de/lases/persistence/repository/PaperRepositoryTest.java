@@ -6,6 +6,11 @@ import de.lases.persistence.exception.DataNotWrittenException;
 import de.lases.persistence.exception.InvalidFieldsException;
 import de.lases.persistence.exception.NotFoundException;
 import org.junit.jupiter.api.*;
+import de.lases.persistence.exception.NotFoundException;
+import de.lases.persistence.exception.InvalidFieldsException;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -14,6 +19,9 @@ import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * @author Stefanie Gürster, Sebastian Vogt
+ */
 class PaperRepositoryTest {
 
     private static Paper paper;
@@ -44,7 +52,6 @@ class PaperRepositoryTest {
     @Test
     void testGetPaper() throws SQLException, NotFoundException, DataNotWrittenException {
         Transaction transaction = new Transaction();
-        PaperRepository.add(paper,pdf, transaction);
 
         Connection connection = transaction.getConnection();
         PreparedStatement statement = connection.prepareStatement(
@@ -67,6 +74,32 @@ class PaperRepositoryTest {
         }
 
         assertEquals(resultPaper, PaperRepository.get(resultPaper, transaction));
+        transaction.abort();
+    }
+
+    @Test
+    void testChange() throws SQLException, DataNotWrittenException, NotFoundException {
+        Transaction transaction = new Transaction();
+        Connection connection = transaction.getConnection();
+        PaperRepository.add(paper, pdf, transaction);
+
+        Paper changed = paper.clone();
+        changed.setVisible(true);
+
+        PreparedStatement statement = connection.prepareStatement(
+                """
+                        UPDATE paper
+                        SET is_visible = ?
+                        WHERE version = ? AND submission_id = ?
+                        """
+        );
+        statement.setBoolean(1, changed.isVisible());
+        statement.setInt(2, changed.getVersionNumber());
+        statement.setInt(3, changed.getSubmissionId());
+
+        PaperRepository.change(changed, transaction);
+
+        assertEquals(changed, paper);
         transaction.abort();
     }
 
@@ -111,6 +144,46 @@ class PaperRepositoryTest {
                                     transaction));
                 }
         );
+        transaction.abort();
+    }
+
+    @Test
+    void testRemove() throws SQLException, DataNotWrittenException, NotFoundException {
+        Transaction transaction = new Transaction();
+        Connection conn = transaction.getConnection();
+
+        PaperRepository.add(paper, pdf, transaction);
+
+        PreparedStatement stmt = conn.prepareStatement(
+                """
+                        SELECT * FROM paper
+                        """);
+        ResultSet resultSet = stmt.executeQuery();
+        int i = 0;
+        while (resultSet.next()) {
+            i++;
+        }
+
+        PaperRepository.remove(paper, transaction);
+
+        ResultSet resultSet2 = stmt.executeQuery();
+        int j = 0;
+        while (resultSet2.next()) {
+            j++;
+        }
+
+        assertEquals(1, i - j);
+        transaction.abort();
+    }
+
+    @Test
+    void testFileSize() throws SQLException, NotFoundException, DataNotWrittenException {
+        Transaction transaction = new Transaction();
+        PaperRepository.add(paper,pdf,transaction);
+        FileDTO fileDTO = PaperRepository.getPDF(paper,transaction);
+        int fileLength = fileDTO.getFile().length;
+
+        assertEquals(pdf.getFile().length, fileLength);
         transaction.abort();
     }
 
