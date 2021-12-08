@@ -138,7 +138,22 @@ public class UserService implements Serializable {
      * @return A list of {@link User}-DTOs.
      */
     public List<User> getList(ResultListParameters resultListParams) {
-        return null;
+        Transaction transaction = new Transaction();
+        Logger l = Logger.getLogger(UserService.class.getName());
+        List<User> userList = new LinkedList<>();
+
+        try {
+            userList = UserRepository.getList(transaction, resultListParams);
+        } catch (DataNotCompleteException e) {
+            l.info(e.getMessage());
+            uiMessageEvent.fire(new UIMessage("Could not fetch data.", MessageCategory.WARNING));
+        } catch (InvalidQueryParamsException e) {
+            l.severe(e.getMessage());
+            uiMessageEvent.fire(new UIMessage("Missing request parameters.", MessageCategory.FATAL));
+        } finally {
+            transaction.commit();
+        }
+        return userList;
     }
 
 

@@ -171,7 +171,7 @@ public class UserRepository {
      */
     public static List<User> getList(Transaction transaction,
                                      ResultListParameters resultListParameters)
-            throws DataNotCompleteException {
+            throws DataNotCompleteException, InvalidQueryParamsException {
         if (transaction == null || resultListParameters == null) {
             throw new InvalidQueryParamsException();
         }
