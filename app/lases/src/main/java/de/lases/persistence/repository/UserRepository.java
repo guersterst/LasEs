@@ -2,23 +2,24 @@ package de.lases.persistence.repository;
 
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
+import de.lases.persistence.internal.ConfigReader;
 import de.lases.persistence.util.DatasourceUtil;
+import jakarta.enterprise.inject.spi.CDI;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.sql.*;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
  * Offers get/add/change/remove operations on a user and the
  * possibility to get lists of users.
+ *
+ * @author Johann Schicho
+ * @author Johannes Garstenauer
  */
 public class UserRepository {
+
+    private static final Collection<String> userListColumnNames = List.of("role", "firstname", "lastname", "email_address", "employer");
 
     /**
      * Takes a user dto that is filled with a valid id or a valid
@@ -171,8 +172,76 @@ public class UserRepository {
     public static List<User> getList(Transaction transaction,
                                      ResultListParameters resultListParameters)
             throws DataNotCompleteException {
-        return null;
+        if (transaction == null || resultListParameters == null) {
+            throw new InvalidQueryParamsException();
+        }
+
+        Connection conn = transaction.getConnection();
+        List<User> userList = new LinkedList<>();
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(generateResultListParametersUserListSQL(resultListParameters));
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                User user = new User();
+                user.setId(rs.getInt("id"));
+                Privilege.getPrivilege(rs.getString("user_role"))
+                        .ifPresentOrElse(value -> user.setPrivileges(List.of(value)),
+                                () -> user.setPrivileges(new LinkedList<>()));
+                user.setTitle(rs.getString("title"));
+                user.setFirstName(rs.getString("firstname"));
+                user.setLastName(rs.getString("lastname"));
+                user.setEmailAddress(rs.getString("email_address"));
+                java.sql.Date birthdate = rs.getDate("birthdate");
+                if (birthdate != null) {
+                    user.setDateOfBirth(birthdate.toLocalDate());
+                }
+                user.setEmployer(rs.getString("employer"));
+                user.setRegistered(rs.getBoolean("is_registered"));
+                user.setNumberOfSubmissions(rs.getInt("count_submission"));
+
+                userList.add(user);
+            }
+        } catch (SQLException e) {
+            throw new DatasourceQueryFailedException();
+        }
+        return userList;
     }
+
+    private static String generateResultListParametersUserListSQL(ResultListParameters params) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("SELECT * FROM user_data WHERE TRUE");
+
+        // Filter according to filter columns parameter.
+        params.getFilterColumns().forEach((column, value) -> {
+            if (userListColumnNames.contains(column)) {
+                sb.append(" AND ").append(column).append(" LIKE '%").append(value).append("%'\n");
+            }
+        });
+
+        // Sort according to sort column parameter
+        if (!"".equals(params.getSortColumn()) && userListColumnNames.contains(params.getSortColumn())) {
+            sb.append("ORDER BY ")
+                    .append(params.getSortColumn())
+                    .append(" ")
+                    .append(params.getSortOrder() == SortOrder.ASCENDING ? "ASC" : "DESC")
+                    .append("\n");
+        }
+
+        // Set limit and offset
+        ConfigReader configReader = CDI.current().select(ConfigReader.class).get();
+        int paginationLength = Integer.parseInt(configReader.getProperty("MAX_PAGINATION_LENGTH"));
+        sb.append("LIMIT ").append(paginationLength)
+                .append("OFFSET ").append(paginationLength * params.getPageNo());
+
+        // Add semicolon to end of query
+        sb.append(";");
+
+        return sb.toString();
+    }
+
 
     /**
      * Gets a list of all users that fulfil a specific role in regard to a
