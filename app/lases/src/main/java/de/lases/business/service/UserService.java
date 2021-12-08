@@ -1,15 +1,22 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.*;
-import de.lases.persistence.exception.*;
+import de.lases.persistence.exception.DataNotCompleteException;
+import de.lases.persistence.exception.InvalidFieldsException;
+import de.lases.persistence.exception.InvalidQueryParamsException;
+import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.repository.Transaction;
+import de.lases.persistence.repository.UserRepository;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.PropertyResourceBundle;
+import java.util.logging.Logger;
 
 /**
  * Provides all functionality for creating, manipulating or receiving information about users in the application.
@@ -24,14 +31,39 @@ public class UserService implements Serializable {
     @Inject
     private Event<UIMessage> uiMessageEvent;
 
+    private static final Logger l = Logger.getLogger(UserService.class.getName());
+
+    @Inject
+    private PropertyResourceBundle propertyResourceBundle;
+
     /**
      * Gets a {@code User}.
      *
-     * @param user A {@link User}-DTO, that should contain an existing id value.
+     * @param user A {@link User}-DTO, that should contain an existing id or email value.
      * @return A {@code User}-DTO filled with all available fields.
      */
-    public User get(User user) throws IllegalArgumentException {
-        return null;
+    public User get(User user)  {
+        if (user.getId() == null && user.getEmailAddress() == null) {
+
+            // Throw an exception when neither an id nor a valid email address exist.
+            l.severe("The id and email are missing. Therefor no user object can be queried.");
+            throw new InvalidFieldsException();
+        } else {
+
+            Transaction transaction = new Transaction();
+            User result = null;
+            try {
+                result = UserRepository.get(user, transaction);
+                transaction.commit();
+                l.finest("Successfully fetched a user with the id: " + user.getId());
+            } catch (NotFoundException ex) {
+                uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataNotFound"),
+                        MessageCategory.ERROR));
+                l.warning(ex.getMessage());
+                transaction.abort();
+            }
+            return result;
+        }
     }
 
     /**
@@ -69,6 +101,8 @@ public class UserService implements Serializable {
      * @return {@code true}, if the email does already exist. {@code false} otherwise.
      */
     public boolean emailExists(User user) {
+
+        //TODO when this is implemented please inform Johannes.
         return false;
     }
 
@@ -133,7 +167,22 @@ public class UserService implements Serializable {
      * @return A list of {@link User}-DTOs.
      */
     public List<User> getList(ResultListParameters resultListParams) {
-        return null;
+        Transaction transaction = new Transaction();
+        List<User> userList = new ArrayList<>();
+
+        try {
+            l.finest("Getting user list with result list parameters.");
+            userList = UserRepository.getList(transaction, resultListParams);
+        } catch (DataNotCompleteException e) {
+            l.info(e.getMessage());
+            uiMessageEvent.fire(new UIMessage("Could not fetch data.", MessageCategory.WARNING));
+        } catch (InvalidQueryParamsException e) {
+            l.severe(e.getMessage());
+            uiMessageEvent.fire(new UIMessage("Missing request parameters.", MessageCategory.FATAL));
+        } finally {
+            transaction.commit();
+        }
+        return userList;
     }
 
 
@@ -149,7 +198,22 @@ public class UserService implements Serializable {
      * @return A list of {@code User}s involved with a {@code Submission} in a certain role.
      */
     public List<User> getList(Submission submission, Privilege privilege) {
-        return null;
+        Transaction transaction = new Transaction();
+        List<User> userList = new ArrayList<>();
+
+        try {
+            l.finest("Getting user list for submission with privilege.");
+            userList = UserRepository.getList(transaction, submission, privilege);
+        } catch (NotFoundException e) {
+            l.info(e.getMessage());
+            uiMessageEvent.fire(new UIMessage("This submission does not exist.", MessageCategory.ERROR));
+        } catch (DataNotCompleteException e) {
+            l.info(e.getMessage());
+            uiMessageEvent.fire(new UIMessage("Could not fetch data.", MessageCategory.WARNING));
+        } finally {
+            transaction.commit();
+        }
+        return userList;
     }
 
     /**
@@ -160,7 +224,22 @@ public class UserService implements Serializable {
      * @return A list of editors for a certain forum.
      */
     public List<User> getList(ScientificForum scientificForum) {
-        return null;
+        Transaction transaction = new Transaction();
+        List<User> userList = new ArrayList<>();
+
+        try {
+            l.finest("Getting user list of editors of forum.");
+            userList = UserRepository.getList(transaction, scientificForum);
+        } catch (DataNotCompleteException e) {
+            l.info(e.getMessage());
+            uiMessageEvent.fire(new UIMessage("Could not fetch data.", MessageCategory.WARNING));
+        } catch (NotFoundException e) {
+            l.info(e.getMessage());
+            uiMessageEvent.fire(new UIMessage("This forum does not exist.", MessageCategory.ERROR));
+        } finally {
+            transaction.commit();
+        }
+        return userList;
     }
 
     /**

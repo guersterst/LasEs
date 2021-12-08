@@ -20,6 +20,12 @@ public class HashingTest {
     private static final String HASH2 = "Yz7+fC9F2UuxC1dsOI4OGg==";
 
     @Test
+    void testSaltLength() {
+        String salt = Hashing.generateRandomSalt();
+        assertEquals(Hashing.SALT_LENGTH_BASE64, salt.length());
+    }
+
+    @Test
     void testCorrectHashing() {
         String calculatedHash1 = Hashing.hashWithGivenSalt(PASSWORD1, SALT1);
         String calculatedHash2 = Hashing.hashWithGivenSalt(PASSWORD2, SALT2);

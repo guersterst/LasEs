@@ -8,6 +8,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 /**
  * Gives access to the application's configuration.
@@ -16,6 +17,8 @@ import java.util.Properties;
 public class ConfigReader {
 
     private Properties props;
+
+    private final Logger logger = Logger.getLogger(ConfigReader.class.getName());
 
     /**
      * Sets the configured properties of the application.
@@ -29,11 +32,19 @@ public class ConfigReader {
      *                                    be read.
      */
     public void setProperties(FileDTO configFile) {
-        InputStream inputStream = configFile.getInputStream();
-        try {
-            this.props = loadProperties(inputStream);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (configFile.getInputStream() == null) {
+            logger.severe("The properties from the configuration could not be set due to the internal"
+                    + "configuration file not containing an input stream.");
+            throw new InvalidFieldsException("The config file's input-stream may not be null.");
+        } else {
+            try {
+                this.props = loadProperties(configFile.getInputStream());
+                logger.info("The configuration's properties were set.");
+            } catch (IOException e) {
+                logger.severe("The properties from the configuration could not be set due to a failure"
+                        + "in loading.");
+                throw new ConfigNotReadableException(e.getMessage(), e);
+            }
         }
     }
 
