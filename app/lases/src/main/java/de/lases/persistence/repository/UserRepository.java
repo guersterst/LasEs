@@ -141,6 +141,7 @@ public class UserRepository {
         if (birthDate != null) {
             result.setDateOfBirth(birthDate.toLocalDate());
         }
+        result.setPasswordSalt(userResult.getString("password_salt"));
         result.setPasswordHashed(userResult.getString("password_hash"));
         result.setRegistered(userResult.getBoolean("is_registered"));
 

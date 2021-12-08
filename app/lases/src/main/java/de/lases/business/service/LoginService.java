@@ -28,6 +28,8 @@ public class LoginService {
     @Inject
     private PropertyResourceBundle propertyResourceBundle;
 
+    private final Logger l = Logger.getLogger(LoginService.class.getName());
+
     /**
      * Authenticates a user
      * by comparing their identifier (e-mail address or id)
@@ -38,7 +40,6 @@ public class LoginService {
      */
     public User login(User user) {
         Transaction transaction = new Transaction();
-        Logger l = LogManager.getLogManager().getLogger(LoginService.class.getName());
         try {
             User matchingEmailUser = UserRepository.get(user, transaction);
             String expectedHash = matchingEmailUser.getPasswordHashed();

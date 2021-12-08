@@ -52,11 +52,8 @@ public class WelcomeBacking {
     public String login() {
         User loginUser = loginService.login(loginInput);
         if (loginUser != null) {
-            User retUser = loginService.login(loginUser);
-            if (retUser != null) {
-                sessionInformation.setUser(retUser);
-                return "/views/authenticated/homepage?faces-redirect=true";
-            }
+            sessionInformation.setUser(loginUser);
+            return "/views/authenticated/homepage?faces-redirect=true";
         }
         // UIMessage and stay on login page
         return null;
