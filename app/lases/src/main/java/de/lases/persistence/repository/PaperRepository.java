@@ -208,14 +208,16 @@ public class PaperRepository {
         Connection connection = transaction.getConnection();
 
         try {
-
             ResultSet resultSet = findPaper(paper, connection);
 
-            if (!resultSet.next()) {
-                logger.fine("Removing paper with the submission id: " + paper.getSubmissionId()
-                        + " and version number: " + paper.getVersionNumber());
-                throw new NotFoundException();
-            }
+        }catch (SQLException exception) {
+            logger.fine("Removing paper with the submission id: " + paper.getSubmissionId()
+                    + " and version number: " + paper.getVersionNumber());
+            throw new NotFoundException();
+        }
+
+        try {
+
 
             PreparedStatement statement = connection.prepareStatement(
                     """

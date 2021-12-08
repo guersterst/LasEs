@@ -4,6 +4,7 @@ import de.lases.global.transport.*;
 
 import de.lases.persistence.exception.DataNotCompleteException;
 import de.lases.persistence.exception.DataNotWrittenException;
+import de.lases.persistence.exception.InvalidFieldsException;
 import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.repository.PaperRepository;
 import de.lases.persistence.repository.SubmissionRepository;
@@ -192,8 +193,8 @@ public class PaperService implements Serializable {
 
         if (paper.getSubmissionId() == null && paper.getVersionNumber() == null) {
 
-            logger.severe("The id of the paper is not valid. Therefore no paper object can be queried.");
-            throw new IllegalArgumentException(resourceBundle.getString("idMissing"));
+            logger.severe("The id of the paper is not valid.");
+            throw new InvalidFieldsException(resourceBundle.getString("idMissing"));
 
         } else {
             Transaction transaction = new Transaction();
