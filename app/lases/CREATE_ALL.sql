@@ -142,3 +142,19 @@ CREATE TABLE system(
 	imprint VARCHAR,
 	logo_image BYTEA
 );
+
+create view user_data as
+select u.id, u.email_address, u.firstname, u.lastname, u.title, u.birthdate, u.employer, u.is_registered, count(distinct s.id) as count_submissions,
+(
+case
+when u.is_administrator then 'admin'
+when exists (select * from member_of mo where mo.editor_id = u.id) then 'editor'
+when exists (select * from reviewed_by rb where rb.reviewer_id = u.id) then 'reviewer'
+else 'none'
+end) as user_role
+from "user" u
+left JOIN submission s
+on u.id = s.author_id
+left join co_authored ca
+on (u.id = ca.user_id and ca.submission_id = s.id)
+group by u.id;

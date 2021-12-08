@@ -10,7 +10,7 @@ import java.util.PropertyResourceBundle;
  */
 public class MessageResourceBundleProducer {
 
-    private static final String MESSAGE_RESOURCE_BUNDLE_NAME = "msg";
+    private static final String MESSAGE_RESOURCE_BUNDLE_NAME = "message";
 
     /**
      * Get the message bundle for the current locale.

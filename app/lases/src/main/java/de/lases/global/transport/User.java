@@ -1,7 +1,9 @@
 package de.lases.global.transport;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Represents a user.
@@ -10,45 +12,49 @@ public class User implements Cloneable {
 
     private int verificationId;
 
-    private Integer id;
+    private Integer id; // SQL: id
 
-    private List<Privilege> privileges;
+    private List<Privilege> privileges; // SQL implicit
 
-    private String title;
+    private String title; // SQL: title
 
-    private String firstName;
+    private String firstName; // SQL: firstname
 
-    private String lastName;
+    private String lastName; // SQL: lastname
 
-    private String emailAddress;
+    private String emailAddress; // SQL: email_address
 
-    private LocalDate dateOfBirth;
+    private LocalDate dateOfBirth; // SQL: birthdate
 
-    private String employer;
+    private String employer; // SQL: employer
 
     private String passwordNotHashed;
 
-    private String passwordHashed;
+    private String passwordHashed; // SQL: password_hash
 
-    private String passwordSalt;
+    private String passwordSalt; // SQL: password_salt
 
-    private boolean isRegistered;
+    private boolean isRegistered; // SQL: is_registered
 
-    private int numberOfSubmissions;
+    private int numberOfSubmissions; // SQL implicit
 
     /**
      * Return if the user is an admin.
      *
      * @return Is the user an admin.
      */
-    public boolean isAdmin() { return false; }
+    public boolean isAdmin() {
+        return false;
+    }
 
     /**
-     * Add or remove admin privileges to the user.
+     * Set the flag whether this user is an admin.
+     * This does not change the {@link User#privileges}.
      *
      * @param isAdmin Should teh use be an admin.
      */
-    public void setAdmin(boolean isAdmin) { }
+    public void setAdmin(boolean isAdmin) {
+    }
 
     public int getVerificationId() {
         return verificationId;
@@ -224,12 +230,18 @@ public class User implements Cloneable {
     /**
      * Check equality by comparing ids.
      *
-     * @param object The object to compare to.
+     * @param o The object to compare to.
      * @return Is the provided object equal to this user?
      */
     @Override
-    public boolean equals(Object object) {
-        return false;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o instanceof User user) {
+            return Objects.equals(id, user.id);
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -264,7 +276,7 @@ public class User implements Cloneable {
     public User clone() {
         try {
             User clone = (User) super.clone();
-            // TODO: copy mutable state here, so the clone can't change the internals of the original
+            clone.privileges = List.copyOf(this.privileges);
             return clone;
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
