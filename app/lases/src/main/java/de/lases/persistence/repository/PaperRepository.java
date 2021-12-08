@@ -117,6 +117,7 @@ public class PaperRepository {
             }
         } catch (SQLException ex) {
             DatasourceUtil.logSQLException(ex, logger);
+            transaction.abort();
             throw new DatasourceQueryFailedException("A datasource exception"
                     + "occurred", ex);
         }
@@ -134,6 +135,7 @@ public class PaperRepository {
             stmt.executeUpdate();
         } catch (SQLException ex) {
             DatasourceUtil.logSQLException(ex, logger);
+            transaction.abort();
             throw new DatasourceQueryFailedException("A datasource exception"
                     + "occurred", ex);
         }

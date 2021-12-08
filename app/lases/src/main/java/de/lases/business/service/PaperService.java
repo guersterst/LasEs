@@ -109,6 +109,7 @@ public class PaperService {
             transaction.abort();
             return;
         } catch (NotFoundException e) {
+            transaction.abort();
             throw new IllegalArgumentException("the submission specified in the"
                     + "paper DTO was not found", e);
         }

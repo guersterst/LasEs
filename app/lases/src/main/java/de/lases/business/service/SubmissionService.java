@@ -2,7 +2,10 @@ package de.lases.business.service;
 
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
+import de.lases.persistence.repository.PaperRepository;
+import de.lases.persistence.repository.SubmissionRepository;
 import de.lases.persistence.repository.Transaction;
+import de.lases.persistence.repository.UserRepository;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
@@ -10,7 +13,9 @@ import jakarta.inject.Inject;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Objects;
+import java.util.PropertyResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Provides functionality regarding the management and handling of submissions.
@@ -19,11 +24,16 @@ import java.util.Objects;
 @Dependent
 public class SubmissionService implements Serializable {
 
+    private static final Logger logger = Logger.getLogger(SubmissionService.class.getName());
+
     @Serial
     private static final long serialVersionUID = 3347910586400642643L;
 
     @Inject
     private Event<UIMessage> uiMessageEvent;
+
+    @Inject
+    PropertyResourceBundle resourceBundle;
 
     /**
      * Gets a submission.
@@ -45,14 +55,58 @@ public class SubmissionService implements Serializable {
      *
      * @param submission The submission's data in a {@link Submission}.
      *                   Must contain a valid forum's id, authorId, editorId, state and title.
-     * @param reviewers  The desired reviewers as proper {@code User}-DTOs with id's or exclusively containing
-     *                   an email-address.
-     * @param coAuthors  The desired co-athors as proper {@link User}-DTOs with id's or exclusively containing
-     *                   an email-address.
+     * @param reviewers  The desired reviewers as proper {@code User}-DTOs with an email-address.
+     * @param coAuthors  The desired co-athors as proper {@link User}-DTOs with an email-address.
      */
-    public void add(Submission submission, List<User> reviewers,
-                    List<User> coAuthors) {
+    public void add(Submission submission, List<User> reviewers, List<User> coAuthors) {
+        Transaction transaction = new Transaction();
 
+        User editor = new User();
+        editor.setId(submission.getEditorId());
+        try {
+            editor = UserRepository.get(editor, transaction);
+        } catch (NotFoundException ex) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString(
+                    "dataNotWritten"), MessageCategory.ERROR));
+            logger.log(Level.WARNING, "Editor was not found when adding a submission.");
+            transaction.abort();
+            return;
+        }
+        // TODO: Das einkommentieren, wenn es die get Methode im user repo gibt!
+        logger.log(Level.SEVERE, "UNCOMMENT THIS");
+        // assert editor != null;
+        // assert editor.getEmailAddress() != null;
+
+        if (!reviewers.stream().allMatch((user) -> user.getEmailAddress() != null)) {
+            throw new InvalidFieldsException("There where reviewers without an email address!");
+        }
+        if (!coAuthors.stream().allMatch((user) -> user.getEmailAddress() != null)) {
+            throw new InvalidFieldsException("There where co-authors without an email address!");
+        }
+
+        List<String> reviewerEmails = reviewers.stream().map(User::getEmailAddress).toList();
+        List<String> coAuthorEmails = coAuthors.stream().map(User::getEmailAddress).toList();
+
+        // TODO: Das auch einkommentieren!
+        // sendEmailsForAddSubmission(editor.getEmailAddress(), reviewerEmails, coAuthorEmails);
+
+        try {
+            SubmissionRepository.add(submission, transaction);
+        } catch (DataNotWrittenException e) {
+            uiMessageEvent.fire(new UIMessage(
+                    resourceBundle.getString("dataNotWritten"),
+                    MessageCategory.ERROR));
+            logger.log(Level.WARNING, e.getMessage());
+            transaction.abort();
+            return;
+        }
+        // TODO (short term) Noch die reviewer und coAuthors und Zeugs hinzufuegen!
+        transaction.commit();
+    }
+
+    private void sendEmailsForAddSubmission(String emailEditor, List<String> emailsReviewers,
+                                            List<String> emailsCoAuthors) {
+        logger.log(Level.SEVERE, "PLEASE IMPLEMENT ME! (sending emails)");
     }
 
     /**
