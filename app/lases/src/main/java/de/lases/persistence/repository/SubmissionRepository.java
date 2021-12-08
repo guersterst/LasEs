@@ -3,6 +3,7 @@ package de.lases.persistence.repository;
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
 import de.lases.persistence.util.DatasourceUtil;
+import org.postgresql.util.PSQLException;
 
 import java.sql.*;
 import java.util.List;
@@ -271,13 +272,17 @@ public class SubmissionRepository {
             stmt.executeUpdate();
         } catch (SQLException ex) {
             DatasourceUtil.logSQLException(ex, logger);
+            transaction.abort();
 
             // 23503: Foreign key constraint violated
             if (ex.getSQLState().equals("23503")) {
                 throw new NotFoundException("Either the specified user or submission does not exist");
+            } else if (! (ex instanceof PSQLException)) {
+                throw new DataNotWrittenException("The co-author was not added", ex);
+            } else {
+                throw new DatasourceQueryFailedException("A datasource exception"
+                        + "occurred", ex);
             }
-            throw new DatasourceQueryFailedException("A datasource exception"
-                    + "occurred", ex);
         }
     }
 

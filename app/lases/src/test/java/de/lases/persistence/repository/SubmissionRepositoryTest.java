@@ -108,7 +108,7 @@ class SubmissionRepositoryTest {
     }
 
     @Test
-    void testAddCoAuthorNotFoundException() throws DataNotWrittenException, NotFoundException {
+    void testAddSubmissionNotFoundException() throws DataNotWrittenException, NotFoundException {
         Submission submission = new Submission();
         Transaction transaction = new Transaction();
         // Diese Submission sollte nicht existieren in der Datenbank
@@ -118,7 +118,21 @@ class SubmissionRepositoryTest {
         user.setId(69);
 
         assertThrows(NotFoundException.class, () -> SubmissionRepository.addCoAuthor(submission, user, transaction));
-        transaction.abort();
+        assertThrows(IllegalStateException.class, transaction::abort);
+    }
+
+    @Test
+    void testAddCoAuthorNotFoundException() throws DataNotWrittenException, NotFoundException {
+        Submission submission = new Submission();
+        Transaction transaction = new Transaction();
+        // Diese Submission sollte nicht existieren in der Datenbank
+        submission.setId(666);
+
+        User user = new User();
+        user.setId(2000);
+
+        assertThrows(NotFoundException.class, () -> SubmissionRepository.addCoAuthor(submission, user, transaction));
+        assertThrows(IllegalStateException.class, transaction::abort);
     }
 
     void testAddAndGetList() throws Exception {
