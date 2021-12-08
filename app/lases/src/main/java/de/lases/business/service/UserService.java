@@ -12,6 +12,7 @@ import jakarta.inject.Inject;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -141,7 +142,7 @@ public class UserService implements Serializable {
      */
     public List<User> getList(ResultListParameters resultListParams) {
         Transaction transaction = new Transaction();
-        List<User> userList = new LinkedList<>();
+        List<User> userList = new ArrayList<>();
 
         try {
             userList = UserRepository.getList(transaction, resultListParams);
@@ -171,7 +172,7 @@ public class UserService implements Serializable {
      */
     public List<User> getList(Submission submission, Privilege privilege) {
         Transaction transaction = new Transaction();
-        List<User> userList = new LinkedList<>();
+        List<User> userList = new ArrayList<>();
 
         try {
             userList = UserRepository.getList(transaction, submission, privilege);
@@ -196,7 +197,7 @@ public class UserService implements Serializable {
      */
     public List<User> getList(ScientificForum scientificForum) {
         Transaction transaction = new Transaction();
-        List<User> userList = new LinkedList<>();
+        List<User> userList = new ArrayList<>();
 
         try {
             userList = UserRepository.getList(transaction, scientificForum);
