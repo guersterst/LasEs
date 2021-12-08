@@ -118,7 +118,7 @@ class SubmissionRepositoryTest {
         user.setId(69);
 
         assertThrows(NotFoundException.class, () -> SubmissionRepository.addCoAuthor(submission, user, transaction));
-        assertThrows(IllegalStateException.class, transaction::abort);
+        transaction.abort();
     }
 
     @Test
@@ -132,7 +132,7 @@ class SubmissionRepositoryTest {
         user.setId(2000);
 
         assertThrows(NotFoundException.class, () -> SubmissionRepository.addCoAuthor(submission, user, transaction));
-        assertThrows(IllegalStateException.class, transaction::abort);
+        transaction.abort();
     }
 
     void testAddAndGetList() throws Exception {

@@ -57,8 +57,9 @@ public class SubmissionRepository {
      *                                submission is null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     * @return The submission that was added, but filled with its id.
      */
-    public static void add(Submission submission, Transaction transaction)
+    public static Submission add(Submission submission, Transaction transaction)
             throws DataNotWrittenException {
         // TODO: die ids auch noch checken, falls die mitlerweile auch Integer sind
         if (submission.getTitle() == null || submission.getState() == null || submission.getSubmissionTime() == null) {
@@ -82,13 +83,14 @@ public class SubmissionRepository {
             throw new DatasourceQueryFailedException("A datasource exception"
                     + "occurred", ex);
         }
+        submission.setId(id);
 
         try {
             PreparedStatement stmt = conn.prepareStatement("""
                     INSERT INTO submission
                     VALUES (?, ?, CAST(? as submission_state), ?, ?, ?, ?, ?, ?)
                     """);
-            stmt.setInt(1, id);
+            stmt.setInt(1, submission.getId());
             stmt.setString(2, submission.getTitle());
             stmt.setString(3, submission.getState().toString());
             stmt.setTimestamp(4, Timestamp.valueOf(submission.getSubmissionTime()));
@@ -105,9 +107,11 @@ public class SubmissionRepository {
             stmt.executeUpdate();
         } catch (SQLException ex) {
             DatasourceUtil.logSQLException(ex, logger);
-            throw new DatasourceQueryFailedException("A datasource exception"
+            transaction.abort();
+            throw new DatasourceQueryFailedException("A datasource exception "
                     + "occurred", ex);
         }
+        return submission;
     }
 
     /**
@@ -249,6 +253,7 @@ public class SubmissionRepository {
      * @param submission A scientific forum dto with a valid id.
      * @param user A user dto with a valid id.
      * @param transaction The transaction to use.
+     * @throws InvalidFieldsException If one of the ids is null.
      * @throws NotFoundException If there is no scientific forum with the
      *                           provided id or there is no user with the
      *                           provided id.
@@ -260,6 +265,11 @@ public class SubmissionRepository {
     public static void addCoAuthor(Submission submission, User user,
                                    Transaction transaction)
             throws NotFoundException, DataNotWrittenException {
+        if (user.getId() == null || submission.getId() == null) {
+            transaction.abort();
+            String nullArgument = user.getId() == null ? "user": "submission";
+            throw new InvalidFieldsException("The ids of the " + nullArgument + " must not be null");
+        }
         Connection conn = transaction.getConnection();
         try {
             PreparedStatement stmt = conn.prepareStatement("""
@@ -272,7 +282,6 @@ public class SubmissionRepository {
             stmt.executeUpdate();
         } catch (SQLException ex) {
             DatasourceUtil.logSQLException(ex, logger);
-            transaction.abort();
 
             // 23503: Foreign key constraint violated
             if (ex.getSQLState().equals("23503")) {
@@ -280,6 +289,7 @@ public class SubmissionRepository {
             } else if (! (ex instanceof PSQLException)) {
                 throw new DataNotWrittenException("The co-author was not added", ex);
             } else {
+                transaction.abort();
                 throw new DatasourceQueryFailedException("A datasource exception"
                         + "occurred", ex);
             }

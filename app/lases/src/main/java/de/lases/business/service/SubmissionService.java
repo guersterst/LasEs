@@ -86,7 +86,7 @@ public class SubmissionService implements Serializable {
         // sendEmailsForAddSubmission(editor.getEmailAddress(), coAuthorEmails);
 
         try {
-            SubmissionRepository.add(submission, transaction);
+            submission = SubmissionRepository.add(submission, transaction);
         } catch (DataNotWrittenException e) {
             uiMessageEvent.fire(new UIMessage(
                     resourceBundle.getString("dataNotWritten"),
@@ -95,7 +95,25 @@ public class SubmissionService implements Serializable {
             transaction.abort();
             return;
         }
-        // TODO (short term) Noch die reviewer und coAuthors und Zeugs hinzufuegen!
+        for (User user: coAuthors) {
+            try {
+                User userWithId = UserRepository.get(user, transaction);
+                assert userWithId.getId() != null;
+                SubmissionRepository.addCoAuthor(submission, userWithId, transaction);
+            } catch (DataNotWrittenException e) {
+                uiMessageEvent.fire(new UIMessage(
+                        resourceBundle.getString("dataNotWritten"),
+                        MessageCategory.ERROR));
+                logger.log(Level.WARNING, e.getMessage());
+                transaction.abort();
+                return;
+            } catch (NotFoundException e) {
+                logger.log(Level.SEVERE, e.getMessage());
+                transaction.abort();
+                throw new AssertionError("Tried to add co authors that don't exist even though this method"
+                        + "makes sure that every co author exists");
+            }
+        }
         transaction.commit();
     }
 
