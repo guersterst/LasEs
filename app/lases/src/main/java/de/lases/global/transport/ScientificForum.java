@@ -123,9 +123,11 @@ public class ScientificForum implements Cloneable {
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
 
-        ScientificForum that = (ScientificForum) object;
-        return Objects.equals(id, that.id);
+        if (object instanceof ScientificForum forum) {
+            return Objects.equals(id, forum.id);
+        } else {
+            return false;
+        }
     }
 }
