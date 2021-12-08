@@ -221,6 +221,17 @@ public class UserRepository {
             }
         });
 
+        // Filter according to global search word.
+        if (!"".equals(params.getGlobalSearchWord())) {
+            sb.append(" AND (");
+            sb.append(" (firstname LIKE '%").append(params.getGlobalSearchWord()).append("%'\n");
+            sb.append(" OR (lastname LIKE '%").append(params.getGlobalSearchWord()).append("%'\n");
+            sb.append(" OR (employer LIKE '%").append(params.getGlobalSearchWord()).append("%'\n");
+            sb.append(" OR (email_address LIKE '%").append(params.getGlobalSearchWord()).append("%'\n");
+            sb.append(")");
+        }
+
+
         // Sort according to sort column parameter
         if (!"".equals(params.getSortColumn()) && userListColumnNames.contains(params.getSortColumn())) {
             sb.append("ORDER BY ")
