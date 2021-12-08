@@ -50,7 +50,7 @@ public class LoginService {
                 l.info("Login attempt unsuccessful for user " + user.getId() + " " + user.getEmailAddress());
                 uiMessageEvent.fire(new UIMessage("Incorrect Credentials", MessageCategory.ERROR));
             }
-        } catch (NotFoundException | DatasourceQueryFailedException | InvalidFieldsException e) {
+        } catch (NotFoundException e) {
             uiMessageEvent.fire(new UIMessage("Login Failure", MessageCategory.FATAL));
         } finally {
             transaction.commit();
