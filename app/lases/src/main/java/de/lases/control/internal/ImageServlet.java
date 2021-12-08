@@ -1,5 +1,6 @@
 package de.lases.control.internal;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.MalformedParametersException;
 import java.util.Objects;
@@ -88,7 +89,26 @@ public class ImageServlet extends HttpServlet {
     }
 
     private void deliverRequestedImage(HttpServletResponse response, boolean isLogo, Optional<Integer> userId) {
+        FileDTO img = new FileDTO();
+        if (isLogo) {
+            img = customizationService.getLogo();
+        } else if (userId.isPresent()) {
+            User requestedUser = new User();
+            requestedUser.setId(userId.get());
+            img = userService.getAvatar(requestedUser);
+        } else {
+            // TODO userID missing
+        }
 
+        if (img == null || img.getFile() == null) {
+            //TODO??
+        } else {
+            try {
+                response.getOutputStream().write(img.getFile());
+            } catch (IOException e) {
+                //TODO
+            }
+        }
     }
 
 }
