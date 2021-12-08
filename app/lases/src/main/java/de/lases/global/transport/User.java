@@ -1,6 +1,7 @@
 package de.lases.global.transport;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -44,7 +45,8 @@ public class User implements Cloneable {
     public boolean isAdmin() { return false; }
 
     /**
-     * Add or remove admin privileges to the user.
+     * Set the flag whether this user is an admin.
+     * This does not change the {@link User#privileges}.
      *
      * @param isAdmin Should teh use be an admin.
      */
@@ -229,7 +231,11 @@ public class User implements Cloneable {
      */
     @Override
     public boolean equals(Object object) {
-        return false;
+        if (object instanceof User user) {
+            return this.getId().equals(user.getId());
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -264,7 +270,7 @@ public class User implements Cloneable {
     public User clone() {
         try {
             User clone = (User) super.clone();
-            // TODO: copy mutable state here, so the clone can't change the internals of the original
+            clone.privileges = List.copyOf(this.privileges);
             return clone;
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
