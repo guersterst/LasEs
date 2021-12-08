@@ -65,15 +65,27 @@ public class UserRepository {
             // Attempt to query for the user.
             ResultSet userResult;
             PreparedStatement userStatement = conn.prepareStatement(sql_user);
-            userStatement.setInt(1, user.getId());
+            // todo: hack, lösung ggf. erst ID zu email finden
+            if(user.getId() != null) {
+                userStatement.setInt(1, user.getId());
+            }else {
+                userStatement.setInt(1, -1);
+            }
             userStatement.setString(2, user.getEmailAddress());
             userResult = userStatement.executeQuery();
 
             // Attempt to query for the user's editor status and number of submissions.
             ResultSet submissionAndEditorResult;
             PreparedStatement extraStatement = conn.prepareStatement(sql_number_of_submissions_and_editor_info);
-            extraStatement.setInt(1, user.getId());
-            extraStatement.setInt(2, user.getId());
+            // todo: auch hack
+            if (user.getId() != null) {
+                extraStatement.setInt(1, user.getId());
+                extraStatement.setInt(2, user.getId());
+            } else {
+                extraStatement.setInt(1, -1);
+                extraStatement.setInt(2, -1);
+            }
+
             submissionAndEditorResult = extraStatement.executeQuery();
 
             // Attempt to create a user from the query results.
