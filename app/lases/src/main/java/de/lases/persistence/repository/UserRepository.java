@@ -6,10 +6,8 @@ import de.lases.persistence.internal.ConfigReader;
 import jakarta.enterprise.inject.spi.CDI;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.sql.Date;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -21,7 +19,7 @@ import java.util.logging.Logger;
  */
 public class UserRepository {
 
-    private static final Collection<String> userListColumnNames = List.of("role", "firstname", "lastname", "email_address", "employer");
+    private static final List<String> userListColumnNames = List.of("user_role", "firstname", "lastname", "email_address", "employer");
     private static final Logger logger = Logger.getLogger(UserRepository.class.getName());
 
     /**
@@ -297,6 +295,23 @@ public class UserRepository {
 
         try {
             PreparedStatement ps = conn.prepareStatement(generateResultListParametersUserListSQL(resultListParameters));
+
+            // Set values here for protection against sql injections.
+            // See comments in generateResultListParametersUserListSQL()
+            final int[] i = {1};
+
+            // Filtering
+            for (String userListColumnName : userListColumnNames) {
+                String value = resultListParameters.getFilterColumns().get(userListColumnName);
+                ps.setString(i[0], Objects.requireNonNullElse("%" + value + "%", "%"));
+                i[0]++;
+            }
+            // Global Search Word
+            for (String ignored : userListColumnNames) {
+                ps.setString(i[0], "%" + resultListParameters.getGlobalSearchWord() + "%");
+                i[0]++;
+            }
+
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -331,22 +346,19 @@ public class UserRepository {
         sb.append("SELECT * FROM user_data WHERE TRUE");
 
         // Filter according to filter columns parameter.
-        params.getFilterColumns().forEach((column, value) -> {
-            if (userListColumnNames.contains(column)) {
-                sb.append(" AND ").append(column).append(" LIKE '%").append(value).append("%'\n");
-            }
-        });
+        userListColumnNames.forEach(column -> sb.append(" AND").append(column).append(" LIKE ?\n"));
 
         // Filter according to global search word.
         if (!"".equals(params.getGlobalSearchWord())) {
             sb.append(" AND (");
-            sb.append(" (firstname LIKE '%").append(params.getGlobalSearchWord()).append("%'\n");
-            sb.append(" OR (lastname LIKE '%").append(params.getGlobalSearchWord()).append("%'\n");
-            sb.append(" OR (employer LIKE '%").append(params.getGlobalSearchWord()).append("%'\n");
-            sb.append(" OR (email_address LIKE '%").append(params.getGlobalSearchWord()).append("%'\n");
+            sb.append(" user_role LIKE ?\n");
+            sb.append(" OR firstname LIKE ?\n"); // sb.append(" firstname LIKE '%").append(params.getGlobalSearchWord()).append("%'\n");
+            sb.append(" OR lastname LIKE ?\n"); // ...
+            sb.append(" OR email_address LIKE ?\n");// sb.append(" OR (lastname LIKE '%").append(params.getGlobalSearchWord()).append("%'\n");
+            sb.append(" OR employer LIKE ?\n"); // sb.append(" OR (employer LIKE '%").append(params.getGlobalSearchWord()).append("%'\n");
+
             sb.append(")");
         }
-
 
         // Sort according to sort column parameter
         if (!"".equals(params.getSortColumn()) && userListColumnNames.contains(params.getSortColumn())) {
