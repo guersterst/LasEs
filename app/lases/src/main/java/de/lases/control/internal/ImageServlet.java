@@ -1,12 +1,5 @@
 package de.lases.control.internal;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.MalformedParametersException;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.logging.Logger;
-
 import de.lases.business.service.CustomizationService;
 import de.lases.business.service.UserService;
 import de.lases.global.transport.FileDTO;
@@ -20,7 +13,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import javax.swing.text.html.Option;
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.MalformedParametersException;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.logging.Logger;
 
 /**
  * Serves images under the /image/* url.
@@ -39,6 +37,8 @@ public class ImageServlet extends HttpServlet {
 
     private static final Logger logger = Logger.getLogger(ImageServlet.class.getName());
 
+    private static final int MAX_AGE = 15 * 60 * 1000; // 15 minutes.
+
     /**
      * Answers a get request that requests a specific image resource specified
      * over the url. Redirects to a 404 page if the user does not have the
@@ -55,6 +55,10 @@ public class ImageServlet extends HttpServlet {
      * @throws IOException      If an input or output error is detected when the
      *                          servlet handles the GET request.
      */
+
+    //TODO throw exceptions at all?
+    // Unique ImageException (also in AvatarUtil)
+    // TODO response status
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -69,6 +73,7 @@ public class ImageServlet extends HttpServlet {
 
                 logger.severe("There must be a user in the session in order to request a user's avatar."
                         + "This user must contain an id and privileges.");
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 throw new InvalidFieldsException();
             } else if (user.isAdmin() || user.getPrivileges().contains(Privilege.EDITOR)) {
 
@@ -79,17 +84,39 @@ public class ImageServlet extends HttpServlet {
             } else {
                 logger.severe("An avatar was requested where the required privileges were not found."
                         + " Requested was user: " + urlUserId + "avatar.");
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 throw new IllegalCallerException();
             }
         } else {
             logger.warning("A request for an image could not be handled due to the type URL"
                     + "parameter being invalid: type=" + request.getParameter("type"));
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             throw new MalformedParametersException();
         }
     }
 
-    private void deliverRequestedImage(HttpServletResponse response, boolean isLogo, Optional<Integer> userId) {
-        FileDTO img = new FileDTO();
+    private void deliverRequestedImage(HttpServletResponse response, boolean isLogo, Optional<Integer> userID) {
+        FileDTO img = fetchImage(response, isLogo, userID);
+            byte[] imgBytes = img.getFile();
+            configureResponse(response, imgBytes);
+            try {
+                response.getOutputStream().write(imgBytes);
+                response.getOutputStream().close();
+            } catch (IOException e) {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                logger.severe("The writing of the image to the respones outputstream has failed.");
+            }
+    }
+
+    private static void configureResponse(HttpServletResponse response, byte[] imgBytes) {
+        response.setHeader("Cache-Control", "private, max-age=" + MAX_AGE);
+        response.setContentLength(imgBytes.length);
+        response.setContentType("image/jpg");
+        response.setStatus(HttpServletResponse.SC_OK);
+    }
+
+    private FileDTO fetchImage(HttpServletResponse response, boolean isLogo, Optional<Integer> userId) {
+        FileDTO img;
         if (isLogo) {
             img = customizationService.getLogo();
         } else if (userId.isPresent()) {
@@ -97,19 +124,17 @@ public class ImageServlet extends HttpServlet {
             requestedUser.setId(userId.get());
             img = userService.getAvatar(requestedUser);
         } else {
-            // TODO userID missing
+            logger.severe("There was no userID passed when requesting an avatar delivery.");
+            throw new IllegalArgumentException();
         }
 
         if (img == null || img.getFile() == null) {
-            //TODO??
-        } else {
-            try {
-                response.getOutputStream().write(img.getFile());
-            } catch (IOException e) {
-                //TODO
-            }
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            logger.severe("The image file must no be null");
+            throw new IllegalStateException();
         }
+        return img;
     }
-
 }
+
 
