@@ -2,17 +2,16 @@ package de.lases.business.service;
 
 import de.lases.business.util.Hashing;
 import de.lases.global.transport.MessageCategory;
+import de.lases.global.transport.UIMessage;
 import de.lases.global.transport.User;
-import de.lases.persistence.exception.DatasourceQueryFailedException;
-import de.lases.persistence.exception.InvalidFieldsException;
 import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.repository.Transaction;
 import de.lases.persistence.repository.UserRepository;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
-import de.lases.global.transport.UIMessage;
 import jakarta.inject.Inject;
 
+import java.util.PropertyResourceBundle;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
@@ -25,6 +24,9 @@ public class LoginService {
 
     @Inject
     private Event<UIMessage> uiMessageEvent;
+
+    @Inject
+    private PropertyResourceBundle propertyResourceBundle;
 
     /**
      * Authenticates a user
@@ -48,10 +50,10 @@ public class LoginService {
             } else {
                 // fail
                 l.info("Login attempt unsuccessful for user " + user.getId() + " " + user.getEmailAddress());
-                uiMessageEvent.fire(new UIMessage("Incorrect Credentials", MessageCategory.ERROR));
+                uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("authFailed"), MessageCategory.ERROR));
             }
         } catch (NotFoundException e) {
-            uiMessageEvent.fire(new UIMessage("Login Failure", MessageCategory.FATAL));
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("authFailed"), MessageCategory.FATAL));
         } finally {
             transaction.commit();
         }
