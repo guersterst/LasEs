@@ -42,7 +42,7 @@ public class ScientificForumService implements Serializable {
      */
     public ScientificForum get(ScientificForum forum) {
         if (forum.getId() == null) {
-            l.severe("The passed ScientificForum-DTO does not contain a valid id.");
+            l.severe("ScientificForum id must not be null.");
             throw new IllegalArgumentException("ScientificForum id must not be null.");
         }
 

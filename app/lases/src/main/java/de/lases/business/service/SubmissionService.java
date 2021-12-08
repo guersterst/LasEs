@@ -47,7 +47,7 @@ public class SubmissionService implements Serializable {
     public Submission get(Submission submission) {
         if (submission.getId() == null) {
             l.severe("The passed Submission-DTO does not contain an id.");
-            throw new IllegalArgumentException("Submission id must not be null.");
+            throw new IllegalArgumentException("The passed Submission-DTO does not contain an id.");
         }
 
         Submission result = null;
@@ -234,7 +234,7 @@ public class SubmissionService implements Serializable {
     public List<Submission> getList(Privilege privilege, User user, ResultListParameters resultParams) {
         if (user.getId() == null) {
             l.severe("The passed User-DTO has no id.");
-            throw new IllegalArgumentException("User id must not be null.");
+            throw new IllegalArgumentException("The passed User-DTO has no id.");
         }
 
         List<Submission> result = null;
@@ -271,7 +271,7 @@ public class SubmissionService implements Serializable {
     public List<Submission> getList(ScientificForum scientificForum, User user, Privilege privilege,
                                     ResultListParameters resultParams) {
         if (user.getId() == null || scientificForum.getId() == null) {
-            l.severe("A passed DTO is not sufficiently filled.");
+            l.severe("User and ScientificForum id must not be null.");
             throw new IllegalArgumentException("User and ScientificForum id must not be null.");
         }
 
@@ -306,7 +306,7 @@ public class SubmissionService implements Serializable {
     public List<Submission> getList(ScientificForum scientificForum,
                                     ResultListParameters resultParams) {
         if (scientificForum.getId() == null) {
-            l.severe("The passed ScientificForum-DTO is not sufficiently filled.");
+            l.severe("ScientificForum id must not be null.");
             throw new IllegalArgumentException("ScientificForum id must not be null.");
         }
 
