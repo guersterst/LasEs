@@ -6,7 +6,11 @@ import de.lases.persistence.exception.InvalidFieldsException;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
 import java.io.*;
+import java.nio.Buffer;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.logging.Logger;
 
 /**
@@ -38,9 +42,10 @@ public final class AvatarUtil {
         try {
 
             // Create image instance, scale and write to an output stream.
+
             Image scaledImg = getImageFromByteArray(file).getScaledInstance(IMAGE_WIDTH, IMAGE_HEIGHT,
                     BufferedImage.SCALE_SMOOTH);
-            ImageIO.write((BufferedImage) scaledImg, "jpg", bos);
+            ImageIO.write(castToBufferedImage(scaledImg), "jpg", bos);
         } catch (IOException e) {
             logger.severe("An error in writing or reading an image has occurred.");
             throw new IOException();
@@ -60,6 +65,35 @@ public final class AvatarUtil {
     private static BufferedImage getImageFromByteArray(FileDTO file) throws IOException {
         InputStream byteStream = new ByteArrayInputStream(file.getFile());
         return ImageIO.read(byteStream);
+    }
+
+    private static BufferedImage castToBufferedImage(Image img) {
+        if (img instanceof BufferedImage) {
+            return (BufferedImage) img;
+        }
+
+        // Create a buffered image with transparency.
+        BufferedImage bImage = new BufferedImage(img.getWidth(null), img.getHeight(null),
+                BufferedImage.TYPE_INT_ARGB);
+
+        // Draw the image onto the buffered image.
+        Graphics2D bGr = bImage.createGraphics();
+        bGr.drawImage(img, 0, 0, null);
+        bGr.dispose();
+
+        return bImage;
+    }
+
+    public static void main(String[] args) throws IOException {
+        FileDTO fileDTO = new FileDTO();
+        InputStream is = AvatarUtil.class.getClassLoader().getResourceAsStream("face.jpg");
+        fileDTO.setFile(is.readAllBytes());
+
+        FileDTO thumbnail = AvatarUtil.generateThumbnail(fileDTO);
+        File outputFile = new File("thumbnail.jpg");
+        FileOutputStream out = new FileOutputStream(outputFile);
+        out.write(thumbnail.getFile());
+        out.close();
     }
 
 }
