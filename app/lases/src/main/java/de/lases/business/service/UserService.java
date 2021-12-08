@@ -29,6 +29,8 @@ public class UserService implements Serializable {
     @Inject
     private Event<UIMessage> uiMessageEvent;
 
+    private final Logger l = Logger.getLogger(UserService.class.getName());
+
     /**
      * Gets a {@code User}.
      *
@@ -139,7 +141,6 @@ public class UserService implements Serializable {
      */
     public List<User> getList(ResultListParameters resultListParams) {
         Transaction transaction = new Transaction();
-        Logger l = Logger.getLogger(UserService.class.getName());
         List<User> userList = new LinkedList<>();
 
         try {
@@ -170,7 +171,6 @@ public class UserService implements Serializable {
      */
     public List<User> getList(Submission submission, Privilege privilege) {
         Transaction transaction = new Transaction();
-        Logger l = Logger.getLogger(UserService.class.getName());
         List<User> userList = new LinkedList<>();
 
         try {
@@ -196,7 +196,6 @@ public class UserService implements Serializable {
      */
     public List<User> getList(ScientificForum scientificForum) {
         Transaction transaction = new Transaction();
-        Logger l = Logger.getLogger(UserService.class.getName());
         List<User> userList = new LinkedList<>();
 
         try {
