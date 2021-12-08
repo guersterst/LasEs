@@ -145,6 +145,7 @@ public class UserService implements Serializable {
         List<User> userList = new ArrayList<>();
 
         try {
+            l.finest("Getting user list with result list parameters.");
             userList = UserRepository.getList(transaction, resultListParams);
         } catch (DataNotCompleteException e) {
             l.info(e.getMessage());
@@ -175,6 +176,7 @@ public class UserService implements Serializable {
         List<User> userList = new ArrayList<>();
 
         try {
+            l.finest("Getting user list for submission with privilege.");
             userList = UserRepository.getList(transaction, submission, privilege);
         } catch (NotFoundException e) {
             l.info(e.getMessage());
@@ -200,6 +202,7 @@ public class UserService implements Serializable {
         List<User> userList = new ArrayList<>();
 
         try {
+            l.finest("Getting user list of editors of forum.");
             userList = UserRepository.getList(transaction, scientificForum);
         } catch (DataNotCompleteException e) {
             l.info(e.getMessage());
