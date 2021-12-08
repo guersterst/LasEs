@@ -258,7 +258,22 @@ public class SubmissionRepository {
      */
     public static void addCoAuthor(Submission submission, User user,
                                    Transaction transaction)
-            throws NotFoundException, DataNotWrittenException{
+            throws NotFoundException, DataNotWrittenException {
+        Connection conn = transaction.getConnection();
+        try {
+            PreparedStatement stmt = conn.prepareStatement("""
+                    INSERT INTO co_authored
+                    VALUES (?, ?)
+                    """);
+            stmt.setInt(1, user.getId());
+            stmt.setInt(2, submission.getId());
+
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            DatasourceUtil.logSQLException(ex, logger);
+            throw new DatasourceQueryFailedException("A datasource exception"
+                    + "occurred", ex);
+        }
     }
 
     /**

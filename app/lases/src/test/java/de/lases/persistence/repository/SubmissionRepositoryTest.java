@@ -2,6 +2,7 @@ package de.lases.persistence.repository;
 
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.DataNotWrittenException;
+import de.lases.persistence.exception.NotFoundException;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -74,6 +75,38 @@ class SubmissionRepositoryTest {
 
         assertEquals(1, j - i);
         transaction.abort();
+    }
+
+    @Test
+    void testAddCoAuthorBasic() throws SQLException, DataNotWrittenException, NotFoundException {
+
+        Submission submission = new Submission();
+        submission.setId(671);
+
+        User user = new User();
+        user.setId(69);
+
+        Transaction transaction = new Transaction();
+        Connection conn = transaction.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(
+                """
+                        SELECT * FROM co_authored
+                        """);
+        ResultSet resultSet = stmt.executeQuery();
+        int i = 0;
+        while (resultSet.next()) {
+            i++;
+        }
+
+        SubmissionRepository.addCoAuthor(submission, user, transaction);
+
+        ResultSet resultSet2 = stmt.executeQuery();
+        int j = 0;
+        while (resultSet2.next()) {
+            j++;
+        }
+        transaction.abort();
+        assertEquals(1, j - i);
     }
 
     @Test

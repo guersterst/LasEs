@@ -31,7 +31,7 @@ class SubmissionServiceTestNoMock {
     }
 
     @Test
-    void testAdd() throws SQLException {
+    void testAddBasic() throws SQLException {
         Submission submission = new Submission();
         submission.setScientificForumId(1);
         submission.setAuthorId(4);
@@ -55,7 +55,7 @@ class SubmissionServiceTestNoMock {
         }
         conn.commit();
 
-        submissionService.add(submission, new ArrayList<>(), new ArrayList<>());
+        submissionService.add(submission, new ArrayList<>());
 
         ResultSet resultSet2 = stmt.executeQuery();
         int j = 0;
