@@ -10,8 +10,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 /**
@@ -24,7 +24,7 @@ public class SubmissionRepository {
 
     private static final Logger l = Logger.getLogger(SubmissionRepository.class.getName());
 
-    private static final Collection<String> columnNames = List.of("id", "title", "state", "timestamp_submission",
+    private static final List<String> columnNames = List.of("id", "title", "state", "timestamp_submission",
             "requires_revision", "timestamp_deadline_revision", "author_id", "editor_id", "forum_id");
 
     /**
@@ -229,11 +229,7 @@ public class SubmissionRepository {
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setInt(1, scientificForum.getId());
                 stmt.setInt(2, user.getId());
-                int i = 3;
-                for (String value : resultListParameters.getFilterColumns().values()) {
-                    stmt.setString(i, "%" + value + "%");
-                }
-                stmt.setString(i, "%" + resultListParameters.getGlobalSearchWord() + "%");
+                fillResultListParameterSuffix(3, stmt, resultListParameters);
                 resultSet = stmt.executeQuery();
 
                 // Attempt to create a list of submissions from the result set.
@@ -308,11 +304,7 @@ public class SubmissionRepository {
             if (privilege != Privilege.ADMIN) {
                 stmt.setInt(1, user.getId());
             }
-            int i = 2;
-            for (String value : resultListParameters.getFilterColumns().values()) {
-                stmt.setString(i, "%" + value + "%");
-            }
-            stmt.setString(i, "%" + resultListParameters.getGlobalSearchWord() + "%");
+            fillResultListParameterSuffix(2, stmt, resultListParameters);
             resultSet = stmt.executeQuery();
 
             // Attempt to create a list of submissions from the result set.
@@ -369,11 +361,7 @@ public class SubmissionRepository {
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, scientificForum.getId());
-            int i = 2;
-            for (String value : resultListParameters.getFilterColumns().values()) {
-                stmt.setString(i, "%" + value + "%");
-            }
-            stmt.setString(i, "%" + resultListParameters.getGlobalSearchWord() + "%");
+            fillResultListParameterSuffix(2, stmt, resultListParameters);
             resultSet = stmt.executeQuery();
 
             // Attempt to create a list of submissions from the result set.
@@ -485,8 +473,8 @@ public class SubmissionRepository {
     /**
      * Generates a suffix to a SQL query string that incorporates the result list parameters.
      * Adds <code>params.getFilterColumns().size()</code> query parameters to the SQL query
-     * to be filled with patterns for values of the filter columns and one query parameter for the
-     * global search word.
+     * to be filled with patterns for values of the filter <code>this.columnNames</code> and
+     * <code>columns.size()</code> parameters for the global search word.
      */
     private static String generateResultListParametersSQLSuffix(ResultListParameters params) {
         StringBuilder sb = new StringBuilder();
@@ -509,17 +497,15 @@ public class SubmissionRepository {
         }
 
         // Filter according to filter columns parameter.
-        params.getFilterColumns().forEach((column, value) -> {
-            if (columnNames.contains(column)) {
-                sb.append(" AND ").append(column).append(" LIKE ?\n");
-            } else {
-                throw new InvalidQueryParamsException("Invalid filter column: " + column);
-            }
-        });
+        columnNames.forEach(column -> sb.append(" AND ").append(column).append(" LIKE ?\n"));
 
         // Filter according to global search word.
-        if (!"".equals(params.getGlobalSearchWord())) {
-            sb.append(" AND title LIKE ?\n");
+        sb.append(" AND (");
+        for (int i = 0; i < columnNames.size(); i++) {
+            sb.append(columnNames.get(i)).append(" LIKE ?\n");
+            if (i < columnNames.size() - 1) {
+                sb.append("OR ");
+            }
         }
 
         // Sort according to sort column parameter
@@ -541,6 +527,18 @@ public class SubmissionRepository {
         sb.append(";");
 
         return sb.toString();
+    }
+
+    private static int fillResultListParameterSuffix(int qParamCounter, PreparedStatement stmt, ResultListParameters params) throws SQLException {
+        // Add values for filter columns and global search word
+        for (int i = 0; i < 2; i++) {
+            for (String column : columnNames) {
+                stmt.setString(qParamCounter++,
+                        "%" + Objects.requireNonNullElse(params.getFilterColumns().get(column), "") + "%");
+            }
+        }
+
+        return qParamCounter;
     }
 
 }
