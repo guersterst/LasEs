@@ -77,6 +77,8 @@ public class SubmissionBacking implements Serializable {
 
     private User author;
 
+    private User isViewing;
+
     private Pagination<Paper> paperPagination;
 
     private Pagination<Review> reviewPagination;
@@ -123,6 +125,19 @@ public class SubmissionBacking implements Serializable {
         scientificForum = new ScientificForum();
         coAuthors = new LinkedList<>();
         author = new User();
+        isViewing = sessionInformation.getUser();
+
+        paperPagination = new Pagination<Paper>("version") {
+            @Override
+            public void loadData() {
+                paperPagination.setEntries(paperService.getList(submission,isViewing,paperPagination.getResultListParameters()));
+            }
+
+            @Override
+            protected Integer calculateNumberPages() {
+                return 1;
+            }
+        };
 
     }
 
@@ -157,19 +172,29 @@ public class SubmissionBacking implements Serializable {
      * @throws IllegalAccessException If the user has no access rights for this
      *                                submission
      */
-    public void onLoad() {
+    public void onLoad() {/*
         FacesContext facesContext = FacesContext.getCurrentInstance();
         if (!facesContext.isPostback()) {
             //TODO: rausnehmen.
-            submission.setId(5);
-            submission = submissionService.get(submission);
 
-            scientificForum.setId(submission.getScientificForumId());
-            scientificForum = scientificForumService.get(scientificForum);
+        }*/
+        submission.setId(5);
+        submission = submissionService.get(submission);
 
-            coAuthors = userService.getList(submission, Privilege.AUTHOR);
-        }
+        author.setId(submission.getAuthorId());
+        author = userService.get(author);
+
+        scientificForum.setId(submission.getScientificForumId());
+        scientificForum = scientificForumService.get(scientificForum);
+
+        coAuthors = userService.getList(submission, Privilege.AUTHOR);
+
+        paperPagination.loadData();
+
+
     }
+
+
 
     /**
      * Checks if the view param is an integer and throws an exception if it is
@@ -280,6 +305,12 @@ public class SubmissionBacking implements Serializable {
      * @param paper The revision (which is a {@code paper}) to release
      */
     public void releaseRevision(Paper paper) {
+       if (loggedInUserIsEditor()) {
+           paper.setVisible(true);
+           paperService.change(paper);
+       } else {
+           uiMessageEvent.fire(new UIMessage(resourceBundle.getString("releaseRevision"), MessageCategory.WARNING));
+       }
     }
 
     /**
@@ -299,7 +330,8 @@ public class SubmissionBacking implements Serializable {
      * @return The submitter of the paper.
      */
     public User getAuthorForPaper(Paper paper) {
-        return null;
+        //TODO: Autor ändert sich ja nicht.
+        return author;
     }
 
     /**
@@ -333,7 +365,12 @@ public class SubmissionBacking implements Serializable {
      * @return Go to the homepage.
      */
     public String deleteSubmission() {
-        return null;
+        if (isViewerSubmitter() || isViewing.isAdmin()) {
+            submissionService.remove(submission);
+            return "/views/authenticated/homepage";
+        }
+        uiMessageEvent.fire(new UIMessage(resourceBundle.getString("failedDelete"), MessageCategory.WARNING));
+        return "/views/authenticated/submission";
     }
 
     /**
@@ -423,7 +460,7 @@ public class SubmissionBacking implements Serializable {
      * @return true if the viewer is the submitter of this submission.
      */
     public boolean isViewerSubmitter() {
-        return submission.getAuthorId() == sessionInformation.getUser().getId();
+        return submission.getAuthorId() == isViewing.getId();
     }
 
     /**
@@ -469,7 +506,7 @@ public class SubmissionBacking implements Serializable {
      * @return Is the logged-in user editor of this submission?
      */
     public boolean loggedInUserIsEditor() {
-        return false;
+        return isViewing.getId().equals(submission.getEditorId());
     }
 
     /**

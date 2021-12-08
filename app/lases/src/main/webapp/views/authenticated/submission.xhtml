@@ -82,10 +82,10 @@
                                         <!--<f:param value="#{submissionBacking.scientificForum.id}" name="id"/>-->
                                     </h:link>
 
-                                    <!--value="#{submissionBacking.author.firstName + ' ' + submissionBacking.author.lastName}"-->
+                                    <!--value="#{submissionBacking.author.firstName + ' ' + submissionBacking.author.lastName}" disabled="#{not (submissionBacking.loggedInUserIsEditor() || submissionBacking.isViewerSubmitter())}"-->
                                     <h:link id="author-lnk" value="Author" outcome="/views/authenticated/profile"
                                             includeViewParams="true" title="#{help.directToProfile}"
-                                            disabled="#{not (submissionBacking.loggedInUserIsEditor() || submissionBacking.isViewerSubmitter())}">
+                                            >
                                         <!--<f:param value="#{submissionBacking.author.id}" name="id"/>-->
                                     </h:link>
 
