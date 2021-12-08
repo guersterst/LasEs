@@ -8,6 +8,7 @@ import jakarta.enterprise.inject.spi.CDI;
 
 import java.sql.*;
 import java.util.*;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 /**
@@ -20,6 +21,8 @@ import java.util.logging.Logger;
 public class UserRepository {
 
     private static final Collection<String> userListColumnNames = List.of("role", "firstname", "lastname", "email_address", "employer");
+
+    private static final Logger l = LogManager.getLogManager().getLogger(UserRepository.class.getName());
 
     /**
      * Takes a user dto that is filled with a valid id or a valid
@@ -173,6 +176,7 @@ public class UserRepository {
                                      ResultListParameters resultListParameters)
             throws DataNotCompleteException, InvalidQueryParamsException {
         if (transaction == null || resultListParameters == null) {
+            l.severe("Invalid Parameters for getList(). Parameter is null.");
             throw new InvalidQueryParamsException();
         }
 
