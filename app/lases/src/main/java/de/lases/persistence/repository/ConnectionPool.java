@@ -141,7 +141,7 @@ public class ConnectionPool {
                         + " be closed. Shutdown failed");
             }
         }
-
+        logger.info("DB Connection Pool stopped");
         getInstance().initialized = false;
     }
 

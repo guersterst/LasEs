@@ -1,12 +1,12 @@
 package de.lases.persistence.repository;
 
-import de.lases.global.transport.Privilege;
-import de.lases.global.transport.ResultListParameters;
-import de.lases.global.transport.Submission;
-import de.lases.global.transport.User;
+import de.lases.global.transport.*;
+import de.lases.persistence.exception.DataNotWrittenException;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -21,10 +21,35 @@ class SubmissionRepositoryTest {
     private static final String EXAMPLE_SUBMISSION_TITLE_2 = "Different title";
 
     @BeforeAll
-    void addUser() throws Exception {
+    static void initConnectionPool() {
+        ConnectionPool.init();
+    }
+
+    @AfterAll
+    static void shutDownConnectionPool() {
+        ConnectionPool.shutDown();
+    }
+
+//    @BeforeAll
+//    static void addUser() throws Exception {
+//        Transaction transaction = new Transaction();
+//        UserRepository.add(new User(), transaction);
+//        EXAMPLE_USER_ID = UserRepository.getList(transaction, new ResultListParameters()).get(0).getId();
+//        transaction.commit();
+//    }
+
+    @Test
+    void testAddSubmission() throws DataNotWrittenException {
+        Submission submission = new Submission();
+        submission.setScientificForumId(1);
+        submission.setAuthorId(4);
+        submission.setEditorId(1);
+        submission.setTitle("Sebastian testet die add Methode!");
+        submission.setState(SubmissionState.ACCEPTED);
+        submission.setSubmissionTime(LocalDateTime.now());
+
         Transaction transaction = new Transaction();
-        UserRepository.add(new User(), transaction);
-        EXAMPLE_USER_ID = UserRepository.getList(transaction, new ResultListParameters()).get(0).getId();
+        SubmissionRepository.add(submission, transaction);
         transaction.commit();
     }
 

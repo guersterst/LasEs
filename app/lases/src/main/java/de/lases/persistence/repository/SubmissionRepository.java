@@ -2,14 +2,19 @@ package de.lases.persistence.repository;
 
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
+import de.lases.persistence.util.DatasourceUtil;
 
+import java.sql.*;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Offers get/add/change/remove operations on a submission and the
  * possibility to get lists of submissions.
  */
 public class SubmissionRepository {
+
+    private static final Logger logger = Logger.getLogger(SubmissionRepository.class.getName());
 
     /**
      * Takes a scientific forum dto that is filled with a valid id and returns
@@ -54,6 +59,49 @@ public class SubmissionRepository {
      */
     public static void add(Submission submission, Transaction transaction)
             throws DataNotWrittenException {
+        Connection conn = transaction.getConnection();
+        Integer id = null;
+        try {
+            PreparedStatement stmt = conn.prepareStatement("""
+                    SELECT max(id) FROM submission
+                    """);
+            ResultSet resultSet = stmt.executeQuery();
+            if (resultSet.next()) {
+                id = resultSet.getInt(1) + 1;
+            } else {
+                id = 0;
+            }
+        } catch (SQLException ex) {
+            DatasourceUtil.logSQLException(ex, logger);
+            throw new DatasourceQueryFailedException("A datasource exception"
+                    + "occurred", ex);
+        }
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement("""
+                    INSERT INTO submission
+                    VALUES (?, ?, CAST(? as submission_state), ?, ?, ?, ?, ?, ?)
+                    """);
+            stmt.setInt(1, id);
+            stmt.setString(2, submission.getTitle());
+            stmt.setString(3, submission.getState().toString());
+            stmt.setTimestamp(4, Timestamp.valueOf(submission.getSubmissionTime()));
+            stmt.setBoolean(5, submission.isRevisionRequired());
+
+            Timestamp deadline = submission.getDeadlineRevision() == null ? null
+                    : Timestamp.valueOf(submission.getDeadlineRevision());
+            stmt.setTimestamp(6, deadline);
+
+            stmt.setInt(7, submission.getAuthorId());
+            stmt.setInt(8, submission.getEditorId());
+            stmt.setInt(9, submission.getScientificForumId());
+
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            DatasourceUtil.logSQLException(ex, logger);
+            throw new DatasourceQueryFailedException("A datasource exception"
+                    + "occurred", ex);
+        }
     }
 
     /**

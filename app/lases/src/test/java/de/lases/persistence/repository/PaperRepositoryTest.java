@@ -55,10 +55,10 @@ class PaperRepositoryTest {
         ConnectionPool.init();
     }
 
-//    @AfterAll
-//    static void shutdownConnectionPool() {
-//        ConnectionPool.shutDown();
-//    }
+    @AfterAll
+    static void shutdownConnectionPool() {
+        ConnectionPool.shutDown();
+    }
 
     @Test
     void testGetPaper() throws SQLException, NotFoundException, DataNotWrittenException {

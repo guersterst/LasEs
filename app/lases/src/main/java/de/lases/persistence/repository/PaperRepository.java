@@ -103,12 +103,30 @@ public class PaperRepository {
                     + "be null!");
         }
 
+        Integer id = null;
+
+        try{
+            PreparedStatement stmt = conn.prepareStatement("""
+                    SELECT max(version) FROM paper
+                    """);
+            ResultSet resultSet = stmt.executeQuery();
+            if (resultSet.next()) {
+                id = resultSet.getInt(1) + 1;
+            } else {
+                id = 0;
+            }
+        } catch (SQLException ex) {
+            DatasourceUtil.logSQLException(ex, logger);
+            throw new DatasourceQueryFailedException("A datasource exception"
+                    + "occurred", ex);
+        }
+
         try {
             PreparedStatement stmt = conn.prepareStatement("""
                     INSERT INTO paper
                     VALUES (?, ?, ?, ?, ?)
                     """);
-            stmt.setInt(1, paper.getVersionNumber());
+            stmt.setInt(1, id);
             stmt.setInt(2, paper.getSubmissionId());
             stmt.setTimestamp(3, Timestamp.valueOf(paper.getUploadTime()));
             stmt.setBoolean(4, paper.isVisible());
@@ -116,7 +134,6 @@ public class PaperRepository {
             stmt.executeUpdate();
         } catch (SQLException ex) {
             DatasourceUtil.logSQLException(ex, logger);
-            String sqlState = ex.getSQLState();
             throw new DatasourceQueryFailedException("A datasource exception"
                     + "occurred", ex);
         }
