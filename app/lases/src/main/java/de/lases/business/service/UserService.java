@@ -2,7 +2,9 @@ package de.lases.business.service;
 
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
+import de.lases.persistence.repository.ConnectionPool;
 import de.lases.persistence.repository.Transaction;
+import de.lases.persistence.repository.UserRepository;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
@@ -10,6 +12,9 @@ import jakarta.inject.Inject;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
+import java.util.PropertyResourceBundle;
+import java.util.logging.Logger;
 
 /**
  * Provides all functionality for creating, manipulating or receiving information about users in the application.
@@ -24,14 +29,39 @@ public class UserService implements Serializable {
     @Inject
     private Event<UIMessage> uiMessageEvent;
 
+    private static final Logger logger = Logger.getLogger(UserService.class.getName());
+
+    @Inject
+    private PropertyResourceBundle propertyResourceBundle;
+
     /**
      * Gets a {@code User}.
      *
-     * @param user A {@link User}-DTO, that should contain an existing id value.
+     * @param user A {@link User}-DTO, that should contain an existing id or email value.
      * @return A {@code User}-DTO filled with all available fields.
      */
-    public User get(User user) throws IllegalArgumentException {
-        return null;
+    public User get(User user)  {
+        if (user.getId() == null && user.getEmailAddress() == null) {
+
+            // Throw an exception when neither an id nor a valid email address exist.
+            logger.severe("The id and email are missing. Therefor no user object can be queried.");
+            throw new InvalidFieldsException();
+        } else {
+
+            Transaction transaction = new Transaction();
+            User result = null;
+            try {
+                result = UserRepository.get(user, transaction);
+                transaction.commit();
+                logger.finest("Successfully fetched a user with the id: " + user.getId());
+            } catch (NotFoundException ex) {
+                uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataNotFound"),
+                        MessageCategory.ERROR));
+                logger.warning(ex.getMessage());
+                transaction.abort();
+            }
+            return result;
+        }
     }
 
     /**
@@ -69,6 +99,8 @@ public class UserService implements Serializable {
      * @return {@code true}, if the email does already exist. {@code false} otherwise.
      */
     public boolean emailExists(User user) {
+
+        //TODO when this is implemented please inform Johannes.
         return false;
     }
 
