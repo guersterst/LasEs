@@ -12,6 +12,7 @@ import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.PropertyResourceBundle;
 
@@ -25,13 +26,13 @@ import java.util.logging.Logger;
  * In case of an unexpected state, a {@link UIMessage} event will be fired.
  */
 @Dependent
-public class PaperService {
+public class PaperService implements Serializable {
 
     @Inject
     private Event<UIMessage> uiMessageEvent;
 
     @Inject
-    private PropertyResourceBundle resourceBundle;
+    private transient PropertyResourceBundle resourceBundle;
 
     private static final Logger logger = Logger.getLogger(PaperService.class.getName());
 

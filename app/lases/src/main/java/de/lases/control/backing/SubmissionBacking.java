@@ -1,23 +1,29 @@
 package de.lases.control.backing;
 
-import de.lases.business.service.ReviewService;
-import de.lases.business.service.SubmissionService;
-import de.lases.business.service.UserService;
+import de.lases.business.service.*;
 import de.lases.control.exception.IllegalAccessException;
 import de.lases.control.exception.IllegalUserFlowException;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.event.Event;
+import jakarta.faces.context.FacesContext;
 import jakarta.faces.event.ComponentSystemEvent;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.PropertyResourceBundle;
 
 /**
  * @author Stefanie Gürster
@@ -38,16 +44,28 @@ public class SubmissionBacking implements Serializable {
     private UserService userService;
 
     @Inject
+    private ScientificForumService scientificForumService;
+
+    @Inject
     private SubmissionService submissionService;
 
     @Inject
     private ReviewService reviewService;
 
     @Inject
+    private PaperService paperService;
+
+    @Inject
     private NewReviewBacking newReviewBacking;
 
     @Inject
     private ToolbarBacking toolbarBacking;
+
+    @Inject
+    private Event<UIMessage> uiMessageEvent;
+
+    @Inject
+    private transient PropertyResourceBundle resourceBundle;
 
     private Part uploadedRevisionPDF;
 
@@ -102,6 +120,9 @@ public class SubmissionBacking implements Serializable {
     @PostConstruct
     public void init() {
         submission = new Submission();
+        scientificForum = new ScientificForum();
+        coAuthors = new LinkedList<>();
+        author = new User();
 
     }
 
@@ -137,6 +158,17 @@ public class SubmissionBacking implements Serializable {
      *                                submission
      */
     public void onLoad() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        if (!facesContext.isPostback()) {
+            //TODO: rausnehmen.
+            submission.setId(5);
+            submission = submissionService.get(submission);
+
+            scientificForum.setId(submission.getScientificForumId());
+            scientificForum = scientificForumService.get(scientificForum);
+
+            coAuthors = userService.getList(submission, Privilege.AUTHOR);
+        }
     }
 
     /**
@@ -154,7 +186,8 @@ public class SubmissionBacking implements Serializable {
      * Set the state of the submission, which can be SUBMITTED,
      * REVISION_REQUIRED, REJECTED, ACCEPTED.
      */
-    public void setState() {
+    public void setState(SubmissionState submissionState) {
+        submission.setState(submissionState);
     }
 
     // TODO: hier IOException? Ueberhaupt an den Service deligieren?
@@ -182,7 +215,31 @@ public class SubmissionBacking implements Serializable {
      * @param paper The paper to download.
      * @throws IOException If the download fails.
      */
-    public void downloadPaper(Paper paper) throws IOException {
+    public void downloadPaper(Paper paper) {
+        FileDTO file = paperService.getFile(paper);
+        byte[] pdf = file.getFile();
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(pdf.length);
+        baos.write(pdf, 0, pdf.length);
+
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+
+        HttpServletResponse response = (HttpServletResponse) facesContext.getExternalContext().getResponse();
+        response.setContentType(submission.getTitle() + "/pdf");
+        response.setContentLength(pdf.length);
+        response.setHeader("Content-disposition","attachment;filename="+ submission.getTitle() + ".pdf");
+
+        try {
+            ServletOutputStream outputStream = response.getOutputStream();
+            baos.writeTo(outputStream);
+            outputStream.flush();
+            response.flushBuffer();
+        } catch (IOException exception) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("failedDownload"), MessageCategory.WARNING));
+        }
+
+
+        facesContext.responseComplete();
     }
 
     /**
@@ -249,6 +306,25 @@ public class SubmissionBacking implements Serializable {
      * Upload a new revision as a pdf.
      */
     public void uploadPDF() {
+
+        try {
+            byte[] input = uploadedRevisionPDF.getInputStream().readAllBytes();
+            FileDTO file = new FileDTO();
+            file.setFile(input);
+
+            Paper revision = new Paper();
+            revision.setVisible(false);
+            revision.setSubmissionId(submission.getId());
+            revision.setUploadTime(LocalDateTime.now());
+
+            paperService.add(file,revision);
+
+        }catch (IOException e) {
+
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("failedUpload"), MessageCategory.WARNING));
+
+        }
+
     }
 
     /**

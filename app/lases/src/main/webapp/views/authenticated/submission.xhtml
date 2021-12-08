@@ -4,19 +4,21 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
-    <f:metadata>
-        <f:viewParam value="#{submissionBacking.submission.id}" name="id"/>
-        <!--TODO:evtl mit parameter übergabe-->
-        <f:event type="preRenderView" listener="#{submissionBacking.preRenderViewListener}"/>
-        <f:viewAction action="#{submissionBacking.onLoad()}"/>
-    </f:metadata>
 
     <!--Title of a Submission as Title of the page.-->
-    <ui:define
-            name="title">#{''.concat(labels.appName).concat(" - ").concat(submissionBacking.submission.title)}</ui:define>
+    <ui:define name="title">
+        #{''.concat(labels.appName).concat(" - ").concat(submissionBacking.submission.title)}
+    </ui:define>
 
     <!--Content of submission.xhtml.-->
     <ui:define name="content">
+        <f:metadata>
+            <f:viewParam value="#{submissionBacking.submission.id}" name="id"/>
+            <!--TODO:evtl mit parameter übergabe-->
+            <f:event type="preRenderView" listener="#{submissionBacking.preRenderViewListener}"/>
+            <f:viewAction action="#{submissionBacking.onLoad()}"/>
+        </f:metadata>
+
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-1">
@@ -54,7 +56,7 @@
                                     <br/>
                                     <h:message for="upload-revision-ifile"/>
                                     <!--rendered="#{submissionBacking.isViewerSubmitter()}"-->
-                                    <h:commandLink id="upload-clnk" styleClass="btn" value="#{labels.uploadSubButton}"
+                                    <h:commandButton id="upload-clnk" styleClass="btn" value="#{labels.uploadSubButton}"
                                                    action="#{submissionBacking.uploadPDF()}" includeViewParams="true"
                                                    title="#{help.uploadRevision}"/>
                                 </h:form>
