@@ -2,22 +2,55 @@
 <ui:composition template="/resources/templates/main.xhtml"
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets" >
-    <f:metadata>
-        <!--<f:importConstants var="Date"/>-->
-        <f:loadBundle var="labels" basename="resource_bundles.labels"/>
-    </f:metadata>
-        <ui:define name="title">LasEs-Welcome</ui:define>
+                xmlns:p="http://primefaces.org/ui" xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
+    <ui:define name="title">#{''.concat(labels.appName).concat(' - ').concat(labels.login)}</ui:define>
 
-            <ui:define name="content">
-                <h1>Welcome</h1>
-                <h:commandButton value="Test Bootstrap" styleClass="btn btn-primary">
-                </h:commandButton>
+    <ui:define name="content">
+        <div class="p-5 text-center bg-light">
+            <h1 id="welcome-heading-otxt" class="mb-3">#{welcomeBacking.systemSettings.headlineWelcomePage}</h1>
+            <h4 id="welcome-otxt" class="mb-3">#{welcomeBacking.systemSettings.messageWelcomePage}</h4>
+        </div>
 
-                <h:link value="register" outcome="register"/>
-            </ui:define>
+        <div class="col d-flex justify-content-center">
+            <div class="card" style="width: 36rem;">
+                <div id="login-div" class="card-body">
+                    <h:form>
+                        <div class="form-group">
+                            <label for="email-itxt">#{labels.emailInput}</label>
+                            <h:inputText id="email-itxt" value="#{welcomeBacking.loginInput.emailAddress}"
+                                         a:placeholder="#{help.yourEmail}" styleClass="form-control" required="true"
+                                         requiredMessage="#{message.emailNeeded}"/>
+                            <h:message for="email-itxt"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="password-iscrt">#{labels.passwordInput}</label>
+                            <h:inputSecret id="password-iscrt" value="#{welcomeBacking.loginInput.passwordNotHashed}"
+                                           a:placeholder="#{help.password}" styleClass="form-control" required="true"
+                                           requiredMessage="#{message.passwordNeeded}"/>
+                            <h:message for="password-iscrt"/>
+                        </div>
+                        <div class="form-group">
+                            <br/>
+                            <h:commandButton id="login-cbtn" value="#{labels.login}" action="#{welcomeBacking.login()}"
+                                             title="#{labels.login}"/>
+                        </div>
+                    </h:form>
+                </div>
+                <div id="register-div" class="card-body">
+                    <h:form>
+                        <h:commandButton id="register-cbtn" value="#{labels.register}"
+                                         action="#{welcomeBacking.goToRegister()}"
+                                         title="#{help.goToRegister}"/>
+                    </h:form>
+                </div>
+                <h:messages/>
+            </div>
+        </div>
 
-
+    </ui:define>
 </ui:composition>
+
+
