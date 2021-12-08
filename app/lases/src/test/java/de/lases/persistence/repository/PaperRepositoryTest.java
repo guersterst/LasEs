@@ -2,6 +2,8 @@ package de.lases.persistence.repository;
 
 import de.lases.global.transport.FileDTO;
 import de.lases.global.transport.Paper;
+import de.lases.global.transport.Submission;
+import de.lases.global.transport.User;
 import de.lases.persistence.exception.DataNotWrittenException;
 import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.exception.InvalidFieldsException;
@@ -31,7 +33,7 @@ class PaperRepositoryTest {
     static void initPaper() {
         paper = new Paper();
         paper.setSubmissionId(5);
-        paper.setUploadTime(LocalDateTime.now());
+        paper.setUploadTime(LocalDateTime.of(2021, 12,8,11,5));
         paper.setVersionNumber(3);
         paper.setVisible(false);
         pdf = new FileDTO();
@@ -184,6 +186,35 @@ class PaperRepositoryTest {
         int fileLength = fileDTO.getFile().length;
 
         assertEquals(pdf.getFile().length, fileLength);
+    }
+
+    @Test
+    void testGetNewestPaper() throws DataNotWrittenException, NotFoundException {
+        Submission submission = new Submission();
+        submission.setId(5);
+        submission.setAuthorId(1);
+
+        User author = new User();
+        author.setId(1);
+
+        PaperRepository.add(paper,pdf,transaction);
+
+        Paper newestPaper = new Paper();
+        newestPaper.setSubmissionId(5);
+        newestPaper.setUploadTime(LocalDateTime.of(2021,12,8,14,22));
+        newestPaper.setVersionNumber(4);
+        newestPaper.setVisible(false);
+        pdf = new FileDTO();
+        pdf.setFile(new byte[]{1, 2, 3, 4});
+
+        PaperRepository.add(newestPaper,pdf,transaction);
+
+        Paper getNewestPaper = PaperRepository.getNewestPaperForSubmission(submission,author,transaction);
+
+        assertAll(
+                () -> assertEquals(newestPaper.getVersionNumber(), newestPaper.getVersionNumber()),
+                () -> assertEquals(newestPaper.getUploadTime(), getNewestPaper.getUploadTime())
+        );
     }
 
 }
