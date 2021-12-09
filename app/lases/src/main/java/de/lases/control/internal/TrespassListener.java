@@ -7,6 +7,7 @@ import de.lases.global.transport.UIMessage;
 import de.lases.global.transport.User;
 import jakarta.enterprise.event.Event;
 import jakarta.enterprise.inject.spi.CDI;
+import jakarta.faces.application.FacesMessage;
 import jakarta.faces.application.NavigationHandler;
 import jakarta.faces.component.UIViewRoot;
 import jakarta.faces.context.ExternalContext;
@@ -30,10 +31,7 @@ public class TrespassListener implements PhaseListener {
     @Serial
     private static final long serialVersionUID = -1137139795334466811L;
 
-    //@Inject
-    //private Event<UIMessage> uiMessageEvent;
-
-    //private final PropertyResourceBundle propertyResourceBundle = (PropertyResourceBundle) ResourceBundle.getBundle("message");
+    private final PropertyResourceBundle propertyResourceBundle = (PropertyResourceBundle) ResourceBundle.getBundle("resource_bundles/message");
 
     private final Logger logger = Logger.getLogger(TrespassListener.class.getName());
 
@@ -74,9 +72,7 @@ public class TrespassListener implements PhaseListener {
 
         UIViewRoot viewRoot = fctx.getViewRoot();
         if (viewRoot == null) {
-            //throw new IllegalAccessException(propertyResourceBundle.getString("illegalAccess"));
-            System.out.println("view root null");
-            return;
+            throw new IllegalAccessException(propertyResourceBundle.getString("illegalAccess"));
         }
 
         String viewId = viewRoot.getViewId();
@@ -86,8 +82,6 @@ public class TrespassListener implements PhaseListener {
         }
 
         if (user == null || (!user.isRegistered() && !viewId.contains("/anonymous/"))) {
-
-            System.out.println("THIS CASE OBVIOUSLY WHHHAY");
 
             // Illegal access to a site which is visible to registered users only.
             logger.warning("An unregistered user tried illegally access "
@@ -99,22 +93,33 @@ public class TrespassListener implements PhaseListener {
             // Illegal access to a site which is visible to editors and admins only.
             logger.warning("The non-editor or non-admin user with the id: " + user.getId() + " tried to illegally "
                     + "access a page using the url: " + viewId);
-            //throw new IllegalAccessException(propertyResourceBundle.getString("illegalAccess"));
+            throw new IllegalAccessException(propertyResourceBundle.getString("illegalAccess"));
         } else if (!user.isAdmin() && viewId.contains("/admin/")) {
 
             // Illegal access to a site which is visible to admins only.
             logger.warning("The non-admin user with the id: " + user.getId() + " tried to illegally "
                     + "access a page using the url: " + viewId);
-            //throw new IllegalAccessException(propertyResourceBundle.getString("illegalAccess"));
+            throw new IllegalAccessException(propertyResourceBundle.getString("illegalAccess"));
         }
     }
 
-    private void navigateToLogin(FacesContext facesContext) {
-        //uiMessageEvent.fire(new UIMessage(
-                //propertyResourceBundle.getString("unauthenticatedAccess"), MessageCategory.ERROR));
+    private void navigateToLogin(FacesContext fctx) {
+        setErrorMessage(fctx, propertyResourceBundle.getString("unauthenticatedAccess"));
 
-        NavigationHandler nav = facesContext.getApplication().getNavigationHandler();
-        nav.handleNavigation(facesContext, null, "/views/anonymous/welcome.xhtml?faces-redirect=true");
-        facesContext.responseComplete();
+        NavigationHandler nav = fctx.getApplication().getNavigationHandler();
+        nav.handleNavigation(fctx, null, "/views/anonymous/welcome.xhtml?faces-redirect=true");
+        fctx.responseComplete();
     }
+
+    private void setErrorMessage(FacesContext fctx, String message) {
+        FacesMessage fmsg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                "Log in first.", null);
+        fctx.addMessage(null, fmsg);
+
+        // Let the faces messages of fctx also live in the next request. The
+        // flash scope lives exactly for two subsequent requests.
+        ExternalContext ctx = fctx.getExternalContext();
+        ctx.getFlash().setKeepMessages(true);
+    }
+
 }
