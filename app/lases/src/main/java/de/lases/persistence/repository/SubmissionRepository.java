@@ -5,10 +5,7 @@ import de.lases.persistence.exception.*;
 import de.lases.persistence.internal.ConfigReader;
 import jakarta.enterprise.inject.spi.CDI;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -24,8 +21,7 @@ public class SubmissionRepository {
 
     private static final Logger l = Logger.getLogger(SubmissionRepository.class.getName());
 
-    private static final List<String> columnNames = List.of("id", "title", "state", "timestamp_submission",
-            "requires_revision", "timestamp_deadline_revision", "author_id", "editor_id", "forum_id");
+    private static final List<String> filterColumnNames = List.of("title");
 
     /**
      * Takes a scientific forum dto that is filled with a valid id and returns
@@ -44,7 +40,7 @@ public class SubmissionRepository {
             throws NotFoundException {
         if (submission.getId() == null) {
             l.severe("The passed Submission-DTO does not contain an id.");
-            throw new IllegalArgumentException("Submission id must not be null.");
+            throw new IllegalArgumentException("The passed Submission-DTO does not contain an id.");
         }
 
         Connection conn = transaction.getConnection();
@@ -66,6 +62,7 @@ public class SubmissionRepository {
                 throw new NotFoundException("No submission with id " + submission.getId() + " found.");
             }
         } catch (SQLException e) {
+            l.severe(e.getMessage());
             throw new DatasourceQueryFailedException(e.getMessage(), e);
         }
 
@@ -79,9 +76,11 @@ public class SubmissionRepository {
         sub.setId(resultSet.getInt("id"));
         sub.setTitle(resultSet.getString("title"));
         sub.setState(SubmissionState.valueOf(resultSet.getString("state")));
-        sub.setSubmissionTime(resultSet.getTimestamp("submission_time").toLocalDateTime());
+        Timestamp ts = resultSet.getTimestamp("timestamp_submission");
+        sub.setSubmissionTime(ts == null ? null : ts.toLocalDateTime());
         sub.setRevisionRequired(resultSet.getBoolean("requires_revision"));
-        sub.setDeadlineRevision(resultSet.getTimestamp("deadline_revision").toLocalDateTime());
+        Timestamp td = resultSet.getTimestamp("timestamp_deadline_revision");
+        sub.setDeadlineRevision(td == null ? null : td.toLocalDateTime());
         sub.setEditorId(resultSet.getInt("editor_id"));
 
         // retrieve optional fields
@@ -238,7 +237,8 @@ public class SubmissionRepository {
                 }
                 l.finer("Retrieved a list of submissions from the database.");
             } catch (SQLException e) {
-                e.printStackTrace();
+                l.severe(e.getMessage());
+                throw new DatasourceQueryFailedException(e.getMessage(), e);
             }
             return result;
         }
@@ -313,7 +313,8 @@ public class SubmissionRepository {
             }
             l.finer("Retrieved a list of submissions from the database.");
         } catch (SQLException e) {
-            e.printStackTrace();
+            l.severe(e.getMessage());
+            throw new DatasourceQueryFailedException(e.getMessage(), e);
         }
         return result;
     }
@@ -370,7 +371,8 @@ public class SubmissionRepository {
             }
             l.finer("Retrieved a list of submissions from the database.");
         } catch (SQLException e) {
-            e.printStackTrace();
+            l.severe(e.getMessage());
+            throw new DatasourceQueryFailedException(e.getMessage(), e);
         }
         return null;
     }
@@ -467,7 +469,35 @@ public class SubmissionRepository {
      */
     public static int countSubmissions(User user, Transaction transaction)
             throws NotFoundException {
-        return 0;
+        if (user.getId() == null) {
+            l.severe("The passed User-DTO does not have an id.");
+            throw new IllegalArgumentException("The passed User-DTO does not have an id.");
+        }
+
+        UserRepository.get(user, transaction); // throws NotFoundException if user does not exist
+
+        Connection conn = transaction.getConnection();
+        String sql = "SELECT COUNT(*) FROM submission WHERE author_id = ?";
+        ResultSet rs;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, user.getId());
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                int result = rs.getInt(1);
+                l.finer("Retrieved the number of submissions authored by the user with id " + user.getId() + ": " + result);
+                return result;
+            } else {
+                l.severe("The number of submissions authored by the user with id " + user.getId() +
+                        " could not be retrieved.");
+                throw new DatasourceQueryFailedException("The number of submissions authored by the user with id "
+                        + user.getId() + " could not be retrieved.");
+            }
+        } catch (SQLException e) {
+            l.severe(e.getMessage());
+            throw new DatasourceQueryFailedException(e.getMessage(), e);
+        }
     }
 
     /**
@@ -497,20 +527,20 @@ public class SubmissionRepository {
         }
 
         // Filter according to filter columns parameter.
-        columnNames.forEach(column -> sb.append(" AND ").append(column).append(" LIKE ?\n"));
+        filterColumnNames.forEach(column -> sb.append(" AND ").append(column).append(" LIKE ?\n"));
 
         // Filter according to global search word.
         sb.append(" AND (");
-        for (int i = 0; i < columnNames.size(); i++) {
-            sb.append(columnNames.get(i)).append(" LIKE ?\n");
-            if (i < columnNames.size() - 1) {
+        for (int i = 0; i < filterColumnNames.size(); i++) {
+            sb.append(filterColumnNames.get(i)).append(" LIKE ?\n");
+            if (i < filterColumnNames.size() - 1) {
                 sb.append("OR ");
             }
         }
-        sb.append(")");
+        sb.append(")\n");
 
         // Sort according to sort column parameter
-        if (!"".equals(params.getSortColumn()) && columnNames.contains(params.getSortColumn())) {
+        if (!"".equals(params.getSortColumn()) && filterColumnNames.contains(params.getSortColumn())) {
             sb.append("ORDER BY ")
                     .append(params.getSortColumn())
                     .append(" ")
@@ -522,7 +552,7 @@ public class SubmissionRepository {
         ConfigReader configReader = CDI.current().select(ConfigReader.class).get();
         int paginationLength = Integer.parseInt(configReader.getProperty("MAX_PAGINATION_LIST_LENGTH"));
         sb.append("LIMIT ").append(paginationLength)
-                .append("OFFSET ").append(paginationLength * params.getPageNo());
+                .append(" OFFSET ").append(paginationLength * (params.getPageNo() - 1));
 
         // Add semicolon to end of query
         sb.append(";");
@@ -533,7 +563,7 @@ public class SubmissionRepository {
     private static int fillResultListParameterSuffix(int qParamCounter, PreparedStatement stmt, ResultListParameters params) throws SQLException {
         // Add values for filter columns and global search word
         for (int i = 0; i < 2; i++) {
-            for (String column : columnNames) {
+            for (String column : filterColumnNames) {
                 stmt.setString(qParamCounter++,
                         "%" + Objects.requireNonNullElse(params.getFilterColumns().get(column), "") + "%");
             }

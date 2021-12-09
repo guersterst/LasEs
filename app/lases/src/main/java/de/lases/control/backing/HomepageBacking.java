@@ -1,7 +1,9 @@
 package de.lases.control.backing;
 
-import de.lases.business.service.*;
-import de.lases.control.internal.*;
+import de.lases.business.service.ScientificForumService;
+import de.lases.business.service.SubmissionService;
+import de.lases.control.internal.Pagination;
+import de.lases.control.internal.SessionInformation;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
@@ -10,7 +12,6 @@ import jakarta.inject.Named;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Arrays;
 
 /**
  * Backing bean for the homepage.
@@ -42,6 +43,8 @@ public class HomepageBacking implements Serializable {
     private Pagination<Submission> reviewedPagination;
 
     private Pagination<Submission> editedPagination;
+
+    private User user;
 
     /**
      * Initialize the dtos and load data from the datasource where possible.
@@ -75,27 +78,27 @@ public class HomepageBacking implements Serializable {
      */
     @PostConstruct
     public void init() {
-        submissionPagination = new Pagination<>("submission-title") {
-            @Override
-            public void loadData() {
-                Submission ok = new Submission();
-                ok.setTitle("ok");
-                Submission aha = new Submission();
-                aha.setTitle("aha");
-                //setEntries(Arrays.asList(ok, aha));
-            }
-
-            @Override
-            protected Integer calculateNumberPages() {
-                return null;
-            }
-        };
+        showOwnSubmissionsTab();
+        user = new User();
+        user.setId(4);
     }
 
     /**
      * Switch to the tab that shows the user's own submissions.
      */
     public void showOwnSubmissionsTab() {
+        submissionPagination = new Pagination<>("submission-title") {
+            @Override
+            public void loadData() {
+                setEntries(submissionService.getList(
+                        Privilege.AUTHOR, user, getResultListParameters()));
+            }
+
+            @Override
+            protected Integer calculateNumberPages() {
+                return submissionService.countSubmissions(user);
+            }
+        };
     }
 
     /**

@@ -6,10 +6,7 @@ import de.lases.global.transport.ScientificForum;
 import de.lases.global.transport.User;
 import de.lases.persistence.exception.*;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -80,7 +77,8 @@ public class ScientificForumRepository {
         forum.setDescription(resultSet.getString("description"));
         forum.setUrl(resultSet.getString("url"));
         forum.setReviewManual(resultSet.getString("review_manual"));
-        forum.setDeadline(resultSet.getTimestamp("deadline").toLocalDateTime());
+        Timestamp ts = resultSet.getTimestamp("deadline");
+        forum.setDeadline(ts == null ? null : ts.toLocalDateTime());
 
         return forum;
     }

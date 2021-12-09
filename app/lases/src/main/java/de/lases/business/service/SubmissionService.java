@@ -365,9 +365,25 @@ public class SubmissionService implements Serializable {
      * The amount of submissions where the given user is a direct author to.
      *
      * @param user A {@link User}-DTO with a valid id.
-     * @return The number of submission the specified user authored.
+     * @return The number of submission the specified user authored and -1
+     * if retrieving the amount of submissions failed.
      */
-    public static int countSubmissions(User user) {
-        return 0;
+    public int countSubmissions(User user) {
+        if (user.getId() == null) {
+            l.severe("The passed User-DTO has no id.");
+            throw new IllegalArgumentException("The passed User-DTO has no id.");
+        }
+
+        Transaction t = new Transaction();
+        try {
+            return SubmissionRepository.countSubmissions(user, t);
+        } catch (NotFoundException e) {
+            l.severe("User to count submissions for not found.");
+            uiMessageEvent.fire(new UIMessage(
+                    msg.getString("error.findingSubmissionListFailed"),
+                    MessageCategory.ERROR));
+            t.abort();
+            return -1;
+        }
     }
 }
