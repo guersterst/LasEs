@@ -44,21 +44,23 @@
 
                 <div class="card-body">
                     <h:form>
+                        <div class="btn-group">
                         <h:selectOneMenu id="date-slctom"
                                          value="#{homepageBacking.submissionPagination.resultListParameters.dateSelect}"
-                                         title="#{help.dateSelect}">
+                                         title="#{help.dateSelect}" styleClass="btn btn-secondary">
                             <f:selectItems value="#{homepageBacking.dateSelects}" var="select"
                                            itemLabel="#{labels['dateSelect.' += select]}"
                                            itemValue="#{select}"/>
                         </h:selectOneMenu>
                         <h:selectOneMenu id="state-slctom"
                                          value="#{homepageBacking.submissionPagination.resultListParameters.submissionState}"
-                                         title="#{help.stateSubSelect}">
+                                         title="#{help.stateSubSelect}" styleClass="btn btn-secondary">
                             <f:selectItem itemValue="#{null}" itemLabel="#{labels['stateSelect.ALL']}"/>
                             <f:selectItems value="#{homepageBacking.submissionStates}" var="select"
                                            itemLabel="#{labels['stateSelect.' += select]}"
                                            itemValue="#{select}"/>
                         </h:selectOneMenu>
+                        </div>
                         <pg:pagination paginator="#{homepageBacking.submissionPagination}">
                             <h:column>
                                 <f:facet name="header">
@@ -97,7 +99,9 @@
 
                             <h:column>
                                 <f:facet name="header">
-                                    <h:outputText value="#{labels.stateSub}"/>
+                                    <div class="input-group">
+                                        <h:outputText value="#{labels.stateSub}" styleClass="input-group-text"/>
+                                    </div>
                                 </f:facet>
                                 <h:outputText id="state-otxt" value="#{var.state}"/>
                             </h:column>
