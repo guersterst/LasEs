@@ -94,6 +94,9 @@ public class CustomizationService {
      * @return The logo of the application.
      */
     public FileDTO getLogo() {
-        return null;
+        Transaction transaction = new Transaction();
+        FileDTO logo = SystemSettingsRepository.getLogo(transaction);
+        transaction.commit();
+        return logo;
     }
 }
