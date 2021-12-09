@@ -184,7 +184,7 @@ public class ConnectionPool {
                 "org.postgresql.ssl.DefaultJavaSSLFactory");
         try {
             Connection connection =
-                    DriverManager.getConnection(url, user, password);
+                    DriverManager.getConnection(url, props);
             connection.setAutoCommit(false);
             return connection;
         } catch(SQLException ex) {
