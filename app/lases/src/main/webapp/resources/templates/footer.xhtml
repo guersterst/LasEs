@@ -1,8 +1,18 @@
 <ui:composition
         xmlns="http://www.w3.org/1999/xhtml"
         xmlns:h="http://xmlns.jcp.org/jsf/html"
-        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-        xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <h1>Default Footer</h1>
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <footer class="bg-light text-center">
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+            <h:link
+                    value="#{labels.imprint}"
+                    outcome="/views/anonymous/imprint"
+                    title="#{help.imprint}"
+                    styleClass="text-dark"/>
+            <h:outputText
+                    value="#{labels.languageForward += labels.language}"
+                    styleClass="mx-5"/>
+        </div>
+    </footer>
 </ui:composition>
 
