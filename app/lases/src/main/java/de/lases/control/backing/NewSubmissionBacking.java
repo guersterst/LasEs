@@ -84,16 +84,20 @@ public class NewSubmissionBacking {
      *     </li>
      * </ul>
      * The list of editors for the forum this submission will be submitted in
-     * will be directly populated from the database.
+     * will be directly populated from the database, if the scientific forum is already prefilled.
      */
     @PostConstruct
     public void init() {
         newSubmission = new Submission();
-        forumInput = new ScientificForum();
         editorSelectionInput = new User();
         coAuthorInput = new User();
         coAuthors = new ArrayList<>();
-        editors = userService.getList(forumInput);
+        if (forumInput != null) {
+            editors = userService.getList(forumInput);
+        } else {
+            forumInput = new ScientificForum();
+            editors = new ArrayList<>();
+        }
         selectedEditor = new User();
     }
 
