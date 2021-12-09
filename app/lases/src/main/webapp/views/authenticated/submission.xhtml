@@ -3,7 +3,9 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pg="http://xmlns.jcp.org/jsf/composite/templates/composites/pagination"
+                xmlns:ssc="http://xmlns.jcp.org/jsf/composite/templates/composites/sortsearchcolumn">
 
     <!--Title of a Submission as Title of the page.-->
     <ui:define name="title">
@@ -132,7 +134,8 @@
                                                                    for="co-author-list" styleClass="h6"/>
                                                 </div>
                                                 <div class="body">
-                                                    <ui:repeat id="co-author-list" value="#{submissionBacking.coAuthors}"
+                                                    <ui:repeat id="co-author-list"
+                                                               value="#{submissionBacking.coAuthors}"
                                                                var="coAuthor">
                                                         <h:outputText id="co-author-otxt"
                                                                       value="#{coAuthor.firstName.concat(' ').concat(coAuthor.lastName).concat(' ')}"/>
@@ -146,6 +149,57 @@
                                             </div>
                                         </div>
                                     </div>
+                                </h:form>
+                            </div>
+                        </div>
+                        <div id="paper-pagination">
+                            <div class="card">
+                                <h:form>
+                                    <pg:pagination paginator="#{submissionBacking.paperPagination}">
+
+                                        <!--Version number-->
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <ssc:sortsearchcolumn id="version-ssc" columnIdentifier="version"
+                                                                      paginator="#{submissionBacking.paperPagination}"
+                                                                      columnNamei18n="#{labels.titleCol}"/>
+                                            </f:facet>
+                                            <h:outputText id="version-otxt" value="#{var.versionNumber}"/>
+                                        </h:column>
+
+                                        <!--Upload Date-->
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <ssc:sortsearchcolumn id="date-ssc" columnIdentifier="timestamp_upload"
+                                                                      paginator="#{submissionBacking.paperPagination}"
+                                                                      columnNamei18n="#{labels.uploadCol}"/>
+                                            </f:facet>
+                                            <h:outputText id="date-otxt" value="#{var.uploadTime}">
+                                                <f:convertDateTime type="localDate"/>
+                                            </h:outputText>
+                                        </h:column>
+
+                                        <!--Release state-->
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <ssc:sortsearchcolumn id="release-revision-ssc" columnIdentifier="state"
+                                                                      paginator="#{submissionBacking.paperPagination}"
+                                                                      columnNamei18n="#{labels.stateCol}"
+                                                                      rendered="#{submissionBacking.loggedInUserIsEditor() || submissionBacking.isViewerSubmitter()}"/>
+                                                <h:selectOneMenu id="release-revision-slctom"
+                                                                 value="#{submissionBacking.paperPagination.resultListParameters.visibleFilter}"
+                                                                 title="#{help.filterRelease}"
+                                                                 rendered="#{submissionBacking.loggedInUserIsEditor()}">
+                                                    <f:selectItems var="visible" itemValue="#{submissionBacking.visibility}" itemLabel="#{labels['visibility.' + visible]}"/>
+                                                </h:selectOneMenu>
+                                            </f:facet>
+                                            <h:commandButton id="release-revision-cbtn"
+                                                             value="#{var.visible == true? labels.released : labels.notReleased}"
+                                                             action="#{submissionBacking.releaseRevision(var)}"
+                                                             title="#{help.releaseBtn}" disabled="#{submissionBacking.isViewerSubmitter()}"/>
+                                        </h:column>
+
+                                    </pg:pagination>
                                 </h:form>
                             </div>
                         </div>

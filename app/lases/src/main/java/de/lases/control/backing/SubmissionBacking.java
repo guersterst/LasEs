@@ -130,6 +130,8 @@ public class SubmissionBacking implements Serializable {
         paperPagination = new Pagination<Paper>("version") {
             @Override
             public void loadData() {
+                paperPagination.getResultListParameters().setVisibleFilter(Visibility.ALL);
+                paperPagination.getResultListParameters().setDateSelect(DateSelect.ALL);
                 paperPagination.setEntries(paperService.getList(submission,isViewing,paperPagination.getResultListParameters()));
             }
 
@@ -481,6 +483,15 @@ public class SubmissionBacking implements Serializable {
      */
     public DateSelect[] getDateSelects() {
         return DateSelect.values();
+    }
+
+    /**
+     * Returns an array of all values the Visibility enum can have.
+     *
+     * @return All options.
+     */
+    public Visibility[] getVisibility() {
+        return Visibility.values();
     }
 
     /**

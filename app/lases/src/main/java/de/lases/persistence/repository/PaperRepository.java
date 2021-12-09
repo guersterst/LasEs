@@ -296,74 +296,84 @@ public class PaperRepository {
             throw new NotFoundException();
         }
 
-        Connection connection = transaction.getConnection();
-        ResultSet resultSet;
         List<Paper> paperList = new LinkedList<>();
 
-        //Privilege of the given user in this submission
-        Privilege privilege;
-        if (user.isAdmin()) {
-            privilege = Privilege.ADMIN;
-        } else if (user.getId() == submission.getEditorId()) {
-            privilege = Privilege.EDITOR;
-        } else if (user.getId() == submission.getAuthorId()) {
-            privilege = Privilege.AUTHOR;
-        } else {
-            //Has no matching privileges.
-            return paperList;
-        }
+        if (resultListParameters.getDateSelect() == DateSelect.ALL || resultListParameters.getDateSelect() == DateSelect.PAST) {
+            Connection connection = transaction.getConnection();
+            ResultSet resultSet;
 
-        String sqlStatment = switch (privilege) {
-            case ADMIN -> """
-                    SELECT * FROM paper p, submission s
+            //Privilege of the given user in this submission
+            Privilege privilege;
+            if (user.isAdmin()) {
+                privilege = Privilege.ADMIN;
+            } else if (user.getId() == submission.getEditorId()) {
+                privilege = Privilege.EDITOR;
+            } else if (user.getId() == submission.getAuthorId()) {
+                privilege = Privilege.AUTHOR;
+            } else {
+                //Has no matching privileges.
+                return paperList;
+            }
+
+            String sqlStatment = switch (privilege) {
+                case ADMIN -> """
+                    SELECT p.* FROM paper p, submission s
                     WHERE s.id = ? 
                     AND p.submission_id = s.id
                     """;
-            case EDITOR -> """
-                    SELECT * FROM paper p, submission s
+                case EDITOR -> """
+                    SELECT p.* FROM paper p, submission s
                     WHERE s.id = ? 
                     AND s.editor_id = ?
                     AND p.submission_id = s.id
                     """;
-            default -> """
-                    SELECT * FROM paper p, submission s
+                default -> """
+                    SELECT p.* FROM paper p, submission s
                     WHERE s.id = ? 
                     AND s.author_id = ?
                     AND p.is_visible = TRUE
                     AND p.submission_id = s.id
                     """;
-        };
+            };
 
-        sqlStatment += generateSQLForResultListParameters(resultListParameters, privilege);
+            sqlStatment += generateSQLForResultListParameters(resultListParameters, privilege);
 
-        try {
-            PreparedStatement statement = connection.prepareStatement(sqlStatment);
+            try {
+                PreparedStatement statement = connection.prepareStatement(sqlStatment);
 
-            statement.setInt(1, submission.getId());
+                statement.setInt(1, submission.getId());
 
-            if (privilege == Privilege.EDITOR) {
-                statement.setInt(2, submission.getEditorId());
-            }
-            if (privilege == Privilege.AUTHOR) {
-                statement.setInt(2, submission.getAuthorId());
-            }
+                if (privilege == Privilege.EDITOR) {
+                    statement.setInt(2, submission.getEditorId());
+                }
+                if (privilege == Privilege.AUTHOR) {
+                    statement.setInt(2, submission.getAuthorId());
+                }
 
-            fillUpStatement(2, statement, resultListParameters);
-            resultSet = statement.executeQuery();
+                if (resultListParameters.getFilterColumns().get("version") != null) {
+                    statement.setString(3, resultListParameters.getFilterColumns().get("version"));
+                }
 
-            while (resultSet.next()) {
-                for (Paper paper : paperList) {
+                if (resultListParameters.getFilterColumns().get("timestamp_upload") != null) {
+                    statement.setString(4, resultListParameters.getFilterColumns().get("timestamp_upload"));
+                }
+                resultSet = statement.executeQuery();
+
+                while (resultSet.next()) {
+                    Paper paper = new Paper();
                     paper.setVisible(resultSet.getBoolean("is_visible"));
                     paper.setVersionNumber(resultSet.getInt("version"));
                     paper.setUploadTime(resultSet.getTimestamp("timestamp_upload").toLocalDateTime());
                     paper.setSubmissionId(resultSet.getInt("submission_id"));
+
+                    paperList.add(paper);
                 }
+
+            } catch (SQLException e) {
+                DatasourceUtil.logSQLException(e, logger);
+                throw new DatasourceQueryFailedException("A datasource exception occurred while loading all papers of a submission.", e);
+
             }
-
-        } catch (SQLException e) {
-            DatasourceUtil.logSQLException(e, logger);
-            throw new DatasourceQueryFailedException("A datasource exception occurred while loading all papers of a submission.", e);
-
         }
         return paperList;
     }
@@ -373,25 +383,29 @@ public class PaperRepository {
         StringBuilder stringBuilder = new StringBuilder();
 
         // Filter according to visibility.
-        if (!parameters.isVisibleFilter() && (privilege == Privilege.ADMIN || privilege == Privilege.EDITOR)) {
-            stringBuilder.append(" AND p.is_visible = FALSE");
-        } else if (parameters.isVisibleFilter()) {
+        if (parameters.getVisibleFilter() != Visibility.ALL) {
+            if (parameters.getVisibleFilter() == Visibility.NOT_RELEASED
+                    && (privilege == Privilege.ADMIN || privilege == Privilege.EDITOR)) {
+                stringBuilder.append(" AND p.is_visible = FALSE");
+            } else if (parameters.getVisibleFilter() == Visibility.RELEASED) {
+                stringBuilder.append(" AND p.is_visible = TRUE");
+            }
+        } else if (!(privilege == Privilege.ADMIN || privilege == Privilege.EDITOR)) {
             stringBuilder.append(" AND p.is_visible = TRUE");
         }
 
 
-        //Filter columns of a pagination.
-        paperColumnNames.forEach(column -> stringBuilder.append(" AND p.").append(column).append(" LINKE ?\n"));
+        stringBuilder.append("""
+                AND p.timestamp_upload < NOW()
+                """);
 
-        //Filter global search word.
-        stringBuilder.append(" AND (");
-        for (int i = 0; i < paperColumnNames.size(); i++) {
-            stringBuilder.append(paperColumnNames.get(i)).append(" LIKE ?\n");
-            if (i < paperColumnNames.size() - 1) {
-                stringBuilder.append("OR ");
-            }
+        if (parameters.getFilterColumns().get("version") != null) {
+            stringBuilder.append("AND p.version::VARCHAR ILIKE ?\n");
         }
-        stringBuilder.append(")");
+
+        if (parameters.getFilterColumns().get("timestamp_upload") != null) {
+            stringBuilder.append("AND timestamp_upload::VARCHAR ILIKE ?\n");
+        }
 
         // Sort according to sort column parameter
         if (!"".equals(parameters.getSortColumn()) && paperColumnNames.contains(parameters.getSortColumn())) {
@@ -407,22 +421,13 @@ public class PaperRepository {
         int pgLength = Integer.parseInt(configReader.getProperty("MAX_PAGINATION_LIST_LENGTH"));
         stringBuilder.append("LIMIT ")
                 .append(pgLength)
+                .append(" ")
                 .append("OFFSET ")
-                .append(pgLength * parameters.getPageNo());
+                .append(pgLength * (parameters.getPageNo() - 1));
 
         stringBuilder.append(";");
 
         return stringBuilder.toString();
-    }
-
-    private static void fillUpStatement(int count, PreparedStatement statement, ResultListParameters parameters) throws SQLException {
-        // Add value for each ? in the statement that isn't filled until now.
-        // Two times. One for filter, one for global search.
-        for (int i = 0; i < 2; i++) {
-            for (String column : paperColumnNames) {
-                statement.setString(count++, "%" + Objects.requireNonNullElse(parameters.getFilterColumns().get(column), "") + "%");
-            }
-        }
     }
 
     /**

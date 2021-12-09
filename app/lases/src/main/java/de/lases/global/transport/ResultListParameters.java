@@ -19,7 +19,7 @@ public class ResultListParameters {
 
     private SubmissionState submissionState;
 
-    private boolean visibleFilter;
+    private Visibility visibleFilter;
 
     private boolean recommendationFilter;
 
@@ -70,7 +70,7 @@ public class ResultListParameters {
         this.submissionState = submissionState;
     }
 
-    public boolean isVisibleFilter() {
+    public Visibility getVisibleFilter() {
         return visibleFilter;
     }
 
@@ -79,7 +79,7 @@ public class ResultListParameters {
      *
      * @param visibleFilter true/false.
      */
-    public void setVisibleFilter(boolean visibleFilter) {
+    public void setVisibleFilter(Visibility visibleFilter) {
         this.visibleFilter = visibleFilter;
     }
 
