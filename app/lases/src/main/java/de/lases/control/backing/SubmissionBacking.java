@@ -1,23 +1,29 @@
 package de.lases.control.backing;
 
-import de.lases.business.service.ReviewService;
-import de.lases.business.service.SubmissionService;
-import de.lases.business.service.UserService;
+import de.lases.business.service.*;
 import de.lases.control.exception.IllegalAccessException;
 import de.lases.control.exception.IllegalUserFlowException;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.event.Event;
+import jakarta.faces.context.FacesContext;
 import jakarta.faces.event.ComponentSystemEvent;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.PropertyResourceBundle;
 
 /**
  * @author Stefanie Gürster
@@ -38,16 +44,28 @@ public class SubmissionBacking implements Serializable {
     private UserService userService;
 
     @Inject
+    private ScientificForumService scientificForumService;
+
+    @Inject
     private SubmissionService submissionService;
 
     @Inject
     private ReviewService reviewService;
 
     @Inject
+    private PaperService paperService;
+
+    @Inject
     private NewReviewBacking newReviewBacking;
 
     @Inject
     private ToolbarBacking toolbarBacking;
+
+    @Inject
+    private Event<UIMessage> uiMessageEvent;
+
+    @Inject
+    private transient PropertyResourceBundle resourceBundle;
 
     private Part uploadedRevisionPDF;
 
@@ -58,6 +76,8 @@ public class SubmissionBacking implements Serializable {
     private List<User> coAuthors;
 
     private User author;
+
+    private User isViewing;
 
     private Pagination<Paper> paperPagination;
 
@@ -102,6 +122,22 @@ public class SubmissionBacking implements Serializable {
     @PostConstruct
     public void init() {
         submission = new Submission();
+        scientificForum = new ScientificForum();
+        coAuthors = new LinkedList<>();
+        author = new User();
+        isViewing = sessionInformation.getUser();
+
+        paperPagination = new Pagination<Paper>("version") {
+            @Override
+            public void loadData() {
+                paperPagination.setEntries(paperService.getList(submission,isViewing,paperPagination.getResultListParameters()));
+            }
+
+            @Override
+            protected Integer calculateNumberPages() {
+                return 1;
+            }
+        };
 
     }
 
@@ -136,8 +172,29 @@ public class SubmissionBacking implements Serializable {
      * @throws IllegalAccessException If the user has no access rights for this
      *                                submission
      */
-    public void onLoad() {
+    public void onLoad() {/*
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        if (!facesContext.isPostback()) {
+            //TODO: rausnehmen.
+
+        }*/
+        submission.setId(5);
+        submission = submissionService.get(submission);
+
+        author.setId(submission.getAuthorId());
+        author = userService.get(author);
+
+        scientificForum.setId(submission.getScientificForumId());
+        scientificForum = scientificForumService.get(scientificForum);
+
+        coAuthors = userService.getList(submission, Privilege.AUTHOR);
+
+        paperPagination.loadData();
+
+
     }
+
+
 
     /**
      * Checks if the view param is an integer and throws an exception if it is
@@ -154,7 +211,8 @@ public class SubmissionBacking implements Serializable {
      * Set the state of the submission, which can be SUBMITTED,
      * REVISION_REQUIRED, REJECTED, ACCEPTED.
      */
-    public void setState() {
+    public void setState(SubmissionState submissionState) {
+        submission.setState(submissionState);
     }
 
     // TODO: hier IOException? Ueberhaupt an den Service deligieren?
@@ -182,7 +240,31 @@ public class SubmissionBacking implements Serializable {
      * @param paper The paper to download.
      * @throws IOException If the download fails.
      */
-    public void downloadPaper(Paper paper) throws IOException {
+    public void downloadPaper(Paper paper) {
+        FileDTO file = paperService.getFile(paper);
+        byte[] pdf = file.getFile();
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(pdf.length);
+        baos.write(pdf, 0, pdf.length);
+
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+
+        HttpServletResponse response = (HttpServletResponse) facesContext.getExternalContext().getResponse();
+        response.setContentType(submission.getTitle() + "/pdf");
+        response.setContentLength(pdf.length);
+        response.setHeader("Content-disposition","attachment;filename="+ submission.getTitle() + ".pdf");
+
+        try {
+            ServletOutputStream outputStream = response.getOutputStream();
+            baos.writeTo(outputStream);
+            outputStream.flush();
+            response.flushBuffer();
+        } catch (IOException exception) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("failedDownload"), MessageCategory.WARNING));
+        }
+
+
+        facesContext.responseComplete();
     }
 
     /**
@@ -223,6 +305,12 @@ public class SubmissionBacking implements Serializable {
      * @param paper The revision (which is a {@code paper}) to release
      */
     public void releaseRevision(Paper paper) {
+       if (loggedInUserIsEditor()) {
+           paper.setVisible(true);
+           paperService.change(paper);
+       } else {
+           uiMessageEvent.fire(new UIMessage(resourceBundle.getString("releaseRevision"), MessageCategory.WARNING));
+       }
     }
 
     /**
@@ -242,13 +330,35 @@ public class SubmissionBacking implements Serializable {
      * @return The submitter of the paper.
      */
     public User getAuthorForPaper(Paper paper) {
-        return null;
+        //TODO: Autor ändert sich ja nicht.
+        return author;
     }
 
     /**
      * Upload a new revision as a pdf.
      */
     public void uploadPDF() {
+
+        try {
+            // Get the file as byte[].
+            byte[] input = uploadedRevisionPDF.getInputStream().readAllBytes();
+            FileDTO file = new FileDTO();
+            file.setFile(input);
+
+            // Put revision pdf into a new paper.
+            Paper revision = new Paper();
+            revision.setVisible(false);
+            revision.setSubmissionId(submission.getId());
+            revision.setUploadTime(LocalDateTime.now());
+
+            paperService.add(file,revision);
+
+        }catch (IOException e) {
+
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("failedUpload"), MessageCategory.WARNING));
+
+        }
+
     }
 
     /**
@@ -257,7 +367,12 @@ public class SubmissionBacking implements Serializable {
      * @return Go to the homepage.
      */
     public String deleteSubmission() {
-        return null;
+        if (isViewerSubmitter() || isViewing.isAdmin()) {
+            submissionService.remove(submission);
+            return "/views/authenticated/homepage";
+        }
+        uiMessageEvent.fire(new UIMessage(resourceBundle.getString("failedDelete"), MessageCategory.WARNING));
+        return "/views/authenticated/submission";
     }
 
     /**
@@ -347,7 +462,7 @@ public class SubmissionBacking implements Serializable {
      * @return true if the viewer is the submitter of this submission.
      */
     public boolean isViewerSubmitter() {
-        return submission.getAuthorId() == sessionInformation.getUser().getId();
+        return submission.getAuthorId() == isViewing.getId();
     }
 
     /**
@@ -393,7 +508,7 @@ public class SubmissionBacking implements Serializable {
      * @return Is the logged-in user editor of this submission?
      */
     public boolean loggedInUserIsEditor() {
-        return false;
+        return isViewing.getId().equals(submission.getEditorId());
     }
 
     /**

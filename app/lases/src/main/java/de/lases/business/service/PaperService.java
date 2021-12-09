@@ -3,6 +3,7 @@ package de.lases.business.service;
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.DataNotCompleteException;
 import de.lases.persistence.exception.DataNotWrittenException;
+import de.lases.persistence.exception.InvalidFieldsException;
 import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.repository.PaperRepository;
 import de.lases.persistence.repository.SubmissionRepository;
@@ -11,6 +12,8 @@ import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.PropertyResourceBundle;
 import java.util.logging.Level;
@@ -23,13 +26,13 @@ import java.util.logging.Logger;
  * In case of an unexpected state, a {@link UIMessage} event will be fired.
  */
 @Dependent
-public class PaperService {
+public class PaperService implements Serializable {
 
     @Inject
     private Event<UIMessage> uiMessageEvent;
 
     @Inject
-    private PropertyResourceBundle resourceBundle;
+    private transient PropertyResourceBundle resourceBundle;
 
     private static final Logger logger = Logger.getLogger(PaperService.class.getName());
 
@@ -194,8 +197,8 @@ public class PaperService {
 
         if (paper.getSubmissionId() == null && paper.getVersionNumber() == null) {
 
-            logger.severe("The id of the paper is not valid. Therefore no paper object can be queried.");
-            throw new IllegalArgumentException(resourceBundle.getString("idMissing"));
+            logger.severe("The id of the paper is not valid.");
+            throw new InvalidFieldsException(resourceBundle.getString("idMissing"));
 
         } else {
             Transaction transaction = new Transaction();
@@ -273,7 +276,26 @@ public class PaperService {
      */
     public List<Paper> getList(Submission submission, User user,
                                ResultListParameters resultListParameters) {
-        return null;
+        Transaction transaction = new Transaction();
+        List<Paper> paperList = new ArrayList<>();
+
+        try{
+            logger.finest("Getting paper list of a specific submission");
+            paperList = PaperRepository.getList(submission, transaction, user, resultListParameters);
+        } catch (DataNotCompleteException e) {
+
+            logger.fine("Error while loading a list of a paper with the submission id: " + submission.getId()
+                    + " and a user with the id: " + user.getId());
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotComplete"), MessageCategory.WARNING));
+
+
+        } catch (NotFoundException e) {
+            logger.fine("Error while loading a list of a paper with the submission id: " + submission.getId()
+                    + " and a user with the id: " + user.getId());
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotFound"), MessageCategory.WARNING));
+
+        }
+        return paperList;
     }
 
     /**

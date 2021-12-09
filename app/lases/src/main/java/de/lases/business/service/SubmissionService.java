@@ -13,6 +13,7 @@ import jakarta.inject.Inject;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 import java.util.PropertyResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,7 +34,7 @@ public class SubmissionService implements Serializable {
     private Event<UIMessage> uiMessageEvent;
 
     @Inject
-    PropertyResourceBundle resourceBundle;
+    private transient PropertyResourceBundle resourceBundle;
 
     /**
      * Gets a submission.
@@ -137,6 +138,34 @@ public class SubmissionService implements Serializable {
      * @param submission A {@link Submission}-DTO containing a valid id.
      */
     public void remove(Submission submission) {
+        //TODO: EMail to inform editor
+
+        if (submission.getId() == null) {
+            logger.severe("The id of the submission is not valid . Submission can't be deleted");
+            throw new InvalidFieldsException(resourceBundle.getString("idMissing"));
+        } else {
+            Transaction transaction = new Transaction();
+
+            try {
+                SubmissionRepository.remove(submission, transaction);
+                transaction.commit();
+            } catch (DataNotWrittenException e) {
+
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotWritten"), MessageCategory.WARNING));
+                logger.log(Level.WARNING, e.getMessage());
+
+                transaction.abort();
+
+            } catch (NotFoundException e) {
+
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotFound"), MessageCategory.ERROR));
+                logger.fine("Error while removing a submssion with the id: " + submission.getId());
+
+                transaction.abort();
+
+            }
+        }
+
     }
 
 

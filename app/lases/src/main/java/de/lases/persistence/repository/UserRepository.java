@@ -66,9 +66,29 @@ public class UserRepository {
                 WHERE "user".id = ? OR "user".email_address = ?
                 """;
 
+        String find_by_email = """
+                SELECT id
+                FROM "user"
+                WHERE LOWER(email_address) = ?
+                """;
+
         User result;
         try {
             Connection conn = transaction.getConnection();
+
+            // first find user by email if no ID is given.
+            if (user.getId() == null) {
+                PreparedStatement ps = conn.prepareStatement(find_by_email);
+                ps.setString(1, user.getEmailAddress().toLowerCase());
+
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    user.setId(rs.getInt("id"));
+                } else {
+                    logger.finest("No user found for address: " + user.getEmailAddress());
+                    throw new NotFoundException("No user found for email-address: " + user.getEmailAddress());
+                }
+            }
 
             // Attempt to query for the user.
             ResultSet userResult;
@@ -131,6 +151,7 @@ public class UserRepository {
         if (birthDate != null) {
             result.setDateOfBirth(birthDate.toLocalDate());
         }
+        result.setPasswordSalt(userResult.getString("password_salt"));
         result.setPasswordHashed(userResult.getString("password_hash"));
         result.setRegistered(userResult.getBoolean("is_registered"));
 
