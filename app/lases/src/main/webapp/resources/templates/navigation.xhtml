@@ -44,13 +44,12 @@
 
                 <!-- search form -->
                 <h:form>
-                    <h:panelGrid columns="2">
+                    <h:panelGrid columns="2" rendered="#{navigationBacking.sessionInformation.user != null}">
                         <h:inputText styleClass="form-control mr-sm2"
                                      value="#{navigationBacking.resultListParameters.globalSearchWord}"
                                      title="#{help.search}"/>
                         <h:commandButton action="#{navigationBacking.search}"
                                          value="#{labels.search}"
-                                         rendered="#{navigationBacking.sessionInformation.user != null}"
                                          styleClass="btn btn-primary my-2 my-sm-0"/>
                     </h:panelGrid>
                 </h:form>
