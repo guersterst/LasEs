@@ -50,10 +50,12 @@
                                     <hr/>
 
                                     <div class="form-group">
-                                        <h:selectOneMenu id="editor-slctom" value="#{newSubmissionBacking.editorSelectionInput}">
+                                        <h:selectOneMenu id="editor-slctom" value="#{newSubmissionBacking.newSubmission.editorId}">
                                             <f:selectItems value="#{newSubmissionBacking.editors}" var="editor"
-                                                           itemLabel="#{editor.firstName.concat(' ').concat(editor.lastName)}"/>
+                                                           itemLabel="#{editor.firstName.concat(' ').concat(editor.lastName)}"
+                                                           itemValue="#{editor.id}"/>
                                         </h:selectOneMenu>
+                                        <h:message for="editor-slctom"/>
                                     </div>
 
                                     <hr/>

@@ -54,8 +54,6 @@ public class NewSubmissionBacking implements Serializable {
 
     private ScientificForum forumInput;
 
-    private User editorSelectionInput;
-
     private Part uploadedPDF;
 
     private User coAuthorInput;
@@ -63,8 +61,6 @@ public class NewSubmissionBacking implements Serializable {
     private List<User> coAuthors;
 
     private List<User> editors;
-
-    private User selectedEditor;
 
     /**
      * Initialize the dtos used in this bean and load the list of possible
@@ -76,9 +72,6 @@ public class NewSubmissionBacking implements Serializable {
      *     </li>
      *     <li>
      *         the scientific forum input
-     *     </li>
-     *     <li>
-     *         the editor selection input
      *     </li>
      *     <li>
      *         the pdf upload input
@@ -93,9 +86,6 @@ public class NewSubmissionBacking implements Serializable {
      *         the list of editors for the forum this submission will be
      *         submitted in
      *     </li>
-     *     <li>
-     *         the selected editor
-     *     </li>
      * </ul>
      * The list of editors for the forum this submission will be submitted in
      * will be directly populated from the database, if the scientific forum is already prefilled.
@@ -103,7 +93,6 @@ public class NewSubmissionBacking implements Serializable {
     @PostConstruct
     public void init() {
         newSubmission = new Submission();
-        editorSelectionInput = new User();
         coAuthorInput = new User();
         coAuthors = new ArrayList<>();
         if (forumInput != null) {
@@ -112,7 +101,6 @@ public class NewSubmissionBacking implements Serializable {
             forumInput = new ScientificForum();
             editors = new ArrayList<>();
         }
-        selectedEditor = new User();
 
         // TODO: Wenn das Scientific forume existiert muss das hier vorausgefuellt sein und eine illegal user flow
         // exception kommen falls nicht!
@@ -143,7 +131,7 @@ public class NewSubmissionBacking implements Serializable {
      * @param user The co-author to delete.
      */
     public void deleteCoAuthor(User user) {
-        logger.log(Level.FINEST, "This is executed and I can log it aswell.");
+        logger.log(Level.SEVERE, "This is executed and I can log it aswell.");
         coAuthors.remove(user);
     }
 
@@ -208,24 +196,6 @@ public class NewSubmissionBacking implements Serializable {
      */
     public void setForumInput(ScientificForum forumInput) {
         this.forumInput = forumInput;
-    }
-
-    /**
-     * Get the selected user that can be added as an editor.
-     *
-     * @return The selected user that can be added as an editor.
-     */
-    public User getEditorSelectionInput() {
-        return editorSelectionInput;
-    }
-
-    /**
-     * Set the selected user that can be added as an editor.
-     *
-     * @param editorSelectionInput Selected user that can be added as an editor.
-     */
-    public void setEditorSelectionInput(User editorSelectionInput) {
-        this.editorSelectionInput = editorSelectionInput;
     }
 
     /**
