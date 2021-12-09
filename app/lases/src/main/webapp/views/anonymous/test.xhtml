@@ -11,8 +11,13 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
 
             <!--- image -->
-            <h:link styleClass="navbar-brand"> <!-- TODO Link -->
-                <h:graphicImage value="/image?type=avatar&amp;id=4"/>
+            <h:link
+                    styleClass="navbar-brand"
+                    outcome="/views/authenticated/homepage.xhtml">
+                <h:graphicImage
+                        value="/image?logo"
+                        width="50"
+                        height="50"/>
             </h:link>
 
             <!-- navigation -->
@@ -22,7 +27,7 @@
                             value="#{labels.userList}"
                             outcome="/views/editor/userList"
                             title="#{help.userList}"
-                            rendered="#{true}"
+                            rendered="#{navigationBacking.sessionInformation.user.privileges.contains(Privilege.EDITOR)}"
                             styleClass="nav-item nav-link"/>
                     <h:link
                             value="#{labels.forumList}" outcome="/views/authenticated/scientificForumList"
@@ -39,30 +44,30 @@
                             outcome="/views/authenticated/profile"
                             rendered="#{true}"
                             styleClass="nav-item nav-link"/>
+
+                    <!-- search form -->
+
+                        <h:inputText
+                                value="#{navigationBacking.resultListParameters.globalSearchWord}"
+                                title="#{help.search}"
+                                rendered="#{navigationBacking.sessionInformation.user != null}"
+                                styleClass="form-control mr-sm-2"
+                                a:placholder="#{labels.search}"
+                                type="search"
+                                a:aria-label="Search"/>
+                    <form class="form-inline">
+                        <h:commandButton
+                                action="#{navigationBacking.search}"
+                                value="#{labels.search}"
+                                rendered="#{navigationBacking.sessionInformation.user != null}"
+                                styleClass="btn btn-outline-success my-2 my-sm-0"
+                                type="submit"/>
+                    </form>
                 </div>
             </div>
 
-            <!-- search form -->
-            <h:form
-                    rendered="#{true}"
-                    styleClass="form-inline">
-                <h:inputText
-                        value="#{navigationBacking.resultListParameters.globalSearchWord}"
-                        title="#{help.search}"
-                        rendered="#{true}"
-                        styleClass="form-control mr-sm-2"
-                        a:placholder="#{labels.search}"
-                        type="search"
-                        aria-label="Search"/>
-                <h:commandButton
-                        action="#{navigationBacking.search}"
-                        rendered="#{true}"
-                        styleClass="btn btn-outline-success my-2 my-sm-0"
-                        type="submit"/>
-            </h:form>
-
             <!-- logout -->
-            <h:form styleClass="form-inline">
+            <h:form styleClass="form-inline mx-3">
                 <h:commandButton
                         value="#{labels.logout}"
                         action="#{navigationBacking.logout}"
