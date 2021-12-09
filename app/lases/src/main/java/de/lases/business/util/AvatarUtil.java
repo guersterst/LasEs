@@ -26,7 +26,7 @@ public final class AvatarUtil {
      *
      * @param imageFile The {@link FileDTO} containing an image as a byte array.
      * @return The image converted into a thumbnail.
-     * @throws IOException If the creation of an image and its scaling has failed.
+     * @throws IOException If the creation of an image or its scaling has failed.
      */
     public static FileDTO generateThumbnail(FileDTO imageFile) throws IOException {
         if (imageFile.getFile() == null) {
