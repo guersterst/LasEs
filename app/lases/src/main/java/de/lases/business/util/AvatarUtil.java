@@ -1,7 +1,11 @@
 package de.lases.business.util;
 
 import de.lases.global.transport.FileDTO;
+import de.lases.persistence.exception.DataNotWrittenException;
 import de.lases.persistence.exception.InvalidFieldsException;
+import de.lases.persistence.repository.ConnectionPool;
+import de.lases.persistence.repository.SystemSettingsRepository;
+import de.lases.persistence.repository.Transaction;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -81,8 +85,9 @@ public final class AvatarUtil {
         return bImage;
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, DataNotWrittenException {
 
+        /*
         // Get image.
         BufferedImage img = ImageIO.read(AvatarUtil.class.getClassLoader().getResource("face.jpg"));
 
@@ -97,7 +102,21 @@ public final class AvatarUtil {
         BufferedImage bufferedThumbnail = getBufferedImageFromByteArray(thumbnail);
         File outputFile = new File("thumbnail.jpg");
         ImageIO.write(bufferedThumbnail, "jpg", outputFile);
+         */
 
+        ConnectionPool.init();
+        // Get image.
+        BufferedImage img = ImageIO.read(AvatarUtil.class.getClassLoader().getResource("face.jpg"));
+
+        // Create fileDTO.
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(img, "jpg", baos);
+        FileDTO fileDTO = new FileDTO();
+        fileDTO.setFile(baos.toByteArray());
+
+
+        Transaction transaction = new Transaction();
+        SystemSettingsRepository.setLogo(fileDTO, transaction);
     }
 
 }
