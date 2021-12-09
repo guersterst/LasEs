@@ -23,7 +23,7 @@
                     <div class="container" id="container-new-submission">
                         <div class="card" id="subvmission-card">
                             <div class="card-header">
-                                LoReM IpsUm DoloR Sit Amet ConescutOR AdiPsinG
+                                #{labels.generalSettings}
                             </div>
                             <div class="card-body">
                                 <h:form id="new-submission-form" enctype="multipart/form-data">
@@ -50,7 +50,8 @@
                                     <hr/>
 
                                     <div class="form-group">
-                                        <h:selectOneMenu id="editor-slctom" value="#{newSubmissionBacking.newSubmission.editorId}">
+                                        <h:selectOneMenu id="editor-slctom" styleClass="btn btn-secondary dropdown-toggle"
+                                                         value="#{newSubmissionBacking.newSubmission.editorId}">
                                             <f:selectItems value="#{newSubmissionBacking.editors}" var="editor"
                                                            itemLabel="#{editor.firstName.concat(' ').concat(editor.lastName)}"
                                                            itemValue="#{editor.id}"/>
@@ -68,9 +69,13 @@
                                         <h:message for="pdf-upload-ifile"/>
                                     </div>
 
-                                    <h:commandButton styleClass="btn btn-primary" id="submitcbtn" value="#{labels.save}"
-                                                     action="#{newSubmissionBacking.submit()}"
-                                                     type="submit"/>
+                                    <hr/>
+
+                                    <div class="form-group">
+                                        <h:commandButton styleClass="btn btn-primary" id="submitcbtn" value="#{labels.save}"
+                                                         action="#{newSubmissionBacking.submit()}"
+                                                         type="submit"/>
+                                    </div>
                                 </h:form>
                             </div>
                         </div>
@@ -128,11 +133,15 @@
                                         <h:message for="co-author-email-itxt"/>
                                     </div>
 
-                                    <h:commandButton id="submit-co-author-cbtn" value="#{labels.add}"
-                                                     styleClass="btn btn-primary" type="submit"
-                                                     action="#{newSubmissionBacking.submitCoAuthor()}">
-                                        <f:ajax execute="co-authors-form" render="co-authors-form" />
-                                    </h:commandButton>
+                                    <hr/>
+
+                                    <div class="form-group">
+                                        <h:commandButton id="submit-co-author-cbtn" value="#{labels.add}"
+                                                         styleClass="btn btn-secondary" type="submit"
+                                                         action="#{newSubmissionBacking.submitCoAuthor()}">
+                                            <f:ajax execute="co-authors-form" render="co-authors-form" />
+                                        </h:commandButton>
+                                    </div>
 
                                     <hr/>
 
@@ -145,7 +154,7 @@
                                             #{user.lastName}
                                             #{user.emailAddress}
                                             <h:commandButton id="delete-co-author-cbtn" value="#{labels.delete}"
-                                                             styleClass="btn-primary btn" type="submit"
+                                                             styleClass="btn-secondary btn" type="submit"
                                                              action="#{newSubmissionBacking.deleteCoAuthor(user)}">
                                                 <f:ajax execute="co-authors-form" render="co-authors-form" />
                                             </h:commandButton>
