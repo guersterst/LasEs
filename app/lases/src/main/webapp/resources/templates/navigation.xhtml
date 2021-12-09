@@ -19,7 +19,7 @@
                     rendered="#{navigationBacking.sessionInformation.user != null}"/>
             <h:link
                     value="#{labels.userList}" outcome="/views/editor/userList" title="#{help.userList}"
-                    rendered="#{navigationBacking.sessionInformation.user.editor}"/>
+                    rendered="#{navigationBacking.sessionInformation.user.privileges.contains(Privilege.EDITOR)}"/>
             <h:link
                     value="#{labels.forumList}" outcome="/views/authenticated/scientificForumList"
                     title="#{help.forumList}"
@@ -34,7 +34,7 @@
                     title="#{help.logout}"
                     rendered="#{navigationBacking.sessionInformation.user != null}"/>
             <h:link
-                    value="#{labels.nav.profile}"
+                    value="#{labels.navProfile}"
                     outcome="/views/authenticated/profile"
                     rendered="#{navigationBacking.sessionInformation.user != null}"/>
         </h:form>

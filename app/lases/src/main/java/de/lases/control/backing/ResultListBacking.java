@@ -45,6 +45,8 @@ public class ResultListBacking implements Serializable {
 
     private Pagination<ScientificForum> scientificForumPagination;
 
+    private ResultListParameters resultListParameters;
+
     /**
      * Initialize the dtos and load data from the datasource where possible.
      * Create objects for:
@@ -86,6 +88,7 @@ public class ResultListBacking implements Serializable {
      */
     @PostConstruct
     public void init() {
+        resultListParameters = new ResultListParameters();
     }
 
     /**
@@ -134,5 +137,9 @@ public class ResultListBacking implements Serializable {
      */
     public Pagination<ScientificForum> getScientificForumPagination() {
         return scientificForumPagination;
+    }
+
+    public void setSearchWord(String searchWord) {
+        resultListParameters.setGlobalSearchWord(searchWord);
     }
 }
