@@ -14,6 +14,7 @@ import jakarta.servlet.http.Part;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -87,6 +88,13 @@ public class NewSubmissionBacking {
      */
     @PostConstruct
     public void init() {
+        newSubmission = new Submission();
+        forumInput = new ScientificForum();
+        editorSelectionInput = new User();
+        coAuthorInput = new User();
+        coAuthors = new ArrayList<>();
+        editors = userService.getList(forumInput);
+        selectedEditor = new User();
     }
 
     /**
