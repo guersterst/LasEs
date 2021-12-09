@@ -44,16 +44,21 @@ public class User implements Cloneable {
      * @return Is the user an admin.
      */
     public boolean isAdmin() {
-        return false;
+        return privileges.contains(Privilege.ADMIN);
     }
 
     /**
      * Set the flag whether this user is an admin.
      * This does not change the {@link User#privileges}.
      *
-     * @param isAdmin Should teh use be an admin.
+     * @param isAdmin Should the use be an admin.
      */
     public void setAdmin(boolean isAdmin) {
+        if (isAdmin) {
+            privileges.add(Privilege.ADMIN);
+        } else {
+            privileges.remove(Privilege.ADMIN);
+        }
     }
 
     public int getVerificationId() {

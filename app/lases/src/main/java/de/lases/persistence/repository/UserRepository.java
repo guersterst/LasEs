@@ -7,8 +7,10 @@ import de.lases.persistence.util.DatasourceUtil;
 import jakarta.enterprise.inject.spi.CDI;
 
 import java.sql.*;
-import java.sql.Date;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -136,7 +138,18 @@ public class UserRepository {
         return result;
     }
 
-    private static User createUserFromResultSet(ResultSet userResult, ResultSet submissionAndEditorResult) throws SQLException {
+    /**
+     * Create a {@link User} from the given results of the SQL queries.
+     *
+     * @param userResult The result of the query for the user entity.
+     * @param submissionAndEditorResult The result of the query for the number of submissions and
+     *                                  whether the user is an editor.
+     * @return The fully-filled {@code User}
+     * @throws SQLException If the ResultSet columns are invalid or  if a database access error occurs or
+     * if this method is called on a closed ResultSet.
+     */
+    private static User createUserFromResultSet(ResultSet userResult, ResultSet submissionAndEditorResult)
+            throws SQLException {
 
         // Regular required user data.
         User result = new User();
@@ -181,6 +194,7 @@ public class UserRepository {
         try {
             result.setNumberOfSubmissions(submissionAndEditorResult.getInt("number_of_submissions"));
         } catch (SQLException ex) {
+
             // Do nothing.
         }
         return result;

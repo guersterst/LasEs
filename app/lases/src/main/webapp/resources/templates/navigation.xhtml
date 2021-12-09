@@ -23,7 +23,8 @@
                         value="#{labels.userList}"
                         outcome="/views/editor/userList"
                         title="#{help.userList}"
-                        rendered="#{navigationBacking.sessionInformation.user.privileges.contains(Privilege.EDITOR)}"
+                        rendered="#{navigationBacking.sessionInformation.user.privileges.contains(Privilege.EDITOR)
+                        || navigationBacking.sessionInformation.user.isAdmin()}"
                         styleClass="nav-item nav-link"/>
                 <h:link
                         value="#{labels.forumList}" outcome="/views/authenticated/scientificForumList"
@@ -33,7 +34,7 @@
                 <h:link
                         value="#{labels.administration}"
                         outcome="/views/admin/administration"
-                        rendered="#{navigationBacking.sessionInformation.user.admin}"
+                        rendered="#{navigationBacking.sessionInformation.user.isAdmin()}"
                         styleClass="nav-item nav-link"/>
                 <h:link
                         value="#{labels.navProfile}"
