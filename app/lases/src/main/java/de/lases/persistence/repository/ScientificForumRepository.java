@@ -1,15 +1,24 @@
 package de.lases.persistence.repository;
 
-import de.lases.global.transport.*;
+import de.lases.global.transport.ResultListParameters;
+import de.lases.global.transport.ScienceField;
+import de.lases.global.transport.ScientificForum;
+import de.lases.global.transport.User;
 import de.lases.persistence.exception.*;
 
+import java.sql.*;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Offers get/add/change/remove operations on a scientific forum and the
  * possibility to get lists of scientific forums.
+ *
+ * @author Thomas Kirz
  */
 public class ScientificForumRepository {
+
+    private static final Logger l = Logger.getLogger(ScientificForumRepository.class.getName());
 
     /**
      * Takes a scientific forum dto that is filled with a valid id or a valid
@@ -29,7 +38,49 @@ public class ScientificForumRepository {
     public static ScientificForum get(ScientificForum scientificForum,
                                       Transaction transaction)
             throws NotFoundException {
-        return null;
+        if (scientificForum.getId() == null) {
+            l.severe("The passed ScientificForum-DTO does not contain an id.");
+            throw new IllegalArgumentException("ScientificForum id must not be null.");
+        }
+
+        Connection conn = transaction.getConnection();
+        String sql = "SELECT * FROM scientific_forum WHERE id = ?";
+
+        ScientificForum result;
+        ResultSet resultSet;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, scientificForum.getId());
+            resultSet = stmt.executeQuery();
+
+            // Attempt to create a scientific forum from the result set.
+            if (resultSet.next()) {
+                result = createScientificForumFromResultSet(resultSet);
+                l.finer("Retrieved scientific forum with id " + scientificForum.getId());
+            } else {
+                l.warning("No scientific forum with id " + scientificForum.getId() + " found in database.");
+                throw new NotFoundException("No scientific forum with id " + scientificForum.getId());
+            }
+        } catch (SQLException e) {
+            throw new DatasourceQueryFailedException(e.getMessage(), e);
+        }
+
+        return result;
+    }
+
+    private static ScientificForum createScientificForumFromResultSet(ResultSet resultSet) throws SQLException {
+        ScientificForum forum = new ScientificForum();
+
+        // retrieve fields from result set
+        forum.setId(resultSet.getInt("id"));
+        forum.setName(resultSet.getString("name"));
+        forum.setDescription(resultSet.getString("description"));
+        forum.setUrl(resultSet.getString("url"));
+        forum.setReviewManual(resultSet.getString("review_manual"));
+        Timestamp ts = resultSet.getTimestamp("deadline");
+        forum.setDeadline(ts == null ? null : ts.toLocalDateTime());
+
+        return forum;
     }
 
     /**

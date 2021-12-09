@@ -1,9 +1,15 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.*;
+
 import de.lases.persistence.exception.*;
+
+import de.lases.persistence.exception.DataNotCompleteException;
+import de.lases.persistence.exception.NotFoundException;
+
 import de.lases.persistence.repository.SubmissionRepository;
 import de.lases.persistence.repository.Transaction;
+import de.lases.persistence.repository.UserRepository;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
@@ -14,17 +20,22 @@ import java.util.List;
 import java.util.Objects;
 import java.util.PropertyResourceBundle;
 import java.util.logging.Level;
+import java.util.PropertyResourceBundle;
 import java.util.logging.Logger;
 
 /**
  * Provides functionality regarding the management and handling of submissions.
  * In case of an unexpected state, a {@link UIMessage} event will be fired.
+ *
+ * @author Thomas Kirz
  */
 @Dependent
 public class SubmissionService implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 3347910586400642643L;
+
+    private final Logger l = Logger.getLogger(SubmissionService.class.getName());
 
     @Inject
     private Event<UIMessage> uiMessageEvent;
@@ -34,6 +45,10 @@ public class SubmissionService implements Serializable {
 
     private static final Logger logger = Logger.getLogger(PaperService.class.getName());
 
+    @Inject
+    private UserService userService;
+
+
     /**
      * Gets a submission.
      *
@@ -41,7 +56,26 @@ public class SubmissionService implements Serializable {
      * @return The submission's data.
      */
     public Submission get(Submission submission) {
-        return null;
+        if (submission.getId() == null) {
+            l.severe("The passed Submission-DTO does not contain an id.");
+            throw new IllegalArgumentException("The passed Submission-DTO does not contain an id.");
+        }
+
+        Submission result = null;
+        Transaction t = new Transaction();
+        try {
+            result = SubmissionRepository.get(submission, t);
+            t.commit();
+            l.finer("Submission with id " + submission.getId() + " retrieved.");
+        } catch (NotFoundException e) {
+            l.severe("Submission not found.");
+            uiMessageEvent.fire(new UIMessage(
+                    resourceBundle.getString("error.requestedSubmissionDoesNotExist"),
+                    MessageCategory.ERROR));
+            t.abort();
+        }
+
+        return result;
     }
 
     /**
@@ -239,11 +273,51 @@ public class SubmissionService implements Serializable {
      *
      * @param submission The {@link Submission}, with a valid id, to be viewed.
      * @param user       The {@link User} whose view access is being determined.
-     *                   Must contain a view-privilege.
+     *                   Must contain an id.
      * @return {@code false} if view access is restricted, {@code true} otherwise.
      */
     public boolean canView(Submission submission, User user) {
-        return false;
+        if (submission.getId() == null || user.getId() == null) {
+            l.severe("Submission and user id must not be null.");
+            throw new IllegalArgumentException("Submission and user id must not be null.");
+        }
+
+        // load user from database
+        Transaction t = new Transaction();
+        try {
+            user = UserRepository.get(user, t);
+            l.finer("User with id " + user.getId() + " retrieved.");
+        } catch (NotFoundException e) {
+            l.severe("User with id " + user.getId() + " not found.");
+            uiMessageEvent.fire(new UIMessage(
+                    resourceBundle.getString("error.loadingSubmissionFailed"),
+                    MessageCategory.ERROR));
+            t.abort();
+            return false;
+        }
+
+        // load submission from database
+        try {
+            submission = SubmissionRepository.get(submission, t);
+            l.finer("Submission with id " + submission.getId() + " retrieved.");
+        } catch (NotFoundException e) {
+            l.severe("Submission with id " + submission.getId() + " not found.");
+            uiMessageEvent.fire(new UIMessage(
+                    resourceBundle.getString("error.loadingSubmissionFailed"),
+                    MessageCategory.ERROR));
+            t.abort();
+            return false;
+        }
+
+        ScientificForum forum = new ScientificForum();
+        forum.setId(submission.getScientificForumId());
+
+        // Check if the user is admin, editor of the forum
+        // or reviewer or author of the submission
+        return user.isAdmin()
+                || userService.getList(forum).contains(user)
+                || userService.getList(submission, Privilege.REVIEWER).contains(user)
+                || userService.getList(submission, Privilege.AUTHOR).contains(user);
     }
 
 
@@ -258,7 +332,28 @@ public class SubmissionService implements Serializable {
      * @return The resulting list of submissions, which a user is involved in.
      */
     public List<Submission> getList(Privilege privilege, User user, ResultListParameters resultParams) {
-        return null;
+        if (user.getId() == null) {
+            l.severe("The passed User-DTO has no id.");
+            throw new IllegalArgumentException("The passed User-DTO has no id.");
+        }
+
+        List<Submission> result = null;
+        Transaction t = new Transaction();
+        try {
+            result = SubmissionRepository.getList(user, privilege, t, resultParams);
+            t.commit();
+            l.finer("List of submissions retrieved.");
+        } catch (DataNotCompleteException e) {
+            //TODO How to handle?
+        } catch (NotFoundException e) {
+            l.severe("User to get submissions for not found.");
+            uiMessageEvent.fire(new UIMessage(
+                    resourceBundle.getString("error.findingSubmissionListFailed"),
+                    MessageCategory.ERROR));
+            t.abort();
+        }
+
+        return result;
     }
 
     /**
@@ -275,31 +370,88 @@ public class SubmissionService implements Serializable {
      */
     public List<Submission> getList(ScientificForum scientificForum, User user, Privilege privilege,
                                     ResultListParameters resultParams) {
-        return null;
+        if (user.getId() == null || scientificForum.getId() == null) {
+            l.severe("User and ScientificForum id must not be null.");
+            throw new IllegalArgumentException("User and ScientificForum id must not be null.");
+        }
+
+        List<Submission> result = null;
+        Transaction t = new Transaction();
+        try {
+            result = SubmissionRepository.getList(user, privilege, scientificForum, t, resultParams);
+            t.commit();
+            l.finer("List of submissions retrieved.");
+        } catch (DataNotCompleteException e) {
+            //TODO How to handle?
+        } catch (NotFoundException e) {
+            l.severe("User or ScientificForum to get submissions for not found.");
+            uiMessageEvent.fire(new UIMessage(
+                    resourceBundle.getString("error.findingSubmissionListFailed"),
+                    MessageCategory.ERROR));
+            t.abort();
+        }
+
+        return result;
     }
 
     /**
      * Gets a list all submissions that belong to a given scientific forum.
      *
-     * @param scientificForum      A {@link ScientificForum} with a valid id.
-     * @param resultListParameters The {@link ResultListParameters} that results
-     *                             parameters from the pagination like
-     *                             filtering, sorting or number of elements.
+     * @param scientificForum A {@link ScientificForum} with a valid id.
+     * @param resultParams    The {@link ResultListParameters} that results
+     *                        parameters from the pagination like
+     *                        filtering, sorting or number of elements.
      * @return A list of all {@link Submission}s that belong to a given scientific forum.
      */
-    public static List<Submission> getList(ScientificForum scientificForum,
-                                           ResultListParameters
-                                                   resultListParameters) {
-        return null;
+    public List<Submission> getList(ScientificForum scientificForum,
+                                    ResultListParameters resultParams) {
+        if (scientificForum.getId() == null) {
+            l.severe("ScientificForum id must not be null.");
+            throw new IllegalArgumentException("ScientificForum id must not be null.");
+        }
+
+        List<Submission> result = null;
+        Transaction t = new Transaction();
+        try {
+            result = SubmissionRepository.getList(scientificForum, t, resultParams);
+            t.commit();
+            l.finer("List of submissions retrieved.");
+        } catch (DataNotCompleteException e) {
+            //TODO How to handle?
+        } catch (NotFoundException e) {
+            l.severe("ScientificForum to get submissions for not found.");
+            uiMessageEvent.fire(new UIMessage(
+                    resourceBundle.getString("error.findingSubmissionListFailed"),
+                    MessageCategory.ERROR));
+            t.abort();
+        }
+
+        return result;
     }
 
     /**
      * The amount of submissions where the given user is a direct author to.
      *
      * @param user A {@link User}-DTO with a valid id.
-     * @return The number of submission the specified user authored.
+     * @return The number of submission the specified user authored and -1
+     * if retrieving the amount of submissions failed.
      */
-    public static int countSubmissions(User user) {
-        return 0;
+    public int countSubmissions(User user) {
+        if (user.getId() == null) {
+            l.severe("The passed User-DTO has no id.");
+            throw new IllegalArgumentException("The passed User-DTO has no id.");
+        }
+
+        Transaction t = new Transaction();
+        try {
+            return SubmissionRepository.countSubmissions(user, t);
+        } catch (NotFoundException e) {
+            l.severe("User to count submissions for not found.");
+            uiMessageEvent.fire(new UIMessage(
+                    resourceBundle.getString("error.findingSubmissionListFailed"),
+                    MessageCategory.ERROR));
+            t.abort();
+            return -1;
+        }
     }
 }

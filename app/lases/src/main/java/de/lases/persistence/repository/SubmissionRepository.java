@@ -2,19 +2,33 @@ package de.lases.persistence.repository;
 
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
+
 import de.lases.persistence.util.DatasourceUtil;
 
 import java.sql.*;
 import java.util.List;
+
+import de.lases.persistence.internal.ConfigReader;
+import jakarta.enterprise.inject.spi.CDI;
+
+import java.util.ArrayList;
+import java.util.Objects;
+
 import java.util.logging.Logger;
 
 /**
  * Offers get/add/change/remove operations on a submission and the
  * possibility to get lists of submissions.
+ *
+ * @author Thomas Kirz
  */
 public class SubmissionRepository {
 
+
     private static final Logger logger = Logger.getLogger(SubmissionRepository.class.getName());
+
+    private static final List<String> filterColumnNames = List.of("title");
+
 
     /**
      * Takes a scientific forum dto that is filled with a valid id and returns
@@ -31,7 +45,56 @@ public class SubmissionRepository {
      */
     public static Submission get(Submission submission, Transaction transaction)
             throws NotFoundException {
-        return null;
+        if (submission.getId() == null) {
+            logger.severe("The passed Submission-DTO does not contain an id.");
+            throw new IllegalArgumentException("The passed Submission-DTO does not contain an id.");
+        }
+
+        Connection conn = transaction.getConnection();
+        String sql = "SELECT * FROM submission WHERE id = ?";
+
+        Submission result;
+        ResultSet resultSet;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, submission.getId());
+            resultSet = stmt.executeQuery();
+
+            // Attempt to create a submission from the result set.
+            if (resultSet.next()) {
+                result = createSubmissionFromResultSet(resultSet);
+                logger.finer("Successfully retrieved submission with id " + submission.getId() + "from database.");
+            } else {
+                logger.warning("No submission with id " + submission.getId() + " found in database.");
+                throw new NotFoundException("No submission with id " + submission.getId() + " found.");
+            }
+        } catch (SQLException e) {
+            logger.severe(e.getMessage());
+            throw new DatasourceQueryFailedException(e.getMessage(), e);
+        }
+
+        return result;
+    }
+
+    private static Submission createSubmissionFromResultSet(ResultSet resultSet) throws SQLException {
+        Submission sub = new Submission();
+
+        // retrieve required fields
+        sub.setId(resultSet.getInt("id"));
+        sub.setTitle(resultSet.getString("title"));
+        sub.setState(SubmissionState.valueOf(resultSet.getString("state")));
+        Timestamp ts = resultSet.getTimestamp("timestamp_submission");
+        sub.setSubmissionTime(ts == null ? null : ts.toLocalDateTime());
+        sub.setRevisionRequired(resultSet.getBoolean("requires_revision"));
+        Timestamp td = resultSet.getTimestamp("timestamp_deadline_revision");
+        sub.setDeadlineRevision(td == null ? null : td.toLocalDateTime());
+        sub.setEditorId(resultSet.getInt("editor_id"));
+
+        // retrieve optional fields
+        sub.setAuthorId(resultSet.getInt("author_id"));
+        sub.setScientificForumId(resultSet.getInt("forum_id"));
+
+        return sub;
     }
 
     /**
@@ -203,7 +266,57 @@ public class SubmissionRepository {
                                            ResultListParameters
                                                    resultListParameters)
             throws DataNotCompleteException, NotFoundException {
-        return null;
+
+        if (user.getId() == null || scientificForum.getId() == null) {
+            logger.severe("A passed DTO is not sufficiently filled.");
+            throw new IllegalArgumentException("User and ScientificForum id must not be null.");
+        }
+
+        Connection conn = transaction.getConnection();
+
+        ResultSet resultSet;
+        List<Submission> result = new ArrayList<>();
+
+        if (privilege == Privilege.ADMIN) {
+            return getList(scientificForum, transaction, resultListParameters);
+        } else {
+            String sql = switch (privilege) {
+                case EDITOR -> """
+                        SELECT * FROM submission
+                        WHERE forum_id = ? AND editor_id = ?
+                        """;
+                case REVIEWER -> """
+                        SELECT * FROM submission
+                        WHERE forum_id = ?
+                        AND EXISTS (SELECT 1 FROM reviewed_by rb
+                                    WHERE rb.submission_id = submission.id
+                                    AND rb.reviewer_id = ?)
+                        """;
+                default -> """
+                        SELECT * FROM submission
+                        WHERE forum_id = ? AND author_id = ?
+                        """;
+            };
+
+            sql += generateResultListParametersSQLSuffix(resultListParameters);
+
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setInt(1, scientificForum.getId());
+                stmt.setInt(2, user.getId());
+                fillResultListParameterSuffix(3, stmt, resultListParameters);
+                resultSet = stmt.executeQuery();
+
+                // Attempt to create a list of submissions from the result set.
+                while (resultSet.next()) {
+                    result.add(createSubmissionFromResultSet(resultSet));
+                }
+                logger.finer("Retrieved a list of submissions from the database.");
+            } catch (SQLException e) {
+                logger.severe(e.getMessage());
+                throw new DatasourceQueryFailedException(e.getMessage(), e);
+            }
+            return result;
+        }
     }
 
     /**
@@ -230,7 +343,55 @@ public class SubmissionRepository {
                                            ResultListParameters
                                                    resultListParameters)
             throws DataNotCompleteException, NotFoundException {
-        return null;
+        if (user.getId() == null) {
+            logger.severe("Passed  User-DTO is not sufficiently filled.");
+            throw new IllegalArgumentException("User id must not be null.");
+        }
+
+        Connection conn = transaction.getConnection();
+
+        ResultSet resultSet;
+        List<Submission> result = new ArrayList<>();
+
+        String sql = switch (privilege) {
+            case ADMIN -> """
+                    SELECT * FROM submission
+                    """;
+            case EDITOR -> """
+                    SELECT * FROM submission
+                    WHERE editor_id = ?
+                    """;
+            case REVIEWER -> """
+                    SELECT * FROM submission
+                    WHERE EXISTS (SELECT 1 FROM reviewed_by rb
+                                WHERE rb.submission_id = submission.id
+                                AND rb.reviewer_id = ?)
+                    """;
+            default -> """
+                    SELECT * FROM submission
+                    WHERE author_id = ?
+                    """;
+        };
+
+        sql += generateResultListParametersSQLSuffix(resultListParameters);
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            if (privilege != Privilege.ADMIN) {
+                stmt.setInt(1, user.getId());
+            }
+            fillResultListParameterSuffix(2, stmt, resultListParameters);
+            resultSet = stmt.executeQuery();
+
+            // Attempt to create a list of submissions from the result set.
+            while (resultSet.next()) {
+                result.add(createSubmissionFromResultSet(resultSet));
+            }
+            logger.finer("Retrieved a list of submissions from the database.");
+        } catch (SQLException e) {
+            logger.severe(e.getMessage());
+            throw new DatasourceQueryFailedException(e.getMessage(), e);
+        }
+        return result;
     }
 
     /**
@@ -257,6 +418,36 @@ public class SubmissionRepository {
                                            ResultListParameters
                                                    resultListParameters)
             throws DataNotCompleteException, NotFoundException {
+        if (scientificForum.getId() == null) {
+            logger.severe("Passed User-DTO is not sufficiently filled.");
+            throw new IllegalArgumentException("User ScientificForum id must not be null.");
+        }
+
+        Connection conn = transaction.getConnection();
+
+        ResultSet resultSet;
+        List<Submission> result = new ArrayList<>();
+
+        String sql = """
+                    SELECT * FROM submission
+                    WHERE forum_id = ?
+                    """;
+        sql += generateResultListParametersSQLSuffix(resultListParameters);
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, scientificForum.getId());
+            fillResultListParameterSuffix(2, stmt, resultListParameters);
+            resultSet = stmt.executeQuery();
+
+            // Attempt to create a list of submissions from the result set.
+            while (resultSet.next()) {
+                result.add(createSubmissionFromResultSet(resultSet));
+            }
+            logger.finer("Retrieved a list of submissions from the database.");
+        } catch (SQLException e) {
+            logger.severe(e.getMessage());
+            throw new DatasourceQueryFailedException(e.getMessage(), e);
+        }
         return null;
     }
 
@@ -352,7 +543,107 @@ public class SubmissionRepository {
      */
     public static int countSubmissions(User user, Transaction transaction)
             throws NotFoundException {
-        return 0;
+        if (user.getId() == null) {
+            logger.severe("The passed User-DTO does not have an id.");
+            throw new IllegalArgumentException("The passed User-DTO does not have an id.");
+        }
+
+        UserRepository.get(user, transaction); // throws NotFoundException if user does not exist
+
+        Connection conn = transaction.getConnection();
+        String sql = "SELECT COUNT(*) FROM submission WHERE author_id = ?";
+        ResultSet rs;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, user.getId());
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                int result = rs.getInt(1);
+                logger.finer("Retrieved the number of submissions authored by the user with id " + user.getId() + ": " + result);
+                return result;
+            } else {
+                logger.severe("The number of submissions authored by the user with id " + user.getId() +
+                        " could not be retrieved.");
+                throw new DatasourceQueryFailedException("The number of submissions authored by the user with id "
+                        + user.getId() + " could not be retrieved.");
+            }
+        } catch (SQLException e) {
+            logger.severe(e.getMessage());
+            throw new DatasourceQueryFailedException(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Generates a suffix to a SQL query string that incorporates the result list parameters.
+     * Adds <code>params.getFilterColumns().size()</code> query parameters to the SQL query
+     * to be filled with patterns for values of the filter <code>this.columnNames</code> and
+     * <code>columns.size()</code> parameters for the global search word.
+     */
+    private static String generateResultListParametersSQLSuffix(ResultListParameters params) {
+        StringBuilder sb = new StringBuilder();
+
+        // Filter according to date select parameter
+        if (params.getDateSelect() == DateSelect.FUTURE) {
+            sb.append(" AND (timestamp_submission >= CURRENT_DATE || timestamp_deadline_revision >= CURRENT_DATE)\n");
+        } else if (params.getDateSelect() == DateSelect.PAST) {
+            sb.append(" AND (timestamp_deadline_revision <= CURRENT_DATE || timestamp_deadline_revision <= CURRENT_DATE)\n");
+        }
+
+        // Filter according to submission state parameter
+        if (params.getSubmissionState() != null) {
+            sb.append(switch (params.getSubmissionState()) {
+                case ACCEPTED -> " AND state = 'ACCEPTED'\n";
+                case REJECTED -> " AND state = 'REJECTED'\n";
+                case REVISION_REQUIRED -> " AND state = 'REVISION_REQUIRED'\n";
+                case SUBMITTED -> " AND state = 'SUBMITTED'\n";
+            });
+        }
+
+        // Filter according to filter columns parameter.
+        filterColumnNames.forEach(column -> sb.append(" AND ").append(column).append(" LIKE ?\n"));
+
+        // Filter according to global search word.
+        sb.append(" AND (");
+        for (int i = 0; i < filterColumnNames.size(); i++) {
+            sb.append(filterColumnNames.get(i)).append(" LIKE ?\n");
+            if (i < filterColumnNames.size() - 1) {
+                sb.append("OR ");
+            }
+        }
+        sb.append(")\n");
+
+        // Sort according to sort column parameter
+        if (!"".equals(params.getSortColumn()) && filterColumnNames.contains(params.getSortColumn())) {
+            sb.append("ORDER BY ")
+                    .append(params.getSortColumn())
+                    .append(" ")
+                    .append(params.getSortOrder() == SortOrder.ASCENDING ? "ASC" : "DESC")
+                    .append("\n");
+        }
+
+        // Set limit and offset
+        ConfigReader configReader = CDI.current().select(ConfigReader.class).get();
+        int paginationLength = Integer.parseInt(configReader.getProperty("MAX_PAGINATION_LIST_LENGTH"));
+        sb.append("LIMIT ").append(paginationLength)
+                .append(" OFFSET ").append(paginationLength * (params.getPageNo() - 1));
+
+        // Add semicolon to end of query
+        sb.append(";");
+
+        return sb.toString();
+    }
+
+    private static int fillResultListParameterSuffix(int qParamCounter, PreparedStatement stmt, ResultListParameters params) throws SQLException {
+        // Add values for filter columns and global search word
+        for (int i = 0; i < 2; i++) {
+            for (String column : filterColumnNames) {
+                stmt.setString(qParamCounter++,
+                        "%" + Objects.requireNonNullElse(params.getFilterColumns().get(column), "") + "%");
+            }
+        }
+
+        return qParamCounter;
     }
 
     private static ResultSet findSubmission(Submission submission, Connection connection) throws SQLException {
