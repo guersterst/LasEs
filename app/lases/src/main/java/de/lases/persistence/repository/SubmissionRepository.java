@@ -563,12 +563,14 @@ public class SubmissionRepository {
         }
 
         // Filter according to filter columns parameter.
-        filterColumnNames.forEach(column -> sb.append(" AND ").append(column).append(" LIKE ?\n"));
+        filterColumnNames.stream()
+                .filter(columnName -> params.getFilterColumns().get(columnName) != null)
+                .forEach(column -> sb.append(" AND ").append(column).append(" ILIKE ?\n"));
 
         // Filter according to global search word.
         sb.append(" AND (");
         for (int i = 0; i < filterColumnNames.size(); i++) {
-            sb.append(filterColumnNames.get(i)).append(" LIKE ?\n");
+            sb.append(filterColumnNames.get(i)).append(" ILIKE ?\n");
             if (i < filterColumnNames.size() - 1) {
                 sb.append("OR ");
             }
@@ -600,11 +602,14 @@ public class SubmissionRepository {
 
     private static int fillResultListParameterSuffix(int qParamCounter, PreparedStatement stmt, ResultListParameters params) throws SQLException {
         // Add values for filter columns and global search word
-        for (int i = 0; i < 2; i++) {
-            for (String column : filterColumnNames) {
-                stmt.setString(qParamCounter++,
-                        "%" + Objects.requireNonNullElse(params.getFilterColumns().get(column), "") + "%");
+        for (String column : filterColumnNames) {
+            if (params.getFilterColumns().get(column) != null) {
+                stmt.setString(qParamCounter++, "%" + params.getFilterColumns().get(column) + "%");
             }
+        }
+        for (String column : filterColumnNames) {
+            stmt.setString(qParamCounter++,
+                    "%" + Objects.requireNonNullElse(params.getFilterColumns().get(column), "") + "%");
         }
 
         return qParamCounter;
