@@ -5,6 +5,9 @@ import de.lases.global.transport.*;
 import de.lases.persistence.exception.DataNotWrittenException;
 import de.lases.persistence.exception.InvalidFieldsException;
 import de.lases.persistence.exception.NotFoundException;
+import de.lases.global.transport.ConnectionState;
+import de.lases.global.transport.FileDTO;
+import de.lases.global.transport.SystemSettings;
 import de.lases.persistence.repository.SystemSettingsRepository;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
@@ -43,7 +46,10 @@ public class CustomizationService {
      * @return The current settings of the system, that determine its look and feel.
      */
     public SystemSettings get() {
-        return null;
+        Transaction transaction = new Transaction();
+        SystemSettings systemSettings = SystemSettingsRepository.getSettings(transaction);
+        transaction.commit();
+        return systemSettings;
     }
 
     /**

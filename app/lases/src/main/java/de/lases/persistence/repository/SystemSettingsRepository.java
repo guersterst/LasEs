@@ -10,6 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
+import java.sql.*;
+
 /**
  * Offers get/update operations on the system settings and the
  * possibility to get and set the logo.
@@ -43,8 +45,26 @@ public class SystemSettingsRepository {
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
-    public static SystemSettings getSettings(Transaction transaction) {
-        return null;
+    public static SystemSettings getSettings(Transaction transaction) throws DatasourceQueryFailedException {
+        Connection conn = transaction.getConnection();
+        try {
+            PreparedStatement ps = conn.prepareStatement(
+                    "SELECT * FROM system");
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                SystemSettings systemSettings = new SystemSettings();
+
+                systemSettings.setCompanyName(rs.getString("company_name"));
+                systemSettings.setHeadlineWelcomePage(rs.getString("welcome_heading"));
+                systemSettings.setMessageWelcomePage(rs.getString("welcome_description"));
+                systemSettings.setStyle(rs.getString("css_theme"));
+                systemSettings.setImprint(rs.getString("imprint"));
+                return systemSettings;
+            }
+        } catch (SQLException e) {
+            throw new DatasourceQueryFailedException();
+        }
+        throw new DatasourceQueryFailedException("No system settings found.");
     }
 
     /**
