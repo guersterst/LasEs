@@ -124,19 +124,24 @@ public class ConnectionPool {
     /**
      * Shuts down the connection pool, freeing all connections.
      *
-     * @throws IllegalStateException If the pool is not yet initialized.
+     * @throws IllegalStateException If the pool is not yet initialized or there
+     *                               still are used connections.
      */
     public static synchronized void shutDown() {
-        instance.usedConnections.forEach(instance::releaseConnection);
+        instance.checkInitialized();
+        if (!instance.usedConnections.isEmpty()) {
+            throw new IllegalStateException("Cannot shut down connection pool, "
+                    + "there still are used connections.");
+        }
         for (Connection conn: instance.freeConnections) {
             try {
                 conn.close();
             } catch (SQLException ex) {
                 throw new DatasourceQueryFailedException("The connection cannot"
-                        + "be closed");
+                        + " be closed. Shutdown failed");
             }
         }
-
+        logger.info("DB Connection Pool stopped");
         getInstance().initialized = false;
     }
 

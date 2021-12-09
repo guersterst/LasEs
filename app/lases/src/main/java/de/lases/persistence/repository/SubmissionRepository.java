@@ -2,13 +2,21 @@ package de.lases.persistence.repository;
 
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
+
+import de.lases.persistence.util.DatasourceUtil;
+import org.postgresql.util.PSQLException;
+
+import java.sql.*;
+
+import java.sql.*;
+import java.util.List;
+
 import de.lases.persistence.internal.ConfigReader;
 import jakarta.enterprise.inject.spi.CDI;
 
-import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
+
 import java.util.logging.Logger;
 
 /**
@@ -19,10 +27,12 @@ import java.util.logging.Logger;
  */
 public class SubmissionRepository {
 
-    private static final Logger l = Logger.getLogger(SubmissionRepository.class.getName());
+
+    private static final Logger logger = Logger.getLogger(SubmissionRepository.class.getName());
 
     private static final List<String> filterColumnNames = List.of("title", "state", "timestamp_submission",
             "timestamp_deadline_revision", "forum");
+
 
     /**
      * Takes a scientific forum dto that is filled with a valid id and returns
@@ -40,7 +50,7 @@ public class SubmissionRepository {
     public static Submission get(Submission submission, Transaction transaction)
             throws NotFoundException {
         if (submission.getId() == null) {
-            l.severe("The passed Submission-DTO does not contain an id.");
+            logger.severe("The passed Submission-DTO does not contain an id.");
             throw new IllegalArgumentException("The passed Submission-DTO does not contain an id.");
         }
 
@@ -57,13 +67,13 @@ public class SubmissionRepository {
             // Attempt to create a submission from the result set.
             if (resultSet.next()) {
                 result = createSubmissionFromResultSet(resultSet);
-                l.finer("Successfully retrieved submission with id " + submission.getId() + "from database.");
+                logger.finer("Successfully retrieved submission with id " + submission.getId() + "from database.");
             } else {
-                l.warning("No submission with id " + submission.getId() + " found in database.");
+                logger.warning("No submission with id " + submission.getId() + " found in database.");
                 throw new NotFoundException("No submission with id " + submission.getId() + " found.");
             }
         } catch (SQLException e) {
-            l.severe(e.getMessage());
+            logger.severe(e.getMessage());
             throw new DatasourceQueryFailedException(e.getMessage(), e);
         }
 
@@ -113,9 +123,61 @@ public class SubmissionRepository {
      *                                        submission is null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     * @return The submission that was added, but filled with its id.
      */
-    public static void add(Submission submission, Transaction transaction)
+    public static Submission add(Submission submission, Transaction transaction)
             throws DataNotWrittenException {
+        // TODO: die ids auch noch checken, falls die mitlerweile auch Integer sind
+        if (submission.getTitle() == null || submission.getState() == null || submission.getSubmissionTime() == null) {
+            throw new InvalidFieldsException("At least one of the required fields of the submission was null");
+        }
+
+        Connection conn = transaction.getConnection();
+        Integer id = null;
+        try {
+            PreparedStatement stmt = conn.prepareStatement("""
+                    SELECT max(id) FROM submission
+                    """);
+            ResultSet resultSet = stmt.executeQuery();
+            if (resultSet.next()) {
+                id = resultSet.getInt(1) + 1;
+            } else {
+                id = 0;
+            }
+        } catch (SQLException ex) {
+            DatasourceUtil.logSQLException(ex, logger);
+            throw new DatasourceQueryFailedException("A datasource exception"
+                    + "occurred", ex);
+        }
+        submission.setId(id);
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement("""
+                    INSERT INTO submission
+                    VALUES (?, ?, CAST(? as submission_state), ?, ?, ?, ?, ?, ?)
+                    """);
+            stmt.setInt(1, submission.getId());
+            stmt.setString(2, submission.getTitle());
+            stmt.setString(3, submission.getState().toString());
+            stmt.setTimestamp(4, Timestamp.valueOf(submission.getSubmissionTime()));
+            stmt.setBoolean(5, submission.isRevisionRequired());
+
+            Timestamp deadline = submission.getDeadlineRevision() == null ? null
+                    : Timestamp.valueOf(submission.getDeadlineRevision());
+            stmt.setTimestamp(6, deadline);
+
+            stmt.setInt(7, submission.getAuthorId());
+            stmt.setInt(8, submission.getEditorId());
+            stmt.setInt(9, submission.getScientificForumId());
+
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            DatasourceUtil.logSQLException(ex, logger);
+            transaction.abort();
+            throw new DatasourceQueryFailedException("A datasource exception "
+                    + "occurred", ex);
+        }
+        return submission;
     }
 
     /**
@@ -144,6 +206,41 @@ public class SubmissionRepository {
      */
     public static void change(Submission submission, Transaction transaction)
             throws NotFoundException, DataNotWrittenException {
+        if (submission.getId() == null) {
+            logger.severe("Invalid submission id when tried to change a submission.");
+            throw new InvalidFieldsException("The submission id must not be null here.");
+        }
+
+        Connection connection = transaction.getConnection();
+
+        try {
+            findSubmission(submission, connection);
+        } catch (SQLException exception) {
+            logger.fine("Searching for a submission failed. Tried to change the submission.");
+            throw new NotFoundException("Submission id doesn't exist.");
+        }
+
+        // Only the following data can be changed.
+        try {
+            PreparedStatement statement = connection.prepareStatement(
+                    """
+                            UPDATE submission
+                            SET state = CAST( ? AS submission_state), requires_revision = ?, timestamp_deadline_revision = ?, editor_id = ?
+                            WHERE id = ?
+                            """
+            );
+            statement.setString(1, submission.getState().toString());
+            statement.setBoolean(2, submission.isRevisionRequired());
+            statement.setTimestamp(3, Timestamp.valueOf(submission.getDeadlineRevision()));
+            statement.setInt(4, submission.getEditorId());
+
+            statement.executeUpdate();
+
+        } catch (SQLException exception) {
+            DatasourceUtil.logSQLException(exception, logger);
+            throw new DatasourceQueryFailedException("A datasource exception occurred while changing a submission's data.", exception);
+        }
+
     }
 
     /**
@@ -162,6 +259,38 @@ public class SubmissionRepository {
      */
     public static void remove(Submission submission, Transaction transaction)
             throws NotFoundException, DataNotWrittenException {
+
+        if (submission.getId() == null) {
+            logger.severe("Invalid submission id while try to remove a submission.");
+            throw new IllegalArgumentException("the submission id must not be null while removing it.");
+        }
+
+        Connection connection = transaction.getConnection();
+
+        try {
+            ResultSet find = findSubmission(submission, connection);
+
+
+        } catch (SQLException exception) {
+            logger.fine("Removing submission with the submission id: " + submission.getId());
+            throw new NotFoundException();
+        }
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(
+                    """
+                            DELETE FROM submission
+                            WHERE id = ?
+                            """
+            );
+            statement.setInt(1, submission.getId());
+
+            statement.executeUpdate();
+
+        } catch (SQLException exception) {
+            DatasourceUtil.logSQLException(exception, logger);
+            throw new DatasourceQueryFailedException("A datasource exception occurred while removing a submission.", exception);
+        }
     }
 
     /**
@@ -193,8 +322,9 @@ public class SubmissionRepository {
                                            ResultListParameters
                                                    resultListParameters)
             throws DataNotCompleteException, NotFoundException {
+
         if (user.getId() == null || scientificForum.getId() == null) {
-            l.severe("A passed DTO is not sufficiently filled.");
+            logger.severe("A passed DTO is not sufficiently filled.");
             throw new IllegalArgumentException("User and ScientificForum id must not be null.");
         }
 
@@ -236,9 +366,9 @@ public class SubmissionRepository {
                 while (resultSet.next()) {
                     result.add(createSubmissionFromResultSet(resultSet));
                 }
-                l.finer("Retrieved a list of submissions from the database.");
+                logger.finer("Retrieved a list of submissions from the database.");
             } catch (SQLException e) {
-                l.severe(e.getMessage());
+                logger.severe(e.getMessage());
                 throw new DatasourceQueryFailedException(e.getMessage(), e);
             }
             return result;
@@ -270,7 +400,7 @@ public class SubmissionRepository {
                                                    resultListParameters)
             throws DataNotCompleteException, NotFoundException {
         if (user.getId() == null) {
-            l.severe("Passed  User-DTO is not sufficiently filled.");
+            logger.severe("Passed  User-DTO is not sufficiently filled.");
             throw new IllegalArgumentException("User id must not be null.");
         }
 
@@ -313,9 +443,9 @@ public class SubmissionRepository {
             while (resultSet.next()) {
                 result.add(createSubmissionFromResultSet(resultSet));
             }
-            l.finer("Retrieved a list of submissions from the database.");
+            logger.finer("Retrieved a list of submissions from the database.");
         } catch (SQLException e) {
-            l.severe(e.getMessage());
+            logger.severe(e.getMessage());
             throw new DatasourceQueryFailedException(e.getMessage(), e);
         }
         return result;
@@ -346,7 +476,7 @@ public class SubmissionRepository {
                                                    resultListParameters)
             throws DataNotCompleteException, NotFoundException {
         if (scientificForum.getId() == null) {
-            l.severe("Passed User-DTO is not sufficiently filled.");
+            logger.severe("Passed User-DTO is not sufficiently filled.");
             throw new IllegalArgumentException("User ScientificForum id must not be null.");
         }
 
@@ -370,9 +500,9 @@ public class SubmissionRepository {
             while (resultSet.next()) {
                 result.add(createSubmissionFromResultSet(resultSet));
             }
-            l.finer("Retrieved a list of submissions from the database.");
+            logger.finer("Retrieved a list of submissions from the database.");
         } catch (SQLException e) {
-            l.severe(e.getMessage());
+            logger.severe(e.getMessage());
             throw new DatasourceQueryFailedException(e.getMessage(), e);
         }
         return null;
@@ -395,6 +525,36 @@ public class SubmissionRepository {
     public static void addCoAuthor(Submission submission, User user,
                                    Transaction transaction)
             throws NotFoundException, DataNotWrittenException {
+
+        if (user.getId() == null || submission.getId() == null) {
+            transaction.abort();
+            String nullArgument = user.getId() == null ? "user": "submission";
+            throw new InvalidFieldsException("The ids of the " + nullArgument + " must not be null");
+        }
+        Connection conn = transaction.getConnection();
+        try {
+            PreparedStatement stmt = conn.prepareStatement("""
+                    INSERT INTO co_authored
+                    VALUES (?, ?)
+                    """);
+            stmt.setInt(1, user.getId());
+            stmt.setInt(2, submission.getId());
+
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            DatasourceUtil.logSQLException(ex, logger);
+
+            // 23503: Foreign key constraint violated
+            if (ex.getSQLState().equals("23503")) {
+                throw new NotFoundException("Either the specified user or submission does not exist");
+            } else if (! (ex instanceof PSQLException)) {
+                throw new DataNotWrittenException("The co-author was not added", ex);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("A datasource exception"
+                        + "occurred", ex);
+            }
+        }
     }
 
     /**
@@ -461,6 +621,7 @@ public class SubmissionRepository {
     /**
      * Count the number of submissions where the specified user is author.
      *
+<<<<<<< HEAD
      * @param user                 A user dto with a valid id.
      * @param privilege            As which role should the user act.
      * @param transaction          The transaction to use.
@@ -469,6 +630,11 @@ public class SubmissionRepository {
      *                             filtering, sorting or number of elements.
      * @return The number of submission the specified user is author, editor
      * or reviewer of.
+=======
+     * @param user        A user dto with a valid id.
+     * @param transaction The transaction to use.
+     * @return The number of submission the specified user authored.
+>>>>>>> submission
      * @throws NotFoundException              If there is no user with the provided id.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
@@ -479,8 +645,10 @@ public class SubmissionRepository {
                                                resultListParameters)
             throws NotFoundException {
         if (user.getId() == null) {
-            l.severe("Passed  User-DTO is not sufficiently filled.");
+
+            logger.severe("Passed  User-DTO is not sufficiently filled.");
             throw new IllegalArgumentException("User id must not be null.");
+
         }
 
         // Throw NotFoundException if user does not exist
@@ -522,16 +690,16 @@ public class SubmissionRepository {
             // Attempt to create a list of submissions from the result set.
             if (rs.next()) {
                 int result = rs.getInt(1);
-                l.finer("Retrieved the number of submissions authored by the user with id " + user.getId() + ": " + result);
+                logger.finer("Retrieved the number of submissions authored by the user with id " + user.getId() + ": " + result);
                 return result;
             } else {
-                l.severe("The number of submissions authored by the user with id " + user.getId() +
+                logger.severe("The number of submissions authored by the user with id " + user.getId() +
                         " could not be retrieved.");
                 throw new DatasourceQueryFailedException("The number of submissions authored by the user with id "
                         + user.getId() + " could not be retrieved.");
             }
         } catch (SQLException e) {
-            l.severe(e.getMessage());
+            logger.severe(e.getMessage());
             throw new DatasourceQueryFailedException(e.getMessage(), e);
         }
     }
@@ -631,8 +799,23 @@ public class SubmissionRepository {
         return qParamCounter;
     }
 
+
     private static boolean isFilled(String s) {
         return s != null && !s.isEmpty();
+    }
+
+    private static ResultSet findSubmission(Submission submission, Connection connection) throws SQLException {
+        PreparedStatement find = connection.prepareStatement(
+                """
+                        SELECT *
+                        FROM submission
+                        WHERE id = ?
+                        """
+        );
+        find.setInt(1, submission.getId());
+
+        return find.executeQuery();
+
     }
 
 }
