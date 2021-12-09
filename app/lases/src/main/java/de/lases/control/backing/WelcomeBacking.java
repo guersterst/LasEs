@@ -39,7 +39,10 @@ public class WelcomeBacking {
      */
     @PostConstruct
     public void init() {
+        loginInput = new User();
+        systemSettings = customizationService.get();
     }
+
     /**
      * Check the entered login data and either show an error message or go
      * to the homepage (and log the user in).
@@ -47,7 +50,13 @@ public class WelcomeBacking {
      * @return Go to the homepage on success and nowhere on failure.
      */
     public String login() {
-        return "welcome";
+        User loginUser = loginService.login(loginInput);
+        if (loginUser != null) {
+            sessionInformation.setUser(loginUser);
+            return "/views/authenticated/homepage?faces-redirect=true";
+        }
+        // UIMessage and stay on login page
+        return null;
     }
 
     /**
@@ -56,7 +65,7 @@ public class WelcomeBacking {
      * @return Go to the register page.
      */
     public String goToRegister() {
-        return "register";
+        return "/views/anonymous/register";
     }
 
     /**

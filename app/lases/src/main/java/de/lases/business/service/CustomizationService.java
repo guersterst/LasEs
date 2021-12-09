@@ -3,6 +3,7 @@ package de.lases.business.service;
 import de.lases.global.transport.ConnectionState;
 import de.lases.global.transport.FileDTO;
 import de.lases.global.transport.SystemSettings;
+import de.lases.persistence.repository.SystemSettingsRepository;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
@@ -33,7 +34,10 @@ public class CustomizationService {
      * @return The current settings of the system, that determine its look and feel.
      */
     public SystemSettings get() {
-        return null;
+        Transaction transaction = new Transaction();
+        SystemSettings systemSettings = SystemSettingsRepository.getSettings(transaction);
+        transaction.commit();
+        return systemSettings;
     }
 
     /**

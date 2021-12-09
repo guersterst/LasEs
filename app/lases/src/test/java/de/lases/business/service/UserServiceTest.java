@@ -2,6 +2,7 @@ package de.lases.business.service;
 
 import de.lases.global.transport.User;
 import de.lases.global.transport.Verification;
+import de.lases.persistence.repository.ConnectionPool;
 import de.lases.persistence.repository.UserRepository;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -10,11 +11,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
 
 @ExtendWith(MockitoExtension.class)
@@ -43,9 +42,29 @@ public class UserServiceTest {
         fullData.setFirstName("Fabi");
         fullData.setLastName("Dorfner");
 
-        mockedRepo.when(() -> UserRepository.get(eq(onlyId), any())).thenReturn(fullData);
+        //mockedRepo.when(() -> UserRepository.get(eq(onlyId), any())).thenReturn(fullData);
 
         assertEquals(fullData, userService.get(onlyId));
+    }
+
+    @Test
+    void testGetUserNoMocks() {
+        ConnectionPool.init();
+        User user = new User();
+        user.setId(1);
+        assertEquals("Peter", userService.get(user).getFirstName());
+    }
+
+    @Test
+    void testGetUserNumberOfSubmissions() {
+        ConnectionPool.init();
+
+    }
+
+    @Test
+    void testGetUserIsEditor() {
+        ConnectionPool.init();
+
     }
 
     @Test
