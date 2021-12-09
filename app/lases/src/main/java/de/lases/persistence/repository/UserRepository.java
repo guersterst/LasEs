@@ -324,13 +324,15 @@ public class UserRepository {
 
             // Filtering
             for (String userListColumnName : userListColumnNames) {
-                String value = resultListParameters.getFilterColumns().get(userListColumnName);
-                ps.setString(i[0], Objects.requireNonNullElse("%" + value + "%", "%"));
-                i[0]++;
+                if (resultListParameters.getFilterColumns().get(userListColumnName) != null) {
+                    String value = resultListParameters.getFilterColumns().get(userListColumnName);
+                    ps.setString(i[0], Objects.requireNonNullElse("%" + value + "%", "%"));
+                    i[0]++;
+                }
             }
             // Global Search Word
             for (String ignored : userListColumnNames) {
-                ps.setString(i[0], "%" + resultListParameters.getGlobalSearchWord() + "%");
+                ps.setString(i[0], "%" + Objects.requireNonNullElse(resultListParameters.getGlobalSearchWord(), "") + "%");
                 i[0]++;
             }
 
@@ -352,7 +354,7 @@ public class UserRepository {
                 }
                 user.setEmployer(rs.getString("employer"));
                 user.setRegistered(rs.getBoolean("is_registered"));
-                user.setNumberOfSubmissions(rs.getInt("count_submission"));
+                user.setNumberOfSubmissions(rs.getInt("count_submissions"));
 
                 userList.add(user);
             }
@@ -368,16 +370,18 @@ public class UserRepository {
         sb.append("SELECT * FROM user_data WHERE TRUE");
 
         // Filter according to filter columns parameter.
-        userListColumnNames.forEach(column -> sb.append(" AND ").append(column).append(" LIKE ?\n"));
+        userListColumnNames.stream()
+                .filter(columnName -> params.getFilterColumns().get(columnName) != null)
+                .forEach(column -> sb.append(" AND ").append(column).append(" ILIKE ?\n"));
 
         // Filter according to global search word.
         if (!"".equals(params.getGlobalSearchWord())) {
             sb.append(" AND (");
-            sb.append(" user_role LIKE ?\n");
-            sb.append(" OR firstname LIKE ?\n"); // sb.append(" firstname LIKE '%").append(params.getGlobalSearchWord()).append("%'\n");
-            sb.append(" OR lastname LIKE ?\n"); // ...
-            sb.append(" OR email_address LIKE ?\n");// sb.append(" OR (lastname LIKE '%").append(params.getGlobalSearchWord()).append("%'\n");
-            sb.append(" OR employer LIKE ?\n"); // sb.append(" OR (employer LIKE '%").append(params.getGlobalSearchWord()).append("%'\n");
+            sb.append(" user_role ILIKE ?\n");
+            sb.append(" OR firstname ILIKE ?\n"); // sb.append(" firstname LIKE '%").append(params.getGlobalSearchWord()).append("%'\n");
+            sb.append(" OR lastname ILIKE ?\n"); // ...
+            sb.append(" OR email_address ILIKE ?\n");// sb.append(" OR (lastname LIKE '%").append(params.getGlobalSearchWord()).append("%'\n");
+            sb.append(" OR employer ILIKE ?\n"); // sb.append(" OR (employer LIKE '%").append(params.getGlobalSearchWord()).append("%'\n");
 
             sb.append(")");
         }
@@ -395,7 +399,7 @@ public class UserRepository {
         ConfigReader configReader = CDI.current().select(ConfigReader.class).get();
         int paginationLength = Integer.parseInt(configReader.getProperty("MAX_PAGINATION_LENGTH"));
         sb.append("LIMIT ").append(paginationLength)
-                .append("OFFSET ").append(paginationLength * params.getPageNo());
+                .append(" OFFSET ").append(paginationLength * (params.getPageNo() - 1));
 
         // Add semicolon to end of query
         sb.append(";");
