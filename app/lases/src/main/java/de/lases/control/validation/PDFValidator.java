@@ -33,8 +33,8 @@ public class PDFValidator implements Validator<FileDTO> {
 
     private int convertLength = 1024;
     private int fileLength;
-    //private int fileMax = Integer.parseInt(configPropagator.getProperty("MAX_PDF_FILE_SIZE_MB"));
-    private int fileMax = 20;
+    private int fileMax = Integer.parseInt(configPropagator.getProperty("MAX_PDF_FILE_SIZE_MB"));
+    //private int fileMax = 20;
 
     /**
      * Validates a pdf as specified in the class description.
