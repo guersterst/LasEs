@@ -23,22 +23,24 @@
                             <h:inputText id="email-itxt" value="#{welcomeBacking.loginInput.emailAddress}"
                                          a:placeholder="#{help.yourEmail}" styleClass="form-control" required="true"
                                          requiredMessage="#{message.emailNeeded}"/>
-                            <h:message for="email-itxt"/>
+                            <h:message for="email-itxt" style="color: red"/>
                         </div>
                         <div class="form-group">
                             <label for="password-iscrt">#{labels.passwordInput}</label>
                             <h:inputSecret id="password-iscrt" value="#{welcomeBacking.loginInput.passwordNotHashed}"
                                            a:placeholder="#{help.password}" styleClass="form-control" required="true"
                                            requiredMessage="#{message.passwordNeeded}"/>
-                            <h:message for="password-iscrt"/>
+                            <h:message for="password-iscrt" style="color: red"/>
                         </div>
                         <div class="form-group">
+                            <h:messages globalOnly="true" style="color:red" layout="table"/>
                             <br/>
                             <h:commandButton id="login-cbtn" value="#{labels.login}" action="#{welcomeBacking.login()}"
                                              title="#{labels.login}"/>
                         </div>
                     </h:form>
                 </div>
+                <hr/>
                 <div id="register-div" class="card-body">
                     <h:form>
                         <h:commandButton id="register-cbtn" value="#{labels.register}"
@@ -46,7 +48,6 @@
                                          title="#{help.goToRegister}"/>
                     </h:form>
                 </div>
-                <h:messages globalOnly="true"/>
             </div>
         </div>
 
