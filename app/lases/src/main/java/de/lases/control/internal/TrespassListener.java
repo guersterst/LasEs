@@ -31,7 +31,8 @@ public class TrespassListener implements PhaseListener {
     @Serial
     private static final long serialVersionUID = -1137139795334466811L;
 
-    private PropertyResourceBundle propertyResourceBundle = (PropertyResourceBundle) ResourceBundle.getBundle("resource_bundles/message");
+    private PropertyResourceBundle propertyResourceBundle =
+            (PropertyResourceBundle) ResourceBundle.getBundle("resource_bundles/message");
 
     private final Logger logger = Logger.getLogger(TrespassListener.class.getName());
 
@@ -66,6 +67,7 @@ public class TrespassListener implements PhaseListener {
      */
     @Override
     public void afterPhase(PhaseEvent event) {
+
         FacesContext fctx = event.getFacesContext();
         SessionInformation sessionInformation = CDI.current().select(SessionInformation.class).get();
         User user = sessionInformation.getUser();
@@ -73,24 +75,23 @@ public class TrespassListener implements PhaseListener {
         UIViewRoot viewRoot = fctx.getViewRoot();
 
         if (viewRoot == null) {
-            throw new IllegalAccessException(propertyResourceBundle.getString("illegalAccess"));
+            logger.severe("The view root is null.");
+            throw new IllegalAccessException();
         }
 
-        // Load localised messages.
-        propertyResourceBundle = (PropertyResourceBundle) ResourceBundle.getBundle("resource_bundles/message", viewRoot.getLocale());
+        // Load localised messages to avoid CDI.
+        propertyResourceBundle = (PropertyResourceBundle)
+                ResourceBundle.getBundle("resource_bundles/message", viewRoot.getLocale());
 
         String viewId = viewRoot.getViewId();
-
         if (viewId.contains("/anonymous/")) {
-            return;
-        }
 
-        if (user == null || (!user.isRegistered() && !viewId.contains("/anonymous/"))) {
+            // Do nothing and let the unregistered user remain on this site.
+        } else if (user == null || (!user.isRegistered() && !viewId.contains("/anonymous/"))) {
 
             // Illegal access to a site which is visible to registered users only.
             logger.warning("An unregistered user tried illegally access "
                     + "a page using the url: " + viewId);
-
             navigateToLogin(fctx);
         } else if (!user.getPrivileges().contains(Privilege.EDITOR) && !user.isAdmin() && viewId.contains("/editor/")) {
 
@@ -107,6 +108,12 @@ public class TrespassListener implements PhaseListener {
         }
     }
 
+    /**
+     * Redirect a user to the login page and hint to him to attempt to login before
+     * accessing restricted sites using a {@code FacesMessage}.
+     *
+     * @param fctx The current instance of the faces-context.
+     */
     private void navigateToLogin(FacesContext fctx) {
         setErrorMessage(fctx, propertyResourceBundle.getString("unauthenticatedAccess"));
 
@@ -115,6 +122,12 @@ public class TrespassListener implements PhaseListener {
         fctx.responseComplete();
     }
 
+    /**
+     * Display a {@code FacesMessage} to the user.
+     *
+     * @param fctx The current instance of the faces-context.
+     * @param message The message to be displayed.
+     */
     private void setErrorMessage(FacesContext fctx, String message) {
         FacesMessage fmsg = new FacesMessage(FacesMessage.SEVERITY_ERROR, message, null);
         fctx.addMessage(null, fmsg);
