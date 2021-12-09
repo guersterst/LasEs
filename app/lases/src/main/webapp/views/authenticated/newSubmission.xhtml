@@ -97,6 +97,7 @@
                                                      value="#{newSubmissionBacking.coAuthorInput.firstName}"
                                                      maxlength="#{Const.FIRST_NAME_MAX}" required="true"
                                                      class="form-control"/>
+                                        <h:message for="co-author-firstname-itxt"/>
                                     </div>
 
                                     <hr/>
@@ -107,6 +108,7 @@
                                                      value="#{newSubmissionBacking.coAuthorInput.lastName}"
                                                      maxlength="#{Const.LAST_NAME_MAX}" required="true"
                                                      class="form-control"/>
+                                        <h:message for="co-auhtor-lastname-itxt"/>
                                     </div>
 
                                     <hr/>
@@ -117,12 +119,25 @@
                                                      value="#{newSubmissionBacking.coAuthorInput.emailAddress}"
                                                      maxlength="#{Const.EMAIL_MAX}" required="true"
                                                      class="form-control"/>
+                                        <h:message for="co-author-email-itxt"/>
                                     </div>
 
                                     <hr/>
 
-                                    <h:dataTable id="co-author-lsit" value="#{newSubmissionBacking.coAuthors}"/>
-                                    <br/>
+                                    <h:dataTable id="co-author-list" value="#{newSubmissionBacking.coAuthors}"
+                                                 var="user">
+                                        <h:column>
+                                            <f:facet name="header">;alskdf</f:facet>
+                                            #{user.title}
+                                            <f:facet name="header">;alskdf</f:facet>
+                                            #{user.firstName}
+                                            <f:facet name="header">;alskdf</f:facet>
+                                            #{user.lastName}
+                                            <f:facet name="header">;alskdf</f:facet>
+                                            #{user.emailAddress}
+                                        </h:column>
+                                    </h:dataTable>
+                                    <hr/>
 
                                     <h:commandButton id="submit-co-author-cbtn" value="#{labels.save}"
                                                      styleClass="btn btn-primary" type="submit"

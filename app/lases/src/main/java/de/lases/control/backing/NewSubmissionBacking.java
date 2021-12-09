@@ -8,6 +8,7 @@ import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.servlet.http.Part;
@@ -20,9 +21,12 @@ import java.util.List;
 /**
  * Backing bean for the new submission page.
  */
-@RequestScoped
+@ViewScoped
 @Named
-public class NewSubmissionBacking {
+public class NewSubmissionBacking implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 7741936440137638673L;
 
     @Inject
     private SessionInformation sessionInformation;
@@ -105,6 +109,16 @@ public class NewSubmissionBacking {
      * Add the entered co-author to the list of co-authors.
      */
     public void submitCoAuthor() {
+        coAuthorInput = coAuthorInput.clone();
+        for (User coAuthor: coAuthors) {
+            if (coAuthor.getEmailAddress().equals(coAuthorInput.getEmailAddress())) {
+                coAuthor.setTitle(coAuthorInput.getTitle());
+                coAuthor.setFirstName(coAuthorInput.getFirstName());
+                coAuthor.setLastName(coAuthorInput.getLastName());
+                return;
+            }
+        }
+        coAuthors.add(coAuthorInput);
     }
 
     /**
@@ -113,6 +127,7 @@ public class NewSubmissionBacking {
      * @param user The co-author to delete.
      */
     public void deleteCoAuthor(User user) {
+        coAuthors.remove(user);
     }
 
     /**
