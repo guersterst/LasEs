@@ -96,7 +96,7 @@ class SubmissionRepositoryTest {
         SubmissionRepository.add(submission1, transaction);
         SubmissionRepository.add(submission2, transaction);
 
-        assertEquals(1, SubmissionRepository.countSubmissions(user, transaction));
+        assertEquals(1, SubmissionRepository.countSubmissions(user, Privilege.AUTHOR, transaction, null));
 
         transaction.abort();
     }
