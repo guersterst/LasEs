@@ -12,6 +12,7 @@
                     styleClass="navbar-brand"
                     outcome="/views/authenticated/homepage.xhtml">
                 <h:graphicImage
+                        styleClass="mx-3"
                         value="/image?type=logo"
                         width="50"
                         height="50"/>
@@ -51,14 +52,15 @@
                             a:placholder="#{labels.search}"
                             type="search"
                             a:aria-label="Search"/>
-                    <form class="form-inline">
+
+                    <h:form class="form-inline">
                         <h:commandButton
                                 action="#{navigationBacking.search}"
                                 value="#{labels.search}"
                                 rendered="#{navigationBacking.sessionInformation.user != null}"
                                 styleClass="btn btn-outline-success my-2 my-sm-0"
                                 type="submit"/>
-                    </form>
+                    </h:form>
                 </div>
             </div>
 
