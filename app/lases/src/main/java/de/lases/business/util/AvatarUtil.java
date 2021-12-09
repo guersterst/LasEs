@@ -105,6 +105,7 @@ public final class AvatarUtil {
          */
 
         ConnectionPool.init();
+
         // Get image.
         BufferedImage img = ImageIO.read(AvatarUtil.class.getClassLoader().getResource("face.jpg"));
 
@@ -114,9 +115,9 @@ public final class AvatarUtil {
         FileDTO fileDTO = new FileDTO();
         fileDTO.setFile(baos.toByteArray());
 
-
         Transaction transaction = new Transaction();
         SystemSettingsRepository.setLogo(fileDTO, transaction);
+        transaction.commit();
     }
 
 }

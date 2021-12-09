@@ -73,37 +73,25 @@ public class SystemSettingsRepository {
      */
     public static void setLogo(FileDTO logo, Transaction transaction)
             throws DataNotWrittenException {
-
-        // TODO kein access auf interne id -> müsste in dto gespeichert sein
-        // companyName als identifier good enough?
         if (logo == null || logo.getFile() == null) {
             logger.severe("The given FileDTO or its contained image was null.");
             throw new InvalidFieldsException();
         }
 
-        /*
-        SystemSettings settings = getSettings(transaction);
-        if (settings == null || settings.getCompanyName() == null) {
-            //TODO
-            throw new DatasourceQueryFailedException();
-        }
-         */
-
+        @SuppressWarnings({"'Update' statement without 'where' updates all table rows at once"})
         String sql = """
                 UPDATE system
                 SET logo_image = ?
-                WHERE company_name = ?
                 """;
 
         try {
             Connection conn = transaction.getConnection();
             PreparedStatement setLogoStatement = conn.prepareStatement(sql);
             setLogoStatement.setBytes(1, logo.getFile());
-            setLogoStatement.setString(2, "LasEs");
-            //setLogoStatement.setString(2, settings.getCompanyName());
             setLogoStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.severe("The logo could not be updated into the database.");
+            throw new DataNotWrittenException();
         }
     }
 
