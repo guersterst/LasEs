@@ -2,7 +2,42 @@
         xmlns="http://www.w3.org/1999/xhtml"
         xmlns:h="http://xmlns.jcp.org/jsf/html"
         xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-        xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <h1>Default Header</h1>
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        template="main.xhtml">
+
+    <ui:define name="navigation">
+        <h:graphicImage url="#{'/image?type=logo'}"/>
+        <h:form>
+            <h:link outcome="/views/authenticated/homepage" title="#{help.toHome}"/>
+        </h:form>
+        <h:form rendered="#{navigationBacking.sessionInformation.user != null}">
+            <h:inputText
+                    value="#{navigationBacking.resultListParameters.globalSearchWord}" title="#{help.search}"
+                    rendered="#{navigationBacking.sessionInformation.user != null}"/>
+            <h:commandButton
+                    action="#{navigationBacking.search}"
+                    rendered="#{navigationBacking.sessionInformation.user != null}"/>
+            <h:link
+                    value="#{labels.userList}" outcome="/views/editor/userList" title="#{help.userList}"
+                    rendered="#{navigationBacking.sessionInformation.user.editor}"/>
+            <h:link
+                    value="#{labels.forumList}" outcome="/views/authenticated/scientificForumList"
+                    title="#{help.forumList}"
+                    rendered="#{navigationBacking.sessionInformation.user != null}"/>
+            <h:link
+                    value="#{labels.administration}"
+                    outcome="/views/admin/administration"
+                    rendered="#{navigationBacking.sessionInformation.user.admin}"/>
+            <h:commandButton
+                    value="#{labels.logout}"
+                    action="#{navigationBacking.logout}"
+                    title="#{help.logout}"
+                    rendered="#{navigationBacking.sessionInformation.user != null}"/>
+            <h:link
+                    value="#{labels.nav.profile}"
+                    outcome="/views/authenticated/profile"
+                    rendered="#{navigationBacking.sessionInformation.user != null}"/>
+        </h:form>
+    </ui:define>
 </ui:composition>
 

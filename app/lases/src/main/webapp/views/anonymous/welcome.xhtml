@@ -3,21 +3,20 @@
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets" >
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <f:metadata>
         <!--<f:importConstants var="Date"/>-->
         <f:loadBundle var="labels" basename="resource_bundles.labels"/>
     </f:metadata>
-        <ui:define name="title">LasEs-Welcome</ui:define>
+    <ui:define name="title">LasEs-Welcome</ui:define>
 
 
-            <ui:define name="content">
-                <h1>Welcome</h1>
-                <h:commandButton value="Test Bootstrap" styleClass="btn btn-primary">
-                </h:commandButton>
+    <ui:define name="content">
+        <h1>Welcome</h1>
+        <h:commandButton value="Test Bootstrap" styleClass="btn btn-primary">
+        </h:commandButton>
 
-                <h:link value="register" outcome="register"/>
-            </ui:define>
-
+        <h:link value="register" outcome="register"/>
+    </ui:define>
 
 </ui:composition>
