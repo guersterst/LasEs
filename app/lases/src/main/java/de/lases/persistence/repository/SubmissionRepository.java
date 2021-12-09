@@ -436,7 +436,6 @@ public class SubmissionRepository {
                 stmt.setInt(1, user.getId());
             }
             fillResultListParameterSuffix(2, stmt, resultListParameters);
-            System.out.println(stmt.toString()); // todo delet
             resultSet = stmt.executeQuery();
 
             // Attempt to create a list of submissions from the result set.
