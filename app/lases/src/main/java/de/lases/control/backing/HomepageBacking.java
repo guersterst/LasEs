@@ -24,10 +24,11 @@ public class HomepageBacking implements Serializable {
     @Serial
     private static final long serialVersionUID = -3666609342938323378L;
 
-    private enum Tab {
-        OWN_SUBMISSIONS, SUBMISSIONS_TO_EDIT, SUBMISSIONS_TO_REVIEW
-    }
 
+
+    private enum Tab {
+        OWN_SUBMISSIONS, SUBMISSIONS_TO_EDIT, SUBMISSIONS_TO_REVIEW;
+    }
     @Inject
     private SubmissionService submissionService;
 
@@ -43,10 +44,6 @@ public class HomepageBacking implements Serializable {
     private Tab tab;
 
     private Pagination<Submission> submissionPagination;
-
-    private Pagination<Submission> reviewedPagination;
-
-    private Pagination<Submission> editedPagination;
 
     private User user;
 
@@ -86,9 +83,10 @@ public class HomepageBacking implements Serializable {
      */
     @PostConstruct
     public void init() {
-        showOwnSubmissionsTab();
         user = new User();
         user.setId(4);
+//        user = sessionInformation.getUser();
+        showOwnSubmissionsTab();
     }
 
     /**
@@ -109,6 +107,8 @@ public class HomepageBacking implements Serializable {
                         getResultListParameters()) / itemsPerPage);
             }
         };
+        tab = Tab.OWN_SUBMISSIONS;
+        submissionPagination.loadData();
     }
 
     /**
@@ -130,6 +130,8 @@ public class HomepageBacking implements Serializable {
                         getResultListParameters()) / itemsPerPage);
             }
         };
+        tab = Tab.SUBMISSIONS_TO_EDIT;
+        submissionPagination.loadData();
     }
 
     /**
@@ -151,6 +153,8 @@ public class HomepageBacking implements Serializable {
                         getResultListParameters()) / itemsPerPage);
             }
         };
+        tab = Tab.SUBMISSIONS_TO_REVIEW;
+        submissionPagination.loadData();
     }
 
     /**
@@ -179,30 +183,12 @@ public class HomepageBacking implements Serializable {
     }
 
     /**
-     * Get the pagination for the submissions edited by the user.
-     *
-     * @return The pagination for the submission edited by the user.
-     */
-    public Pagination<Submission> getEditedPagination() {
-        return editedPagination;
-    }
-
-    /**
      * Get the pagination for the submissions submitted by the user.
      *
      * @return The pagination for the submissions submitted by the user.
      */
     public Pagination<Submission> getSubmissionPagination() {
         return submissionPagination;
-    }
-
-    /**
-     * Get the pagination for the submissions reviewed by the user.
-     *
-     * @return The pagination for the submissions reviewed by the user.
-     */
-    public Pagination<Submission> getReviewedPagination() {
-        return reviewedPagination;
     }
 
     /**
@@ -227,6 +213,18 @@ public class HomepageBacking implements Serializable {
         ScientificForum forum = new ScientificForum();
         forum.setId(sub.getScientificForumId());
         return scientificForumService.get(forum).getName();
+    }
+
+    public String getOwnCssClassSuffix() {
+        return tab == Tab.OWN_SUBMISSIONS ? " active" : "";
+    }
+
+    public String getReviewCssClassSuffix() {
+        return tab == Tab.SUBMISSIONS_TO_REVIEW ? " active" : "";
+    }
+
+    public String getEditCssClassSuffix() {
+        return tab == Tab.SUBMISSIONS_TO_EDIT ? " active" : "";
     }
 
 }

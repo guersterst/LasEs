@@ -17,43 +17,33 @@
             <f:viewAction action="#{homepageBacking.submissionPagination.loadData}"/>
         </f:metadata>
 
-        <h1>Welcome to LasEs</h1>
-        <!-- create three tabs with bootstrap -->
-        <div class="nav nav-tabs">
-            <h:form>
-                <ul class="nav nav-tabs justify-content-center">
-                    <li class="nav-item">
-                        <h:commandLink value="#{labels['ownSubmissions']}"
-                                       action="#{homepageBacking.showOwnSubmissionsTab()}"/>
-                    </li>
-                    <li class="nav-item">
-                        <h:commandLink value="#{labels['reviewedSubmissions']}"
-                                       action="#{homepageBacking.showSubmissionsToReviewTab()}"/>
-                    </li>
-                    <li class="nav-item">
-                        <h:commandLink value="#{labels['editedSubmissions']}"
-                                       action="#{homepageBacking.showSubmissionsToEditTab()}"/>
-                    </li>
-                </ul>
-            </h:form>
-        </div>
+        <div class="container">
+            <h1>Welcome to LasEs</h1>
+            <div class="card">
+                <div class="card-head">
+                    <h:form>
+                        <ul class="nav nav-tabs justify-content-center">
+                            <li class="nav-item">
+                                <h:commandLink value="#{labels['ownSubmissions']}"
+                                               action="#{homepageBacking.showOwnSubmissionsTab()}"
+                                               styleClass="#{'nav-link'.concat(homepageBacking.ownCssClassSuffix)}"/>
+                            </li>
+                            <li class="nav-item">
+                                <h:commandLink value="#{labels['reviewedSubmissions']}"
+                                               action="#{homepageBacking.showSubmissionsToReviewTab()}"
+                                               styleClass="#{'nav-link'.concat(homepageBacking.reviewCssClassSuffix)}"/>
+                            </li>
+                            <li class="nav-item">
+                                <h:commandLink value="#{labels['editedSubmissions']}"
+                                               action="#{homepageBacking.showSubmissionsToEditTab()}"
+                                               styleClass="#{'nav-link'.concat(homepageBacking.editCssClassSuffix)}"/>
+                            </li>
+                        </ul>
+                    </h:form>
+                </div>
 
-        <h:form>
-            <pg:pagination paginator="#{homepageBacking.submissionPagination}">
-                <h:column>
-                    <f:facet name="header">
-                        <col:sortsearchcolumn paginator="#{homepageBacking.submissionPagination}"
-                                              columnIdentifier="title"
-                                              columnNamei18n="Title"/>
-                    </f:facet>
-                    <h:outputText value="#{var.title}"/>
-                </h:column>
-
-                <h:column>
-                    <f:facet name="header">
-                        <col:sortsearchcolumn id="date-ssc" columnNamei18n="#{labels.date}"
-                                              paginator="#{homepageBacking.submissionPagination}"
-                                              columnIdentifier="timestamp_submission"/>
+                <div class="card-body">
+                    <h:form>
                         <h:selectOneMenu id="date-slctom"
                                          value="#{homepageBacking.submissionPagination.resultListParameters.dateSelect}"
                                          title="#{help.dateSelect}">
@@ -61,56 +51,74 @@
                                            itemLabel="#{labels['dateSelect.' += select]}"
                                            itemValue="#{select}"/>
                         </h:selectOneMenu>
-                    </f:facet>
-                    <h:outputText value="#{var.submissionTime}">
-                        <f:convertDateTime type="localDate"/>
-                    </h:outputText>
-                </h:column>
-
-                <h:column>
-                    <f:facet name="header">
-                        <col:sortsearchcolumn columnNamei18n="#{labels.deadline}"
-                                              paginator="#{homepageBacking.submissionPagination}"
-                                              columnIdentifier="timestamp_deadline_revision"/>
-                    </f:facet>
-                    <h:outputText value="#{var.deadlineRevision}">
-                        <f:convertDateTime type="localDate"/>
-                    </h:outputText>
-                </h:column>
-
-                <h:column>
-                    <f:facet name="header">
-                        <col:sortsearchcolumn columnNamei18n="#{labels.stateSub}"
-                                              paginator="#{homepageBacking.submissionPagination}"
-                                              columnIdentifier="state"/>
                         <h:selectOneMenu id="state-slctom"
                                          value="#{homepageBacking.submissionPagination.resultListParameters.submissionState}"
-                                         title="#{help.stateSubSelect}"/>
-                        <f:selectItems value="#{homepageBacking.submissionStates}" var="select"
-                                       itemLabel="#{labels['stateSelect.' += select]}"
-                                       itemValue="#{select}"/>
-                    </f:facet>
-                    <h:outputText id="state-otxt" value="#{var.state}"/>
-                </h:column>
+                                         title="#{help.stateSubSelect}">
+                            <f:selectItem itemValue="#{null}" itemLabel="#{labels['stateSelect.ALL']}"/>
+                            <f:selectItems value="#{homepageBacking.submissionStates}" var="select"
+                                           itemLabel="#{labels['stateSelect.' += select]}"
+                                           itemValue="#{select}"/>
+                        </h:selectOneMenu>
+                        <pg:pagination paginator="#{homepageBacking.submissionPagination}">
+                            <h:column>
+                                <f:facet name="header">
+                                    <col:sortsearchcolumn id="title-ssc"
+                                                          paginator="#{homepageBacking.submissionPagination}"
+                                                          columnIdentifier="title"
+                                                          columnNamei18n="Title"/>
+                                </f:facet>
+                                <h:link value="#{var.title}" outcome="/views/authenticated/submission"
+                                        includeViewParams="true">
+                                    <f:param name="id" value="#{var.id}"/>
+                                </h:link>
+                            </h:column>
 
-                <h:column>
-                    <f:facet name="header">
-                        <col:sortsearchcolumn columnNamei18n="#{labels.forumSub}"
-                                              paginator="#{homepageBacking.submissionPagination}"
-                                              columnIdentifier="forum_id"/>
-                    </f:facet>
-                    <h:link id="forum-lnk" value="#{homepageBacking.getForumName(var)}"
-                            outcome="/views/authenticated/scientificForum.xhtml"
-                            includeViewParams="true">
-                        <f:param name="id" value="#{var.scientificForumId}"/>
-                    </h:link>
-                </h:column>
-            </pg:pagination>
-        </h:form>
-        <h:form>
-            <h:commandButton value="Next page"
-                             action="#{homepageBacking.submissionPagination.nextPage()}"/>
-        </h:form>
+                            <h:column>
+                                <f:facet name="header">
+                                    <col:sortsearchcolumn id="date-ssc" columnNamei18n="#{labels.date}"
+                                                          paginator="#{homepageBacking.submissionPagination}"
+                                                          columnIdentifier="timestamp_submission"/>
+                                </f:facet>
+                                <h:outputText value="#{var.submissionTime}">
+                                    <f:convertDateTime type="localDate"/>
+                                </h:outputText>
+                            </h:column>
+
+                            <h:column>
+                                <f:facet name="header">
+                                    <col:sortsearchcolumn columnNamei18n="#{labels.deadline}"
+                                                          paginator="#{homepageBacking.submissionPagination}"
+                                                          columnIdentifier="timestamp_deadline_revision"/>
+                                </f:facet>
+                                <h:outputText value="#{var.deadlineRevision}">
+                                    <f:convertDateTime type="localDate"/>
+                                </h:outputText>
+                            </h:column>
+
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="#{labels.stateSub}"/>
+                                </f:facet>
+                                <h:outputText id="state-otxt" value="#{var.state}"/>
+                            </h:column>
+
+                            <h:column>
+                                <f:facet name="header">
+                                    <col:sortsearchcolumn columnNamei18n="#{labels.forumSub}"
+                                                          paginator="#{homepageBacking.submissionPagination}"
+                                                          columnIdentifier="forum"/>
+                                </f:facet>
+                                <h:link id="forum-lnk" value="#{homepageBacking.getForumName(var)}"
+                                        outcome="/views/authenticated/scientificForum"
+                                        includeViewParams="true">
+                                    <f:param name="id" value="#{var.scientificForumId}"/>
+                                </h:link>
+                            </h:column>
+                        </pg:pagination>
+                    </h:form>
+                </div>
+            </div>
+        </div>
 
         <h:messages/>
     </ui:define>

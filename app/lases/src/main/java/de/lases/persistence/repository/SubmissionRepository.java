@@ -21,7 +21,8 @@ public class SubmissionRepository {
 
     private static final Logger l = Logger.getLogger(SubmissionRepository.class.getName());
 
-    private static final List<String> filterColumnNames = List.of("title");
+    private static final List<String> filterColumnNames = List.of("title", "state", "timestamp_submission",
+            "timestamp_deadline_revision", "forum");
 
     /**
      * Takes a scientific forum dto that is filled with a valid id and returns
@@ -516,7 +517,6 @@ public class SubmissionRepository {
                 stmt.setInt(1, user.getId());
             }
             fillResultListParameterSuffix(2, stmt, resultListParameters);
-            System.out.println(stmt.toString()); // todo delet
             rs = stmt.executeQuery();
 
             // Attempt to create a list of submissions from the result set.
@@ -563,26 +563,58 @@ public class SubmissionRepository {
         }
 
         // Filter according to filter columns parameter.
-        filterColumnNames.stream()
-                .filter(columnName -> params.getFilterColumns().get(columnName) != null)
-                .forEach(column -> sb.append(" AND ").append(column).append(" ILIKE ?\n"));
+//        filterColumnNames.stream()
+//                .filter(columnName -> params.getFilterColumns().get(columnName) != null)
+//                .filter(columnName -> !params.getFilterColumns().get(columnName).isEmpty())
+//                .forEach(column -> sb.append(" AND ").append(column).append("::VARCHAR ILIKE ?\n"));
 
-        // Filter according to global search word.
-        sb.append(" AND (");
-        for (int i = 0; i < filterColumnNames.size(); i++) {
-            sb.append(filterColumnNames.get(i)).append(" ILIKE ?\n");
-            if (i < filterColumnNames.size() - 1) {
-                sb.append("OR ");
-            }
+        if (isFilled(params.getFilterColumns().get("title"))) {
+            sb.append(" AND title ILIKE ?\n");
         }
-        sb.append(")\n");
+        if (isFilled(params.getFilterColumns().get("state"))) {
+            sb.append(" AND state::VARCHAR ILIKE ?\n");
+        }
+        if (isFilled(params.getFilterColumns().get("timestamp_submission"))) {
+            sb.append(" AND timestamp_submission::DATE::VARCHAR ILIKE ?\n");
+        }
+        if (isFilled(params.getFilterColumns().get("timestamp_deadline_revision"))) {
+            sb.append(" AND timestamp_deadline_revision::DATE::VARCHAR ILIKE ?\n");
+        }
+        if (isFilled(params.getFilterColumns().get("forum"))) {
+            sb.append(" AND (SELECT f.name FROM scientific_forum f WHERE f.id = submission.forum_id) ILIKE ?\n");
+        }
+
+
+        sb.append("""
+                AND (
+                    title ILIKE ?
+                    OR state::VARCHAR ILIKE ?
+                    OR timestamp_submission::DATE::VARCHAR ILIKE ?
+                    OR timestamp_deadline_revision::DATE::VARCHAR ILIKE ?
+                    OR (SELECT f.name FROM scientific_forum f WHERE f.id = submission.forum_id) ILIKE ?
+                )
+                """);
+
+//        // Filter according to global search word.
+//        sb.append(" AND (");
+//        for (int i = 0; i < filterColumnNames.size(); i++) {
+//            sb.append(filterColumnNames.get(i)).append("::VARCHAR ILIKE ?\n");
+//            if (i < filterColumnNames.size() - 1) {
+//                sb.append("OR ");
+//            }
+//        }
+//        sb.append(")\n");
 
         if (limit) {
             // Sort according to sort column parameter
-            if (!"".equals(params.getSortColumn()) && filterColumnNames.contains(params.getSortColumn())) {
-                sb.append("ORDER BY ")
-                        .append(params.getSortColumn())
-                        .append(" ")
+            if (filterColumnNames.contains(params.getSortColumn())) {
+                sb.append("ORDER BY ");
+                if (params.getSortColumn().equals("forum")) { // need to get forum name
+                    sb.append("(SELECT f.name FROM scientific_forum f WHERE f.id = submission.forum_id)");
+                } else {
+                    sb.append(params.getSortColumn());
+                }
+                sb.append(" ")
                         .append(params.getSortOrder() == SortOrder.ASCENDING ? "ASC" : "DESC")
                         .append("\n");
             }
@@ -603,7 +635,7 @@ public class SubmissionRepository {
     private static int fillResultListParameterSuffix(int qParamCounter, PreparedStatement stmt, ResultListParameters params) throws SQLException {
         // Add values for filter columns and global search word
         for (String column : filterColumnNames) {
-            if (params.getFilterColumns().get(column) != null) {
+            if (params.getFilterColumns().get(column) != null && !params.getFilterColumns().get(column).isEmpty()) {
                 stmt.setString(qParamCounter++, "%" + params.getFilterColumns().get(column) + "%");
             }
         }
@@ -613,6 +645,10 @@ public class SubmissionRepository {
         }
 
         return qParamCounter;
+    }
+
+    private static boolean isFilled(String s) {
+        return s != null && !s.isEmpty();
     }
 
 }
