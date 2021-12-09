@@ -23,7 +23,7 @@ import org.postgresql.util.PSQLException;
  */
 public class PaperRepository {
 
-    private static final List<String> paperColumnNames = List.of("version","timestamp_upload","is_visible");
+    private static final List<String> paperColumnNames = List.of("version", "timestamp_upload", "is_visible");
 
     private static final Logger logger = Logger.getLogger(PaperRepository.class.getName());
 
@@ -216,7 +216,7 @@ public class PaperRepository {
         try {
             ResultSet resultSet = findPaper(paper, connection);
 
-        }catch (SQLException exception) {
+        } catch (SQLException exception) {
             logger.fine("Removing paper with the submission id: " + paper.getSubmissionId()
                     + " and version number: " + paper.getVersionNumber());
             throw new NotFoundException();
@@ -499,14 +499,10 @@ public class PaperRepository {
 
             ResultSet found = find.executeQuery();
 
-            if (!found.next()) {
-                logger.fine("Searching for a submission with the id: " + submission.getId()
-                        + " for an author with the id: " + user.getId() + " in order to proof if the ids are valid.");
-                throw new NotFoundException();
-            }
         } catch (SQLException e) {
-            DatasourceUtil.logSQLException(e, logger);
-            throw new DatasourceQueryFailedException("A datasource exception occured while looking for the submission.", e);
+            logger.fine("Searching for a submission with the id: " + submission.getId()
+                    + " for an author with the id: " + user.getId() + " in order to proof if the ids are valid.");
+            throw new NotFoundException();
         }
 
         try {
