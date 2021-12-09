@@ -69,6 +69,7 @@ public class TrespassListener implements PhaseListener {
      */
     @Override
     public void afterPhase(PhaseEvent event) {
+        /*
         FacesContext fctxt = event.getFacesContext();
         SessionInformation sessionInformation = CDI.current().select(SessionInformation.class).get();
         User user = sessionInformation.getUser();
@@ -111,5 +112,6 @@ public class TrespassListener implements PhaseListener {
         NavigationHandler nav = facesContext.getApplication().getNavigationHandler();
         nav.handleNavigation(facesContext, null, "welcome.xhtml?faces-redirect=true");
         facesContext.responseComplete();
+         */
     }
 }
