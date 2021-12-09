@@ -405,9 +405,9 @@ public class SubmissionService implements Serializable {
             t.commit();
             logger.finer("List of submissions retrieved.");
         } catch (DataNotCompleteException e) {
-            l.warning("Data not complete: " + e.getMessage());
+            logger.warning("Data not complete: " + e.getMessage());
             uiMessageEvent.fire(new UIMessage(
-                    msg.getString("warning.dataNotComplete"),
+                    resourceBundle.getString("warning.dataNotComplete"),
                     MessageCategory.WARNING));
         } catch (NotFoundException e) {
             logger.severe("User to get submissions for not found.");
@@ -446,9 +446,9 @@ public class SubmissionService implements Serializable {
             t.commit();
             logger.finer("List of submissions retrieved.");
         } catch (DataNotCompleteException e) {
-            l.warning("Data not complete: " + e.getMessage());
+            logger.warning("Data not complete: " + e.getMessage());
             uiMessageEvent.fire(new UIMessage(
-                    msg.getString("warning.dataNotComplete"),
+                    resourceBundle.getString("warning.dataNotComplete"),
                     MessageCategory.WARNING));
         } catch (NotFoundException e) {
             logger.severe("User or ScientificForum to get submissions for not found.");
@@ -484,9 +484,9 @@ public class SubmissionService implements Serializable {
             t.commit();
             logger.finer("List of submissions retrieved.");
         } catch (DataNotCompleteException e) {
-            l.warning("Data not complete: " + e.getMessage());
+            logger.warning("Data not complete: " + e.getMessage());
             uiMessageEvent.fire(new UIMessage(
-                    msg.getString("warning.dataNotComplete"),
+                    resourceBundle.getString("warning.dataNotComplete"),
                     MessageCategory.WARNING));
         } catch (NotFoundException e) {
             logger.severe("ScientificForum to get submissions for not found.");
