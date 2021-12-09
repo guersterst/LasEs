@@ -62,8 +62,8 @@ public class ImageServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //if (Objects.equals(request.getParameter("type"), "logo")) {
-        if (true) {
+        if (Objects.equals(request.getParameter("type"), "logo")) {
+        //if (true) {
 
             deliverRequestedImage(response, true, Optional.empty());
         } else if (Objects.equals(request.getParameter("type"), "avatar")) {
