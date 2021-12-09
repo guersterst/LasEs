@@ -149,8 +149,8 @@ public class PaperService implements Serializable {
     public void change(Paper paper) {
         if (paper.getSubmissionId() == null && paper.getVersionNumber() == null) {
 
-            logger.severe("The id of the paper is not valid. Therefore no paper object can be queried.");
-            throw new IllegalArgumentException(resourceBundle.getString("idMissing"));
+            logger.severe("The id of the paper is not valid. Therefore no paper object can be changed.");
+            throw new InvalidFieldsException(resourceBundle.getString("idMissing"));
 
         } else {
             Transaction transaction = new Transaction();

@@ -118,20 +118,50 @@ public class SubmissionService implements Serializable {
      * <li> The submitter about a required revision. </li>
      * </ul>
      *
-     * @param newSubmission A {@link Submission}-DTO. The required fields are:
+     * @param newSubmission A {@link Submission}-DTO. The required fields can't be changed.
+     *                      Only following can be changed:
      *                      <ul>
-     *                      <li> id </li>
-     *                      <li> scientificForumId </li>
-     *                      <li> authorId </li>
-     *                      <li> editorId </li>
-     *                      <li> title </li>
-     *                      <li> state </li>
-     *                      <li> submissionTime </li>
+     *                      <li>
+     *                          Submission state
+     *                      </li>
+     *                      <li>
+     *                          Require a revision
+     *                      </li>
+     *                      <li>
+     *                          Deadline of a revision.
+     *                      </li>
      *                      </ul>
-     *                      If empty they will be deleted other fields are optional
-     *                      and will not be deleted if empty.
      */
     public void change(Submission newSubmission) {
+        // TODO: Send a Email in some cases.
+
+        if (newSubmission.getId() == null) {
+
+            logger.severe("The id of the submission is not valid. Therefore no submission can be changed. ");
+            throw new InvalidFieldsException(resourceBundle.getString("idMissing"));
+
+        } else {
+            Transaction transaction = new Transaction();
+
+            try {
+                SubmissionRepository.change(newSubmission, transaction);
+                transaction.commit();
+            } catch (DataNotWrittenException e) {
+
+                logger.log(Level.WARNING, e.getMessage());
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotWritten"),MessageCategory.ERROR));
+
+                transaction.abort();
+
+            } catch (NotFoundException e) {
+
+                logger.fine("Error while changing a submission with the submission id: " +newSubmission.getId());
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("submissionNotFound"), MessageCategory.ERROR));
+
+                transaction.abort();
+            }
+        }
+
     }
 
     /**
