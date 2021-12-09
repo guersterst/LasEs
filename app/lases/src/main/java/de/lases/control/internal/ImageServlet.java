@@ -15,14 +15,15 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.lang.reflect.MalformedParametersException;
+import java.net.MalformedURLException;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Logger;
 
 /**
- * Serves images under the /image/* url.
+ * Serves images under the /image* url.
  */
-@WebServlet("/image*")
+@WebServlet(value = "/image*")
 public class ImageServlet extends HttpServlet {
 
     @Inject
@@ -54,10 +55,10 @@ public class ImageServlet extends HttpServlet {
      * @throws IOException      If an input or output error is detected when the
      *                          servlet handles the GET request.
      */
-
     //TODO throw exceptions at all?
     // Unique ImageException (also in AvatarUtil)
     // TODO response status
+    //TODO default avatar
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -84,7 +85,7 @@ public class ImageServlet extends HttpServlet {
                 logger.severe("An avatar was requested where the required privileges were not found."
                         + " Requested was user: " + urlUserId + "avatar.");
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                throw new IllegalCallerException();
+                throw new MalformedURLException();
             }
         } else {
             logger.warning("A request for an image could not be handled due to the type URL"
