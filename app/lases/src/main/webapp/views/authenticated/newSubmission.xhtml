@@ -26,7 +26,17 @@
                                 LoReM IpsUm DoloR Sit Amet ConescutOR AdiPsinG
                             </div>
                             <div class="card-body">
-                                <h:form id="new-submission-form">
+                                <h:form id="new-submission-form" enctype="multipart/form-data">
+
+                                    <div class="form-group">
+                                        <h:outputLabel for="forum-name-itxt" value="#{labels.forumName}"/>
+                                        <h:inputText id="forum-name-itxt" value="#{newSubmissionBacking.forumInput.name}"
+                                                     required="true" requiredMessage="#{message.forum}"
+                                                     class="form-control" readonly="true"/>
+                                        <h:message for="forum-name-itxt"/>
+                                    </div>
+
+                                    <hr/>
 
                                     <div class="form-group">
                                         <h:outputLabel for="submission-title-itxt" value="#{labels.submissionTitle}"/>
@@ -40,26 +50,16 @@
                                     <hr/>
 
                                     <div class="form-group">
-                                        <h:outputLabel for="forum-name-itxt" value="#{labels.forumName}"/>
-                                        <h:inputText id="forum-name-itxt" value="#{newSubmissionBacking.forumInput.name}"
-                                                     required="true" requiredMessage="#{message.forum}"
-                                                     class="form-control"/>
-                                        <h:message for="forum-name-itxt"/>
-                                    </div>
-
-                                    <hr/>
-
-                                    <div class="form-group">
                                         <h:selectOneMenu id="editor-slctom" value="#{newSubmissionBacking.editorSelectionInput}">
                                             <f:selectItems value="#{newSubmissionBacking.editors}" var="editor"
-                                                           itemLabel="#{editor.firstName + ' ' + editor.lastName}"/>
+                                                           itemLabel="#{editor.firstName.concat(' ').concat(editor.lastName)}"/>
                                         </h:selectOneMenu>
                                     </div>
 
                                     <hr/>
 
                                     <div class="form-group">
-                                        <h:inputText id="pdf-upload-ifile" value="#{newSubmissionBacking.uploadedPDF}"
+                                        <h:inputFile id="pdf-upload-ifile" value="#{newSubmissionBacking.uploadedPDF}"
                                                      required="true" requiredMessage="#{message.inputFile}"
                                                      class="form-control"/>
                                         <h:message for="pdf-upload-ifile"/>
@@ -138,14 +138,18 @@
                                             <f:facet name="header">;alskdfj</f:facet>
                                             <h:commandButton id="delete-co-author-cbtn" value="#{labels.delete}"
                                                              styleClass="btn-primary btn" type="submit"
-                                                             action="#{newSubmissionBacking.deleteCoAuthor(user)}"/>
+                                                             action="#{newSubmissionBacking.deleteCoAuthor(user)}">
+                                                <f:ajax execute="co-authors-form" render="co-authors-form" />
+                                            </h:commandButton>
                                         </h:column>
                                     </h:dataTable>
                                     <hr/>
 
                                     <h:commandButton id="submit-co-author-cbtn" value="#{labels.save}"
                                                      styleClass="btn btn-primary" type="submit"
-                                                     action="#{newSubmissionBacking.submitCoAuthor()}"/>
+                                                     action="#{newSubmissionBacking.submitCoAuthor()}">
+                                        <f:ajax execute="co-authors-form" render="co-authors-form" />
+                                    </h:commandButton>
                                     <br/>
                                 </h:form>
                             </div>

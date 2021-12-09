@@ -1,5 +1,6 @@
 package de.lases.control.backing;
 
+import de.lases.business.service.PaperService;
 import de.lases.business.service.ScientificForumService;
 import de.lases.business.service.SubmissionService;
 import de.lases.business.service.UserService;
@@ -13,10 +14,14 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.servlet.http.Part;
 
+import java.io.IOException;
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Backing bean for the new submission page.
@@ -24,6 +29,8 @@ import java.util.List;
 @ViewScoped
 @Named
 public class NewSubmissionBacking implements Serializable {
+
+    private static final Logger logger = Logger.getLogger(NewSubmissionBacking.class.getName());
 
     @Serial
     private static final long serialVersionUID = 7741936440137638673L;
@@ -33,6 +40,9 @@ public class NewSubmissionBacking implements Serializable {
 
     @Inject
     private SubmissionService submissionService;
+
+    @Inject
+    private PaperService paperService;
 
     @Inject
     private ScientificForumService scientificForumService;
@@ -103,6 +113,12 @@ public class NewSubmissionBacking implements Serializable {
             editors = new ArrayList<>();
         }
         selectedEditor = new User();
+
+        // TODO: Wenn das Scientific forume existiert muss das hier vorausgefuellt sein und eine illegal user flow
+        // exception kommen falls nicht!
+        forumInput.setName("Mathematik Konferenz 2022");
+        forumInput.setId(1);
+        editors = userService.getList(forumInput);
     }
 
     /**
@@ -127,6 +143,7 @@ public class NewSubmissionBacking implements Serializable {
      * @param user The co-author to delete.
      */
     public void deleteCoAuthor(User user) {
+        logger.log(Level.FINEST, "This is executed and I can log it aswell.");
         coAuthors.remove(user);
     }
 
@@ -135,8 +152,24 @@ public class NewSubmissionBacking implements Serializable {
      *
      * @return The page of the entered submission.
      */
-    public String submit() {
-        return null;
+    public String submit() throws IOException {
+        Submission submission = submissionService.add(newSubmission, coAuthors);
+
+        if (submission == null) {
+            logger.log(Level.SEVERE, "the submission was not successfully added.");
+            return null;
+        } else {
+            Paper paper = new Paper();
+            paper.setSubmissionId(submission.getId());
+            paper.setVisible(false);
+            paper.setUploadTime(LocalDateTime.now());
+            FileDTO file = new FileDTO();
+            file.setFile(uploadedPDF.getInputStream().readAllBytes());
+            paperService.add(file, paper);
+        }
+        logger.log(Level.SEVERE, "Going to submission page");
+        // TODO: hier die submission Seite returnen!
+        return "submission";
     }
 
     /**
