@@ -55,8 +55,36 @@ public class SystemSettingsRepository {
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
-    public static FileDTO getLogo(Transaction transaction) {
-        return null;
+    public static FileDTO getLogo(Transaction transaction) throws NotFoundException {
+
+        String sql = """
+                SELECT logo_image
+                FROM system
+                """;
+
+        FileDTO logo = new FileDTO();
+        ResultSet logoResult;
+
+        try (Connection conn = transaction.getConnection()) {
+            PreparedStatement logoStatement = conn.prepareStatement(sql);
+            logoResult = logoStatement.executeQuery();
+
+            if (logoResult.next()) {
+                byte[] logoBytes = logoResult.getBytes(1);
+                logo.setFile(logoBytes);
+            } else {
+                logger.severe("The logo could not be found in the query results.");
+                throw new NotFoundException();
+            }
+
+            if (logoResult.next()) {
+                throw new IllegalStateException("There must not be two 'system' entries in the database.");
+            }
+        } catch (SQLException ex) {
+            logger.severe("Could not fetch the logo from the database.");
+            throw new DatasourceQueryFailedException();
+        }
+        return logo;
     }
 
     /**

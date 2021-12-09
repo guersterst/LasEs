@@ -4,6 +4,7 @@ import de.lases.business.util.AvatarUtil;
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.DataNotWrittenException;
 import de.lases.persistence.exception.InvalidFieldsException;
+import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.repository.SystemSettingsRepository;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
@@ -95,7 +96,13 @@ public class CustomizationService {
      */
     public FileDTO getLogo() {
         Transaction transaction = new Transaction();
-        FileDTO logo = SystemSettingsRepository.getLogo(transaction);
+        FileDTO logo = null;
+        try {
+            logo = SystemSettingsRepository.getLogo(transaction);
+        } catch (NotFoundException e) {
+            transaction.abort();
+            throw new IllegalStateException("No logo could be fetched.");
+        }
         transaction.commit();
         return logo;
     }

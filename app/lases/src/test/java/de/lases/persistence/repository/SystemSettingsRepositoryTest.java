@@ -4,6 +4,7 @@ import de.lases.global.transport.FileDTO;
 import de.lases.global.transport.SystemSettings;
 import de.lases.persistence.exception.DataNotWrittenException;
 import de.lases.persistence.exception.InvalidFieldsException;
+import de.lases.persistence.exception.NotFoundException;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,7 @@ class SystemSettingsRepositoryTest {
 
     @BeforeAll
     static void initSystemSettings() {
+        ConnectionPool.init();
         transaction = new Transaction();
         systemSettings = new SystemSettings();
         systemSettings.setImprint("imprint");
@@ -62,7 +64,7 @@ class SystemSettingsRepositoryTest {
     }
 
     @Test
-    void testGetAndSetLogo() throws DataNotWrittenException {
+    void testGetAndSetLogo() throws DataNotWrittenException, NotFoundException {
         FileDTO file = new FileDTO();
         file.setFile(new byte[]{});
         SystemSettingsRepository.setLogo(file, transaction);
