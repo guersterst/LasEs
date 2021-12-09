@@ -117,6 +117,7 @@ public final class AvatarUtil {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(img, "jpg", baos);
         FileDTO fileDTO = new FileDTO();
+        fileDTO = generateThumbnail(fileDTO);
         fileDTO.setFile(baos.toByteArray());
 
         Transaction transaction = new Transaction();

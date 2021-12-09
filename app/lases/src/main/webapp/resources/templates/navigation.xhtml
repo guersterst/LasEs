@@ -2,42 +2,80 @@
         xmlns="http://www.w3.org/1999/xhtml"
         xmlns:h="http://xmlns.jcp.org/jsf/html"
         xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-        xmlns:f="http://xmlns.jcp.org/jsf/core"
-        template="main.xhtml">
+        xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
 
+    <!-- template="/resources/templates/main.xhtml" -->
+    <!--Content of test.xhtml.-->
     <ui:define name="navigation">
-        <h:graphicImage url="#{'/image?type=logo'}"/>
-        <h:form>
-            <h:link outcome="/views/authenticated/homepage" title="#{help.toHome}"/>
-        </h:form>
-        <h:form rendered="#{navigationBacking.sessionInformation.user != null}">
-            <h:inputText
-                    value="#{navigationBacking.resultListParameters.globalSearchWord}" title="#{help.search}"
-                    rendered="#{navigationBacking.sessionInformation.user != null}"/>
-            <h:commandButton
-                    action="#{navigationBacking.search}"
-                    rendered="#{navigationBacking.sessionInformation.user != null}"/>
+
+        <!-- navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+            <!--- image -->
             <h:link
-                    value="#{labels.userList}" outcome="/views/editor/userList" title="#{help.userList}"
-                    rendered="#{navigationBacking.sessionInformation.user.privileges.contains(Privilege.EDITOR)}"/>
-            <h:link
-                    value="#{labels.forumList}" outcome="/views/authenticated/scientificForumList"
-                    title="#{help.forumList}"
-                    rendered="#{navigationBacking.sessionInformation.user != null}"/>
-            <h:link
-                    value="#{labels.administration}"
-                    outcome="/views/admin/administration"
-                    rendered="#{navigationBacking.sessionInformation.user.admin}"/>
-            <h:commandButton
-                    value="#{labels.logout}"
-                    action="#{navigationBacking.logout}"
-                    title="#{help.logout}"
-                    rendered="#{navigationBacking.sessionInformation.user != null}"/>
-            <h:link
-                    value="#{labels.navProfile}"
-                    outcome="/views/authenticated/profile"
-                    rendered="#{navigationBacking.sessionInformation.user != null}"/>
-        </h:form>
+                    styleClass="navbar-brand"
+                    outcome="/views/authenticated/homepage.xhtml">
+                <h:graphicImage
+                        value="/image?type=logo"
+                        width="50"
+                        height="50"/>
+            </h:link>
+
+            <!-- navigation -->
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <h:link
+                            value="#{labels.userList}"
+                            outcome="/views/editor/userList"
+                            title="#{help.userList}"
+                            rendered="#{navigationBacking.sessionInformation.user.privileges.contains(Privilege.EDITOR)}"
+                            styleClass="nav-item nav-link"/>
+                    <h:link
+                            value="#{labels.forumList}" outcome="/views/authenticated/scientificForumList"
+                            title="#{help.forumList}"
+                            rendered="#{navigationBacking.sessionInformation.user != null}"
+                            styleClass="nav-item nav-link"/>
+                    <h:link
+                            value="#{labels.administration}"
+                            outcome="/views/admin/administration"
+                            rendered="#{navigationBacking.sessionInformation.user.admin}"
+                            styleClass="nav-item nav-link"/>
+                    <h:link
+                            value="#{labels.navProfile}"
+                            outcome="/views/authenticated/profile"
+                            rendered="#{navigationBacking.sessionInformation.user != null}"
+                            styleClass="nav-item nav-link"/>
+
+                    <!-- search form -->
+                    <h:inputText
+                            value="#{navigationBacking.resultListParameters.globalSearchWord}"
+                            title="#{help.search}"
+                            rendered="#{navigationBacking.sessionInformation.user != null}"
+                            styleClass="form-control mr-sm-2"
+                            a:placholder="#{labels.search}"
+                            type="search"
+                            a:aria-label="Search"/>
+                    <form class="form-inline">
+                        <h:commandButton
+                                action="#{navigationBacking.search}"
+                                value="#{labels.search}"
+                                rendered="#{navigationBacking.sessionInformation.user != null}"
+                                styleClass="btn btn-outline-success my-2 my-sm-0"
+                                type="submit"/>
+                    </form>
+                </div>
+            </div>
+
+            <!-- logout -->
+            <h:form styleClass="form-inline mx-3">
+                <h:commandButton
+                        value="#{labels.logout}"
+                        action="#{navigationBacking.logout}"
+                        title="#{help.logout}"
+                        rendered="#{navigationBacking.sessionInformation.user != null}"
+                        styleClass="btn btn-sm btn-outline-secondary"
+                        type="button"/>
+            </h:form>
+        </nav>
     </ui:define>
 </ui:composition>
-
