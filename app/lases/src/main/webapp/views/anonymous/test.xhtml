@@ -3,37 +3,44 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html">
 <body>
-<h:graphicImage value="/image"/>
-<h:form>
-    <h:link value ="#{labels.homePage}" outcome="/views/authenticated/homepage" title="#{help.toHome}"/>
-</h:form>
+<h:panelGroup layout="block">
+    <h:graphicImage value="/logo"/>
+    <h:form>
+        <h:link value="#{labels.homePage}" outcome="/views/authenticated/homepage" title="#{help.toHome}"/>
+    </h:form>
+</h:panelGroup>
+
 <h:form rendered="#{true}">
-    <h:inputText
-            value="#{navigationBacking.resultListParameters.globalSearchWord}" title="#{help.search}"
-            rendered="#{true}"/>
-    <h:commandButton
-            action="#{navigationBacking.search}"
-            rendered="#{true}"/>
-    <h:link
-            value="#{labels.userList}" outcome="/views/editor/userList" title="#{help.userList}"
-            rendered="#{true}"/>
-    <h:link
-            value="#{labels.forumList}" outcome="/views/authenticated/scientificForumList"
-            title="#{help.forumList}"
-            rendered="#{true}"/>
-    <h:link
-            value="#{labels.administration}"
-            outcome="/views/admin/administration"
-            rendered="#{true}"/>
-    <h:commandButton
-            value="#{labels.logout}"
-            action="#{navigationBacking.logout}"
-            title="#{help.logout}"
-            rendered="#{true}"/>
-    <h:link
-            value="#{labels.navProfile}"
-            outcome="/views/authenticated/profile"
-            rendered="#{true}"/>
+    <h:panelGroup layout="block">
+        <h:inputText
+                value="#{navigationBacking.resultListParameters.globalSearchWord}" title="#{help.search}"
+                rendered="#{true}"/>
+        <h:commandButton
+                action="#{navigationBacking.search}"
+                rendered="#{true}"/>
+    </h:panelGroup>
+    <h:panelGroup layout="block">
+        <h:link
+                value="#{labels.userList}" outcome="/views/editor/userList" title="#{help.userList}"
+                rendered="#{true}"/>
+        <h:link
+                value="#{labels.forumList}" outcome="/views/authenticated/scientificForumList"
+                title="#{help.forumList}"
+                rendered="#{true}"/>
+        <h:link
+                value="#{labels.administration}"
+                outcome="/views/admin/administration"
+                rendered="#{true}"/>
+        <h:commandButton
+                value="#{labels.logout}"
+                action="#{navigationBacking.logout}"
+                title="#{help.logout}"
+                rendered="#{true}"/>
+        <h:link
+                value="#{labels.navProfile}"
+                outcome="/views/authenticated/profile"
+                rendered="#{true}"/>
+    </h:panelGroup>
 </h:form>
 </body>
 </html>

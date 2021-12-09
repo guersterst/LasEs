@@ -18,6 +18,16 @@
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>imageServlet</servlet-name>
+        <servlet-class>de.lases.control.internal.ImageServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>imageServlet</servlet-name>
+        <url-pattern>/logo</url-pattern>
+    </servlet-mapping>
+
     <context-param>
         <param-name>jakarta.faces.PROJECT_STAGE</param-name>
         <param-value>Development</param-value>

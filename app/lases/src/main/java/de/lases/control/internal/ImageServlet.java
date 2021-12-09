@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 /**
  * Serves images under the /image* url.
  */
-@WebServlet(value = "/image")
+//@WebServlet(value = "/image")
 public class ImageServlet extends HttpServlet {
 
     @Inject
@@ -98,15 +98,15 @@ public class ImageServlet extends HttpServlet {
 
     private void deliverRequestedImage(HttpServletResponse response, boolean isLogo, Optional<Integer> userID) {
         FileDTO img = fetchImage(response, isLogo, userID);
-            byte[] imgBytes = img.getFile();
-            configureResponse(response, imgBytes);
-            try {
-                response.getOutputStream().write(imgBytes);
-                response.getOutputStream().close();
-            } catch (IOException e) {
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                logger.severe("The writing of the image to the respones outputstream has failed.");
-            }
+        byte[] imgBytes = img.getFile();
+        configureResponse(response, imgBytes);
+        try {
+            response.getOutputStream().write(imgBytes);
+            response.getOutputStream().close();
+        } catch (IOException e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            logger.severe("The writing of the image to the respones outputstream has failed.");
+        }
     }
 
     private static void configureResponse(HttpServletResponse response, byte[] imgBytes) {
