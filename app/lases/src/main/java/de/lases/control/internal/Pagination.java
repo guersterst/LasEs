@@ -1,9 +1,10 @@
 package de.lases.control.internal;
 
+import de.lases.global.transport.ResultListParameters;
+import de.lases.global.transport.SortOrder;
+
 import java.util.LinkedList;
 import java.util.List;
-
-import de.lases.global.transport.*;
 
 /**
  * Abstract class which implements a list pagination.
@@ -30,7 +31,7 @@ public abstract class Pagination<T> {
      *
      * @param defaultSortedBy default column identifier to be sorted by.
      */
-    public Pagination(String defaultSortedBy) {
+    public  Pagination(String defaultSortedBy) {
         resultListParameters = new ResultListParameters();
         resultListParameters.setSortColumn(defaultSortedBy);
         resultListParameters.setPageNo(1);
@@ -132,5 +133,10 @@ public abstract class Pagination<T> {
      */
     public void setEntries(List<T> entries) {
         this.entries = entries;
+    }
+
+    public void applyFilters() {
+        resultListParameters.setPageNo(1);
+        loadData();
     }
 }

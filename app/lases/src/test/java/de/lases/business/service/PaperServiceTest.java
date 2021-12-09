@@ -2,6 +2,7 @@ package de.lases.business.service;
 
 import de.lases.global.transport.FileDTO;
 import de.lases.global.transport.Paper;
+import de.lases.persistence.repository.ConnectionPool;
 import de.lases.persistence.repository.PaperRepository;
 import de.lases.persistence.repository.Transaction;
 import org.junit.jupiter.api.AfterAll;
@@ -11,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.eq;
@@ -44,6 +47,13 @@ public class PaperServiceTest {
         // Mock get to return a paper or file if the ids are correct.
         paperRepoMocked.when(() -> PaperRepository.get(eq(paper), any(Transaction.class))).thenReturn(paper);
         paperRepoMocked.when(() -> PaperRepository.getPDF(eq(paper), any(Transaction.class))).thenReturn(fileDTO);
+
+        ConnectionPool.init();
+    }
+
+    @AfterAll
+    static void shutDown() {
+        ConnectionPool.shutDown();
     }
 
     @BeforeEach
@@ -66,13 +76,21 @@ public class PaperServiceTest {
 
     @Test
     void testGet() {
+        Paper paper = new Paper();
+        paper = new Paper();
+        paper.setSubmissionId(5);
+        paper.setUploadTime(LocalDateTime.now());
+        paper.setVersionNumber(3);
+        paper.setVisible(false);
+
+        FileDTO pdf = new FileDTO();
+        pdf.setFile(new byte[]{1, 2, 3, 4});
+
         paperService.add(fileDTO, paper);
 
         Paper gotten = paperService.get(paper);
-        assertAll(
-                () -> assertEquals(EXAMPLE_SUBMISSION_ID, gotten.getSubmissionId()),
-                () -> assertEquals(EXAMPLE_VERSION_NUMBER, gotten.getVersionNumber())
-        );
+
+        assertEquals(paper, gotten);
     }
 
     @Test

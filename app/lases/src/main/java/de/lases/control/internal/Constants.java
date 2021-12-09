@@ -58,12 +58,12 @@ public final class Constants {
     /**
      * Maximal Length that is allowed for the title of a submission.
      */
-    public static final String SUBMISSION_TITLE = "200";
+    public static final String SUBMISSION_TITLE_MAX = "200";
 
     /**
      * Maximal Length that is allowed for the name of a company.
      */
-    public static final String SYSTEM_COMPANY_NAME = "100";
+    public static final String SYSTEM_COMPANY_NAME_MAX = "100";
 
     /**
      * Maximal Length that is allowed for the heading of the welcome page.

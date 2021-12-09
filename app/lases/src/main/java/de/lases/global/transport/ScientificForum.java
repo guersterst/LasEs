@@ -1,6 +1,7 @@
 package de.lases.global.transport;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * Represents a scientific forum.
@@ -81,7 +82,7 @@ public class ScientificForum implements Cloneable {
      *
       * @param deadline Deadline for new submissions.
      */
-    void setDeadline(LocalDateTime deadline) {
+    public void setDeadline(LocalDateTime deadline) {
         this.deadline = deadline;
     }
 
@@ -106,13 +107,8 @@ public class ScientificForum implements Cloneable {
     @Override
     public ScientificForum clone() {
         try {
-            ScientificForum clone = (ScientificForum) super.clone();
-
-            /*
-             * Nothing to do here, since all references of ScientificForum are
-             * immutable.
-             */
-            return clone;
+            // All fields are immutable
+            return (ScientificForum) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }
@@ -122,17 +118,16 @@ public class ScientificForum implements Cloneable {
      * Check equality by comparing ids.
      *
      * @param object The object to compare to.
-     * @return Is the provided object equal to this scfientific forum?
+     * @return Is the provided object equal to this scientific forum?
      */
     @Override
     public boolean equals(Object object) {
-        if (object == this) {
-            return true;
-        }
-        if (!(object instanceof ScientificForum)) {
+        if (this == object) return true;
+
+        if (object instanceof ScientificForum forum) {
+            return Objects.equals(id, forum.id);
+        } else {
             return false;
         }
-        ScientificForum forum = (ScientificForum) object;
-        return forum.getId().equals(this.getId());
     }
 }

@@ -14,6 +14,7 @@ import jakarta.servlet.http.Part;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -83,10 +84,21 @@ public class NewSubmissionBacking {
      *     </li>
      * </ul>
      * The list of editors for the forum this submission will be submitted in
-     * will be directly populated from the database.
+     * will be directly populated from the database, if the scientific forum is already prefilled.
      */
     @PostConstruct
     public void init() {
+        newSubmission = new Submission();
+        editorSelectionInput = new User();
+        coAuthorInput = new User();
+        coAuthors = new ArrayList<>();
+        if (forumInput != null) {
+            editors = userService.getList(forumInput);
+        } else {
+            forumInput = new ScientificForum();
+            editors = new ArrayList<>();
+        }
+        selectedEditor = new User();
     }
 
     /**

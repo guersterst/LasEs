@@ -2,6 +2,7 @@ package de.lases.persistence.repository;
 
 import de.lases.persistence.exception.DatasourceQueryFailedException;
 import de.lases.persistence.exception.DepletedResourceException;
+import de.lases.persistence.util.DatasourceUtil;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -46,9 +47,9 @@ public class Transaction {
                     connection.close();
                 }
             } catch (SQLException ex) {
-                logSQLException(ex);
+                DatasourceUtil.logSQLException(ex, logger);
             }
-            logSQLException(e);
+            DatasourceUtil.logSQLException(e, logger);
             throw new DatasourceQueryFailedException("Transaction cannot"
                     + "be rolled back", e);
         }
@@ -71,10 +72,10 @@ public class Transaction {
                     connection.rollback();
                     connection.close();
                 } catch (SQLException ex) {
-                    logSQLException(ex);
+                    DatasourceUtil.logSQLException(ex, logger);
                 }
             }
-            logSQLException(e);
+            DatasourceUtil.logSQLException(e, logger);
             throw new DatasourceQueryFailedException("Commit failed");
         }
         transactionOver = true;
@@ -87,21 +88,10 @@ public class Transaction {
      * @return The db connection.
      * @throws IllegalStateException When the transaction is already over.
      */
-    Connection getConnection() {
+    public Connection getConnection() {
         if (transactionOver)
             throw new IllegalStateException("Transaction is already over");
         return connection;
-    }
-
-    private void logSQLException(SQLException sqlException) {
-        logger.log(Level.SEVERE,
-                """
-                Message: %s
-                SQLState: %s
-                Vendor error code: %s
-                """.formatted(sqlException.getMessage(),
-                        sqlException.getSQLState(), sqlException.getErrorCode())
-                );
     }
 
 }

@@ -7,15 +7,15 @@ import java.time.LocalDateTime;
  */
 public class Paper implements Cloneable {
 
-    private int submissionId;
+    private Integer submissionId;
 
-    private int versionNumber;
+    private Integer versionNumber;
 
     private LocalDateTime uploadTime;
 
     private boolean visible;
 
-    public int getSubmissionId() {
+    public Integer getSubmissionId() {
         return submissionId;
     }
 
@@ -28,7 +28,7 @@ public class Paper implements Cloneable {
         this.submissionId = submissionId;
     }
 
-    public int getVersionNumber() {
+    public Integer getVersionNumber() {
         return versionNumber;
     }
 

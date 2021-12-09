@@ -1,0 +1,30 @@
+<ui:composition template="/resources/templates/main.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <f:metadata>
+        <f:importConstants type="de.lases.control.internal.Constants" var="Const"/>
+    </f:metadata>
+
+
+    <!--Title of a Submission as Title of the page.-->
+    <ui:define
+            name="title">Hello</ui:define>
+
+    <!--Content of submission.xhtml.-->
+    <ui:define name="content">
+        <h:form>
+            <h:inputText id="submissiontitle-itxt" value="#{newSubmissionBacking.newSubmission.title}"
+                         required="true" requiredMessage="#{message.titleSub}"
+                         maxlength="#{Const.SUBMISSION_TITLE_MAX}"/>
+            <h:message for="submissiontitle-itxt"/>
+
+
+
+            <h:commandButton id="submitcbtn" value="henlo" action="#{newSubmissionBacking.submit()}"/>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
