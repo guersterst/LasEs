@@ -102,31 +102,34 @@ public class PaperService implements Serializable {
 
         List<Paper> paperList;
 
-        try {
-            paperList = PaperRepository.getList(submission, transaction,
-                    user, new ResultListParameters());
-        } catch (DataNotCompleteException e) {
-            uiMessageEvent.fire(new UIMessage(resourceBundle.getString(
-                    "dataNotWritten"), MessageCategory.ERROR));
-            logger.log(Level.WARNING, e.getMessage());
-            transaction.abort();
-            return;
-        } catch (NotFoundException e) {
-            transaction.abort();
-            throw new IllegalArgumentException("the submission specified in the"
-                    + "paper DTO was not found", e);
-        }
-
-        // TODO: Sobald die richtige Methode implementiert ist hier ein assert anstatt ein if einbauen!
-        if (paperList == null) {
-            logger.log(Level.SEVERE, "paperList is still null, probably because the paperGetList method is not" +
-                    "implemented yet!");
-        } else {
-            if (!paperList.isEmpty()) {
-                logger.log(Level.INFO, "Sending email to an editor.");
-                // TODO: Email senden oder a ned in develop mode.
-            }
-        }
+        // TODO: Das email zeug wieder einkommentieren
+        logger.log(Level.SEVERE, "einkommentieren");
+//        try {
+//            // TODO: De Methode geht ned, do muss ich mir eine eigene schreiben!
+//            paperList = PaperRepository.getList(submission, transaction,
+//                    user, new ResultListParameters());
+//        } catch (DataNotCompleteException e) {
+//            uiMessageEvent.fire(new UIMessage(resourceBundle.getString(
+//                    "dataNotWritten"), MessageCategory.ERROR));
+//            logger.log(Level.WARNING, e.getMessage());
+//            transaction.abort();
+//            return;
+//        } catch (NotFoundException e) {
+//            transaction.abort();
+//            throw new InvalidFieldsException("the submission specified in the"
+//                    + "paper DTO was not found", e);
+//        }
+//
+//        // TODO: Sobald die richtige Methode implementiert ist hier ein assert anstatt ein if einbauen!
+//        if (paperList == null) {
+//            logger.log(Level.SEVERE, "paperList is still null, probably because the paperGetList method is not" +
+//                    "implemented yet!");
+//        } else {
+//            if (!paperList.isEmpty()) {
+//                logger.log(Level.INFO, "Sending email to an editor.");
+//                // TODO: Email senden oder a ned in develop mode.
+//            }
+//        }
 
         try {
             PaperRepository.add(paper, file, transaction);

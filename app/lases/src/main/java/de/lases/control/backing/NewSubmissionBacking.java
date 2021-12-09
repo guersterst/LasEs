@@ -106,6 +106,7 @@ public class NewSubmissionBacking implements Serializable {
         // exception kommen falls nicht!
         forumInput.setName("Mathematik Konferenz 2022");
         forumInput.setId(1);
+        newSubmission.setScientificForumId(forumInput.getId());
         editors = userService.getList(forumInput);
     }
 
@@ -131,7 +132,6 @@ public class NewSubmissionBacking implements Serializable {
      * @param user The co-author to delete.
      */
     public void deleteCoAuthor(User user) {
-        logger.log(Level.SEVERE, "This is executed and I can log it aswell.");
         coAuthors.remove(user);
     }
 
@@ -141,6 +141,10 @@ public class NewSubmissionBacking implements Serializable {
      * @return The page of the entered submission.
      */
     public String submit() throws IOException {
+        newSubmission.setSubmissionTime(LocalDateTime.now());
+        newSubmission.setState(SubmissionState.SUBMITTED);
+        // TODO: Was, wenn der User nicht angemeldet ist?
+        newSubmission.setAuthorId(sessionInformation.getUser().getId());
         Submission submission = submissionService.add(newSubmission, coAuthors);
 
         if (submission == null) {
@@ -148,6 +152,7 @@ public class NewSubmissionBacking implements Serializable {
             return null;
         } else {
             Paper paper = new Paper();
+            logger.log(Level.INFO, "Adding paper to the submission with id: " + submission.getId());
             paper.setSubmissionId(submission.getId());
             paper.setVisible(false);
             paper.setUploadTime(LocalDateTime.now());

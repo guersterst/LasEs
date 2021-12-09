@@ -66,7 +66,6 @@ public class TrespassListener implements PhaseListener {
      */
     @Override
     public void afterPhase(PhaseEvent event) {
-        /*
         FacesContext fctx = event.getFacesContext();
         SessionInformation sessionInformation = CDI.current().select(SessionInformation.class).get();
         User user = sessionInformation.getUser();
@@ -124,7 +123,6 @@ public class TrespassListener implements PhaseListener {
         // flash scope lives exactly for two subsequent requests.
         ExternalContext ctx = fctx.getExternalContext();
         ctx.getFlash().setKeepMessages(true);
-         */
     }
 
 }
