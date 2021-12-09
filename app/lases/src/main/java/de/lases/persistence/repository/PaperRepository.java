@@ -157,7 +157,7 @@ public class PaperRepository {
         Connection connection = transaction.getConnection();
 
         try {
-            ResultSet resultSet = findPaper(paper, connection);
+            findPaper(paper, connection);
 
         } catch (SQLException exception) {
             logger.fine("Searching paper failed. Tried to change paper");

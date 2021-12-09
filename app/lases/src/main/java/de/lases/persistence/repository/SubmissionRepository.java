@@ -4,10 +4,7 @@ import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
 import de.lases.persistence.util.DatasourceUtil;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -91,7 +88,38 @@ public class SubmissionRepository {
     public static void change(Submission submission, Transaction transaction)
             throws NotFoundException, DataNotWrittenException {
         if (submission.getId() == null) {
+            logger.severe("Invalid submission id when tried to change a submission.");
+            throw new InvalidFieldsException("The submission id must not be null here.");
+        }
 
+        Connection connection = transaction.getConnection();
+
+        try {
+            findSubmission(submission, connection);
+        } catch (SQLException exception) {
+            logger.fine("Searching for a submission failed. Tried to change the submission.");
+            throw new NotFoundException("Submission id doesn't exist.");
+        }
+
+        // Only the following data can be changed.
+        try {
+            PreparedStatement statement = connection.prepareStatement(
+                    """
+                            UPDATE submission
+                            SET state = CAST( ? AS submission_state), requires_revision = ?, timestamp_deadline_revision = ?, editor_id = ?
+                            WHERE id = ?
+                            """
+            );
+            statement.setString(1, submission.getState().toString());
+            statement.setBoolean(2, submission.isRevisionRequired());
+            statement.setTimestamp(3, Timestamp.valueOf(submission.getDeadlineRevision()));
+            statement.setInt(4, submission.getEditorId());
+
+            statement.executeUpdate();
+
+        } catch (SQLException exception) {
+            DatasourceUtil.logSQLException(exception, logger);
+            throw new DatasourceQueryFailedException("A datasource exception occurred while changing a submission's data.", exception);
         }
 
     }
@@ -140,7 +168,7 @@ public class SubmissionRepository {
 
             statement.executeUpdate();
 
-        }catch (SQLException exception) {
+        } catch (SQLException exception) {
             DatasourceUtil.logSQLException(exception, logger);
             throw new DatasourceQueryFailedException("A datasource exception occurred while removing a submission.", exception);
         }
