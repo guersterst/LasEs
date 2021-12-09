@@ -5,6 +5,9 @@ import de.lases.global.transport.Paper;
 import de.lases.global.transport.Submission;
 import de.lases.global.transport.User;
 import de.lases.persistence.exception.DataNotWrittenException;
+import de.lases.persistence.exception.InvalidFieldsException;
+import de.lases.persistence.exception.NotFoundException;
+import org.junit.jupiter.api.*;
 import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.exception.InvalidFieldsException;
 import org.junit.jupiter.api.AfterAll;
@@ -23,21 +26,30 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class PaperRepositoryTest {
 
+    /**
+     * A paper that is not supposed to be in the test db already.
+     */
     private static Paper paper;
 
-    private static FileDTO pdf;
+    /**
+     * A paper that is supposed to be in the test db already.
+     */
+    private static Paper paperNonExistent;
 
-    private static Transaction transaction;
+    private static FileDTO pdf;
 
     @BeforeAll
     static void initPaper() {
         paper = new Paper();
         paper.setSubmissionId(5);
-        paper.setUploadTime(LocalDateTime.of(2021, 12,8,11,5));
-        paper.setVersionNumber(3);
+        paper.setUploadTime(LocalDateTime.now());
+        paper.setVersionNumber(2);
         paper.setVisible(false);
         pdf = new FileDTO();
         pdf.setFile(new byte[]{1, 2, 3, 4});
+
+        paperNonExistent = paper.clone();
+        paperNonExistent.setVersionNumber(3);
     }
 
     @BeforeAll
@@ -45,25 +57,14 @@ class PaperRepositoryTest {
         ConnectionPool.init();
     }
 
-    @BeforeAll
-    static void startTransaction() {
-        transaction = new Transaction();
-    }
-
     @AfterAll
-    static void rollbackTransaction() {
-        transaction.abort();
+    static void shutdownConnectionPool() {
         ConnectionPool.shutDown();
     }
 
-//    @AfterAll
-//    static void shutdownConnectionPool() {
-//        ConnectionPool.shutDown();
-//    }
-
     @Test
     void testGetPaper() throws SQLException, NotFoundException, DataNotWrittenException {
-        PaperRepository.add(paper, pdf, transaction);
+        Transaction transaction = new Transaction();
 
         Connection connection = transaction.getConnection();
         PreparedStatement statement = connection.prepareStatement(
@@ -86,14 +87,16 @@ class PaperRepositoryTest {
         }
 
         assertEquals(resultPaper, PaperRepository.get(resultPaper, transaction));
+        transaction.abort();
     }
 
     @Test
     void testChange() throws SQLException, DataNotWrittenException, NotFoundException {
+        Transaction transaction = new Transaction();
         Connection connection = transaction.getConnection();
-        PaperRepository.add(paper, pdf, transaction);
+        PaperRepository.add(paperNonExistent, pdf, transaction);
 
-        Paper changed = paper.clone();
+        Paper changed = paperNonExistent.clone();
         changed.setVisible(true);
 
         PreparedStatement statement = connection.prepareStatement(
@@ -109,11 +112,13 @@ class PaperRepositoryTest {
 
         PaperRepository.change(changed, transaction);
 
-        assertEquals(changed, paper);
+        assertEquals(changed, paperNonExistent);
+        transaction.abort();
     }
 
     @Test
     void testAdd() throws SQLException, DataNotWrittenException {
+        Transaction transaction = new Transaction();
         Connection conn = transaction.getConnection();
         PreparedStatement stmt = conn.prepareStatement(
                 """
@@ -125,7 +130,7 @@ class PaperRepositoryTest {
             i++;
         }
 
-        PaperRepository.add(paper, pdf, transaction);
+        PaperRepository.add(paperNonExistent, pdf, transaction);
 
         ResultSet resultSet2 = stmt.executeQuery();
         int j = 0;
@@ -134,10 +139,12 @@ class PaperRepositoryTest {
         }
 
         assertEquals(1, j - i);
+        transaction.abort();
     }
 
     @Test
     void testNull() {
+        Transaction transaction = new Transaction();
         assertAll(
                 () -> {
                     assertThrows(InvalidFieldsException.class,
@@ -150,13 +157,15 @@ class PaperRepositoryTest {
                                     transaction));
                 }
         );
+        transaction.abort();
     }
 
     @Test
     void testRemove() throws SQLException, DataNotWrittenException, NotFoundException {
+        Transaction transaction = new Transaction();
         Connection conn = transaction.getConnection();
 
-        PaperRepository.add(paper, pdf, transaction);
+        PaperRepository.add(paperNonExistent, pdf, transaction);
 
         PreparedStatement stmt = conn.prepareStatement(
                 """
@@ -177,19 +186,23 @@ class PaperRepositoryTest {
         }
 
         assertEquals(1, i - j);
+        transaction.abort();
     }
 
     @Test
     void testFileSize() throws SQLException, NotFoundException, DataNotWrittenException {
-        PaperRepository.add(paper,pdf,transaction);
-        FileDTO fileDTO = PaperRepository.getPDF(paper,transaction);
+        Transaction transaction = new Transaction();
+        PaperRepository.add(paperNonExistent,pdf,transaction);
+        FileDTO fileDTO = PaperRepository.getPDF(paperNonExistent,transaction);
         int fileLength = fileDTO.getFile().length;
 
         assertEquals(pdf.getFile().length, fileLength);
+        transaction.abort();
     }
 
     @Test
     void testGetNewestPaper() throws DataNotWrittenException, NotFoundException {
+        Transaction transaction = new Transaction();
         Submission submission = new Submission();
         submission.setId(5);
         submission.setAuthorId(1);
@@ -215,6 +228,7 @@ class PaperRepositoryTest {
                 () -> assertEquals(newestPaper.getVersionNumber(), newestPaper.getVersionNumber()),
                 () -> assertEquals(newestPaper.getUploadTime(), getNewestPaper.getUploadTime())
         );
+        transaction.abort();
     }
 
 }

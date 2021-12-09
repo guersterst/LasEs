@@ -88,7 +88,7 @@ public class Transaction {
      * @return The db connection.
      * @throws IllegalStateException When the transaction is already over.
      */
-    Connection getConnection() {
+    public Connection getConnection() {
         if (transactionOver)
             throw new IllegalStateException("Transaction is already over");
         return connection;

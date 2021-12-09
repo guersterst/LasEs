@@ -1,7 +1,6 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.*;
-
 import de.lases.persistence.exception.DataNotCompleteException;
 import de.lases.persistence.exception.DataNotWrittenException;
 import de.lases.persistence.exception.InvalidFieldsException;
@@ -17,7 +16,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.PropertyResourceBundle;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,7 +35,6 @@ public class PaperService implements Serializable {
     private transient PropertyResourceBundle resourceBundle;
 
     private static final Logger logger = Logger.getLogger(PaperService.class.getName());
-
 
     /**
      * Gets a paper.
@@ -115,14 +112,20 @@ public class PaperService implements Serializable {
             transaction.abort();
             return;
         } catch (NotFoundException e) {
+            transaction.abort();
             throw new IllegalArgumentException("the submission specified in the"
                     + "paper DTO was not found", e);
         }
 
-        assert paperList != null;
-        if (!paperList.isEmpty()) {
-            logger.log(Level.INFO, "Sending email to an editor.");
-            // TODO: Email senden oder a ned in develop mode.
+        // TODO: Sobald die richtige Methode implementiert ist hier ein assert anstatt ein if einbauen!
+        if (paperList == null) {
+            logger.log(Level.SEVERE, "paperList is still null, probably because the paperGetList method is not" +
+                    "implemented yet!");
+        } else {
+            if (!paperList.isEmpty()) {
+                logger.log(Level.INFO, "Sending email to an editor.");
+                // TODO: Email senden oder a ned in develop mode.
+            }
         }
 
         try {
@@ -135,6 +138,7 @@ public class PaperService implements Serializable {
             transaction.abort();
             return;
         }
+        transaction.commit();
     }
 
     /**

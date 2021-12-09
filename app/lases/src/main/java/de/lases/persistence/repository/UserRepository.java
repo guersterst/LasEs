@@ -3,11 +3,13 @@ package de.lases.persistence.repository;
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
 import de.lases.persistence.internal.ConfigReader;
+import de.lases.persistence.util.DatasourceUtil;
 import jakarta.enterprise.inject.spi.CDI;
 
 import java.sql.*;
 import java.sql.Date;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -91,16 +93,24 @@ public class UserRepository {
             // Attempt to query for the user.
             ResultSet userResult;
             PreparedStatement userStatement = conn.prepareStatement(sql_user);
-            userStatement.setInt(1, user.getId());
+            if (user.getId() != null) {
+                userStatement.setInt(1, user.getId());
+            } else {
+                userStatement.setNull(1, Types.INTEGER);
+            }
             userStatement.setString(2, user.getEmailAddress());
             userResult = userStatement.executeQuery();
 
             // Attempt to query for the user's editor status and number of submissions.
             ResultSet submissionAndEditorResult;
             PreparedStatement extraStatement = conn.prepareStatement(sql_number_of_submissions_and_editor_info);
-            extraStatement.setInt(1, user.getId());
-            extraStatement.setInt(2, user.getId());
-
+            if (user.getId() != null) {
+                extraStatement.setInt(1, user.getId());
+                extraStatement.setInt(2, user.getId());
+            } else {
+                extraStatement.setNull(1, Types.INTEGER);
+                extraStatement.setNull(2, Types.INTEGER);
+            }
             submissionAndEditorResult = extraStatement.executeQuery();
 
             // Attempt to create a user from the query results.
@@ -193,15 +203,78 @@ public class UserRepository {
      * @param transaction The transaction to use.
      * @throws DataNotWrittenException        If writing the data to the repository
      *                                        fails.
-     * @throws KeyExistsException             If the email address of the added user
-     *                                        already exists in the datasource.
      * @throws InvalidFieldsException         If one of the required fields of the
      *                                        scientific forum is null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     * @return The user object with his id.
      */
-    public static void add(User user, Transaction transaction)
-            throws DataNotWrittenException, KeyExistsException {
+    public static User add(User user, Transaction transaction)
+            throws DataNotWrittenException {
+        // TODO: Ist noch nicht getestet, habe das nur schnell gebraucht.
+        Connection conn = transaction.getConnection();
+
+        if (user.getEmailAddress() == null || user.getFirstName() == null || user.getLastName() == null) {
+            transaction.abort();
+            throw new InvalidFieldsException("The email address or the first or last name was null");
+        }
+
+        if (user.isRegistered() && (user.getPasswordHashed() == null || user.getPasswordSalt() == null)) {
+            transaction.abort();
+            throw new InvalidFieldsException("Hashed password or password salt was null for a registered user");
+        }
+
+        Integer id = null;
+
+        try{
+            PreparedStatement stmt = conn.prepareStatement("""
+                    SELECT max(id) FROM "user"
+                    """);
+            ResultSet resultSet = stmt.executeQuery();
+            if (resultSet.next()) {
+                id = resultSet.getInt(1) + 1;
+            } else {
+                id = 0;
+            }
+        } catch (SQLException ex) {
+            DatasourceUtil.logSQLException(ex, logger);
+            transaction.abort();
+            throw new DatasourceQueryFailedException("A datasource exception"
+                    + " occurred", ex);
+        }
+        user.setId(id);
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement("""
+                    INSERT INTO "user"
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    """);
+            stmt.setInt(1, user.getId());
+            stmt.setString(2, user.getEmailAddress());
+            stmt.setBoolean(3, user.isAdmin());
+            stmt.setString(4, user.getFirstName());
+            stmt.setString(5, user.getLastName());
+            stmt.setString(6, user.getTitle());
+            stmt.setString(7, user.getEmployer());
+
+            if (user.getDateOfBirth() != null) {
+                stmt.setDate(8, Date.valueOf(user.getDateOfBirth()));
+            } else {
+                stmt.setNull(8, Types.DATE);
+            }
+            stmt.setBytes(9, null);
+            stmt.setBoolean(10, user.isRegistered());
+            stmt.setString(11, user.getPasswordHashed());
+            stmt.setString(12, user.getPasswordSalt());
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            DatasourceUtil.logSQLException(ex, logger);
+            transaction.abort();
+            throw new DatasourceQueryFailedException("A datasource exception"
+                    + "occurred", ex);
+        }
+        return user;
+        // TODO: her auch Exceptins noch besser unterscheiden
     }
 
     /**
@@ -694,7 +767,27 @@ public class UserRepository {
      *                                        queried.
      */
     public static boolean emailExists(User user, Transaction transaction) {
-        return false;
+        // TODO: Ist noch nicht getestet, habe das nur schnell gebraucht
+        if (user.getEmailAddress() ==  null) {
+            transaction.abort();
+            throw new InvalidFieldsException("the email address was null");
+        }
+        Connection conn = transaction.getConnection();
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement("""
+                                                            SELECT * FROM "user"
+                                                            WHERE email_address = ?
+                                                            """);
+            stmt.setString(1, user.getEmailAddress());
+            ResultSet resultSet = stmt.executeQuery();
+            return resultSet.next();
+        } catch (SQLException e) {
+            // TODO: hier eventuell unter Bedingungen eine checked Exception werfen
+            transaction.abort();
+            DatasourceUtil.logSQLException(e, logger);
+            throw new DatasourceQueryFailedException("the datasource could not be queried", e);
+        }
     }
 
     /**
