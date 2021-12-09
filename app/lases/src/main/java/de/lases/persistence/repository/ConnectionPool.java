@@ -2,6 +2,8 @@ package de.lases.persistence.repository;
 
 import de.lases.persistence.exception.DatasourceQueryFailedException;
 import de.lases.persistence.exception.DepletedResourceException;
+import de.lases.persistence.internal.ConfigReader;
+import jakarta.enterprise.inject.spi.CDI;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,6 +19,8 @@ import java.util.logging.Logger;
  */
 public class ConnectionPool {
 
+    private static final ConfigReader configReader = CDI.current().select(ConfigReader.class).get();
+
     private static final String DB_DRIVER = "org.postgresql.Driver";
     private static final String DB_HOST = "bueno.fim.uni-passau.de";
     private static final String DB_NAME = "sep21g02t";
@@ -25,8 +29,6 @@ public class ConnectionPool {
 
     private static final Logger logger
             = Logger.getLogger(Transaction.class.getName());
-
-    // TODO: Pool Size and Timeout into config file.
 
     /**
      * The initial number of free connections.
