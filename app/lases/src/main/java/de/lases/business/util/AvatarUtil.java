@@ -1,11 +1,7 @@
 package de.lases.business.util;
 
 import de.lases.global.transport.FileDTO;
-import de.lases.persistence.exception.DataNotWrittenException;
 import de.lases.persistence.exception.InvalidFieldsException;
-import de.lases.persistence.repository.ConnectionPool;
-import de.lases.persistence.repository.SystemSettingsRepository;
-import de.lases.persistence.repository.Transaction;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -42,9 +38,9 @@ public final class AvatarUtil {
         try {
 
             // Create image instance, scale and write to an output stream.
-            Image scaledImg = getBufferedImageFromByteArray(imageFile).getScaledInstance(IMAGE_WIDTH, IMAGE_HEIGHT,
+            Image scaledImg = castToBufferedImageFromFileDTO(imageFile).getScaledInstance(IMAGE_WIDTH, IMAGE_HEIGHT,
                     BufferedImage.SCALE_SMOOTH);
-            ImageIO.write(castToBufferedImage(scaledImg), "jpg", bos);
+            ImageIO.write(castToBufferedImageFromImage(scaledImg), "jpg", bos);
             bos.flush();
             bos.close();
         } catch (IOException e) {
@@ -57,18 +53,24 @@ public final class AvatarUtil {
     }
 
     /**
-     * Converts the byte array contained in the file to an {@code Image}.
+     * Converts the byte array contained in the file to an {@code BufferedImage}.
      *
      * @param file The file containing a byte array.
-     * @return The byte array as an {@code Image}.
+     * @return The byte array as an {@code BufferedImage}.
      * @throws IOException If the conversion fails.
      */
-    private static BufferedImage getBufferedImageFromByteArray(FileDTO file) throws IOException {
+    private static BufferedImage castToBufferedImageFromFileDTO(FileDTO file) throws IOException {
         InputStream byteStream = new ByteArrayInputStream(file.getFile());
         return ImageIO.read(byteStream);
     }
 
-    private static BufferedImage castToBufferedImage(Image img) {
+    /**
+     * Converts the {@code Image} to a {@code BufferedImage}.
+     *
+     * @param img The image to be converted.
+     * @return The {@code Image} as a {@code BufferedImage}.
+     */
+    private static BufferedImage castToBufferedImageFromImage(Image img) {
         if (img instanceof BufferedImage) {
             return (BufferedImage) img;
         }
@@ -84,45 +86,4 @@ public final class AvatarUtil {
 
         return bImage;
     }
-
-    //TODO REMOVE OR TURN INTO TESTS
-    public static void main(String[] args) throws IOException, DataNotWrittenException {
-
-        //TEST AvatarUtil
-        /*
-        // Get image.
-        BufferedImage img = ImageIO.read(AvatarUtil.class.getClassLoader().getResource("face.jpg"));
-
-        // Create fileDTO.
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(img, "jpg", baos);
-        FileDTO fileDTO = new FileDTO();
-        fileDTO.setFile(baos.toByteArray());
-
-        // Write the image.
-        FileDTO thumbnail = generateThumbnail(fileDTO);
-        BufferedImage bufferedThumbnail = getBufferedImageFromByteArray(thumbnail);
-        File outputFile = new File("thumbnail.jpg");
-        ImageIO.write(bufferedThumbnail, "jpg", outputFile);
-         */
-
-
-        //TEST setLogo
-        ConnectionPool.init();
-
-        // Get image.
-        BufferedImage img = ImageIO.read(AvatarUtil.class.getClassLoader().getResource("face.jpg"));
-
-        // Create fileDTO.
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(img, "jpg", baos);
-        FileDTO fileDTO = new FileDTO();
-        fileDTO = generateThumbnail(fileDTO);
-        fileDTO.setFile(baos.toByteArray());
-
-        Transaction transaction = new Transaction();
-        SystemSettingsRepository.setLogo(fileDTO, transaction);
-        transaction.commit();
-    }
-
 }
