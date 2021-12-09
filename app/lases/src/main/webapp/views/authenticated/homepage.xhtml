@@ -77,9 +77,9 @@
 
                             <h:column>
                                 <f:facet name="header">
-                                    <col:sortsearchcolumn id="date-ssc" columnNamei18n="#{labels.date}"
-                                                          paginator="#{homepageBacking.submissionPagination}"
-                                                          columnIdentifier="timestamp_submission"/>
+                                    <div class="input-group">
+                                        <h:outputText value="#{labels.date}" styleClass="input-group-text"/>
+                                    </div>
                                 </f:facet>
                                 <h:outputText value="#{var.submissionTime}">
                                     <f:convertDateTime type="localDate"/>
@@ -88,9 +88,9 @@
 
                             <h:column>
                                 <f:facet name="header">
-                                    <col:sortsearchcolumn columnNamei18n="#{labels.deadline}"
-                                                          paginator="#{homepageBacking.submissionPagination}"
-                                                          columnIdentifier="timestamp_deadline_revision"/>
+                                    <div class="input-group">
+                                        <h:outputText value="#{labels.deadline}" styleClass="input-group-text"/>
+                                    </div>
                                 </f:facet>
                                 <h:outputText value="#{var.deadlineRevision}">
                                     <f:convertDateTime type="localDate"/>
