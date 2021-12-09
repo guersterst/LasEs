@@ -19,6 +19,10 @@
             <f:viewAction action="#{submissionBacking.onLoad()}"/>
         </f:metadata>
 
+        <h:head>
+            <h:outputStylesheet name="design/css/submissionStyle.css"/>
+        </h:head>
+
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-1">
@@ -47,55 +51,101 @@
 
                                 <!--Upload a revision.-->
                                 <h:form id="upload-file-frm" enctype="multipart/form-data">
-                                    <!--rendered="#{submissionBacking.isViewerSubmitter()}"-->
-                                    <h:inputFile id="upload-revision-ifile"
-                                                 value="#{submissionBacking.uploadedRevisionPDF}" required="true"
-                                                 requiredMessage="#{message.inputFile}">
-                                        <!--<f:validator validatorId="pdfValidator"/>-->
-                                    </h:inputFile>
-                                    <br/>
-                                    <h:message for="upload-revision-ifile"/>
-                                    <!--rendered="#{submissionBacking.isViewerSubmitter()}"-->
-                                    <h:commandButton id="upload-clnk" styleClass="btn" value="#{labels.uploadSubButton}"
-                                                   action="#{submissionBacking.uploadPDF()}" includeViewParams="true"
-                                                   title="#{help.uploadRevision}"/>
+                                    <div class="form-group">
+                                        <!--rendered="#{submissionBacking.isViewerSubmitter()}"-->
+                                        <h:inputFile id="upload-revision-ifile"
+                                                     value="#{submissionBacking.uploadedRevisionPDF}" required="true"
+                                                     requiredMessage="#{message.inputFile}">
+                                            <!--<f:validator validatorId="pdfValidator"/>-->
+                                        </h:inputFile>
+                                        <br/>
+                                        <h:message for="upload-revision-ifile"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <!--rendered="#{submissionBacking.isViewerSubmitter()}"-->
+                                        <h:commandButton id="upload-clnk" styleClass="btn"
+                                                         value="#{labels.uploadSubButton}"
+                                                         action="#{submissionBacking.uploadPDF()}"
+                                                         includeViewParams="true"
+                                                         title="#{help.uploadRevision}"/>
+                                    </div>
                                 </h:form>
 
                                 <!--Current state of a Submission-->
                                 <h:form id="submission-state-frm">
-                                    <h:selectOneMenu styleClass="bootstrap-select" id="state-slctom"
-                                                     value="#{submissionBacking.submission.state}"
-                                                     readonly="#{not submissionBacking.loggedInUserIsEditor()}">
-                                        <f:selectItems value="#{submissionBacking.submissionStates}" var="select"
-                                                       itemLabel="#{labels['subStateSelect.' += select]}" itemValue="#{select}"/>
-                                    </h:selectOneMenu>
-
+                                    <div class="form-group">
+                                        <h:selectOneMenu styleClass="dropdown-menu" id="state-slctom"
+                                                         value="#{submissionBacking.submission.state}"
+                                                         readonly="#{not submissionBacking.loggedInUserIsEditor()}">
+                                            <f:selectItems value="#{submissionBacking.submissionStates}" var="select"
+                                                           itemLabel="#{labels['subStateSelect.' += select]}"
+                                                           itemValue="#{select}"/>
+                                        </h:selectOneMenu>
+                                    </div>
                                 </h:form>
                             </div>
 
                             <!--General inomformation about the submission-->
                             <div class="card-body">
                                 <h:form id="info-submission">
-                                    <!--value="#{submissionBacking.scientificForum.name}"-->
-                                    <h:link id="forum-lnk" value="Forumsname"
-                                            outcome="/views/authenticated/scientificForum" includeViewParams="true"
-                                            title="#{help.directToForum}">
-                                        <!--<f:param value="#{submissionBacking.scientificForum.id}" name="id"/>-->
-                                    </h:link>
 
-                                    <!--value="#{submissionBacking.author.firstName + ' ' + submissionBacking.author.lastName}" disabled="#{not (submissionBacking.loggedInUserIsEditor() || submissionBacking.isViewerSubmitter())}"-->
-                                    <h:link id="author-lnk" value="Author" outcome="/views/authenticated/profile"
-                                            includeViewParams="true" title="#{help.directToProfile}"
-                                            >
-                                        <!--<f:param value="#{submissionBacking.author.id}" name="id"/>-->
-                                    </h:link>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h:outputText id="submission-title-otxt"
+                                                          value="#{submissionBacking.submission.title}"
+                                                          styleClass="h4"/>
 
-                                    <ui:repeat value="#{submissionBacking.coAuthors}" var="coAuthor">
-                                        <h:link id="email-lnk" value="#{submissionBacking.coAuthors}"
-                                                outcome="#{'mailto:'.concat(coAuthor.emailAddress)}"
-                                                includeViewParams="true" title="#{help.mailTo}"
-                                                disabled="#{not submissionBacking.loggedInUserIsEditor()}"/>
-                                    </ui:repeat>
+                                            <br/>
+                                            <div class="body">
+                                                <h:link id="forum-lnk" value="#{submissionBacking.scientificForum.name}"
+                                                        outcome="/views/authenticated/scientificForum"
+                                                        includeViewParams="true"
+                                                        title="#{help.directToForum}">
+                                                    <!--<f:param value="#{submissionBacking.scientificForum.id}" name="id"/>-->
+                                                </h:link>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+
+                                            <div id="label">
+                                                <div style="margin: 10px">
+                                                    <h:outputLabel id="author-lbl" value="#{labels.author}"
+                                                                   for="author-lnk" styleClass="h6"/>
+                                                </div>
+                                                <div id="body">
+                                                    <h:link id="author-lnk"
+                                                            value="#{submissionBacking.author.firstName.concat(' ').concat(submissionBacking.author.lastName)}"
+                                                            outcome="/views/authenticated/profile"
+                                                            includeViewParams="true" title="#{help.directToProfile}"
+                                                            disabled="#{not (submissionBacking.loggedInUserIsEditor() || submissionBacking.isViewerSubmitter())}"
+                                                    >
+                                                        <!--<f:param value="#{submissionBacking.author.id}" name="id"/>-->
+                                                    </h:link>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <div class="label">
+                                                    <h:outputLabel id="co-author-lbl" value="#{labels.coAuthor}"
+                                                                   for="co-author-list" styleClass="h6"/>
+                                                </div>
+                                                <div class="body">
+                                                    <ui:repeat id="co-author-list" value="#{submissionBacking.coAuthors}"
+                                                               var="coAuthor">
+                                                        <h:outputText id="co-author-otxt"
+                                                                      value="#{coAuthor.firstName.concat(' ').concat(coAuthor.lastName).concat(' ')}"/>
+                                                        <h:commandLink id="email-lnk" value="#{coAuthor.emailAddress}"
+                                                                       outcome="#{'mailto:'.concat(coAuthor.emailAddress)}"
+                                                                       includeViewParams="true" title="#{help.mailTo}"
+                                                                       disabled="#{not submissionBacking.loggedInUserIsEditor()}"/>
+                                                        <br/>
+                                                    </ui:repeat>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </h:form>
                             </div>
                         </div>
