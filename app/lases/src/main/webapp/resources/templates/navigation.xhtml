@@ -2,11 +2,9 @@
         xmlns="http://www.w3.org/1999/xhtml"
         xmlns:h="http://xmlns.jcp.org/jsf/html"
         xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-        xmlns:f="http://xmlns.jcp.org/jsf/core"
-        template="main.xhtml">
+        xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <ui:define name="navigation">
-        <h:graphicImage url="#{'/image?type=logo'}"/>
+        <h:graphicImage url="#{'/image?type=logo'}" height="50"/>
         <h:form>
             <h:link outcome="/views/authenticated/homepage" title="#{help.toHome}"/>
         </h:form>
@@ -38,6 +36,5 @@
                     outcome="/views/authenticated/profile"
                     rendered="#{navigationBacking.sessionInformation.user != null}"/>
         </h:form>
-    </ui:define>
 </ui:composition>
 
