@@ -5,7 +5,9 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
     <f:metadata>
+        <f:importConstants type="de.lases.control.internal.Constants" var="Const"/>
     </f:metadata>
+
 
     <!--Title of a Submission as Title of the page.-->
     <ui:define
@@ -15,8 +17,9 @@
     <ui:define name="content">
         <h:form>
             <h:inputText id="submissiontitle-itxt" value="#{newSubmissionBacking.newSubmission.title}"
-                         required="true" requiredMessage="henlo"
-                         maxlength="5"/>
+                         required="true" requiredMessage="#{message.titleSub}"
+                         maxlength="#{Const.SUBMISSION_TITLE_MAX}"/>
+            <h:message for="submissiontitle-itxt"/>
 
             <h:commandButton id="submitcbtn" value="henlo" action="#{newSubmissionBacking.submit()}"/>
         </h:form>
