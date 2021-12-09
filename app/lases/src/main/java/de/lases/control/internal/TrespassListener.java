@@ -18,6 +18,7 @@ import jakarta.inject.Inject;
 
 import java.io.Serial;
 import java.util.PropertyResourceBundle;
+import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
 /**
@@ -29,11 +30,10 @@ public class TrespassListener implements PhaseListener {
     @Serial
     private static final long serialVersionUID = -1137139795334466811L;
 
-    @Inject
-    private Event<UIMessage> uiMessageEvent;
+    //@Inject
+    //private Event<UIMessage> uiMessageEvent;
 
-    @Inject
-    private PropertyResourceBundle propertyResourceBundle;
+    //private final PropertyResourceBundle propertyResourceBundle = (PropertyResourceBundle) ResourceBundle.getBundle("message");
 
     private final Logger logger = Logger.getLogger(TrespassListener.class.getName());
 
@@ -64,52 +64,57 @@ public class TrespassListener implements PhaseListener {
      *
      * @param event The event that just happened.
      * @throws IllegalAccessException If there is an attempt to access a page to which the user does not have
-     * access with his current roles.
-     *
+     *                                access with his current roles.
      */
     @Override
     public void afterPhase(PhaseEvent event) {
-        FacesContext fctxt = event.getFacesContext();
+        FacesContext fctx = event.getFacesContext();
         SessionInformation sessionInformation = CDI.current().select(SessionInformation.class).get();
         User user = sessionInformation.getUser();
 
-        UIViewRoot viewRoot = fctxt.getViewRoot();
-        if (viewRoot == null || user == null) {
-            throw new IllegalAccessException(propertyResourceBundle.getString("illegalAccess"));
+        UIViewRoot viewRoot = fctx.getViewRoot();
+        if (viewRoot == null) {
+            //throw new IllegalAccessException(propertyResourceBundle.getString("illegalAccess"));
+            System.out.println("view root null");
+            return;
         }
 
         String viewId = viewRoot.getViewId();
-        boolean isRegistered = user.isRegistered();
-        boolean isAdmin = user.isAdmin();
-        boolean isEditor = user.getPrivileges().contains(Privilege.EDITOR);
 
-        if (!isRegistered && !viewId.contains("/anonymous/")) {
+        if (viewId.contains("/anonymous/")) {
+            return;
+        }
+
+        if (user == null || (!user.isRegistered() && !viewId.contains("/anonymous/"))) {
+
+            System.out.println("THIS CASE OBVIOUSLY WHHHAY");
 
             // Illegal access to a site which is visible to registered users only.
-            navigateToLogin(fctxt);
-            logger.warning("The unregistered user with the id: " + user.getId() + " tried illegally access "
+            logger.warning("An unregistered user tried illegally access "
                     + "a page using the url: " + viewId);
-        } else if (!isEditor && !isAdmin && viewId.contains("/editor/")) {
+
+            navigateToLogin(fctx);
+        } else if (!user.getPrivileges().contains(Privilege.EDITOR) && !user.isAdmin() && viewId.contains("/editor/")) {
 
             // Illegal access to a site which is visible to editors and admins only.
             logger.warning("The non-editor or non-admin user with the id: " + user.getId() + " tried to illegally "
                     + "access a page using the url: " + viewId);
-            throw new IllegalAccessException(propertyResourceBundle.getString("illegalAccess"));
-        } else if (!isAdmin && viewId.contains("/admin/")) {
+            //throw new IllegalAccessException(propertyResourceBundle.getString("illegalAccess"));
+        } else if (!user.isAdmin() && viewId.contains("/admin/")) {
 
             // Illegal access to a site which is visible to admins only.
             logger.warning("The non-admin user with the id: " + user.getId() + " tried to illegally "
                     + "access a page using the url: " + viewId);
-            throw new IllegalAccessException(propertyResourceBundle.getString("illegalAccess"));
+            //throw new IllegalAccessException(propertyResourceBundle.getString("illegalAccess"));
         }
     }
 
     private void navigateToLogin(FacesContext facesContext) {
-        uiMessageEvent.fire(new UIMessage(
-                propertyResourceBundle.getString("unauthenticatedAccess"), MessageCategory.ERROR));
+        //uiMessageEvent.fire(new UIMessage(
+                //propertyResourceBundle.getString("unauthenticatedAccess"), MessageCategory.ERROR));
 
         NavigationHandler nav = facesContext.getApplication().getNavigationHandler();
-        nav.handleNavigation(facesContext, null, "welcome.xhtml?faces-redirect=true");
+        nav.handleNavigation(facesContext, null, "/views/anonymous/welcome.xhtml?faces-redirect=true");
         facesContext.responseComplete();
     }
 }
