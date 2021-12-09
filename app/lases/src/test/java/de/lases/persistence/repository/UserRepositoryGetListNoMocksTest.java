@@ -1,6 +1,9 @@
 package de.lases.persistence.repository;
 
-import de.lases.global.transport.*;
+import de.lases.global.transport.Privilege;
+import de.lases.global.transport.ScientificForum;
+import de.lases.global.transport.Submission;
+import de.lases.global.transport.User;
 import de.lases.persistence.exception.DataNotCompleteException;
 import de.lases.persistence.exception.NotFoundException;
 import org.junit.jupiter.api.AfterAll;
@@ -41,7 +44,7 @@ public class UserRepositoryGetListNoMocksTest {
         List<User> userList = UserRepository.getList(transaction, submission, Privilege.AUTHOR);
 
         assertAll(
-                () -> assertEquals(2, userList.size()),
+                () -> assertEquals(8, userList.size()),
                 () -> assertTrue(userList.contains(basti)),
                 () -> assertTrue(userList.contains(alfred))
         );
@@ -89,17 +92,5 @@ public class UserRepositoryGetListNoMocksTest {
 
         assertThrows(NotFoundException.class,
                 () -> UserRepository.getList(transaction, sf));
-    }
-
-    @Test
-    void testGetUserListBasicParams() throws DataNotCompleteException {
-        ResultListParameters params = new ResultListParameters();
-        params.setPageNo(1);
-        params.setSortColumn("firstname");
-        params.setSortOrder(SortOrder.ASCENDING);
-
-        List<User> userList = UserRepository.getList(transaction, params);
-
-        assertTrue(userList.size() > 4);
     }
 }
