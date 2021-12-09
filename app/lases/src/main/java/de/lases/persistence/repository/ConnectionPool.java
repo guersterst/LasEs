@@ -110,15 +110,17 @@ public class ConnectionPool {
     /**
      * Initialize the connection pool.
      */
-    public static synchronized void init() {
-        Logger logger = Logger.getLogger(ConnectionPool.class.getName());
-        getInstance().initialized = true;
-        List<Connection> pool = new ArrayList<>(INITIAL_POOL_SIZE);
-        for (int i = 0; i < INITIAL_POOL_SIZE; i++) {
-            pool.add(createConnection(DB_URL, DB_USER, DB_PASSWORD));
+    public static void init() {
+        synchronized (instance) {
+            Logger logger = Logger.getLogger(ConnectionPool.class.getName());
+            getInstance().initialized = true;
+            List<Connection> pool = new ArrayList<>(INITIAL_POOL_SIZE);
+            for (int i = 0; i < INITIAL_POOL_SIZE; i++) {
+                pool.add(createConnection(DB_URL, DB_USER, DB_PASSWORD));
+            }
+            getInstance().addConnections(pool);
+            logger.info("DB Connection Pool started");
         }
-        getInstance().addConnections(pool);
-        logger.info("DB Connection Pool started");
     }
 
     /**
@@ -127,22 +129,38 @@ public class ConnectionPool {
      * @throws IllegalStateException If the pool is not yet initialized or there
      *                               still are used connections.
      */
-    public static synchronized void shutDown() {
-        instance.checkInitialized();
-        if (!instance.usedConnections.isEmpty()) {
-            throw new IllegalStateException("Cannot shut down connection pool, "
-                    + "there still are used connections.");
-        }
-        for (Connection conn: instance.freeConnections) {
-            try {
-                conn.close();
-            } catch (SQLException ex) {
-                throw new DatasourceQueryFailedException("The connection cannot"
-                        + " be closed. Shutdown failed");
+    public static void shutDown() {
+        synchronized (instance) {
+            instance.checkInitialized();
+
+            long timestamp = System.currentTimeMillis() + TIMEOUT;
+
+            while (!instance.usedConnections.isEmpty()) {
+                try {
+                    instance.wait(Math.max(timestamp - System.currentTimeMillis(), 1));
+                } catch (InterruptedException ex) {
+                    logger.log(Level.WARNING, ex.getMessage());
+                    throw new IllegalStateException("Cannot shut down connection pool, "
+                            + "shutdown was interrupted while waiting for used connections to be returned.");
+                }
+
+                if (timestamp <= System.currentTimeMillis()) {
+                    throw new IllegalStateException("Cannot shut down connection pool, "
+                            + "there still are used connections.");
+                }
             }
+
+            for (Connection conn : instance.freeConnections) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    throw new DatasourceQueryFailedException("The connection cannot"
+                            + " be closed. Shutdown failed");
+                }
+            }
+            logger.info("DB Connection Pool stopped");
+            getInstance().initialized = false;
         }
-        logger.info("DB Connection Pool stopped");
-        getInstance().initialized = false;
     }
 
     /**
