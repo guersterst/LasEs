@@ -4,24 +4,26 @@ import de.lases.global.transport.ResultListParameters;
 import de.lases.global.transport.SortOrder;
 import de.lases.global.transport.User;
 import de.lases.persistence.exception.DataNotCompleteException;
+import de.lases.persistence.internal.ConfigReader;
+import jakarta.enterprise.inject.Instance;
+import jakarta.enterprise.inject.spi.CDI;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
 import java.lang.reflect.Field;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserRepositoryGetListTest {
@@ -73,23 +75,40 @@ public class UserRepositoryGetListTest {
         params.setSortColumn("firstname");
         params.setSortOrder(SortOrder.ASCENDING);
 
+        CDI cdiMock = mock(CDI.class);
+        ConfigReader mockConfig = mock(ConfigReader.class);
+        Instance configReaderInstance = mock(Instance.class);
+
+
         Transaction mockTransaction = mock(Transaction.class);
         Connection mockConnection = mock(Connection.class);
-        Statement mockStmt = mock(Statement.class);
+        PreparedStatement mockStmt = mock(PreparedStatement.class);
         ResultSet rst = mock(ResultSet.class);
 
         try {
+            // Return default pagination size
+            when(mockConfig.getProperty("MAX_PAGINATION_LENGTH")).thenReturn("25");
+
+            // Mock CDI
+            MockedStatic<CDI> cdiMockedStatic = mockStatic(CDI.class);
+            cdiMockedStatic.when(CDI::current).thenReturn(cdiMock);
+            when(cdiMock.select(ConfigReader.class)).thenReturn(configReaderInstance);
+            when(configReaderInstance.get()).thenReturn(mockConfig);
+
+            // get the modified connection from transaction.
+            when(mockTransaction.getConnection()).thenReturn(mockConnection);
+
             // Mock the connection to get a mocked statement.
-            when(mockConnection.createStatement()).thenReturn(mockStmt);
+            when(mockConnection.prepareStatement(any())).thenReturn(mockStmt);
 
             // Mock the statement to get a mocked ResultSet.
-            when(mockStmt.executeQuery(any())).thenReturn(rst);
+            when(mockStmt.executeQuery()).thenReturn(rst);
 
             // Finally, mock the ResultSet to return the test values
             // for all 7 entries of the testdata in the order we expect.
-            final int[] i = {0};
+            final int[] i = {-1};
             when(rst.next()).thenAnswer((Answer<Boolean>) invocation -> {
-                if (i[0] < 7) {
+                if (i[0] < userTestData.size() - 1) {
                     i[0]++;
                     return true;
                 } else {
@@ -98,24 +117,22 @@ public class UserRepositoryGetListTest {
             });
 
             // All return values are based on the number of previous rst.next() calls.
-            when(rst.getInt("id")).thenAnswer(I -> userTestData.get(i[0]).getId());
-            when(rst.getString("email_address")).thenAnswer(I -> userTestData.get(i[0]).getEmailAddress());
-            when(rst.getString("is_administrator")).thenAnswer(I -> userTestData.get(i[0]).isAdmin());
-            when(rst.getString("firstname")).thenAnswer(I -> userTestData.get(i[0]).getFirstName());
-            when(rst.getString("lastname")).thenAnswer(I -> userTestData.get(i[0]).getLastName());
-            when(rst.getString("title")).thenAnswer(I -> userTestData.get(i[0]).getTitle());
-            when(rst.getString("employer")).thenAnswer(I -> userTestData.get(i[0]).getEmployer());
-            when(rst.getString("birthdate")).thenAnswer(I -> userTestData.get(i[0]).getDateOfBirth());
-            when(rst.getString("is_registered")).thenAnswer(I -> userTestData.get(i[0]).isRegistered());
-            when(rst.getString("password_hash")).thenAnswer(I -> userTestData.get(i[0]).getPasswordHashed());
-            when(rst.getString("password_salt")).thenAnswer(I -> userTestData.get(i[0]).getPasswordSalt());
+            lenient().when(rst.getInt("id")).thenAnswer(I -> userTestData.get(i[0]).getId());
+            lenient().when(rst.getString("user_role")).thenAnswer(I -> "none");
+            lenient().when(rst.getString("email_address")).thenAnswer(I -> userTestData.get(i[0]).getEmailAddress());
+            lenient().when(rst.getString("is_administrator")).thenAnswer(I -> userTestData.get(i[0]).isAdmin());
+            lenient().when(rst.getString("firstname")).thenAnswer(I -> userTestData.get(i[0]).getFirstName());
+            lenient().when(rst.getString("lastname")).thenAnswer(I -> userTestData.get(i[0]).getLastName());
+            lenient().when(rst.getString("title")).thenAnswer(I -> userTestData.get(i[0]).getTitle());
+            lenient().when(rst.getString("employer")).thenAnswer(I -> userTestData.get(i[0]).getEmployer());
+            lenient().when(rst.getString("birthdate")).thenAnswer(I -> userTestData.get(i[0]).getDateOfBirth());
+            lenient().when(rst.getString("is_registered")).thenAnswer(I -> userTestData.get(i[0]).isRegistered());
+            lenient().when(rst.getString("password_hash")).thenAnswer(I -> userTestData.get(i[0]).getPasswordHashed());
+            lenient().when(rst.getString("password_salt")).thenAnswer(I -> userTestData.get(i[0]).getPasswordSalt());
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        // get the modified connection from transaction.
-        when(mockTransaction.getConnection()).thenReturn(mockConnection);
 
         assertEquals(userTestData, UserRepository.getList(mockTransaction, params));
     }
