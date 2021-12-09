@@ -276,7 +276,10 @@ public class SubmissionService implements Serializable {
             t.commit();
             l.finer("List of submissions retrieved.");
         } catch (DataNotCompleteException e) {
-            //TODO How to handle?
+            l.warning("Data not complete: " + e.getMessage());
+            uiMessageEvent.fire(new UIMessage(
+                    msg.getString("warning.dataNotComplete"),
+                    MessageCategory.WARNING));
         } catch (NotFoundException e) {
             l.severe("User to get submissions for not found.");
             uiMessageEvent.fire(new UIMessage(
@@ -314,7 +317,10 @@ public class SubmissionService implements Serializable {
             t.commit();
             l.finer("List of submissions retrieved.");
         } catch (DataNotCompleteException e) {
-            //TODO How to handle?
+            l.warning("Data not complete: " + e.getMessage());
+            uiMessageEvent.fire(new UIMessage(
+                    msg.getString("warning.dataNotComplete"),
+                    MessageCategory.WARNING));
         } catch (NotFoundException e) {
             l.severe("User or ScientificForum to get submissions for not found.");
             uiMessageEvent.fire(new UIMessage(
@@ -349,7 +355,10 @@ public class SubmissionService implements Serializable {
             t.commit();
             l.finer("List of submissions retrieved.");
         } catch (DataNotCompleteException e) {
-            //TODO How to handle?
+            l.warning("Data not complete: " + e.getMessage());
+            uiMessageEvent.fire(new UIMessage(
+                    msg.getString("warning.dataNotComplete"),
+                    MessageCategory.WARNING));
         } catch (NotFoundException e) {
             l.severe("ScientificForum to get submissions for not found.");
             uiMessageEvent.fire(new UIMessage(
