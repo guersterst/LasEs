@@ -162,7 +162,7 @@
                                             <f:facet name="header">
                                                 <ssc:sortsearchcolumn id="version-ssc" columnIdentifier="version"
                                                                       paginator="#{submissionBacking.paperPagination}"
-                                                                      columnNamei18n="#{labels.titleCol}"/>
+                                                                      columnNamei18n="#{labels.versionCol}"/>
                                             </f:facet>
                                             <h:outputText id="version-otxt" value="#{var.versionNumber}"/>
                                         </h:column>
@@ -170,9 +170,7 @@
                                         <!--Upload Date-->
                                         <h:column>
                                             <f:facet name="header">
-                                                <ssc:sortsearchcolumn id="date-ssc" columnIdentifier="timestamp_upload"
-                                                                      paginator="#{submissionBacking.paperPagination}"
-                                                                      columnNamei18n="#{labels.uploadCol}"/>
+                                                <h:commandLink value="#{labels.uploadCol}" action="#{submissionBacking.paperPagination.sortBy('timestamp_upload')}"/>
                                             </f:facet>
                                             <h:outputText id="date-otxt" value="#{var.uploadTime}">
                                                 <f:convertDateTime type="localDate"/>
@@ -180,23 +178,21 @@
                                         </h:column>
 
                                         <!--Release state-->
-                                        <h:column>
+                                        <h:column rendered="#{submissionBacking.loggedInUserIsEditor()}">
                                             <f:facet name="header">
-                                                <ssc:sortsearchcolumn id="release-revision-ssc" columnIdentifier="state"
-                                                                      paginator="#{submissionBacking.paperPagination}"
-                                                                      columnNamei18n="#{labels.stateCol}"
-                                                                      rendered="#{submissionBacking.loggedInUserIsEditor() || submissionBacking.isViewerSubmitter()}"/>
+                                                <h:commandLink value="#{labels.stateCol}" action="#{submissionBacking.paperPagination.sortBy('state')}"/>
+                                                <br/>
                                                 <h:selectOneMenu id="release-revision-slctom"
                                                                  value="#{submissionBacking.paperPagination.resultListParameters.visibleFilter}"
                                                                  title="#{help.filterRelease}"
                                                                  rendered="#{submissionBacking.loggedInUserIsEditor()}">
-                                                    <f:selectItems var="visible" itemValue="#{submissionBacking.visibility}" itemLabel="#{labels['visibility.' + visible]}"/>
+                                                    <f:selectItems var="visible" itemValue="#{submissionBacking.visibility}" itemLabel="#{labels['visibility.' += visible]}"/>
                                                 </h:selectOneMenu>
                                             </f:facet>
                                             <h:commandButton id="release-revision-cbtn"
                                                              value="#{var.visible == true? labels.released : labels.notReleased}"
                                                              action="#{submissionBacking.releaseRevision(var)}"
-                                                             title="#{help.releaseBtn}" disabled="#{submissionBacking.isViewerSubmitter()}"/>
+                                                             title="#{help.releaseBtn}" disabled="#{submissionBacking.isViewerSubmitter() || var.visible}"/>
                                         </h:column>
 
                                     </pg:pagination>

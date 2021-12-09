@@ -331,7 +331,6 @@ public class PaperRepository {
                     SELECT p.* FROM paper p, submission s
                     WHERE s.id = ? 
                     AND s.author_id = ?
-                    AND p.is_visible = TRUE
                     AND p.submission_id = s.id
                     """;
             };
@@ -350,13 +349,13 @@ public class PaperRepository {
                     statement.setInt(2, submission.getAuthorId());
                 }
 
-                if (resultListParameters.getFilterColumns().get("version") != null) {
+
+
+                if (resultListParameters.getFilterColumns().get("version") != null
+                        && !resultListParameters.getFilterColumns().get("version").isEmpty()) {
                     statement.setString(3, resultListParameters.getFilterColumns().get("version"));
                 }
 
-                if (resultListParameters.getFilterColumns().get("timestamp_upload") != null) {
-                    statement.setString(4, resultListParameters.getFilterColumns().get("timestamp_upload"));
-                }
                 resultSet = statement.executeQuery();
 
                 while (resultSet.next()) {
@@ -386,12 +385,12 @@ public class PaperRepository {
         if (parameters.getVisibleFilter() != Visibility.ALL) {
             if (parameters.getVisibleFilter() == Visibility.NOT_RELEASED
                     && (privilege == Privilege.ADMIN || privilege == Privilege.EDITOR)) {
-                stringBuilder.append(" AND p.is_visible = FALSE");
+                stringBuilder.append(" AND p.is_visible = FALSE ");
             } else if (parameters.getVisibleFilter() == Visibility.RELEASED) {
-                stringBuilder.append(" AND p.is_visible = TRUE");
+                stringBuilder.append(" AND p.is_visible = TRUE ");
             }
         } else if (!(privilege == Privilege.ADMIN || privilege == Privilege.EDITOR)) {
-            stringBuilder.append(" AND p.is_visible = TRUE");
+            stringBuilder.append(" AND p.is_visible = TRUE ");
         }
 
 
@@ -399,12 +398,9 @@ public class PaperRepository {
                 AND p.timestamp_upload < NOW()
                 """);
 
-        if (parameters.getFilterColumns().get("version") != null) {
+        if (parameters.getFilterColumns().get("version") != null
+                && !parameters.getFilterColumns().get("version").isEmpty()) {
             stringBuilder.append("AND p.version::VARCHAR ILIKE ?\n");
-        }
-
-        if (parameters.getFilterColumns().get("timestamp_upload") != null) {
-            stringBuilder.append("AND timestamp_upload::VARCHAR ILIKE ?\n");
         }
 
         // Sort according to sort column parameter
