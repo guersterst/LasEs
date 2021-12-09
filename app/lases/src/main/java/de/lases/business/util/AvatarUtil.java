@@ -85,8 +85,10 @@ public final class AvatarUtil {
         return bImage;
     }
 
+    //TODO REMOVE OR TURN INTO TESTS
     public static void main(String[] args) throws IOException, DataNotWrittenException {
 
+        //TEST AvatarUtil
         /*
         // Get image.
         BufferedImage img = ImageIO.read(AvatarUtil.class.getClassLoader().getResource("face.jpg"));
@@ -104,6 +106,8 @@ public final class AvatarUtil {
         ImageIO.write(bufferedThumbnail, "jpg", outputFile);
          */
 
+
+        //TEST setLogo
         ConnectionPool.init();
 
         // Get image.
