@@ -1,46 +1,76 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
-<body>
-<h:panelGroup layout="block">
-    <h:graphicImage value="/logo"/>
-    <h:form>
-        <h:link value="#{labels.homePage}" outcome="/views/authenticated/homepage" title="#{help.toHome}"/>
-    </h:form>
-</h:panelGroup>
+<ui:composition template="/resources/templates/main.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
 
-<h:form rendered="#{true}">
-    <h:panelGroup layout="block">
-        <h:inputText
-                value="#{navigationBacking.resultListParameters.globalSearchWord}" title="#{help.search}"
-                rendered="#{true}"/>
-        <h:commandButton
-                action="#{navigationBacking.search}"
-                rendered="#{true}"/>
-    </h:panelGroup>
-    <h:panelGroup layout="block">
-        <h:link
-                value="#{labels.userList}" outcome="/views/editor/userList" title="#{help.userList}"
-                rendered="#{true}"/>
-        <h:link
-                value="#{labels.forumList}" outcome="/views/authenticated/scientificForumList"
-                title="#{help.forumList}"
-                rendered="#{true}"/>
-        <h:link
-                value="#{labels.administration}"
-                outcome="/views/admin/administration"
-                rendered="#{true}"/>
-        <h:commandButton
-                value="#{labels.logout}"
-                action="#{navigationBacking.logout}"
-                title="#{help.logout}"
-                rendered="#{true}"/>
-        <h:link
-                value="#{labels.navProfile}"
-                outcome="/views/authenticated/profile"
-                rendered="#{true}"/>
-    </h:panelGroup>
-</h:form>
-</body>
-</html>
+    <!--Content of test.xhtml.-->
+    <ui:define name="content">
+
+        <!-- navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+            <!--- image -->
+            <h:link styleClass="navbar-brand"> <!-- TODO Link -->
+                <h:graphicImage value="/logo"/>
+            </h:link>
+
+            <!-- navigation -->
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <h:link
+                            value="#{labels.userList}"
+                            outcome="/views/editor/userList"
+                            title="#{help.userList}"
+                            rendered="#{true}"
+                            styleClass="nav-item nav-link"/>
+                    <h:link
+                            value="#{labels.forumList}" outcome="/views/authenticated/scientificForumList"
+                            title="#{help.forumList}"
+                            rendered="#{true}"
+                            styleClass="nav-item nav-link"/>
+                    <h:link
+                            value="#{labels.administration}"
+                            outcome="/views/admin/administration"
+                            rendered="#{true}"
+                            styleClass="nav-item nav-link"/>
+                    <h:link
+                            value="#{labels.navProfile}"
+                            outcome="/views/authenticated/profile"
+                            rendered="#{true}"
+                            styleClass="nav-item nav-link"/>
+                </div>
+            </div>
+
+            <!-- search form -->
+            <h:form
+                    rendered="#{true}"
+                    styleClass="form-inline">
+                <h:inputText
+                        value="#{navigationBacking.resultListParameters.globalSearchWord}"
+                        title="#{help.search}"
+                        rendered="#{true}"
+                        styleClass="form-control mr-sm-2"
+                        a:placholder="#{labels.search}"
+                        type="search"
+                        aria-label="Search"/>
+                <h:commandButton
+                        action="#{navigationBacking.search}"
+                        rendered="#{true}"
+                        styleClass="btn btn-outline-success my-2 my-sm-0"
+                        type="submit"/>
+            </h:form>
+
+            <!-- logout -->
+            <h:form styleClass="form-inline">
+                <h:commandButton
+                        value="#{labels.logout}"
+                        action="#{navigationBacking.logout}"
+                        title="#{help.logout}"
+                        rendered="#{true}"
+                        styleClass="btn btn-sm btn-outline-secondary"
+                        type="button"/>
+            </h:form>
+        </nav>
+    </ui:define>
+</ui:composition>

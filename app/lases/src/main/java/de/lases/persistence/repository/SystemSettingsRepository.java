@@ -65,7 +65,8 @@ public class SystemSettingsRepository {
         FileDTO logo = new FileDTO();
         ResultSet logoResult;
 
-        try (Connection conn = transaction.getConnection()) {
+        try {
+            Connection conn = transaction.getConnection();
             PreparedStatement logoStatement = conn.prepareStatement(sql);
             logoResult = logoStatement.executeQuery();
 
