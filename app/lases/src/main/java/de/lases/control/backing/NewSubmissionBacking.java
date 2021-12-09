@@ -162,7 +162,7 @@ public class NewSubmissionBacking implements Serializable {
         }
         logger.log(Level.SEVERE, "Going to submission page");
         // TODO: hier die submission Seite returnen!
-        return "submission";
+        return "submission?id=" + submission.getId();
     }
 
     /**
