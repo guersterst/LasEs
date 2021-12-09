@@ -67,8 +67,9 @@
                                                      value="#{submissionBacking.submission.state}"
                                                      readonly="#{not submissionBacking.loggedInUserIsEditor()}">
                                         <f:selectItems value="#{submissionBacking.submissionStates}" var="select"
-                                                       itemLabel="#{labels['subStateSelect.' += select]}"/>
+                                                       itemLabel="#{labels['subStateSelect.' += select]}" itemValue="#{select}"/>
                                     </h:selectOneMenu>
+
                                 </h:form>
                             </div>
 

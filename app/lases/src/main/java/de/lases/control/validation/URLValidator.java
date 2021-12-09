@@ -40,7 +40,7 @@ public class URLValidator implements Validator<String> {
         Matcher matcher = urlPattern.matcher(url);
 
         if (!matcher.find()) {
-            
+
             FacesMessage facesMessage = new FacesMessage(resourceBundle.getString("validateUrl"));
             facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
             throw new ValidatorException(facesMessage);
