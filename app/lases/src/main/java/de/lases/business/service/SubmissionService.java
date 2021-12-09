@@ -103,7 +103,7 @@ public class SubmissionService implements Serializable {
 
     /**
      * Manipulates a submission.
-     *
+     * <p>
      * Some manipulations will cause an email to be dispatched
      * using the {@link de.lases.business.util.EmailUtil}-utility.
      * <ul>
@@ -364,11 +364,14 @@ public class SubmissionService implements Serializable {
     /**
      * The amount of submissions where the given user is a direct author to.
      *
-     * @param user A {@link User}-DTO with a valid id.
+     * @param privilege The role, to which submissions belong, in relation to a user
+     *                  Meaning, the user can request to receive the submissions which
+     *                  he is an editor to, reviews or has submitted himself.
+     * @param user      A {@link User}-DTO with a valid id.
      * @return The number of submission the specified user authored and -1
      * if retrieving the amount of submissions failed.
      */
-    public int countSubmissions(User user) {
+    public int countSubmissions(User user, Privilege privilege, ResultListParameters resultParams) {
         if (user.getId() == null) {
             l.severe("The passed User-DTO has no id.");
             throw new IllegalArgumentException("The passed User-DTO has no id.");
@@ -376,7 +379,7 @@ public class SubmissionService implements Serializable {
 
         Transaction t = new Transaction();
         try {
-            return SubmissionRepository.countSubmissions(user, t);
+            return SubmissionRepository.countSubmissions(user, privilege, t, resultParams);
         } catch (NotFoundException e) {
             l.severe("User to count submissions for not found.");
             uiMessageEvent.fire(new UIMessage(

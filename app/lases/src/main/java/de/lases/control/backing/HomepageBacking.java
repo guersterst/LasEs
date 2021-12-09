@@ -1,5 +1,6 @@
 package de.lases.control.backing;
 
+import de.lases.business.internal.ConfigPropagator;
 import de.lases.business.service.ScientificForumService;
 import de.lases.business.service.SubmissionService;
 import de.lases.control.internal.Pagination;
@@ -36,6 +37,9 @@ public class HomepageBacking implements Serializable {
     @Inject
     private ScientificForumService scientificForumService;
 
+    @Inject
+    private ConfigPropagator configPropagator;
+
     private Tab tab;
 
     private Pagination<Submission> submissionPagination;
@@ -45,6 +49,10 @@ public class HomepageBacking implements Serializable {
     private Pagination<Submission> editedPagination;
 
     private User user;
+
+    private DateSelect submissionDateSelect;
+
+    private DateSelect deadlineDateSelect;
 
     /**
      * Initialize the dtos and load data from the datasource where possible.
@@ -87,7 +95,7 @@ public class HomepageBacking implements Serializable {
      * Switch to the tab that shows the user's own submissions.
      */
     public void showOwnSubmissionsTab() {
-        submissionPagination = new Pagination<>("submission-title") {
+        submissionPagination = new Pagination<>("title") {
             @Override
             public void loadData() {
                 setEntries(submissionService.getList(
@@ -96,7 +104,9 @@ public class HomepageBacking implements Serializable {
 
             @Override
             protected Integer calculateNumberPages() {
-                return submissionService.countSubmissions(user);
+                int itemsPerPage = Integer.parseInt(configPropagator.getProperty("MAX_PAGINATION_LIST_LENGTH"));
+                return (int) Math.ceil((double) submissionService.countSubmissions(user, Privilege.AUTHOR,
+                        getResultListParameters()) / itemsPerPage);
             }
         };
     }
@@ -106,6 +116,20 @@ public class HomepageBacking implements Serializable {
      * editor.
      */
     public void showSubmissionsToEditTab() {
+        submissionPagination = new Pagination<>("title") {
+            @Override
+            public void loadData() {
+                setEntries(submissionService.getList(
+                        Privilege.EDITOR, user, getResultListParameters()));
+            }
+
+            @Override
+            protected Integer calculateNumberPages() {
+                int itemsPerPage = Integer.parseInt(configPropagator.getProperty("MAX_PAGINATION_LIST_LENGTH"));
+                return (int) Math.ceil((double) submissionService.countSubmissions(user, Privilege.EDITOR,
+                        getResultListParameters()) / itemsPerPage);
+            }
+        };
     }
 
     /**
@@ -113,6 +137,20 @@ public class HomepageBacking implements Serializable {
      * reviewer.
      */
     public void showSubmissionsToReviewTab() {
+        submissionPagination = new Pagination<>("title") {
+            @Override
+            public void loadData() {
+                setEntries(submissionService.getList(
+                        Privilege.REVIEWER, user, getResultListParameters()));
+            }
+
+            @Override
+            protected Integer calculateNumberPages() {
+                int itemsPerPage = Integer.parseInt(configPropagator.getProperty("MAX_PAGINATION_LIST_LENGTH"));
+                return (int) Math.ceil((double) submissionService.countSubmissions(user, Privilege.REVIEWER,
+                        getResultListParameters()) / itemsPerPage);
+            }
+        };
     }
 
     /**
@@ -185,5 +223,10 @@ public class HomepageBacking implements Serializable {
         return SubmissionState.values();
     }
 
+    public String getForumName(Submission sub) {
+        ScientificForum forum = new ScientificForum();
+        forum.setId(sub.getScientificForumId());
+        return scientificForumService.get(forum).getName();
+    }
 
 }

@@ -77,7 +77,7 @@ public class ScientificForumRepository {
         forum.setDescription(resultSet.getString("description"));
         forum.setUrl(resultSet.getString("url"));
         forum.setReviewManual(resultSet.getString("review_manual"));
-        Timestamp ts = resultSet.getTimestamp("deadline");
+        Timestamp ts = resultSet.getTimestamp("timestamp_deadline");
         forum.setDeadline(ts == null ? null : ts.toLocalDateTime());
 
         return forum;
