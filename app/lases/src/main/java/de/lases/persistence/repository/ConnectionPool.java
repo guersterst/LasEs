@@ -26,19 +26,13 @@ public class ConnectionPool {
     private static final String DB_NAME = "sep21g02t";
     private static final String DB_USER = "sep21g02";
     private static final String DB_PASSWORD = "ieQu2aeShoon";
+    public static final int INITIAL_POOL_SIZE = 10;
+    private static final int TIMEOUT = 3000;
+    private static final String DB_URL
+            = "jdbc:postgresql://" + DB_HOST + "/" + DB_NAME;
 
     private static final Logger logger
             = Logger.getLogger(Transaction.class.getName());
-
-    /**
-     * The initial number of free connections.
-     */
-    public static final int INITIAL_POOL_SIZE = 10;
-
-    private static final int TIMEOUT = 3000;
-
-    private static final String DB_URL
-            = "jdbc:postgresql://" + DB_HOST + "/" + DB_NAME;
 
     private List<Connection> freeConnections;
     private List<Connection> usedConnections = new ArrayList<>();
