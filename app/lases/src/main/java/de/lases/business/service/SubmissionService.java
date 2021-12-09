@@ -97,7 +97,13 @@ public class SubmissionService implements Serializable {
         }
         for (User user: coAuthors) {
             try {
-                User userWithId = UserRepository.get(user, transaction);
+                User userWithId;
+                if (UserRepository.emailExists(user, transaction)) {
+                    userWithId = UserRepository.get(user, transaction);
+                } else {
+                    user.setRegistered(false);
+                    userWithId = UserRepository.add(user, transaction);
+                }
                 assert userWithId.getId() != null;
                 SubmissionRepository.addCoAuthor(submission, userWithId, transaction);
             } catch (DataNotWrittenException e) {
@@ -111,7 +117,7 @@ public class SubmissionService implements Serializable {
                 logger.log(Level.SEVERE, e.getMessage());
                 transaction.abort();
                 throw new AssertionError("Tried to add co authors that don't exist even though this method"
-                        + "makes sure that every co author exists");
+                        + " makes sure that every co author exists.");
             }
         }
         transaction.commit();

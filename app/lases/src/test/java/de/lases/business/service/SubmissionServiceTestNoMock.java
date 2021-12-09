@@ -114,4 +114,50 @@ class SubmissionServiceTestNoMock {
         }
     }
 
+    @Test
+    void testAddWithNonExistentCoAuthors() throws SQLException {
+        Transaction transaction = new Transaction();
+
+        try {
+            Submission submission = new Submission();
+            submission.setScientificForumId(1);
+            submission.setAuthorId(4);
+            submission.setEditorId(1);
+            submission.setTitle("Sebastian testet die add Methode!");
+            submission.setState(SubmissionState.ACCEPTED);
+            submission.setSubmissionTime(LocalDateTime.now());
+
+            User user = new User();
+            user.setEmailAddress("denUserGibtsNed@gmail.com");
+            user.setFirstName("Ignaz");
+            user.setLastName("Hanslmaier");
+
+            SubmissionService submissionService = new SubmissionService();
+
+            Connection conn = transaction.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(
+                    """
+                        SELECT * FROM submission
+                        """);
+            ResultSet resultSet = stmt.executeQuery();
+            int i = 0;
+            while (resultSet.next()) {
+                i++;
+            }
+            conn.commit();
+
+            submissionService.add(submission, List.of(user));
+
+            ResultSet resultSet2 = stmt.executeQuery();
+            int j = 0;
+            while (resultSet2.next()) {
+                j++;
+            }
+
+            assertEquals(1, j - i);
+        } finally {
+            transaction.abort();
+        }
+    }
+
 }
