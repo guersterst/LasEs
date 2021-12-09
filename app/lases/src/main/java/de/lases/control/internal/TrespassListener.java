@@ -112,8 +112,7 @@ public class TrespassListener implements PhaseListener {
     }
 
     private void setErrorMessage(FacesContext fctx, String message) {
-        FacesMessage fmsg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                "Log in first.", null);
+        FacesMessage fmsg = new FacesMessage(FacesMessage.SEVERITY_ERROR, message, null);
         fctx.addMessage(null, fmsg);
 
         // Let the faces messages of fctx also live in the next request. The
