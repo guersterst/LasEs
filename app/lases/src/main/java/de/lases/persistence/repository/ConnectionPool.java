@@ -22,22 +22,24 @@ public class ConnectionPool {
     private static final ConfigReader configReader = CDI.current().select(ConfigReader.class).get();
 
     private static final String DB_DRIVER = "org.postgresql.Driver";
-    private static final String DB_HOST = "bueno.fim.uni-passau.de";
-    private static final String DB_NAME = "sep21g02t";
-    private static final String DB_USER = "sep21g02";
-    private static final String DB_PASSWORD = "ieQu2aeShoon";
-    public static final int INITIAL_POOL_SIZE = 10;
-    private static final int TIMEOUT = 3000;
-    private static final String DB_URL
-            = "jdbc:postgresql://" + DB_HOST + "/" + DB_NAME;
+    private static final String DB_USER = configReader.getProperty("DB_USER");
+    private static final String DB_PASSWORD = configReader.getProperty("DB_PASSWORD");
+    private static final String DB_URL = configReader.getProperty("DB_URL");
+    private static final String DB_SSL = configReader.getProperty("DB_SSL");
+    private static final String DB_SSL_FACTORY = configReader.getProperty("DB_SSL_FACTORY");
+    public static final int POOL_SIZE = Integer.parseInt(configReader.getProperty("DB_POOL_SIZE"));
 
-    private static final Logger logger
-            = Logger.getLogger(Transaction.class.getName());
+    /**
+     * The timeout is not fetched from the config file, since it does not depend on the specific database setup.
+     */
+    private static final int TIMEOUT = 3000;
+
+    private static final ConnectionPool instance = new ConnectionPool();
+
+    private static final Logger logger = Logger.getLogger(Transaction.class.getName());
 
     private List<Connection> freeConnections;
     private List<Connection> usedConnections = new ArrayList<>();
-
-    private static final ConnectionPool instance = new ConnectionPool();
 
     private boolean initialized;
 
@@ -110,9 +112,9 @@ public class ConnectionPool {
         synchronized (instance) {
             Logger logger = Logger.getLogger(ConnectionPool.class.getName());
             getInstance().initialized = true;
-            List<Connection> pool = new ArrayList<>(INITIAL_POOL_SIZE);
-            for (int i = 0; i < INITIAL_POOL_SIZE; i++) {
-                pool.add(createConnection(DB_URL, DB_USER, DB_PASSWORD));
+            List<Connection> pool = new ArrayList<>(POOL_SIZE);
+            for (int i = 0; i < POOL_SIZE; i++) {
+                pool.add(createConnection());
             }
             getInstance().addConnections(pool);
             logger.info("DB Connection Pool started");
@@ -168,8 +170,7 @@ public class ConnectionPool {
         return freeConnections.size();
     }
 
-    private static Connection createConnection(
-            String url, String user, String password) {
+    private static Connection createConnection() {
         try {
             Class.forName(DB_DRIVER);
         }
@@ -179,12 +180,10 @@ public class ConnectionPool {
         Properties props = new Properties();
         props.setProperty("user", DB_USER);
         props.setProperty("password", DB_PASSWORD);
-        props.setProperty("ssl", "true");
-        props.setProperty("sslfactory",
-                "org.postgresql.ssl.DefaultJavaSSLFactory");
+        props.setProperty("ssl", DB_SSL);
+        props.setProperty("sslfactory", DB_SSL_FACTORY);
         try {
-            Connection connection =
-                    DriverManager.getConnection(url, props);
+            Connection connection = DriverManager.getConnection(DB_URL, props);
             connection.setAutoCommit(false);
             return connection;
         } catch(SQLException ex) {
