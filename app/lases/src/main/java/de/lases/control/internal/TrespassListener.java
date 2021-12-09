@@ -31,7 +31,7 @@ public class TrespassListener implements PhaseListener {
     @Serial
     private static final long serialVersionUID = -1137139795334466811L;
 
-    private final PropertyResourceBundle propertyResourceBundle = (PropertyResourceBundle) ResourceBundle.getBundle("resource_bundles/message");
+    private PropertyResourceBundle propertyResourceBundle = (PropertyResourceBundle) ResourceBundle.getBundle("resource_bundles/message");
 
     private final Logger logger = Logger.getLogger(TrespassListener.class.getName());
 
@@ -71,9 +71,13 @@ public class TrespassListener implements PhaseListener {
         User user = sessionInformation.getUser();
 
         UIViewRoot viewRoot = fctx.getViewRoot();
+
         if (viewRoot == null) {
             throw new IllegalAccessException(propertyResourceBundle.getString("illegalAccess"));
         }
+
+        // Load localised messages.
+        propertyResourceBundle = (PropertyResourceBundle) ResourceBundle.getBundle("resource_bundles/message", viewRoot.getLocale());
 
         String viewId = viewRoot.getViewId();
 
