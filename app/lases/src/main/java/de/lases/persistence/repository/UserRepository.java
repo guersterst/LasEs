@@ -636,7 +636,7 @@ public class UserRepository {
             }
             return userList;
         } catch (SQLException e) {
-            // todo: log once branch is updooted
+            logger.severe("Data Query failed: " + e.getMessage() + e.getSQLState());
             throw new DatasourceQueryFailedException();
         }
     }
