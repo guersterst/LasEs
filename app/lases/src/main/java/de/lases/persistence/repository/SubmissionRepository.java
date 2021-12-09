@@ -562,12 +562,6 @@ public class SubmissionRepository {
             });
         }
 
-        // Filter according to filter columns parameter.
-//        filterColumnNames.stream()
-//                .filter(columnName -> params.getFilterColumns().get(columnName) != null)
-//                .filter(columnName -> !params.getFilterColumns().get(columnName).isEmpty())
-//                .forEach(column -> sb.append(" AND ").append(column).append("::VARCHAR ILIKE ?\n"));
-
         if (isFilled(params.getFilterColumns().get("title"))) {
             sb.append(" AND title ILIKE ?\n");
         }
@@ -594,16 +588,6 @@ public class SubmissionRepository {
                     OR (SELECT f.name FROM scientific_forum f WHERE f.id = submission.forum_id) ILIKE ?
                 )
                 """);
-
-//        // Filter according to global search word.
-//        sb.append(" AND (");
-//        for (int i = 0; i < filterColumnNames.size(); i++) {
-//            sb.append(filterColumnNames.get(i)).append("::VARCHAR ILIKE ?\n");
-//            if (i < filterColumnNames.size() - 1) {
-//                sb.append("OR ");
-//            }
-//        }
-//        sb.append(")\n");
 
         if (limit) {
             // Sort according to sort column parameter
