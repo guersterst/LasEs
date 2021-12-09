@@ -368,7 +368,7 @@ public class UserRepository {
         sb.append("SELECT * FROM user_data WHERE TRUE");
 
         // Filter according to filter columns parameter.
-        userListColumnNames.forEach(column -> sb.append(" AND").append(column).append(" LIKE ?\n"));
+        userListColumnNames.forEach(column -> sb.append(" AND ").append(column).append(" LIKE ?\n"));
 
         // Filter according to global search word.
         if (!"".equals(params.getGlobalSearchWord())) {
