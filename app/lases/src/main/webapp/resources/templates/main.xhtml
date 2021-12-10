@@ -13,6 +13,7 @@
         <ui:insert name="title">LasEs</ui:insert>
     </title>
     <h:outputStylesheet name="design/bootstrap/css/bootstrap.min.css"/>
+    <h:outputStylesheet name="design/css/main.css"/>
 </h:head>
 
 <!--Inorder to include a page you have to use ui:composition and ui:define -->
@@ -30,7 +31,7 @@
         </div>
         
         <!--Includes content for default-->
-        <div id="content" class="mt-5">
+        <div id="content">
             <ui:insert name="content">
                 <ui:include src="content.xhtml"></ui:include>
             </ui:insert>

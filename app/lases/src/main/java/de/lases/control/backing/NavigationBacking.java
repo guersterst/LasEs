@@ -44,7 +44,7 @@ public class NavigationBacking {
         sessionInformation.setUser(null);
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
 
-        return "welcome.xhtml?faces-redirect=true";
+        return "/views/anonymous/welcome.xhtml?faces-redirect=true";
     }
 
     /**

@@ -1,9 +1,7 @@
 package de.lases.global.transport;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Represents a user.
@@ -14,7 +12,7 @@ public class User implements Cloneable {
 
     private Integer id; // SQL: id
 
-    private List<Privilege> privileges; // SQL implicit
+    private List<Privilege> privileges = new ArrayList<>(); // SQL implicit
 
     private String title; // SQL: title
 
@@ -57,7 +55,7 @@ public class User implements Cloneable {
         if (isAdmin) {
             privileges.add(Privilege.ADMIN);
         } else {
-            privileges.remove(Privilege.ADMIN);
+            privileges.removeAll(Collections.singleton(Privilege.ADMIN));
         }
     }
 
