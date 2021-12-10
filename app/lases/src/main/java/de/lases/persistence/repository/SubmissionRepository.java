@@ -232,6 +232,7 @@ public class SubmissionRepository {
             statement.setBoolean(2, submission.isRevisionRequired());
             statement.setTimestamp(3, Timestamp.valueOf(submission.getDeadlineRevision()));
             statement.setInt(4, submission.getEditorId());
+            statement.setInt(5, submission.getId());
 
             statement.executeUpdate();
 
