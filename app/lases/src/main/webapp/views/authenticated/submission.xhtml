@@ -195,6 +195,14 @@
                                                              title="#{help.releaseBtn}" disabled="#{submissionBacking.isViewerSubmitter() || var.visible}"/>
                                         </h:column>
 
+                                        <!--Download-->
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <h:outputText value="#{labels.downloadCol}"/>
+                                            </f:facet>
+                                            <h:commandButton value="#{labels.downloadCol}" action="#{submissionBacking.downloadPaper(var)}"/>
+                                        </h:column>
+
                                     </pg:pagination>
                                 </h:form>
                             </div>
