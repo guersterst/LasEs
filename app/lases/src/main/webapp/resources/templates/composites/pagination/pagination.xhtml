@@ -10,18 +10,33 @@
 
 
 <composite:implementation>
-    <h:commandButton value="Apply Filters" action="#{cc.attrs.paginator.loadData}"/>
+    <div class="btn-group">
+        <h:commandButton value="Apply Filters" action="#{cc.attrs.paginator.applyFilters}"
+                         styleClass="btn btn-primary"/>
+    </div>
     <h:dataTable value="#{cc.attrs.paginator.entries}" var="var">
         <composite:insertChildren/>
     </h:dataTable>
     <h:outputText value="No entries." rendered="#{cc.attrs.paginator.entries.isEmpty()}"/>
-    <h:panelGrid columns="5">
-        <h:commandButton value="First" action="#{cc.attrs.paginator.firstPage}"/>
-        <h:commandButton value="Back" action="#{cc.attrs.paginator.previousPage}"/>
-        <h:outputText value="#{cc.attrs.paginator.resultListParameters.pageNo}"/>
-        <h:commandButton value="Next" action="#{cc.attrs.paginator.nextPage}"/>
-        <h:commandButton value="Last" action="#{cc.attrs.paginator.lastPage}"/>
-    </h:panelGrid>
+    <ul class="pagination">
+<!--        <h:panelGrid columns="5">-->
+            <li class="page-item">
+                <h:commandButton value="First" action="#{cc.attrs.paginator.firstPage}" styleClass="page-link"/>
+            </li>
+            <li class="page-item">
+                <h:commandButton value="Back" action="#{cc.attrs.paginator.previousPage}" styleClass="page-link"/>
+            </li>
+            <li class="page-item">
+                <h:outputText value="#{cc.attrs.paginator.resultListParameters.pageNo}" styleClass="page-link active"/>
+            </li>
+            <li class="page-item">
+                <h:commandButton value="Next" action="#{cc.attrs.paginator.nextPage}" styleClass="page-link"/>
+            </li>
+            <li class="page-item">
+                <h:commandButton value="Last" action="#{cc.attrs.paginator.lastPage}" styleClass="page-link"/>
+            </li>
+<!--        </h:panelGrid>-->
+    </ul>
 </composite:implementation>
 
 </html>

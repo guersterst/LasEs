@@ -12,9 +12,15 @@
 
 
 <composite:implementation>
-    <h:commandLink value="#{cc.attrs.columnNamei18n}" action="#{cc.attrs.paginator.sortBy(cc.attrs.columnIdentifier)}"/>
-    <br/>
-    <h:inputText value="#{cc.attrs.paginator.resultListParameters.filterColumns[cc.attrs.columnIdentifier]}"/>
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <h:commandLink value="#{cc.attrs.columnNamei18n}"
+                           action="#{cc.attrs.paginator.sortBy(cc.attrs.columnIdentifier)}"
+                           styleClass="input-group-text"/>
+        </div>
+        <h:inputText value="#{cc.attrs.paginator.resultListParameters.filterColumns[cc.attrs.columnIdentifier]}"
+                     styleClass="form-control"/>
+    </div>
 </composite:implementation>
 
 </html>

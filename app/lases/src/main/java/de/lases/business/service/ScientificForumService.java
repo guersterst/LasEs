@@ -1,6 +1,9 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.*;
+import de.lases.persistence.exception.NotFoundException;
+import de.lases.persistence.repository.ScientificForumRepository;
+import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
@@ -8,10 +11,14 @@ import jakarta.inject.Inject;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
+import java.util.PropertyResourceBundle;
+import java.util.logging.Logger;
 
 /**
  * Provides functionality regarding the handling of scientific forums.
  * In case of an unexpected state, a {@link UIMessage} event will be fired.
+ *
+ * @author Thomas Kirz
  */
 @Dependent
 public class ScientificForumService implements Serializable {
@@ -19,8 +26,13 @@ public class ScientificForumService implements Serializable {
     @Serial
     private static final long serialVersionUID = 5459943608069682810L;
 
+    private final Logger l = Logger.getLogger(SubmissionService.class.getName());
+
     @Inject
     private Event<UIMessage> uiMessageEvent;
+
+    @Inject
+    PropertyResourceBundle message;
 
     /**
      * Gets a scientific forum.
@@ -29,7 +41,27 @@ public class ScientificForumService implements Serializable {
      * @return The requested scientific forum.
      */
     public ScientificForum get(ScientificForum forum) {
-        return null;
+        if (forum.getId() == null) {
+            l.severe("ScientificForum id must not be null.");
+            throw new IllegalArgumentException("ScientificForum id must not be null.");
+        }
+
+        ScientificForum result = null;
+        Transaction t = new Transaction();
+
+        try {
+            result = ScientificForumRepository.get(forum, t);
+            t.commit();
+            l.finer("ScientificForum with id " + forum.getId() + " retrieved.");
+        } catch (NotFoundException e) {
+            l.severe("ScientificForum not found");
+            uiMessageEvent.fire(new UIMessage(
+                    message.getString("error.requestedScientificForumDoesNotExist"),
+                    MessageCategory.ERROR));
+            t.abort();
+        }
+
+        return result;
     }
 
     /**
