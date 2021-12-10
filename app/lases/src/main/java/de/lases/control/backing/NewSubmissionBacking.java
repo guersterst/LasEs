@@ -145,24 +145,27 @@ public class NewSubmissionBacking implements Serializable {
         newSubmission.setState(SubmissionState.SUBMITTED);
         // TODO: Was, wenn der User nicht angemeldet ist?
         newSubmission.setAuthorId(sessionInformation.getUser().getId());
-        Submission submission = submissionService.add(newSubmission, coAuthors);
+        newSubmission = submissionService.add(newSubmission, coAuthors);
 
-        if (submission == null) {
+        if (newSubmission == null) {
             logger.log(Level.SEVERE, "the submission was not successfully added.");
             return null;
         } else {
             Paper paper = new Paper();
-            logger.log(Level.INFO, "Adding paper to the submission with id: " + submission.getId());
-            paper.setSubmissionId(submission.getId());
+            logger.log(Level.INFO, "Adding paper to the submission with id: " + newSubmission.getId());
+            paper.setSubmissionId(newSubmission.getId());
             paper.setVisible(false);
             paper.setUploadTime(LocalDateTime.now());
             FileDTO file = new FileDTO();
             file.setFile(uploadedPDF.getInputStream().readAllBytes());
             paperService.add(file, paper);
         }
-        logger.log(Level.SEVERE, "Going to submission page");
         // TODO: hier die submission Seite returnen!
-        return "submission?id=" + submission.getId();
+        return "submission?faces-redirect=true&includeViewParams=true";
+    }
+
+    public int getId() {
+        return newSubmission.getId();
     }
 
     /**
