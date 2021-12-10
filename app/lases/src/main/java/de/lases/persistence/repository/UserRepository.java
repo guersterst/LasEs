@@ -532,7 +532,7 @@ public class UserRepository {
             case AUTHOR -> {
                 try {
                     PreparedStatement ps = conn.prepareStatement(
-                            "SELECT u.* FROM \"user\" u, submission s, co_authored c " +
+                            "SELECT DISTINCT u.* FROM \"user\" u, submission s, co_authored c " +
                                     "WHERE ((u.id = s.author_id) OR (u.id = c.user_id AND  c.submission_id = s.id)) " +
                                     "AND s.id = ?"
                     );
