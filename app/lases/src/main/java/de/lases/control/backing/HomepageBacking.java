@@ -83,9 +83,7 @@ public class HomepageBacking implements Serializable {
      */
     @PostConstruct
     public void init() {
-        user = new User();
-        user.setId(4);
-//        user = sessionInformation.getUser();
+        user = sessionInformation.getUser();
         showOwnSubmissionsTab();
     }
 
