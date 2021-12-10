@@ -41,7 +41,6 @@ public class PaperRepository {
      */
     public static Paper get(Paper paper, Transaction transaction) throws NotFoundException {
 
-        //TODO: brauch ich eigentlich überall?
         if (paper.getSubmissionId() == null) {
             logger.severe("Invalid submission id while try to load a paper.");
             throw new InvalidFieldsException("The submission id of the paper must not be null.");
@@ -224,7 +223,6 @@ public class PaperRepository {
      */
     public static void remove(Paper paper, Transaction transaction) throws NotFoundException, DataNotWrittenException {
 
-        //TODO: nicht dokumentiert
         if (paper.getSubmissionId() == null) {
             logger.severe("Invalid submisison id when tried to remove paper");
             throw new IllegalArgumentException("The submission id of the paper must not be null.");
@@ -357,7 +355,11 @@ public class PaperRepository {
 
                 if (resultListParameters.getFilterColumns().get("version") != null
                         && !resultListParameters.getFilterColumns().get("version").isEmpty()) {
-                    statement.setString(3, resultListParameters.getFilterColumns().get("version"));
+                    int index = 3;
+                    if (privilege ==  Privilege.ADMIN) {
+                        index = 2;
+                    }
+                    statement.setString(index, resultListParameters.getFilterColumns().get("version"));
                 }
 
                 resultSet = statement.executeQuery();
@@ -443,7 +445,6 @@ public class PaperRepository {
      */
     public static FileDTO getPDF(Paper paper, Transaction transaction) throws NotFoundException {
 
-        //TODO: nicht dokumentiert
         if (paper.getSubmissionId() == null) {
             logger.severe("Invalid submission id when tried to get file.");
             throw new InvalidFieldsException("The submission id of the paper must not be null.");
@@ -510,7 +511,6 @@ public class PaperRepository {
         Paper paper = new Paper();
 
         try {
-            //TODO: notfound exception 2x?
             PreparedStatement find = connection.prepareStatement(
                     """
                             SELECT s.*
@@ -564,7 +564,7 @@ public class PaperRepository {
         return paper;
     }
 
-    //TODO
+
     private static ResultSet findPaper(Paper paper, Connection connection) throws SQLException {
 
         PreparedStatement find = connection.prepareStatement(

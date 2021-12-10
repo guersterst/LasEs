@@ -328,8 +328,15 @@ public class SubmissionBacking implements Serializable {
      * @return The submitter of the paper.
      */
     public User getAuthorForPaper(Paper paper) {
-        //TODO: Autor ändert sich ja nicht.
         return author;
+    }
+
+    /**
+     * Apply changes for the submission state.
+     */
+    public void applyState() {
+        submission.setRevisionRequired(submission.getState() == SubmissionState.REVISION_REQUIRED);
+        submissionService.change(submission.clone());
     }
 
     /**
@@ -351,8 +358,7 @@ public class SubmissionBacking implements Serializable {
 
             paperService.add(file,revision);
 
-            Submission newSubmission = new Submission();
-            newSubmission = submission.clone();
+            Submission newSubmission = submission.clone();
             newSubmission.setState(SubmissionState.SUBMITTED);
             newSubmission.setRevisionRequired(false);
 
@@ -373,7 +379,7 @@ public class SubmissionBacking implements Serializable {
      */
     public String deleteSubmission() {
         if (isViewerSubmitter() || sessionInformation.getUser().isAdmin()) {
-            submissionService.remove(submission);
+            submissionService.remove(submission.clone());
             return "/views/authenticated/homepage";
         }
         uiMessageEvent.fire(new UIMessage(resourceBundle.getString("failedDelete"), MessageCategory.WARNING));

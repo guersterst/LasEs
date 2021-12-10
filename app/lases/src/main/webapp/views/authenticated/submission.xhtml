@@ -65,7 +65,7 @@
                                                              value="#{submissionBacking.uploadedRevisionPDF}" required="true"
                                                              requiredMessage="#{message.inputFile}"
                                                              rendered="#{submissionBacking.isViewerSubmitter()}">
-                                                    <!--<f:validator validatorId="pdfValidator"/>-->
+                                                    <f:validator validatorId="pdfValidator"/>
                                                 </h:inputFile>
                                                 <br/>
                                                 <h:message for="upload-revision-ifile"/>
@@ -91,6 +91,7 @@
                                                                    itemLabel="#{labels['subStateSelect.' += select]}"
                                                                    itemValue="#{select}"/>
                                                 </h:selectOneMenu>
+                                                <h:commandButton id="apply-cbtn" value="#{labels.apply}" action="#{submissionBacking.applyState()}"/>
                                             </div>
                                         </h:form>
                                     </div>
@@ -165,6 +166,14 @@
                         <div id="paper-pagination">
                             <div class="card">
                                 <h:form>
+                                    <div class="btn-group">
+                                        <h:selectOneMenu id="release-revision-slctom" styleClass="btn-secondary"
+                                                         value="#{submissionBacking.paperPagination.resultListParameters.visibleFilter}"
+                                                         title="#{help.filterRelease}"
+                                                         disabled="#{ not submissionBacking.loggedInUserIsEditor()}">
+                                            <f:selectItems var="visible" itemValue="#{visible.visibility}" itemLabel="#{labels['visibility.' += visible]}"/>
+                                        </h:selectOneMenu>
+                                    </div>
                                     <pg:pagination paginator="#{submissionBacking.paperPagination}">
 
                                         <!--Version number-->
@@ -180,7 +189,9 @@
                                         <!--Upload Date-->
                                         <h:column>
                                             <f:facet name="header">
-                                                <h:commandLink value="#{labels.uploadCol}" action="#{submissionBacking.paperPagination.sortBy('timestamp_upload')}"/>
+                                                <div class="input-group">
+                                                    <h:commandLink id="upload-col" value="#{labels.uploadCol}" action="#{submissionBacking.paperPagination.sortBy('timestamp_upload')}" styleClass="input-group-text"/>
+                                                </div>
                                             </f:facet>
                                             <h:outputText id="date-otxt" value="#{var.uploadTime}">
                                                 <f:convertDateTime type="localDate"/>
@@ -188,27 +199,24 @@
                                         </h:column>
 
                                         <!--Release state-->
-                                        <h:column rendered="#{submissionBacking.loggedInUserIsEditor()}">
+                                        <h:column rendered="#{submissionBacking.loggedInUserIsEditor() || submissionBacking.isViewerSubmitter()}">
                                             <f:facet name="header">
-                                                <h:commandLink value="#{labels.stateCol}" action="#{submissionBacking.paperPagination.sortBy('state')}"/>
-                                                <br/>
-                                                <h:selectOneMenu id="release-revision-slctom"
-                                                                 value="#{submissionBacking.paperPagination.resultListParameters.visibleFilter}"
-                                                                 title="#{help.filterRelease}"
-                                                                 rendered="#{submissionBacking.loggedInUserIsEditor()}">
-                                                    <f:selectItems var="visible" itemValue="#{submissionBacking.visibility}" itemLabel="#{labels['visibility.' += visible]}"/>
-                                                </h:selectOneMenu>
+                                                <div class="input-group">
+                                                    <h:commandLink id="state-col" value="#{labels.stateCol}" action="#{submissionBacking.paperPagination.sortBy('state')}" styleClass="input-group-text"/>
+                                                </div>
                                             </f:facet>
                                             <h:commandButton id="release-revision-cbtn" styleClass="btn btn-primary"
                                                              value="#{var.visible == true? labels.released : labels.notReleased}"
                                                              action="#{submissionBacking.releaseRevision(var)}"
-                                                             title="#{help.releaseBtn}" disabled="#{submissionBacking.isViewerSubmitter() || var.visible}"/>
+                                                             title="#{help.releaseBtn}" disabled="#{submissionBacking.isViewerSubmitter()}"/>
                                         </h:column>
 
                                         <!--Download-->
                                         <h:column>
                                             <f:facet name="header">
-                                                <h:outputText value="#{labels.downloadCol}"/>
+                                                <div class="input-group">
+                                                    <h:outputText id="download-col" value="#{labels.downloadCol}" styleClass="input-group-text"/>
+                                                </div>
                                             </f:facet>
                                             <h:commandButton id="download-btn" styleClass="btn btn-primary" value="#{labels.downloadCol}" action="#{submissionBacking.downloadPaper(var)}"/>
                                         </h:column>
