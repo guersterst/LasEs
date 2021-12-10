@@ -77,8 +77,6 @@ public class SubmissionBacking implements Serializable {
 
     private User author;
 
-    private User isViewing;
-
     private Pagination<Paper> paperPagination;
 
     private Pagination<Review> reviewPagination;
@@ -125,14 +123,13 @@ public class SubmissionBacking implements Serializable {
         scientificForum = new ScientificForum();
         coAuthors = new LinkedList<>();
         author = new User();
-        isViewing = sessionInformation.getUser();
 
         paperPagination = new Pagination<Paper>("version") {
             @Override
             public void loadData() {
                 paperPagination.getResultListParameters().setVisibleFilter(Visibility.ALL);
                 paperPagination.getResultListParameters().setDateSelect(DateSelect.ALL);
-                paperPagination.setEntries(paperService.getList(submission,isViewing,paperPagination.getResultListParameters()));
+                paperPagination.setEntries(paperService.getList(submission,sessionInformation.getUser(),paperPagination.getResultListParameters()));
             }
 
             @Override
@@ -354,6 +351,13 @@ public class SubmissionBacking implements Serializable {
 
             paperService.add(file,revision);
 
+            Submission newSubmission = new Submission();
+            newSubmission = submission.clone();
+            newSubmission.setState(SubmissionState.SUBMITTED);
+            newSubmission.setRevisionRequired(false);
+
+            submissionService.change(newSubmission);
+
         }catch (IOException e) {
 
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("failedUpload"), MessageCategory.WARNING));
@@ -368,7 +372,7 @@ public class SubmissionBacking implements Serializable {
      * @return Go to the homepage.
      */
     public String deleteSubmission() {
-        if (isViewerSubmitter() || isViewing.isAdmin()) {
+        if (isViewerSubmitter() || sessionInformation.getUser().isAdmin()) {
             submissionService.remove(submission);
             return "/views/authenticated/homepage";
         }
@@ -463,7 +467,11 @@ public class SubmissionBacking implements Serializable {
      * @return true if the viewer is the submitter of this submission.
      */
     public boolean isViewerSubmitter() {
-        return submission.getAuthorId() == isViewing.getId();
+        return submission.getAuthorId() == sessionInformation.getUser().getId();
+    }
+
+    public boolean isAdmin() {
+        return sessionInformation.getUser().isAdmin();
     }
 
     /**
@@ -518,7 +526,7 @@ public class SubmissionBacking implements Serializable {
      * @return Is the logged-in user editor of this submission?
      */
     public boolean loggedInUserIsEditor() {
-        return isViewing.getId().equals(submission.getEditorId());
+        return sessionInformation.getUser().getId().equals(submission.getEditorId());
     }
 
     /**
