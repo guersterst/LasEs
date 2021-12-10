@@ -110,13 +110,17 @@ public class PaperRepository {
             throw new InvalidFieldsException("The file in the pdf must not "
                     + "be null!");
         }
+        if (paper.getSubmissionId() == null) {
+            throw new InvalidFieldsException("The submission id must not be null!");
+        }
 
         Integer id = null;
 
         try{
             PreparedStatement stmt = conn.prepareStatement("""
-                    SELECT max(version) FROM paper
+                    SELECT max(version) FROM paper WHERE submission_id = ?
                     """);
+            stmt.setInt(1, paper.getSubmissionId());
             ResultSet resultSet = stmt.executeQuery();
             if (resultSet.next()) {
                 id = resultSet.getInt(1) + 1;
