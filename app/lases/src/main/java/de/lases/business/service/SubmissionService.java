@@ -88,8 +88,9 @@ public class SubmissionService implements Serializable {
      * @param submission The submission's data in a {@link Submission}.
      *                   Must contain a valid forum's id, authorId, editorId, state and title.
      * @param coAuthors  The desired co-athors as proper {@link User}-DTOs with an email-address.
+     * @return The submission that was added, but filled with its id.
      */
-    public void add(Submission submission, List<User> coAuthors) {
+    public Submission add(Submission submission, List<User> coAuthors) {
         Transaction transaction = new Transaction();
 
         User editor = new User();
@@ -101,7 +102,7 @@ public class SubmissionService implements Serializable {
                     "dataNotWritten"), MessageCategory.ERROR));
             logger.log(Level.WARNING, "Editor was not found when adding a submission.");
             transaction.abort();
-            return;
+            return null;
         }
         // TODO: Das einkommentieren, wenn es die get Methode im user repo gibt!
         logger.log(Level.SEVERE, "UNCOMMENT THIS");
@@ -125,7 +126,7 @@ public class SubmissionService implements Serializable {
                     MessageCategory.ERROR));
             logger.log(Level.WARNING, e.getMessage());
             transaction.abort();
-            return;
+            return null;
         }
         for (User user: coAuthors) {
             try {
@@ -144,7 +145,7 @@ public class SubmissionService implements Serializable {
                         MessageCategory.ERROR));
                 logger.log(Level.WARNING, e.getMessage());
                 transaction.abort();
-                return;
+                return null;
             } catch (NotFoundException e) {
                 logger.log(Level.SEVERE, e.getMessage());
                 transaction.abort();
@@ -153,6 +154,7 @@ public class SubmissionService implements Serializable {
             }
         }
         transaction.commit();
+        return submission;
     }
 
     private void sendEmailsForAddSubmission(String emailEditor, List<String> emailsCoAuthors) {

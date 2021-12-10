@@ -30,8 +30,7 @@ public class SubmissionRepository {
 
     private static final Logger logger = Logger.getLogger(SubmissionRepository.class.getName());
 
-    private static final List<String> filterColumnNames = List.of("title", "state", "timestamp_submission",
-            "timestamp_deadline_revision", "forum");
+    private static final List<String> filterColumnNames = List.of("title", "state", "forum");
 
 
     /**
@@ -436,7 +435,6 @@ public class SubmissionRepository {
                 stmt.setInt(1, user.getId());
             }
             fillResultListParameterSuffix(2, stmt, resultListParameters);
-            System.out.println(stmt.toString()); // todo delet
             resultSet = stmt.executeQuery();
 
             // Attempt to create a list of submissions from the result set.
@@ -736,12 +734,6 @@ public class SubmissionRepository {
         if (isFilled(params.getFilterColumns().get("state"))) {
             sb.append(" AND state::VARCHAR ILIKE ?\n");
         }
-        if (isFilled(params.getFilterColumns().get("timestamp_submission"))) {
-            sb.append(" AND timestamp_submission::DATE::VARCHAR ILIKE ?\n");
-        }
-        if (isFilled(params.getFilterColumns().get("timestamp_deadline_revision"))) {
-            sb.append(" AND timestamp_deadline_revision::DATE::VARCHAR ILIKE ?\n");
-        }
         if (isFilled(params.getFilterColumns().get("forum"))) {
             sb.append(" AND (SELECT f.name FROM scientific_forum f WHERE f.id = submission.forum_id) ILIKE ?\n");
         }
@@ -751,8 +743,6 @@ public class SubmissionRepository {
                 AND (
                     title ILIKE ?
                     OR state::VARCHAR ILIKE ?
-                    OR timestamp_submission::DATE::VARCHAR ILIKE ?
-                    OR timestamp_deadline_revision::DATE::VARCHAR ILIKE ?
                     OR (SELECT f.name FROM scientific_forum f WHERE f.id = submission.forum_id) ILIKE ?
                 )
                 """);
