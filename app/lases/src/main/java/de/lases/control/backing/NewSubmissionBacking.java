@@ -161,11 +161,7 @@ public class NewSubmissionBacking implements Serializable {
             paperService.add(file, paper);
         }
         // TODO: hier die submission Seite returnen!
-        return "submission?faces-redirect=true&includeViewParams=true";
-    }
-
-    public int getId() {
-        return newSubmission.getId();
+        return "submission?faces-redirect=true&id=" + newSubmission.getId();
     }
 
     /**
