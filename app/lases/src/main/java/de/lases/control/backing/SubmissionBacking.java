@@ -213,7 +213,6 @@ public class SubmissionBacking implements Serializable {
         submission.setState(submissionState);
     }
 
-    // TODO: hier IOException? Ueberhaupt an den Service deligieren?
 
     /**
      * Download the PDF belonging to a specific review.
@@ -369,7 +368,7 @@ public class SubmissionBacking implements Serializable {
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("failedUpload"), MessageCategory.WARNING));
 
         }
-
+        paperPagination.loadData();
     }
 
     /**
