@@ -1,6 +1,7 @@
 package de.lases.global.transport;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -36,7 +37,11 @@ public class User implements Cloneable {
 
     private boolean isRegistered; // SQL: is_registered
 
-    private int numberOfSubmissions; // SQL implicit
+    private int numberOfSubmissions; // SQL
+
+    public User() {
+        privileges = new ArrayList<>();
+    }
 
     /**
      * Return if the user is an admin.
