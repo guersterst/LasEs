@@ -37,39 +37,44 @@
                         <div class="card" id="toolbox">
                             <div class="card-header">
 
-                                <!--rendered="#{submissionBacking.isViewerSubmitter()}"-->
-                                <h:commandButton styleClass="btn" id="delete-sub-cbtn" title="#{help.deleteSubmission}"
-                                                 value="#{labels.deleteButton}" onclick="PF('dlg').show()"/>
+                                <!---->
+                                <h:commandButton styleClass="btn btn-primary" id="delete-sub-cbtn" title="#{help.deleteSubmission}"
+                                                 value="#{labels.deleteButton}" onclick="PF('dlg').show()"
+                                                 rendered="#{submissionBacking.isViewerSubmitter()}"/>
                                 <p:dialog id="delete-sub-dlg" widgetVar="dlg">
                                     <div class="text-center">
                                         <h:outputText id="delete-warning-otxt" value="#{message.deleteWarningOtxt}"/>
                                     </div>
                                     <br/>
                                     <div class="text-center">
-                                        <h:commandButton styleClass="btn" id="agree-delete-cbtn"
-                                                         value="#{labels.agreeButton}"/>
+                                        <h:form>
+                                            <h:commandButton styleClass="btn btn-primary" id="agree-delete-cbtn"
+                                                             value="#{labels.agreeButton}" action="#{submissionBacking.deleteSubmission()}"/>
+                                        </h:form>
                                     </div>
                                 </p:dialog>
 
                                 <!--Upload a revision.-->
-                                <h:form id="upload-file-frm" enctype="multipart/form-data">
+                                <h:form id="upload-file-frm" enctype="multipart/form-data" rendered="#{submissionBacking.submission.revisionRequired}">
                                     <div class="form-group">
-                                        <!--rendered="#{submissionBacking.isViewerSubmitter()}"-->
+                                        <!---->
                                         <h:inputFile id="upload-revision-ifile"
                                                      value="#{submissionBacking.uploadedRevisionPDF}" required="true"
-                                                     requiredMessage="#{message.inputFile}">
+                                                     requiredMessage="#{message.inputFile}"
+                                                     rendered="#{submissionBacking.isViewerSubmitter()}">
                                             <!--<f:validator validatorId="pdfValidator"/>-->
                                         </h:inputFile>
                                         <br/>
                                         <h:message for="upload-revision-ifile"/>
                                     </div>
                                     <div class="form-group">
-                                        <!--rendered="#{submissionBacking.isViewerSubmitter()}"-->
-                                        <h:commandButton id="upload-clnk" styleClass="btn"
+                                        <!---->
+                                        <h:commandButton id="upload-clnk" styleClass="btn btn-primary"
                                                          value="#{labels.uploadSubButton}"
                                                          action="#{submissionBacking.uploadPDF()}"
                                                          includeViewParams="true"
-                                                         title="#{help.uploadRevision}"/>
+                                                         title="#{help.uploadRevision}"
+                                                         rendered="#{submissionBacking.isViewerSubmitter()}"/>
                                     </div>
                                 </h:form>
 
@@ -103,7 +108,7 @@
                                                         outcome="/views/authenticated/scientificForum"
                                                         includeViewParams="true"
                                                         title="#{help.directToForum}">
-                                                    <!--<f:param value="#{submissionBacking.scientificForum.id}" name="id"/>-->
+                                                    <f:param value="#{submissionBacking.scientificForum.id}" name="id"/>
                                                 </h:link>
                                             </div>
                                         </div>
@@ -121,7 +126,7 @@
                                                             includeViewParams="true" title="#{help.directToProfile}"
                                                             disabled="#{not (submissionBacking.loggedInUserIsEditor() || submissionBacking.isViewerSubmitter())}"
                                                     >
-                                                        <!--<f:param value="#{submissionBacking.author.id}" name="id"/>-->
+                                                        <f:param value="#{submissionBacking.author.id}" name="id"/>
                                                     </h:link>
                                                 </div>
 
@@ -189,7 +194,7 @@
                                                     <f:selectItems var="visible" itemValue="#{submissionBacking.visibility}" itemLabel="#{labels['visibility.' += visible]}"/>
                                                 </h:selectOneMenu>
                                             </f:facet>
-                                            <h:commandButton id="release-revision-cbtn"
+                                            <h:commandButton id="release-revision-cbtn" styleClass="btn btn-primary"
                                                              value="#{var.visible == true? labels.released : labels.notReleased}"
                                                              action="#{submissionBacking.releaseRevision(var)}"
                                                              title="#{help.releaseBtn}" disabled="#{submissionBacking.isViewerSubmitter() || var.visible}"/>
@@ -200,7 +205,7 @@
                                             <f:facet name="header">
                                                 <h:outputText value="#{labels.downloadCol}"/>
                                             </f:facet>
-                                            <h:commandButton value="#{labels.downloadCol}" action="#{submissionBacking.downloadPaper(var)}"/>
+                                            <h:commandButton id="download-btn" styleClass="btn btn-primary" value="#{labels.downloadCol}" action="#{submissionBacking.downloadPaper(var)}"/>
                                         </h:column>
 
                                     </pg:pagination>
