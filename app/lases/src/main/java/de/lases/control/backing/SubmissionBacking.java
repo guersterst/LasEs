@@ -180,7 +180,6 @@ public class SubmissionBacking implements Serializable {
             //TODO: rausnehmen.
 
         }*/
-        submission.setId(5);
         submission = submissionService.get(submission);
 
         author.setId(submission.getAuthorId());
