@@ -3,10 +3,12 @@ package de.lases.business.service;
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.DataNotCompleteException;
 import de.lases.persistence.exception.NotFoundException;
+import de.lases.persistence.internal.ConfigReader;
 import de.lases.persistence.repository.ReviewRepository;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
+import jakarta.enterprise.inject.spi.CDI;
 import jakarta.faces.component.UIMessage;
 import jakarta.inject.Inject;
 
@@ -112,6 +114,24 @@ public class ReviewService implements Serializable {
             transaction.commit();
         }
         return new ArrayList<>();
+    }
+
+    public int getListCountPages(Submission submission, User user, ResultListParameters resultListParameters) {
+        Transaction transaction = new Transaction();
+        int items = 0;
+        int pages = 0;
+        try {
+            items = ReviewRepository.getCountItemsList(submission, user, transaction, resultListParameters);
+            ConfigReader configReader = CDI.current().select(ConfigReader.class).get();
+            int paginationLength = Integer.parseInt(configReader.getProperty("MAX_PAGINATION_LIST_LENGTH"));
+            // Calculate number of pages.
+            pages =  (int) Math.ceil((double) items / paginationLength);
+        } catch (DataNotCompleteException | NotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            transaction.commit();
+        }
+        return pages;
     }
 
     /**

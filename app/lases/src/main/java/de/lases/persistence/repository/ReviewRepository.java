@@ -144,7 +144,7 @@ public class ReviewRepository {
 
         // Case Editor or Admin
         if (user.isAdmin() || submission.getEditorId() == user.getId()) {
-            try (PreparedStatement ps = conn.prepareStatement(getStatementReviewListForEditor(resultListParameters))) {
+            try (PreparedStatement ps = conn.prepareStatement(getStatementReviewListForEditor(resultListParameters, false))) {
 
                 int i = 1;
                 if (isFilled(resultListParameters.getFilterColumns().get("version"))) {
@@ -184,14 +184,78 @@ public class ReviewRepository {
         return reviewList;
     }
 
+    public static int getCountItemsList(Submission submission, User user,
+                                       Transaction transaction,
+                                       ResultListParameters resultListParameters)
+            throws DataNotCompleteException, NotFoundException {
+        if (transaction == null) {
+            logger.severe("Passed transaction is null.");
+            throw new IllegalArgumentException("Transaction must not be null.");
+        }
+        if (resultListParameters == null) {
+            logger.severe("Passed result-list parameters is null.");
+            throw new IllegalArgumentException("ResultListParameters must not be null.");
+        }
+        if (user == null || user.getId() == null) {
+            logger.severe("Passed  User-DTO is not sufficiently filled.");
+            throw new IllegalArgumentException("User id must not be null.");
+        }
+        if (submission == null || submission.getId() == null) {
+            logger.severe("Passed  Submission-DTO is not sufficiently filled.");
+            throw new IllegalArgumentException("User id must not be null.");
+        }
+
+        Connection conn = transaction.getConnection();
+        ResultSet resultSet;
+        List<Review> reviewList = new ArrayList<>();
+
+        // Case Editor or Admin
+        if (user.isAdmin() || submission.getEditorId() == user.getId()) {
+            try (PreparedStatement ps = conn.prepareStatement(getStatementReviewListForEditor(resultListParameters, true))) {
+
+                int i = 1;
+                if (isFilled(resultListParameters.getFilterColumns().get("version"))) {
+                    ps.setString(i, "%" + resultListParameters.getFilterColumns().get("version") + "%");
+                    i++;
+                }
+                if (isFilled(resultListParameters.getFilterColumns().get("lastname"))) {
+                    ps.setString(i, "%" + resultListParameters.getFilterColumns().get("lastname") + "%");
+                    i++;
+                }
+                if (isFilled(resultListParameters.getFilterColumns().get("comment"))) {
+                    ps.setString(i, "%" + resultListParameters.getFilterColumns().get("comment") + "%");
+                }
+
+                resultSet = ps.executeQuery();
+
+                if (resultSet.next()) {
+                    return resultSet.getInt("count");
+                }
+
+            } catch (SQLException e) {
+                logger.severe(e.getMessage());
+                throw new DatasourceQueryFailedException(e.getMessage(), e);
+            }
+        }
+        return -1;
+    }
+
+
+
     private static boolean isFilled(String s) {
         return s != null && !s.isEmpty();
     }
 
-    private static String getStatementReviewListForEditor(ResultListParameters resultListParameters) {
+    private static String getStatementReviewListForEditor(ResultListParameters resultListParameters, boolean doCount) {
         StringBuilder sb = new StringBuilder();
+
+        if (doCount) {
+            sb.append("SELECT COUNT (DISTINCT CONCAT(p.version, ':', r.reviewer_id)) as count\n");
+        } else {
+            sb.append("SELECT DISTINCT r.*, u.lastname\n");
+        }
+
         sb.append("""
-                    SELECT DISTINCT r.*, u.lastname
                     FROM submission s, paper p, review r, "user" u
                     WHERE s.id = p.submission_id AND p.version = r.version AND r.reviewer_id = u.id
                     """).append("\n");
@@ -222,22 +286,24 @@ public class ReviewRepository {
             sb.append(" AND r.comment ILIKE ?\n");
         }
 
-        if (isFilled(resultListParameters.getSortColumn())) {
-            if (resultListParameters.getSortColumn().equals("lastname")) {
-                sb.append( "ORDER BY u.lastname");
-            } else {
-                sb.append( "ORDER BY r.").append(resultListParameters.getSortColumn());
+        if (!doCount) {
+            if (isFilled(resultListParameters.getSortColumn())) {
+                if (resultListParameters.getSortColumn().equals("lastname")) {
+                    sb.append("ORDER BY u.lastname");
+                } else {
+                    sb.append("ORDER BY r.").append(resultListParameters.getSortColumn());
+                }
+                sb.append(" ")
+                        .append(resultListParameters.getSortOrder() == SortOrder.ASCENDING ? "ASC" : "DESC")
+                        .append("\n");
             }
-            sb.append(" ")
-                    .append(resultListParameters.getSortOrder() == SortOrder.ASCENDING ? "ASC" : "DESC")
-                    .append("\n");
-        }
 
-        // Set limit and offset
-        ConfigReader configReader = CDI.current().select(ConfigReader.class).get();
-        int paginationLength = Integer.parseInt(configReader.getProperty("MAX_PAGINATION_LIST_LENGTH"));
-        sb.append("LIMIT ").append(paginationLength)
-                .append(" OFFSET ").append(paginationLength * (resultListParameters.getPageNo() - 1));
+            // Set limit and offset
+            ConfigReader configReader = CDI.current().select(ConfigReader.class).get();
+            int paginationLength = Integer.parseInt(configReader.getProperty("MAX_PAGINATION_LIST_LENGTH"));
+            sb.append("LIMIT ").append(paginationLength)
+                    .append(" OFFSET ").append(paginationLength * (resultListParameters.getPageNo() - 1));
+        }
 
         return sb.toString();
     }

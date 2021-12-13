@@ -148,7 +148,7 @@ public class SubmissionBacking implements Serializable {
 
             @Override
             protected Integer calculateNumberPages() {
-                return null;
+                return reviewService.getListCountPages(submission, sessionInformation.getUser(), reviewPagination.getResultListParameters());
             }
         };
     }
