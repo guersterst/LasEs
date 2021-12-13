@@ -75,13 +75,15 @@ public class SubmissionBacking implements Serializable {
 
     private List<User> coAuthors;
 
+    private List<User> reviewers;
+
     private User author;
 
     private Pagination<Paper> paperPagination;
 
     private Pagination<Review> reviewPagination;
 
-    private ReviewedBy reviewedBy;
+    private List<ReviewedBy> reviewedBy;
 
     private Paper newestPaper;
 
@@ -138,6 +140,17 @@ public class SubmissionBacking implements Serializable {
             }
         };
 
+        reviewPagination = new Pagination<Review>("version") {
+            @Override
+            public void loadData() {
+
+            }
+
+            @Override
+            protected Integer calculateNumberPages() {
+                return null;
+            }
+        };
     }
 
     /**
@@ -171,12 +184,7 @@ public class SubmissionBacking implements Serializable {
      * @throws IllegalAccessException If the user has no access rights for this
      *                                submission
      */
-    public void onLoad() {/*
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        if (!facesContext.isPostback()) {
-            //TODO: rausnehmen.
-
-        }*/
+    public void onLoad() {
         submission = submissionService.get(submission);
 
         author.setId(submission.getAuthorId());
@@ -186,10 +194,10 @@ public class SubmissionBacking implements Serializable {
         scientificForum = scientificForumService.get(scientificForum);
 
         coAuthors = userService.getList(submission, Privilege.AUTHOR);
+        reviewers = userService.getList(submission, Privilege.REVIEWER);
 
         paperPagination.loadData();
-
-
+        reviewPagination.loadData();
     }
 
 
@@ -317,6 +325,11 @@ public class SubmissionBacking implements Serializable {
      * @return The reviewer who submitted the review.
      */
     public User getReviewerForReview(Review review) {
+        for (User reviewer: reviewers) {
+            if (reviewer.getId() == review.getReviewerId()) {
+                return reviewer;
+            }
+        }
         return null;
     }
 
@@ -507,12 +520,21 @@ public class SubmissionBacking implements Serializable {
     }
 
     /**
+     * Array  of all possible recommendation filter options.
+     *
+     * @return All options.
+     */
+    public Recommendation[] getRecommendation() {
+        return Recommendation.values();
+    }
+
+    /**
      * Get the possible reviewed-by relationship between this submission and
      * the logged-in user. May be null if there is none.
      *
      * @return Reviewed-by between the logged-in user and this submission.
      */
-    public ReviewedBy getReviewedBy() {
+    public List<ReviewedBy> getReviewedBy() {
         return reviewedBy;
     }
 
@@ -531,7 +553,7 @@ public class SubmissionBacking implements Serializable {
      * @return Is the logged-in user editor of this submission?
      */
     public boolean loggedInUserIsEditor() {
-        return sessionInformation.getUser().getId().equals(submission.getEditorId());
+        return sessionInformation.getUser().getId().equals(submission.getEditorId()) || sessionInformation.getUser().isAdmin();
     }
 
     /**

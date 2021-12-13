@@ -13,7 +13,7 @@ public class Review implements Cloneable {
 
     private int reviewerId;
 
-    private LocalDateTime timestampUpdloaded;
+    private LocalDateTime uploadTime;
 
     private boolean visible;
 
@@ -60,18 +60,18 @@ public class Review implements Cloneable {
         this.reviewerId = reviewerId;
     }
 
-    public LocalDateTime getTimestampUpdloaded() {
-        return timestampUpdloaded;
+    public LocalDateTime getUploadTime() {
+        return uploadTime;
     }
 
     /**
      * Set the timestamp that states when this review was uploaded.
      *
-     * @param timestampUpdloaded Timestamp that states when this review was
+     * @param uploadTime Timestamp that states when this review was
      *                           uploaded.
      */
-    public void setTimestampUpdloaded(LocalDateTime timestampUpdloaded) {
-        this.timestampUpdloaded = timestampUpdloaded;
+    public void setUploadTime(LocalDateTime uploadTime) {
+        this.uploadTime = uploadTime;
     }
 
     public boolean isVisible() {
