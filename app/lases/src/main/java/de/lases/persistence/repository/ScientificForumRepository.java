@@ -304,7 +304,7 @@ public class ScientificForumRepository {
             preparedStatement.setInt(2, scientificForum.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            throw new DatasourceQueryFailedException();
+            throw new DataNotWrittenException();
         }
     }
 
@@ -324,7 +324,7 @@ public class ScientificForumRepository {
             preparedStatement.setInt(1, user.getId());
             return preparedStatement.executeQuery().next();
         } catch (SQLException e) {
-            throw new DatasourceQueryFailedException(e.getMessage(), e);
+            throw new DatasourceQueryFailedException(e.getMessage());
         }
     }
 
@@ -362,7 +362,7 @@ public class ScientificForumRepository {
             preparedStatement.setInt(2, scientificForum.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            throw new DatasourceQueryFailedException();
+            throw new DataNotWrittenException(ex.getMessage());
         }
     }
 
@@ -400,12 +400,29 @@ public class ScientificForumRepository {
      *                                        an editor for the provided forum.
      * @throws DataNotWrittenException        If writing the data to the repository
      *                                        fails.
-     * @throws DatasourceQueryFailedException If the datasource cannot be
-     *                                        queried.
      */
     public static void removeEditor(ScientificForum scientificForum,
                                     User editor, Transaction transaction)
             throws NotFoundException, DataNotWrittenException {
+        if (editor.getId() == null || scientificForum.getId() == null) {
+            throw new InvalidFieldsException();
+        } else if (!exists(scientificForum, transaction) || !userExists(editor, transaction)) {
+            throw new NotFoundException();
+        }
+
+        String sql = """
+                DELETE FROM member_of
+                WHERE editor_id = ?
+                AND scientific_forum_id = ?
+                """;
+
+        try (PreparedStatement preparedStatement = transaction.getConnection().prepareStatement(sql)) {
+            preparedStatement.setInt(1, editor.getId());
+            preparedStatement.setInt(2, scientificForum.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            throw new DataNotWrittenException();
+        }
     }
 
     /**
@@ -428,6 +445,24 @@ public class ScientificForumRepository {
                                           ScienceField scienceField,
                                           Transaction transaction)
             throws NotFoundException, DataNotWrittenException {
+        if (scientificForum.getId() == null || scienceField.getName() == null) {
+            throw new InvalidFieldsException();
+        } else if (!exists(scientificForum, transaction) ||  !scienceFieldExists(scienceField, transaction)) {
+            throw new NotFoundException();
+        }
+
+        String sql = """
+                INSERT INTO topics (science_field_name, scientific_forum_id)
+                VALUES (?, ?)
+                """;
+
+        try (PreparedStatement preparedStatement = transaction.getConnection().prepareStatement(sql)) {
+            preparedStatement.setString(1, scientificForum.getName());
+            preparedStatement.setInt(2, scientificForum.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            throw new DataNotWrittenException(ex.getMessage());
+        }
     }
 
 }
