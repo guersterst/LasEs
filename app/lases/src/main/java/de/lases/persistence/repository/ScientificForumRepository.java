@@ -293,12 +293,29 @@ public class ScientificForumRepository {
      *                                        provided id.
      * @throws DataNotWrittenException        If writing the data to the repository
      *                                        fails.
-     * @throws DatasourceQueryFailedException If the datasource cannot be
-     *                                        queried.
+     * @throws DataNotWrittenException        If the update could not be performed.
      */
     public static void addEditor(ScientificForum scientificForum, User editor,
                                  Transaction transaction)
             throws NotFoundException, DataNotWrittenException {
+        if (editor.getId() == null || scientificForum.getId() == null) {
+            throw new InvalidFieldsException();
+        } else if (!exists(scientificForum, transaction)) {
+            throw new NotFoundException();
+        }
+
+        String sql = """
+                INSERT INTO member_of (editor_id, scientific_forum_id)
+                VALUES (?, ?)
+                """;
+
+        try (PreparedStatement preparedStatement = transaction.getConnection().prepareStatement(sql)) {
+            preparedStatement.setInt(1, editor.getId());
+            preparedStatement.setInt(2, scientificForum.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            throw new DatasourceQueryFailedException();
+        }
     }
 
     /**
