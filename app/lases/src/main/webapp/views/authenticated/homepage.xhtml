@@ -7,7 +7,7 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <!-- Page title -->
-    <ui:define name="title">#{labels['appName'] += ' - ' += labels['homePage.title']}</ui:define>
+    <ui:define name="title">#{labels['homePage.title']}</ui:define>
 
     <!-- Content of homepage.xhtml -->
     <ui:define name="content">
@@ -17,7 +17,6 @@
         </f:metadata>
 
         <div class="container">
-            <h1>#{labels['homePage.header'] += labels['appName']}</h1>
             <div class="card">
                 <div class="card-head">
                     <!-- Tabs for the different views -->
