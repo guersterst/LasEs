@@ -202,7 +202,6 @@ public class ScientificForumRepository {
                 //TODO what in else
                 preparedStatement.setTimestamp(5, null);
             }
-
             preparedStatement.executeUpdate();
         } catch (SQLException exception) {
             Throwable cause = exception;
@@ -242,6 +241,24 @@ public class ScientificForumRepository {
     public static void remove(ScientificForum scientificForum,
                               Transaction transaction)
             throws NotFoundException, DataNotWrittenException {
+        if (scientificForum.getId() == null) {
+            throw new IllegalArgumentException();
+        } else if (!exists(scientificForum, transaction)) {
+            throw new NotFoundException();
+        }
+
+        String sql = """
+                DELETE
+                FROM scientific_forum
+                WHERE id = ?
+                """;
+
+        try (PreparedStatement preparedStatement = transaction.getConnection().prepareStatement(sql)) {
+            preparedStatement.setInt(1, scientificForum.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            throw new DataNotWrittenException();
+        }
     }
 
     /**
