@@ -1,6 +1,7 @@
 package de.lases.global.transport;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Represents a field of expertise in science.
@@ -50,7 +51,7 @@ public class ScienceField implements Cloneable {
         if (this == object) return true;
 
         if (object instanceof ScienceField field) {
-            return this.name.equals(field.name);
+            return Objects.equals(name, field.name);
         } else {
             return false;
         }

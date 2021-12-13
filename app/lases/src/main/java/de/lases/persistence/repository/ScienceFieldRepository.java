@@ -2,8 +2,13 @@ package de.lases.persistence.repository;
 
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
+import de.lases.persistence.util.DatasourceUtil;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Offers get/add/remove operations on a science field and the
@@ -11,26 +16,7 @@ import java.util.List;
  */
 public class ScienceFieldRepository {
 
-    /**
-     * Takes a science field dto that is filled out with a valid id or a valid
-     * name and returns a fully filled science field dto.
-     *
-     * @param scienceField A ScienceField dto that must be filled with a valid
-     *                     id.
-     * @param transaction The transaction to use.
-     * @return A fully filled ScienceField dto.
-     * @throws NotFoundException If there is no science field with the provided
-     *                           id or name.
-     * @throws InvalidFieldsException If both name and id are provided, but they
-     *                                belong to two different science fields.
-     * @throws DatasourceQueryFailedException If the datasource cannot be
-     *                                        queried.
-     */
-    public static ScienceField get(ScienceField scienceField,
-                                   Transaction transaction)
-            throws NotFoundException{
-        return null;
-    }
+    private static final Logger logger = Logger.getLogger(ScienceField.class.getName());
 
     /**
      * Adds a science field to the repository.
@@ -38,6 +24,7 @@ public class ScienceFieldRepository {
      * @param scienceField A fully filled science field dto. (The id must not be
      *                     specified, as the repository will create the id)
      * @param transaction The transaction to use.
+     * @throws KeyExistsException If the provided science field already exists.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
      * @throws InvalidFieldsException If one of the fields of the science field
@@ -46,7 +33,33 @@ public class ScienceFieldRepository {
      *                                        queried.
      */
     public static void add(ScienceField scienceField, Transaction transaction)
-            throws DataNotWrittenException {
+            throws DataNotWrittenException, KeyExistsException {
+        Connection conn = transaction.getConnection();
+
+        if (scienceField.getName() == null) {
+            throw new InvalidFieldsException("The name of the science field must not be null");
+        }
+
+        String query = """
+                INSERT INTO science_field
+                VALUES (?)
+                """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, scienceField.getName());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            DatasourceUtil.logSQLException(e, logger);
+
+            // duplicate key value
+            if (e.getSQLState().equals("23505")) {
+                throw new KeyExistsException("This science field already exists.", e);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("Science field could not be added", e);
+            }
+        }
+
     }
 
     /**

@@ -115,7 +115,7 @@ public class PaperRepository {
 
         Integer id = null;
 
-        try{
+        try {
             PreparedStatement stmt = conn.prepareStatement("""
                     SELECT max(version) FROM paper WHERE submission_id = ?
                     """);
