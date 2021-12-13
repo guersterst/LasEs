@@ -10,7 +10,7 @@ import jakarta.faces.validator.ValidatorException;
  * Validator for email addresses that checks if the given email is a valid
  * email address.
  */
-@FacesValidator
+@FacesValidator("emailAddressLayout")
 public class EmailAddressLayoutValidator implements Validator<String> {
 
     /**
