@@ -48,20 +48,6 @@
                                      requiredMessage="#{message.lastNameRequired}" maxlength="#{Const.LAST_NAME_MAX}"
                                      styleClass="form-control"/>
                     </div>
-                    <!-- Password -->
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                <h:outputText value="#{labels['password']}"/>
-                            </span>
-                        </div>
-                        <h:inputSecret id="password-iscrt" value="#{registrationBacking.newUser.passwordNotHashed}"
-                                       title="#{help.password}" required="true"
-                                       requiredMessage="#{message.passwordNeeded}" styleClass="form-control">
-                            <f:validator for="password-iscrt" validatorId="passwordValidator"/>
-                        </h:inputSecret>
-                    </div>
-
                     <!-- Email -->
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -77,6 +63,20 @@
                             <f:validator for="email-itxt" validatorId="emailAddressLayoutValidator"/>
                         </h:inputText>
                     </div>
+                    <!-- Password -->
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <h:outputText value="#{labels['password']}"/>
+                            </span>
+                        </div>
+                        <h:inputSecret id="password-iscrt" value="#{registrationBacking.newUser.passwordNotHashed}"
+                                       title="#{help.password}" required="true"
+                                       requiredMessage="#{message.passwordNeeded}" styleClass="form-control">
+                            <f:validator for="password-iscrt" validatorId="passwordValidator"/>
+                        </h:inputSecret>
+                    </div>
+
                     <!-- Register button -->
                     <div>
                         <h:commandButton id="register-cbtn" value="#{labels.register}"

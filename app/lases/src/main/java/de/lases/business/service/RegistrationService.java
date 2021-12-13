@@ -10,6 +10,7 @@ import de.lases.global.transport.User;
 import de.lases.global.transport.Verification;
 import de.lases.persistence.exception.DataNotWrittenException;
 import de.lases.persistence.exception.EmailTransmissionFailedException;
+import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.repository.Transaction;
 import de.lases.persistence.repository.UserRepository;
 import jakarta.enterprise.context.Dependent;
@@ -72,6 +73,9 @@ public class RegistrationService {
             return null;
         }
 
+        user.setRegistered(true);
+        hashPassword(user);
+
         try {
             user = UserRepository.add(user, t);
             t.commit();
@@ -86,6 +90,14 @@ public class RegistrationService {
         verification.setNonVerifiedEmailAddress(user.getEmailAddress());
         verification.setValidationRandom(Hashing.generateRandomSalt());
         verification.setTimestampValidationStarted(LocalDateTime.now());
+
+        try {
+            UserRepository.setVerification(verification, t);
+            l.fine("Verification for user " + user.getId() + " created.");
+        } catch (NotFoundException e) {
+            l.severe("Could not upload verification for user " + user.getId() + ".");
+            uiMessageEvent.fire(new UIMessage(message.getString("registrationFailed"), MessageCategory.ERROR));
+        }
 
         String emailBody = message.getString("email.verification.body.0") + user.getFirstName()
                 + message.getString("email.verification.body.1") + verification.getValidationRandom();
@@ -102,7 +114,9 @@ public class RegistrationService {
         if (configPropagator.getProperty("DEBUG_AND_TEST_MODE").equalsIgnoreCase("true")) {
             msg += "\n" + verification.getValidationRandom();
         }
-        uiMessageEvent.fire(new UIMessage(message.getString(msg), MessageCategory.INFO));
+        uiMessageEvent.fire(new UIMessage(msg, MessageCategory.INFO));
+
+        l.info("User " + user.getEmailAddress() + " registered.");
 
         return user;
     }
@@ -126,8 +140,16 @@ public class RegistrationService {
 
     private boolean userSufficientlyFilled(User user) {
         return user.getEmailAddress() != null && !user.getEmailAddress().isEmpty()
-                && user.getPasswordHashed() != null && !user.getPasswordHashed().isEmpty()
+                && user.getPasswordNotHashed() != null && !user.getPasswordNotHashed().isEmpty()
                 && user.getFirstName() != null && !user.getFirstName().isEmpty()
                 && user.getLastName() != null && !user.getLastName().isEmpty();
+    }
+
+    private void hashPassword(User user) {
+        String salt = Hashing.generateRandomSalt();
+        String hashedPassword = Hashing.hashWithGivenSalt(user.getPasswordNotHashed(), salt);
+        user.setPasswordSalt(salt);
+        user.setPasswordNotHashed(null);
+        user.setPasswordHashed(hashedPassword);
     }
 }

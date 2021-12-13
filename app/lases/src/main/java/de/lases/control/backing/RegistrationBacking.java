@@ -45,7 +45,7 @@ public class RegistrationBacking {
      */
     public String register() {
         if (registrationService.selfRegister(newUser) != null) {
-            return "views/authenticated/welcome?faces-redirect=true";
+            return "/views/anonymous/welcome";
         } else {
             return null;
         }

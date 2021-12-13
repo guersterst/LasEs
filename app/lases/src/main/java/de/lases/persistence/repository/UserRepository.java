@@ -247,9 +247,9 @@ public class UserRepository {
             stmt.setString(1, user.getEmailAddress());
             stmt.setBoolean(2, user.isAdmin());
             stmt.setString(3, user.getFirstName());
-            stmt.setString(4, user.getFirstName());
-            stmt.setString(5, user.getLastName());
-            stmt.setString(6, user.getTitle());
+            stmt.setString(4, user.getLastName());
+            stmt.setString(5, user.getTitle());
+            stmt.setString(6, user.getEmployer());
 
             if (user.getDateOfBirth() != null) {
                 stmt.setDate(7, Date.valueOf(user.getDateOfBirth()));
@@ -359,7 +359,7 @@ public class UserRepository {
     public static void setVerification(Verification verification,
                                        Transaction transaction)
             throws NotFoundException {
-
+        // TODO: Implement this method
     }
 
     /**
