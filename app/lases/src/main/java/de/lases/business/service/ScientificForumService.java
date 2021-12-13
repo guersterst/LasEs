@@ -170,7 +170,7 @@ public class ScientificForumService implements Serializable {
                     + editor.getId());
         } catch (NotFoundException e) {
 
-            l.severe(e.getMessage() + "caused the operation to fail for: " + forum.getId());
+            l.severe(e.getMessage() + "\n Caused the operation to fail for: " + forum.getId());
             uiMessageEvent.fire(new UIMessage(message.getString("dataNotFound"), MessageCategory.ERROR));
         } catch (DataNotWrittenException e) {
 
@@ -203,7 +203,7 @@ public class ScientificForumService implements Serializable {
                     + forum.getId());
         } catch (NotFoundException e) {
 
-            l.severe(e.getMessage() + "caused the operation to fail for: " + forum.getId());
+            l.severe(e.getMessage() + "\n Caused the operation to fail for: " + forum.getId());
             uiMessageEvent.fire(new UIMessage(message.getString("dataNotFound"), MessageCategory.ERROR));
         } catch (DataNotWrittenException e) {
 
@@ -222,6 +222,29 @@ public class ScientificForumService implements Serializable {
      *                     containing a valid id
      */
     public void addScienceField(ScienceField scienceField, ScientificForum forum) {
+        if (forum.getId() == null || scienceField.getName() == null) {
+
+            l.severe("Must contain a forum id and sciencefield name to enter in a relationship");
+            throw new InvalidFieldsException();
+        }
+
+        Transaction transaction = new Transaction();
+        try {
+
+            ScientificForumRepository.addScienceField(forum, scienceField, transaction);
+            l.finest("Successfully added the forum: " + forum.getId() + " to the topic: "
+                    + scienceField.getName());
+        } catch (NotFoundException e) {
+
+            l.severe(e.getMessage() + " \n Caused the operation to fail for: " + forum.getId());
+            uiMessageEvent.fire(new UIMessage(message.getString("dataNotFound"), MessageCategory.ERROR));
+        } catch (DataNotWrittenException e) {
+
+            l.severe("A database error occurred and the operation could not be performed.");
+            uiMessageEvent.fire(new UIMessage(message.getString("dataNotWritten"), MessageCategory.ERROR));
+        } finally {
+            transaction.commit();
+        }
     }
 
     /**
@@ -229,12 +252,34 @@ public class ScientificForumService implements Serializable {
      *
      * @param scienceField    A {@link ScienceField} containing a valid id, which is removed
      *                        from the forum.
-     * @param scientificForum A {@link ScientificForum} from which the area of expertise e.g.
+     * @param forum A {@link ScientificForum} from which the area of expertise e.g.
      *                        {@code ScienceField} is being removed from. Should contain
      *                        a valid id.
      */
-    public void removeScienceField(ScienceField scienceField, ScientificForum scientificForum) {
+    public void removeScienceField(ScienceField scienceField, ScientificForum forum) {
+        if (forum.getId() == null || scienceField.getName() == null) {
 
+            l.severe("Must contain a forum id and sciencefield name to enter in a relationship");
+            throw new InvalidFieldsException();
+        }
+
+        Transaction transaction = new Transaction();
+        try {
+
+            ScientificForumRepository.removeScienceField(forum, scienceField, transaction);
+            l.finest("Successfully removed the topic: " + scienceField.getName() + " from the forum: "
+                    + forum.getId());
+        } catch (NotFoundException e) {
+
+            l.severe(e.getMessage() + "\n Caused the operation to fail for: " + forum.getId());
+            uiMessageEvent.fire(new UIMessage(message.getString("dataNotFound"), MessageCategory.ERROR));
+        } catch (DataNotWrittenException e) {
+
+            l.severe("A database error occurred and the operation could not be performed.");
+            uiMessageEvent.fire(new UIMessage(message.getString("dataNotWritten"), MessageCategory.ERROR));
+        } finally {
+            transaction.commit();
+        }
     }
 
     /**
