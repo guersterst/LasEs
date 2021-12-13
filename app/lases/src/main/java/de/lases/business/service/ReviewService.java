@@ -9,13 +9,14 @@ import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.enterprise.inject.spi.CDI;
-import jakarta.faces.component.UIMessage;
 import jakarta.inject.Inject;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PropertyResourceBundle;
+import java.util.logging.Logger;
 
 /**
  * Provides functionality for dealing with reviews of submission papers.
@@ -32,6 +33,11 @@ public class ReviewService implements Serializable {
 
     @Inject
     private ReviewRepository reviewRepository;
+
+    @Inject
+    private transient PropertyResourceBundle resourceBundle;
+
+    private static final Logger logger = Logger.getLogger(PaperService.class.getName());
 
     /**
      * Gets a {@link Review}.
@@ -142,6 +148,29 @@ public class ReviewService implements Serializable {
      * @return The requested {@code File}.
      */
     public FileDTO getFile(Review review) {
-        return null;
+        if (review == null) {
+            logger.severe("This review is not valid. Therefore no file dto can be queried.");
+            throw new IllegalArgumentException(resourceBundle.getString("idMissing"));
+        } else {
+            Transaction transaction = new Transaction();
+            FileDTO file = null;
+            try {
+                file = ReviewRepository.getPDF(review, transaction);
+                transaction.commit();
+            }  catch (NotFoundException exception) {
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewNotFound"), MessageCategory.ERROR));
+                logger.fine("Error while loading a file of a review with the submission id: " + review.getSubmissionId()
+                        + " and version number: " + review.getPaperVersion() + "and reviewer id: " + review.getReviewerId());
+                transaction.abort();
+            }
+
+            if (file == null) {
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewNotFound"), MessageCategory.ERROR));
+                logger.severe("No file gotten for review: " + review.getSubmissionId()
+                        + " and version number: " + review.getPaperVersion() + "and reviewer id: " + review.getReviewerId());
+            }
+
+            return file;
+        }
     }
 }

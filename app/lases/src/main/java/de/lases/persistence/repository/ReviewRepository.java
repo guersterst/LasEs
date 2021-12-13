@@ -3,6 +3,7 @@ package de.lases.persistence.repository;
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
 import de.lases.persistence.internal.ConfigReader;
+import de.lases.persistence.util.DatasourceUtil;
 import jakarta.enterprise.inject.spi.CDI;
 
 import java.sql.Connection;
@@ -324,9 +325,42 @@ public class ReviewRepository {
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
-    public static FileDTO getPDF(Paper review, Transaction transaction)
+    public static FileDTO getPDF(Review review, Transaction transaction)
             throws NotFoundException {
-        return null;
+        if (review == null) {
+            logger.severe("Invalid review dto id when tried to get file.");
+            throw new InvalidFieldsException("The review dto must not be null.");
+        }
+        Connection connection = transaction.getConnection();
+        try {
+            PreparedStatement statement = connection.prepareStatement(
+                    """
+                            SELECT pdf_file
+                            FROM review
+                            WHERE version = ? AND submission_id = ? AND reviewer_id = ?
+                            """
+            );
+            statement.setInt(1, review.getPaperVersion());
+            statement.setInt(2, review.getSubmissionId());
+            statement.setInt(3, review.getReviewerId());
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                FileDTO file = new FileDTO();
+                file.setFile(resultSet.getBytes("pdf_file"));
+                return file;
+
+            } else {
+                logger.fine("Loading paper with the submission id: " + review.getSubmissionId()
+                        + " and version number: " + review.getPaperVersion() + "and author: " + review.getReviewerId());
+                throw new NotFoundException();
+            }
+
+        } catch (SQLException exception) {
+            DatasourceUtil.logSQLException(exception, logger);
+            throw new DatasourceQueryFailedException("A datasource exception occurred while loading a file.", exception);
+        }
     }
 
     /**

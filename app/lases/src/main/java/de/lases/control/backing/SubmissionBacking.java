@@ -229,6 +229,34 @@ public class SubmissionBacking implements Serializable {
      * @throws IOException If the download fails.
      */
     public void downloadReview(Review review) throws IOException {
+        FileDTO file = reviewService.getFile(review);
+        byte[] pdf = file.getFile();
+
+        if (pdf == null) {
+            // Error occured and a message event has been fired by the service.
+            return;
+        }
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(pdf.length);
+        baos.write(pdf, 0, pdf.length);
+
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+
+        HttpServletResponse response = (HttpServletResponse) facesContext.getExternalContext().getResponse();
+        response.setContentType(submission.getTitle() + "/pdf");
+        response.setContentLength(pdf.length);
+        response.setHeader("Content-disposition", "attachment;filename=review_" + getReviewerForReview(review).getLastName() + "_" + submission.getTitle() + ".pdf");
+
+        try {
+            ServletOutputStream outputStream = response.getOutputStream();
+            baos.writeTo(outputStream);
+            outputStream.flush();
+            response.flushBuffer();
+        } catch (IOException exception) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("failedDownload"), MessageCategory.WARNING));
+        }
+
+        facesContext.responseComplete();
     }
 
     /**
