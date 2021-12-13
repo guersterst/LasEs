@@ -86,7 +86,7 @@
                                             <div class="form-group">
                                                 <h:selectOneMenu styleClass="btn btn-primary" id="state-slctom"
                                                                  value="#{submissionBacking.submission.state}"
-                                                                 disabled="#{not submissionBacking.loggedInUserIsEditor()}">
+                                                                 disabled="#{not (submissionBacking.loggedInUserIsEditor() || submissionBacking.admin)}">
                                                     <f:selectItems value="#{submissionBacking.submissionStates}" var="select"
                                                                    itemLabel="#{labels['subStateSelect.' += select]}"
                                                                    itemValue="#{select}"/>
@@ -170,7 +170,7 @@
                                         <h:selectOneMenu id="release-revision-slctom" styleClass="btn-secondary"
                                                          value="#{submissionBacking.paperPagination.resultListParameters.visibleFilter}"
                                                          title="#{help.filterRelease}"
-                                                         disabled="#{ not submissionBacking.loggedInUserIsEditor()}">
+                                                         disabled="#{not submissionBacking.loggedInUserIsEditor()}">
                                             <f:selectItems var="visible" itemValue="#{visible.visibility}" itemLabel="#{labels['visibility.' += visible]}"/>
                                         </h:selectOneMenu>
                                     </div>

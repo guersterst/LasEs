@@ -390,12 +390,12 @@ public class PaperRepository {
         // Filter according to visibility.
         if (parameters.getVisibleFilter() != Visibility.ALL) {
             if (parameters.getVisibleFilter() == Visibility.NOT_RELEASED
-                    && (privilege == Privilege.ADMIN || privilege == Privilege.EDITOR)) {
+                    && !(privilege == Privilege.REVIEWER)) {
                 stringBuilder.append(" AND p.is_visible = FALSE ");
             } else if (parameters.getVisibleFilter() == Visibility.RELEASED) {
                 stringBuilder.append(" AND p.is_visible = TRUE ");
             }
-        } else if (!(privilege == Privilege.ADMIN || privilege == Privilege.EDITOR)) {
+        } else if (privilege == Privilege.REVIEWER) {
             stringBuilder.append(" AND p.is_visible = TRUE ");
         }
 

@@ -359,7 +359,7 @@ public class SubmissionBacking implements Serializable {
 
             Submission newSubmission = submission.clone();
             newSubmission.setState(SubmissionState.SUBMITTED);
-            newSubmission.setRevisionRequired(false);
+            newSubmission.setRevisionRequired(newSubmission.getState() == SubmissionState.REVISION_REQUIRED);
 
             submissionService.change(newSubmission);
 
