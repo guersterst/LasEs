@@ -127,7 +127,7 @@ public class SubmissionBacking implements Serializable {
         paperPagination = new Pagination<>("version") {
             @Override
             public void loadData() {
-               setEntries(paperService.getList(submission, author, getResultListParameters()));
+               setEntries(paperService.getList(submission, sessionInformation.getUser(), getResultListParameters()));
                 }
 
             @Override
@@ -184,6 +184,8 @@ public class SubmissionBacking implements Serializable {
         scientificForum = scientificForumService.get(scientificForum);
 
         coAuthors = userService.getList(submission, Privilege.AUTHOR);
+
+        coAuthors.removeIf(user -> user.getId().equals(author.getId()));
 
         paperPagination.loadData();
 

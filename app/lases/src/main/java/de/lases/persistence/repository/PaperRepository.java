@@ -304,7 +304,7 @@ public class PaperRepository {
         ResultSet resultSet;
 
         //Privilege of the given user in this submission
-        Privilege privilege;
+        Privilege privilege = null;
         if (user.isAdmin()) {
             privilege = Privilege.ADMIN;
         } else if (user.getId() == submission.getEditorId()) {
@@ -312,8 +312,18 @@ public class PaperRepository {
         } else if (user.getId() == submission.getAuthorId()) {
             privilege = Privilege.AUTHOR;
         } else {
-            //Has no matching privileges.
-            return paperList;
+            List<User> reviewers = UserRepository.getList(transaction, submission, Privilege.REVIEWER);
+            for (User reviewer : reviewers) {
+                if (reviewer.getId().equals(user.getId())) {
+                    privilege = Privilege.REVIEWER;
+                }
+            }
+
+            if (privilege == null) {
+                //Has no matching privileges.
+                return paperList;
+            }
+
         }
 
         String sqlStatment = switch (privilege) {
@@ -327,6 +337,12 @@ public class PaperRepository {
                     WHERE s.id = ? 
                     AND s.editor_id = ?
                     AND p.submission_id = s.id
+                    """;
+            case REVIEWER -> """
+                    SELECT p.* FROM paper p, submission s , reviewed_by r
+                    WHERE s.id = ?
+                    AND r.reviewer_id = ?
+                    AND s.id = r.submission_id
                     """;
             default -> """
                     SELECT p.* FROM paper p, submission s
@@ -345,9 +361,10 @@ public class PaperRepository {
 
             if (privilege == Privilege.EDITOR) {
                 statement.setInt(2, submission.getEditorId());
-            }
-            if (privilege == Privilege.AUTHOR) {
+            }else if (privilege == Privilege.AUTHOR) {
                 statement.setInt(2, submission.getAuthorId());
+            } else if (privilege == Privilege.REVIEWER) {
+                statement.setInt(2, user.getId());
             }
 
 
@@ -386,14 +403,12 @@ public class PaperRepository {
         StringBuilder stringBuilder = new StringBuilder();
 
         // Filter according to visibility.
-        if (parameters.getVisibleFilter() != Visibility.ALL) {
-            if (parameters.getVisibleFilter() == Visibility.NOT_RELEASED
-                    && !(privilege == Privilege.REVIEWER)) {
-                stringBuilder.append(" AND p.is_visible = FALSE ");
-            } else if (parameters.getVisibleFilter() == Visibility.RELEASED) {
-                stringBuilder.append(" AND p.is_visible = TRUE ");
-            }
-        } else if (privilege == Privilege.REVIEWER) {
+        if ((parameters.getVisibleFilter() == Visibility.ALL || parameters.getVisibleFilter() == null) && privilege == Privilege.REVIEWER) {
+            stringBuilder.append(" AND p.is_visible = TRUE ");
+        } else if (parameters.getVisibleFilter() == Visibility.NOT_RELEASED
+                && !(privilege == Privilege.REVIEWER)) {
+            stringBuilder.append(" AND p.is_visible = FALSE ");
+        } else if (parameters.getVisibleFilter() == Visibility.RELEASED) {
             stringBuilder.append(" AND p.is_visible = TRUE ");
         }
 
