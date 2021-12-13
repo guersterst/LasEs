@@ -255,7 +255,7 @@
                                                                       paginator="#{submissionBacking.reviewPagination}"
                                                                       columnNamei18n="#{labels.versionCol}"/>
                                             </f:facet>
-                                            <h:outputText id="version-review-otxt" value="#{var.versionNumber}"/>
+                                            <h:outputText id="version-review-otxt" value="#{var.paperVersion}"/>
                                         </h:column>
 
                                         <!-- Reviewer Lastname -->
@@ -266,7 +266,7 @@
                                                                       columnNamei18n="#{labels.reviewer}"/>
                                             </f:facet>
                                             <h:link value="#{submissionBacking.getReviewerForReview(var).lastName}"
-                                                    outcome="#{'/authenticated/profile?id='.concat(submissionBacking.getReviewerForReview(var).id)}"/>
+                                                    outcome="#{'/views/authenticated/profile.xhtml?id='.concat(submissionBacking.getReviewerForReview(var).id)}"/>
                                         </h:column>
 
                                         <!--Upload Timestamp-->
@@ -301,7 +301,9 @@
                                                     <h:commandLink id="recommended-state-review-col" value="#{labels.recommended}" action="#{submissionBacking.reviewPagination.sortBy('is_recommended')}" styleClass="input-group-text"/>
                                                 </div>
                                             </f:facet>
-                                            <h:selectBooleanCheckbox id="cbx-is-recommended" value="#{var.acceptPaper}" readonly="true"/>
+                                            <div class="checkbox">
+                                                <h:selectBooleanCheckbox id="cbx-is-recommended" styleClass="recomm-cbx" value="#{var.acceptPaper}" disabled="true" style="width: 1.5rem; height: 1.5rem;"/>
+                                            </div>
                                         </h:column>
 
                                         <!--comment-->

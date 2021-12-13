@@ -1,6 +1,8 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.*;
+import de.lases.persistence.exception.DataNotCompleteException;
+import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.repository.ReviewRepository;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
@@ -10,6 +12,7 @@ import jakarta.inject.Inject;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -80,8 +83,8 @@ public class ReviewService implements Serializable {
      *
      * @param review The {@code Review} that is to be removed. Must be filled with a valid
      *               reviewerId, paperId and submissionId.
-     * @param user The {@link User} who removes the {@code Review}.
-     *             Must contain a valid id.
+     * @param user   The {@link User} who removes the {@code Review}.
+     *               Must contain a valid id.
      */
     public void remove(Review review, User user) {
     }
@@ -98,7 +101,17 @@ public class ReviewService implements Serializable {
      */
     public List<Review> getList(Submission submission, User user,
                                 ResultListParameters resultListParameters) {
-        return null;
+        Transaction transaction = new Transaction();
+        try {
+            return ReviewRepository.getList(submission, user, transaction, resultListParameters);
+        } catch (DataNotCompleteException e) {
+            e.printStackTrace();
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            transaction.commit();
+        }
+        return new ArrayList<>();
     }
 
     /**

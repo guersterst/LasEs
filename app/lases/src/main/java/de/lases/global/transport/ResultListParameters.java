@@ -21,7 +21,7 @@ public class ResultListParameters {
 
     private Visibility visibleFilter;
 
-    private Recommendation recommendedFilter;
+    private Recommendation recommendedFilter = Recommendation.ALL;
 
     private int pageNo;
 

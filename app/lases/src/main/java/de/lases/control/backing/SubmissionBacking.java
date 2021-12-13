@@ -143,7 +143,7 @@ public class SubmissionBacking implements Serializable {
         reviewPagination = new Pagination<Review>("version") {
             @Override
             public void loadData() {
-
+                reviewPagination.setEntries(reviewService.getList(submission, sessionInformation.getUser(), reviewPagination.getResultListParameters()));
             }
 
             @Override
