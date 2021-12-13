@@ -4,10 +4,11 @@ import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
 import de.lases.persistence.util.DatasourceUtil;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -69,8 +70,6 @@ public class ScienceFieldRepository {
      * @param scienceField The science field to remove. Must be filled with a
      *                     valid name.
      * @param transaction The transaction to use.
-     * @throws NotFoundException The specified science field was not found in
-     *                           the repository.
      * @throws DataNotWrittenException If writing the data to the repository
      *                                 fails.
      * @throws DatasourceQueryFailedException If the datasource cannot be
@@ -94,8 +93,6 @@ public class ScienceFieldRepository {
             stmt.executeUpdate();
         } catch (SQLException e) {
             DatasourceUtil.logSQLException(e, logger);
-
-            // TODO: Wann not found Exception werfen?
             transaction.abort();
             throw new DatasourceQueryFailedException("Science field could not be added", e);
         }
@@ -104,43 +101,78 @@ public class ScienceFieldRepository {
 
     /**
      * Gets a list all science fields that belong to the specified scientific
-     * forum.
+     * forum. Note: To filter the list of science fields, please use the global search word. The filterColumns map will
+     * be ignored, since the science field table contains only one column.
      *
      * @param forum A {@code ScientificForum} dto with a valid id.
      * @param transaction The transaction to use.
      * @param resultListParameters The ResultListParameters dto that results
      *                             parameters from the pagination like
-     *                             filtering, sorting or number of elements.
+     *                             filtering, sorting or number of elements. To filter the list of science fields,
+     *                             please use the global search word. The filterColumns map will be ignored, since
+     *                             the science field table contains only one column.
      * @return A list of fully filled science field dtos for all reviews that
      *         belong to the specified submission.
      * @throws DataNotCompleteException If the list is truncated.
-     * @throws NotFoundException If there is no scientific forum with the provided
-     *                           id.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      * @throws InvalidQueryParamsException If the resultListParameters contain
      *                                     an erroneous option.
      */
-    public static List<ScienceField> getList(ScientificForum forum,
-                                             Transaction transaction,
-                                             ResultListParameters
-                                                     resultListParameters)
-            throws DataNotCompleteException, NotFoundException {
-        return null;
+    public static List<ScienceField> getList(ScientificForum forum, Transaction transaction,
+                                             ResultListParameters resultListParameters)
+            throws DataNotCompleteException {
+        Connection conn = transaction.getConnection();
+
+        if (forum.getId() == null) {
+            throw new InvalidFieldsException("The id of the forum must not be null");
+        }
+
+        String query = """
+                SELECT science_field_name FROM topics
+                WHERE scientific_forum_id = ?
+                AND science_field_name ILIKE ?
+                """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, forum.getId());
+            stmt.setString(2,
+                    "%" + Objects.requireNonNullElse(resultListParameters.getGlobalSearchWord(), "") + "%");
+            ResultSet set = stmt.executeQuery();
+
+            List<ScienceField> scienceFields = new ArrayList<>();
+            while (set.next()) {
+                ScienceField scienceField = new ScienceField();
+                scienceField.setName(set.getString(1));
+                scienceFields.add(scienceField);
+            }
+
+            set.close();
+            return scienceFields;
+        } catch (SQLException e) {
+            DatasourceUtil.logSQLException(e, logger);
+
+            // TODO: DataNotCompleteException wann?
+            transaction.abort();
+            throw new DatasourceQueryFailedException("Science field could not be added", e);
+        }
     }
 
     /**
-     * Gets a list all science fields that belong to the specified user.
+     * Gets a list all science fields that belong to the specified user. Note: To filter the list of science fields,
+     * please use the global search word. The filterColumns map will
+     * be ignored, since the science field table contains only one column.
      *
      * @param user A {@code User} dto with a valid id.
      * @param transaction The transaction to use.
      * @param resultListParameters The ResultListParameters dto that results
      *                             parameters from the pagination like
-     *                             filtering, sorting or number of elements.
+     *                             filtering, sorting or number of elements. To filter the list of science fields,
+     *                             please use the global search word. The filterColumns map will be ignored, since
+     *                             the science field table contains only one column.
      * @return A list of fully filled science field dtos for all reviews that
      *         belong to the specified user.
      * @throws DataNotCompleteException If the list is truncated.
-     * @throws NotFoundException If there is no user with the provided id.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      * @throws InvalidQueryParamsException If the resultListParameters contain
@@ -149,17 +181,54 @@ public class ScienceFieldRepository {
     public static List<ScienceField> getList(User user, Transaction transaction,
                                              ResultListParameters
                                                      resultListParameters)
-            throws DataNotCompleteException, NotFoundException {
-        return null;
+            throws DataNotCompleteException {
+        Connection conn = transaction.getConnection();
+
+        if (user.getId() == null) {
+            throw new InvalidFieldsException("The id of the forum must not be null");
+        }
+
+        String query = """
+                SELECT science_field_name FROM interests
+                WHERE user_id = ?
+                AND science_field_name ILIKE ?
+                """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, user.getId());
+            stmt.setString(2,
+                    "%" + Objects.requireNonNullElse(resultListParameters.getGlobalSearchWord(), "") + "%");
+            ResultSet set = stmt.executeQuery();
+
+            List<ScienceField> scienceFields = new ArrayList<>();
+            while (set.next()) {
+                ScienceField scienceField = new ScienceField();
+                scienceField.setName(set.getString(1));
+                scienceFields.add(scienceField);
+            }
+
+            set.close();
+            return scienceFields;
+        } catch (SQLException e) {
+            DatasourceUtil.logSQLException(e, logger);
+
+            // TODO: DataNotCompleteException wann?
+            transaction.abort();
+            throw new DatasourceQueryFailedException("Science field could not be added", e);
+        }
     }
 
     /**
-     * Gets a list all science fields.
+     * Gets a list all science fields. Note: To filter the list of science fields,
+     * please use the global search word. The filterColumns map will
+     * be ignored, since the science field table contains only one column.
      *
      * @param transaction The transaction to use.
      * @param resultListParameters The ResultListParameters dto that results
      *                             parameters from the pagination like
-     *                             filtering, sorting or number of elements.
+     *                             filtering, sorting or number of elements. To filter the list of science fields,
+     *                             please use the global search word. The filterColumns map will be ignored, since
+     *                             the science field table contains only one column.
      * @return A list of fully filled science field dtos.
      * @throws DataNotCompleteException If the list is truncated.
      * @throws DatasourceQueryFailedException If the datasource cannot be
@@ -167,11 +236,36 @@ public class ScienceFieldRepository {
      * @throws InvalidQueryParamsException If the resultListParameters contain
      *                                     an erroneous option.
      */
-    public static List<ScienceField> getList(Transaction transaction,
-                                             ResultListParameters
-                                                     resultListParameters)
+    public static List<ScienceField> getList(Transaction transaction, ResultListParameters resultListParameters)
             throws DataNotCompleteException {
-        return null;
+        Connection conn = transaction.getConnection();
+
+        String query = """
+                SELECT name FROM science_field
+                WHERE name ILIKE ?
+                """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1,
+                    "%" + Objects.requireNonNullElse(resultListParameters.getGlobalSearchWord(), "") + "%");
+            ResultSet set = stmt.executeQuery();
+
+            List<ScienceField> scienceFields = new ArrayList<>();
+            while (set.next()) {
+                ScienceField scienceField = new ScienceField();
+                scienceField.setName(set.getString(1));
+                scienceFields.add(scienceField);
+            }
+
+            set.close();
+            return scienceFields;
+        } catch (SQLException e) {
+            DatasourceUtil.logSQLException(e, logger);
+
+            // TODO: DataNotCompleteException wann?
+            transaction.abort();
+            throw new DatasourceQueryFailedException("Science field could not be added", e);
+        }
     }
 
     /**
