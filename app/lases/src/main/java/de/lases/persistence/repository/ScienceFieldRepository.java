@@ -136,6 +136,7 @@ public class ScienceFieldRepository {
                                              ResultListParameters
                                                      resultListParameters)
             throws DataNotCompleteException {
+        //TODO: Do we allow resultListParams a null, if we want an unfiltered result? Please confirm with @Johannes
         return null;
     }
 

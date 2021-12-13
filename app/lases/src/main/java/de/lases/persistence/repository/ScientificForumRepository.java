@@ -118,17 +118,7 @@ public class ScientificForumRepository {
             preparedStatement.setString(2, scientificForum.getName());
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            if (resultSet.next()) {
-                if (resultSet.next()) {
-
-                    // There must not be two results of this query.
-                    throw new InvalidFieldsException();
-                } else {
-                    return true;
-                }
-            } else {
-                return false;
-            }
+            return resultSet.next();
         } catch (SQLException e) {
             throw new DatasourceQueryFailedException(e.getMessage(), e);
         }
@@ -300,7 +290,7 @@ public class ScientificForumRepository {
             throws NotFoundException, DataNotWrittenException {
         if (editor.getId() == null || scientificForum.getId() == null) {
             throw new InvalidFieldsException();
-        } else if (!exists(scientificForum, transaction)) {
+        } else if (!exists(scientificForum, transaction) || !userExists(editor, transaction)) {
             throw new NotFoundException();
         }
 
@@ -315,6 +305,26 @@ public class ScientificForumRepository {
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             throw new DatasourceQueryFailedException();
+        }
+    }
+
+    // TODO move to UserRepo
+    private static boolean userExists(User user, Transaction transaction) {
+        if (user.getId() == null ) {
+            throw new InvalidFieldsException();
+        }
+
+        String sql = """
+                SELECT id 
+                FROM "user" 
+                WHERE id=?
+                """;
+
+        try (PreparedStatement preparedStatement = transaction.getConnection().prepareStatement(sql)) {
+            preparedStatement.setInt(1, user.getId());
+            return preparedStatement.executeQuery().next();
+        } catch (SQLException e) {
+            throw new DatasourceQueryFailedException(e.getMessage(), e);
         }
     }
 
@@ -336,6 +346,45 @@ public class ScientificForumRepository {
                                        ScienceField scienceField,
                                        Transaction transaction)
             throws NotFoundException, DataNotWrittenException {
+        if (scientificForum.getId() == null || scienceField.getName() == null) {
+            throw new InvalidFieldsException();
+        } else if (!exists(scientificForum, transaction) ||  !scienceFieldExists(scienceField, transaction)) {
+            throw new NotFoundException();
+        }
+
+        String sql = """
+                INSERT INTO topics (science_field_name, scientific_forum_id)
+                VALUES (?, ?)
+                """;
+
+        try (PreparedStatement preparedStatement = transaction.getConnection().prepareStatement(sql)) {
+            preparedStatement.setString(1, scientificForum.getName());
+            preparedStatement.setInt(2, scientificForum.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            throw new DatasourceQueryFailedException();
+        }
+    }
+
+    // TODO move to ScienceFieldRepo
+    private static boolean scienceFieldExists(ScienceField scienceField, Transaction transaction) {
+        if (scienceField.getName() == null ) {
+            throw new InvalidFieldsException();
+        }
+
+        String sql = """
+                SELECT id 
+                FROM science_field 
+                WHERE name=?
+                """;
+
+        try (PreparedStatement preparedStatement = transaction.getConnection().prepareStatement(sql)) {
+            preparedStatement.setString(1, scienceField.getName());
+            return preparedStatement.executeQuery().next();
+        } catch (SQLException e) {
+            throw new DatasourceQueryFailedException(e.getMessage(), e);
+        }
+
     }
 
     /**
