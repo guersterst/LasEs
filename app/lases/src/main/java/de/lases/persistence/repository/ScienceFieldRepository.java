@@ -63,11 +63,11 @@ public class ScienceFieldRepository {
     }
 
     /**
-     * Takes a science field dto that is filled with a valid id and removes
+     * Takes a science field dto that is filled with a valid name and removes
      * this science field from the repository.
      *
      * @param scienceField The science field to remove. Must be filled with a
-     *                     valid id.
+     *                     valid name.
      * @param transaction The transaction to use.
      * @throws NotFoundException The specified science field was not found in
      *                           the repository.
@@ -78,6 +78,28 @@ public class ScienceFieldRepository {
      */
     public static void remove(ScienceField scienceField, Transaction transaction)
             throws NotFoundException, DataNotWrittenException {
+        Connection conn = transaction.getConnection();
+
+        if (scienceField.getName() == null) {
+            throw new InvalidFieldsException("The name of the science field must not be null");
+        }
+
+        String query = """
+                DELETE FROM science_field
+                WHERE name = ?
+                """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, scienceField.getName());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            DatasourceUtil.logSQLException(e, logger);
+
+            // TODO: Wann not found Exception werfen?
+            transaction.abort();
+            throw new DatasourceQueryFailedException("Science field could not be added", e);
+        }
+
     }
 
     /**
