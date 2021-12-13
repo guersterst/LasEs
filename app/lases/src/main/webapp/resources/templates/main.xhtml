@@ -30,9 +30,10 @@
                 <ui:include src="navigation.xhtml"></ui:include>
             </ui:insert>
         </div>
-        
+
         <!--Includes content for default-->
         <div id="content">
+            <h:messages globalOnly="true"/>
             <ui:insert name="content">
                 <ui:include src="content.xhtml"></ui:include>
             </ui:insert>
