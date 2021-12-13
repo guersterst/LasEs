@@ -101,25 +101,25 @@ public class ReviewRepository {
      * specified user can see. (An editor can see everything, the submitter
      * can view see all visible reviews, a reviewer his own reviews.)
      *
-     * @param submission A submission dto filled with a valid id.
-     * @param user A user dto filled with a valid id.
-     * @param transaction The transaction to use.
+     * @param submission           A submission dto filled with a valid id.
+     * @param user                 A user dto filled with a valid id.
+     * @param transaction          The transaction to use.
      * @param resultListParameters The ResultListParameters dto that results
      *                             parameters from the pagination like
      *                             filtering, sorting or number of elements.
      * @return A list of fully filled review dtos for all reviews that belong
-     *         to the specified submission and the specified user can see.
-     * @throws DataNotCompleteException If the list is truncated.
-     * @throws NotFoundException If there is no submission with the provided id
-     *                           or there is no user with the provided id.
+     * to the specified submission and the specified user can see.
+     * @throws DataNotCompleteException       If the list is truncated.
+     * @throws NotFoundException              If there is no submission with the provided id
+     *                                        or there is no user with the provided id.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
-     * @throws InvalidQueryParamsException If the resultListParameters contain
-     *                                     an erroneous option.
+     * @throws InvalidQueryParamsException    If the resultListParameters contain
+     *                                        an erroneous option.
      */
     public static List<Review> getList(Submission submission, User user,
-                               Transaction transaction,
-                               ResultListParameters resultListParameters)
+                                       Transaction transaction,
+                                       ResultListParameters resultListParameters)
             throws DataNotCompleteException, NotFoundException {
         if (transaction == null) {
             logger.severe("Passed transaction is null.");
@@ -142,46 +142,51 @@ public class ReviewRepository {
         ResultSet resultSet;
         List<Review> reviewList = new ArrayList<>();
 
-        // Case Editor or Admin
-        if (user.isAdmin() || submission.getEditorId() == user.getId()) {
-            try (PreparedStatement ps = conn.prepareStatement(getStatementReviewListForEditor(resultListParameters, false))) {
-
-                int i = 1;
-                if (isFilled(resultListParameters.getFilterColumns().get("version"))) {
-                    ps.setString(i, "%" + resultListParameters.getFilterColumns().get("version") + "%");
-                    i++;
-                }
-                if (isFilled(resultListParameters.getFilterColumns().get("lastname"))) {
-                    ps.setString(i, "%" + resultListParameters.getFilterColumns().get("lastname") + "%");
-                    i++;
-                }
-                if (isFilled(resultListParameters.getFilterColumns().get("comment"))) {
-                    ps.setString(i, "%" + resultListParameters.getFilterColumns().get("comment") + "%");
-                }
-
-                resultSet = ps.executeQuery();
-
-                while (resultSet.next()) {
-                    Review review = new Review();
-                    review.setSubmissionId(resultSet.getInt("submission_id"));
-                    review.setPaperVersion(resultSet.getInt("version"));
-                    review.setReviewerId(resultSet.getInt("reviewer_id"));
-                    java.sql.Timestamp timestamp = resultSet.getTimestamp("timestamp_upload");
-                    if (timestamp != null) {
-                        review.setUploadTime(timestamp.toLocalDateTime());
-                    }
-                    review.setVisible(resultSet.getBoolean("is_visible"));
-                    review.setAcceptPaper(resultSet.getBoolean("is_recommended"));
-                    review.setComment(resultSet.getString("comment"));
-
-                    reviewList.add(review);
-                }
-            } catch (SQLException e) {
-                logger.severe(e.getMessage());
-                throw new DatasourceQueryFailedException(e.getMessage(), e);
+        // Get all first.
+        try (PreparedStatement ps = conn.prepareStatement(getStatementReviewListForEditor(resultListParameters, false))) {
+            int i = 1;
+            if (isFilled(resultListParameters.getFilterColumns().get("version"))) {
+                ps.setString(i, "%" + resultListParameters.getFilterColumns().get("version") + "%");
+                i++;
             }
+            if (isFilled(resultListParameters.getFilterColumns().get("lastname"))) {
+                ps.setString(i, "%" + resultListParameters.getFilterColumns().get("lastname") + "%");
+                i++;
+            }
+            if (isFilled(resultListParameters.getFilterColumns().get("comment"))) {
+                ps.setString(i, "%" + resultListParameters.getFilterColumns().get("comment") + "%");
+            }
+
+            resultSet = ps.executeQuery();
+
+            while (resultSet.next()) {
+                Review review = new Review();
+                review.setSubmissionId(resultSet.getInt("submission_id"));
+                review.setPaperVersion(resultSet.getInt("version"));
+                review.setReviewerId(resultSet.getInt("reviewer_id"));
+                java.sql.Timestamp timestamp = resultSet.getTimestamp("timestamp_upload");
+                if (timestamp != null) {
+                    review.setUploadTime(timestamp.toLocalDateTime());
+                }
+                review.setVisible(resultSet.getBoolean("is_visible"));
+                review.setAcceptPaper(resultSet.getBoolean("is_recommended"));
+                review.setComment(resultSet.getString("comment"));
+
+                reviewList.add(review);
+            }
+        } catch (SQLException e) {
+            logger.severe(e.getMessage());
+            throw new DatasourceQueryFailedException(e.getMessage(), e);
         }
-        return reviewList;
+
+        // Filter in Java.
+        if (user.isAdmin() || submission.getEditorId() == user.getId()) {
+            return reviewList;
+        } else if (submission.getAuthorId() == user.getId()) {
+            return reviewList.stream().filter(Review::isVisible).toList();
+        } else {
+            return reviewList.stream().filter(review -> review.getReviewerId() == user.getId()).toList();
+        }
     }
 
     public static int getCountItemsList(Submission submission, User user,
