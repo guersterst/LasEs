@@ -15,6 +15,7 @@ import java.util.logging.Logger;
  * possibility to get lists of scientific forums.
  *
  * @author Thomas Kirz
+ * @author Johannes Garstenauer
  */
 public class ScientificForumRepository {
 
@@ -98,7 +99,36 @@ public class ScientificForumRepository {
      */
     public static boolean exists(ScientificForum scientificForum,
                                  Transaction transaction) {
-        return false;
+        if (scientificForum.getId() == null && scientificForum.getName() == null) {
+            throw new IllegalArgumentException();
+        }
+
+        String sql = """
+                SELECT id 
+                FROM scientific_forum 
+                WHERE id=?
+                OR name =?
+                """;
+
+        try (PreparedStatement preparedStatement = transaction.getConnection().prepareStatement(sql)) {
+            preparedStatement.setInt(1, scientificForum.getId());
+            preparedStatement.setString(2, scientificForum.getName());
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                if (resultSet.next()) {
+
+                    // There must not be two results of this query.
+                    throw new InvalidFieldsException();
+                } else {
+                    return true;
+                }
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            throw new DatasourceQueryFailedException(e.getMessage(), e);
+        }
     }
 
     /**
