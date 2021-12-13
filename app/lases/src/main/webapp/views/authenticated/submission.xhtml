@@ -208,7 +208,7 @@
                                             <h:commandButton id="release-revision-cbtn" styleClass="btn btn-primary"
                                                              value="#{var.visible == true? labels.released : labels.notReleased}"
                                                              action="#{submissionBacking.releaseRevision(var)}"
-                                                             title="#{help.releaseBtn}" disabled="#{submissionBacking.isViewerSubmitter()}"/>
+                                                             title="#{help.releaseBtn}" disabled="#{!submissionBacking.isViewerSubmitter()}"/>
                                         </h:column>
 
                                         <!--Download-->
@@ -233,8 +233,7 @@
                                     <div class="btn-group">
                                         <h:selectOneMenu id="released-review-slctom" styleClass="btn-secondary"
                                                          value="#{submissionBacking.reviewPagination.resultListParameters.visibleFilter}"
-                                                         title="#{help.filterRelease}"
-                                                         disabled="#{ not submissionBacking.loggedInUserIsEditor()}">
+                                                         title="#{help.filterRelease}">
                                             <f:selectItems value="#{submissionBacking.visibility}" var="visible" itemValue="#{visible}" itemLabel="#{labels['visibility.' += visible]}"/>
                                         </h:selectOneMenu>
 
@@ -242,8 +241,7 @@
 
                                         <h:selectOneMenu id="recommended-review-slctom" styleClass="btn-secondary"
                                                          value="#{submissionBacking.reviewPagination.resultListParameters.recommendedFilter}"
-                                                         title="#{help.filterRecom}"
-                                                         disabled="#{ not submissionBacking.loggedInUserIsEditor()}">
+                                                         title="#{help.filterRecom}">
                                             <f:selectItems value="#{submissionBacking.recommendation}" var="recommended" itemValue="#{recommended}" itemLabel="#{labels['recommendation.' += recommended]}"/>
                                         </h:selectOneMenu>
 
