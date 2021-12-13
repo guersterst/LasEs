@@ -1,10 +1,7 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.*;
-import de.lases.persistence.exception.DataNotWrittenException;
-import de.lases.persistence.exception.InvalidFieldsException;
-import de.lases.persistence.exception.KeyExistsException;
-import de.lases.persistence.exception.NotFoundException;
+import de.lases.persistence.exception.*;
 import de.lases.persistence.repository.ScientificForumRepository;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
@@ -80,7 +77,7 @@ public class ScientificForumService implements Serializable {
     public void change(ScientificForum newForum) {
         if (newForum.getId() == null || newForum.getName() == null) {
 
-            l.severe("Must contain a sciencefield name and forum id to add as a topic.");
+            l.severe("Must contain a name and forum id to change.");
             throw new InvalidFieldsException();
         }
 
@@ -89,10 +86,14 @@ public class ScientificForumService implements Serializable {
 
             ScientificForumRepository.change(newForum, transaction);
             l.finest("Successfully changed the forum: " + newForum.getId() + ".");
-        } catch (DataNotWrittenException | InvalidFieldsException | NotFoundException e) {
+        } catch (InvalidFieldsException | NotFoundException e) {
 
             l.severe(e.getMessage() + "caused the change operation to fail for: " + newForum.getId());
             uiMessageEvent.fire(new UIMessage(message.getString("dataNotFound"), MessageCategory.ERROR));
+        } catch (DataNotWrittenException e) {
+
+            l.severe("A database error occurred and the operation could not be performed.");
+            throw new DatasourceQueryFailedException(e.getMessage(), e);
         } catch (KeyExistsException e) {
 
             l.warning("It was attempted to create a forum with an existing name: " + newForum.getName());
@@ -123,6 +124,28 @@ public class ScientificForumService implements Serializable {
      * @param forum The scientific forum to be deleted.
      */
     public void remove(ScientificForum forum) {
+        if (forum.getId() == null) {
+
+            l.severe("Must contain a forum id to remove");
+            throw new InvalidFieldsException();
+        }
+
+        Transaction transaction = new Transaction();
+        try {
+
+            ScientificForumRepository.remove(forum, transaction);
+            l.finest("Successfully removed the forum: " + forum.getId() + ".");
+        } catch (NotFoundException e) {
+
+            l.severe(e.getMessage() + "caused the removal operation to fail for: " + forum.getId());
+            uiMessageEvent.fire(new UIMessage(message.getString("dataNotFound"), MessageCategory.ERROR));
+        } catch (DataNotWrittenException e) {
+
+            l.severe("A database error occurred and the operation could not be performed.");
+            uiMessageEvent.fire(new UIMessage(message.getString("dataNotWritten"), MessageCategory.ERROR));
+        } finally {
+            transaction.commit();
+        }
     }
 
     /**
