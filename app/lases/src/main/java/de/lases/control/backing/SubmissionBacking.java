@@ -124,13 +124,11 @@ public class SubmissionBacking implements Serializable {
         coAuthors = new LinkedList<>();
         author = new User();
 
-        paperPagination = new Pagination<Paper>("version") {
+        paperPagination = new Pagination<>("version") {
             @Override
             public void loadData() {
-                paperPagination.getResultListParameters().setVisibleFilter(Visibility.ALL);
-                paperPagination.getResultListParameters().setDateSelect(DateSelect.ALL);
-                paperPagination.setEntries(paperService.getList(submission,sessionInformation.getUser(),paperPagination.getResultListParameters()));
-            }
+               setEntries(paperService.getList(submission, author, getResultListParameters()));
+                }
 
             @Override
             protected Integer calculateNumberPages() {

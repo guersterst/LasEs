@@ -115,7 +115,7 @@ public class PaperRepository {
 
         Integer id = null;
 
-        try{
+        try {
             PreparedStatement stmt = conn.prepareStatement("""
                     SELECT max(version) FROM paper WHERE submission_id = ?
                     """);
@@ -300,86 +300,84 @@ public class PaperRepository {
 
         List<Paper> paperList = new LinkedList<>();
 
-        if (resultListParameters.getDateSelect() == DateSelect.ALL || resultListParameters.getDateSelect() == DateSelect.PAST) {
-            Connection connection = transaction.getConnection();
-            ResultSet resultSet;
+        Connection connection = transaction.getConnection();
+        ResultSet resultSet;
 
-            //Privilege of the given user in this submission
-            Privilege privilege;
-            if (user.isAdmin()) {
-                privilege = Privilege.ADMIN;
-            } else if (user.getId() == submission.getEditorId()) {
-                privilege = Privilege.EDITOR;
-            } else if (user.getId() == submission.getAuthorId()) {
-                privilege = Privilege.AUTHOR;
-            } else {
-                //Has no matching privileges.
-                return paperList;
-            }
+        //Privilege of the given user in this submission
+        Privilege privilege;
+        if (user.isAdmin()) {
+            privilege = Privilege.ADMIN;
+        } else if (user.getId() == submission.getEditorId()) {
+            privilege = Privilege.EDITOR;
+        } else if (user.getId() == submission.getAuthorId()) {
+            privilege = Privilege.AUTHOR;
+        } else {
+            //Has no matching privileges.
+            return paperList;
+        }
 
-            String sqlStatment = switch (privilege) {
-                case ADMIN -> """
+        String sqlStatment = switch (privilege) {
+            case ADMIN -> """
                     SELECT p.* FROM paper p, submission s
                     WHERE s.id = ? 
                     AND p.submission_id = s.id
                     """;
-                case EDITOR -> """
+            case EDITOR -> """
                     SELECT p.* FROM paper p, submission s
                     WHERE s.id = ? 
                     AND s.editor_id = ?
                     AND p.submission_id = s.id
                     """;
-                default -> """
+            default -> """
                     SELECT p.* FROM paper p, submission s
                     WHERE s.id = ? 
                     AND s.author_id = ?
                     AND p.submission_id = s.id
                     """;
-            };
+        };
 
-            sqlStatment += generateSQLForResultListParameters(resultListParameters, privilege);
+        sqlStatment += generateSQLForResultListParameters(resultListParameters, privilege);
 
-            try {
-                PreparedStatement statement = connection.prepareStatement(sqlStatment);
+        try {
+            PreparedStatement statement = connection.prepareStatement(sqlStatment);
 
-                statement.setInt(1, submission.getId());
+            statement.setInt(1, submission.getId());
 
-                if (privilege == Privilege.EDITOR) {
-                    statement.setInt(2, submission.getEditorId());
-                }
-                if (privilege == Privilege.AUTHOR) {
-                    statement.setInt(2, submission.getAuthorId());
-                }
-
-
-
-                if (resultListParameters.getFilterColumns().get("version") != null
-                        && !resultListParameters.getFilterColumns().get("version").isEmpty()) {
-                    int index = 3;
-                    if (privilege ==  Privilege.ADMIN) {
-                        index = 2;
-                    }
-                    statement.setString(index, resultListParameters.getFilterColumns().get("version"));
-                }
-
-                resultSet = statement.executeQuery();
-
-                while (resultSet.next()) {
-                    Paper paper = new Paper();
-                    paper.setVisible(resultSet.getBoolean("is_visible"));
-                    paper.setVersionNumber(resultSet.getInt("version"));
-                    paper.setUploadTime(resultSet.getTimestamp("timestamp_upload").toLocalDateTime());
-                    paper.setSubmissionId(resultSet.getInt("submission_id"));
-
-                    paperList.add(paper);
-                }
-
-            } catch (SQLException e) {
-                DatasourceUtil.logSQLException(e, logger);
-                throw new DatasourceQueryFailedException("A datasource exception occurred while loading all papers of a submission.", e);
-
+            if (privilege == Privilege.EDITOR) {
+                statement.setInt(2, submission.getEditorId());
             }
+            if (privilege == Privilege.AUTHOR) {
+                statement.setInt(2, submission.getAuthorId());
+            }
+
+
+            if (resultListParameters.getFilterColumns().get("version") != null
+                    && !resultListParameters.getFilterColumns().get("version").isEmpty()) {
+                int index = 3;
+                if (privilege == Privilege.ADMIN) {
+                    index = 2;
+                }
+                statement.setString(index, resultListParameters.getFilterColumns().get("version"));
+            }
+
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                Paper paper = new Paper();
+                paper.setVisible(resultSet.getBoolean("is_visible"));
+                paper.setVersionNumber(resultSet.getInt("version"));
+                paper.setUploadTime(resultSet.getTimestamp("timestamp_upload").toLocalDateTime());
+                paper.setSubmissionId(resultSet.getInt("submission_id"));
+
+                paperList.add(paper);
+            }
+
+        } catch (SQLException e) {
+            DatasourceUtil.logSQLException(e, logger);
+            throw new DatasourceQueryFailedException("A datasource exception occurred while loading all papers of a submission.", e);
+
         }
+
         return paperList;
     }
 
