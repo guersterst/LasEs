@@ -189,6 +189,29 @@ public class ScientificForumService implements Serializable {
      *               containing a valid id
      */
     public void removeEditor(User editor, ScientificForum forum) {
+        if (forum.getId() == null || editor.getId() == null) {
+
+            l.severe("Must contain a forum id and editor id to remove their relationship");
+            throw new InvalidFieldsException();
+        }
+
+        Transaction transaction = new Transaction();
+        try {
+
+            ScientificForumRepository.removeEditor(forum, editor, transaction);
+            l.finest("Successfully removed the editor: " + editor.getId() + " from the forum: "
+                    + forum.getId());
+        } catch (NotFoundException e) {
+
+            l.severe(e.getMessage() + "caused the operation to fail for: " + forum.getId());
+            uiMessageEvent.fire(new UIMessage(message.getString("dataNotFound"), MessageCategory.ERROR));
+        } catch (DataNotWrittenException e) {
+
+            l.severe("A database error occurred and the operation could not be performed.");
+            uiMessageEvent.fire(new UIMessage(message.getString("dataNotWritten"), MessageCategory.ERROR));
+        } finally {
+            transaction.commit();
+        }
     }
 
     /**
