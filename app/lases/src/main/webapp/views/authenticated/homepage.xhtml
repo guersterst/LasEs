@@ -7,8 +7,7 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <!-- Page title -->
-    <ui:define name="title">Homepage</ui:define>
-    <!-- TODO update title -->
+    <ui:define name="title">#{labels['homePage.title']}</ui:define>
 
     <!-- Content of homepage.xhtml -->
     <ui:define name="content">
@@ -18,7 +17,7 @@
         </f:metadata>
 
         <div class="container">
-            <h1>Welcome to LasEs</h1>
+            <h1>#{labels['homePage.header'] += labels['appName']}</h1>
             <div class="card">
                 <div class="card-head">
                     <h:form>
