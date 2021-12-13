@@ -1,19 +1,41 @@
 package de.lases.business.service;
 
 
+import de.lases.business.internal.ConfigPropagator;
+import de.lases.business.util.EmailUtil;
+import de.lases.business.util.Hashing;
+import de.lases.global.transport.MessageCategory;
+import de.lases.global.transport.UIMessage;
 import de.lases.global.transport.User;
+import de.lases.global.transport.Verification;
+import de.lases.persistence.exception.DataNotWrittenException;
+import de.lases.persistence.exception.EmailTransmissionFailedException;
 import de.lases.persistence.repository.Transaction;
+import de.lases.persistence.repository.UserRepository;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
-import jakarta.faces.component.UIMessage;
 import jakarta.inject.Inject;
+
+import java.time.LocalDateTime;
+import java.util.PropertyResourceBundle;
+import java.util.logging.Logger;
 
 /**
  * Provides functionality for the registration and creation of users.
  * In case of an unexpected state, a {@link UIMessage} event will be fired.
+ *
+ * @author Thomas Kirz
  */
 @Dependent
 public class RegistrationService {
+
+    private final Logger l = Logger.getLogger(RegistrationService.class.getName());
+
+    @Inject
+    private ConfigPropagator configPropagator;
+
+    @Inject
+    private PropertyResourceBundle message;
 
     @Inject
     private Event<UIMessage> uiMessageEvent;
@@ -34,7 +56,55 @@ public class RegistrationService {
      * @return The user with all their data, if successful, and {@code null} otherwise.
      */
     public User selfRegister(User user) {
-        return null;
+        if (!userSufficientlyFilled(user)) {
+            l.severe("User-DTO not sufficiently filled.");
+            throw new IllegalArgumentException("User-DTO not sufficiently filled.");
+        }
+
+        Transaction t = new Transaction();
+
+        // make sure that the user's email address is not already in use
+        if (UserRepository.emailExists(user, t)) {
+            l.warning("User with email address " + user.getEmailAddress() + " already exists.");
+            uiMessageEvent.fire(new UIMessage(message.getString("emailInUse"),
+                    MessageCategory.ERROR));
+            t.abort();
+            return null;
+        }
+
+        try {
+            user = UserRepository.add(user, t);
+            t.commit();
+        } catch (DataNotWrittenException e) {
+            uiMessageEvent.fire(new UIMessage(message.getString("registrationFailed"), MessageCategory.ERROR));
+            return null;
+        }
+
+        Verification verification = new Verification();
+        verification.setVerified(false);
+        verification.setUserId(user.getId());
+        verification.setNonVerifiedEmailAddress(user.getEmailAddress());
+        verification.setValidationRandom(Hashing.generateRandomSalt());
+        verification.setTimestampValidationStarted(LocalDateTime.now());
+
+        String emailBody = message.getString("email.verification.body.0") + user.getFirstName()
+                + message.getString("email.verification.body.1") + verification.getValidationRandom();
+        try {
+            EmailUtil.sendEmail(configPropagator.getProperty("MAIL_ADDRESS_FROM"), new String[]{user.getEmailAddress()},
+                    null, message.getString("email.verification.subject"), emailBody);
+        } catch (EmailTransmissionFailedException e) {
+            uiMessageEvent.fire(new UIMessage(message.getString("registrationFailed"), MessageCategory.ERROR));
+            return null;
+        }
+
+        // Success message, containing verification random if test mode is enabled
+        String msg = message.getString("registrationSuccessful");
+        if (configPropagator.getProperty("DEBUG_AND_TEST_MODE").equalsIgnoreCase("true")) {
+            msg += "\n" + verification.getValidationRandom();
+        }
+        uiMessageEvent.fire(new UIMessage(message.getString(msg), MessageCategory.INFO));
+
+        return user;
     }
 
     /**
@@ -54,4 +124,10 @@ public class RegistrationService {
         return null;
     }
 
+    private boolean userSufficientlyFilled(User user) {
+        return user.getEmailAddress() != null && !user.getEmailAddress().isEmpty()
+                && user.getPasswordHashed() != null && !user.getPasswordHashed().isEmpty()
+                && user.getFirstName() != null && !user.getFirstName().isEmpty()
+                && user.getLastName() != null && !user.getLastName().isEmpty();
+    }
 }

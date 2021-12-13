@@ -44,8 +44,11 @@ public class RegistrationBacking {
      * @return Go to the welcome page.
      */
     public String register() {
-        registrationService.selfRegister(newUser);
-        return "welcome";
+        if (registrationService.selfRegister(newUser) != null) {
+            return "views/authenticated/welcome?faces-redirect=true";
+        } else {
+            return null;
+        }
     }
 
     /**
