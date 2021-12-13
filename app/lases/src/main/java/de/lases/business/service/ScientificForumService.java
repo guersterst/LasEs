@@ -1,6 +1,9 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.*;
+import de.lases.persistence.exception.DataNotWrittenException;
+import de.lases.persistence.exception.InvalidFieldsException;
+import de.lases.persistence.exception.KeyExistsException;
 import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.repository.ScientificForumRepository;
 import de.lases.persistence.repository.Transaction;
@@ -19,6 +22,7 @@ import java.util.logging.Logger;
  * In case of an unexpected state, a {@link UIMessage} event will be fired.
  *
  * @author Thomas Kirz
+ * @author Johannes Garstenauer
  */
 @Dependent
 public class ScientificForumService implements Serializable {
@@ -26,13 +30,13 @@ public class ScientificForumService implements Serializable {
     @Serial
     private static final long serialVersionUID = 5459943608069682810L;
 
-    private final Logger l = Logger.getLogger(SubmissionService.class.getName());
+    private static final Logger l = Logger.getLogger(SubmissionService.class.getName());
 
     @Inject
     private Event<UIMessage> uiMessageEvent;
 
     @Inject
-    PropertyResourceBundle message;
+    private PropertyResourceBundle message;
 
     /**
      * Gets a scientific forum.
@@ -74,6 +78,28 @@ public class ScientificForumService implements Serializable {
      *                 </p>
      */
     public void change(ScientificForum newForum) {
+        if (newForum.getId() == null || newForum.getName() == null) {
+
+            l.severe("Must contain a sciencefield name and forum id to add as a topic.");
+            throw new InvalidFieldsException();
+        }
+
+        Transaction transaction = new Transaction();
+        try {
+
+            ScientificForumRepository.change(newForum, transaction);
+            l.finest("Successfully changed the forum: " + newForum.getId() + ".");
+        } catch (DataNotWrittenException | InvalidFieldsException | NotFoundException e) {
+
+            l.severe(e.getMessage() + "caused the change operation to fail for: " + newForum.getId());
+            uiMessageEvent.fire(new UIMessage(message.getString("dataNotFound"), MessageCategory.ERROR));
+        } catch (KeyExistsException e) {
+
+            l.warning("It was attempted to create a forum with an existing name: " + newForum.getName());
+            uiMessageEvent.fire(new UIMessage(message.getString("nameTaken"), MessageCategory.ERROR));
+        } finally {
+            transaction.commit();
+        }
     }
 
     /**
@@ -153,15 +179,6 @@ public class ScientificForumService implements Serializable {
         return null;
     }
 
-    /**
-     * Gets all scientific forums.
-     *
-     * @param resultListParams The parameters, that control filtering and sorting of the resulting list.
-     * @return All scientific forums.
-     */
-    public List<ScientificForum> getList(ResultListParameters resultListParams) {
-        return null;
-    }
 
     /**
      * Determines whether a {@link ScientificForum} already exists.
@@ -172,5 +189,15 @@ public class ScientificForumService implements Serializable {
      */
     public static boolean exists(ScientificForum scientificForum) {
         return false;
+    }
+
+    /**
+     * Gets all scientific forums.
+     *
+     * @param resultListParams The parameters, that control filtering and sorting of the resulting list.
+     * @return All scientific forums.
+     */
+    public List<ScientificForum> getList(ResultListParameters resultListParams) {
+        return null;
     }
 }
