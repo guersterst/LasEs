@@ -1,15 +1,14 @@
 package de.lases.control.backing;
 
-import de.lases.business.service.CustomizationService;
-import de.lases.business.service.LoginService;
-import de.lases.global.transport.*;
-import de.lases.control.internal.*;
+import de.lases.control.internal.SessionInformation;
+import de.lases.global.transport.ResultListParameters;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
-import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Backing bean for the navigation bar.
@@ -18,8 +17,7 @@ import java.util.List;
 @Named
 public class NavigationBacking {
 
-    @Inject
-    private LoginService loginService;
+    private static final Logger logger = Logger.getLogger(NavigationBacking.class.getName());
 
     @Inject
     private SessionInformation sessionInformation;
@@ -30,12 +28,23 @@ public class NavigationBacking {
     private ResultListParameters resultListParameters;
 
     /**
+     * Create the {@link ResultListParameters}-DTO required for the search.
+     */
+    @PostConstruct
+    public void init() {
+       resultListParameters = new ResultListParameters();
+    }
+    /**
      * Log the user out of the system and got to the welcome page.
      *
      * @return Show the welcome page.
      */
     public String logout() {
-        return null;
+        logger.finest("User: " + sessionInformation.getUser().getId() + "logged out.");
+        sessionInformation.setUser(null);
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+
+        return "/views/anonymous/welcome.xhtml?faces-redirect=true";
     }
 
     /**
@@ -44,7 +53,12 @@ public class NavigationBacking {
      * @return Show the result list page.
      */
     public String search() {
-        return null;
+        String searchWord = resultListParameters.getGlobalSearchWord();
+        if (searchWord == null) {
+            searchWord = "";
+        }
+        resultListBacking.setSearchWord(searchWord);
+        return "/views/authenticated/resultList.xhtml?faces-redirect=true";
     }
 
     /**

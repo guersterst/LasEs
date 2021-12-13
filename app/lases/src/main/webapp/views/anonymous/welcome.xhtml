@@ -1,114 +1,56 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
-<f:metadata>
-    <f:importConstants type="de.lases.control.backing.DateSelect" var="Date"/>
-    <f:loadBundle var="labels" basename="resource_bundles.labels"/>
-</f:metadata>
-<h:head>
-    <title>LasEs</title>
-    <h:outputStylesheet name="design/bootstrap/css/bootstrap.min.css"/>
-</h:head>
+<!--Please take care about following: Don not add something outside of ui:composition. JSF would just ignore this-->
+<ui:composition template="/resources/templates/main.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui" xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
 
-<h:body>
-    <div class="container-fluid">
-        <div class="col-first">
-            <h1>Welcome to LasEs
-                <h:outputText id="welcome-heading-otxt" value="#{welcomeBacking.systemSettings.headlineWelcomePage}"/>
-            </h1>
-            <p>This is the discription.
-                <h:outputText id="welcome-otxt" value="#{welcomeBacking.systemSettings.messageWelcomePage}"/>
-            </p>
+    <ui:define name="title">#{''.concat(labels.appName).concat(' - ').concat(labels.login)}</ui:define>
+
+    <ui:define name="content">
+        <div class="p-5 text-center bg-light">
+            <h1 id="welcome-heading-otxt" class="mb-3">#{welcomeBacking.systemSettings.headlineWelcomePage}</h1>
+            <h4 id="welcome-otxt" class="mb-3">#{welcomeBacking.systemSettings.messageWelcomePage}</h4>
         </div>
-        <div class="col-second card">
-            <div class="card-header">
-                <div class="welcome">
-                    <h2>Login</h2>
-                    <p>Please enter your login credentials.</p>
-                </div>
-            </div>
 
-            <h:form>
-                <h:outputText value="#{footerBacking.sessionInformation.locale.getCountry}"/>
-                <input type="date"/>
-
-                <br/>
-
-                <h:inputText a:type="date" value="#{profileBacking.testDate}" readonly="true">
-                </h:inputText>
-
-                <br/>
-
-                <h:outputText value="#{profileBacking.testDate}" a:type="date">
-                    <f:convertDateTime type="localDate"/>
-                </h:outputText>
-
-                <br/>
-
-                <h:outputText value="#{labels.appName}"/>
-
-                <br/>
-
-            </h:form>
-
-            <h:outputText value="#{welcomeBacking.testString}"/>
-            <br/>
-
-            <h:commandButton styleClass="btn btn-primary" value="DIALOG FÜR STEFAN" type="button" onclick="PF('dlg').show();"/>
-            <h:form>
-                <p:dialog header="Wichtiger hinweis" appendToBody="true" widgetVar="dlg" modal="true">
-                    <h:outputText value="dialog jaja?"/>
-                    mEEEXDN xD
-                    <h:commandButton styleClass="btn btn-primary" value="Close" onclick="PF('dlg').hide();"/>
-                    <h:commandButton styleClass="btn btn-primary" value="action and close" action="#{welcomeBacking.stringChanger}" onclick="PF('dlg').hide();"/>
-                </p:dialog>
-            </h:form>
-
-
-            <div class="card-body">
-                <div class="login-form">
+        <div class="col d-flex justify-content-center">
+            <div class="card" id="login-box" style="width: 36rem;">
+                <div id="login-div" class="card-body">
                     <h:form>
-
-
-                        <h:selectOneMenu value="#{submissionBacking.dateFilterSelectPaper}">
-                            <f:selectItems value="#{submissionBacking.dateSelects}" var="select" itemValue="#{select}"
-                                           itemLabel="#{labels['dateSelect.' += select]}"/>
-                        </h:selectOneMenu>
-                        <h4>
-                            <h:outputText value="#{labels['appName']}"/>
-                        </h4>
-                        <h:inputText class="form-control" id="email-itxt" value="#{welcomeBacking.loginInput.emailAddress}" required="true"
-                                     requiredMessage="#{message.email}">
-                            <!--<f:validator/>
-                            <f:validator/>-->
-                        </h:inputText>
-                        <h4>Password</h4>
-                        <h:inputSecret id="password-itxt" value="#{welcomeBacking.loginInput.passwordNotHashed}"
-                                       required="true" requiredMessage="#{message.password}">
-                            <f:validateLength minimum="8" maximum="100"/>
-                        </h:inputSecret>
-                        <div class="">
-                            <h:commandButton class="btn btn-primary" id="login-cbtn" value="Login" action="#{welcomeBacking.login}"/>
+                        <div class="form-group">
+                            <label for="email-itxt">#{labels.emailInput}</label>
+                            <h:inputText id="email-itxt" value="#{welcomeBacking.loginInput.emailAddress}"
+                                         a:placeholder="#{help.yourEmail}" styleClass="form-control" required="true"
+                                         requiredMessage="#{message.emailNeeded}"/>
+                            <h:message for="email-itxt" style="color: red"/>
                         </div>
-                        <div>
-                            <h:commandButton id="register-cbtn" value="Register"
-                                             action="#{welcomeBacking.goToRegister}"/>
+                        <div class="form-group">
+                            <label for="password-iscrt">#{labels.passwordInput}</label>
+                            <h:inputSecret id="password-iscrt" value="#{welcomeBacking.loginInput.passwordNotHashed}"
+                                           a:placeholder="#{help.password}" styleClass="form-control" required="true"
+                                           requiredMessage="#{message.passwordNeeded}"/>
+                            <h:message for="password-iscrt" style="color: red"/>
                         </div>
-                        <!--<div class="error-msgs" versionNumber="error-msgs">
-                            <h:messages/>
+                        <div class="form-group">
+                            <h:messages globalOnly="true" style="color:red" layout="table"/>
+                            <br/>
+                            <h:commandButton id="login-cbtn" value="#{labels.login}" action="#{welcomeBacking.login()}"
+                                             title="#{labels.login}"/>
                         </div>
-                        -->
+                    </h:form>
+                </div>
+                <hr/>
+                <div id="register-div" class="card-body">
+                    <h:form>
+                        <h:commandButton id="register-cbtn" value="#{labels.register}"
+                                         action="#{welcomeBacking.goToRegister()}"
+                                         title="#{help.goToRegister}"/>
                     </h:form>
                 </div>
             </div>
         </div>
-        <h:link value="Register" outcome="/views/anonymous/register"/>
-    </div>
 
-
-</h:body>
-</html>
+    </ui:define>
+</ui:composition>

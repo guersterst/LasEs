@@ -20,4 +20,19 @@ public class DataNotWrittenException extends Exception {
     public DataNotWrittenException(String message, Throwable cause) {
         super(message, cause);
     }
+
+    /**
+     * Constructs an exception with a message and a cause.
+     */
+    public DataNotWrittenException() {
+        super();
+    }
+
+    /**
+     * Constructs an exception with a message and a cause.
+     * @param message Error message.
+     */
+    public DataNotWrittenException(String message) {
+        super(message);
+    }
 }

@@ -1,16 +1,20 @@
 package de.lases.persistence.repository;
 
-import de.lases.global.transport.Privilege;
-import de.lases.global.transport.ResultListParameters;
-import de.lases.global.transport.Submission;
-import de.lases.global.transport.User;
+import de.lases.global.transport.*;
+import de.lases.persistence.exception.DataNotWrittenException;
+import de.lases.persistence.exception.NotFoundException;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class SubmissionRepositoryTest {
 
@@ -21,14 +25,116 @@ class SubmissionRepositoryTest {
     private static final String EXAMPLE_SUBMISSION_TITLE_2 = "Different title";
 
     @BeforeAll
-    void addUser() throws Exception {
+    static void initConnectionPool() {
+        ConnectionPool.init();
+    }
+
+    @AfterAll
+    static void shutDownConnectionPool() {
+        ConnectionPool.shutDown();
+    }
+
+//    @BeforeAll
+//    static void addUser() throws Exception {
+//        Transaction transaction = new Transaction();
+//        UserRepository.add(new User(), transaction);
+//        EXAMPLE_USER_ID = UserRepository.getList(transaction, new ResultListParameters()).get(0).getId();
+//        transaction.commit();
+//    }
+
+    @Test
+    void testAddSubmission() throws DataNotWrittenException, SQLException {
+        Submission submission = new Submission();
+        submission.setScientificForumId(1);
+        submission.setAuthorId(4);
+        submission.setEditorId(1);
+        submission.setTitle("Sebastian testet die add Methode!");
+        submission.setState(SubmissionState.ACCEPTED);
+        submission.setSubmissionTime(LocalDateTime.now());
+
         Transaction transaction = new Transaction();
-        UserRepository.add(new User(), transaction);
-        EXAMPLE_USER_ID = UserRepository.getList(transaction, new ResultListParameters()).get(0).getId();
-        transaction.commit();
+        Connection conn = transaction.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(
+                """
+                        SELECT * FROM submission
+                        """);
+        ResultSet resultSet = stmt.executeQuery();
+        int i = 0;
+        while (resultSet.next()) {
+            i++;
+        }
+
+        SubmissionRepository.add(submission, transaction);
+
+        ResultSet resultSet2 = stmt.executeQuery();
+        int j = 0;
+        while (resultSet2.next()) {
+            j++;
+        }
+
+        assertEquals(1, j - i);
+        transaction.abort();
     }
 
     @Test
+    void testAddCoAuthorBasic() throws SQLException, DataNotWrittenException, NotFoundException {
+        Submission submission = new Submission();
+        submission.setId(671);
+
+        User user = new User();
+        user.setId(69);
+
+        Transaction transaction = new Transaction();
+        Connection conn = transaction.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(
+                """
+                        SELECT * FROM co_authored
+                        """);
+        ResultSet resultSet = stmt.executeQuery();
+        int i = 0;
+        while (resultSet.next()) {
+            i++;
+        }
+
+        SubmissionRepository.addCoAuthor(submission, user, transaction);
+
+        ResultSet resultSet2 = stmt.executeQuery();
+        int j = 0;
+        while (resultSet2.next()) {
+            j++;
+        }
+        transaction.abort();
+        assertEquals(1, j - i);
+    }
+
+    @Test
+    void testAddSubmissionNotFoundException() throws DataNotWrittenException, NotFoundException {
+        Submission submission = new Submission();
+        Transaction transaction = new Transaction();
+        // Diese Submission sollte nicht existieren in der Datenbank
+        submission.setId(900);
+
+        User user = new User();
+        user.setId(69);
+
+        assertThrows(NotFoundException.class, () -> SubmissionRepository.addCoAuthor(submission, user, transaction));
+        transaction.abort();
+    }
+
+    @Test
+    void testAddCoAuthorNotFoundException() throws DataNotWrittenException, NotFoundException {
+        Submission submission = new Submission();
+        Transaction transaction = new Transaction();
+        // Diese Submission sollte nicht existieren in der Datenbank
+        submission.setId(666);
+
+        User user = new User();
+        user.setId(2000);
+
+        assertThrows(NotFoundException.class, () -> SubmissionRepository.addCoAuthor(submission, user, transaction));
+        transaction.abort();
+    }
+
     void testAddAndGetList() throws Exception {
         Transaction transaction = new Transaction();
 
@@ -62,7 +168,6 @@ class SubmissionRepositoryTest {
         transaction.abort();
     }
 
-    @Test
     void testAddAndAbort() throws Exception {
         Transaction transaction = new Transaction();
         Submission submission = new Submission();
@@ -76,7 +181,6 @@ class SubmissionRepositoryTest {
     }
 
     // add two submissions and test countSubmissions()
-    @Test
     void testCountSubmissions() throws Exception {
         User user = new User();
         user.setId(EXAMPLE_USER_ID);
@@ -96,7 +200,7 @@ class SubmissionRepositoryTest {
         SubmissionRepository.add(submission1, transaction);
         SubmissionRepository.add(submission2, transaction);
 
-        assertEquals(1, SubmissionRepository.countSubmissions(user, transaction));
+        assertEquals(1, SubmissionRepository.countSubmissions(user, Privilege.AUTHOR, transaction, null));
 
         transaction.abort();
     }

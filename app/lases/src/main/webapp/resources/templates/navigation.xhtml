@@ -1,0 +1,71 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:a="http://xmlns.jcp.org/jsf/passthrough" xmlns:H="http://java.sun.com/jsf/html">
+    <!-- navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+
+        <!--- image -->
+        <h:link
+                styleClass="navbar-brand"
+                outcome="/views/authenticated/homepage.xhtml">
+            <h:graphicImage
+                    styleClass="mx-3"
+                    value="/image?id=logo"
+                    height="50"/>
+        </h:link>
+
+        <!-- navigation -->
+        <div class="collapse navbar-collapse" id="navbar-nav-alt -markup">
+            <div class="navbar-nav">
+                <h:link
+                        value="#{labels.userList}"
+                        outcome="/views/editor/userList"
+                        title="#{help.userList}"
+                        rendered="#{navigationBacking.sessionInformation.user.privileges.contains(Privilege.EDITOR)
+                        || navigationBacking.sessionInformation.user.isAdmin()}"
+                        styleClass="nav-item nav-link"/>
+                <h:link
+                        value="#{labels.forumList}" outcome="/views/authenticated/scientificForumList"
+                        title="#{help.forumList}"
+                        rendered="#{navigationBacking.sessionInformation.user != null}"
+                        styleClass="nav-item nav-link"/>
+                <h:link
+                        value="#{labels.administration}"
+                        outcome="/views/admin/administration"
+                        rendered="#{navigationBacking.sessionInformation.user.isAdmin()}"
+                        styleClass="nav-item nav-link"/>
+                <h:link
+                        value="#{labels.navProfile}"
+                        outcome="/views/authenticated/profile"
+                        rendered="#{navigationBacking.sessionInformation.user != null}"
+                        styleClass="nav-item nav-link"/>
+
+                <!-- search form -->
+                <h:form>
+                    <h:panelGrid columns="2" rendered="#{navigationBacking.sessionInformation.user != null}">
+                        <h:inputText styleClass="form-control mr-sm2"
+                                     value="#{navigationBacking.resultListParameters.globalSearchWord}"
+                                     title="#{help.search}"/>
+                        <h:commandButton action="#{navigationBacking.search}"
+                                         value="#{labels.search}"
+                                         styleClass="btn btn-primary my-2 my-sm-0"/>
+                    </h:panelGrid>
+                </h:form>
+            </div>
+        </div>
+
+        <!-- logout -->
+        <h:form styleClass="form-inline mx-3">
+            <h:commandButton
+                    value="#{labels.logout}"
+                    action="#{navigationBacking.logout}"
+                    title="#{help.logout}"
+                    rendered="#{navigationBacking.sessionInformation.user != null}"
+                    styleClass="btn btn-sm btn-outline-secondary"
+                    type="submit"/>
+        </h:form>
+    </nav>
+</ui:composition>
+

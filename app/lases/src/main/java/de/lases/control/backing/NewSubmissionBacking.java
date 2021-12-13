@@ -1,5 +1,6 @@
 package de.lases.control.backing;
 
+import de.lases.business.service.PaperService;
 import de.lases.business.service.ScientificForumService;
 import de.lases.business.service.SubmissionService;
 import de.lases.business.service.UserService;
@@ -8,26 +9,40 @@ import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.servlet.http.Part;
 
+import java.io.IOException;
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Backing bean for the new submission page.
  */
-@RequestScoped
+@ViewScoped
 @Named
-public class NewSubmissionBacking {
+public class NewSubmissionBacking implements Serializable {
+
+    private static final Logger logger = Logger.getLogger(NewSubmissionBacking.class.getName());
+
+    @Serial
+    private static final long serialVersionUID = 7741936440137638673L;
 
     @Inject
     private SessionInformation sessionInformation;
 
     @Inject
     private SubmissionService submissionService;
+
+    @Inject
+    private PaperService paperService;
 
     @Inject
     private ScientificForumService scientificForumService;
@@ -39,8 +54,6 @@ public class NewSubmissionBacking {
 
     private ScientificForum forumInput;
 
-    private User editorSelectionInput;
-
     private Part uploadedPDF;
 
     private User coAuthorInput;
@@ -48,8 +61,6 @@ public class NewSubmissionBacking {
     private List<User> coAuthors;
 
     private List<User> editors;
-
-    private User selectedEditor;
 
     /**
      * Initialize the dtos used in this bean and load the list of possible
@@ -61,9 +72,6 @@ public class NewSubmissionBacking {
      *     </li>
      *     <li>
      *         the scientific forum input
-     *     </li>
-     *     <li>
-     *         the editor selection input
      *     </li>
      *     <li>
      *         the pdf upload input
@@ -78,21 +86,44 @@ public class NewSubmissionBacking {
      *         the list of editors for the forum this submission will be
      *         submitted in
      *     </li>
-     *     <li>
-     *         the selected editor
-     *     </li>
      * </ul>
      * The list of editors for the forum this submission will be submitted in
-     * will be directly populated from the database.
+     * will be directly populated from the database, if the scientific forum is already prefilled.
      */
     @PostConstruct
     public void init() {
+        newSubmission = new Submission();
+        coAuthorInput = new User();
+        coAuthors = new ArrayList<>();
+        if (forumInput != null) {
+            editors = userService.getList(forumInput);
+        } else {
+            forumInput = new ScientificForum();
+            editors = new ArrayList<>();
+        }
+
+        // TODO: Wenn das Scientific forume existiert muss das hier vorausgefuellt sein und eine illegal user flow
+        // exception kommen falls nicht!
+        forumInput.setName("Mathematik Konferenz 2022");
+        forumInput.setId(1);
+        newSubmission.setScientificForumId(forumInput.getId());
+        editors = userService.getList(forumInput);
     }
 
     /**
      * Add the entered co-author to the list of co-authors.
      */
     public void submitCoAuthor() {
+        coAuthorInput = coAuthorInput.clone();
+        for (User coAuthor: coAuthors) {
+            if (coAuthor.getEmailAddress().equals(coAuthorInput.getEmailAddress())) {
+                coAuthor.setTitle(coAuthorInput.getTitle());
+                coAuthor.setFirstName(coAuthorInput.getFirstName());
+                coAuthor.setLastName(coAuthorInput.getLastName());
+                return;
+            }
+        }
+        coAuthors.add(coAuthorInput);
     }
 
     /**
@@ -101,6 +132,7 @@ public class NewSubmissionBacking {
      * @param user The co-author to delete.
      */
     public void deleteCoAuthor(User user) {
+        coAuthors.remove(user);
     }
 
     /**
@@ -108,8 +140,28 @@ public class NewSubmissionBacking {
      *
      * @return The page of the entered submission.
      */
-    public String submit() {
-        return null;
+    public String submit() throws IOException {
+        newSubmission.setSubmissionTime(LocalDateTime.now());
+        newSubmission.setState(SubmissionState.SUBMITTED);
+        // TODO: Was, wenn der User nicht angemeldet ist?
+        newSubmission.setAuthorId(sessionInformation.getUser().getId());
+        newSubmission = submissionService.add(newSubmission, coAuthors);
+
+        if (newSubmission == null) {
+            logger.log(Level.SEVERE, "the submission was not successfully added.");
+            return null;
+        } else {
+            Paper paper = new Paper();
+            logger.log(Level.INFO, "Adding paper to the submission with id: " + newSubmission.getId());
+            paper.setSubmissionId(newSubmission.getId());
+            paper.setVisible(false);
+            paper.setUploadTime(LocalDateTime.now());
+            FileDTO file = new FileDTO();
+            file.setFile(uploadedPDF.getInputStream().readAllBytes());
+            paperService.add(file, paper);
+        }
+        // TODO: hier die submission Seite returnen!
+        return "submission?faces-redirect=true&id=" + newSubmission.getId();
     }
 
     /**
@@ -148,24 +200,6 @@ public class NewSubmissionBacking {
      */
     public void setForumInput(ScientificForum forumInput) {
         this.forumInput = forumInput;
-    }
-
-    /**
-     * Get the selected user that can be added as an editor.
-     *
-     * @return The selected user that can be added as an editor.
-     */
-    public User getEditorSelectionInput() {
-        return editorSelectionInput;
-    }
-
-    /**
-     * Set the selected user that can be added as an editor.
-     *
-     * @param editorSelectionInput Selected user that can be added as an editor.
-     */
-    public void setEditorSelectionInput(User editorSelectionInput) {
-        this.editorSelectionInput = editorSelectionInput;
     }
 
     /**

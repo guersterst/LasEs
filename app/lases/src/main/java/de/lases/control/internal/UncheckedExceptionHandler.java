@@ -38,6 +38,7 @@ public class UncheckedExceptionHandler extends ExceptionHandlerWrapper {
      */
     @Override
     public void handle() {
+        /*
         FacesContext facesContext = FacesContext.getCurrentInstance();
         NavigationHandler navigationHandler
                 = facesContext.getApplication().getNavigationHandler();
@@ -62,5 +63,7 @@ public class UncheckedExceptionHandler extends ExceptionHandlerWrapper {
                                 "?faces-redirect=true");
             }
         }
+
+         */
     }
 }

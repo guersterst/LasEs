@@ -2,7 +2,11 @@ package de.lases.persistence.util;
 
 import de.lases.global.transport.ConnectionState;
 import de.lases.persistence.exception.DatasourceNotFoundException;
-import de.lases.persistence.exception.DatasourceQueryFailedException;
+import de.lases.persistence.repository.Transaction;
+
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Offers methods for managing the datasource.
@@ -34,6 +38,27 @@ public class DatasourceUtil {
      */
     public static ConnectionState testDatasourceConnection() {
         return null;
+    }
+
+    /**
+     * Log the contents of an SQL exception.
+     *
+     * @param sqlException An sql exception.
+     * @param logger The logger to user.
+     */
+    public static void logSQLException(SQLException sqlException,
+                                       Logger logger) {
+        logger.log(Level.SEVERE,
+                """
+                SQLException with the following attributes:
+                - Class: %s
+                - Message: %s
+                - SQLState: %s
+                - Vendor error code: %s
+                """.formatted(sqlException.getClass(),
+                        sqlException.getMessage(), sqlException.getSQLState(),
+                        sqlException.getErrorCode())
+        );
     }
 
 }
