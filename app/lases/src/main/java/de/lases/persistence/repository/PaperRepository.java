@@ -343,6 +343,7 @@ public class PaperRepository {
                     WHERE s.id = ?
                     AND r.reviewer_id = ?
                     AND s.id = r.submission_id
+                    AND p.submission_id = s.id
                     """;
             default -> """
                     SELECT p.* FROM paper p, submission s
@@ -403,12 +404,9 @@ public class PaperRepository {
         StringBuilder stringBuilder = new StringBuilder();
 
         // Filter according to visibility.
-        if ((parameters.getVisibleFilter() == Visibility.ALL || parameters.getVisibleFilter() == null) && privilege == Privilege.REVIEWER) {
-            stringBuilder.append(" AND p.is_visible = TRUE ");
-        } else if (parameters.getVisibleFilter() == Visibility.NOT_RELEASED
-                && !(privilege == Privilege.REVIEWER)) {
+        if (privilege != Privilege.REVIEWER && parameters.getVisibleFilter() == Visibility.NOT_RELEASED) {
             stringBuilder.append(" AND p.is_visible = FALSE ");
-        } else if (parameters.getVisibleFilter() == Visibility.RELEASED) {
+        } else if (parameters.getVisibleFilter() == Visibility.RELEASED || privilege == Privilege.REVIEWER) {
             stringBuilder.append(" AND p.is_visible = TRUE ");
         }
 
