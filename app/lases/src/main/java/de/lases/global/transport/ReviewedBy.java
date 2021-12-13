@@ -78,7 +78,10 @@ public class ReviewedBy implements Cloneable {
     public ReviewedBy clone() {
         try {
             ReviewedBy clone = (ReviewedBy) super.clone();
-            // TODO: copy mutable state here, so the clone can't change the internals of the original
+            /*
+             * Nothing to do here, since all references of Submission are
+             * immutable.
+             */
             return clone;
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();

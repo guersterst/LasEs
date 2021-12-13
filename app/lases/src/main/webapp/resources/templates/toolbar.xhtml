@@ -3,43 +3,49 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <div class="card">
-        <div class="card-header">
-            <h:outputText value="#{labels.toolbar}"/>
-        </div>
-        <div class="card-body">
-            <h:form id="add-reviewer-frm">
-                <div class="form-group">
-                    <h:outputLabel for="add-reviewer-itxt" value="#{labels.emailInput}"/>
-                    <h:inputText id="add-reviewer-itxt" value="#{toolbarBacking.reviewerInput.emailAddress}"
-                                 title="#{help.addReviewerEmail}"
-                                 required="true" requiredMessage="#{message.requiredEmail}"
-                                 styleClass="form-control">
-                        <f:validator validatorId="emailAddressExits"/>
-                        <f:validator validatorId="emailAddressLayout"/>
-                    </h:inputText>
-                    <h:message for="add-reviewer-itxt"/>
-                </div>
-                <div class="form-group">
-                    <h:outputLabel for="add-deadline-reviewer-itxt" value="#{labels.deadline}"/>
-                    <h:inputText id="add-deadline-reviewer-itxt"
-                                 value="#{toolbarBacking.reviewedByInput.timestampDeadline}"
-                                 title="#{help.addReviewerDeadline}"
-                                 styleClass="form-control">
-                        <f:convertDateTime type="localDate"/>
-                    </h:inputText>
-                    <h:message for="add-deadline-reviewer-itxt"/>
-                </div>
-                <div class="form-group">
-                    <br/>
-                    <h:commandButton id="add-reviewer-cbtn"
-                                     value="#{labels.addReviewer}"
-                                     action="#{toolbarBacking.addReviewer()}"
-                                     styleClass="btn btn-primary"
-                                     title="#{help.addReviewerButton}"/>
-                </div>
-            </h:form>
+
+    <div class="card-header">
+        <h:outputText value="#{labels.toolbar}"/>
+    </div>
+    <div class="card-body">
+        <h:form id="add-reviewer-frm">
+            <div class="form-group">
+                <h:outputLabel for="add-reviewer-itxt" value="#{labels.emailInput}"/>
+                <h:inputText id="add-reviewer-itxt" value="#{toolbarBacking.reviewerInput.emailAddress}"
+                             title="#{help.addReviewerEmail}"
+                             required="true" requiredMessage="#{message.requiredEmail}"
+                             styleClass="form-control">
+                    <f:validator validatorId="emailAddressExits"/>
+                    <f:validator validatorId="emailAddressLayout"/>
+                </h:inputText>
+                <h:message for="add-reviewer-itxt"/>
+            </div>
+            <div class="form-group">
+                <h:outputLabel for="add-deadline-reviewer-itxt" value="#{labels.deadline}"/>
+                <h:inputText id="add-deadline-reviewer-itxt"
+                             value="#{toolbarBacking.reviewedByInput.timestampDeadline}"
+                             title="#{help.addReviewerDeadline}"
+                             styleClass="form-control">
+                    <f:convertDateTime type="localDate"/>
+                </h:inputText>
+                <h:message for="add-deadline-reviewer-itxt"/>
+            </div>
+            <div class="form-group">
+                <br/>
+                <h:commandButton id="add-reviewer-cbtn"
+                                 value="#{labels.addReviewer}"
+                                 action="#{toolbarBacking.addReviewer()}"
+                                 styleClass="btn btn-primary"
+                                 title="#{help.addReviewerButton}"/>
+            </div>
+        </h:form>
+        <div id="list">
+            <ui:repeat value="#{toolbarBacking.reviewer}" var="reviewer">
+                <h:outputText value="#{reviewer.firstName.concat(' ').concat(reviewer.lastName).concat(': ').concat(toolbarBacking.reviewedByInput.timestampDeadline)}"/>
+                <h:commandButton value="#{labels.deleteButton}" action="#{toolbarBacking.removeReviewer(reviewer)}"/>
+            </ui:repeat>
         </div>
     </div>
+
 
 </ui:composition>

@@ -1,6 +1,7 @@
 package de.lases.control.backing;
 
 import de.lases.business.service.SubmissionService;
+import de.lases.business.service.UserService;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
@@ -15,6 +16,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Backing bean for the toolbar view. This view belongs to the submission page.
@@ -31,6 +33,11 @@ public class ToolbarBacking implements Serializable {
 
     @Inject
     private SubmissionService submissionService;
+
+    @Inject
+    private UserService userService;
+
+    private Logger logger;
 
     private Submission submission;
 
@@ -98,6 +105,22 @@ public class ToolbarBacking implements Serializable {
      * The currently entered user will be added as a reviewer.
      */
     public void addReviewer() {
+        User newUser = new User();
+        newUser.setEmailAddress(reviewerInput.getEmailAddress());
+        User reviewer = userService.get(newUser);
+
+        if (reviewer != null) {
+            logger.finest("Reviewer is an existing person.");
+        }
+
+        ReviewedBy reviewedBy = reviewedByInput.clone();
+        reviewedBy.setReviewerId(reviewer.getId());
+        reviewedBy.setSubmissionId(submission.getId());
+        reviewedBy.setHasAccepted(AcceptanceStatus.PENDING);
+
+        submissionService.addReviewer(submission, reviewer, reviewedBy);
+
+        getReviewer().add(reviewer);
     } // y
 
     /**

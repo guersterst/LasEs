@@ -553,7 +553,7 @@ public class SubmissionRepository {
     /**
      * Adds the specified user to the specified submission as a reviewer.
      *
-     * @param submission  A scientific forum dto with a valid id.
+     * @param submission  A submission dto with a valid id.
      * @param user        A user dto with a valid id.
      * @param transaction The transaction to use.
      * @throws NotFoundException              If there is no scientific forum with the
@@ -567,6 +567,17 @@ public class SubmissionRepository {
     public static void addReviewer(Submission submission, User user,
                                    Transaction transaction)
             throws NotFoundException, DataNotWrittenException {
+        if (submission.getId() == null) {
+            transaction.abort();
+            logger.severe("Passed submission DTO is not sufficiently filled.");
+            throw new InvalidFieldsException("Submission with id: " + submission.getId() + " must not be null.");
+        }
+        if (user.getEmailAddress() == null) {
+            transaction.abort();
+            logger.severe("Passed user DTO is not sufficiently filled.");
+            throw new InvalidFieldsException("User with email: " + user.getEmailAddress() + " must not be null.");
+        }
+
     }
 
     /**
