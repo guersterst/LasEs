@@ -1,6 +1,9 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.*;
+import de.lases.persistence.exception.DataNotWrittenException;
+import de.lases.persistence.exception.KeyExistsException;
+import de.lases.persistence.repository.ScienceFieldRepository;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
@@ -9,6 +12,8 @@ import jakarta.inject.Inject;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
+import java.util.PropertyResourceBundle;
+import java.util.logging.Logger;
 
 /**
  * Provides functionality for handling the scientific fields ({@link ScienceField}s), that the application has.
@@ -23,15 +28,10 @@ public class ScienceFieldService implements Serializable {
     @Inject
     private Event<UIMessage> uiMessageEvent;
 
-    /**
-     * Gets a {@link ScienceField}.
-     *
-     * @param name A {@code String} name of a scienceField.
-     * @return The fully filled requested {@code ScienceField} or null if it doesn't exist.
-     */
-    public ScienceField get(String name) {
-        return null;
-    }
+    @Inject
+    private PropertyResourceBundle resourceBundle;
+
+    private static final Logger logger = Logger.getLogger(ScienceFieldService.class.getName());
 
     /**
      * Adds a {@link ScienceField} to the database.
@@ -39,6 +39,19 @@ public class ScienceFieldService implements Serializable {
      * @param field All the scientific field's data.
      */
     public void add(ScienceField field) {
+        Transaction transaction = new Transaction();
+
+        try {
+            ScienceFieldRepository.add(field, transaction);
+        } catch (DataNotWrittenException e) {
+            logger.warning(e.getMessage());
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotWritten"), MessageCategory.ERROR));
+        } catch (KeyExistsException e) {
+            logger.warning(e.getMessage());
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("scienceFieldExists"), MessageCategory.ERROR));
+        }
+
+        transaction.commit();
     }
 
     /**

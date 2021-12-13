@@ -203,6 +203,26 @@ class ScienceFieldRepositoryTest {
         transaction.abort();
     }
 
+    @Test
+    void testExists() throws DataNotWrittenException, KeyExistsException {
+        Transaction transaction = new Transaction();
+
+        ScienceFieldRepository.add(scienceField, transaction);
+
+        assertTrue(ScienceFieldRepository.isScienceField(scienceField, transaction));
+
+        transaction.abort();
+    }
+
+    @Test
+    void testNotExists() throws DataNotWrittenException, KeyExistsException {
+        Transaction transaction = new Transaction();
+
+        assertFalse(ScienceFieldRepository.isScienceField(scienceField, transaction));
+
+        transaction.abort();
+    }
+
 
 
 }

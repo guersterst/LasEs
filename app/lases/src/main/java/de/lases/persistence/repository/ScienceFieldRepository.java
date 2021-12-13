@@ -274,10 +274,34 @@ public class ScienceFieldRepository {
      * @param scienceField The {@link ScienceField} to check.
      *                    Must contain either an id or a name.
      * @param transaction The transaction to use.
+     * @throws InvalidFieldsException If the science field does not have a name.
+     * @throws DatasourceQueryFailedException If the datasource cannot be
+     *                                        queried.
      * @return Does the given name exist as science field in the repository.
      */
     public static boolean isScienceField(ScienceField scienceField, Transaction transaction) {
-        return false;
+        Connection conn = transaction.getConnection();
+
+        if (scienceField.getName() == null) {
+            throw new InvalidFieldsException("The science field name was null.");
+        }
+
+        String query = """
+                SELECT * FROM science_field
+                WHERE name = ?
+                """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, scienceField.getName());
+            ResultSet resultSet = stmt.executeQuery();
+            boolean exists = resultSet.next();
+            resultSet.close();
+            return exists;
+        } catch (SQLException e) {
+            DatasourceUtil.logSQLException(e, logger);
+            transaction.abort();
+            throw new DatasourceQueryFailedException("Science field could not be added", e);
+        }
     }
 
 }
