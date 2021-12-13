@@ -4,14 +4,18 @@ import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
 import de.lases.persistence.repository.ScientificForumRepository;
 import de.lases.persistence.repository.Transaction;
+import de.lases.persistence.repository.UserRepository;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.PropertyResourceBundle;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
 
 /**
@@ -259,7 +263,7 @@ public class ScientificForumService implements Serializable {
     public void removeScienceField(ScienceField scienceField, ScientificForum forum) {
         if (forum.getId() == null || scienceField.getName() == null) {
 
-            l.severe("Must contain a forum id and sciencefield name to enter in a relationship");
+            l.severe("Must contain a forum id and sciencefield name to dissolve a relationship");
             throw new InvalidFieldsException();
         }
 
@@ -290,19 +294,46 @@ public class ScientificForumService implements Serializable {
      * @return All editors of the given forum.
      */
     public List<User> getEditors(ScientificForum forum) {
-        return null;
+        if (forum.getId() == null) {
+
+            l.severe("Must contain a forum id to find out editors.");
+            throw new InvalidFieldsException();
+        }
+
+        Transaction transaction = new Transaction();
+        List<User> editors = Collections.emptyList();
+        try {
+            editors = UserRepository.getList(transaction, forum);
+        } catch (NotFoundException e) {
+
+            l.severe(e.getMessage() + "\n Caused the operation to fail for: " + forum.getId());
+            uiMessageEvent.fire(new UIMessage(message.getString("dataNotFound"), MessageCategory.ERROR));
+        } finally {
+            transaction.commit();
+        }
+
+        return editors;
     }
 
 
     /**
      * Determines whether a {@link ScientificForum} already exists.
      *
-     * @param scientificForum A {@code ScientificForum} that must be filled
+     * @param forum A {@code ScientificForum} that must be filled
      *                        with a valid id or a name.
      * @return {@code true} if this {@link ScientificForum} exists and {@code false} otherwise.
      */
-    public static boolean exists(ScientificForum scientificForum) {
-        return false;
+    public static boolean exists(ScientificForum forum) {
+        if (forum.getId() == null) {
+
+            l.severe("Must contain a forum id to find out whether it exists.");
+            throw new InvalidFieldsException();
+        }
+
+        Transaction transaction = new Transaction();
+        boolean exists = ScientificForumRepository.exists(forum, transaction);
+        transaction.commit();
+        return exists;
     }
 
     /**
