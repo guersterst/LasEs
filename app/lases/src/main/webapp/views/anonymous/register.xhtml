@@ -7,46 +7,85 @@
     <f:metadata>
         <f:importConstants type="de.lases.control.internal.Constants" var="Const"/>
     </f:metadata>
-    <title>LasEs - Register</title>
-    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css"/>
-    <ui:define name="title">LasEs-Registration</ui:define>
+    <ui:define name="title">#{labels['appName'] += ' - ' += labels['register']}</ui:define>
+
     <ui:define name="content">
         <div class="container-fluid">
-            <div>
-                <h2>Registrierung</h2>
-            </div>
+            <h1>#{labels['register']}</h1>
             <div>
                 <h:form id="register-frm">
-                    <h6>Titel</h6>
-                    <h:inputText id="title-itxt" value="#{registrationBacking.newUser.title}"
-                                 title="#{help.title}"/>
-                    <h6>Vorname</h6>
-                    <h:inputText id="first-name-itxt" value="#{registrationBacking.newUser.firstName}"
-                                 title="#{help.firstName}" required="true"
-                                 requiredMessage="#{message.firstName}" maxlength="#{Const.FIRST_NAME_MAX}"/>
-                    <h6>Nachname</h6>
-                    <h:inputText id="last-name-itxt" value="#{registrationBacking.newUser.passwordNotHashed}"
-                                 title="#{help.lastName}" required="true"
-                                 requiredMessage="#{message.lastName}" maxlength="#{Const.LAST_NAME_MAX}"/>
-                    <h6>Passwort</h6>
-                    <h:inputSecret id="password-iscrt" value="#{registrationBacking.newUser.passwordNotHashed}"
-                                   title="#{help.password}" required="true"
-                                   requiredMessage="#{message.password}">
-                        <!-- <f:validator for="password-iscrt"/>-->
-                    </h:inputSecret>
-                    <h:inputText id="email-itxt" value="#{registrationBacking.newUser.emailAddress}"
-                                 title="#{help.email}" required="true"
-                                 requiredMessage="#{message.email}" maxlength="#{Const.EMAIL_MAX}">
-                        <!--<f:validator/>
-                        <f:validator/>-->
-                    </h:inputText>
+                    <!-- Title -->
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <h:outputText value="#{labels['titleInput']}"/>
+                            </span>
+                        </div>
+                        <h:inputText id="title-itxt" value="#{registrationBacking.newUser.title}"
+                                     maxlength="#{Const.TITLE_MAX}" styleClass="form-control"/>
+                    </div>
+                    <!-- First name -->
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <h:outputText value="#{labels['firstName']}"/>
+                            </span>
+                        </div>
+                        <h:inputText id="first-name-itxt" value="#{registrationBacking.newUser.firstName}"
+                                     title="#{help.firstName}" required="true"
+                                     requiredMessage="#{message.firstNameRequired}" maxlength="#{Const.FIRST_NAME_MAX}"
+                                     styleClass="form-control"/>
+                    </div>
+                    <!-- Last Name -->
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <h:outputText value="#{labels['lastName']}"/>
+                            </span>
+                        </div>
+                        <h:inputText id="last-name-itxt" value="#{registrationBacking.newUser.lastName}"
+                                     title="#{help.lastName}" required="true"
+                                     requiredMessage="#{message.lastNameRequired}" maxlength="#{Const.LAST_NAME_MAX}"
+                                     styleClass="form-control"/>
+                    </div>
+                    <!-- Password -->
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <h:outputText value="#{labels['password']}"/>
+                            </span>
+                        </div>
+                        <h:inputSecret id="password-iscrt" value="#{registrationBacking.newUser.passwordNotHashed}"
+                                       title="#{help.password}" required="true"
+                                       requiredMessage="#{message.passwordNeeded}" styleClass="form-control">
+                            <f:validator for="password-iscrt" validatorId="passwordValidator"/>
+                        </h:inputSecret>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <h:outputText value="#{labels['email']}"/>
+                            </span>
+                        </div>
+                        <h:inputText id="email-itxt" value="#{registrationBacking.newUser.emailAddress}"
+                                     title="#{help.email}" required="true"
+                                     requiredMessage="#{message.emailRequired}" maxlength="#{Const.EMAIL_MAX}"
+                                     styleClass="form-control">
+                            <f:validator for="email-itxt" validatorId="emailAddressExistsValidator"/>
+                            <f:validator for="email-itxt" validatorId="emailAddressLayoutValidator"/>
+                        </h:inputText>
+                    </div>
+                    <!-- Register button -->
                     <div>
-                        <h:commandButton id="register-cbtn" value="#{label.register}"
+                        <h:commandButton id="register-cbtn" value="#{labels.register}"
                                          action="#{registrationBacking.register}"/>
                     </div>
+                    <!-- Login link -->
                     <div>
-                        <h:link id="welcomepage-lnk" value="#{label.welcome}" outcome="/facelets/anonymous/welcome"
-                                title="#{help.welcomepage}"/>
+                        <h:link id="welcomepage-lnk" value="#{labels.welcomeLink}" outcome="/views/anonymous/welcome"
+                                title="#{help.welcomePage}"/>
                     </div>
                 </h:form>
             </div>
