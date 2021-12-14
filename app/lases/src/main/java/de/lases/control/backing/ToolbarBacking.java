@@ -18,7 +18,9 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -52,7 +54,7 @@ public class ToolbarBacking implements Serializable {
 
     private User currentEditor;
 
-    private List<User> reviewer;
+    private HashMap<User, ReviewedBy> reviewer;
 
     private List<User> editors;
 
@@ -82,7 +84,7 @@ public class ToolbarBacking implements Serializable {
         submission = new Submission();
         reviewerInput = new User();
         reviewedByInput = new ReviewedBy();
-        reviewer = new ArrayList<>();
+        reviewer = new HashMap<>();
         editors = new ArrayList<>();
         currentEditor = new User();
     }
@@ -108,7 +110,8 @@ public class ToolbarBacking implements Serializable {
      */
     public void onLoad(Submission sub) {
         submission = sub;
-        reviewer = userService.getList(submission, Privilege.REVIEWER);
+        List<User> userList = userService.getList(submission, Privilege.REVIEWER);
+        List<ReviewedBy> reviewedByList = submissionService.getReviewedBy(submission)
         editors = userService.getList(submission, Privilege.EDITOR);
 
         currentEditor.setId(submission.getEditorId());

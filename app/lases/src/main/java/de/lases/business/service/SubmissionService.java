@@ -319,6 +319,17 @@ public class SubmissionService implements Serializable {
     }
 
     /**
+     * Gets a list of all relations between the specific {@code submission} and the reviewer of it.
+     *
+     * @param submission The submission which is requested to be reviewed by a reviewer.
+     * @return A List of {@link ReviewedBy}-DTO containing information about the review-request relationship of a
+     * submission and the reviewer.
+     */
+    public List<ReviewedBy> getList(Submission submission) {
+
+    }
+
+    /**
      * Updates the given {@code ReviewedBy} in the repository.
      *
      * @param reviewedBy The fully filled {@link ReviewedBy}.
