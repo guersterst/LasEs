@@ -309,7 +309,12 @@ public class SubmissionBacking implements Serializable {
      * @return The page for a new review
      */
     public String uploadReview() {
-        return null;
+        Review newReview = new Review();
+        newReview.setVisible(false);
+        newReview.setReviewerId(sessionInformation.getUser().getId());
+        newReview.setSubmissionId(submission.getId());
+        newReviewBacking.setReview(newReview);
+        return "/views/reviewer/newReview.xhtml";
     }
 
     /**

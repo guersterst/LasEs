@@ -245,6 +245,7 @@
                                         <h:outputText id="date-review-deadline-otxt" value="#{submissionBacking.getDeadlineForReviewer(sessionInformation.user)}">
                                             <f:convertDateTime type="localDateTime"/>
                                         </h:outputText>
+                                        <h:commandButton id="new-review-cbtn" value="#{labels.uploadReview}" action="#{submissionBacking.uploadReview()}"/>
                                     </div>
                                 </h:form>
                             </div>
