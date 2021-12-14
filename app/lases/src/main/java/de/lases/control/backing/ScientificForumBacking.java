@@ -1,9 +1,7 @@
 package de.lases.control.backing;
 
-import de.lases.business.service.ScienceFieldService;
-import de.lases.business.service.ScientificForumService;
-import de.lases.business.service.SubmissionService;
-import de.lases.business.service.UserService;
+import de.lases.business.internal.ConfigPropagator;
+import de.lases.business.service.*;
 import de.lases.control.exception.IllegalUserFlowException;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
@@ -15,7 +13,7 @@ import jakarta.inject.Named;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,7 +30,10 @@ public class ScientificForumBacking implements Serializable {
     private SessionInformation sessionInformation;
 
     @Inject
-    private SubmissionService submissionListService;
+    private SubmissionService submissionService;
+
+    @Inject
+    private ReviewService reviewService;
 
     @Inject
     private ScientificForumService scientificForumService;
@@ -43,23 +44,30 @@ public class ScientificForumBacking implements Serializable {
     @Inject
     private UserService userService;
 
+    @Inject
+    private ConfigPropagator config;
+
     private ScientificForum scientificForum;
+
+    private User user;
 
     private User newEditorInput;
 
     private ScienceField selectedScienceFieldInput;
 
-    private Pagination<Submission> submissionPagination;
-
-    private Pagination<Submission> reviewedPagination;
-
-    private Pagination<Submission> editedPagination;
+    private Pagination<Submission> submissionsPagination;
 
     private List<User> editors;
 
-    private List<ScienceField> selectedScieneFields;
+    private List<ScienceField> currentScieneFields;
 
-    private List<ScienceField> scienceFields;
+    private List<ScienceField> allScienceFields;
+
+    private enum Tab {
+        OWN_SUBMISSIONS, SUBMISSIONS_TO_EDIT, SUBMISSIONS_TO_REVIEW;
+    }
+
+    private Tab tab;
 
     /**
      * Initialize the dtos and load data from the datasource where possible.
@@ -97,6 +105,91 @@ public class ScientificForumBacking implements Serializable {
      */
     @PostConstruct
     public void init() {
+        user = sessionInformation.getUser();
+        scientificForum = new ScientificForum();
+        editors = new ArrayList<>();
+        allScienceFields = new ArrayList<>();
+
+        newEditorInput = new User();
+        currentScieneFields = new ArrayList<>();
+        selectedScienceFieldInput = new ScienceField();
+        displayOwnSubmissionsTab();
+    }
+
+    public void displayOwnSubmissionsTab() {
+        submissionsPagination = new Pagination<Submission>("submissionTime") {
+
+            final List<Submission> authoredSubmissions =
+                    submissionService.getList(scientificForum, user,
+                            Privilege.AUTHOR, submissionsPagination.getResultListParameters());
+
+            @Override
+            public void loadData() {
+                //submissionPagination.getResultListParameters().setDateSelect(DateSelect.ALL);
+                submissionsPagination.setEntries(authoredSubmissions);
+            }
+
+            @Override
+            protected Integer calculateNumberPages() {
+                int itemsPerPage = Integer.parseInt(config.getProperty("MAX_PAGINATION_LIST_LENGTH"));
+                return (int) Math.ceil((double) submissionService
+                        .countSubmissions(user, Privilege.AUTHOR,
+                                getResultListParameters()) / itemsPerPage);
+            }
+        };
+        tab = Tab.OWN_SUBMISSIONS;
+        submissionsPagination.loadData();
+    }
+
+    public void displayReviewSubmissionsTab() {
+        submissionsPagination = new Pagination<Submission>("submissionTime") {
+
+            final List<Submission> reviewedSubmissions = submissionService.getList(scientificForum,
+                    sessionInformation.getUser(), Privilege.REVIEWER, submissionsPagination.getResultListParameters());
+
+            @Override
+            public void loadData() {
+                //reviewedPagination.getResultListParameters().setDateSelect(DateSelect.ALL);
+                // Todo müssen reviews freigeschaltet werden?
+                //reviewedPagination.getResultListParameters().setVisibleFilter(Visibility.RELEASED);
+
+                submissionsPagination.setEntries(reviewedSubmissions);
+            }
+
+            @Override
+            protected Integer calculateNumberPages() {
+                int itemsPerPage = Integer.parseInt(config.getProperty("MAX_PAGINATION_LIST_LENGTH"));
+                return (int) Math.ceil((double) submissionService
+                        .countSubmissions(user, Privilege.REVIEWER,
+                                getResultListParameters()) / itemsPerPage);
+            }
+        };
+        tab = Tab.SUBMISSIONS_TO_REVIEW;
+        submissionsPagination.loadData();
+    }
+
+    public void displayEditSubmissionsTab() {
+        submissionsPagination = new Pagination<Submission>("submissionTime") {
+
+            final List<Submission> editedSubmissions = submissionService.getList(scientificForum,
+                    sessionInformation.getUser(), Privilege.EDITOR, submissionsPagination.getResultListParameters());
+
+            @Override
+            public void loadData() {
+                submissionsPagination.getResultListParameters().setDateSelect(DateSelect.ALL);
+                submissionsPagination.setEntries(editedSubmissions);
+            }
+
+            @Override
+            protected Integer calculateNumberPages() {
+                int itemsPerPage = Integer.parseInt(config.getProperty("MAX_PAGINATION_LIST_LENGTH"));
+                return (int) Math.ceil((double) submissionService
+                        .countSubmissions(user, Privilege.EDITOR,
+                                getResultListParameters()) / itemsPerPage);
+            }
+        };
+        tab = Tab.SUBMISSIONS_TO_EDIT;
+        submissionsPagination.loadData();
     }
 
     /**
@@ -136,7 +229,8 @@ public class ScientificForumBacking implements Serializable {
      * @throws IllegalUserFlowException If there is no integer provided as view
      *                                  param
      */
-    public void preRenderViewListener(ComponentSystemEvent event) {}
+    public void preRenderViewListener(ComponentSystemEvent event) {
+    }
 
     /**
      * Delete the scientific forum and got to the homepage.
@@ -182,6 +276,15 @@ public class ScientificForumBacking implements Serializable {
     public void submitChanges() {
     }
 
+
+    public Tab getTab() {
+        return tab;
+    }
+
+    public void setTab(Tab tab) {
+        this.tab = tab;
+    }
+
     /**
      * Get the pagination for the search results with submissions submitted by
      * the user.
@@ -189,26 +292,7 @@ public class ScientificForumBacking implements Serializable {
      * @return The pagination for the submission submitted by the user.
      */
     public Pagination<Submission> getSubmissionPagination() {
-        return submissionPagination;
-    }
-
-    /**
-     * Get the pagination for the search results with submissions reviewed by
-     * the user.
-     *
-     * @return The pagination for the submission reviewed by the user.
-     */
-    public Pagination<Submission> getReviewedPagination() {
-        return reviewedPagination;
-    }
-
-    /**
-     * Get the pagination for the submissions edited by the user.
-     *
-     * @return The pagination for the submission edited by the user.
-     */
-    public Pagination<Submission> getEditedPagination() {
-        return editedPagination;
+        return submissionsPagination;
     }
 
     /**
@@ -225,8 +309,8 @@ public class ScientificForumBacking implements Serializable {
      *
      * @return The list of science fields belonging to this forum.
      */
-    public List<ScienceField> getSelectedScieneFields() {
-        return selectedScieneFields;
+    public List<ScienceField> getCurrentScienceFields() {
+        return currentScieneFields;
     }
 
     /**
@@ -234,8 +318,8 @@ public class ScientificForumBacking implements Serializable {
      *
      * @return The list of science fields.
      */
-    public List<ScienceField> getScienceFields() {
-        return scienceFields;
+    public List<ScienceField> getAllScienceFields() {
+        return allScienceFields;
     }
 
     /**
@@ -282,5 +366,7 @@ public class ScientificForumBacking implements Serializable {
     public boolean loggedInUserIsReviewer() {
         return false;
     }
+
+
 
 }

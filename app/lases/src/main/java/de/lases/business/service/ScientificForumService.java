@@ -304,7 +304,7 @@ public class ScientificForumService implements Serializable {
         List<User> editors = Collections.emptyList();
         try {
             editors = UserRepository.getList(transaction, forum);
-        } catch (NotFoundException e) {
+        } catch (NotFoundException | DataNotCompleteException e) {
 
             l.severe(e.getMessage() + "\n Caused the operation to fail for: " + forum.getId());
             uiMessageEvent.fire(new UIMessage(message.getString("dataNotFound"), MessageCategory.ERROR));
