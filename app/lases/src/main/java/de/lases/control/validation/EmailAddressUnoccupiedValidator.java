@@ -24,7 +24,7 @@ public class EmailAddressUnoccupiedValidator implements Validator<String> {
     @Inject
     private UserService userService;
 
-    Logger l = Logger.getLogger(EmailAddressUnoccupiedValidator.class.getName());
+    private final Logger l = Logger.getLogger(EmailAddressUnoccupiedValidator.class.getName());
 
     @Inject
     private PropertyResourceBundle bundle;

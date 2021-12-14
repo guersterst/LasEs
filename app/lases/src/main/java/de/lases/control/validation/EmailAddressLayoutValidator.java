@@ -26,7 +26,7 @@ public class EmailAddressLayoutValidator implements Validator<String> {
     private static final String EMAIL_REGEX =
             "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
 
-    Logger l = Logger.getLogger(EmailAddressLayoutValidator.class.getName());
+    private final Logger l = Logger.getLogger(EmailAddressLayoutValidator.class.getName());
 
     @Inject
     private PropertyResourceBundle bundle;
