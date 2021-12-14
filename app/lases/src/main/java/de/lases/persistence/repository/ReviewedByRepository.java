@@ -76,6 +76,18 @@ public class ReviewedByRepository {
      */
     public static void change(ReviewedBy reviewedBy, Transaction transaction)
             throws NotFoundException, DataNotWrittenException {
+        Connection conn = transaction.getConnection();
+        String query = "UPDATE reviewed_by SET timestamp_deadline = ?, has_accepted = CAST(? as review_task_state)  WHERE submission_id = ? AND reviewer_id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+                ps.setTimestamp(1, Timestamp.valueOf(reviewedBy.getTimestampDeadline()));
+                ps.setString(2, reviewedBy.getHasAccepted().toString());
+                ps.setInt(3, reviewedBy.getSubmissionId());
+                ps.setInt(4, reviewedBy.getReviewerId());
+
+                ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new DatasourceQueryFailedException(e.getMessage());
+        }
     }
 
 }

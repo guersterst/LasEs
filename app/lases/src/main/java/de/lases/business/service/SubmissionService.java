@@ -300,6 +300,19 @@ public class SubmissionService implements Serializable {
      * @param reviewedBy The fully filled {@link ReviewedBy}.
      */
     public void changeReviewedBy(ReviewedBy reviewedBy) {
+        Transaction transaction = new Transaction();
+        try {
+            ReviewedByRepository.change(reviewedBy, transaction);
+            transaction.commit();
+        } catch (NotFoundException e) {
+            transaction.abort();
+            logger.info("Could not update ReviewedBy: " + reviewedBy + e.getMessage());
+            uiMessageEvent.fire(new UIMessage("Review Request does not exist.", MessageCategory.ERROR));
+        } catch (DataNotWrittenException e) {
+            transaction.abort();
+            logger.info("Could not update ReviewedBy: " + reviewedBy + e.getMessage());
+            uiMessageEvent.fire(new UIMessage("Could not update status.", MessageCategory.ERROR));
+        }
     }
 
     /**

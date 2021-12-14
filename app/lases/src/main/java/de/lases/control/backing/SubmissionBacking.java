@@ -318,6 +318,9 @@ public class SubmissionBacking implements Serializable {
      * @param user The user that accepted to be a reviewer.
      */
     public void acceptReviewing(User user) {
+        ReviewedBy update = submissionService.getReviewedBy(submission, user);
+        update.setHasAccepted(AcceptanceStatus.ACCEPTED);
+        submissionService.changeReviewedBy(update);
     }
 
     /**
@@ -326,6 +329,9 @@ public class SubmissionBacking implements Serializable {
      * @param user The user that declined to be a reviewer.
      */
     public void declineReviewing(User user) {
+        ReviewedBy update = submissionService.getReviewedBy(submission, user);
+        update.setHasAccepted(AcceptanceStatus.REJECTED);
+        submissionService.changeReviewedBy(update);
     }
 
     /**
