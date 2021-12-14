@@ -116,6 +116,7 @@ public class ScientificForumBacking implements Serializable {
     }
 
     public void displayOwnSubmissionsTab() {
+        //Todo defaultsortedby not working
         submissionPagination = new Pagination<Submission>("submissionTime") {
 
             @Override

@@ -138,7 +138,6 @@ public abstract class Pagination<T> {
     }
 
     public void applyFilters() {
-        l.severe("Filters Applied!");
         resultListParameters.setPageNo(1);
         loadData();
     }
