@@ -15,6 +15,7 @@ import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 
+import javax.management.openmbean.KeyAlreadyExistsException;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
@@ -294,6 +295,9 @@ public class SubmissionService implements Serializable {
             logger.log(Level.WARNING, e.getMessage());
 
             transaction.abort();
+        } catch (KeyAlreadyExistsException e) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("alreadyExistsReviewer"), MessageCategory.WARNING));
+            logger.log(Level.WARNING, e.getMessage());
         }
 
         //TODO:Need to send E-Mail when adding the user as reviewer is successful

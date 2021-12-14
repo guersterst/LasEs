@@ -7,6 +7,7 @@ import de.lases.persistence.util.DatasourceUtil;
 import jakarta.enterprise.inject.spi.CDI;
 import org.postgresql.util.PSQLException;
 
+import javax.management.openmbean.KeyAlreadyExistsException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -110,13 +111,13 @@ public class SubmissionRepository {
      *                    (The id must not be specified, as the repository will
      *                    create the id)
      * @param transaction The transaction to use.
+     * @return The submission that was added, but filled with its id.
      * @throws DataNotWrittenException        If writing the data to the repository
      *                                        fails.
      * @throws InvalidFieldsException         If one of the required fields of the
      *                                        submission is null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
-     * @return The submission that was added, but filled with its id.
      */
     public static Submission add(Submission submission, Transaction transaction)
             throws DataNotWrittenException {
@@ -521,7 +522,7 @@ public class SubmissionRepository {
 
         if (user.getId() == null || submission.getId() == null) {
             transaction.abort();
-            String nullArgument = user.getId() == null ? "user": "submission";
+            String nullArgument = user.getId() == null ? "user" : "submission";
             throw new InvalidFieldsException("The ids of the " + nullArgument + " must not be null");
         }
         Connection conn = transaction.getConnection();
@@ -540,7 +541,7 @@ public class SubmissionRepository {
             // 23503: Foreign key constraint violated
             if (ex.getSQLState().equals("23503")) {
                 throw new NotFoundException("Either the specified user or submission does not exist");
-            } else if (! (ex instanceof PSQLException)) {
+            } else if (!(ex instanceof PSQLException)) {
                 throw new DataNotWrittenException("The co-author was not added", ex);
             } else {
                 transaction.abort();
@@ -553,7 +554,7 @@ public class SubmissionRepository {
     /**
      * Adds the specified user to the specified submission as a reviewer.
      *
-     * @param reviewedBy A relation between submission and a user in a role of a reviewer.
+     * @param reviewedBy  A relation between submission and a user in a role of a reviewer.
      * @param transaction The transaction to use.
      * @throws NotFoundException              If there is no submission forum with the
      *                                        provided id or there is no user with the
@@ -565,7 +566,7 @@ public class SubmissionRepository {
      */
     public static void addReviewer(ReviewedBy reviewedBy,
                                    Transaction transaction)
-            throws NotFoundException, DataNotWrittenException {
+            throws NotFoundException, DataNotWrittenException, KeyAlreadyExistsException {
         if (reviewedBy.getSubmissionId() == null) {
             transaction.abort();
             logger.severe("Passed submission DTO is not sufficiently filled.");
@@ -580,7 +581,7 @@ public class SubmissionRepository {
         Connection connection = transaction.getConnection();
         String findSubmission = "SELECT s.id FROM submission s WHERE s.id = ?";
 
-        try (PreparedStatement statement = connection.prepareStatement(findSubmission)){
+        try (PreparedStatement statement = connection.prepareStatement(findSubmission)) {
 
             statement.setInt(1, reviewedBy.getSubmissionId());
 
@@ -602,7 +603,7 @@ public class SubmissionRepository {
 
         String sql = "INSERT INTO reviewed_by VALUES (?, ?, CAST (? as review_task_state), ?)";
 
-        try (PreparedStatement statement = connection.prepareStatement(sql)){
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, reviewedBy.getReviewerId());
             statement.setInt(2, reviewedBy.getSubmissionId());
             statement.setString(3, reviewedBy.getHasAccepted().name());
@@ -613,7 +614,12 @@ public class SubmissionRepository {
         } catch (SQLException exception) {
             transaction.abort();
             DatasourceUtil.logSQLException(exception, logger);
-            throw new DatasourceQueryFailedException("A datasource exception occurred while adding a new reviewer.");
+            if (exception.getSQLState().equals("23505")) {
+                throw new KeyAlreadyExistsException("Reviewer does already review this submission.");
+            } else {
+                throw new DatasourceQueryFailedException("A datasource exception occurred while adding a new reviewer.");
+            }
+
         }
 
     }
