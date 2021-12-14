@@ -302,6 +302,8 @@ public class UserService implements Serializable {
         }
 
         transaction.commit();
+        uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("verification.success"),
+                MessageCategory.INFO));
         return storedVerification;
     }
 }
