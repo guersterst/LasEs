@@ -218,6 +218,13 @@ public class ScientificForumBacking implements Serializable {
      * </ul>
      */
     public void onLoad() {
+        scientificForum = scientificForumService.get(scientificForum);
+        editors = userService.getList(scientificForum);
+
+        // Todo richtige ResultListParameters here?
+        allScienceFields = scienceFieldService.getList(new ResultListParameters());
+        currentScieneFields = scienceFieldService.getList(scientificForum, new ResultListParameters());
+        displayOwnSubmissionsTab();
     }
 
     /**
