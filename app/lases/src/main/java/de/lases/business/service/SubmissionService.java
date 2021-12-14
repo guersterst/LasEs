@@ -268,11 +268,35 @@ public class SubmissionService implements Serializable {
      * {@code EmailUtil} utility.
      * </p>
      *
-     * @param submission The submission, with a valid id, that receives a new reviewer.
      * @param reviewer   The reviewer to be added to the submission.
      * @param reviewedBy Information about the review-request relationship.
      */
-    public void addReviewer(Submission submission, User reviewer, ReviewedBy reviewedBy) {
+    public void addReviewer(User reviewer, ReviewedBy reviewedBy) {
+        if (reviewer.getId() != reviewedBy.getReviewerId() || reviewer.getId() == null) {
+            logger.severe("The id in the reviewed_by DTO and the id in the user DTO does not match or at least one of them are null");
+            throw new InvalidFieldsException("The id's need to be equal and must not be null.");
+        }
+
+        Transaction transaction = new Transaction();
+
+        try {
+            SubmissionRepository.addReviewer(reviewedBy,transaction);
+            transaction.commit();
+        } catch (DataNotWrittenException e) {
+
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotWritten"), MessageCategory.WARNING));
+            logger.log(Level.WARNING, e.getMessage());
+
+            transaction.abort();
+
+        } catch (NotFoundException e) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotFound"), MessageCategory.WARNING));
+            logger.log(Level.WARNING, e.getMessage());
+
+            transaction.abort();
+        }
+
+        //TODO:Need to send E-Mail when adding the user as reviewer is successful
     }
 
 

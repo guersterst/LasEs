@@ -118,7 +118,7 @@ public class ToolbarBacking implements Serializable {
         reviewedBy.setSubmissionId(submission.getId());
         reviewedBy.setHasAccepted(AcceptanceStatus.NO_DECISION);
 
-        submissionService.addReviewer(submission, reviewer, reviewedBy);
+        submissionService.addReviewer(reviewer, reviewedBy);
 
         getReviewer().add(reviewer);
     }
