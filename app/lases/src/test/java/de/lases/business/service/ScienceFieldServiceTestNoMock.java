@@ -1,12 +1,9 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.FileDTO;
-import de.lases.global.transport.ResultListParameters;
 import de.lases.global.transport.ScienceField;
-import de.lases.global.transport.User;
 import de.lases.persistence.internal.ConfigReader;
 import de.lases.persistence.repository.ConnectionPool;
-import de.lases.persistence.repository.ScienceFieldRepository;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.context.SessionScoped;
 import org.jboss.weld.junit5.WeldInitiator;
@@ -14,17 +11,9 @@ import org.jboss.weld.junit5.WeldJunit5Extension;
 import org.jboss.weld.junit5.WeldSetup;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.MockedStatic;
 
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mockStatic;
 
 @ExtendWith(WeldJunit5Extension.class)
 public class ScienceFieldServiceTestNoMock {
