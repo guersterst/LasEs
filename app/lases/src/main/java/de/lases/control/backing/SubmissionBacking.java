@@ -126,13 +126,11 @@ public class SubmissionBacking implements Serializable {
         coAuthors = new LinkedList<>();
         author = new User();
 
-        paperPagination = new Pagination<Paper>("version") {
+        paperPagination = new Pagination<>("version") {
             @Override
             public void loadData() {
-                paperPagination.getResultListParameters().setVisibleFilter(Visibility.ALL);
-                paperPagination.getResultListParameters().setDateSelect(DateSelect.ALL);
-                paperPagination.setEntries(paperService.getList(submission,sessionInformation.getUser(),paperPagination.getResultListParameters()));
-            }
+               setEntries(paperService.getList(submission, sessionInformation.getUser(), getResultListParameters()));
+                }
 
             @Override
             protected Integer calculateNumberPages() {
@@ -195,6 +193,8 @@ public class SubmissionBacking implements Serializable {
 
         coAuthors = userService.getList(submission, Privilege.AUTHOR);
         reviewers = userService.getList(submission, Privilege.REVIEWER);
+
+        coAuthors.removeIf(user -> user.getId().equals(author.getId()));
 
         paperPagination.loadData();
         reviewPagination.loadData();
@@ -405,7 +405,7 @@ public class SubmissionBacking implements Serializable {
 
             Submission newSubmission = submission.clone();
             newSubmission.setState(SubmissionState.SUBMITTED);
-            newSubmission.setRevisionRequired(false);
+            newSubmission.setRevisionRequired(newSubmission.getState() == SubmissionState.REVISION_REQUIRED);
 
             submissionService.change(newSubmission);
 
