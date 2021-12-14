@@ -2,6 +2,7 @@ package de.lases.business.service;
 
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
+import de.lases.persistence.repository.ScienceFieldRepository;
 import de.lases.persistence.repository.ScientificForumRepository;
 import de.lases.persistence.repository.Transaction;
 import de.lases.persistence.repository.UserRepository;
@@ -166,7 +167,20 @@ public class ScientificForumService implements Serializable {
             throw new InvalidFieldsException();
         }
 
+        // Query whether this editor is already in the forum.
         Transaction transaction = new Transaction();
+        try {
+            List<User> editors = UserRepository.getList(transaction, forum);
+            for (User oldEditor : editors) {
+                if (oldEditor.equals(editor)) {
+                    l.warning("Cannot add an editor, that already exists.");
+                    uiMessageEvent.fire(new UIMessage("editorAlreadyExistsInForum", MessageCategory.INFO));
+                }
+            }
+        } catch (DataNotCompleteException |NotFoundException e) {
+            l.warning("Could not query whether this editor is a duplicate.");
+        }
+
         try {
 
             ScientificForumRepository.addEditor(forum, editor, transaction);
@@ -233,6 +247,20 @@ public class ScientificForumService implements Serializable {
         }
 
         Transaction transaction = new Transaction();
+
+        // Query whether this sciencefield is already in the forum.
+        try {
+            List<ScienceField> oldScienceFields = ScienceFieldRepository
+                    .getList(forum, transaction, new ResultListParameters());
+            for (ScienceField oldField : oldScienceFields) {
+                if (oldField.equals(scienceField)) {
+                    l.warning("Cannot add a field, that already exists in this forum.");
+                    uiMessageEvent.fire(new UIMessage("scienceFieldAlreadyExistsInForum", MessageCategory.INFO));
+                }
+            }
+        } catch (DataNotCompleteException e) {
+            l.warning("Could not query whether this field is a duplicate: " + scienceField.getName());
+        }
         try {
 
             ScientificForumRepository.addScienceField(forum, scienceField, transaction);

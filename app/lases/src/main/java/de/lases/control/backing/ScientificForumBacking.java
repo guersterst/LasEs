@@ -36,7 +36,7 @@ public class ScientificForumBacking implements Serializable {
     private ReviewService reviewService;
 
     @Inject
-    private ScientificForumService scientificForumService;
+    private ScientificForumService forumService;
 
     @Inject
     private ScienceFieldService scienceFieldService;
@@ -47,7 +47,7 @@ public class ScientificForumBacking implements Serializable {
     @Inject
     private ConfigPropagator config;
 
-    private ScientificForum scientificForum;
+    private ScientificForum forum;
 
     private User user;
 
@@ -106,7 +106,7 @@ public class ScientificForumBacking implements Serializable {
     @PostConstruct
     public void init() {
         user = sessionInformation.getUser();
-        scientificForum = new ScientificForum();
+        forum = new ScientificForum();
         editors = new ArrayList<>();
         allScienceFields = new ArrayList<>();
 
@@ -120,7 +120,7 @@ public class ScientificForumBacking implements Serializable {
         submissionsPagination = new Pagination<Submission>("submissionTime") {
 
             final List<Submission> authoredSubmissions =
-                    submissionService.getList(scientificForum, user,
+                    submissionService.getList(forum, user,
                             Privilege.AUTHOR, submissionsPagination.getResultListParameters());
 
             @Override
@@ -144,7 +144,7 @@ public class ScientificForumBacking implements Serializable {
     public void displayReviewSubmissionsTab() {
         submissionsPagination = new Pagination<Submission>("submissionTime") {
 
-            final List<Submission> reviewedSubmissions = submissionService.getList(scientificForum,
+            final List<Submission> reviewedSubmissions = submissionService.getList(forum,
                     sessionInformation.getUser(), Privilege.REVIEWER, submissionsPagination.getResultListParameters());
 
             @Override
@@ -171,7 +171,7 @@ public class ScientificForumBacking implements Serializable {
     public void displayEditSubmissionsTab() {
         submissionsPagination = new Pagination<Submission>("submissionTime") {
 
-            final List<Submission> editedSubmissions = submissionService.getList(scientificForum,
+            final List<Submission> editedSubmissions = submissionService.getList(forum,
                     sessionInformation.getUser(), Privilege.EDITOR, submissionsPagination.getResultListParameters());
 
             @Override
@@ -218,12 +218,12 @@ public class ScientificForumBacking implements Serializable {
      * </ul>
      */
     public void onLoad() {
-        scientificForum = scientificForumService.get(scientificForum);
-        editors = userService.getList(scientificForum);
+        forum = forumService.get(forum);
+        editors = userService.getList(forum);
 
         // Todo richtige ResultListParameters here?
         allScienceFields = scienceFieldService.getList(new ResultListParameters());
-        currentScieneFields = scienceFieldService.getList(scientificForum, new ResultListParameters());
+        currentScieneFields = scienceFieldService.getList(forum, new ResultListParameters());
         displayOwnSubmissionsTab();
     }
 
@@ -240,24 +240,31 @@ public class ScientificForumBacking implements Serializable {
     }
 
     /**
-     * Delete the scientific forum and got to the homepage.
+     * Delete the scientific forum and go to the homepage.
      *
      * @return Go to the homepage.
      */
     public String deleteForum() {
-        return null;
+        forumService.remove(forum);
+        return "/views/authenticated/homepage.xhtml?faces-redirect=true";
     }
 
     /**
      * Add the currently selected user to the list of editors.
      */
     public void addEditor() {
+        forumService.addEditor(newEditorInput, forum);
+        //TODO reload list of editors
+        //call onLoad f.e.
+        //does this work? -> ajax
+        //same on other action methods
     }
 
     /**
      * Add the currently selected scienceField to the list of science fields.
      */
     public void addScienceField() {
+        forumService.addScienceField(selectedScienceFieldInput, forum);
     }
 
     /**
@@ -266,6 +273,7 @@ public class ScientificForumBacking implements Serializable {
      * @param user User to remove from editor list.
      */
     public void removeEditor(User user) {
+        forumService.removeEditor(user, forum);
     }
 
     /**
@@ -274,6 +282,7 @@ public class ScientificForumBacking implements Serializable {
      * @param scienceField Field to remove from the list.
      */
     public void removeScienceField(ScienceField scienceField) {
+        forumService.removeScienceField(scienceField, forum);
     }
 
     /**
