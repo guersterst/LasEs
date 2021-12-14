@@ -11,10 +11,6 @@
     <ui:define name="title">#{labels['emailVerification']}</ui:define>
 
     <ui:define name="content">
-        <h:outputText id="success-otxt" value="#{labels['verification.success']}"
-                      rendered="#{verificationBacking.verification.verified}"/>
-        <h:outputText id="failed-otxt" value="#{labels['verification.failure']}"
-                      rendered="#{not verificationBacking.verification.verified}"/>
         <h:commandButton id="go-to-home-cbtn" action="#{verificationBacking.goToHome}"/>
     </ui:define>
 

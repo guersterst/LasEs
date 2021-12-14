@@ -258,15 +258,17 @@ public class UserService implements Serializable {
     /**
      * Verifies a user's email-address.
      *
-     * @param verification The {@link Verification} containing the validation random.
+     * @param verification The {@link Verification}, containing the validation random, otherwise
+     *                     a UIMessage is fired.
      * @return The filled {@link Verification} with verified set to true if the verification
      *         was successful.
      * @author Thomas Kirz
      */
     public Verification verify(Verification verification) {
         if (verification.getValidationRandom() == null) {
-            l.severe("Validation random is null.");
-            throw new IllegalArgumentException("Validation random is null.");
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("verification.noRandom"),
+                    MessageCategory.ERROR));
+            return verification;
         }
 
         Transaction transaction = new Transaction();
