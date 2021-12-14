@@ -387,6 +387,7 @@ public class UserRepository {
             }
         } catch (SQLException e) {
             DatasourceUtil.logSQLException(e, logger);
+            transaction.abort();
             throw new DatasourceQueryFailedException("Failed to retrieve Verification from database.", e);
         }
 
