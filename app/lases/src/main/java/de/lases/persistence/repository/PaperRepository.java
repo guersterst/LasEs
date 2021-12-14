@@ -52,12 +52,10 @@ public class PaperRepository {
         }
 
         Connection connection = transaction.getConnection();
+        String sql = "SELECT * FROM paper WHERE submission_id = ? AND version = ?";
 
-        try {
-            PreparedStatement statement = connection.prepareStatement("""
-                    SELECT * FROM paper
-                    WHERE submission_id = ? AND version = ?
-                    """);
+        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+
             statement.setInt(1, paper.getSubmissionId());
             statement.setInt(2, paper.getVersionNumber());
 
@@ -100,6 +98,7 @@ public class PaperRepository {
      */
     public static void add(Paper paper, FileDTO pdf, Transaction transaction) throws DataNotWrittenException {
         Connection conn = transaction.getConnection();
+        String sqlMaxVersion = "SELECT max(version) FROM paper WHERE submission_id = ?";
 
         if (paper.getUploadTime() == null) {
             throw new InvalidFieldsException("The upload time of the paper "
@@ -115,10 +114,7 @@ public class PaperRepository {
 
         Integer id = null;
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement("""
-                    SELECT max(version) FROM paper WHERE submission_id = ?
-                    """);
+        try (PreparedStatement stmt = conn.prepareStatement(sqlMaxVersion)){
             stmt.setInt(1, paper.getSubmissionId());
             ResultSet resultSet = stmt.executeQuery();
             if (resultSet.next()) {
@@ -133,11 +129,9 @@ public class PaperRepository {
                     + "occurred", ex);
         }
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement("""
-                    INSERT INTO paper
-                    VALUES (?, ?, ?, ?, ?)
-                    """);
+        String sqlInsert = "INSERT INTO paper VALUES (?, ?, ?, ?, ?)";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sqlInsert)){
             stmt.setInt(1, id);
             stmt.setInt(2, paper.getSubmissionId());
             stmt.setTimestamp(3, Timestamp.valueOf(paper.getUploadTime()));
@@ -185,16 +179,9 @@ public class PaperRepository {
             logger.fine("Searching paper failed. Tried to change paper");
             throw new NotFoundException();
         }
+        String sql = "UPDATE paper SET is_visible = ? WHERE version = ? AND submission_id = ?";
 
-        try {
-
-            PreparedStatement statement = connection.prepareStatement(
-                    """
-                            UPDATE paper
-                            SET is_visible = ?
-                            WHERE version = ? AND submission_id = ?
-                            """
-            );
+        try (PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setBoolean(1, paper.isVisible());
             statement.setInt(2, paper.getVersionNumber());
             statement.setInt(3, paper.getSubmissionId());
@@ -243,15 +230,9 @@ public class PaperRepository {
             throw new NotFoundException();
         }
 
-        try {
+        String sql = "DELETE FROM paper WHERE version = ? AND submission_id = ?";
 
-
-            PreparedStatement statement = connection.prepareStatement(
-                    """
-                            DELETE FROM paper
-                            WHERE version = ? AND submission_id = ?
-                            """
-            );
+        try (PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setInt(1, paper.getVersionNumber());
             statement.setInt(2, paper.getSubmissionId());
 
@@ -300,86 +281,100 @@ public class PaperRepository {
 
         List<Paper> paperList = new LinkedList<>();
 
-        if (resultListParameters.getDateSelect() == DateSelect.ALL || resultListParameters.getDateSelect() == DateSelect.PAST) {
-            Connection connection = transaction.getConnection();
-            ResultSet resultSet;
+        Connection connection = transaction.getConnection();
+        ResultSet resultSet;
 
-            //Privilege of the given user in this submission
-            Privilege privilege;
-            if (user.isAdmin()) {
-                privilege = Privilege.ADMIN;
-            } else if (user.getId() == submission.getEditorId()) {
-                privilege = Privilege.EDITOR;
-            } else if (user.getId() == submission.getAuthorId()) {
-                privilege = Privilege.AUTHOR;
-            } else {
+        //Privilege of the given user in this submission
+        Privilege privilege = null;
+        if (user.isAdmin()) {
+            privilege = Privilege.ADMIN;
+        } else if (user.getId() == submission.getEditorId()) {
+            privilege = Privilege.EDITOR;
+        } else if (user.getId() == submission.getAuthorId()) {
+            privilege = Privilege.AUTHOR;
+        } else {
+            List<User> reviewers = UserRepository.getList(transaction, submission, Privilege.REVIEWER);
+            for (User reviewer : reviewers) {
+                if (reviewer.getId().equals(user.getId())) {
+                    privilege = Privilege.REVIEWER;
+                }
+            }
+
+            if (privilege == null) {
                 //Has no matching privileges.
                 return paperList;
             }
 
-            String sqlStatment = switch (privilege) {
-                case ADMIN -> """
+        }
+
+        String sqlStatment = switch (privilege) {
+            case ADMIN -> """
                     SELECT p.* FROM paper p, submission s
                     WHERE s.id = ? 
                     AND p.submission_id = s.id
                     """;
-                case EDITOR -> """
+            case EDITOR -> """
                     SELECT p.* FROM paper p, submission s
                     WHERE s.id = ? 
                     AND s.editor_id = ?
                     AND p.submission_id = s.id
                     """;
-                default -> """
+            case REVIEWER -> """
+                    SELECT p.* FROM paper p, submission s , reviewed_by r
+                    WHERE s.id = ?
+                    AND r.reviewer_id = ?
+                    AND s.id = r.submission_id
+                    AND p.submission_id = s.id
+                    """;
+            default -> """
                     SELECT p.* FROM paper p, submission s
                     WHERE s.id = ? 
                     AND s.author_id = ?
                     AND p.submission_id = s.id
                     """;
-            };
+        };
 
-            sqlStatment += generateSQLForResultListParameters(resultListParameters, privilege);
+        sqlStatment += generateSQLForResultListParameters(resultListParameters, privilege);
 
-            try {
-                PreparedStatement statement = connection.prepareStatement(sqlStatment);
+        try (PreparedStatement statement = connection.prepareStatement(sqlStatment)){
+            statement.setInt(1, submission.getId());
 
-                statement.setInt(1, submission.getId());
-
-                if (privilege == Privilege.EDITOR) {
-                    statement.setInt(2, submission.getEditorId());
-                }
-                if (privilege == Privilege.AUTHOR) {
-                    statement.setInt(2, submission.getAuthorId());
-                }
-
-
-
-                if (resultListParameters.getFilterColumns().get("version") != null
-                        && !resultListParameters.getFilterColumns().get("version").isEmpty()) {
-                    int index = 3;
-                    if (privilege ==  Privilege.ADMIN) {
-                        index = 2;
-                    }
-                    statement.setString(index, resultListParameters.getFilterColumns().get("version"));
-                }
-
-                resultSet = statement.executeQuery();
-
-                while (resultSet.next()) {
-                    Paper paper = new Paper();
-                    paper.setVisible(resultSet.getBoolean("is_visible"));
-                    paper.setVersionNumber(resultSet.getInt("version"));
-                    paper.setUploadTime(resultSet.getTimestamp("timestamp_upload").toLocalDateTime());
-                    paper.setSubmissionId(resultSet.getInt("submission_id"));
-
-                    paperList.add(paper);
-                }
-
-            } catch (SQLException e) {
-                DatasourceUtil.logSQLException(e, logger);
-                throw new DatasourceQueryFailedException("A datasource exception occurred while loading all papers of a submission.", e);
-
+            if (privilege == Privilege.EDITOR) {
+                statement.setInt(2, submission.getEditorId());
+            }else if (privilege == Privilege.AUTHOR) {
+                statement.setInt(2, submission.getAuthorId());
+            } else if (privilege == Privilege.REVIEWER) {
+                statement.setInt(2, user.getId());
             }
+
+
+            if (resultListParameters.getFilterColumns().get("version") != null
+                    && !resultListParameters.getFilterColumns().get("version").isEmpty()) {
+                int index = 3;
+                if (privilege == Privilege.ADMIN) {
+                    index = 2;
+                }
+                statement.setString(index, resultListParameters.getFilterColumns().get("version"));
+            }
+
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                Paper paper = new Paper();
+                paper.setVisible(resultSet.getBoolean("is_visible"));
+                paper.setVersionNumber(resultSet.getInt("version"));
+                paper.setUploadTime(resultSet.getTimestamp("timestamp_upload").toLocalDateTime());
+                paper.setSubmissionId(resultSet.getInt("submission_id"));
+
+                paperList.add(paper);
+            }
+
+        } catch (SQLException e) {
+            DatasourceUtil.logSQLException(e, logger);
+            throw new DatasourceQueryFailedException("A datasource exception occurred while loading all papers of a submission.", e);
+
         }
+
         return paperList;
     }
 
@@ -388,14 +383,9 @@ public class PaperRepository {
         StringBuilder stringBuilder = new StringBuilder();
 
         // Filter according to visibility.
-        if (parameters.getVisibleFilter() != Visibility.ALL) {
-            if (parameters.getVisibleFilter() == Visibility.NOT_RELEASED
-                    && (privilege == Privilege.ADMIN || privilege == Privilege.EDITOR)) {
-                stringBuilder.append(" AND p.is_visible = FALSE ");
-            } else if (parameters.getVisibleFilter() == Visibility.RELEASED) {
-                stringBuilder.append(" AND p.is_visible = TRUE ");
-            }
-        } else if (!(privilege == Privilege.ADMIN || privilege == Privilege.EDITOR)) {
+        if (privilege != Privilege.REVIEWER && parameters.getVisibleFilter() == Visibility.NOT_RELEASED) {
+            stringBuilder.append(" AND p.is_visible = FALSE ");
+        } else if (parameters.getVisibleFilter() == Visibility.RELEASED || privilege == Privilege.REVIEWER) {
             stringBuilder.append(" AND p.is_visible = TRUE ");
         }
 
@@ -456,16 +446,9 @@ public class PaperRepository {
         }
 
         Connection connection = transaction.getConnection();
+        String sql = "SELECT pdf_file FROM paper WHERE version = ? AND submission_id = ?";
 
-        try {
-
-            PreparedStatement statement = connection.prepareStatement(
-                    """
-                            SELECT pdf_file
-                            FROM paper
-                            WHERE version = ? AND submission_id = ?
-                            """
-            );
+        try (PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setInt(1, paper.getVersionNumber());
             statement.setInt(2, paper.getSubmissionId());
 
@@ -508,16 +491,10 @@ public class PaperRepository {
         }
 
         Connection connection = transaction.getConnection();
+        String sql = "SELECT s.* FROM submission s, \"user\" u WHERE s.id = ? AND u.id = ? AND s.author_id = u.id";
         Paper paper = new Paper();
 
-        try {
-            PreparedStatement find = connection.prepareStatement(
-                    """
-                            SELECT s.*
-                            FROM submission s, \"user\" u
-                            WHERE s.id = ? AND u.id = ? AND s.author_id = u.id
-                            """
-            );
+        try (PreparedStatement find = connection.prepareStatement(sql)){
             find.setInt(1, submission.getId());
             find.setInt(2, user.getId());
 
@@ -529,15 +506,10 @@ public class PaperRepository {
             throw new NotFoundException();
         }
 
-        try {
-            PreparedStatement statement = connection.prepareStatement(
-                    """
-                            SELECT p2.*
-                            FROM paper p2, ( SELECT s.* FROM submission s, \"user\" u WHERE s.id = ? AND u.id = ? AND s.author_id = u.id) AS sub 
-                            WHERE p2.submission_id = sub.id
-                            AND p2.version = (SELECT max (p3.version) from paper p3 WHERE sub.id = p3.submission_id)
-                                                        """
-            );
+        String newestPaperSql = "SELECT p2.* FROM paper p2, ( SELECT s.* FROM submission s, \"user\" u WHERE s.id = ? " +
+                "AND u.id = ? AND s.author_id = u.id) AS sub WHERE p2.submission_id = sub.id " +
+                "AND p2.version = (SELECT max (p3.version) from paper p3 WHERE sub.id = p3.submission_id)";
+        try (PreparedStatement statement = connection.prepareStatement(newestPaperSql)){
 
             statement.setInt(1, submission.getId());
             statement.setInt(2, user.getId());
@@ -576,6 +548,8 @@ public class PaperRepository {
         );
         find.setInt(1, paper.getVersionNumber());
         find.setInt(2, paper.getSubmissionId());
+
+        find.close();
 
         return find.executeQuery();
     }

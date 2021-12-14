@@ -2,21 +2,15 @@ package de.lases.persistence.repository;
 
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
-
+import de.lases.persistence.internal.ConfigReader;
 import de.lases.persistence.util.DatasourceUtil;
+import jakarta.enterprise.inject.spi.CDI;
 import org.postgresql.util.PSQLException;
 
 import java.sql.*;
-
-import java.sql.*;
-import java.util.List;
-
-import de.lases.persistence.internal.ConfigReader;
-import jakarta.enterprise.inject.spi.CDI;
-
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-
 import java.util.logging.Logger;
 
 /**
@@ -620,7 +614,6 @@ public class SubmissionRepository {
     /**
      * Count the number of submissions where the specified user is author.
      *
-<<<<<<< HEAD
      * @param user                 A user dto with a valid id.
      * @param privilege            As which role should the user act.
      * @param transaction          The transaction to use.
@@ -629,11 +622,6 @@ public class SubmissionRepository {
      *                             filtering, sorting or number of elements.
      * @return The number of submission the specified user is author, editor
      * or reviewer of.
-=======
-     * @param user        A user dto with a valid id.
-     * @param transaction The transaction to use.
-     * @return The number of submission the specified user authored.
->>>>>>> submission
      * @throws NotFoundException              If there is no user with the provided id.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
