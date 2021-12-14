@@ -1,6 +1,7 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.*;
+import de.lases.persistence.exception.DataNotCompleteException;
 import de.lases.persistence.exception.DataNotWrittenException;
 import de.lases.persistence.exception.KeyExistsException;
 import de.lases.persistence.repository.ScienceFieldRepository;
@@ -43,15 +44,16 @@ public class ScienceFieldService implements Serializable {
 
         try {
             ScienceFieldRepository.add(field, transaction);
+            transaction.commit();
         } catch (DataNotWrittenException e) {
+            transaction.abort();
             logger.warning(e.getMessage());
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotWritten"), MessageCategory.ERROR));
         } catch (KeyExistsException e) {
+            transaction.abort();
             logger.warning(e.getMessage());
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("scienceFieldExists"), MessageCategory.ERROR));
         }
-
-        transaction.commit();
     }
 
     /**
@@ -61,6 +63,16 @@ public class ScienceFieldService implements Serializable {
      *              Must contain a valid id.
      */
     public void remove(ScienceField field) {
+        Transaction transaction = new Transaction();
+
+        try {
+            ScienceFieldRepository.remove(field, transaction);
+            transaction.commit();
+        } catch (DataNotWrittenException e) {
+            transaction.abort();
+            logger.warning(e.getMessage());
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotRemoved"), MessageCategory.ERROR));
+        }
     }
 
     /**
@@ -71,8 +83,20 @@ public class ScienceFieldService implements Serializable {
      * @param resultListParameters The parameters, that control filtering and sorting of the resulting list.
      * @return All scientific fields in which a given {@code ScientificForum} has expertise.
      */
-    public static List<ScienceField> getList(ScientificForum forum, ResultListParameters resultListParameters) {
-        return null;
+    public List<ScienceField> getList(ScientificForum forum, ResultListParameters resultListParameters) {
+        Transaction transaction = new Transaction();
+
+        try {
+            List<ScienceField> list = ScienceFieldRepository.getList(forum, transaction, resultListParameters);
+            transaction.commit();
+            return list;
+        } catch (DataNotCompleteException e) {
+            transaction.abort();
+            logger.warning(e.getMessage());
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotComplete"),
+                    MessageCategory.WARNING));
+            return List.of();
+        }
     }
 
     /**
@@ -83,8 +107,20 @@ public class ScienceFieldService implements Serializable {
      * @param resultListParameters The parameters, that control filtering and sorting of the resulting list.
      * @return All scientific fields in which a given {@code User} has expertise.
      */
-    public static List<ScienceField> getList(User user, ResultListParameters resultListParameters) {
-        return null;
+    public List<ScienceField> getList(User user, ResultListParameters resultListParameters) {
+        Transaction transaction = new Transaction();
+
+        try {
+            List<ScienceField> list = ScienceFieldRepository.getList(user, transaction, resultListParameters);
+            transaction.commit();
+            return list;
+        } catch (DataNotCompleteException e) {
+            transaction.abort();
+            logger.warning(e.getMessage());
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotComplete"),
+                    MessageCategory.WARNING));
+            return List.of();
+        }
     }
 
     /**
@@ -93,8 +129,20 @@ public class ScienceFieldService implements Serializable {
      * @param resultListParameters The parameters, that control filtering and sorting of the resulting list.
      * @return All scientific fields.
      */
-    public static List<ScienceField> getList(ResultListParameters resultListParameters) {
-        return null;
+    public List<ScienceField> getList(ResultListParameters resultListParameters) {
+        Transaction transaction = new Transaction();
+
+        try {
+            List<ScienceField> list = ScienceFieldRepository.getList(transaction, resultListParameters);
+            transaction.commit();
+            return list;
+        } catch (DataNotCompleteException e) {
+            transaction.abort();
+            logger.warning(e.getMessage());
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotComplete"),
+                    MessageCategory.WARNING));
+            return List.of();
+        }
     }
 
     /**
@@ -105,6 +153,10 @@ public class ScienceFieldService implements Serializable {
      * @return {@code true} if this scientific field already exists, {@code false} otherwise.
      */
     public boolean exists(ScienceField scienceField) {
-        return false;
+        Transaction transaction = new Transaction();
+
+        boolean exists = ScienceFieldRepository.isScienceField(scienceField, transaction);
+        transaction.commit();
+        return exists;
     }
 }

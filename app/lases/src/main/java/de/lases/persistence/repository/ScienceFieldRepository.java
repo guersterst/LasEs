@@ -76,7 +76,7 @@ public class ScienceFieldRepository {
      *                                        queried.
      */
     public static void remove(ScienceField scienceField, Transaction transaction)
-            throws NotFoundException, DataNotWrittenException {
+            throws DataNotWrittenException {
         Connection conn = transaction.getConnection();
 
         if (scienceField.getName() == null) {
