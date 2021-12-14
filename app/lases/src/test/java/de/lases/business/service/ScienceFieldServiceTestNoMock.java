@@ -15,34 +15,20 @@ import org.jboss.weld.junit5.WeldSetup;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mockStatic;
 
 @ExtendWith(WeldJunit5Extension.class)
-@ExtendWith(MockitoExtension.class)
-public class ScienceFieldServiceTest {
-
+public class ScienceFieldServiceTestNoMock {
     private static final String NAME_MATH_SF = "Math";
-
-    static MockedStatic<ScienceFieldRepository> mockedStatic;
-
-    @BeforeAll
-    static void mockRepository() {
-        mockedStatic = mockStatic(ScienceFieldRepository.class);
-    }
-
-    @AfterAll
-    static void closeMock() {
-        mockedStatic.close();
-    }
 
     @WeldSetup
     public WeldInitiator weld = WeldInitiator.from(ConnectionPool.class, ConfigReader.class, ConfigReader.class)
@@ -56,7 +42,7 @@ public class ScienceFieldServiceTest {
     void startConnectionPool() {
         FileDTO file = new FileDTO();
 
-        Class clazz = ScienceFieldServiceTest.class;
+        Class clazz = ScienceFieldServiceTestNoMock.class;
         InputStream inputStream = clazz.getResourceAsStream("/config.properties");
 
         file.setInputStream(inputStream);
@@ -71,22 +57,25 @@ public class ScienceFieldServiceTest {
     }
 
     @Test
-    void testGetScienceFieldsOfUser() {
+    void testAddScienceField() {
         ScienceFieldService scienceFieldService = new ScienceFieldService();
-        User user = new User();
-        user.setId(1);
-
         ScienceField mathField = new ScienceField();
-        mathField.setName("Math");
-        ScienceField csField = new ScienceField();
-        csField.setName("Computer Science");
+        mathField.setName(NAME_MATH_SF);
+        scienceFieldService.add(mathField);
 
-        ResultListParameters params = new ResultListParameters();
+        //assertTrue(scienceFieldService.exists(mathField));
+        //scienceFieldService.remove(mathField);
+    }
 
-        List<ScienceField> userScienceFields = Arrays.asList(mathField, csField);
+    @Test
+    void testRemoveScienceField() {
+        ScienceFieldService scienceFieldService = new ScienceFieldService();
+        ScienceField mathField = new ScienceField();
+        mathField.setName(NAME_MATH_SF);
+        scienceFieldService.add(mathField);
 
-        mockedStatic.when(() -> ScienceFieldRepository.getList(eq(user), any(), eq(params))).thenReturn(userScienceFields);
+        scienceFieldService.remove(mathField);
 
-        assertEquals(userScienceFields, scienceFieldService.getList(user, params));
+        assertFalse(scienceFieldService.exists(mathField));
     }
 }
