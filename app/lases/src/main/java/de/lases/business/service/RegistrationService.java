@@ -15,9 +15,12 @@ import de.lases.persistence.repository.Transaction;
 import de.lases.persistence.repository.UserRepository;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
+import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 import java.util.PropertyResourceBundle;
 import java.util.logging.Logger;
 
@@ -99,8 +102,11 @@ public class RegistrationService {
             uiMessageEvent.fire(new UIMessage(message.getString("registrationFailed"), MessageCategory.ERROR));
         }
 
-        String emailBody = message.getString("email.verification.body.0") + user.getFirstName()
-                + message.getString("email.verification.body.1") + verification.getValidationRandom();
+        String emailBody = message.getString("email.verification.body.0")
+                + user.getFirstName()
+                + message.getString("email.verification.body.1")
+                + generateValidationUrl(user, verification);
+
         try {
             EmailUtil.sendEmail(configPropagator.getProperty("MAIL_ADDRESS_FROM"), new String[]{user.getEmailAddress()},
                     null, message.getString("email.verification.subject"), emailBody);
@@ -112,13 +118,19 @@ public class RegistrationService {
         // Success message, containing verification random if test mode is enabled
         String msg = message.getString("registrationSuccessful");
         if (configPropagator.getProperty("DEBUG_AND_TEST_MODE").equalsIgnoreCase("true")) {
-            msg += "\n" + verification.getValidationRandom();
+            msg += "\n" + generateValidationUrl(user, verification);
         }
         uiMessageEvent.fire(new UIMessage(msg, MessageCategory.INFO));
 
         l.info("User " + user.getEmailAddress() + " registered.");
 
         return user;
+    }
+
+    private String generateValidationUrl(User user, Verification verification) {
+        return FacesContext.getCurrentInstance().getExternalContext().encodeBookmarkableURL(
+                "/anonymous/verification.xhtml",
+                Map.of("validationRandom", List.of(verification.getValidationRandom())));
     }
 
     /**
