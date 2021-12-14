@@ -7,8 +7,7 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <!-- Page title -->
-    <ui:define name="title">Homepage</ui:define>
-    <!-- TODO update title -->
+    <ui:define name="title">#{labels['homePage.title']}</ui:define>
 
     <!-- Content of homepage.xhtml -->
     <ui:define name="content">
@@ -18,9 +17,9 @@
         </f:metadata>
 
         <div class="container">
-            <h1>Welcome to LasEs</h1>
             <div class="card">
                 <div class="card-head">
+                    <!-- Tabs for the different views -->
                     <h:form>
                         <ul class="nav nav-tabs justify-content-center">
                             <li class="nav-item">
@@ -44,22 +43,25 @@
 
                 <div class="card-body">
                     <h:form>
+                        <!-- Filter controls -->
                         <div class="btn-group">
-                        <h:selectOneMenu id="date-slctom"
-                                         value="#{homepageBacking.submissionPagination.resultListParameters.dateSelect}"
-                                         title="#{help.dateSelect}" styleClass="btn btn-secondary">
-                            <f:selectItems value="#{homepageBacking.dateSelects}" var="select"
-                                           itemLabel="#{labels['dateSelect.' += select]}"
-                                           itemValue="#{select}"/>
-                        </h:selectOneMenu>
-                        <h:selectOneMenu id="state-slctom"
-                                         value="#{homepageBacking.submissionPagination.resultListParameters.submissionState}"
-                                         title="#{help.stateSubSelect}" styleClass="btn btn-secondary">
-                            <f:selectItem itemValue="#{null}" itemLabel="#{labels['stateSelect.ALL']}"/>
-                            <f:selectItems value="#{homepageBacking.submissionStates}" var="select"
-                                           itemLabel="#{labels['stateSelect.' += select]}"
-                                           itemValue="#{select}"/>
-                        </h:selectOneMenu>
+                            <!-- Date filtering -->
+                            <h:selectOneMenu id="date-slctom"
+                                             value="#{homepageBacking.submissionPagination.resultListParameters.dateSelect}"
+                                             title="#{help.dateSelect}" styleClass="btn btn-secondary">
+                                <f:selectItems value="#{homepageBacking.dateSelects}" var="select"
+                                               itemLabel="#{labels['dateSelect.' += select]}"
+                                               itemValue="#{select}"/>
+                            </h:selectOneMenu>
+                            <!-- Submission state filtering -->
+                            <h:selectOneMenu id="state-slctom"
+                                             value="#{homepageBacking.submissionPagination.resultListParameters.submissionState}"
+                                             title="#{help.stateSubSelect}" styleClass="btn btn-secondary">
+                                <f:selectItem itemValue="#{null}" itemLabel="#{labels['stateSelect.ALL']}"/>
+                                <f:selectItems value="#{homepageBacking.submissionStates}" var="select"
+                                               itemLabel="#{labels['stateSelect.' += select]}"
+                                               itemValue="#{select}"/>
+                            </h:selectOneMenu>
                         </div>
                         <pg:pagination paginator="#{homepageBacking.submissionPagination}">
                             <h:column>
@@ -67,7 +69,7 @@
                                     <col:sortsearchcolumn id="title-ssc"
                                                           paginator="#{homepageBacking.submissionPagination}"
                                                           columnIdentifier="title"
-                                                          columnNamei18n="Title"/>
+                                                          columnNamei18n="#{labels.title}"/>
                                 </f:facet>
                                 <h:link value="#{var.title}" outcome="/views/authenticated/submission"
                                         includeViewParams="true">
@@ -123,8 +125,6 @@
                 </div>
             </div>
         </div>
-
-        <h:messages/>
     </ui:define>
 
 </ui:composition>

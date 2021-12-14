@@ -32,6 +32,7 @@ public class RegistrationBacking {
      */
     @PostConstruct
     public void init() {
+        newUser = new User();
     }
 
     /**
@@ -43,7 +44,11 @@ public class RegistrationBacking {
      * @return Go to the welcome page.
      */
     public String register() {
-        return null;
+        if (registrationService.selfRegister(newUser) != null) {
+            return "/views/anonymous/welcome";
+        } else {
+            return null;
+        }
     }
 
     /**

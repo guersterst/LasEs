@@ -2,7 +2,6 @@ package de.lases.persistence.util;
 
 import de.lases.global.transport.ConnectionState;
 import de.lases.persistence.exception.DatasourceNotFoundException;
-import de.lases.persistence.repository.Transaction;
 
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -15,7 +14,7 @@ public class DatasourceUtil {
 
     /**
      * Deletes all users/email addresses (if the user already has a valid email
-     * address he will not be deleted) from the datasource that need to verify
+     * address they will not be deleted) from the datasource that need to verify
      * their email address but did not do so within 1 hour.
      */
     public static void cleanUpVerifications() {
