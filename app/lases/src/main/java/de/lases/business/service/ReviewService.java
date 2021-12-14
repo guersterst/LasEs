@@ -94,24 +94,6 @@ public class ReviewService implements Serializable {
     }
 
     /**
-     * Removes a {@link Review}.
-     * <p>
-     * If the {@code User} removing the review is not
-     * the reviewer himself an email will be dispatched to the
-     * reviewer informing him about this action.
-     * The {@link de.lases.business.util.EmailUtil} utility will
-     * be used for this.
-     * </p>
-     *
-     * @param review The {@code Review} that is to be removed. Must be filled with a valid
-     *               reviewerId, paperId and submissionId.
-     * @param user   The {@link User} who removes the {@code Review}.
-     *               Must contain a valid id.
-     */
-    public void remove(Review review, User user) {
-    }
-
-    /**
      * Gets all {@link Review}s that can be viewed by a given {@link User}.
      * For example, a reviewer can only view his own reviews.
      *
@@ -178,10 +160,9 @@ public class ReviewService implements Serializable {
                 transaction.abort();
             }
 
-            if (file == null) {
+            if (file.getFile() == null) {
                 uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewNotFound"), MessageCategory.ERROR));
-                logger.severe("No file gotten for review: " + review.getSubmissionId()
-                        + " and version number: " + review.getPaperVersion() + "and reviewer id: " + review.getReviewerId());
+                logger.severe("No file gotten for review: " + review);
             }
 
             return file;

@@ -98,24 +98,6 @@ public class ReviewRepository {
     }
 
     /**
-     * Takes a review dto that is filled with a valid reviewerId, paperId and
-     * submissionId and removes this review from the repository.
-     *
-     * @param review The review to remove. Must be filled with a valid
-     *               reviewerId, paperId and submissionId.
-     * @param transaction The transaction to use.
-     * @throws NotFoundException The specified review was not found in the
-     *                           repository.
-     * @throws DataNotWrittenException If writing the data to the repository
-     *                                 fails.
-     * @throws DatasourceQueryFailedException If the datasource cannot be
-     *                                        queried.
-     */
-    public static void remove(Review review, Transaction transaction)
-            throws NotFoundException, DataNotWrittenException {
-    }
-
-    /**
      * Gets a list all reviews that belong to the specified submission that the
      * specified user can see. (An editor can see everything, the submitter
      * can view see all visible reviews, a reviewer his own reviews.)
