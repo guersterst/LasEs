@@ -1,6 +1,89 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition template="/resources/templates/main.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="title">Lorem ipsum</ui:define>
+
+    <ui:define name="content">
+
+        <f:metadata>
+            <f:importConstants type="de.lases.control.internal.Constants" var="Const"/>
+            <f:viewAction action="#{profileBacking.onLoad()}"/>
+            <f:event id="pre-render-evnt" type="preRenderView" listener="#{profileBacking.preRenderViewListener}"/>
+            <f:viewParam value="#{profileBacking.user.id}" name="id"/>
+        </f:metadata>
+
+        <div class="container">
+            <h1>#{labels['profile']}</h1>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card" id="old-avatar-card">
+                        <div class="card-header">
+                            Old Avatar
+                        </div>
+                        <div class="card-body">
+                            <h:graphicImage value="#{'lases_war/image?id='.concat(profileBacking.user.id)}" alt="#{labels.noAvatar}"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card" id="new-avatar-card">
+                        <div class="card-header">
+                            #{labels.editAvatar}
+                        </div>
+                        <div class="card-body">
+                            <h:form id="new-avatar-form" enctype="multipart/form-data">
+
+                                <div class="form-group">
+                                    <h:inputFile id="new-avatar-ifile" value="#{profileBacking.uploadedAvatar}"
+                                                 required="true" requiredMessage="#{message.inputFile}"
+                                                 validator="avatarValidator"
+                                                 disabled="#{not profileBacking.hasViewerEditRights()}"
+                                                 class="form-control"/>
+                                    <h:message for="new-avatar-ifile"/>
+                                </div>
+
+                                <hr/>
+
+                                <div class="form-group">
+                                    <h:commandButton styleClass="btn btn-primary" id="submit-avatar-cbtn" value="#{labels.save}"
+                                                     action="#{profileBacking.uploadAvatar}"
+                                                     disabled="#{not profileBacking.hasViewerEditRights()}"
+                                                     type="submit"/>
+                                </div>
+                                <hr/>
+                            </h:form>
+                            <h:form id="delete-avatar-form" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <h:commandButton styleClass="btn btn-secondary" id="delete-avatar-cbtn" value="#{labels.delete}"
+                                                     action="#{profileBacking.deleteAvatar}"
+                                                     disabled="#{not profileBacking.hasViewerEditRights()}"
+                                                     type="submit"/>
+                                </div>
+                            </h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr/>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card" id="profile-card">
+                        <div class="card-header">
+                            Edit Profile
+                        </div>
+                        <div class="card-body">
+                            dolor sit amet
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ui:define>
 
 </ui:composition>

@@ -25,7 +25,7 @@ import jakarta.inject.Inject;
  *     </li>
  * </ul>
  */
-@FacesValidator
+@FacesValidator("avatarValidator")
 public class AvatarValidator implements Validator<FileDTO> {
 
     @Inject

@@ -64,7 +64,7 @@ class SubmissionServiceTestNoMock {
         }
 
         assertEquals(1, j - i);
-        transaction.commit();
+        transaction.abort();
     }
 
     @Test

@@ -18,7 +18,9 @@ import jakarta.servlet.http.Part;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Backing bean for the profile page.
@@ -82,6 +84,13 @@ public class ProfileBacking implements Serializable {
      */
     @PostConstruct
     public void init() {
+        user = new User();
+        scienceFields = new ArrayList<>();
+        usersScienceFields = new ArrayList<>();
+        selectedScienceField = new ScienceField();
+        adminPasswordInPopup = new User();
+
+        scienceFields = scienceFieldService.getList(new ResultListParameters());
     }
 
     /**
@@ -97,7 +106,11 @@ public class ProfileBacking implements Serializable {
      *     </li>
      * </ul>
      */
-    public void onLoad() { }
+    public void onLoad() {
+        user.setId(420);
+        user = userService.get(user);
+        usersScienceFields = scienceFieldService.getList(user, new ResultListParameters());
+    }
 
     /**
      * Checks if the view param is an integer and throws an exception if it is
@@ -276,7 +289,7 @@ public class ProfileBacking implements Serializable {
      * @return true if they have edit rights.
      */
     public boolean hasViewerEditRights() {
-        return sessionInformation.getUser().getId() == user.getId()
+        return Objects.equals(sessionInformation.getUser(), user)
                 || sessionInformation.getUser().isAdmin();
     }
 }
