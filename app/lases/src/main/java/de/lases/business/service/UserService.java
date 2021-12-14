@@ -99,11 +99,13 @@ public class UserService implements Serializable {
      * @param user The {@link User} to be removed,
      *             containing a valid id or email-address.
      * @return {@code true}, if the email does already exist. {@code false} otherwise.
+     * @author Thomas Kirz
      */
     public boolean emailExists(User user) {
-
-        //TODO when this is implemented please inform Johannes.
-        return false;
+        Transaction t = new Transaction();
+        boolean exists = UserRepository.emailExists(user, t);
+        t.commit();
+        return exists;
     }
 
     /**
