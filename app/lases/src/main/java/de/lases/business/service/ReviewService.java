@@ -2,6 +2,7 @@ package de.lases.business.service;
 
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.DataNotCompleteException;
+import de.lases.persistence.exception.DataNotWrittenException;
 import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.internal.ConfigReader;
 import de.lases.persistence.repository.ReviewRepository;
@@ -32,9 +33,6 @@ public class ReviewService implements Serializable {
     private Event<UIMessage> uiMessageEvent;
 
     @Inject
-    private ReviewRepository reviewRepository;
-
-    @Inject
     private transient PropertyResourceBundle resourceBundle;
 
     private static final Logger logger = Logger.getLogger(PaperService.class.getName());
@@ -59,6 +57,22 @@ public class ReviewService implements Serializable {
      *                  </p>
      */
     public void change(Review newReview) {
+        if (newReview == null) {
+            throw new IllegalArgumentException("Cannot change null review.");
+        }
+        Transaction transaction = new Transaction();
+        try {
+            ReviewRepository.change(newReview, transaction);
+            transaction.commit();
+        } catch (DataNotWrittenException e) {
+            logger.severe("Cannot change revision: " + newReview + e.getMessage());
+            uiMessageEvent.fire(new UIMessage("Could not update the state of this review.", MessageCategory.FATAL));
+            transaction.abort();
+        } catch (NotFoundException e) {
+            logger.info("Did not find: " + newReview + e.getMessage());
+            uiMessageEvent.fire(new UIMessage("This review does not exist.", MessageCategory.ERROR));
+            transaction.abort();
+        }
     }
 
     /**

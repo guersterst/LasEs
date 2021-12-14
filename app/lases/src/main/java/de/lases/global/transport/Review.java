@@ -134,11 +134,35 @@ public class Review implements Cloneable {
     /**
      * Check equality by comparing reviewer id, paper version and submission id.
      *
-     * @param object The object to compare to.
+     * @param o The object to compare to.
      * @return Is the provided object equal to this review?
      */
     @Override
-    public boolean equals(Object object) {
-        return false;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Review review = (Review) o;
+
+        if (paperVersion != review.paperVersion) return false;
+        if (submissionId != review.submissionId) return false;
+        return reviewerId == review.reviewerId;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = paperVersion;
+        result = 31 * result + submissionId;
+        result = 31 * result + reviewerId;
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Review{" +
+                "paperVersion=" + paperVersion +
+                ", submissionId=" + submissionId +
+                ", reviewerId=" + reviewerId +
+                '}';
     }
 }

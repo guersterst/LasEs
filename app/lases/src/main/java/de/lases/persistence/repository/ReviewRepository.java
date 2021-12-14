@@ -77,6 +77,24 @@ public class ReviewRepository {
      */
     public static void change(Review review, Transaction transaction)
             throws NotFoundException, DataNotWrittenException {
+        Connection conn = transaction.getConnection();
+        try (PreparedStatement ps = conn.prepareStatement("UPDATE review SET is_visible = ? AND is_recommended = ?" +
+                " AND comment = ? WHERE submission_id = ? AND version = ? AND reviewer_id = ?"
+        )) {
+            ps.setBoolean(1, review.isVisible());
+            ps.setBoolean(2, review.isAcceptPaper());
+            ps.setString(3, review.getComment());
+
+            ps.setInt(4, review.getSubmissionId());
+            ps.setInt(5, review.getPaperVersion());
+            ps.setInt(6, review.getReviewerId());
+
+            ps.executeUpdate();
+        }
+        catch (SQLException e) {
+            logger.severe("Review Change failed. " + e.getMessage());
+            throw new DatasourceQueryFailedException(e.getMessage());
+        }
     }
 
     /**

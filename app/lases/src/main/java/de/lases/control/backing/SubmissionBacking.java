@@ -265,6 +265,11 @@ public class SubmissionBacking implements Serializable {
      * @param review The review to release.
      */
     public void releaseReview(Review review) {
+        if (review == null) {
+            throw new IllegalArgumentException("Cannot release null review");
+        }
+        review.setVisible(true);
+        reviewService.change(review);
     }
 
     /**
