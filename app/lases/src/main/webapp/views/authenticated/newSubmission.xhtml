@@ -129,6 +129,8 @@
                                                      value="#{newSubmissionBacking.coAuthorInput.emailAddress}"
                                                      maxlength="#{Const.EMAIL_MAX}" required="true"
                                                      class="form-control"
+                                                     validator="emailAddressLayoutValidator"
+                                                     validatorMessage="#{message.emailInvalid}"
                                                      requiredMessage="#{message.emailRequired}"/>
                                         <h:message for="co-author-email-itxt"/>
                                     </div>

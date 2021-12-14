@@ -114,7 +114,6 @@ public class NewSubmissionBacking implements Serializable {
      * Add the entered co-author to the list of co-authors.
      */
     public void submitCoAuthor() {
-        coAuthorInput = coAuthorInput.clone();
         for (User coAuthor: coAuthors) {
             if (coAuthor.getEmailAddress().equals(coAuthorInput.getEmailAddress())) {
                 coAuthor.setTitle(coAuthorInput.getTitle());
@@ -123,7 +122,7 @@ public class NewSubmissionBacking implements Serializable {
                 return;
             }
         }
-        coAuthors.add(coAuthorInput);
+        coAuthors.add(coAuthorInput.clone());
     }
 
     /**
@@ -132,7 +131,11 @@ public class NewSubmissionBacking implements Serializable {
      * @param user The co-author to delete.
      */
     public void deleteCoAuthor(User user) {
-        coAuthors.remove(user);
+        for (int i = 0; i < coAuthors.size(); i++) {
+            if (coAuthors.get(i).getEmailAddress().equals(user.getEmailAddress())) {
+                coAuthors.remove(i);
+            }
+        }
     }
 
     /**
