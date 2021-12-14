@@ -1,5 +1,6 @@
 package de.lases.control.validation;
 
+import jakarta.faces.application.FacesMessage;
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.validator.FacesValidator;
@@ -14,6 +15,13 @@ import jakarta.faces.validator.ValidatorException;
 public class EmailAddressLayoutValidator implements Validator<String> {
 
     /**
+     * E-Mail address regular expression from
+     * <a href=https://owasp.org/www-community/OWASP_Validation_Regex_Repository>OWASP Validation Regex Repository</a>
+     */
+    private static final String EMAIL_REGEX =
+            "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+
+    /**
      * Validates an email address as specified in the class description.
      *
      * @param facesContext FacesContext for the request we are processing
@@ -24,6 +32,11 @@ public class EmailAddressLayoutValidator implements Validator<String> {
     @Override
     public void validate(FacesContext facesContext, UIComponent uiComponent,
                          String address) throws ValidatorException {
+        if (address == null || !address.matches(EMAIL_REGEX)) {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid email address",
+                    null);
+            throw new ValidatorException(message);
+        }
     }
 
 
