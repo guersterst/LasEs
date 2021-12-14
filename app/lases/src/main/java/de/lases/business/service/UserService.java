@@ -254,4 +254,54 @@ public class UserService implements Serializable {
     public Verification getVerification(User user) {
         return null;
     }
+
+    /**
+     * Verifies a user's email-address.
+     *
+     * @param verification The {@link Verification} containing the validation random.
+     * @return The filled {@link Verification} with verified set to true if the verification
+     *         was successful.
+     * @author Thomas Kirz
+     */
+    public Verification verify(Verification verification) {
+        if (verification.getValidationRandom() == null) {
+            l.severe("Validation random is null.");
+            throw new IllegalArgumentException("Validation random is null.");
+        }
+
+        Transaction transaction = new Transaction();
+        Verification storedVerification;
+        try {
+            storedVerification = UserRepository.getVerification(verification, transaction);
+        } catch (NotFoundException e) {
+            transaction.abort();
+            l.warning("Could not find verification.");
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("verification.failure"),
+                    MessageCategory.ERROR));
+            return verification;
+        }
+
+        if (storedVerification.isVerified()) {
+            transaction.abort();
+            l.fine("User already verified");
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("verification.alreadyVerified"),
+                    MessageCategory.ERROR));
+        }
+
+        if (verification.getValidationRandom().equals(storedVerification.getValidationRandom())) {
+            storedVerification.setVerified(true);
+            try {
+                UserRepository.setVerification(storedVerification, transaction);
+                l.info("Successfully verified user with id " + storedVerification.getUserId());
+            } catch (NotFoundException e) {
+                transaction.abort();
+                l.severe("Could not update verification as the user does not exist.");
+                uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("verification.failure"),
+                        MessageCategory.ERROR));
+            }
+        }
+
+        transaction.commit();
+        return storedVerification;
+    }
 }
