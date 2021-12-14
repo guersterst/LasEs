@@ -13,6 +13,7 @@ import java.util.PropertyResourceBundle;
 /**
  * Validator for email addresses that checks if the given email is a valid
  * email address.
+ * @author Thomas Kirz
  */
 @FacesValidator
 public class EmailAddressLayoutValidator implements Validator<String> {
