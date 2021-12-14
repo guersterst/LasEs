@@ -2,7 +2,8 @@ package de.lases.control.backing;
 
 import de.lases.business.service.UserService;
 import de.lases.control.exception.IllegalUserFlowException;
-import de.lases.control.internal.*;
+import de.lases.control.internal.SessionInformation;
+import de.lases.global.transport.User;
 import de.lases.global.transport.Verification;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
@@ -12,10 +13,11 @@ import jakarta.inject.Named;
 
 /**
  * Backing bean for the verification page.
+ * @author Thomas Kirz
  */
 @RequestScoped
 @Named
-public class VerificationBacking { // y
+public class VerificationBacking {
 
     @Inject
     private SessionInformation sessionInformation;
@@ -27,10 +29,11 @@ public class VerificationBacking { // y
 
     /**
      * Create the dto for the verification.
-     * No data will be loaded form the datasource at this point.
+     * No data will be loaded from the datasource at this point.
      */
     @PostConstruct
     public void init() {
+        verification = new Verification();
     }
 
     /**
@@ -41,7 +44,12 @@ public class VerificationBacking { // y
      * from a view param.
      */
     public void onLoad() {
-
+        verification = userService.verify(verification);
+        if (verification.isVerified()) {
+            User user = new User();
+            user.setId(verification.getUserId());
+            sessionInformation.setUser(user);
+        }
     }
 
     /**
@@ -56,12 +64,16 @@ public class VerificationBacking { // y
     public void preRenderViewListener(ComponentSystemEvent event) {}
 
     /**
-     * Go to homepage if the user is now verified, go to welcome page if not.
+     * Go to homepage if the user is now verified and logged in, go to welcome page if not.
      *
      * @return Go to next page.
      */
     public String goToHome() {
-        return null;
+        if (sessionInformation.getUser() != null) {
+            return "/views/authenticated/homepage?faces-redirect=true";
+        } else {
+            return "/views/anonymous/welcome?faces-redirect=true";
+        }
     }
 
     /**
