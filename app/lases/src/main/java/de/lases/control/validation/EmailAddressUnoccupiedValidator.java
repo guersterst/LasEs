@@ -11,6 +11,7 @@ import jakarta.faces.validator.ValidatorException;
 import jakarta.inject.Inject;
 
 import java.util.PropertyResourceBundle;
+import java.util.logging.Logger;
 
 /**
  * Validator for email addresses that checks if a given email address is not
@@ -22,6 +23,8 @@ public class EmailAddressUnoccupiedValidator implements Validator<String> {
 
     @Inject
     private UserService userService;
+
+    Logger l = Logger.getLogger(EmailAddressUnoccupiedValidator.class.getName());
 
     @Inject
     private PropertyResourceBundle bundle;
@@ -40,6 +43,7 @@ public class EmailAddressUnoccupiedValidator implements Validator<String> {
         User user = new User();
         user.setEmailAddress(address);
         if (userService.emailExists(user)) {
+            l.finer("Validation failed: " + address + " is already in use.");
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, bundle.getString("emailInUse"),
                     null);
             throw new ValidatorException(message);
