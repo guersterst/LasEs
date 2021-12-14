@@ -127,10 +127,10 @@ public class SubmissionRepository {
 
         Connection conn = transaction.getConnection();
         Integer id = null;
-        try {
-            PreparedStatement stmt = conn.prepareStatement("""
-                    SELECT max(id) FROM submission
-                    """);
+        String sql = """
+                SELECT max(id) FROM submission
+                """;
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             ResultSet resultSet = stmt.executeQuery();
             if (resultSet.next()) {
                 id = resultSet.getInt(1) + 1;
@@ -144,11 +144,11 @@ public class SubmissionRepository {
         }
         submission.setId(id);
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement("""
-                    INSERT INTO submission
-                    VALUES (?, ?, CAST(? as submission_state), ?, ?, ?, ?, ?, ?)
-                    """);
+        sql = """
+                INSERT INTO submission
+                VALUES (?, ?, CAST(? as submission_state), ?, ?, ?, ?, ?, ?)
+                """;
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, submission.getId());
             stmt.setString(2, submission.getTitle());
             stmt.setString(3, submission.getState().toString());
@@ -214,14 +214,12 @@ public class SubmissionRepository {
         }
 
         // Only the following data can be changed.
-        try {
-            PreparedStatement statement = connection.prepareStatement(
-                    """
-                            UPDATE submission
-                            SET state = CAST( ? AS submission_state), requires_revision = ?, timestamp_deadline_revision = ?, editor_id = ?
-                            WHERE id = ?
-                            """
-            );
+        String sql = """
+                UPDATE submission
+                SET state = CAST( ? AS submission_state), requires_revision = ?, timestamp_deadline_revision = ?, editor_id = ?
+                WHERE id = ?
+                """;
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, submission.getState().toString());
             statement.setBoolean(2, submission.isRevisionRequired());
             statement.setTimestamp(3, Timestamp.valueOf(submission.getDeadlineRevision()));
@@ -270,13 +268,11 @@ public class SubmissionRepository {
             throw new NotFoundException();
         }
 
-        try {
-            PreparedStatement statement = connection.prepareStatement(
-                    """
-                            DELETE FROM submission
-                            WHERE id = ?
-                            """
-            );
+        String sql = """
+                DELETE FROM submission
+                WHERE id = ?
+                """;
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, submission.getId());
 
             statement.executeUpdate();
@@ -525,11 +521,11 @@ public class SubmissionRepository {
             throw new InvalidFieldsException("The ids of the " + nullArgument + " must not be null");
         }
         Connection conn = transaction.getConnection();
-        try {
-            PreparedStatement stmt = conn.prepareStatement("""
-                    INSERT INTO co_authored
-                    VALUES (?, ?)
-                    """);
+        String sql = """
+                INSERT INTO co_authored
+                VALUES (?, ?)
+                """;
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, user.getId());
             stmt.setInt(2, submission.getId());
 

@@ -1,9 +1,8 @@
 package de.lases.global.transport;
 
 import java.time.LocalDate;
-import java.util.*;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -11,8 +10,6 @@ import java.util.Objects;
  * Represents a user.
  */
 public class User implements Cloneable {
-
-    private int verificationId;
 
     private Integer id; // SQL: id
 
@@ -65,19 +62,6 @@ public class User implements Cloneable {
         } else {
             privileges.removeAll(Collections.singleton(Privilege.ADMIN));
         }
-    }
-
-    public int getVerificationId() {
-        return verificationId;
-    }
-
-    /**
-     * Set the id of the verification belonging to this user.
-     *
-     * @param verificationId The id of the verification.
-     */
-    public void setVerificationId(int verificationId) {
-        this.verificationId = verificationId;
     }
 
     public Integer getId() {
