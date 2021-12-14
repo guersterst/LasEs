@@ -6,6 +6,9 @@ import jakarta.faces.context.FacesContext;
 import jakarta.faces.validator.FacesValidator;
 import jakarta.faces.validator.Validator;
 import jakarta.faces.validator.ValidatorException;
+import jakarta.inject.Inject;
+
+import java.util.PropertyResourceBundle;
 
 /**
  * Validator for email addresses that checks if the given email is a valid
@@ -21,6 +24,9 @@ public class EmailAddressLayoutValidator implements Validator<String> {
     private static final String EMAIL_REGEX =
             "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
 
+    @Inject
+    private PropertyResourceBundle bundle;
+
     /**
      * Validates an email address as specified in the class description.
      *
@@ -33,7 +39,7 @@ public class EmailAddressLayoutValidator implements Validator<String> {
     public void validate(FacesContext facesContext, UIComponent uiComponent,
                          String address) throws ValidatorException {
         if (address == null || !address.matches(EMAIL_REGEX)) {
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid email address",
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, bundle.getString("emailInvalid"),
                     null);
             throw new ValidatorException(message);
         }
