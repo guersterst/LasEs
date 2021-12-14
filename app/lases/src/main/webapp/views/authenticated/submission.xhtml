@@ -14,6 +14,11 @@
 
     <!--Content of submission.xhtml.-->
     <ui:define name="content">
+
+        <h:head>
+            <h:outputStylesheet name="design/css/submissionStyle.css"/>
+        </h:head>
+
         <f:metadata>
             <f:viewParam value="#{submissionBacking.submission.id}" name="id"/>
             <!--TODO:evtl mit parameter übergabe-->
@@ -21,13 +26,9 @@
             <f:viewAction action="#{submissionBacking.onLoad()}"/>
         </f:metadata>
 
-        <h:head>
-            <h:outputStylesheet name="design/css/submissionStyle.css"/>
-        </h:head>
-
         <div class="row">
             <div class="col-md-3" style="background: lightblue">
-                <ui:include src="/resources/templates/toolbar.xhtml"></ui:include>
+                <ui:include src="/resources/templates/toolbar.xhtml"/>
             </div>
             <div class="col-md-7">
                 <div class="container-fluid">

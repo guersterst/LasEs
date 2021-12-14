@@ -189,7 +189,7 @@ public class SubmissionBacking implements Serializable {
 
         paperPagination.loadData();
 
-
+        toolbarBacking.onLoad(submission);
     }
 
 
@@ -198,12 +198,11 @@ public class SubmissionBacking implements Serializable {
      * Checks if the view param is an integer and throws an exception if it is
      * not
      *
-     * @param event The component system event that happens before rendering
-     *              the view param.
      * @throws IllegalUserFlowException If there is no integer provided as view
      *                                  param
      */
-    public void preRenderViewListener(ComponentSystemEvent event) {}
+    public void preRenderViewListener() {
+    }
 
     /**
      * Set the state of the submission, which can be SUBMITTED,

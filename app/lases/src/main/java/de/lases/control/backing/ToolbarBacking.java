@@ -2,12 +2,14 @@ package de.lases.control.backing;
 
 import de.lases.business.service.SubmissionService;
 import de.lases.business.service.UserService;
+import de.lases.control.exception.IllegalUserFlowException;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
+import jakarta.faces.event.ComponentSystemEvent;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -15,7 +17,10 @@ import jakarta.inject.Named;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -37,7 +42,7 @@ public class ToolbarBacking implements Serializable {
     @Inject
     private UserService userService;
 
-    private Logger logger;
+    private static final Logger logger = Logger.getLogger(ToolbarBacking.class.getName());
 
     private Submission submission;
 
@@ -49,7 +54,7 @@ public class ToolbarBacking implements Serializable {
 
     private User currentEditor;
 
-    private List<User> reviewer;
+    private HashMap<User, ReviewedBy> reviewer;
 
     private List<User> editors;
 
@@ -76,6 +81,12 @@ public class ToolbarBacking implements Serializable {
      */
     @PostConstruct
     public void init() {
+        submission = new Submission();
+        reviewerInput = new User();
+        reviewedByInput = new ReviewedBy();
+        reviewer = new HashMap<>();
+        editors = new ArrayList<>();
+        currentEditor = new User();
     }
 
     /**
@@ -96,10 +107,16 @@ public class ToolbarBacking implements Serializable {
      * called by a view action but rather by the onLoad method in the
      * {@code SubmissionBacking}.
      *
-     * @param submission A submission dto that is filled with the id received
-     *                   via view params.
      */
-    public void onLoad(Submission submission) { }
+    public void onLoad(Submission sub) {
+        submission = sub;
+        List<User> userList = userService.getList(submission, Privilege.REVIEWER);
+        List<ReviewedBy> reviewedByList = submissionService.getReviewedBy(submission)
+        editors = userService.getList(submission, Privilege.EDITOR);
+
+        currentEditor.setId(submission.getEditorId());
+        currentEditor = userService.get(currentEditor);
+    }
 
     /**
      * The currently entered user will be added as a reviewer.
@@ -107,21 +124,39 @@ public class ToolbarBacking implements Serializable {
     public void addReviewer() {
         User newUser = new User();
         newUser.setEmailAddress(reviewerInput.getEmailAddress());
-        User reviewer = userService.get(newUser);
+        User newReviewer = userService.get(newUser);
 
-        if (reviewer != null) {
+        if (newReviewer != null) {
             logger.finest("Reviewer is an existing person.");
         }
 
         ReviewedBy reviewedBy = reviewedByInput.clone();
-        reviewedBy.setReviewerId(reviewer.getId());
+        reviewedBy.setReviewerId(newReviewer.getId());
         reviewedBy.setSubmissionId(submission.getId());
-        reviewedBy.setHasAccepted(AcceptanceStatus.PENDING);
+        reviewedBy.setHasAccepted(AcceptanceStatus.NO_DECISION);
 
-        submissionService.addReviewer(submission, reviewer, reviewedBy);
+        submissionService.addReviewer(newReviewer, reviewedBy);
 
-        getReviewer().add(reviewer);
-    } // y
+        for (User user : reviewer) {
+            if (newReviewer.getId().equals(user.getId())) {
+                return;
+            }
+        }
+
+        getReviewer().add(newReviewer);
+    }
+
+    /**
+     * Checks if the view param is an integer and throws an exception if it is
+     * not
+     *
+     * @param event The component system event that happens before rendering
+     *              the view param.
+     * @throws IllegalUserFlowException If there is no integer provided as view
+     *                                  param
+     */
+    public void preRenderViewListener() {
+    }
 
     /**
      * Remove the specified user form the list of reviewers.

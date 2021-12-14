@@ -25,6 +25,7 @@
         <postgresql.jdbc.version>42.3.1</postgresql.jdbc.version>
         <mockito.version>4.0.0</mockito.version>
         <selenium.version>4.0.0</selenium.version>
+        <weld-junit5.version>3.0.0.Final</weld-junit5.version>
     </properties>
 
     <dependencies>
@@ -112,6 +113,13 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.jboss.weld</groupId>
+            <artifactId>weld-junit5</artifactId>
+            <version>${weld-junit5.version}</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>

@@ -2,12 +2,23 @@ package de.lases.persistence.repository;
 
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
+import de.lases.persistence.util.DatasourceUtil;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Offers get/change operations on the relationship between reviewer and
  * submission.
  */
 public class ReviewedByRepository {
+
+    private static final Logger logger = Logger.getLogger(ReviewedByRepository.class.getName());
 
     /**
      * Returns the ReviewedBy dto for the given submission and user.
@@ -46,6 +57,38 @@ public class ReviewedByRepository {
      */
     public static void change(ReviewedBy reviewedBy, Transaction transaction)
             throws NotFoundException, DataNotWrittenException {
+    }
+
+    /**
+     * Gets a list of {@code ReviewedBy} dto's.
+     *
+     * @param submission A fully filled {@code ReviewedBy} dto.
+     * @param transaction The transaction to use.
+     *  @throws NotFoundException  If there is no scientific forum with the
+     *                             provided id.
+     * @throws DatasourceQueryFailedException If the datasource cannot be
+     *                                        queried.
+     * @return A list of {@code ReviewedBy} dto's.
+     */
+    public static List<ReviewedBy> getList(Submission submission, Transaction transaction) {
+        if (submission.getId() == null) {
+            logger.severe("A passed DTO is not sufficiently filled.");
+            throw new InvalidFieldsException("Submission id must not be null");
+        }
+
+        Connection connection = transaction.getConnection();
+
+        ResultSet resultSet;
+        List<ReviewedBy> reviewedByList = new ArrayList<>();
+
+        String sql = "SELECT * FROM reviewed_by WHERE submission_id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setInt(1, submission.getId());
+        } catch (SQLException exception) {
+            DatasourceUtil.logSQLException(exception, logger);
+            throw 
+        }
     }
 
 }
