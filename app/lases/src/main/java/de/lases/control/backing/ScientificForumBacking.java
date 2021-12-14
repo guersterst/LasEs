@@ -55,7 +55,7 @@ public class ScientificForumBacking implements Serializable {
 
     private ScienceField selectedScienceFieldInput;
 
-    private Pagination<Submission> submissionsPagination;
+    private Pagination<Submission> submissionPagination;
 
     private List<User> editors;
 
@@ -113,20 +113,16 @@ public class ScientificForumBacking implements Serializable {
         newEditorInput = new User();
         currentScieneFields = new ArrayList<>();
         selectedScienceFieldInput = new ScienceField();
-        displayOwnSubmissionsTab();
     }
 
     public void displayOwnSubmissionsTab() {
-        submissionsPagination = new Pagination<Submission>("submissionTime") {
-
-            final List<Submission> authoredSubmissions =
-                    submissionService.getList(forum, user,
-                            Privilege.AUTHOR, submissionsPagination.getResultListParameters());
+        submissionPagination = new Pagination<Submission>("submissionTime") {
 
             @Override
             public void loadData() {
-                //submissionPagination.getResultListParameters().setDateSelect(DateSelect.ALL);
-                submissionsPagination.setEntries(authoredSubmissions);
+                //.getResultListParameters().setDateSelect(DateSelect.ALL);
+                submissionPagination.setEntries(submissionService.getList(forum, user,
+                        Privilege.AUTHOR, getResultListParameters()));
             }
 
             @Override
@@ -138,14 +134,11 @@ public class ScientificForumBacking implements Serializable {
             }
         };
         tab = Tab.OWN_SUBMISSIONS;
-        submissionsPagination.loadData();
+        submissionPagination.loadData();
     }
 
     public void displayReviewSubmissionsTab() {
-        submissionsPagination = new Pagination<Submission>("submissionTime") {
-
-            final List<Submission> reviewedSubmissions = submissionService.getList(forum,
-                    sessionInformation.getUser(), Privilege.REVIEWER, submissionsPagination.getResultListParameters());
+        submissionPagination = new Pagination<Submission>("submissionTime") {
 
             @Override
             public void loadData() {
@@ -153,7 +146,8 @@ public class ScientificForumBacking implements Serializable {
                 // Todo müssen reviews freigeschaltet werden?
                 //reviewedPagination.getResultListParameters().setVisibleFilter(Visibility.RELEASED);
 
-                submissionsPagination.setEntries(reviewedSubmissions);
+                submissionPagination.setEntries(submissionService.getList(forum,
+                        sessionInformation.getUser(), Privilege.REVIEWER, getResultListParameters()));
             }
 
             @Override
@@ -165,20 +159,19 @@ public class ScientificForumBacking implements Serializable {
             }
         };
         tab = Tab.SUBMISSIONS_TO_REVIEW;
-        submissionsPagination.loadData();
+        submissionPagination.loadData();
     }
 
     public void displayEditSubmissionsTab() {
-        submissionsPagination = new Pagination<Submission>("submissionTime") {
-
-            final List<Submission> editedSubmissions = submissionService.getList(forum,
-                    sessionInformation.getUser(), Privilege.EDITOR, submissionsPagination.getResultListParameters());
+        submissionPagination = new Pagination<Submission>("submissionTime") {
 
             @Override
             public void loadData() {
-                submissionsPagination.getResultListParameters().setDateSelect(DateSelect.ALL);
-                submissionsPagination.setEntries(editedSubmissions);
+                submissionPagination.getResultListParameters().setDateSelect(DateSelect.ALL);
+                submissionPagination.setEntries(submissionService.getList(forum,
+                        sessionInformation.getUser(), Privilege.EDITOR, getResultListParameters()));
             }
+
 
             @Override
             protected Integer calculateNumberPages() {
@@ -188,8 +181,9 @@ public class ScientificForumBacking implements Serializable {
                                 getResultListParameters()) / itemsPerPage);
             }
         };
+        submissionPagination.applyFilters();
         tab = Tab.SUBMISSIONS_TO_EDIT;
-        submissionsPagination.loadData();
+        submissionPagination.loadData();
     }
 
     /**
@@ -290,6 +284,7 @@ public class ScientificForumBacking implements Serializable {
      * editor or scientific forum list.
      */
     public void submitChanges() {
+        forumService.change(forum);
     }
 
 
@@ -308,7 +303,7 @@ public class ScientificForumBacking implements Serializable {
      * @return The pagination for the submission submitted by the user.
      */
     public Pagination<Submission> getSubmissionPagination() {
-        return submissionsPagination;
+        return submissionPagination;
     }
 
     /**
@@ -336,6 +331,14 @@ public class ScientificForumBacking implements Serializable {
      */
     public List<ScienceField> getAllScienceFields() {
         return allScienceFields;
+    }
+
+    public ScientificForum getForum() {
+        return forum;
+    }
+
+    public void setForum(ScientificForum forum) {
+        this.forum = forum;
     }
 
     /**
@@ -383,6 +386,17 @@ public class ScientificForumBacking implements Serializable {
         return false;
     }
 
+    public String getOwnCssClassSuffix() {
+        return tab == Tab.OWN_SUBMISSIONS ? " active" : "";
+    }
+
+    public String getReviewCssClassSuffix() {
+        return tab == Tab.SUBMISSIONS_TO_REVIEW ? " active" : "";
+    }
+
+    public String getEditCssClassSuffix() {
+        return tab == Tab.SUBMISSIONS_TO_EDIT ? " active" : "";
+    }
 
 
 }

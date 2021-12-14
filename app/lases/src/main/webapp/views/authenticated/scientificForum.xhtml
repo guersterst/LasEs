@@ -1,7 +1,122 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition template="/resources/templates/main.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:pg="http://xmlns.jcp.org/jsf/composite/templates/composites/pagination"
+                xmlns:col="http://xmlns.jcp.org/jsf/composite/templates/composites/sortsearchcolumn"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <!-- Page title -->
+    <!-- TODO possibly ans Ende -->
+    <ui:define name="title">#{scientificForumBacking.forum.name}</ui:define>
+
+    <!-- Content of homepage.xhtml -->
+    <ui:define name="content">
+
+        <f:metadata>
+            <f:viewParam value="#{scientificForumBacking.forum.id}" name="id"/>
+            <!--TODO:evtl mit parameter übergabe-->
+            <f:event type="preRenderView" listener="#{scientificForumBacking.preRenderViewListener}"/>
+            <f:viewAction action="#{scientificForumBacking.onLoad()}"/>
+        </f:metadata>
+
+        <div class="container">
+            <div class="card">
+                <div class="card-head">
+                    <!-- Tabs for the different views -->
+                    <h:form>
+                        <ul class="nav nav-tabs justify-content-center">
+                            <li class="nav-item">
+                                <h:commandLink value="#{labels['ownSubmissions']}"
+                                               action="#{scientificForumBacking.displayOwnSubmissionsTab()}"
+                                               styleClass="#{'nav-link'.concat(scientificForumBacking.getOwnCssClassSuffix())}"/>
+                            </li>
+                            <li class="nav-item">
+                                <h:commandLink value="#{labels['reviewedSubmissions']}"
+                                               action="#{scientificForumBacking.displayReviewSubmissionsTab()}"
+                                               styleClass="#{'nav-link'.concat(scientificForumBacking.getReviewCssClassSuffix())}"/>
+                            </li>
+                            <li class="nav-item">
+                                <h:commandLink value="#{labels['editedSubmissions']}"
+                                               action="#{scientificForumBacking.displayEditSubmissionsTab()}"
+                                               styleClass="#{'nav-link'.concat(scientificForumBacking.getEditCssClassSuffix())}"/>
+                            </li>
+                        </ul>
+                    </h:form>
+                </div>
+
+                <div class="card-body">
+                    <h:form>
+                        <!-- Filter controls -->
+                        <div class="btn-group">
+                            <!-- Date filtering -->
+                            <h:selectOneMenu id="date-slctom"
+                                             value="#{scientificForumBacking.submissionPagination.resultListParameters.dateSelect}"
+                                             title="#{help.dateSelect}" styleClass="btn btn-secondary">
+                                <f:selectItems value="#{scientificForumBacking.dateSelects}" var="select"
+                                               itemLabel="#{labels['dateSelect.' += select]}"
+                                               itemValue="#{select}"/>
+                            </h:selectOneMenu>
+                            <!-- Submission state filtering -->
+                            <h:selectOneMenu id="state-slctom"
+                                             value="#{scientificForumBacking.submissionPagination.resultListParameters.submissionState}"
+                                             title="#{help.stateSubSelect}" styleClass="btn btn-secondary">
+                                <f:selectItem itemValue="#{null}" itemLabel="#{labels['stateSelect.ALL']}"/>
+                                <f:selectItems value="#{scientificForumBacking.submissionStates}" var="select"
+                                               itemLabel="#{labels['stateSelect.' += select]}"
+                                               itemValue="#{select}"/>
+                            </h:selectOneMenu>
+                        </div>
+                        <pg:pagination paginator="#{scientificForumBacking.submissionPagination}">
+                            <h:column>
+                                <f:facet name="header">
+                                    <col:sortsearchcolumn id="title-ssc"
+                                                          paginator="#{scientificForumBacking.submissionPagination}"
+                                                          columnIdentifier="title"
+                                                          columnNamei18n="#{labels.title}"/>
+                                </f:facet>
+                                <h:link value="#{var.title}" outcome="/views/authenticated/submission"
+                                        includeViewParams="true">
+                                    <f:param name="id" value="#{var.id}"/>
+                                </h:link>
+                            </h:column>
+
+                            <h:column>
+                                <f:facet name="header">
+                                    <div class="input-group">
+                                        <h:outputText value="#{labels.date}" styleClass="input-group-text"/>
+                                    </div>
+                                </f:facet>
+                                <h:outputText value="#{var.submissionTime}">
+                                    <f:convertDateTime type="localDate"/>
+                                </h:outputText>
+                            </h:column>
+
+                            <h:column>
+                                <f:facet name="header">
+                                    <div class="input-group">
+                                        <h:outputText value="#{labels.deadline}" styleClass="input-group-text"/>
+                                    </div>
+                                </f:facet>
+                                <h:outputText value="#{var.deadlineRevision}">
+                                    <f:convertDateTime type="localDate"/>
+                                </h:outputText>
+                            </h:column>
+
+                            <h:column>
+                                <f:facet name="header">
+                                    <div class="input-group">
+                                        <h:outputText value="#{labels.stateSub}" styleClass="input-group-text"/>
+                                    </div>
+                                </f:facet>
+                                <h:outputText id="state-otxt" value="#{var.state}"/>
+                            </h:column>
+                        </pg:pagination>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+    </ui:define>
 
 </ui:composition>
 
