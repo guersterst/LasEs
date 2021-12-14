@@ -19,6 +19,7 @@ import java.util.logging.Logger;
  *
  * @author Johann Schicho
  * @author Johannes Garstenauer
+ * @author Thomas Kirz
  */
 public class UserRepository {
 
@@ -409,19 +410,74 @@ public class UserRepository {
 
     /**
      * Takes a verification dto that is filled with a valid userId and adds the
-     * verification to the user.
+     * verification to the user or updates the verification if it already exists.
      *
      * @param verification A fully filled Verification dto.
      * @param transaction  The transaction to use.
      * @throws NotFoundException              If there is no user with the
      *                                        provided userId.
+     * @throws DataNotWrittenException        If the verification could not be added but has
+     *                                        high probability of succeeding after retrying.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     * @author Thomas Kirz
      */
     public static void setVerification(Verification verification,
                                        Transaction transaction)
-            throws NotFoundException {
-        // TODO: Implement this method
+            throws NotFoundException, DataNotWrittenException {
+        User user = new User();
+        user.setId(verification.getUserId());
+        Verification existingVerification;
+        try {
+            existingVerification = getVerification(verification, transaction);
+        } catch (NotFoundException e) {
+            logger.severe("Verification dto is not filled with a user id.");
+            throw new NotFoundException("User belonging to verification dto was not found.");
+        }
+
+        if (existingVerification == null) {
+            // insert new verification
+            Connection conn = transaction.getConnection();
+            String sql = """
+                    INSERT INTO verification (id, validation_random, is_verified, timestamp_validation_started,
+                    unvalidated_email_address)
+                    VALUES (?, ?, ?, ?, ?);
+                    """;
+
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                    stmt.setInt(1, verification.getUserId());
+                    stmt.setString(2, verification.getValidationRandom());
+                    stmt.setBoolean(3, verification.isVerified());
+                    stmt.setTimestamp(4, Timestamp.valueOf(verification.getTimestampValidationStarted()));
+                    stmt.setString(5, verification.getNonVerifiedEmailAddress());
+                    stmt.executeUpdate();
+            } catch (SQLException e) {
+                DatasourceUtil.logSQLException(e, logger);
+                // todo handle sql exception
+                throw new DataNotWrittenException("Failed to add verification to database.", e);
+            }
+        } else {
+            // update existing verification
+            Connection conn = transaction.getConnection();
+            String sql = """
+                    UPDATE verification
+                    SET validation_random = ?, is_verified = ?, timestamp_validation_started = ?,
+                    unvalidated_email_address = ?
+                    WHERE id = ?;
+                    """;
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setString(1, verification.getValidationRandom());
+                stmt.setBoolean(2, verification.isVerified());
+                stmt.setTimestamp(3, Timestamp.valueOf(verification.getTimestampValidationStarted()));
+                stmt.setString(4, verification.getNonVerifiedEmailAddress());
+                stmt.setInt(5, verification.getUserId());
+                stmt.executeUpdate();
+            } catch (SQLException e) {
+                DatasourceUtil.logSQLException(e, logger);
+                // todo handle sql exception
+                throw new DataNotWrittenException("Failed to add verification to database.", e);
+            }
+        }
     }
 
     /**

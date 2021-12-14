@@ -1,10 +1,7 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.*;
-import de.lases.persistence.exception.DataNotCompleteException;
-import de.lases.persistence.exception.InvalidFieldsException;
-import de.lases.persistence.exception.InvalidQueryParamsException;
-import de.lases.persistence.exception.NotFoundException;
+import de.lases.persistence.exception.*;
 import de.lases.persistence.repository.Transaction;
 import de.lases.persistence.repository.UserRepository;
 import jakarta.enterprise.context.Dependent;
@@ -298,6 +295,11 @@ public class UserService implements Serializable {
             } catch (NotFoundException e) {
                 transaction.abort();
                 l.severe("Could not update verification as the user does not exist.");
+                uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("verification.failure"),
+                        MessageCategory.ERROR));
+            } catch (DataNotWrittenException e) {
+                transaction.abort();
+                l.severe("Verification could not be updated in data source.");
                 uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("verification.failure"),
                         MessageCategory.ERROR));
             }
