@@ -346,6 +346,67 @@ public class UserRepository {
     }
 
     /**
+     * Takes a verification dto that is filled with a validation random returns the
+     * filled verification dto.
+     *
+     * @param verification A {@code Verification} dto that must be filled
+     *                     with a validation random.
+     * @param transaction  The transaction to use.
+     * @return A fully filled {@code Verification} dto if a verification with the
+     * provided validation random exists, otherwise null.
+     * @throws NotFoundException              If there is no verification with the
+     *                                        provided validation random.
+     * @throws DatasourceQueryFailedException If the datasource cannot be
+     *                                        queried.
+     */
+    public static Verification getVerification(Verification verification, Transaction transaction)
+            throws NotFoundException {
+        if (verification.getValidationRandom() == null) {
+            logger.severe("Verification dto is not filled with a validation random.");
+            throw new IllegalArgumentException("Verification dto is not filled with a validation random.");
+        }
+
+        Connection conn = transaction.getConnection();
+        String sql = "SELECT * FROM verification WHERE validation_random = ?";
+
+        Verification result;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, verification.getValidationRandom());
+            ResultSet rs = stmt.executeQuery();
+
+            // Attempt to create a verification dto from the result set.
+            if (rs.next()) {
+                result = createVerificationFromResultSet(rs);
+                logger.finer("Found verification dto with validation random "
+                        + verification.getValidationRandom());
+            } else {
+                logger.warning("No verification dto with validation random " + verification.getValidationRandom()
+                        + " found.");
+                throw new NotFoundException("No verification dto with the specified validation random found.");
+            }
+        } catch (SQLException e) {
+            DatasourceUtil.logSQLException(e, logger);
+            throw new DatasourceQueryFailedException("Failed to retrieve Verification from database.", e);
+        }
+
+        return result;
+    }
+
+    private static Verification createVerificationFromResultSet(ResultSet rs) throws SQLException {
+        Verification verification = new Verification();
+
+        verification.setUserId(rs.getInt("id"));
+        verification.setValidationRandom(rs.getString("validation_random"));
+        verification.setVerified(rs.getBoolean("is_verified"));
+        Timestamp timestamp = rs.getTimestamp("timestamp_validation_started");
+        verification.setTimestampValidationStarted(timestamp == null ? null : timestamp.toLocalDateTime());
+        verification.setNonVerifiedEmailAddress(rs.getString("unvalidated_email_address"));
+
+        return verification;
+    }
+
+    /**
      * Takes a verification dto that is filled with a valid userId and adds the
      * verification to the user.
      *
