@@ -116,12 +116,12 @@ public class ToolbarBacking implements Serializable {
         ReviewedBy reviewedBy = reviewedByInput.clone();
         reviewedBy.setReviewerId(reviewer.getId());
         reviewedBy.setSubmissionId(submission.getId());
-        reviewedBy.setHasAccepted(AcceptanceStatus.PENDING);
+        reviewedBy.setHasAccepted(AcceptanceStatus.NO_DECISION);
 
         submissionService.addReviewer(submission, reviewer, reviewedBy);
 
         getReviewer().add(reviewer);
-    } // y
+    }
 
     /**
      * Remove the specified user form the list of reviewers.

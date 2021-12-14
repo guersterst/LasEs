@@ -553,10 +553,9 @@ public class SubmissionRepository {
     /**
      * Adds the specified user to the specified submission as a reviewer.
      *
-     * @param submission  A submission dto with a valid id.
-     * @param user        A user dto with a valid id.
+     * @param reviewedBy A relation between submission and a user in a role of a reviewer.
      * @param transaction The transaction to use.
-     * @throws NotFoundException              If there is no scientific forum with the
+     * @throws NotFoundException              If there is no submission forum with the
      *                                        provided id or there is no user with the
      *                                        provided id.
      * @throws DataNotWrittenException        If writing the data to the repository
@@ -564,18 +563,57 @@ public class SubmissionRepository {
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
-    public static void addReviewer(Submission submission, User user,
+    public static void addReviewer(ReviewedBy reviewedBy,
                                    Transaction transaction)
             throws NotFoundException, DataNotWrittenException {
-        if (submission.getId() == null) {
+        if (reviewedBy.getSubmissionId() == null) {
             transaction.abort();
             logger.severe("Passed submission DTO is not sufficiently filled.");
-            throw new InvalidFieldsException("Submission with id: " + submission.getId() + " must not be null.");
+            throw new InvalidFieldsException("Submission with id: " + reviewedBy.getSubmissionId() + " must not be null.");
         }
-        if (user.getEmailAddress() == null) {
+        if (reviewedBy.getReviewerId() == null) {
             transaction.abort();
             logger.severe("Passed user DTO is not sufficiently filled.");
-            throw new InvalidFieldsException("User with email: " + user.getEmailAddress() + " must not be null.");
+            throw new InvalidFieldsException("User with id: " + reviewedBy.getReviewerId() + " must not be null.");
+        }
+
+        Connection connection = transaction.getConnection();
+        String findSubmission = "SELECT s.id FROM submission s WHERE s.id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(findSubmission)){
+
+            statement.setInt(1, reviewedBy.getSubmissionId());
+
+        } catch (SQLException exception) {
+            transaction.abort();
+            logger.warning("Searching for a submission with the id: " + reviewedBy.getSubmissionId());
+            throw new NotFoundException(exception.getMessage());
+        }
+        String findUser = "SELECT * FROM \"user\" u WHERE u.id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(findUser)) {
+            statement.setInt(1, reviewedBy.getReviewerId());
+            statement.executeQuery();
+        } catch (SQLException exception) {
+            transaction.abort();
+            logger.warning("Searching for an user with the id: " + reviewedBy.getReviewerId());
+            throw new NotFoundException(exception.getMessage());
+        }
+
+        String sql = "INSERT INTO reviewed_by VALUES (?, ?, CAST (? as review_task_state), ?)";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setInt(1, reviewedBy.getReviewerId());
+            statement.setInt(2, reviewedBy.getSubmissionId());
+            statement.setString(3, reviewedBy.getHasAccepted().name());
+            statement.setTimestamp(4, Timestamp.valueOf(reviewedBy.getTimestampDeadline()));
+
+            statement.executeUpdate();
+
+        } catch (SQLException exception) {
+            transaction.abort();
+            DatasourceUtil.logSQLException(exception, logger);
+            throw new DatasourceQueryFailedException("A datasource exception occurred while adding a new reviewer.");
         }
 
     }
