@@ -7,10 +7,7 @@ import de.lases.persistence.exception.*;
 import de.lases.persistence.exception.DataNotCompleteException;
 import de.lases.persistence.exception.NotFoundException;
 
-import de.lases.persistence.repository.PaperRepository;
-import de.lases.persistence.repository.SubmissionRepository;
-import de.lases.persistence.repository.Transaction;
-import de.lases.persistence.repository.UserRepository;
+import de.lases.persistence.repository.*;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
@@ -287,7 +284,14 @@ public class SubmissionService implements Serializable {
      * submission and the reviewer. Returns null if no such relationship exists.
      */
     public ReviewedBy getReviewedBy(Submission submission, User reviewer) {
-        return null;
+        Transaction transaction = new Transaction();
+        try {
+            return ReviewedByRepository.get(submission, reviewer, transaction);
+        } catch (NotFoundException e) {
+            return null;
+        } finally {
+            transaction.commit();
+        }
     }
 
     /**

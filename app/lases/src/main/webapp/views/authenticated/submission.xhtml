@@ -227,6 +227,29 @@
                             </div>
                         </div>
 
+                        <div id="review-request" style="margin-top: 1cm">
+                            <div class="card">
+                                <h:form rendered="#{submissionBacking.loggedInUserIsReviewer()}">
+                                    <div class="btn-group-justified">
+                                        <h:panelGroup id="request-box" layout="block"
+                                                      rendered="#{submissionBacking.loggedInUserHasPendingReviewRequest()}">
+                                            <h:outputText id="review-request-otxt" value="#{labels.reviewRequest}" style="margin: 3px"/>
+                                            <h:commandButton id="review-accept-cbtn" value="#{labels.acceptReviewReq}"
+                                                             action="#{submissionBacking.acceptReviewing(sessionInformation.user)}"
+                                                             style="margin: 3px"/>
+                                            <h:commandButton id="review-decline-cbtn" value="#{labels.declineReviewReq}"
+                                                             action="#{submissionBacking.declineReviewing(sessionInformation.user)}"
+                                                             style="margin: 3px"/>
+                                        </h:panelGroup>
+                                        <h:outputText id="deadline-review-otxt" value="#{labels.reviewDeadline}" style="margin: 3px"/>
+                                        <h:outputText id="date-review-deadline-otxt" value="#{submissionBacking.getDeadlineForReviewer(sessionInformation.user)}">
+                                            <f:convertDateTime type="localDateTime"/>
+                                        </h:outputText>
+                                    </div>
+                                </h:form>
+                            </div>
+                        </div>
+
                         <div id="review-pagination" style="margin-top: 1cm;">
                             <h2>#{labels.reviews}</h2>
                             <div class="card">

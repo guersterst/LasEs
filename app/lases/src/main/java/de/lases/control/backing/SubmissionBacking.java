@@ -83,8 +83,6 @@ public class SubmissionBacking implements Serializable {
 
     private Pagination<Review> reviewPagination;
 
-    private List<ReviewedBy> reviewedBy;
-
     private Paper newestPaper;
 
     /**
@@ -331,6 +329,24 @@ public class SubmissionBacking implements Serializable {
     }
 
     /**
+     * Get the Deadline for a reviewer.
+     * @param user user DTO of the reviewer with a valid ID.
+     * @return LocalDateTime of the Deadline
+     */
+    public LocalDateTime getDeadlineForReviewer(User user) {
+        ReviewedBy reviewedBy = reviewedByForUser(user);
+        if (reviewedBy != null) {
+            return reviewedBy.getTimestampDeadline();
+        } else {
+            return LocalDateTime.of(1970, 1, 1, 0, 0);
+        }
+    }
+
+    private ReviewedBy reviewedByForUser(User user) {
+        return submissionService.getReviewedBy(submission, user);
+    }
+
+    /**
      * Apply all the filters that are specified outside the pagination to
      * the table.
      */
@@ -562,16 +578,6 @@ public class SubmissionBacking implements Serializable {
     }
 
     /**
-     * Get the possible reviewed-by relationship between this submission and
-     * the logged-in user. May be null if there is none.
-     *
-     * @return Reviewed-by between the logged-in user and this submission.
-     */
-    public List<ReviewedBy> getReviewedBy() {
-        return reviewedBy;
-    }
-
-    /**
      * Get the newest paper for this submission.
      *
      * @return The newest paper for this submission.
@@ -596,7 +602,26 @@ public class SubmissionBacking implements Serializable {
      * @return Is the logged-in user reviewer of this submission?
      */
     public boolean loggedInUserIsReviewer() {
-        return false;
+        return reviewers.contains(sessionInformation.getUser());
+    }
+
+    /**
+     * Return if the logged-in user is a reviewer of this submission,
+     * and whether they have accepted the review request.
+     *
+     * @return false if user is not a reviewer, yes or no depending on the acceptance state.
+     */
+    public boolean loggedInUserHasPendingReviewRequest() {
+        if (loggedInUserIsReviewer()) {
+            ReviewedBy reviewedBy = submissionService.getReviewedBy(submission, sessionInformation.getUser());
+            if (reviewedBy == null) {
+                return false;
+            } else {
+                return reviewedBy.getHasAccepted() == AcceptanceStatus.NO_DECISION;
+            }
+        } else {
+            return false;
+        }
     }
 
 }

@@ -1,13 +1,19 @@
 package de.lases.persistence.repository;
 
+import de.lases.business.service.SubmissionService;
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
+
+import java.sql.*;
+import java.util.logging.Logger;
 
 /**
  * Offers get/change operations on the relationship between reviewer and
  * submission.
  */
 public class ReviewedByRepository {
+
+    private static final Logger logger = Logger.getLogger(ReviewedByRepository.class.getName());
 
     /**
      * Returns the ReviewedBy dto for the given submission and user.
@@ -27,7 +33,31 @@ public class ReviewedByRepository {
     public static ReviewedBy get(Submission submission, User user,
                                  Transaction transaction)
             throws NotFoundException {
-        return null;
+        Connection conn = transaction.getConnection();
+        String query = "SELECT * FROM reviewed_by WHERE submission_id = ? AND reviewer_id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, submission.getId());
+            ps.setInt(2, user.getId());
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                ReviewedBy reviewedBy = new ReviewedBy();
+                reviewedBy.setReviewerId(user.getId());
+                reviewedBy.setSubmissionId(submission.getId());
+                Timestamp timestamp = rs.getTimestamp("timestamp_deadline");
+                if (timestamp != null) {
+                    reviewedBy.setTimestampDeadline(timestamp.toLocalDateTime());
+                }
+                reviewedBy.setHasAccepted(AcceptanceStatus.valueOf(rs.getString("has_accepted")));
+
+                return reviewedBy;
+            }else {
+                throw new NotFoundException("No entry in reviewed_by for user: " + user);
+            }
+        } catch (SQLException e) {
+            logger.severe("ReviewedBy.get Exception: " + e.getMessage());
+            throw new DatasourceQueryFailedException();
+        }
     }
 
     /**
