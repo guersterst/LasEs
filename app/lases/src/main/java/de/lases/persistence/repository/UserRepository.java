@@ -135,6 +135,9 @@ public class UserRepository {
         } catch (SQLException ex) {
             throw new DatasourceQueryFailedException(ex.getMessage());
         }
+
+        setVerifiedStatus(result, transaction);
+
         return result;
     }
 
@@ -689,6 +692,7 @@ public class UserRepository {
                             user.setDateOfBirth(birthdate.toLocalDate());
                         }
                         user.setEmployer(rs.getString("employer"));
+                        setVerifiedStatus(user, transaction);
 
                         userList.add(user);
                     }
@@ -720,6 +724,7 @@ public class UserRepository {
                             user.setDateOfBirth(birthdate.toLocalDate());
                         }
                         user.setEmployer(rs.getString("employer"));
+                        setVerifiedStatus(user, transaction);
 
                         userList.add(user);
                     }
@@ -841,6 +846,7 @@ public class UserRepository {
                     user.setDateOfBirth(birthdate.toLocalDate());
                 }
                 user.setEmployer(rs.getString("employer"));
+                setVerifiedStatus(user, transaction);
 
                 userList.add(user);
             }
@@ -962,6 +968,17 @@ public class UserRepository {
     public static void setAvatar(User user, FileDTO avatar,
                                  Transaction transaction)
             throws DataNotWrittenException, NotFoundException {
+    }
+
+    private static void setVerifiedStatus(User user, Transaction transaction) {
+        Verification verification;
+        try {
+            verification = getVerification(user, transaction);
+        } catch (NotFoundException e) {
+            verification = null;
+            logger.fine("No verification found for user: " + user.getEmailAddress());
+        }
+        user.setVerified(verification != null && verification.isVerified());
     }
 
 }

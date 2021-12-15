@@ -48,6 +48,7 @@ public class VerificationBacking {
         if (verification.isVerified()) {
             User user = new User();
             user.setId(verification.getUserId());
+            user = userService.get(user);
             sessionInformation.setUser(user);
         }
     }
