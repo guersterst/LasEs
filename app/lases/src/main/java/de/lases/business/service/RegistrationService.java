@@ -15,12 +15,9 @@ import de.lases.persistence.repository.Transaction;
 import de.lases.persistence.repository.UserRepository;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
-import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
 import java.util.PropertyResourceBundle;
 import java.util.logging.Logger;
 
@@ -105,7 +102,7 @@ public class RegistrationService {
         String emailBody = message.getString("email.verification.body.0")
                 + user.getFirstName()
                 + message.getString("email.verification.body.1")
-                + generateValidationUrl(user, verification);
+                + generateValidationUrl(verification);
 
         try {
             EmailUtil.sendEmail(configPropagator.getProperty("MAIL_ADDRESS_FROM"), new String[]{user.getEmailAddress()},
@@ -118,7 +115,7 @@ public class RegistrationService {
         // Success message, containing verification random if test mode is enabled
         String msg = message.getString("registrationSuccessful");
         if (configPropagator.getProperty("DEBUG_AND_TEST_MODE").equalsIgnoreCase("true")) {
-            msg += "\n" + generateValidationUrl(user, verification);
+            msg += "\n" + generateValidationUrl(verification);
         }
         uiMessageEvent.fire(new UIMessage(msg, MessageCategory.INFO));
 
@@ -127,10 +124,9 @@ public class RegistrationService {
         return user;
     }
 
-    private String generateValidationUrl(User user, Verification verification) {
-        return FacesContext.getCurrentInstance().getExternalContext().encodeBookmarkableURL(
-                "/anonymous/verification.xhtml",
-                Map.of("validationRandom", List.of(verification.getValidationRandom())));
+    private String generateValidationUrl(Verification verification) {
+        return configPropagator.getProperty("BASE_URL") + "/views/anonymous/verification.xhtml?validationRandom="
+                + verification.getValidationRandom();
     }
 
     /**
