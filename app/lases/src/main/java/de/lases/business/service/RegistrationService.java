@@ -18,6 +18,7 @@ import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.PropertyResourceBundle;
 import java.util.logging.Logger;
 
@@ -88,7 +89,7 @@ public class RegistrationService {
         verification.setUserId(user.getId());
         verification.setNonVerifiedEmailAddress(user.getEmailAddress());
         verification.setValidationRandom(Hashing.generateRandomSalt());
-        verification.setTimestampValidationStarted(LocalDateTime.now());
+        verification.setTimestampValidationStarted(LocalDateTime.now(ZoneOffset.UTC));
 
         try {
             UserRepository.addVerification(verification, t);
