@@ -73,7 +73,7 @@ public class PaperRepository {
 
                 return resultPaper;
             } else {
-                logger.fine("Loading paper with the submission id: " + paper.getSubmissionId()
+                logger.warning("Loading paper with the submission id: " + paper.getSubmissionId()
                         + " and version number: " + paper.getVersionNumber());
                 throw new NotFoundException();
             }
@@ -184,7 +184,7 @@ public class PaperRepository {
             findPaper(paper, connection);
 
         } catch (SQLException exception) {
-            logger.fine("Searching paper failed. Tried to change paper");
+            logger.warning("Searching paper failed. Tried to change paper");
             throw new NotFoundException();
         }
         String sql = "UPDATE paper SET is_visible = ? WHERE version = ? AND submission_id = ?";
@@ -236,7 +236,7 @@ public class PaperRepository {
             ResultSet resultSet = findPaper(paper, connection);
 
         } catch (SQLException exception) {
-            logger.fine("Removing paper with the submission id: " + paper.getSubmissionId()
+            logger.warning("Removing paper with the submission id: " + paper.getSubmissionId()
                     + " and version number: " + paper.getVersionNumber());
             throw new NotFoundException();
         }
@@ -288,7 +288,7 @@ public class PaperRepository {
 
         if (submission.getId() == null || user.getId() == null) {
             transaction.abort();
-            logger.fine("Loading a list of paper with the submission id: " + submission.getId()
+            logger.warning("Loading a list of paper with the submission id: " + submission.getId()
                     + " and a user, who requests it, with the id: " + user.getId());
             throw new NotFoundException();
         }
@@ -477,7 +477,7 @@ public class PaperRepository {
                 return file;
 
             } else {
-                logger.fine("Loading paper with the submission id: " + paper.getSubmissionId()
+                logger.warning("Loading paper with the submission id: " + paper.getSubmissionId()
                         + " and version number: " + paper.getVersionNumber());
                 throw new NotFoundException();
             }
@@ -520,7 +520,7 @@ public class PaperRepository {
             ResultSet found = find.executeQuery();
 
         } catch (SQLException e) {
-            logger.fine("Searching for a submission with the id: " + submission.getId()
+            logger.warning("Searching for a submission with the id: " + submission.getId()
                     + " for an author with the id: " + user.getId() + " in order to proof if the ids are valid.");
             throw new NotFoundException();
         }
@@ -542,7 +542,7 @@ public class PaperRepository {
                 paper.setVisible(resultSet.getBoolean("is_visible"));
 
             } else {
-                logger.fine("Loading newest paper of a submission with the id: " + submission.getId()
+                logger.warning("Loading newest paper of a submission with the id: " + submission.getId()
                         + " for an author with the id: " + user.getId());
                 throw new NotFoundException();
             }
