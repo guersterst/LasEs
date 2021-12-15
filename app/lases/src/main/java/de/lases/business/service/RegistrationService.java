@@ -10,6 +10,7 @@ import de.lases.global.transport.User;
 import de.lases.global.transport.Verification;
 import de.lases.persistence.exception.DataNotWrittenException;
 import de.lases.persistence.exception.EmailTransmissionFailedException;
+import de.lases.persistence.exception.KeyExistsException;
 import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.repository.Transaction;
 import de.lases.persistence.repository.UserRepository;
@@ -65,23 +66,40 @@ public class RegistrationService {
 
         Transaction t = new Transaction();
 
-        // make sure that the user's email address is not already in use
+        // check if a user with that email address already exists
         if (UserRepository.emailExists(user, t)) {
-            l.warning("User with email address " + user.getEmailAddress() + " already exists.");
-            uiMessageEvent.fire(new UIMessage(message.getString("emailInUse"),
-                    MessageCategory.ERROR));
-            t.abort();
-            return null;
-        }
-
-        user.setRegistered(true);
-        hashPassword(user);
-
-        try {
-            user = UserRepository.add(user, t);
-        } catch (DataNotWrittenException e) {
-            uiMessageEvent.fire(new UIMessage(message.getString("registrationFailed"), MessageCategory.ERROR));
-            return null;
+            User oldUser;
+            try {
+                oldUser = UserRepository.get(user, t);
+            } catch (NotFoundException e) {
+                l.severe("User with email " + user.getEmailAddress() + " should exist but was not found.");
+                t.abort();
+                return user;
+            }
+            oldUser.setRegistered(true);
+            oldUser.setPasswordNotHashed(user.getPasswordNotHashed());
+            hashPassword(oldUser);
+            try {
+                UserRepository.change(oldUser, t);
+            } catch (DataNotWrittenException e) {
+                // todo: handle this
+                e.printStackTrace();
+            } catch (NotFoundException e) {
+                // todo: handle this
+                e.printStackTrace();
+            } catch (KeyExistsException e) {
+                // todo: handle this
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                user.setRegistered(true);
+                hashPassword(user);
+                user = UserRepository.add(user, t);
+            } catch (DataNotWrittenException e) {
+                uiMessageEvent.fire(new UIMessage(message.getString("registrationFailed"), MessageCategory.ERROR));
+                return user;
+            }
         }
 
         Verification verification = new Verification();
