@@ -115,6 +115,8 @@
                                 <h:form id="info-forum">
 
                                     <div class="row">
+
+                                        <!-- leftmost column -->
                                         <div class="col-md-6">
 
                                             <!-- name -->
@@ -129,183 +131,182 @@
                                             <div class="body">
 
                                                 <!-- desc -->
-                                                <div class="body">
-                                                    <h:inputText id="description-itxt"
-                                                                 value="#{scientificForumBacking.forum.description}"
-                                                                 readonly="#{!scientificForumBacking.loggedInUserIsEditor()}"
-                                                                 required="true"
-                                                                 requiredMessage="#{message.description}"
-                                                                 styleClass="h4"/>
-                                                </div>
+                                                <h:inputText id="description-itxt"
+                                                             value="#{scientificForumBacking.forum.description}"
+                                                             readonly="#{!scientificForumBacking.loggedInUserIsEditor()}"
+                                                             rendered="#{scientificForumBacking.loggedInUserIsEditor()}"
+                                                             required="true"
+                                                             requiredMessage="#{message.description}"
+                                                             styleClass="h4"/>
 
+                                                <!-- alternative desc output for non editors -->
+                                                <h:outputText id="description-otxtx"
+                                                              value="#{scientificForumBacking.forum.description}"
+                                                              rendered="#{!scientificForumBacking.loggedInUserIsEditor()}"
+                                                              styleClass="h4"/>
+                                            </div>
+                                            <div class="body">
                                                 <!-- url -->
-                                                <h:outputLink id="url-lnk" value="#{scientificForumBacking.forum.url}"
-                                                        outcome="#{scientificForumBacking.forum.url}"
-                                                        title="#{help.directToWebsite}"/>
-                                                <h:inputText id ="change-url-itxt"
+                                                <h:inputText id="change-url-itxt"
                                                              value="#{scientificForumBacking.forum.url}"
                                                              rendered="#{scientificForumBacking.loggedInUserIsEditor()}"/>
-                                            </div>
 
-                                            <!-- deadline for submission -->
-                                            <!-- todo hier text input? -> converter -->
-                                            <h:inputText id = "deadline-itxt"
-                                                         value = "#{scientificForumBacking.forum.deadline}"
-                                                         readonly="#{!scientificForumBacking.loggedInUserIsEditor()}"
-                                                         required="true"
-                                                         requiredMessage="#{message.deadline}" />
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div id="label">
-                                                <div style="margin: 10px">
-                                                    <h:outputLabel id="editors-lbl" value="#{labels.editors}"
-                                                                   for="editors-lst" styleClass="h6"/>
-                                                </div>
-                                                <div id="body">
-                                                    <h:dataTable id = "editors-lst" />
-                                                    <h:link id="author-lnk"
-                                                            value="#{submissionBacking.author.firstName.concat(' ').concat(submissionBacking.author.lastName)}"
-                                                            outcome="/views/authenticated/profile"
-                                                            includeViewParams="true" title="#{help.directToProfile}"
-                                                            disabled="#{not (submissionBacking.loggedInUserIsEditor() || submissionBacking.isViewerSubmitter())}"
-                                                    >
-                                                        <f:param value="#{submissionBacking.author.id}" name="id"/>
-                                                    </h:link>
-                                                </div>
-
+                                                <!-- alternative url output for non editors -->
+                                                <h:outputLink value="#{scientificForumBacking.forum.url}"
+                                                              rendered="#{!scientificForumBacking.loggedInUserIsEditor()}">
+                                                    <h:outputText value="#{scientificForumBacking.forum.url}"/>
+                                                </h:outputLink>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <div class="label">
-                                                    <h:outputLabel id="co-author-lbl" value="#{labels.coAuthor}"
-                                                                   for="co-author-list" styleClass="h6"/>
-                                                </div>
-                                                <div class="body">
-                                                    <ui:repeat id="co-author-list"
-                                                               value="#{submissionBacking.coAuthors}"
-                                                               var="coAuthor">
-                                                        <h:outputText id="co-author-otxt"
-                                                                      value="#{coAuthor.firstName.concat(' ').concat(coAuthor.lastName).concat(' ')}"/>
-                                                        <h:commandLink id="email-lnk" value="#{coAuthor.emailAddress}"
-                                                                       outcome="#{'mailto:'.concat(coAuthor.emailAddress)}"
-                                                                       includeViewParams="true" title="#{help.mailTo}"
-                                                                       disabled="#{not submissionBacking.loggedInUserIsEditor()}"/>
-                                                        <br/>
-                                                    </ui:repeat>
-                                                </div>
+
+                                        <!-- deadline for submission -->
+                                        <!-- todo hier text input? -> converter -->
+                                        <!--
+                                        <h:inputText id = "deadline-itxt"
+                                                     value = "#{scientificForumBacking.forum.deadline}"
+                                                     readonly="#{!scientificForumBacking.loggedInUserIsEditor()}"
+                                                     required="true"
+                                                     requiredMessage="#{message.deadline}" />
+                                                     -->
+                                    </div>
+
+                                    <!-- editor column -->
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <div class="label">
+                                                <h:outputLabel id="editor-lbl" value="#{labels.editors}"
+                                                               for="editor-list" styleClass="h6"/>
+                                            </div>
+                                            <div class="body">
+                                                <ui:repeat id="editor-list"
+                                                           value="#{scientificForumBacking.editors}"
+                                                           var="editor">
+                                                    <h:outputLink id="email-lnk"
+                                                                  value="#{'/views/authenticated/profile.xhtml'}">
+                                                        <h:outputText
+                                                                value="#{editor.firstName.concat(' ').concat(editor.lastName).concat(' ')}"/>
+                                                        <f:param name="id" value="#{editor.id}"/>
+                                                    </h:outputLink>
+                                                    <!--
+                                                    <h:outputLink value="login.xhtml">
+                                                        <h:outputText value="Login page" />
+                                                        <f:param name="username" value="mkyong" />
+                                                    </h:outputLink>
+                                                    -->
+                                                    <br/>
+                                                </ui:repeat>
                                             </div>
                                         </div>
                                     </div>
                                 </h:form>
                             </div>
                         </div>
-                        <!-- submission pagination -->
-                        <div id="submission-pagination">
-                            <div class="container">
-                                <div class="card">
-                                    <div class="card-head">
-                                        <!-- Tabs for the different views -->
-                                        <h:form>
-                                            <ul class="nav nav-tabs justify-content-center">
-                                                <li class="nav-item">
-                                                    <h:commandLink value="#{labels['ownSubmissions']}"
-                                                                   action="#{scientificForumBacking.displayOwnSubmissionsTab()}"
-                                                                   styleClass="#{'nav-link'.concat(scientificForumBacking.getOwnCssClassSuffix())}"/>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <h:commandLink value="#{labels['reviewedSubmissions']}"
-                                                                   action="#{scientificForumBacking.displayReviewSubmissionsTab()}"
-                                                                   styleClass="#{'nav-link'.concat(scientificForumBacking.getReviewCssClassSuffix())}"/>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <h:commandLink value="#{labels['editedSubmissions']}"
-                                                                   action="#{scientificForumBacking.displayEditSubmissionsTab()}"
-                                                                   styleClass="#{'nav-link'.concat(scientificForumBacking.getEditCssClassSuffix())}"/>
-                                                </li>
-                                            </ul>
-                                        </h:form>
+                    </div>
+                </div>
+                <!-- submission pagination -->
+                <div id="submission-pagination">
+                    <div class="container">
+                        <div class="card">
+                            <div class="card-head">
+                                <!-- Tabs for the different views -->
+                                <h:form>
+                                    <ul class="nav nav-tabs justify-content-center">
+                                        <li class="nav-item">
+                                            <h:commandLink value="#{labels['ownSubmissions']}"
+                                                           action="#{scientificForumBacking.displayOwnSubmissionsTab()}"
+                                                           styleClass="#{'nav-link'.concat(scientificForumBacking.getOwnCssClassSuffix())}"/>
+                                        </li>
+                                        <li class="nav-item">
+                                            <h:commandLink value="#{labels['reviewedSubmissions']}"
+                                                           action="#{scientificForumBacking.displayReviewSubmissionsTab()}"
+                                                           styleClass="#{'nav-link'.concat(scientificForumBacking.getReviewCssClassSuffix())}"/>
+                                        </li>
+                                        <li class="nav-item">
+                                            <h:commandLink value="#{labels['editedSubmissions']}"
+                                                           action="#{scientificForumBacking.displayEditSubmissionsTab()}"
+                                                           styleClass="#{'nav-link'.concat(scientificForumBacking.getEditCssClassSuffix())}"/>
+                                        </li>
+                                    </ul>
+                                </h:form>
+                            </div>
+
+                            <div class="card-body">
+                                <h:form>
+                                    <!-- Filter controls -->
+                                    <div class="btn-group">
+                                        <!-- Date filtering -->
+                                        <h:selectOneMenu id="date-slctom"
+                                                         value="#{scientificForumBacking.submissionPagination.resultListParameters.dateSelect}"
+                                                         title="#{help.dateSelect}"
+                                                         styleClass="btn btn-secondary">
+                                            <f:selectItems value="#{scientificForumBacking.dateSelects}"
+                                                           var="select"
+                                                           itemLabel="#{labels['dateSelect.' += select]}"
+                                                           itemValue="#{select}"/>
+                                        </h:selectOneMenu>
+                                        <!-- Submission state filtering -->
+                                        <h:selectOneMenu id="state-slctom"
+                                                         value="#{scientificForumBacking.submissionPagination.resultListParameters.submissionState}"
+                                                         title="#{help.stateSubSelect}"
+                                                         styleClass="btn btn-secondary">
+                                            <f:selectItem itemValue="#{null}"
+                                                          itemLabel="#{labels['stateSelect.ALL']}"/>
+                                            <f:selectItems value="#{scientificForumBacking.submissionStates}"
+                                                           var="select"
+                                                           itemLabel="#{labels['stateSelect.' += select]}"
+                                                           itemValue="#{select}"/>
+                                        </h:selectOneMenu>
                                     </div>
+                                    <pg:pagination paginator="#{scientificForumBacking.submissionPagination}">
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <col:sortsearchcolumn id="title-ssc"
+                                                                      paginator="#{scientificForumBacking.submissionPagination}"
+                                                                      columnIdentifier="title"
+                                                                      columnNamei18n="#{labels.title}"/>
+                                            </f:facet>
+                                            <h:link value="#{var.title}"
+                                                    outcome="/views/authenticated/submission"
+                                                    includeViewParams="true">
+                                                <f:param name="id" value="#{var.id}"/>
+                                            </h:link>
+                                        </h:column>
 
-                                    <div class="card-body">
-                                        <h:form>
-                                            <!-- Filter controls -->
-                                            <div class="btn-group">
-                                                <!-- Date filtering -->
-                                                <h:selectOneMenu id="date-slctom"
-                                                                 value="#{scientificForumBacking.submissionPagination.resultListParameters.dateSelect}"
-                                                                 title="#{help.dateSelect}"
-                                                                 styleClass="btn btn-secondary">
-                                                    <f:selectItems value="#{scientificForumBacking.dateSelects}"
-                                                                   var="select"
-                                                                   itemLabel="#{labels['dateSelect.' += select]}"
-                                                                   itemValue="#{select}"/>
-                                                </h:selectOneMenu>
-                                                <!-- Submission state filtering -->
-                                                <h:selectOneMenu id="state-slctom"
-                                                                 value="#{scientificForumBacking.submissionPagination.resultListParameters.submissionState}"
-                                                                 title="#{help.stateSubSelect}"
-                                                                 styleClass="btn btn-secondary">
-                                                    <f:selectItem itemValue="#{null}"
-                                                                  itemLabel="#{labels['stateSelect.ALL']}"/>
-                                                    <f:selectItems value="#{scientificForumBacking.submissionStates}"
-                                                                   var="select"
-                                                                   itemLabel="#{labels['stateSelect.' += select]}"
-                                                                   itemValue="#{select}"/>
-                                                </h:selectOneMenu>
-                                            </div>
-                                            <pg:pagination paginator="#{scientificForumBacking.submissionPagination}">
-                                                <h:column>
-                                                    <f:facet name="header">
-                                                        <col:sortsearchcolumn id="title-ssc"
-                                                                              paginator="#{scientificForumBacking.submissionPagination}"
-                                                                              columnIdentifier="title"
-                                                                              columnNamei18n="#{labels.title}"/>
-                                                    </f:facet>
-                                                    <h:link value="#{var.title}"
-                                                            outcome="/views/authenticated/submission"
-                                                            includeViewParams="true">
-                                                        <f:param name="id" value="#{var.id}"/>
-                                                    </h:link>
-                                                </h:column>
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <div class="input-group">
+                                                    <h:outputText value="#{labels.date}"
+                                                                  styleClass="input-group-text"/>
+                                                </div>
+                                            </f:facet>
+                                            <h:outputText value="#{var.submissionTime}">
+                                                <f:convertDateTime type="localDate"/>
+                                            </h:outputText>
+                                        </h:column>
 
-                                                <h:column>
-                                                    <f:facet name="header">
-                                                        <div class="input-group">
-                                                            <h:outputText value="#{labels.date}"
-                                                                          styleClass="input-group-text"/>
-                                                        </div>
-                                                    </f:facet>
-                                                    <h:outputText value="#{var.submissionTime}">
-                                                        <f:convertDateTime type="localDate"/>
-                                                    </h:outputText>
-                                                </h:column>
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <div class="input-group">
+                                                    <h:outputText value="#{labels.deadline}"
+                                                                  styleClass="input-group-text"/>
+                                                </div>
+                                            </f:facet>
+                                            <h:outputText value="#{var.deadlineRevision}">
+                                                <f:convertDateTime type="localDate"/>
+                                            </h:outputText>
+                                        </h:column>
 
-                                                <h:column>
-                                                    <f:facet name="header">
-                                                        <div class="input-group">
-                                                            <h:outputText value="#{labels.deadline}"
-                                                                          styleClass="input-group-text"/>
-                                                        </div>
-                                                    </f:facet>
-                                                    <h:outputText value="#{var.deadlineRevision}">
-                                                        <f:convertDateTime type="localDate"/>
-                                                    </h:outputText>
-                                                </h:column>
-
-                                                <h:column>
-                                                    <f:facet name="header">
-                                                        <div class="input-group">
-                                                            <h:outputText value="#{labels.stateSub}"
-                                                                          styleClass="input-group-text"/>
-                                                        </div>
-                                                    </f:facet>
-                                                    <h:outputText id="state-otxt" value="#{var.state}"/>
-                                                </h:column>
-                                            </pg:pagination>
-                                        </h:form>
-                                    </div>
-                                </div>
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <div class="input-group">
+                                                    <h:outputText value="#{labels.stateSub}"
+                                                                  styleClass="input-group-text"/>
+                                                </div>
+                                            </f:facet>
+                                            <h:outputText id="state-otxt" value="#{var.state}"/>
+                                        </h:column>
+                                    </pg:pagination>
+                                </h:form>
                             </div>
                         </div>
                     </div>

@@ -375,9 +375,10 @@ public class ScientificForumBacking implements Serializable {
      * @return Is the logged-in user editor of this scientific forum?
      */
     public boolean loggedInUserIsEditor() {
-        return false;
+        return editors.contains(user);
     }
 
+    //TODO needed?
     /**
      * Return if the logged-in user is reviewer of this scientific forum.
      *
