@@ -285,18 +285,21 @@ public class PaperService implements Serializable {
         try{
             logger.finest("Getting paper list of a specific submission");
             paperList = PaperRepository.getList(submission, transaction, user, resultListParameters);
+            transaction.commit();
         } catch (DataNotCompleteException e) {
 
             logger.fine("Error while loading a list of a paper with the submission id: " + submission.getId()
                     + " and a user with the id: " + user.getId());
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotComplete"), MessageCategory.WARNING));
 
+            transaction.abort();
 
         } catch (NotFoundException e) {
             logger.fine("Error while loading a list of a paper with the submission id: " + submission.getId()
                     + " and a user with the id: " + user.getId());
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotFound"), MessageCategory.WARNING));
 
+            transaction.abort();
         }
         return paperList;
     }

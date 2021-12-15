@@ -314,6 +314,14 @@ public class PaperRepository {
                 }
             }
 
+            List<User> coAuthors = UserRepository.getList(transaction, submission, Privilege.AUTHOR);
+
+            for (User u : coAuthors) {
+                if (u.getId().equals(user.getId())) {
+                    privilege = Privilege.AUTHOR;
+                }
+            }
+
             if (privilege == null) {
                 //Has no matching privileges.
                 return paperList;

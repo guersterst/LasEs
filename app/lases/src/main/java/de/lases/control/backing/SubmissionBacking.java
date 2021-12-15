@@ -484,7 +484,15 @@ public class SubmissionBacking implements Serializable {
      * @return true if the viewer is the submitter of this submission.
      */
     public boolean isViewerSubmitter() {
-        return submission.getAuthorId() == sessionInformation.getUser().getId();
+        if (submission.getAuthorId() == sessionInformation.getUser().getId()) {
+            return true;
+        }
+        for (User user :  coAuthors) {
+            if (sessionInformation.getUser().getId().equals(user.getId())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean isAdmin() {
