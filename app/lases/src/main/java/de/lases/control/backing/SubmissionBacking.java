@@ -319,7 +319,9 @@ public class SubmissionBacking implements Serializable {
             reviewAlreadyWritten.setReviewerId(sessionInformation.getUser().getId());
             reviewAlreadyWritten.setPaperVersion(newestPaper.getVersionNumber());
             // Only render if no review has been written yet.
-            disable = reviewService.get(reviewAlreadyWritten) != null;
+            if (reviewService.get(reviewAlreadyWritten) != null && newestPaper.isVisible()) {
+                disable = false;
+            }
         }
         return disable;
     }
