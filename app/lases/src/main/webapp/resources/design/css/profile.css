@@ -1,6 +1,7 @@
 #profile-image {
     height: 100%;
     width: 100%;
+    max-width: 300px;
     object-fit: cover;
     display: block;
     margin-left: auto;

@@ -1,5 +1,6 @@
 package de.lases.business.service;
 
+import de.lases.business.util.AvatarUtil;
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
 import de.lases.persistence.repository.Transaction;
@@ -8,6 +9,7 @@ import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 
+import java.io.IOException;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -119,9 +121,9 @@ public class UserService implements Serializable {
     public void setAvatar(FileDTO avatar, User user) {
         Transaction transaction = new Transaction();
         try {
-            UserRepository.setAvatar(user, avatar, transaction);
+            UserRepository.setAvatar(user, AvatarUtil.generateThumbnail(avatar), transaction);
             transaction.commit();
-        } catch (DataNotWrittenException e) {
+        } catch (DataNotWrittenException | IOException e) {
             transaction.abort();
             uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataNorWritten"),
                     MessageCategory.ERROR));
