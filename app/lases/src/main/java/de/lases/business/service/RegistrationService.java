@@ -97,7 +97,7 @@ public class RegistrationService {
         try {
             UserRepository.setVerification(verification, t);
             l.fine("Verification for user " + user.getId() + " created.");
-        } catch (NotFoundException e) {
+        } catch (NotFoundException | DataNotWrittenException e) {
             l.severe("Could not upload verification for user " + user.getId() + ".");
             uiMessageEvent.fire(new UIMessage(message.getString("registrationFailed"), MessageCategory.ERROR));
         }
