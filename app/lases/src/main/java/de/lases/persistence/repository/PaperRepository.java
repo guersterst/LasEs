@@ -550,9 +550,9 @@ public class PaperRepository {
         find.setInt(1, paper.getVersionNumber());
         find.setInt(2, paper.getSubmissionId());
 
+        ResultSet rs = find.executeQuery();
         find.close();
-
-        return find.executeQuery();
+        return rs;
     }
 
 }
