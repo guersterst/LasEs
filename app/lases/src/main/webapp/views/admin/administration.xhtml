@@ -21,7 +21,9 @@
                             <h:form id="theme-frm">
                                 <div class="form-group">
                                     <h:outputLabel id="select-theme-lbl" for="select-theme-slctom" value="#{labels.theme}"/>
-                                    <h:selectOneMenu value="#{administrationBacking.systemSettings.style}"/>
+                                    <h:selectOneMenu value="#{administrationBacking.systemSettings.style}" id="select-theme-slctom">
+                                        <f:selectItems value="#{administrationBacking.styles}" var="style" itemValue="#{style}" itemLabel="#{labels['themes.' += style]}"/>
+                                    </h:selectOneMenu>
                                 </div>
                             </h:form>
                         </div>

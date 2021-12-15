@@ -95,8 +95,7 @@ public class AdministrationBacking {
      * @return ALl options of Style.
      */
     public String[] getStyles() {
-        // TODO @implementierer: Hier muss man irgendwie alle styles aus dem
-        // backend holen. (da fehlen Methoden)
+        
         return null;
     }
 }
