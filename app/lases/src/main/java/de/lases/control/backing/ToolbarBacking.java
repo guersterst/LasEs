@@ -23,6 +23,8 @@ import java.util.logging.Logger;
 
 /**
  * Backing bean for the toolbar view. This view belongs to the submission page.
+ *
+ * @author Stefanie Gürster
  */
 @ViewScoped
 @Named
@@ -236,13 +238,30 @@ public class ToolbarBacking implements Serializable {
      * Accept the submission belonging to this page.
      */
     public void acceptSubmission() {
-    } // y
+        submission.setState(SubmissionState.ACCEPTED);
 
+        submissionService.change(submission);
+
+        uiMessageEvent.fire(new UIMessage(resourceBundle.getString("acceptedSubmission"), MessageCategory.INFO));
+    }
+
+    public boolean isAccepted() {
+        return submission.getState() == SubmissionState.ACCEPTED;
+    }
     /**
      * Reject the submission belonging to this page.
      */
     public void rejectSubmission() {
-    } // y
+        submission.setState(SubmissionState.REJECTED);
+
+        submissionService.change(submission);
+
+        uiMessageEvent.fire(new UIMessage(resourceBundle.getString("rejectedSubmission"), MessageCategory.INFO));
+    }
+
+    public boolean isRejected() {
+        return submission.getState() == SubmissionState.REJECTED;
+    }
 
     /**
      * Get the submission belonging to this page.

@@ -115,6 +115,30 @@ xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
                                  title="#{help.revisionRequired}" styleClass="btn btn-primary"/>
             </div>
         </h:form>
+        <br/>
+        <br/>
+        <br/>
+        <h:form id="accept-reject-frm">
+            <div class="form-group">
+                <div class="input-group-btn">
+                    <h:commandButton id="accept-submission-cbtn" value="#{labels.acceptSubmission}"
+                                     title="#{help.acceptBtn}"
+                                     action="#{toolbarBacking.acceptSubmission}"
+                                     styleClass="btn btn-primary input-group"
+                                     disabled="#{toolbarBacking.accepted || toolbarBacking.rejected}"/>
+                </div>
+            </div>
+            <br/>
+            <div class="form-group">
+                <div class="input-group-btn">
+                    <h:commandButton id="reject-submission-cbtn" value="#{labels.rejectSubmission}"
+                                     title="#{help.rejectBtn}"
+                                     action="#{toolbarBacking.rejectSubmission}"
+                                     styleClass="btn btn-primary input-group"
+                                     disabled="#{toolbarBacking.rejected || toolbarBacking.accepted}"/>
+                </div>
+            </div>
+        </h:form>
     </div>
 
 
