@@ -28,11 +28,11 @@ public class ReviewRepository {
      * Takes a review dto that is filled out with a valid reviewerId, paperId
      * and submissionId and returns a fully filled review dto.
      *
-     * @param review A review dto that must be filled with a valid reviewerId,
-     *               paperId and submissionId
+     * @param review      A review dto that must be filled with a valid reviewerId,
+     *                    paperId and submissionId
      * @param transaction The transaction to use.
      * @return A fully filled review dto.
-     * @throws NotFoundException If there is no review with the provided ids.
+     * @throws NotFoundException              If there is no review with the provided ids.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
@@ -44,34 +44,52 @@ public class ReviewRepository {
     /**
      * Adds a review to the repository.
      *
-     * @param review A fully filled review dto. (The id must not be specified,
-     *               as the repository will create the id)
+     * @param review      A fully filled review dto.
      * @param transaction The transaction to use.
-     * @throws DataNotWrittenException If writing the data to the repository
-     *                                 fails.
-     * @throws InvalidFieldsException If one of the fields of the review is
-     *                                null.
+     * @param pdf         The pdf file, might be null.
+     * @throws DataNotWrittenException        If writing the data to the repository
+     *                                        fails.
+     * @throws InvalidFieldsException         If one of the fields of the review is
+     *                                        null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
-     * @throws NotFoundException If there is no submission with the given
-     *                           submissionId or the submission has no
-     *                           reviewer with the given reviewerId.
+     * @throws NotFoundException              If there is no submission with the given
+     *                                        submissionId or the submission has no
+     *                                        reviewer with the given reviewerId.
      */
-    public static void add(Review review, Transaction transaction)
+    public static void add(Review review, FileDTO pdf, Transaction transaction)
             throws DataNotWrittenException, NotFoundException {
+        Connection connection = transaction.getConnection();
+        String sql = "INSERT INTO review(reviewer_id, version, submission_id, timestamp_upload, is_visible, is_recommended, comment, pdf_file)" +
+                " VALUES (?, ?, ?, NOW(), FALSE, ?, ?, ?)";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1,review.getReviewerId());
+            ps.setInt(2, review.getPaperVersion());
+            ps.setInt(3, review.getSubmissionId());
+
+            ps.setBoolean(4, review.isAcceptPaper());
+            ps.setString(5, review.getComment());
+            ps.setBytes(6, pdf.getFile());
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            logger.info(e.getMessage());
+            throw new DatasourceQueryFailedException(e.getMessage());
+        }
     }
 
     /**
      * Changes the given review in the repository.
      *
-     * @param review A fully filled review dto.
+     * @param review      A fully filled review dto.
      * @param transaction The transaction to use.
-     * @throws NotFoundException If there is no review with the provided
-     *                           reviewerId, paperId and submissionId.
-     * @throws DataNotWrittenException If writing the data to the repository
-     *                                 fails.
-     * @throws InvalidFieldsException If one of the fields of the review is
-     *                                null.
+     * @throws NotFoundException              If there is no review with the provided
+     *                                        reviewerId, paperId and submissionId.
+     * @throws DataNotWrittenException        If writing the data to the repository
+     *                                        fails.
+     * @throws InvalidFieldsException         If one of the fields of the review is
+     *                                        null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
@@ -90,8 +108,7 @@ public class ReviewRepository {
             ps.setInt(6, review.getReviewerId());
 
             ps.executeUpdate();
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             logger.severe("Review Change failed. " + e.getMessage());
             throw new DatasourceQueryFailedException(e.getMessage());
         }
@@ -191,8 +208,8 @@ public class ReviewRepository {
     }
 
     public static int getCountItemsList(Submission submission, User user,
-                                       Transaction transaction,
-                                       ResultListParameters resultListParameters)
+                                        Transaction transaction,
+                                        ResultListParameters resultListParameters)
             throws DataNotCompleteException, NotFoundException {
         if (transaction == null) {
             logger.severe("Passed transaction is null.");
@@ -247,7 +264,6 @@ public class ReviewRepository {
     }
 
 
-
     private static boolean isFilled(String s) {
         return s != null && !s.isEmpty();
     }
@@ -262,9 +278,9 @@ public class ReviewRepository {
         }
 
         sb.append("""
-                    FROM submission s, paper p, review r, "user" u
-                    WHERE s.id = p.submission_id AND p.version = r.version AND r.reviewer_id = u.id
-                    """).append("\n");
+                FROM submission s, paper p, review r, "user" u
+                WHERE s.id = p.submission_id AND p.version = r.version AND r.reviewer_id = u.id
+                """).append("\n");
 
         if (resultListParameters.getVisibleFilter() != null) {
             sb.append(switch (resultListParameters.getVisibleFilter()) {
@@ -317,11 +333,11 @@ public class ReviewRepository {
     /**
      * Get the PDF file for the provided review.
      *
-     * @param review A review dto filled with a valid reviewerId, paperId and
-     *              submissionId.
+     * @param review      A review dto filled with a valid reviewerId, paperId and
+     *                    submissionId.
      * @param transaction The transaction to use.
      * @return A file containing the PDF for the specified review.
-     * @throws NotFoundException If there is no review with the provided ids.
+     * @throws NotFoundException              If there is no review with the provided ids.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
@@ -362,22 +378,4 @@ public class ReviewRepository {
             throw new DatasourceQueryFailedException("A datasource exception occurred while loading a file.", exception);
         }
     }
-
-    /**
-     * Sets the PDF belonging to a specified review.
-     *
-     * @param review A review dto filled with a valid reviewerId, paperId and
-     *               submissionId.
-     * @param pdf A file dto filled with a pdf file.
-     * @param transaction The transaction to use.
-     * @throws DataNotWrittenException If writing the data to the repository
-     *                                 fails.
-     * @throws NotFoundException If there is no review with the provided ids.
-     * @throws DatasourceQueryFailedException If the datasource cannot be
-     *                                        queried.
-     */
-    public static void setPDF(Review review, FileDTO pdf, Transaction transaction)
-            throws DataNotWrittenException, NotFoundException {
-    }
-
 }

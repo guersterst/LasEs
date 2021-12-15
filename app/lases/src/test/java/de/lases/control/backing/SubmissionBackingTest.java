@@ -58,7 +58,6 @@ class SubmissionBackingTest {
         verify(paperService).getList(eq(sub), eq(user), any());
         verify(reviewService).getList(eq(sub), eq(user), any());
         verify(submissionService).getReviewedBy(eq(sub), eq(user));
-        verify(paperService).getLatest(eq(sub), eq(user));
     }
 
     @Test

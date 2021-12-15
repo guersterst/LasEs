@@ -242,10 +242,10 @@
                                                              style="margin: 3px"/>
                                         </h:panelGroup>
                                         <h:outputText id="deadline-review-otxt" value="#{labels.reviewDeadline}" style="margin: 3px"/>
-                                        <h:outputText id="date-review-deadline-otxt" value="#{submissionBacking.getDeadlineForReviewer(sessionInformation.user)}">
+                                        <h:outputText id="date-review-deadline-otxt" value="#{submissionBacking.getDeadlineForReviewer(sessionInformation.user)}" style="margin: 3px">
                                             <f:convertDateTime type="localDateTime"/>
                                         </h:outputText>
-                                        <h:commandButton id="new-review-cbtn" value="#{labels.uploadReview}" action="#{submissionBacking.uploadReview()}"/>
+                                        <h:commandButton id="new-review-cbtn" value="#{labels.uploadReview}" action="#{submissionBacking.uploadReview()}" style="margin: 3px"/>
                                     </div>
                                 </h:form>
                             </div>

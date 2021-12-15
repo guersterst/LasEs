@@ -222,7 +222,7 @@ class PaperRepositoryTest {
 
         PaperRepository.add(newestPaper,pdf,transaction);
 
-        Paper getNewestPaper = PaperRepository.getNewestPaperForSubmission(submission,author,transaction);
+        Paper getNewestPaper = PaperRepository.getNewestPaperForSubmission(submission,transaction);
 
         assertAll(
                 () -> assertEquals(newestPaper.getVersionNumber(), newestPaper.getVersionNumber()),

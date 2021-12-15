@@ -19,7 +19,7 @@
                 <div id="upload-box-body" class="card-body">
                     <h2>#{labels.uploadReview}</h2>
                     <hr/>
-                    <h:form>
+                    <h:form id="upload-review-form" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="comment-itxt-area">#{labels.reviewComment}</label>
                             <h:inputTextarea id="comment-itxt-area" value="#{newReviewBacking.review.comment}"
@@ -29,6 +29,13 @@
                         <div class="form-group" style="margin-top: 1rem">
                             <label for="recommend-cbx">#{labels.reviewRecommendation}</label>
                             <h:selectBooleanCheckbox id="recommend-cbx" value="#{newReviewBacking.review.acceptPaper}" style="margin-left: 1rem"/>
+                        </div>
+                        <div class="form-group">
+                            <h:inputFile id="pdf-upload-ifile" value="#{newReviewBacking.uploadedPDF}"
+                                         required="false"
+                                         validator="pdfValidator"
+                                         class="form-control"/>
+                            <h:message for="pdf-upload-ifile"/>
                         </div>
                         <div class="form-group">
                             <hr/>
