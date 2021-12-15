@@ -108,7 +108,7 @@ public class UserService implements Serializable {
     }
 
     /**
-     * Sets a user's avatar.
+     * Sets a user's avatar. If the avatar file or the contained byte[] are null, the current avatar will be removed.
      * <p>
      * The avatar is parsed into a thumbnail using the
      * {@link de.lases.business.util.AvatarUtil} utility.
@@ -117,11 +117,13 @@ public class UserService implements Serializable {
      * @param avatar The {@link FileDTO} containing the image as a byte-array.
      * @param user   The {@link User} whose avatar is being set.
      *               Must contain a valid id.
+     *
+     * @author Sebastian Vogt
      */
     public void setAvatar(FileDTO avatar, User user) {
         Transaction transaction = new Transaction();
         try {
-            UserRepository.setAvatar(user, AvatarUtil.generateThumbnail(avatar), transaction);
+            UserRepository.setAvatar(user, avatar == null ? null : AvatarUtil.generateThumbnail(avatar), transaction);
             transaction.commit();
         } catch (DataNotWrittenException | IOException e) {
             transaction.abort();

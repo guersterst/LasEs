@@ -852,21 +852,20 @@ public class UserRepository {
      * @param avatar      A file dto filled with an image file. If the dto or the
      *                    image itself are null, the current avatar will be deleted.
      * @param transaction The transaction to use.
-     * @throws InvalidFieldsException If the specified user id or avatar file is null.
+     * @throws InvalidFieldsException         If the specified user.
      * @throws NotFoundException              If there is no user with the specified id.
      * @throws DataNotWrittenException        If writing the data to the repository
      *                                        fails.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     *
+     * @author Sebastian Vogt
      */
     public static void setAvatar(User user, FileDTO avatar,
                                  Transaction transaction)
             throws DataNotWrittenException, NotFoundException {
         if (user.getId() == null) {
             throw new InvalidFieldsException("The user id must not be null!");
-        }
-        if (avatar.getFile() == null) {
-            throw new InvalidFieldsException("The avatar file byte[] must not be null!");
         }
 
         Connection connection = transaction.getConnection();
@@ -878,7 +877,7 @@ public class UserRepository {
                 """;
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setBytes(1, avatar.getFile());
+            stmt.setBytes(1, avatar == null ? null : avatar.getFile());
             stmt.setInt(2, user.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {

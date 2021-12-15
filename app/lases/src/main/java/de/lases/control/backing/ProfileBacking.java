@@ -164,6 +164,7 @@ public class ProfileBacking implements Serializable {
      * Delete the current avatar for the user.
      */
     public void deleteAvatar() {
+        userService.setAvatar(null, user);
     }
 
     /**

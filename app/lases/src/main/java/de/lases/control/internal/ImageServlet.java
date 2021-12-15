@@ -36,8 +36,6 @@ public class ImageServlet extends HttpServlet {
 
     private static final Logger logger = Logger.getLogger(ImageServlet.class.getName());
 
-    //private static final int MAX_AGE = 15 * 60 * 1000; // 15 minutes.
-
     /**
      * Answers a get request that requests a specific image resource specified
      * over the url. Redirects to a 404 page if the user does not have the
@@ -128,7 +126,6 @@ public class ImageServlet extends HttpServlet {
      *                 This does not occur here though. Rather they are used for metadata calculations.
      */
     private static void configureResponse(HttpServletResponse response, byte[] imgBytes) {
-        //response.setHeader("Cache-Control", "private, max-age=" + MAX_AGE);
         response.setContentLength(imgBytes.length);
         response.setContentType("image/jpg");
         response.setStatus(HttpServletResponse.SC_OK);
