@@ -7,7 +7,7 @@
 
     <!--Title of a Submission as Title of the page.-->
     <ui:define
-            name="title">Hello</ui:define>
+            name="title">#{labels.newSubmission}</ui:define>
 
     <!--Content of submission.xhtml.-->
     <ui:define name="content">
@@ -49,6 +49,7 @@
                                     <hr/>
 
                                     <div class="form-group">
+                                        <h:outputLabel for="editor-slctom" value="#{labels.editor}"/><br/>
                                         <h:selectOneMenu id="editor-slctom" styleClass="btn btn-secondary dropdown-toggle"
                                                          value="#{newSubmissionBacking.newSubmission.editorId}">
                                             <f:selectItems value="#{newSubmissionBacking.editors}" var="editor"
@@ -128,6 +129,8 @@
                                                      value="#{newSubmissionBacking.coAuthorInput.emailAddress}"
                                                      maxlength="#{Const.EMAIL_MAX}" required="true"
                                                      class="form-control"
+                                                     validator="emailAddressLayoutValidator"
+                                                     validatorMessage="#{message.emailInvalid}"
                                                      requiredMessage="#{message.emailRequired}"/>
                                         <h:message for="co-author-email-itxt"/>
                                     </div>
@@ -135,7 +138,7 @@
                                     <hr/>
 
                                     <div class="form-group">
-                                        <h:commandButton id="submit-co-author-cbtn" value="#{labels.add}"
+                                        <h:commandButton id="submit-co-author-cbtn" value="#{labels.addChange}"
                                                          styleClass="btn btn-secondary" type="submit"
                                                          action="#{newSubmissionBacking.submitCoAuthor()}">
                                             <f:ajax execute="co-authors-form" render="co-authors-form" />

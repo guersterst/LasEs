@@ -2,15 +2,14 @@ package de.lases.control.backing;
 
 import de.lases.business.service.CustomizationService;
 import de.lases.business.service.LoginService;
-import de.lases.control.internal.*;
-import de.lases.global.transport.*;
+import de.lases.control.internal.SessionInformation;
+import de.lases.global.transport.SystemSettings;
+import de.lases.global.transport.User;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.annotation.FacesConfig;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-
-import java.io.Serializable;
 
 /**
  * Backing bean for the welcome page.
@@ -65,7 +64,7 @@ public class WelcomeBacking {
      * @return Go to the register page.
      */
     public String goToRegister() {
-        return "/views/anonymous/register";
+        return "/views/anonymous/register?faces-redirect=true";
     }
 
     /**
