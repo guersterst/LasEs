@@ -89,7 +89,7 @@ public class ReviewRepository {
                 " VALUES (?, ?, ?, NOW(), FALSE, ?, ?, ?)";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1,review.getReviewerId());
+            ps.setInt(1, review.getReviewerId());
             ps.setInt(2, review.getPaperVersion());
             ps.setInt(3, review.getSubmissionId());
 
@@ -185,8 +185,10 @@ public class ReviewRepository {
         ResultSet resultSet;
         List<Review> reviewList = new ArrayList<>();
 
-        // Get all first.
-        try (PreparedStatement ps = conn.prepareStatement(getStatementReviewListForEditor(resultListParameters, false))) {
+        Privilege privilege = getPrivilegeForReviews(transaction, user, submission);
+        ;
+
+        try (PreparedStatement ps = conn.prepareStatement(getStatementReviewList(resultListParameters, user, privilege, false))) {
             int i = 1;
             if (isFilled(resultListParameters.getFilterColumns().get("version"))) {
                 ps.setString(i, "%" + resultListParameters.getFilterColumns().get("version") + "%");
@@ -221,15 +223,7 @@ public class ReviewRepository {
             logger.severe(e.getMessage());
             throw new DatasourceQueryFailedException(e.getMessage(), e);
         }
-
-        // Filter in Java.
-        if (user.isAdmin() || submission.getEditorId() == user.getId()) {
-            return reviewList;
-        } else if (submission.getAuthorId() == user.getId()) {
-            return reviewList.stream().filter(Review::isVisible).toList();
-        } else {
-            return reviewList.stream().filter(review -> review.getReviewerId() == user.getId()).toList();
-        }
+        return reviewList;
     }
 
     public static int getCountItemsList(Submission submission, User user,
@@ -257,34 +251,34 @@ public class ReviewRepository {
         ResultSet resultSet;
         List<Review> reviewList = new ArrayList<>();
 
-        // Case Editor or Admin
-        if (user.isAdmin() || submission.getEditorId() == user.getId()) {
-            try (PreparedStatement ps = conn.prepareStatement(getStatementReviewListForEditor(resultListParameters, true))) {
+        Privilege privilege = getPrivilegeForReviews(transaction, user, submission);
 
-                int i = 1;
-                if (isFilled(resultListParameters.getFilterColumns().get("version"))) {
-                    ps.setString(i, "%" + resultListParameters.getFilterColumns().get("version") + "%");
-                    i++;
-                }
-                if (isFilled(resultListParameters.getFilterColumns().get("lastname"))) {
-                    ps.setString(i, "%" + resultListParameters.getFilterColumns().get("lastname") + "%");
-                    i++;
-                }
-                if (isFilled(resultListParameters.getFilterColumns().get("comment"))) {
-                    ps.setString(i, "%" + resultListParameters.getFilterColumns().get("comment") + "%");
-                }
+        try (PreparedStatement ps = conn.prepareStatement(getStatementReviewList(resultListParameters, user, privilege, true))) {
 
-                resultSet = ps.executeQuery();
-
-                if (resultSet.next()) {
-                    return resultSet.getInt("count");
-                }
-
-            } catch (SQLException e) {
-                logger.severe(e.getMessage());
-                throw new DatasourceQueryFailedException(e.getMessage(), e);
+            int i = 1;
+            if (isFilled(resultListParameters.getFilterColumns().get("version"))) {
+                ps.setString(i, "%" + resultListParameters.getFilterColumns().get("version") + "%");
+                i++;
             }
+            if (isFilled(resultListParameters.getFilterColumns().get("lastname"))) {
+                ps.setString(i, "%" + resultListParameters.getFilterColumns().get("lastname") + "%");
+                i++;
+            }
+            if (isFilled(resultListParameters.getFilterColumns().get("comment"))) {
+                ps.setString(i, "%" + resultListParameters.getFilterColumns().get("comment") + "%");
+            }
+
+            resultSet = ps.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getInt("count");
+            }
+
+        } catch (SQLException e) {
+            logger.severe(e.getMessage());
+            throw new DatasourceQueryFailedException(e.getMessage(), e);
         }
+
         return -1;
     }
 
@@ -293,7 +287,22 @@ public class ReviewRepository {
         return s != null && !s.isEmpty();
     }
 
-    private static String getStatementReviewListForEditor(ResultListParameters resultListParameters, boolean doCount) {
+    /**
+     * Get the privilege of a user regarding the rights of viewing certain reviews.
+     */
+    private static Privilege getPrivilegeForReviews(Transaction transaction, User user, Submission submission)
+            throws DataNotCompleteException, NotFoundException {
+        if (user.isAdmin() || user.getId() == submission.getEditorId()) {
+            return Privilege.EDITOR;
+        } else if (UserRepository.getList(transaction, submission, Privilege.REVIEWER).contains(user)) {
+            return Privilege.REVIEWER;
+        } else if (UserRepository.getList(transaction, submission, Privilege.AUTHOR).contains(user)) {
+            return Privilege.AUTHOR;
+        }
+        return null;
+    }
+
+    private static String getStatementReviewList(ResultListParameters resultListParameters, User user, Privilege privilege, boolean doCount) {
         StringBuilder sb = new StringBuilder();
 
         if (doCount) {
@@ -306,6 +315,12 @@ public class ReviewRepository {
                 FROM submission s, paper p, review r, "user" u
                 WHERE s.id = p.submission_id AND p.version = r.version AND r.reviewer_id = u.id
                 """).append("\n");
+
+        if (privilege == Privilege.REVIEWER) {
+            sb.append(" AND r.reviewer_id = " + user.getId() + "\n");
+        } else if (privilege == Privilege.AUTHOR) {
+            sb.append(" AND r.is_visible = TRUE \n");
+        }
 
         if (resultListParameters.getVisibleFilter() != null) {
             sb.append(switch (resultListParameters.getVisibleFilter()) {
