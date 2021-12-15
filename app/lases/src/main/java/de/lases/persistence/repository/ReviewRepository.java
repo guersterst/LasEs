@@ -38,7 +38,32 @@ public class ReviewRepository {
      */
     public static Review get(Review review, Transaction transaction)
             throws NotFoundException {
-        return null;
+        Connection connection = transaction.getConnection();
+        String sql = "SELECT * FROM review r WHERE r.submission_id = ? AND r.version = ? AND r.reviewer_id = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, review.getSubmissionId());
+            ps.setInt(2, review.getPaperVersion());
+            ps.setInt(3, review.getReviewerId());
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Review retReview = new Review();
+                retReview.setSubmissionId(review.getSubmissionId());
+                retReview.setPaperVersion(review.getPaperVersion());
+                retReview.setReviewerId(review.getReviewerId());
+
+                retReview.setUploadTime(rs.getTimestamp("timestamp_upload").toLocalDateTime());
+                retReview.setVisible(rs.getBoolean("is_visible"));
+                retReview.setAcceptPaper(rs.getBoolean("is_recommended"));
+                retReview.setComment(rs.getString("comment"));
+                return retReview;
+            } else {
+                throw new NotFoundException();
+            }
+        } catch (SQLException e) {
+            throw new DatasourceQueryFailedException(e.getMessage());
+        }
     }
 
     /**

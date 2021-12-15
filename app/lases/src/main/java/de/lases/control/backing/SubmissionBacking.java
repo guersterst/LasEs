@@ -186,6 +186,8 @@ public class SubmissionBacking implements Serializable {
         scientificForum.setId(submission.getScientificForumId());
         scientificForum = scientificForumService.get(scientificForum);
 
+        newestPaper = paperService.getLatest(submission);
+
         coAuthors = userService.getList(submission, Privilege.AUTHOR);
         reviewers = userService.getList(submission, Privilege.REVIEWER);
 
@@ -307,6 +309,19 @@ public class SubmissionBacking implements Serializable {
      */
     public String uploadReview() {
         return "/views/reviewer/newReview.xhtml?faces-redirect=true&id=" + submission.getId();
+    }
+
+    public boolean disableReviewUploadButton() {
+        boolean disable = true;
+        if (sessionInformation.getUser().isAdmin() || loggedInUserIsReviewer()) {
+            Review reviewAlreadyWritten = new Review();
+            reviewAlreadyWritten.setSubmissionId(submission.getId());
+            reviewAlreadyWritten.setReviewerId(sessionInformation.getUser().getId());
+            reviewAlreadyWritten.setPaperVersion(newestPaper.getVersionNumber());
+            // Only render if no review has been written yet.
+            disable = reviewService.get(reviewAlreadyWritten) != null;
+        }
+        return disable;
     }
 
     /**

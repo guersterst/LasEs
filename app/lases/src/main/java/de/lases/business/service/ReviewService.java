@@ -40,11 +40,16 @@ public class ReviewService implements Serializable {
     /**
      * Gets a {@link Review}.
      *
-     * @param review The requested {@code Review} containing a valid id.
-     * @return The fully filled requested {@code Review}.
+     * @param review The requested {@code Review} containing submissionId, versionNumber, reviewerId.
+     * @return The fully filled requested {@code Review}, null if not found.
      */
     public Review get(Review review) {
-        return null;
+        Transaction transaction = new Transaction();
+        try {
+            return ReviewRepository.get(review, transaction);
+        } catch (NotFoundException e) {
+            return null;
+        }
     }
 
     /**
@@ -98,7 +103,7 @@ public class ReviewService implements Serializable {
             uiMessageEvent.fire(new UIMessage("Upload of review failed.", MessageCategory.ERROR));
             transaction.abort();
         } catch (NotFoundException e) {
-            e.printStackTrace();
+            uiMessageEvent.fire(new UIMessage("This submission does not have a paper to review.", MessageCategory.ERROR));
             transaction.abort();
         }
     }
