@@ -55,15 +55,24 @@ public class NewReviewBacking {
         // Submission ID is set per URL parameter.
     }
 
-    public String onLoad() throws IllegalUserFlowException {
+    public void onLoad() throws IllegalUserFlowException {
         Submission submission = new Submission();
         submission.setId(review.getSubmissionId());
         ReviewedBy reviewedBy = submissionService.getReviewedBy(submission, sessionInformation.getUser());
 
         if (reviewedBy == null) {
-            throw new IllegalUserFlowException();
+            throw new IllegalUserFlowException("Not a reviewer for this paper.");
         }
-        return null;
+
+        Paper newestPaper = paperService.getLatest(submission);
+        if (newestPaper == null) {
+            throw new IllegalUserFlowException("Can not submit a review for a submission without a paper.");
+        }
+        review.setPaperVersion(newestPaper.getVersionNumber());
+
+        if (reviewService.get(review) != null) {
+            throw new IllegalUserFlowException("Can not add a second review.");
+        }
     }
 
     /**
@@ -75,20 +84,21 @@ public class NewReviewBacking {
         // Get the newest Paper first, so we know the version of the paper for the review.
         Submission submission = new Submission();
         submission.setId(review.getSubmissionId());
-        Paper newestPaper = paperService.getLatest(submission);
 
         FileDTO file = new FileDTO();
-        file.setFile(uploadedPDF.getInputStream().readAllBytes());
-
-
-        if (newestPaper == null) {
-            // Error occurred in the paperService.
-            return null;
-        } else {
-            review.setPaperVersion(newestPaper.getVersionNumber());
-            reviewService.add(review, file);
-            return "/views/authenticated/submission.xhtml?faces-redirect=true&id=" + review.getSubmissionId();
+        if (uploadedPDF != null) {
+            file.setFile(uploadedPDF.getInputStream().readAllBytes());
         }
+
+        Paper newestPaper = paperService.getLatest(submission);
+        if (newestPaper == null) {
+            return null;
+        }
+        review.setPaperVersion(newestPaper.getVersionNumber());
+
+        reviewService.add(review, file);
+        return "/views/authenticated/submission.xhtml?faces-redirect=true&id=" + review.getSubmissionId();
+
     }
 
     /**
