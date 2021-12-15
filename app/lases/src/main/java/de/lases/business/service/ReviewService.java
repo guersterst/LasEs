@@ -176,8 +176,8 @@ public class ReviewService implements Serializable {
             }
 
             if (file.getFile() == null) {
-                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewNotFound"), MessageCategory.ERROR));
-                logger.severe("No file gotten for review: " + review);
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewNotFound"), MessageCategory.INFO));
+                logger.info("No file gotten for review: " + review);
             }
 
             return file;
