@@ -346,7 +346,7 @@ public class UserRepository {
      */
     public static Verification getVerification(User user, Transaction transaction)
             throws NotFoundException {
-        if (user.getId() != null && user.getEmailAddress() != null) {
+        if (user.getId() == null && user.getEmailAddress() == null) {
             logger.severe("User dto is not filled with an id or email address.");
             throw new IllegalArgumentException("User dto is not filled with an id or email address.");
         }
