@@ -320,6 +320,11 @@ public class SubmissionBacking implements Serializable {
         return "/views/reviewer/newReview.xhtml?faces-redirect=true&id=" + submission.getId();
     }
 
+    /**
+     * Checks if the "upload review" button should be disabled.
+     * Disabled if reviewer has already uploaded a review.
+     * @return whether the button needs to be disabled.
+     */
     public boolean disableReviewUploadButton() {
         boolean disable = true;
         if (sessionInformation.getUser().isAdmin() || loggedInUserIsReviewer()) {
@@ -328,7 +333,7 @@ public class SubmissionBacking implements Serializable {
             reviewAlreadyWritten.setReviewerId(sessionInformation.getUser().getId());
             reviewAlreadyWritten.setPaperVersion(newestPaper.getVersionNumber());
             // Only render if no review has been written yet.
-            if (reviewService.get(reviewAlreadyWritten) != null && newestPaper.isVisible()) {
+            if (reviewService.get(reviewAlreadyWritten) == null && newestPaper.isVisible()) {
                 disable = false;
             }
         }
