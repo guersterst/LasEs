@@ -6,9 +6,12 @@ import de.lases.control.internal.*;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.servlet.http.Part;
+
+import java.io.Serializable;
 
 /**
  * Backing bean for the new review page.
@@ -37,6 +40,9 @@ public class NewReviewBacking {
      */
     @PostConstruct
     public void init() throws IllegalUserFlowException {
+        review = new Review();
+        review.setReviewerId(sessionInformation.getUser().getId());
+        // Submission ID is set per URL parameter.
     }
 
     /**
@@ -45,7 +51,8 @@ public class NewReviewBacking {
      * @return Return to the submission page.
      */
     public String addReview() {
-        return null;
+        //todo: upload
+        return "/views/authenticated/submission.xhtml?faces-redirect=true&id=" + review.getSubmissionId();
     }
 
     /**

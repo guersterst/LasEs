@@ -56,9 +56,6 @@ public class SubmissionBacking implements Serializable {
     private PaperService paperService;
 
     @Inject
-    private NewReviewBacking newReviewBacking;
-
-    @Inject
     private ToolbarBacking toolbarBacking;
 
     @Inject
@@ -309,12 +306,7 @@ public class SubmissionBacking implements Serializable {
      * @return The page for a new review
      */
     public String uploadReview() {
-        Review newReview = new Review();
-        newReview.setVisible(false);
-        newReview.setReviewerId(sessionInformation.getUser().getId());
-        newReview.setSubmissionId(submission.getId());
-        newReviewBacking.setReview(newReview);
-        return "/views/reviewer/newReview.xhtml";
+        return "/views/reviewer/newReview.xhtml?faces-redirect=true&id=" + submission.getId();
     }
 
     /**
