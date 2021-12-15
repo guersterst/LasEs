@@ -642,27 +642,6 @@ public class SubmissionRepository {
     }
 
     /**
-     * Removes the specified reviewer from the specified scientific forum.
-     *
-     * @param submission  A scientific forum dto with a valid id.
-     * @param user        A user dto with a valid id, which is a reviewer in the
-     *                    aforementioned submission.
-     * @param transaction The transaction to use.
-     * @throws NotFoundException              If there is no scientific forum with the
-     *                                        provided id or there is no user with the
-     *                                        provided id or the provided user is not
-     *                                        a reviewer for the provided submission.
-     * @throws DataNotWrittenException        If writing the data to the repository
-     *                                        fails.
-     * @throws DatasourceQueryFailedException If the datasource cannot be
-     *                                        queried.
-     */
-    public static void removeReviewer(Submission submission, User user,
-                                      Transaction transaction)
-            throws NotFoundException, DataNotWrittenException {
-    }
-
-    /**
      * Count the number of submissions where the specified user is author.
      *
      * @param user                 A user dto with a valid id.

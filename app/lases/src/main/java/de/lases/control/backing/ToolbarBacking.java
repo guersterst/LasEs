@@ -180,7 +180,11 @@ public class ToolbarBacking implements Serializable {
      *
      * @param user The user to remove from the list of reviewers.
      */
-    public void removeReviewer(String user) {
+    public void removeReviewer(User user) {
+        submissionService.removeReviewer(submission, user);
+
+        reviewer.remove(user);
+
     }
 
     /**

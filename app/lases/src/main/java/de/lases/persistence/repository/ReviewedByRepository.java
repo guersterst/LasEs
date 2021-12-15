@@ -61,13 +61,57 @@ public class ReviewedByRepository {
     }
 
     /**
+     * Removes the specified reviewer from the specified scientific forum.
+     *
+     * @param submission  A scientific forum dto with a valid id.
+     * @param user        A user dto with a valid id, which is a reviewer in the
+     *                    aforementioned submission.
+     * @param transaction The transaction to use.
+     * @throws NotFoundException              If there is no scientific forum with the
+     *                                        provided id or there is no user with the
+     *                                        provided id or the provided user is not
+     *                                        a reviewer for the provided submission.
+     * @throws DataNotWrittenException        If writing the data to the repository
+     *                                        fails.
+     * @throws DatasourceQueryFailedException If the datasource cannot be
+     *                                        queried.
+     */
+    public static void removeReviewer(Submission submission, User user,
+                                      Transaction transaction)
+            throws NotFoundException, DataNotWrittenException {
+
+        if (submission.getId() == null) {
+            logger.severe("A passed submission DTO is not sufficiently filled.");
+            throw new InvalidFieldsException("submission id must not be null");
+        }
+        if (user.getId() == null) {
+            logger.severe("A passed submission DTO is not sufficiently filled.");
+            throw new InvalidFieldsException("User id must not be null.");
+        }
+
+        Connection connection = transaction.getConnection();
+
+        String sql = "DELETE FROM reviewed_by WHERE reviewer_id = ? AND submission_id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setInt(1, user.getId());
+            statement.setInt(2, submission.getId());
+
+            statement.executeUpdate();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+
+    }
+
+    /**
      * Gets a list of {@code ReviewedBy} dto's.
      *
      * @param submission A fully filled {@code ReviewedBy} dto.
      * @param transaction The transaction to use.
      * @throws InvalidFieldsException If one of the fields of the
      *                                provided {@code ReviewedBy} dto is null.
-     * @throws NotFoundException  If there is no scientific forum with the
+     * @throws NotFoundException  If there is no submission with the
      *                             provided id.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
