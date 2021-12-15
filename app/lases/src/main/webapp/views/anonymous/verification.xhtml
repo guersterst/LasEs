@@ -11,7 +11,10 @@
     <ui:define name="title">#{labels['emailVerification']}</ui:define>
 
     <ui:define name="content">
-        <h:commandButton id="go-to-home-cbtn" action="#{verificationBacking.goToHome}"/>
+        <h:link outcome="/views/authenticated/homepage" id="go-to-homepage-lnk" value="#{labels['homepageLink']}"
+                rendered="#{verificationBacking.verification.verified}"/>
+        <h:link outcome="/views/anonymous/welcome" id="go-to-welcome-lnk" value="#{labels['welcomeLink']}"
+                rendered="#{not verificationBacking.verification.verified}"/>
     </ui:define>
 
 </ui:composition>
