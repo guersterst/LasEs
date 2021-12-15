@@ -4,13 +4,12 @@ import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
 import de.lases.persistence.internal.ConfigReader;
 import de.lases.persistence.util.DatasourceUtil;
+import de.lases.persistence.util.TransientSQLExceptionChecker;
 import jakarta.enterprise.inject.spi.CDI;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.sql.Date;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -795,18 +794,55 @@ public class UserRepository {
     }
 
     /**
-     * Get the avatar image file for the avatar of the specified user.
+     * Get the avatar image file for the avatar of the specified user. Is null if the user has no avatar.
      *
      * @param user        A user dto with a valid id.
      * @param transaction The transaction to use.
      * @return A file containing the logo.
      * @throws NotFoundException              If there is no user with the specified id.
+     * @throws InvalidFieldsException If the user id is null.
+     * @throws DataNotCompleteException If the data cannot be fetched due to a transient fault.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
     public static FileDTO getAvatar(User user, Transaction transaction)
-            throws NotFoundException {
-        return null;
+            throws NotFoundException, DataNotCompleteException {
+
+        if (user.getId() == null) {
+            throw new InvalidFieldsException("The user id must not be null!");
+        }
+
+        Connection connection = transaction.getConnection();
+
+        String query = """
+                SELECT avatar_thumbnail
+                FROM "user"
+                WHERE id = ?
+                """;
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, user.getId());
+            ResultSet resultSet = stmt.executeQuery();
+            if (resultSet.next()) {
+                byte[] avatar = resultSet.getBytes(1);
+                resultSet.close();
+                FileDTO avatarFile = new FileDTO();
+                avatarFile.setFile(avatar);
+                return avatarFile;
+            } else {
+                throw new NotFoundException("There is no user with the given id!");
+            }
+        } catch (SQLException e) {
+            DatasourceUtil.logSQLException(e, logger);
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                throw new DataNotCompleteException("Avatar could not be fetched", e);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("Avatar could not be fetched", e);
+            }
+        }
+
+
     }
 
     /**
@@ -816,6 +852,7 @@ public class UserRepository {
      * @param avatar      A file dto filled with an image file. If the dto or the
      *                    image itself are null, the current avatar will be deleted.
      * @param transaction The transaction to use.
+     * @throws InvalidFieldsException If the specified user id or avatar file is null.
      * @throws NotFoundException              If there is no user with the specified id.
      * @throws DataNotWrittenException        If writing the data to the repository
      *                                        fails.
@@ -825,6 +862,35 @@ public class UserRepository {
     public static void setAvatar(User user, FileDTO avatar,
                                  Transaction transaction)
             throws DataNotWrittenException, NotFoundException {
+        if (user.getId() == null) {
+            throw new InvalidFieldsException("The user id must not be null!");
+        }
+        if (avatar.getFile() == null) {
+            throw new InvalidFieldsException("The avatar file byte[] must not be null!");
+        }
+
+        Connection connection = transaction.getConnection();
+
+        String query = """
+                UPDATE "user"
+                SET avatar_thumbnail = ?
+                WHERE id = ?
+                """;
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setBytes(1, avatar.getFile());
+            stmt.setInt(2, user.getId());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            // TODO: was, wenn es den user nicht gibt?
+            DatasourceUtil.logSQLException(e, logger);
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                throw new DataNotWrittenException("The avatar could not be written!", e);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("The avatar could not be written!", e);
+            }
+        }
     }
 
 }

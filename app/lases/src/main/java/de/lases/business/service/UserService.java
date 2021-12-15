@@ -1,10 +1,7 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.*;
-import de.lases.persistence.exception.DataNotCompleteException;
-import de.lases.persistence.exception.InvalidFieldsException;
-import de.lases.persistence.exception.InvalidQueryParamsException;
-import de.lases.persistence.exception.NotFoundException;
+import de.lases.persistence.exception.*;
 import de.lases.persistence.repository.Transaction;
 import de.lases.persistence.repository.UserRepository;
 import jakarta.enterprise.context.Dependent;
@@ -120,16 +117,44 @@ public class UserService implements Serializable {
      *               Must contain a valid id.
      */
     public void setAvatar(FileDTO avatar, User user) {
+        Transaction transaction = new Transaction();
+        try {
+            UserRepository.setAvatar(user, avatar, transaction);
+            transaction.commit();
+        } catch (DataNotWrittenException e) {
+            transaction.abort();
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataNorWritten"),
+                    MessageCategory.ERROR));
+        } catch (NotFoundException e) {
+            transaction.abort();
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("userNotFound"),
+                    MessageCategory.ERROR));
+        }
     }
 
     /**
-     * Gets the user's avatar.
+     * Gets the user's avatar. Is null if the user has no avatar.
      *
      * @param user The {@link User} whose avatar is being requested.
      *             Must contain a valid id.
      * @return The user's avatar as a byte-array, wrapped by a {@code FileDTO}.
      */
     public FileDTO getAvatar(User user) {
+        Transaction transaction = new Transaction();
+
+        try {
+            FileDTO avatar = UserRepository.getAvatar(user, transaction);
+            transaction.commit();
+            return avatar;
+        } catch (DataNotCompleteException e) {
+            transaction.abort();
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("avatarNotLoaded"),
+                    MessageCategory.ERROR));
+        } catch (NotFoundException e) {
+            transaction.abort();
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("userNotFound"),
+                    MessageCategory.ERROR));
+        }
         return null;
     }
 

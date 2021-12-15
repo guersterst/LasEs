@@ -15,6 +15,10 @@
             <f:viewParam value="#{profileBacking.user.id}" name="id"/>
         </f:metadata>
 
+        <h:head>
+            <h:outputStylesheet name="design/css/profile.css"/>
+        </h:head>
+
         <div class="container">
             <h1>#{labels['profile']}</h1>
 
@@ -25,7 +29,8 @@
                             Old Avatar
                         </div>
                         <div class="card-body">
-                            <h:graphicImage value="#{'lases_war/image?id='.concat(profileBacking.user.id)}" alt="#{labels.noAvatar}"/>
+                            <h:graphicImage id="profile-image" value="#{'/image?id='.concat(profileBacking.user.id)}"
+                                            alt="#{labels.noAvatar}"/>
                         </div>
                     </div>
                 </div>

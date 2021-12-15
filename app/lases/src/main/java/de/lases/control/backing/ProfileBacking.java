@@ -15,6 +15,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.servlet.http.Part;
 
+import java.io.IOException;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -152,7 +153,11 @@ public class ProfileBacking implements Serializable {
     /**
      * Set a new avatar for the user.
      */
-    public void uploadAvatar() {
+    public void uploadAvatar() throws IOException {
+        // TODO: Hier IO Exception nach aussen?
+        FileDTO avatar = new FileDTO();
+        avatar.setFile(uploadedAvatar.getInputStream().readAllBytes());
+        userService.setAvatar(avatar, user);
     }
 
     /**
