@@ -15,6 +15,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Backing bean for the scientific forum page.
@@ -53,6 +54,8 @@ public class ScientificForumBacking implements Serializable {
 
     private User newEditorInput;
 
+    private User removeEditorInput;
+
     private ScienceField selectedScienceFieldInput;
 
     private Pagination<Submission> submissionPagination;
@@ -66,6 +69,8 @@ public class ScientificForumBacking implements Serializable {
     private enum Tab {
         OWN_SUBMISSIONS, SUBMISSIONS_TO_EDIT, SUBMISSIONS_TO_REVIEW;
     }
+
+    private static Logger l = Logger.getLogger(ScientificForumBacking.class.getName());
 
     private Tab tab;
 
@@ -111,6 +116,7 @@ public class ScientificForumBacking implements Serializable {
         allScienceFields = new ArrayList<>();
 
         newEditorInput = new User();
+        removeEditorInput = new User();
         currentScieneFields = new ArrayList<>();
         selectedScienceFieldInput = new ScienceField();
     }
@@ -216,6 +222,9 @@ public class ScientificForumBacking implements Serializable {
         forum = forumService.get(forum);
         editors = userService.getList(forum);
 
+        //ResultListParameters params = new ResultListParameters();
+        //allEditors = userService.getList(params);
+
         // Todo richtige ResultListParameters here?
         allScienceFields = scienceFieldService.getList(new ResultListParameters());
         currentScieneFields = scienceFieldService.getList(forum, new ResultListParameters());
@@ -249,6 +258,7 @@ public class ScientificForumBacking implements Serializable {
      */
     public void addEditor() {
         forumService.addEditor(newEditorInput, forum);
+        editors.add(newEditorInput);
         //TODO reload list of editors
         //call onLoad f.e.
         //does this work? -> ajax
@@ -260,15 +270,17 @@ public class ScientificForumBacking implements Serializable {
      */
     public void addScienceField() {
         forumService.addScienceField(selectedScienceFieldInput, forum);
+        currentScieneFields.add(selectedScienceFieldInput);
     }
 
     /**
      * Remove a specific user form the list of editors.
      *
-     * @param user User to remove from editor list.
      */
-    public void removeEditor(User user) {
-        forumService.removeEditor(user, forum);
+    public void removeEditor(User editor) {
+        l.severe("Called remove");
+        forumService.removeEditor(editor, forum);
+        editors.remove(editor);
     }
 
     /**
@@ -278,6 +290,7 @@ public class ScientificForumBacking implements Serializable {
      */
     public void removeScienceField(ScienceField scienceField) {
         forumService.removeScienceField(scienceField, forum);
+        currentScieneFields.remove(scienceField);
     }
 
     /**
@@ -295,6 +308,14 @@ public class ScientificForumBacking implements Serializable {
 
     public void setTab(Tab tab) {
         this.tab = tab;
+    }
+
+    public User getRemoveEditorInput() {
+        return removeEditorInput;
+    }
+
+    public void setRemoveEditorInput(User removeEditorInput) {
+        this.removeEditorInput = removeEditorInput;
     }
 
     /**

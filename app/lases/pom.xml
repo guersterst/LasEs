@@ -121,12 +121,6 @@
             <version>${weld-junit5.version}</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>de.lases</groupId>
-            <artifactId>lases</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
     </dependencies>
 
     <build>
