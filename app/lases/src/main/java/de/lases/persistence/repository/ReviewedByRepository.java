@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -85,10 +86,29 @@ public class ReviewedByRepository {
 
         try (PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setInt(1, submission.getId());
+
+            resultSet = statement.executeQuery();
+
+            if (resultSet != null) {
+                logger.finest("Got a list of reviewedBy DTO's");
+            }
+
+            while (resultSet.next()) {
+                ReviewedBy reviewed = new ReviewedBy();
+
+                reviewed.setReviewerId(resultSet.getInt("submission_id"));
+                reviewed.setHasAccepted(AcceptanceStatus.valueOf(resultSet.getString("has_accepted")));
+                reviewed.setSubmissionId(resultSet.getInt("submission_id"));
+                reviewed.setTimestampDeadline(resultSet.getTimestamp("timestamp_deadline").toLocalDateTime());
+
+                reviewedByList.add(reviewed);
+            }
         } catch (SQLException exception) {
             DatasourceUtil.logSQLException(exception, logger);
             throw 
         }
+
+        return reviewedByList;
     }
 
 }
