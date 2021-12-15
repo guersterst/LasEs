@@ -302,21 +302,26 @@
                                                 </div>
                                             </f:facet>
                                             <h:outputText id="date-review-otxt" value="#{var.uploadTime}">
-                                                <f:convertDateTime type="localDate"/>
+                                                <f:convertDateTime type="localDateTime"/>
                                             </h:outputText>
                                         </h:column>
 
                                         <!--Visible state-->
-                                        <h:column rendered="#{submissionBacking.loggedInUserIsEditor() || submissionBacking.loggedInUserIsReviewer()}">
+                                        <h:column
+                                                rendered="#{submissionBacking.loggedInUserIsEditor() || submissionBacking.loggedInUserIsReviewer()}">
                                             <f:facet name="header">
                                                 <div class="input-group">
-                                                    <h:commandLink id="visible-state-review-col" value="#{labels.stateCol}" action="#{submissionBacking.reviewPagination.sortBy('is_visible')}" styleClass="input-group-text"/>
+                                                    <h:commandLink id="visible-state-review-col"
+                                                                   value="#{labels.stateCol}"
+                                                                   action="#{submissionBacking.reviewPagination.sortBy('is_visible')}"
+                                                                   styleClass="input-group-text"/>
                                                 </div>
                                             </f:facet>
                                             <h:commandButton id="set-visible-cbtn" styleClass="btn btn-primary"
                                                              value="#{var.visible ? labels.released : labels.notReleased}"
                                                              action="#{submissionBacking.releaseReview(var)}"
-                                                             title="#{help.releaseBtn}"/>
+                                                             title="#{help.releaseBtn}"
+                                                             disabled="#{!submissionBacking.loggedInUserIsEditor()}"/>
                                         </h:column>
 
                                         <!--recommended checkbox-->
