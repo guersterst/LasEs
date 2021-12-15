@@ -285,6 +285,7 @@ public class UserService implements Serializable {
             l.fine("User already verified");
             uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("verification.alreadyVerified"),
                     MessageCategory.ERROR));
+            return verification;
         }
 
         if (verification.getValidationRandom().equals(storedVerification.getValidationRandom())) {
