@@ -293,6 +293,7 @@ public class SubmissionService implements Serializable {
         } catch (KeyAlreadyExistsException e) {
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("alreadyExistsReviewer"), MessageCategory.WARNING));
             logger.log(Level.WARNING, e.getMessage());
+            transaction.abort();
         }
 
         //TODO:Need to send E-Mail when adding the user as reviewer is successful
@@ -363,6 +364,33 @@ public class SubmissionService implements Serializable {
      * @param reviewer   The reviewer to be removed from the submission.
      */
     public void removeReviewer(Submission submission, User reviewer) {
+        if (submission.getId() == null) {
+            logger.severe("The id of the submission is null.");
+            throw new InvalidFieldsException(resourceBundle.getString("idMissing"));
+        }
+        if (reviewer.getId() == null) {
+            logger.severe("The id of the reviewer is null.");
+            throw new InvalidFieldsException(resourceBundle.getString("idMissing"));
+        }
+
+        Transaction transaction = new Transaction();
+
+        try {
+            ReviewedByRepository.removeReviewer(submission, reviewer, transaction);
+            transaction.commit();
+        } catch (DataNotWrittenException e) {
+
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotWritten"), MessageCategory.WARNING));
+            logger.log(Level.WARNING, e.getMessage());
+
+            transaction.abort();
+        } catch (NotFoundException e) {
+
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotFound"), MessageCategory.ERROR));
+            logger.severe("A Relation between this submission and users is not existing.");
+
+            transaction.abort();
+        }
     }
 
     /**

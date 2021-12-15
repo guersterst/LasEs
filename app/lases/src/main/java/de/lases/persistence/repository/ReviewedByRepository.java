@@ -67,7 +67,7 @@ public class ReviewedByRepository {
      * @param user        A user dto with a valid id, which is a reviewer in the
      *                    aforementioned submission.
      * @param transaction The transaction to use.
-     * @throws NotFoundException              If there is no scientific forum with the
+     * @throws NotFoundException              If there is no submission with the
      *                                        provided id or there is no user with the
      *                                        provided id or the provided user is not
      *                                        a reviewer for the provided submission.
@@ -99,7 +99,9 @@ public class ReviewedByRepository {
 
             statement.executeUpdate();
         } catch (SQLException exception) {
-            exception.printStackTrace();
+        transaction.abort();
+            DatasourceUtil.logSQLException(exception, logger);
+            throw new DatasourceQueryFailedException("A datasource exception occurred while removing a reviewedBy.");
         }
 
     }

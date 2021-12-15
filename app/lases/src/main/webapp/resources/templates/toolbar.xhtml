@@ -15,7 +15,7 @@ xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
                 <h:inputText id="add-reviewer-itxt" value="#{toolbarBacking.reviewerInput.emailAddress}"
                              title="#{help.addReviewerEmail}"
                              required="true" requiredMessage="#{message.requiredEmail}"
-                             styleClass="form-control">
+                             styleClass="form-control" >
                     <f:validator validatorId="emailAddressLayout"/>
                 </h:inputText>
                 <h:message for="add-reviewer-itxt"/>
@@ -40,14 +40,16 @@ xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
                                  title="#{help.addReviewerButton}"/>
             </div>
         </h:form>
+        <h:form>
         <div id="list">
             <div class="row">
                 <div class="col">
                     <h:dataTable value="#{toolbarBacking.reviewer}" var="user">
                         <h:column>
-                            <h:commandButton value="#{labels.deleteButton}"
-                                             action="#{toolbarBacking.removeReviewer(user)}"
-                                             styleClass="btn btn-secondary btn-sm"/>
+                                <h:commandButton value="#{labels.deleteButton}"
+                                                 action="#{toolbarBacking.removeReviewer(user)}"
+                                                 styleClass="btn btn-secondary btn-sm" />
+
                         </h:column>
                         <h:column>
                             <h:outputText value="#{user.firstName.concat(' ').concat(user.lastName).concat(': ')}"/>
@@ -61,6 +63,37 @@ xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
                 </div>
             </div>
         </div>
+        </h:form>
+        <br/>
+        <h:form id="select-editor-frm">
+            <div class="form-group">
+                <div class="input-group">
+                    <h:outputLabel id="editor-lbl" value="#{labels.selectEditor}"/>
+                    <h:outputText id="show-editor-itxt"
+                                  value="#{toolbarBacking.currentEditor.firstName.concat(' ')
+                                  .concat(toolbarBacking.currentEditor.lastName)}"/>
+                </div>
+            </div>
+            <br/>
+            <div class="form-group">
+                <div class="input-group">
+                    <h:selectOneMenu id="select-editor-slctom"
+                                     value="#{toolbarBacking.currentEditor.firstName.concat(' ')
+                                 .concat(toolbarBacking.currentEditor.lastName)}" title="#{help.chooseEditor}"
+                                     styleClass="form-select">
+                        <f:selectItems value="#{toolbarBacking.editors}" var="editor"
+                                       itemValue="#{editor}"
+                                       itemLabel="#{editor.firstName.concat(' ').concat(editor.lastName)}"/>
+                    </h:selectOneMenu>
+                </div>
+                <br/>
+                <div class="btn-group">
+                    <h:commandButton id="save-editor-cbtn" value="#{labels.saveButton}"
+                                     action="#{toolbarBacking.chooseNewManagingEditor}"
+                                     styleClass="btn btn-primary"/>
+                </div>
+            </div>
+        </h:form>
     </div>
 
 

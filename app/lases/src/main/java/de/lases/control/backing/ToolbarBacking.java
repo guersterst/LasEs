@@ -114,6 +114,19 @@ public class ToolbarBacking implements Serializable {
      */
     public void onLoad(Submission sub) {
         submission = sub;
+        loadReviewerList();
+
+        currentEditor.setId(submission.getEditorId());
+        currentEditor = userService.get(currentEditor);
+
+        ScientificForum scientificForum = new ScientificForum();
+        scientificForum.setId(submission.getScientificForumId());
+
+        editors = userService.getList(scientificForum);
+    }
+
+    private void loadReviewerList() {
+        reviewer = new LinkedHashMap<>();
         List<User> userList = userService.getList(submission, Privilege.REVIEWER);
         List<ReviewedBy> reviewedByList = submissionService.getList(submission);
 
@@ -132,11 +145,6 @@ public class ToolbarBacking implements Serializable {
             }
             hasNoDeadline = true;
         }
-
-        editors = userService.getList(submission, Privilege.EDITOR);
-
-        currentEditor.setId(submission.getEditorId());
-        currentEditor = userService.get(currentEditor);
     }
 
     /**
@@ -163,7 +171,9 @@ public class ToolbarBacking implements Serializable {
 
         submissionService.addReviewer(newReviewer, reviewedBy);
 
+
         reviewer.put(newReviewer, reviewedBy);
+
     }
 
     /**
@@ -182,9 +192,7 @@ public class ToolbarBacking implements Serializable {
      */
     public void removeReviewer(User user) {
         submissionService.removeReviewer(submission, user);
-
-        reviewer.remove(user);
-
+        loadReviewerList();
     }
 
     /**

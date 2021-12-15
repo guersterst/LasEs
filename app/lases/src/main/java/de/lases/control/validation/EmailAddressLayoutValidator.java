@@ -1,5 +1,6 @@
 package de.lases.control.validation;
 
+import jakarta.enterprise.inject.spi.CDI;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
@@ -28,8 +29,7 @@ public class EmailAddressLayoutValidator implements Validator<String> {
 
     private final Logger l = Logger.getLogger(EmailAddressLayoutValidator.class.getName());
 
-    @Inject
-    private PropertyResourceBundle bundle;
+    private PropertyResourceBundle bundle = CDI.current().select(PropertyResourceBundle.class).get();
 
     /**
      * Validates an email address as specified in the class description.
