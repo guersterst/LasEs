@@ -10,8 +10,6 @@ public class Verification implements Cloneable {
 
     private int userId;
 
-    private int id;
-
     private String validationRandom;
 
     private boolean verified;
@@ -31,19 +29,6 @@ public class Verification implements Cloneable {
      */
     public void setUserId(int userId) {
         this.userId = userId;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * Set id of this verification.
-     *
-     * @param id Id of this verification.
-     */
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getValidationRandom() {
