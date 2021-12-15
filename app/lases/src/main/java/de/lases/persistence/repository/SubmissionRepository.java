@@ -223,7 +223,11 @@ public class SubmissionRepository {
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, submission.getState().toString());
             statement.setBoolean(2, submission.isRevisionRequired());
-            statement.setTimestamp(3, Timestamp.valueOf(submission.getDeadlineRevision()));
+            if (submission.getDeadlineRevision() == null) {
+                statement.setTimestamp(3, null);
+            } else {
+                statement.setTimestamp(3, Timestamp.valueOf(submission.getDeadlineRevision()));
+            }
             statement.setInt(4, submission.getEditorId());
             statement.setInt(5, submission.getId());
 

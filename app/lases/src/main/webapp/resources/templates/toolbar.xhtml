@@ -97,6 +97,24 @@ xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
                 </div>
             </div>
         </h:form>
+        <br/>
+        <h:form id="revision-required-frm">
+            <h:outputLabel id="revision-lbl" value="#{labels.revision}" for="revision-required-frm"/>
+            <div class="form-group">
+                <h:outputLabel id="revision-deadline-lbl" value="#{labels.deadline}"
+                               for="revision-deadline-itxt" styleClass="input-group"/>
+                <h:inputText id="revision-deadline-itxt" value="#{toolbarBacking.submission.deadlineRevision}"
+                             title="#{help.addRevisionDeadline}">
+                    <f:convertDateTime type="localDateTime"/>
+                </h:inputText>
+                <h:message for="revision-deadline-itxt" id="revision-requiered-msg"/>
+            </div>
+            <br/>
+            <div class="form-group btn-group">
+                <h:commandButton id="revision-required-cbtn" value="#{labels.revisionBtn}" action="#{toolbarBacking.requireRevision}"
+                                 title="#{help.revisionRequired}" styleClass="btn btn-primary"/>
+            </div>
+        </h:form>
     </div>
 
 

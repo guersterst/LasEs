@@ -329,13 +329,6 @@ public class SubmissionBacking implements Serializable {
         return author;
     }
 
-    /**
-     * Apply changes for the submission state.
-     */
-    public void applyState() {
-        submission.setRevisionRequired(submission.getState() == SubmissionState.REVISION_REQUIRED);
-        submissionService.change(submission.clone());
-    }
 
     /**
      * Upload a new revision as a pdf.
@@ -359,8 +352,11 @@ public class SubmissionBacking implements Serializable {
             Submission newSubmission = submission.clone();
             newSubmission.setState(SubmissionState.SUBMITTED);
             newSubmission.setRevisionRequired(newSubmission.getState() == SubmissionState.REVISION_REQUIRED);
+            newSubmission.setDeadlineRevision(null);
 
             submissionService.change(newSubmission);
+            submission = newSubmission;
+            toolbarBacking.onLoad(submission);
 
         }catch (IOException e) {
 
@@ -401,6 +397,20 @@ public class SubmissionBacking implements Serializable {
     public void setUploadedRevisionPDF(Part uploadedRevisionPDF) {
         this.uploadedRevisionPDF = uploadedRevisionPDF;
     }
+
+    /**
+     * Apply changes for the submission state.
+     */
+    /*
+    public void applyState(Submission submission) {
+
+        if (submission.getState() != SubmissionState.REVISION_REQUIRED) {
+            submission.setDeadlineRevision(null);
+        }
+        submissionService.change(submission);
+    }
+
+     */
 
     /**
      * Get the submission this page belongs to.

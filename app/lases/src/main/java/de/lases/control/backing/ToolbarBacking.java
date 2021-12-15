@@ -210,6 +210,12 @@ public class ToolbarBacking implements Serializable {
         }
     }
 
+    /**
+     * Checks whether a user has a title in order to print it.
+     *
+     * @param user Given user that has to be checked for a title.
+     * @return A {@code null} if there is no title. Otherwise, returns the title.
+     */
     public String getTitle(User user) {
         return Objects.requireNonNullElse(user.getTitle(), "");
     }
@@ -219,6 +225,11 @@ public class ToolbarBacking implements Serializable {
      * page.
      */
     public void requireRevision() {
+        if (!submission.isRevisionRequired()) {
+            submission.setRevisionRequired(true);
+            submission.setState(SubmissionState.REVISION_REQUIRED);
+            submissionService.change(submission);
+        }
     }
 
     /**

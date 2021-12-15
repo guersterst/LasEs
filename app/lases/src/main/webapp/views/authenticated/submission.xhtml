@@ -27,8 +27,10 @@
         </f:metadata>
 
         <div class="row">
-            <div class="col-md-3" style="background: lightblue">
-                <ui:include src="/resources/templates/toolbar.xhtml"/>
+            <div class="col-md-3">
+                <h:panelGroup rendered="#{submissionBacking.admin || submissionBacking.loggedInUserIsEditor()}" style="background: lightblue">
+                    <ui:include src="/resources/templates/toolbar.xhtml"/>
+                </h:panelGroup>
             </div>
             <div class="col-md-7">
                 <div class="container-fluid">
@@ -87,17 +89,18 @@
 
                                         <!--Current state of a Submission-->
                                         <h:form id="submission-state-frm">
-                                            <div class="form-group">
-                                                <h:selectOneMenu styleClass="btn btn-primary" id="state-slctom"
-                                                                 value="#{submissionBacking.submission.state}"
-                                                                 disabled="#{not (submissionBacking.loggedInUserIsEditor() || submissionBacking.admin)}">
-                                                    <f:selectItems value="#{submissionBacking.submissionStates}"
-                                                                   var="select"
-                                                                   itemLabel="#{labels['subStateSelect.' += select]}"
-                                                                   itemValue="#{select}"/>
-                                                </h:selectOneMenu>
-                                                <h:commandButton id="apply-cbtn" value="#{labels.apply}"
-                                                                 action="#{submissionBacking.applyState()}"/>
+                                            <div class="form-group align-items-end">
+                                                <div class="input-group-sm">
+                                                    <h:outputText id="submission-state-otxt"
+                                                                  value="#{submissionBacking.submission.state}"
+                                                                  styleClass="h6 input-group-text"/>
+                                                    <h:outputText id="submission-revision-deadline"
+                                                                  value="#{submissionBacking.submission.deadlineRevision}"
+                                                                  rendered="#{submissionBacking.submission.deadlineRevision != null}"
+                                                                  styleClass="input-group-text">
+                                                        <f:convertDateTime type="localDateTime"/>
+                                                    </h:outputText>
+                                                </div>
                                             </div>
                                         </h:form>
                                     </div>
@@ -106,7 +109,7 @@
 
                             <!--General inomformation about the submission-->
                             <div class="card-body">
-                                <h:form id="info-submission">
+                                <h:form id="info-submission" style="position: center">
 
                                     <div class="row">
                                         <div class="col-md-6">
