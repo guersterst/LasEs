@@ -57,6 +57,7 @@ public class RegistrationService {
      *             and a name and surname.
      *             </p>
      * @return The user with all their data, if successful, and {@code null} otherwise.
+     * @author Thomas Kirz
      */
     public User selfRegister(User user) {
         if (!userSufficientlyFilled(user)) {
@@ -73,6 +74,13 @@ public class RegistrationService {
                 oldUser = UserRepository.get(user, t);
             } catch (NotFoundException e) {
                 l.severe("User with email " + user.getEmailAddress() + " should exist but was not found.");
+                t.abort();
+                return user;
+            }
+            if (oldUser.isRegistered()) {
+                l.fine("User with email address " + user.getEmailAddress() + " is already registered.");
+                uiMessageEvent.fire(new UIMessage(message.getString("emailInUse"),
+                        MessageCategory.ERROR));
                 t.abort();
                 return user;
             }
