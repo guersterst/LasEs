@@ -1,5 +1,6 @@
 package de.lases.persistence.repository;
 
+import de.lases.business.service.SubmissionService;
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
 import de.lases.persistence.util.DatasourceUtil;
@@ -11,6 +12,9 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
+
+import java.sql.*;
 import java.util.logging.Logger;
 
 /**
@@ -39,7 +43,31 @@ public class ReviewedByRepository {
     public static ReviewedBy get(Submission submission, User user,
                                  Transaction transaction)
             throws NotFoundException {
-        return null;
+        Connection conn = transaction.getConnection();
+        String query = "SELECT * FROM reviewed_by WHERE submission_id = ? AND reviewer_id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, submission.getId());
+            ps.setInt(2, user.getId());
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                ReviewedBy reviewedBy = new ReviewedBy();
+                reviewedBy.setReviewerId(user.getId());
+                reviewedBy.setSubmissionId(submission.getId());
+                Timestamp timestamp = rs.getTimestamp("timestamp_deadline");
+                if (timestamp != null) {
+                    reviewedBy.setTimestampDeadline(timestamp.toLocalDateTime());
+                }
+                reviewedBy.setHasAccepted(AcceptanceStatus.valueOf(rs.getString("has_accepted")));
+
+                return reviewedBy;
+            }else {
+                throw new NotFoundException("No entry in reviewed_by for user: " + user);
+            }
+        } catch (SQLException e) {
+            logger.severe("ReviewedBy.get Exception: " + e.getMessage());
+            throw new DatasourceQueryFailedException();
+        }
     }
 
     /**
@@ -58,6 +86,18 @@ public class ReviewedByRepository {
      */
     public static void change(ReviewedBy reviewedBy, Transaction transaction)
             throws NotFoundException, DataNotWrittenException {
+        Connection conn = transaction.getConnection();
+        String query = "UPDATE reviewed_by SET timestamp_deadline = ?, has_accepted = CAST(? as review_task_state)  WHERE submission_id = ? AND reviewer_id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+                ps.setTimestamp(1, Timestamp.valueOf(reviewedBy.getTimestampDeadline()));
+                ps.setString(2, reviewedBy.getHasAccepted().toString());
+                ps.setInt(3, reviewedBy.getSubmissionId());
+                ps.setInt(4, reviewedBy.getReviewerId());
+
+                ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new DatasourceQueryFailedException(e.getMessage());
+        }
     }
 
     /**
