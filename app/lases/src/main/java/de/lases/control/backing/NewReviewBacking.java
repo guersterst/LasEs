@@ -2,6 +2,7 @@ package de.lases.control.backing;
 
 import de.lases.business.service.PaperService;
 import de.lases.business.service.ReviewService;
+import de.lases.business.service.SubmissionService;
 import de.lases.control.exception.IllegalUserFlowException;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
@@ -27,6 +28,9 @@ public class NewReviewBacking {
     private ReviewService reviewService;
 
     @Inject
+    private SubmissionService submissionService;
+
+    @Inject
     private PaperService paperService;
 
     @Inject
@@ -49,6 +53,17 @@ public class NewReviewBacking {
         review = new Review();
         review.setReviewerId(sessionInformation.getUser().getId());
         // Submission ID is set per URL parameter.
+    }
+
+    public String onLoad() throws IllegalUserFlowException {
+        Submission submission = new Submission();
+        submission.setId(review.getSubmissionId());
+        ReviewedBy reviewedBy = submissionService.getReviewedBy(submission, sessionInformation.getUser());
+
+        if (reviewedBy == null) {
+            throw new IllegalUserFlowException();
+        }
+        return null;
     }
 
     /**

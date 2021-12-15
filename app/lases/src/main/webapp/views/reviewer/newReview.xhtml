@@ -12,6 +12,7 @@
     <ui:define name="content">
         <f:metadata>
             <f:viewParam name="id" value="#{newReviewBacking.review.submissionId}"/>
+            <f:viewAction action="#{newReviewBacking.onLoad()}"/>
         </f:metadata>
 
         <div class="col d-flex justify-content-center">
