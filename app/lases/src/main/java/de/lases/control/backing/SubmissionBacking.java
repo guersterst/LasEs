@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PropertyResourceBundle;
+import java.util.logging.Logger;
 
 /**
  * @author Stefanie Gürster
@@ -63,6 +64,8 @@ public class SubmissionBacking implements Serializable {
 
     @Inject
     private transient PropertyResourceBundle resourceBundle;
+
+    private static final Logger logger = Logger.getLogger(SubmissionBacking.class.getName());
 
     private Part uploadedRevisionPDF;
 
@@ -180,21 +183,28 @@ public class SubmissionBacking implements Serializable {
     public void onLoad() {
         submission = submissionService.get(submission);
 
-        author.setId(submission.getAuthorId());
-        author = userService.get(author);
+        if (submissionService.canView(submission, sessionInformation.getUser())) {
+            author.setId(submission.getAuthorId());
+            author = userService.get(author);
 
-        scientificForum.setId(submission.getScientificForumId());
-        scientificForum = scientificForumService.get(scientificForum);
+            scientificForum.setId(submission.getScientificForumId());
+            scientificForum = scientificForumService.get(scientificForum);
 
-        newestPaper = paperService.getLatest(submission);
+            newestPaper = paperService.getLatest(submission);
 
-        coAuthors = userService.getList(submission, Privilege.AUTHOR);
-        reviewers = userService.getList(submission, Privilege.REVIEWER);
+            coAuthors = userService.getList(submission, Privilege.AUTHOR);
+            coAuthors.removeIf(user -> user.getId().equals(author.getId()));
 
-        coAuthors.removeIf(user -> user.getId().equals(author.getId()));
+            reviewers = userService.getList(submission, Privilege.REVIEWER);
 
-        paperPagination.loadData();
-        reviewPagination.loadData();
+            paperPagination.loadData();
+            reviewPagination.loadData();
+
+            toolbarBacking.onLoad(submission);
+        } else {
+            logger.severe("Access denied to submission: " + submission.getId() + " for user with id: " + sessionInformation.getUser().getId());
+            throw new IllegalAccessException("Access denied to this submission because user is not allowed to access it.");
+        }
     }
 
 
@@ -203,12 +213,11 @@ public class SubmissionBacking implements Serializable {
      * Checks if the view param is an integer and throws an exception if it is
      * not
      *
-     * @param event The component system event that happens before rendering
-     *              the view param.
      * @throws IllegalUserFlowException If there is no integer provided as view
      *                                  param
      */
-    public void preRenderViewListener(ComponentSystemEvent event) {}
+    public void preRenderViewListener() {
+    }
 
     /**
      * Set the state of the submission, which can be SUBMITTED,
@@ -412,13 +421,6 @@ public class SubmissionBacking implements Serializable {
         return author;
     }
 
-    /**
-     * Apply changes for the submission state.
-     */
-    public void applyState() {
-        submission.setRevisionRequired(submission.getState() == SubmissionState.REVISION_REQUIRED);
-        submissionService.change(submission.clone());
-    }
 
     /**
      * Upload a new revision as a pdf.
@@ -442,8 +444,11 @@ public class SubmissionBacking implements Serializable {
             Submission newSubmission = submission.clone();
             newSubmission.setState(SubmissionState.SUBMITTED);
             newSubmission.setRevisionRequired(newSubmission.getState() == SubmissionState.REVISION_REQUIRED);
+            newSubmission.setDeadlineRevision(null);
 
             submissionService.change(newSubmission);
+            submission = newSubmission;
+            toolbarBacking.onLoad(submission);
 
         }catch (IOException e) {
 
@@ -484,6 +489,20 @@ public class SubmissionBacking implements Serializable {
     public void setUploadedRevisionPDF(Part uploadedRevisionPDF) {
         this.uploadedRevisionPDF = uploadedRevisionPDF;
     }
+
+    /**
+     * Apply changes for the submission state.
+     */
+    /*
+    public void applyState(Submission submission) {
+
+        if (submission.getState() != SubmissionState.REVISION_REQUIRED) {
+            submission.setDeadlineRevision(null);
+        }
+        submissionService.change(submission);
+    }
+
+     */
 
     /**
      * Get the submission this page belongs to.

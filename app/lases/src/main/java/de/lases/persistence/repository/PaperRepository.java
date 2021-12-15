@@ -42,11 +42,13 @@ public class PaperRepository {
     public static Paper get(Paper paper, Transaction transaction) throws NotFoundException {
 
         if (paper.getSubmissionId() == null) {
+            transaction.abort();
             logger.severe("Invalid submission id while try to load a paper.");
             throw new InvalidFieldsException("The submission id of the paper must not be null.");
         }
 
         if (paper.getVersionNumber() == null) {
+            transaction.abort();
             logger.severe("Invalid version number while try to change a paper.");
             throw new InvalidFieldsException("The version number of the paper must not be null.");
         }
@@ -71,7 +73,7 @@ public class PaperRepository {
 
                 return resultPaper;
             } else {
-                logger.fine("Loading paper with the submission id: " + paper.getSubmissionId()
+                logger.warning("Loading paper with the submission id: " + paper.getSubmissionId()
                         + " and version number: " + paper.getVersionNumber());
                 throw new NotFoundException();
             }
@@ -101,14 +103,17 @@ public class PaperRepository {
         String sqlMaxVersion = "SELECT max(version) FROM paper WHERE submission_id = ?";
 
         if (paper.getUploadTime() == null) {
+            transaction.abort();
             throw new InvalidFieldsException("The upload time of the paper "
                     + "must not be null!");
         }
         if (pdf.getFile() == null) {
+            transaction.abort();
             throw new InvalidFieldsException("The file in the pdf must not "
                     + "be null!");
         }
         if (paper.getSubmissionId() == null) {
+            transaction.abort();
             throw new InvalidFieldsException("The submission id must not be null!");
         }
 
@@ -162,11 +167,13 @@ public class PaperRepository {
      */
     public static void change(Paper paper, Transaction transaction) throws NotFoundException, DataNotWrittenException {
         if (paper.getSubmissionId() == null) {
+            transaction.abort();
             logger.severe("Invalid submission id while try to change a paper.");
             throw new InvalidFieldsException("The submission id of the paper must not be null.");
         }
 
         if (paper.getVersionNumber() == null) {
+            transaction.abort();
             logger.severe("Invalid version number while try to change a paper.");
             throw new InvalidFieldsException("The version number of the paper must not be null.");
         }
@@ -177,7 +184,7 @@ public class PaperRepository {
             findPaper(paper, connection);
 
         } catch (SQLException exception) {
-            logger.fine("Searching paper failed. Tried to change paper");
+            logger.warning("Searching paper failed. Tried to change paper");
             throw new NotFoundException();
         }
         String sql = "UPDATE paper SET is_visible = ? WHERE version = ? AND submission_id = ?";
@@ -190,6 +197,7 @@ public class PaperRepository {
             statement.executeUpdate();
 
         } catch (SQLException exception) {
+            transaction.abort();
             DatasourceUtil.logSQLException(exception, logger);
             throw new DatasourceQueryFailedException("A datasource exception occurred while changing paper data.", exception);
         }
@@ -212,12 +220,14 @@ public class PaperRepository {
     public static void remove(Paper paper, Transaction transaction) throws NotFoundException, DataNotWrittenException {
 
         if (paper.getSubmissionId() == null) {
+            transaction.abort();
             logger.severe("Invalid submisison id when tried to remove paper");
-            throw new IllegalArgumentException("The submission id of the paper must not be null.");
+            throw new InvalidFieldsException("The submission id of the paper must not be null.");
         }
 
         if (paper.getVersionNumber() == null) {
-            throw new IllegalArgumentException("The version number of the paper must not be null.");
+            transaction.abort();
+            throw new InvalidFieldsException("The version number of the paper must not be null.");
         }
 
         Connection connection = transaction.getConnection();
@@ -226,7 +236,7 @@ public class PaperRepository {
             ResultSet resultSet = findPaper(paper, connection);
 
         } catch (SQLException exception) {
-            logger.fine("Removing paper with the submission id: " + paper.getSubmissionId()
+            logger.warning("Removing paper with the submission id: " + paper.getSubmissionId()
                     + " and version number: " + paper.getVersionNumber());
             throw new NotFoundException();
         }
@@ -240,6 +250,7 @@ public class PaperRepository {
             statement.executeUpdate();
 
         } catch (SQLException exception) {
+            transaction.abort();
             DatasourceUtil.logSQLException(exception, logger);
             throw new DatasourceQueryFailedException("A datasource exception occurred while removing a paper.", exception);
         }
@@ -270,12 +281,14 @@ public class PaperRepository {
      */
     public static List<Paper> getList(Submission submission, Transaction transaction, User user, ResultListParameters resultListParameters) throws DataNotCompleteException, NotFoundException {
         if (transaction == null || resultListParameters == null) {
+            transaction.abort();
             logger.severe("Invalid parameters for loading a list of papers belonging to a submission. Parameter is null.");
             throw new InvalidQueryParamsException();
         }
 
         if (submission.getId() == null || user.getId() == null) {
-            logger.fine("Loading a list of paper with the submission id: " + submission.getId()
+            transaction.abort();
+            logger.warning("Loading a list of paper with the submission id: " + submission.getId()
                     + " and a user, who requests it, with the id: " + user.getId());
             throw new NotFoundException();
         }
@@ -371,6 +384,7 @@ public class PaperRepository {
             }
 
         } catch (SQLException e) {
+            transaction.abort();
             DatasourceUtil.logSQLException(e, logger);
             throw new DatasourceQueryFailedException("A datasource exception occurred while loading all papers of a submission.", e);
 
@@ -437,11 +451,13 @@ public class PaperRepository {
     public static FileDTO getPDF(Paper paper, Transaction transaction) throws NotFoundException {
 
         if (paper.getSubmissionId() == null) {
+            transaction.abort();
             logger.severe("Invalid submission id when tried to get file.");
             throw new InvalidFieldsException("The submission id of the paper must not be null.");
         }
 
         if (paper.getVersionNumber() == null) {
+            transaction.abort();
             logger.severe("Invalid version number wehn tried to get file.");
             throw new InvalidFieldsException("The version number of the paper must not be null.");
         }
@@ -461,12 +477,13 @@ public class PaperRepository {
                 return file;
 
             } else {
-                logger.fine("Loading paper with the submission id: " + paper.getSubmissionId()
+                logger.warning("Loading paper with the submission id: " + paper.getSubmissionId()
                         + " and version number: " + paper.getVersionNumber());
                 throw new NotFoundException();
             }
 
         } catch (SQLException exception) {
+            transaction.abort();
             DatasourceUtil.logSQLException(exception, logger);
             throw new DatasourceQueryFailedException("A datasource exception occurred while loading a file.", exception);
         }
@@ -490,6 +507,7 @@ public class PaperRepository {
             throw new InvalidFieldsException("The submission must not be null.");
         }
         if (submission.getId() == null) {
+            transaction.abort();
             logger.severe("Invalid submission id when tried to get newest paper.");
             throw new InvalidFieldsException("The id of a submission must not be null.");
         }
@@ -498,18 +516,18 @@ public class PaperRepository {
         String sql = "SELECT p.* FROM submission s, paper p WHERE s.id = p.submission_id AND s.id = ? ORDER BY p.timestamp_upload ASC";
         Paper paper = new Paper();
 
-        try (PreparedStatement find = connection.prepareStatement(sql)){
+        try (PreparedStatement find = connection.prepareStatement(sql)) {
             find.setInt(1, submission.getId());
 
             ResultSet found = find.executeQuery();
 
-            if(found.next()) {
+            if (found.next()) {
                 paper.setSubmissionId(submission.getId());
                 paper.setVersionNumber(found.getInt("version"));
                 paper.setVisible(found.getBoolean("is_visible"));
                 paper.setUploadTime(found.getTimestamp("timestamp_upload").toLocalDateTime());
                 return paper;
-            }else {
+            } else {
                 logger.fine("No paper exists for submission: " + submission + ". When trying to find newest paper.");
                 throw new NotFoundException("No paper exists for this submission: " + submission);
             }
