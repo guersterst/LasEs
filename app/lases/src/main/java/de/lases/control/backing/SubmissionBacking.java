@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PropertyResourceBundle;
+import java.util.logging.Logger;
 
 /**
  * @author Stefanie Gürster
@@ -66,6 +67,8 @@ public class SubmissionBacking implements Serializable {
 
     @Inject
     private transient PropertyResourceBundle resourceBundle;
+
+    private static final Logger logger = Logger.getLogger(SubmissionBacking.class.getName());
 
     private Part uploadedRevisionPDF;
 
@@ -169,27 +172,27 @@ public class SubmissionBacking implements Serializable {
      * @throws IllegalAccessException If the user has no access rights for this
      *                                submission
      */
-    public void onLoad() {/*
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        if (!facesContext.isPostback()) {
-            //TODO: rausnehmen.
-
-        }*/
+    public void onLoad() {
         submission = submissionService.get(submission);
 
-        author.setId(submission.getAuthorId());
-        author = userService.get(author);
+        if (submissionService.canView(submission, sessionInformation.getUser())) {
+            author.setId(submission.getAuthorId());
+            author = userService.get(author);
 
-        scientificForum.setId(submission.getScientificForumId());
-        scientificForum = scientificForumService.get(scientificForum);
+            scientificForum.setId(submission.getScientificForumId());
+            scientificForum = scientificForumService.get(scientificForum);
 
-        coAuthors = userService.getList(submission, Privilege.AUTHOR);
+            coAuthors = userService.getList(submission, Privilege.AUTHOR);
 
-        coAuthors.removeIf(user -> user.getId().equals(author.getId()));
+            coAuthors.removeIf(user -> user.getId().equals(author.getId()));
 
-        paperPagination.loadData();
+            paperPagination.loadData();
 
-        toolbarBacking.onLoad(submission);
+            toolbarBacking.onLoad(submission);
+        } else {
+            logger.severe("Access denied to submission: " + submission.getId() + " for user with id: " + sessionInformation.getUser().getId());
+            throw new IllegalAccessException("Access denied to this submission because user is not allowed to access it.");
+        }
     }
 
 
