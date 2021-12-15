@@ -86,23 +86,26 @@
                             <h:form id="edit-profile-form">
 
                                 <div class="form-group">
-                                    <h:inputFile id="new-avatar-ifile" value="#{profileBacking.uploadedAvatar}"
-                                                 required="true" requiredMessage="#{message.inputFile}"
-                                                 validator="avatarValidator"
-                                                 disabled="#{not profileBacking.hasViewerEditRights()}"
-                                                 class="form-control"/>
-                                    <h:message for="new-avatar-ifile"/>
+                                    <h:outputLabel for="is-admin-cbx" value="Lorem Ipsum"/>
+                                    <h:selectBooleanCheckbox id="is-admin-cbx" value="#{profileBacking.user.admin}" rendered="#{sessionInformation.user.admin}"/>
+                                    <h:message for="is-admin-cbx"/>
                                 </div>
-
                                 <hr/>
 
                                 <div class="form-group">
-                                    <h:commandButton styleClass="btn btn-primary" id="submit-avatar-cbtn" value="#{labels.save}"
-                                                     action="#{profileBacking.uploadAvatar}"
-                                                     disabled="#{not profileBacking.hasViewerEditRights()}"
-                                                     type="submit"/>
+                                    <h:outputLabel for="is-admin-cbtn" value="Lorem Ipsum"/>
+                                    <h:commandButton id="is-admin-cbtn" value="Lorem Ipsum" onclick="PF('dlg').show()" rendered="#{sessionInformation.user.admin}"/>
+                                    <h:message for="is-admin-cbtn"/>
                                 </div>
                                 <hr/>
+
+                                <div class="form-group">
+                                    <h:outputLabel for="title-itxt" value="Lorem Ipsum"/>
+                                    <h:inputText id="title-itxt" value="#{profileBacking.user.title}" readonly="#{!profileBacking.hasViewerEditRights}" maxlength="#{Const.TITLE_MAX}"/>
+                                    <h:message for="title-itxt"/>
+                                </div>
+                                <hr/>
+
                             </h:form>
                         </div>
                     </div>
