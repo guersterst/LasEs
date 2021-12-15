@@ -228,6 +228,7 @@ public class ScientificForumBacking implements Serializable {
         // Todo richtige ResultListParameters here?
         allScienceFields = scienceFieldService.getList(new ResultListParameters());
         currentScieneFields = scienceFieldService.getList(forum, new ResultListParameters());
+        allScienceFields.removeAll(currentScieneFields);
         displayOwnSubmissionsTab();
     }
 
@@ -269,8 +270,10 @@ public class ScientificForumBacking implements Serializable {
      * Add the currently selected scienceField to the list of science fields.
      */
     public void addScienceField() {
+        l.severe("sci field added");
         forumService.addScienceField(selectedScienceFieldInput, forum);
         currentScieneFields.add(selectedScienceFieldInput);
+        allScienceFields.remove(selectedScienceFieldInput);
     }
 
     /**
@@ -291,6 +294,7 @@ public class ScientificForumBacking implements Serializable {
     public void removeScienceField(ScienceField scienceField) {
         forumService.removeScienceField(scienceField, forum);
         currentScieneFields.remove(scienceField);
+        allScienceFields.add(scienceField);
     }
 
     /**
@@ -316,6 +320,22 @@ public class ScientificForumBacking implements Serializable {
 
     public void setRemoveEditorInput(User removeEditorInput) {
         this.removeEditorInput = removeEditorInput;
+    }
+
+    public User getNewEditorInput() {
+        return newEditorInput;
+    }
+
+    public void setNewEditorInput(User newEditorInput) {
+        this.newEditorInput = newEditorInput;
+    }
+
+    public ScienceField getSelectedScienceFieldInput() {
+        return selectedScienceFieldInput;
+    }
+
+    public void setSelectedScienceFieldInput(ScienceField selectedScienceFieldInput) {
+        this.selectedScienceFieldInput = selectedScienceFieldInput;
     }
 
     /**

@@ -106,23 +106,24 @@ public class ScientificForumRepository {
             throw new InvalidFieldsException();
         }
 
-        String sql = """
+        String baseSQL = """
                 SELECT id
                 FROM scientific_forum
                 WHERE
                 """;
-        String sql_with_id = sql.concat("id = ?");
-        String sql_with_name = sql.concat("name = ?");
+        String sql_with_id = baseSQL + " id = ?";
+        String sql_with_name = baseSQL + " name = ?";
+        String sqlRes;
 
         // Determine whether to query with id or name.
         boolean hasIdFlag = scientificForum.getId() != null;
         if (hasIdFlag) {
-            sql = sql.concat(sql_with_id);
+            sqlRes = sql_with_id;
         } else {
-            sql = sql.concat(sql_with_name);
+            sqlRes = sql_with_name;
         }
 
-        try (PreparedStatement preparedStatement = transaction.getConnection().prepareStatement(sql)) {
+        try (PreparedStatement preparedStatement = transaction.getConnection().prepareStatement(sqlRes)) {
 
             if (hasIdFlag) {
                 preparedStatement.setInt(1, scientificForum.getId());
@@ -523,7 +524,7 @@ public class ScientificForumRepository {
         }
 
         String sql = """
-                SELECT id 
+                SELECT name 
                 FROM science_field 
                 WHERE name=?
                 """;

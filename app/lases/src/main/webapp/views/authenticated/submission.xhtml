@@ -127,7 +127,7 @@
                                                 </div>
                                                 <div id="body">
                                                     <h:link id="author-lnk"
-                                                            value="#{submissionBacking.editors.firstName.concat(' ').concat(submissionBacking.author.lastName)}"
+                                                            value="#{submissionBacking.author.firstName.concat(' ').concat(submissionBacking.author.lastName)}"
                                                             outcome="/views/authenticated/profile"
                                                             includeViewParams="true" title="#{help.directToProfile}"
                                                             disabled="#{not (submissionBacking.loggedInUserIsEditor() || submissionBacking.isViewerSubmitter())}"
