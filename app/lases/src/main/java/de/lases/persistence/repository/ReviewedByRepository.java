@@ -2,12 +2,24 @@ package de.lases.persistence.repository;
 
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
+import de.lases.persistence.util.DatasourceUtil;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Offers get/change operations on the relationship between reviewer and
  * submission.
  */
 public class ReviewedByRepository {
+
+    private static final Logger logger = Logger.getLogger(ReviewedByRepository.class.getName());
 
     /**
      * Returns the ReviewedBy dto for the given submission and user.
@@ -46,6 +58,106 @@ public class ReviewedByRepository {
      */
     public static void change(ReviewedBy reviewedBy, Transaction transaction)
             throws NotFoundException, DataNotWrittenException {
+    }
+
+    /**
+     * Removes the specified reviewer from the specified scientific forum.
+     *
+     * @param submission  A scientific forum dto with a valid id.
+     * @param user        A user dto with a valid id, which is a reviewer in the
+     *                    aforementioned submission.
+     * @param transaction The transaction to use.
+     * @throws NotFoundException              If there is no submission with the
+     *                                        provided id or there is no user with the
+     *                                        provided id or the provided user is not
+     *                                        a reviewer for the provided submission.
+     * @throws DataNotWrittenException        If writing the data to the repository
+     *                                        fails.
+     * @throws DatasourceQueryFailedException If the datasource cannot be
+     *                                        queried.
+     */
+    public static void removeReviewer(Submission submission, User user,
+                                      Transaction transaction)
+            throws NotFoundException, DataNotWrittenException {
+
+        if (submission.getId() == null) {
+            logger.severe("A passed submission DTO is not sufficiently filled.");
+            throw new InvalidFieldsException("submission id must not be null");
+        }
+        if (user.getId() == null) {
+            logger.severe("A passed submission DTO is not sufficiently filled.");
+            throw new InvalidFieldsException("User id must not be null.");
+        }
+
+        Connection connection = transaction.getConnection();
+
+        String sql = "DELETE FROM reviewed_by WHERE reviewer_id = ? AND submission_id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setInt(1, user.getId());
+            statement.setInt(2, submission.getId());
+
+            statement.executeUpdate();
+        } catch (SQLException exception) {
+        transaction.abort();
+            DatasourceUtil.logSQLException(exception, logger);
+            throw new DatasourceQueryFailedException("A datasource exception occurred while removing a reviewedBy.");
+        }
+
+    }
+
+    /**
+     * Gets a list of {@code ReviewedBy} dto's.
+     *
+     * @param submission A fully filled {@code ReviewedBy} dto.
+     * @param transaction The transaction to use.
+     * @throws InvalidFieldsException If one of the fields of the
+     *                                provided {@code ReviewedBy} dto is null.
+     * @throws NotFoundException  If there is no submission with the
+     *                             provided id.
+     * @throws DatasourceQueryFailedException If the datasource cannot be
+     *                                        queried.
+     * @return A list of {@code ReviewedBy} dto's.
+     */
+    public static List<ReviewedBy> getList(Submission submission, Transaction transaction) throws NotFoundException {
+        if (submission.getId() == null) {
+            logger.severe("A passed DTO is not sufficiently filled.");
+            throw new InvalidFieldsException("Submission id must not be null");
+        }
+
+        Connection connection = transaction.getConnection();
+
+        ResultSet resultSet;
+        List<ReviewedBy> reviewedByList = new ArrayList<>();
+
+        String sql = "SELECT * FROM reviewed_by WHERE submission_id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setInt(1, submission.getId());
+
+            resultSet = statement.executeQuery();
+
+            if (resultSet != null) {
+                logger.finest("Got a list of reviewedBy DTO's");
+            }
+
+            while (resultSet.next()) {
+                ReviewedBy reviewed = new ReviewedBy();
+
+                reviewed.setReviewerId(resultSet.getInt("reviewer_id"));
+                reviewed.setHasAccepted(AcceptanceStatus.valueOf(resultSet.getString("has_accepted")));
+                reviewed.setSubmissionId(resultSet.getInt("submission_id"));
+                reviewed.setTimestampDeadline(resultSet.getTimestamp("timestamp_deadline").toLocalDateTime());
+
+                reviewedByList.add(reviewed);
+            }
+        } catch (SQLException exception) {
+            transaction.abort();
+            DatasourceUtil.logSQLException(exception, logger);
+            throw new DatasourceQueryFailedException("A datasource exception occurred while loading a list of reviewedBy.");
+        }
+
+        return reviewedByList;
     }
 
 }

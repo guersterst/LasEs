@@ -113,7 +113,6 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-
         <!-- https://mvnrepository.com/artifact/org.jboss.weld/weld-junit-parent -->
         <dependency>
             <groupId>org.jboss.weld</groupId>

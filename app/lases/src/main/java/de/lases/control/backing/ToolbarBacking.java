@@ -1,12 +1,16 @@
 package de.lases.control.backing;
 
 import de.lases.business.service.SubmissionService;
+import de.lases.business.service.UserService;
+import de.lases.control.exception.IllegalUserFlowException;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.event.Event;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
+import jakarta.faces.event.ComponentSystemEvent;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -14,10 +18,13 @@ import jakarta.inject.Named;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Backing bean for the toolbar view. This view belongs to the submission page.
+ *
+ * @author Stefanie Gürster
  */
 @ViewScoped
 @Named
@@ -32,6 +39,17 @@ public class ToolbarBacking implements Serializable {
     @Inject
     private SubmissionService submissionService;
 
+    @Inject
+    private UserService userService;
+
+    @Inject
+    private Event<UIMessage> uiMessageEvent;
+
+    @Inject
+    private transient PropertyResourceBundle resourceBundle;
+
+    private static final Logger logger = Logger.getLogger(ToolbarBacking.class.getName());
+
     private Submission submission;
 
     private User reviewerInput;
@@ -42,7 +60,7 @@ public class ToolbarBacking implements Serializable {
 
     private User currentEditor;
 
-    private List<User> reviewer;
+    private LinkedHashMap<User, ReviewedBy> reviewer;
 
     private List<User> editors;
 
@@ -69,6 +87,12 @@ public class ToolbarBacking implements Serializable {
      */
     @PostConstruct
     public void init() {
+        submission = new Submission();
+        reviewerInput = new User();
+        reviewedByInput = new ReviewedBy();
+        reviewer = new LinkedHashMap<>();
+        editors = new ArrayList<>();
+        currentEditor = new User();
     }
 
     /**
@@ -89,29 +113,113 @@ public class ToolbarBacking implements Serializable {
      * called by a view action but rather by the onLoad method in the
      * {@code SubmissionBacking}.
      *
-     * @param submission A submission dto that is filled with the id received
-     *                   via view params.
      */
-    public void onLoad(Submission submission) { }
+    public void onLoad(Submission sub) {
+        submission = sub;
+        loadReviewerList();
+
+        currentEditor.setId(submission.getEditorId());
+        currentEditor = userService.get(currentEditor);
+
+        ScientificForum scientificForum = new ScientificForum();
+        scientificForum.setId(submission.getScientificForumId());
+
+        editors = userService.getList(scientificForum);
+    }
+
+    private void loadReviewerList() {
+        reviewer = new LinkedHashMap<>();
+        List<User> userList = userService.getList(submission, Privilege.REVIEWER);
+        List<ReviewedBy> reviewedByList = submissionService.getList(submission);
+
+        boolean hasNoDeadline = true;
+        for (User user : userList) {
+            for (ReviewedBy reviewedBy : reviewedByList) {
+                if (user.getId().equals(reviewedBy.getReviewerId())) {
+                    reviewer.put(user, reviewedBy);
+                    hasNoDeadline = false;
+                    break;
+                }
+            }
+
+            if (hasNoDeadline) {
+                reviewer.put(user, null);
+            }
+            hasNoDeadline = true;
+        }
+    }
 
     /**
      * The currently entered user will be added as a reviewer.
      */
     public void addReviewer() {
-    } // y
+        User newUser = new User();
+        newUser.setEmailAddress(reviewerInput.getEmailAddress());
+        User newReviewer = userService.get(newUser);
+
+        if (newReviewer != null) {
+            logger.finest("Reviewer is an existing person.");
+        }
+
+        ReviewedBy reviewedBy = reviewedByInput.clone();
+        reviewedBy.setReviewerId(newReviewer.getId());
+        reviewedBy.setSubmissionId(submission.getId());
+        reviewedBy.setHasAccepted(AcceptanceStatus.NO_DECISION);
+
+        if (reviewer.containsKey(newReviewer)) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("alreadyExistsReviewer"), MessageCategory.WARNING));
+            return;
+        }
+
+        submissionService.addReviewer(newReviewer, reviewedBy);
+
+
+        reviewer.put(newReviewer, reviewedBy);
+
+    }
+
+    /**
+     * Checks if the view param is an integer and throws an exception if it is
+     * not
+     * @throws IllegalUserFlowException If there is no integer provided as view
+     *                                  param
+     */
+    public void preRenderViewListener() {
+    }
 
     /**
      * Remove the specified user form the list of reviewers.
      *
      * @param user The user to remove from the list of reviewers.
      */
-    public void removeReviewer(String user) {
+    public void removeReviewer(User user) {
+        submissionService.removeReviewer(submission, user);
+        loadReviewerList();
     }
 
     /**
      * Add the entered user as managing editor, replacing the old editor.
      */
     public void chooseNewManagingEditor() {
+        Submission newSubmission = submission.clone();
+        newSubmission.setEditorId(currentEditor.getId());
+        submissionService.change(newSubmission);
+
+        for (User user : editors) {
+            if (user.getId().equals(newSubmission.getEditorId())) {
+                currentEditor = user;
+            }
+        }
+    }
+
+    /**
+     * Checks whether a user has a title in order to print it.
+     *
+     * @param user Given user that has to be checked for a title.
+     * @return A {@code null} if there is no title. Otherwise, returns the title.
+     */
+    public String getTitle(User user) {
+        return Objects.requireNonNullElse(user.getTitle(), "");
     }
 
     /**
@@ -119,19 +227,41 @@ public class ToolbarBacking implements Serializable {
      * page.
      */
     public void requireRevision() {
+        if (!submission.isRevisionRequired()) {
+            submission.setRevisionRequired(true);
+            submission.setState(SubmissionState.REVISION_REQUIRED);
+            submissionService.change(submission);
+        }
     }
 
     /**
      * Accept the submission belonging to this page.
      */
     public void acceptSubmission() {
-    } // y
+        submission.setState(SubmissionState.ACCEPTED);
 
+        submissionService.change(submission);
+
+        uiMessageEvent.fire(new UIMessage(resourceBundle.getString("acceptedSubmission"), MessageCategory.INFO));
+    }
+
+    public boolean isAccepted() {
+        return submission.getState() == SubmissionState.ACCEPTED;
+    }
     /**
      * Reject the submission belonging to this page.
      */
     public void rejectSubmission() {
-    } // y
+        submission.setState(SubmissionState.REJECTED);
+
+        submissionService.change(submission);
+
+        uiMessageEvent.fire(new UIMessage(resourceBundle.getString("rejectedSubmission"), MessageCategory.INFO));
+    }
+
+    public boolean isRejected() {
+        return submission.getState() == SubmissionState.REJECTED;
+    }
 
     /**
      * Get the submission belonging to this page.
@@ -221,7 +351,11 @@ public class ToolbarBacking implements Serializable {
      * @return The list of reviewers.
      */
     public List<User> getReviewer() {
-        return reviewer;
+        return reviewer.keySet().stream().toList();
+    }
+
+    public List<ReviewedBy> getReviewerDeadline() {
+        return reviewer.values().stream().toList();
     }
 
     /**
