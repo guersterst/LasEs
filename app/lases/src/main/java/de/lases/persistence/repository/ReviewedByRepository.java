@@ -87,7 +87,7 @@ public class ReviewedByRepository {
             statement.setInt(1, submission.getId());
         } catch (SQLException exception) {
             DatasourceUtil.logSQLException(exception, logger);
-            throw 
+            throw
         }
     }
 
