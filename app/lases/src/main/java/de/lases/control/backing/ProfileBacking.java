@@ -106,9 +106,13 @@ public class ProfileBacking implements Serializable {
      *         the list of science fields of the user
      *     </li>
      * </ul>
+     * @throws IllegalUserFlowException If there is no integer provided as view
+     *                                  param
      */
     public void onLoad() {
-        user.setId(420);
+        if (user.getId() == null) {
+            throw new IllegalUserFlowException("Profile page called without an id");
+        }
         user = userService.get(user);
         usersScienceFields = scienceFieldService.getList(user, new ResultListParameters());
     }
@@ -122,7 +126,11 @@ public class ProfileBacking implements Serializable {
      * @throws IllegalUserFlowException If there is no integer provided as view
      *                                  param
      */
-    public void preRenderViewListener(ComponentSystemEvent event) {}
+    public void preRenderViewListener() {
+        if (user.getId() == null) {
+            throw new IllegalUserFlowException("Profile page called without an id.");
+        }
+    }
 
     /**
      * Save the changes to the user profile excluding profile picture,

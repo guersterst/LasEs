@@ -80,10 +80,30 @@
                 <div class="col-md-12">
                     <div class="card" id="profile-card">
                         <div class="card-header">
-                            Edit Profile
+                            #{labels.editProfile}
                         </div>
                         <div class="card-body">
-                            dolor sit amet
+                            <h:form id="edit-profile-form">
+
+                                <div class="form-group">
+                                    <h:inputFile id="new-avatar-ifile" value="#{profileBacking.uploadedAvatar}"
+                                                 required="true" requiredMessage="#{message.inputFile}"
+                                                 validator="avatarValidator"
+                                                 disabled="#{not profileBacking.hasViewerEditRights()}"
+                                                 class="form-control"/>
+                                    <h:message for="new-avatar-ifile"/>
+                                </div>
+
+                                <hr/>
+
+                                <div class="form-group">
+                                    <h:commandButton styleClass="btn btn-primary" id="submit-avatar-cbtn" value="#{labels.save}"
+                                                     action="#{profileBacking.uploadAvatar}"
+                                                     disabled="#{not profileBacking.hasViewerEditRights()}"
+                                                     type="submit"/>
+                                </div>
+                                <hr/>
+                            </h:form>
                         </div>
                     </div>
                 </div>
