@@ -41,15 +41,24 @@ xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
             </div>
         </h:form>
         <div id="list">
-            <ui:repeat value="#{toolbarBacking.reviewer}" var="reviewer">
-                <h:outputText value="#{reviewer.firstName.concat(' ').concat(reviewer.lastName).concat(': ')}"/>
-                <h:outputText value="#{toolbarBacking.reviewedByInput.timestampDeadline}">
-                    <f:convertDateTime type="localDateTime"/>
-                </h:outputText>
-                <h:commandButton value="#{labels.deleteButton}" action="#{toolbarBacking.removeReviewer(reviewer)}"
-                                 styleClass="btn btn-secondary"/>
-                <br/>
-            </ui:repeat>
+            <div class="row">
+                <div class="col">
+                    <h:dataTable value="#{toolbarBacking.reviewer}" var="user">
+                        <h:column>
+                            <h:outputText value="#{user.firstName.concat(' ').concat(user.lastName).concat(': ')}"/>
+                        </h:column>
+                    </h:dataTable>
+                </div>
+                <div class="col">
+                    <h:dataTable value="#{toolbarBacking.reviewerDeadline}" var="deadline">
+                        <h:column>
+                            <h:outputText value="#{deadline.timestampDeadline}">
+                                <f:convertDateTime type="localDateTime"/>
+                            </h:outputText>
+                        </h:column>
+                    </h:dataTable>
+                </div>
+            </div>
         </div>
     </div>
 

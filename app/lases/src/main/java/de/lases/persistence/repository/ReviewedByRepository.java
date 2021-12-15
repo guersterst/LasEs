@@ -65,13 +65,15 @@ public class ReviewedByRepository {
      *
      * @param submission A fully filled {@code ReviewedBy} dto.
      * @param transaction The transaction to use.
-     *  @throws NotFoundException  If there is no scientific forum with the
+     * @throws InvalidFieldsException If one of the fields of the
+     *                                provided {@code ReviewedBy} dto is null.
+     * @throws NotFoundException  If there is no scientific forum with the
      *                             provided id.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      * @return A list of {@code ReviewedBy} dto's.
      */
-    public static List<ReviewedBy> getList(Submission submission, Transaction transaction) {
+    public static List<ReviewedBy> getList(Submission submission, Transaction transaction) throws NotFoundException {
         if (submission.getId() == null) {
             logger.severe("A passed DTO is not sufficiently filled.");
             throw new InvalidFieldsException("Submission id must not be null");
@@ -96,7 +98,7 @@ public class ReviewedByRepository {
             while (resultSet.next()) {
                 ReviewedBy reviewed = new ReviewedBy();
 
-                reviewed.setReviewerId(resultSet.getInt("submission_id"));
+                reviewed.setReviewerId(resultSet.getInt("reviewer_id"));
                 reviewed.setHasAccepted(AcceptanceStatus.valueOf(resultSet.getString("has_accepted")));
                 reviewed.setSubmissionId(resultSet.getInt("submission_id"));
                 reviewed.setTimestampDeadline(resultSet.getTimestamp("timestamp_deadline").toLocalDateTime());
@@ -104,8 +106,9 @@ public class ReviewedByRepository {
                 reviewedByList.add(reviewed);
             }
         } catch (SQLException exception) {
+            transaction.abort();
             DatasourceUtil.logSQLException(exception, logger);
-            throw
+            throw new DatasourceQueryFailedException("A datasource exception occurred while loading a list of reviewedBy.");
         }
 
         return reviewedByList;

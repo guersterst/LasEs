@@ -36,7 +36,7 @@ public class DateTimeInFutureValidator implements Validator<LocalDateTime> {
     public void validate(FacesContext facesContext, UIComponent uiComponent, LocalDateTime localDateTime) throws ValidatorException {
         LocalDateTime time = LocalDateTime.now();
 
-        if (!localDateTime.isAfter(time.plusDays(1))) {
+        if (!localDateTime.isAfter(time)) {
             String message = messageResourceBundle.getString("validateDeadlineReview");
             FacesMessage facesMessage = new FacesMessage(message);
             facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);

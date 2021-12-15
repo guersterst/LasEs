@@ -7,10 +7,7 @@ import de.lases.persistence.exception.*;
 import de.lases.persistence.exception.DataNotCompleteException;
 import de.lases.persistence.exception.NotFoundException;
 
-import de.lases.persistence.repository.PaperRepository;
-import de.lases.persistence.repository.SubmissionRepository;
-import de.lases.persistence.repository.Transaction;
-import de.lases.persistence.repository.UserRepository;
+import de.lases.persistence.repository.*;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
@@ -18,9 +15,7 @@ import jakarta.inject.Inject;
 import javax.management.openmbean.KeyAlreadyExistsException;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.List;
-import java.util.Objects;
-import java.util.PropertyResourceBundle;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.PropertyResourceBundle;
 import java.util.logging.Logger;
@@ -29,7 +24,7 @@ import java.util.logging.Logger;
  * Provides functionality regarding the management and handling of submissions.
  * In case of an unexpected state, a {@link UIMessage} event will be fired.
  *
- * @author Thomas Kirz
+ * @author Thomas Kirz, Stefanie Gürster
  */
 @Dependent
 public class SubmissionService implements Serializable {
@@ -326,7 +321,27 @@ public class SubmissionService implements Serializable {
      * submission and the reviewer.
      */
     public List<ReviewedBy> getList(Submission submission) {
+        if (submission.getId() ==  null) {
+            logger.severe("The id of the submission is null. The requested list could not be loaded.");
+            throw new InvalidFieldsException(resourceBundle.getString("idMissing"));
+        }
 
+        Transaction transaction = new Transaction();
+
+        List<ReviewedBy> resultList = new ArrayList<>();
+
+        try {
+            resultList = ReviewedByRepository.getList(submission, transaction);
+            transaction.commit();
+        } catch (NotFoundException e) {
+
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotFound"), MessageCategory.ERROR));
+            logger.severe("A Relation between this submission and users is not existing.");
+
+            transaction.abort();
+
+        }
+        return resultList;
     }
 
     /**

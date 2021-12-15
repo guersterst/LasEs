@@ -7,6 +7,7 @@ import de.lases.control.internal.*;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.event.Event;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.event.ComponentSystemEvent;
@@ -17,10 +18,7 @@ import jakarta.inject.Named;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -42,6 +40,12 @@ public class ToolbarBacking implements Serializable {
     @Inject
     private UserService userService;
 
+    @Inject
+    private Event<UIMessage> uiMessageEvent;
+
+    @Inject
+    private transient PropertyResourceBundle resourceBundle;
+
     private static final Logger logger = Logger.getLogger(ToolbarBacking.class.getName());
 
     private Submission submission;
@@ -54,7 +58,7 @@ public class ToolbarBacking implements Serializable {
 
     private User currentEditor;
 
-    private HashMap<User, ReviewedBy> reviewer;
+    private LinkedHashMap<User, ReviewedBy> reviewer;
 
     private List<User> editors;
 
@@ -84,7 +88,7 @@ public class ToolbarBacking implements Serializable {
         submission = new Submission();
         reviewerInput = new User();
         reviewedByInput = new ReviewedBy();
-        reviewer = new HashMap<>();
+        reviewer = new LinkedHashMap<>();
         editors = new ArrayList<>();
         currentEditor = new User();
     }
@@ -111,7 +115,24 @@ public class ToolbarBacking implements Serializable {
     public void onLoad(Submission sub) {
         submission = sub;
         List<User> userList = userService.getList(submission, Privilege.REVIEWER);
-        List<ReviewedBy> reviewedByList = submissionService.getReviewedBy(submission)
+        List<ReviewedBy> reviewedByList = submissionService.getList(submission);
+
+        boolean hasNoDeadline = true;
+        for (User user : userList) {
+            for (ReviewedBy reviewedBy : reviewedByList) {
+                if (user.getId().equals(reviewedBy.getReviewerId())) {
+                    reviewer.put(user, reviewedBy);
+                    hasNoDeadline = false;
+                    break;
+                }
+            }
+
+            if (hasNoDeadline) {
+                reviewer.put(user, null);
+            }
+            hasNoDeadline = true;
+        }
+
         editors = userService.getList(submission, Privilege.EDITOR);
 
         currentEditor.setId(submission.getEditorId());
@@ -135,23 +156,19 @@ public class ToolbarBacking implements Serializable {
         reviewedBy.setSubmissionId(submission.getId());
         reviewedBy.setHasAccepted(AcceptanceStatus.NO_DECISION);
 
-        submissionService.addReviewer(newReviewer, reviewedBy);
-
-        for (User user : reviewer) {
-            if (newReviewer.getId().equals(user.getId())) {
-                return;
-            }
+        if (reviewer.containsKey(newReviewer)) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("alreadyExistsReviewer"), MessageCategory.WARNING));
+            return;
         }
 
-        getReviewer().add(newReviewer);
+        submissionService.addReviewer(newReviewer, reviewedBy);
+
+        reviewer.put(newReviewer, reviewedBy);
     }
 
     /**
      * Checks if the view param is an integer and throws an exception if it is
      * not
-     *
-     * @param event The component system event that happens before rendering
-     *              the view param.
      * @throws IllegalUserFlowException If there is no integer provided as view
      *                                  param
      */
@@ -279,7 +296,11 @@ public class ToolbarBacking implements Serializable {
      * @return The list of reviewers.
      */
     public List<User> getReviewer() {
-        return reviewer;
+        return reviewer.keySet().stream().toList();
+    }
+
+    public List<ReviewedBy> getReviewerDeadline() {
+        return reviewer.values().stream().toList();
     }
 
     /**
