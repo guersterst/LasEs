@@ -199,6 +199,19 @@ public class ToolbarBacking implements Serializable {
      * Add the entered user as managing editor, replacing the old editor.
      */
     public void chooseNewManagingEditor() {
+        Submission newSubmission = submission.clone();
+        newSubmission.setEditorId(currentEditor.getId());
+        submissionService.change(newSubmission);
+
+        for (User user : editors) {
+            if (user.getId().equals(newSubmission.getEditorId())) {
+                currentEditor = user;
+            }
+        }
+    }
+
+    public String getTitle(User user) {
+        return Objects.requireNonNullElse(user.getTitle(), "");
     }
 
     /**

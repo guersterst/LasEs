@@ -67,26 +67,29 @@ xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
         <br/>
         <h:form id="select-editor-frm">
             <div class="form-group">
+                <div class="form-group">
+                    <div class="input-group">
+                        <h:outputLabel id="current-editor-lbl" value="#{labels.selectEditor}" for="show-editor-itxt" styleClass="input-group"/>
+                        <h:outputText id="show-editor-itxt"
+                                      value="#{toolbarBacking.getTitle(toolbarBacking.currentEditor).concat(' ')
+                                      .concat(toolbarBacking.currentEditor.firstName.concat(' ')
+                                  .concat(toolbarBacking.currentEditor.lastName))}"/>
+                    </div>
+                    <br/>
+                </div>
                 <div class="input-group">
-                    <h:outputLabel id="editor-lbl" value="#{labels.selectEditor}"/>
-                    <h:outputText id="show-editor-itxt"
-                                  value="#{toolbarBacking.currentEditor.firstName.concat(' ')
-                                  .concat(toolbarBacking.currentEditor.lastName)}"/>
+                    <h:outputLabel id="editor-lbl" value="#{labels.editor}" for="select-editor-slctom" styleClass="input-group-text"/>
+                    <h:selectOneMenu id="select-editor-slctom"
+                                     value="#{toolbarBacking.currentEditor.id}" title="#{help.chooseEditor}"
+                                     styleClass="form-select">
+                        <f:selectItems value="#{toolbarBacking.editors}" var="editor"
+                                       itemValue="#{editor.id}"
+                                       itemLabel="#{toolbarBacking.getTitle(editor).concat(' ').concat(editor.firstName.concat(' ').concat(editor.lastName))}"/>
+                    </h:selectOneMenu>
                 </div>
             </div>
             <br/>
             <div class="form-group">
-                <div class="input-group">
-                    <h:selectOneMenu id="select-editor-slctom"
-                                     value="#{toolbarBacking.currentEditor.firstName.concat(' ')
-                                 .concat(toolbarBacking.currentEditor.lastName)}" title="#{help.chooseEditor}"
-                                     styleClass="form-select">
-                        <f:selectItems value="#{toolbarBacking.editors}" var="editor"
-                                       itemValue="#{editor}"
-                                       itemLabel="#{editor.firstName.concat(' ').concat(editor.lastName)}"/>
-                    </h:selectOneMenu>
-                </div>
-                <br/>
                 <div class="btn-group">
                     <h:commandButton id="save-editor-cbtn" value="#{labels.saveButton}"
                                      action="#{toolbarBacking.chooseNewManagingEditor}"
