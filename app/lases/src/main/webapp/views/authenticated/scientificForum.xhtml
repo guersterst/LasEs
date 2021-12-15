@@ -32,11 +32,13 @@
                                     <div class="col">
 
                                         <!-- delete forum -->
+                                        <h:form>
                                         <h:commandButton styleClass="btn btn-primary" id="delete-sub-cbtn"
                                                          title="#{help.deleteSubmission}"
                                                          value="#{labels.deleteButton}"
                                                          onclick="PF('dlg').show()"
                                                          rendered="#{scientificForumBacking.sessionInformation.user.admin}"/>
+                                        </h:form>
                                         <p:dialog id="delete-forum-dlg" widgetVar="dlg">
                                             <div class="text-center">
                                                 <h:outputText id="delete-warning-otxt"
@@ -57,12 +59,11 @@
 
                             <!--General inomformation about the forum-->
                             <div class="card-body">
-                                <h:form id="info-forum">
-                                    <div class="row">
+                                <div class="row">
 
-                                        <!-- leftmost column -->
-                                        <div class="col-md-6">
-
+                                    <!-- leftmost column -->
+                                    <div class="col-md-6">
+                                        <h:form>
                                             <!-- name -->
                                             <h:inputText id="forum-name-itxt"
                                                          value="#{scientificForumBacking.forum.name}"
@@ -101,35 +102,41 @@
                                                     <h:outputText value="#{scientificForumBacking.forum.url}"/>
                                                 </h:outputLink>
                                             </div>
-                                        </div>
+                                        </h:form>
+                                    </div>
 
-                                        <!-- deadline for submission -->
-                                        <!-- todo hier text input? -> converter -->
-                                        <!--
-                                        <h:inputText id = "deadline-itxt"
-                                                     value = "#{scientificForumBacking.forum.deadline}"
-                                                     readonly="#{!scientificForumBacking.loggedInUserIsEditor()}"
-                                                     required="true"
-                                                     requiredMessage="#{message.deadline}" />
-                                                     -->
+                                    <!-- deadline for submission -->
+                                    <!-- todo hier text input? -> converter -->
+                                    <!--
+                                    <h:inputText id = "deadline-itxt"
+                                                 value = "#{scientificForumBacking.forum.deadline}"
+                                                 readonly="#{!scientificForumBacking.loggedInUserIsEditor()}"
+                                                 required="true"
+                                                 requiredMessage="#{message.deadline}" />
+                                                 -->
 
-                                        <!-- editor column -->
-                                        <div class="col-md-3">
-                                            <div class="form-group">
+                                    <!-- editor column -->
+                                    <div class="col-md-3">
+                                        <div class="form-group">
 
-                                                <!-- editor controls -->
-                                                <!-- todo rendered -->
+                                            <!-- editor controls -->
+                                            <!-- todo rendered -->
 
-                                                <!-- add editor -->
+                                            <!-- add editor -->
+                                            <h:form>
                                                 <div class="form-group">
                                                     <h:outputLabel for="editor-email-itxt" value="#{labels.email}"/>
                                                     <!-- todo req. message und label und hilfe text-->
+                                                    <!--todo what if already exists -->
                                                     <h:inputText id="editor-email-itxt"
-                                                                 value="#{scientificForumBacking.newEditorInput}"
+                                                                 value="#{scientificForumBacking.newEditorInput.emailAddress}"
                                                                  class="form-control"
-                                                                 requiredMessage="#{message.emailRequired}"/>
+                                                                 required="true"
+                                                                 requiredMessage="#{message.emailRequired}">
+                                                       <!-- <f:validator validatorId="emailAddressExistsValidator"/> -->
+                                                    </h:inputText>
                                                     <!-- todo message aus service -->
-                                                    <h:message for="editor-email-itxt"/>
+                                                    <h:messages/>
                                                 </div>
                                                 <div class="form-group">
                                                     <h:commandButton id="add-editor-cbtn" value="#{labels.add}"
@@ -137,12 +144,15 @@
                                                                      type="submit"
                                                                      action="#{scientificForumBacking.addEditor()}">
                                                         <!-- todo what about this -> render & execute list-->
-                                                        <f:ajax execute="info-forum" render="info-forum"/>
+                                                        <!-- <f:ajax execute="info-forum" render="info-forum"/> -->
                                                     </h:commandButton>
                                                 </div>
+                                            </h:form>
 
-                                                <!--- editor list -->
-                                                <h:dataTable id="editor-list" value="#{scientificForumBacking.editors}"
+                                            <!--- editor list -->
+                                            <h:form id ="editor-list-frm">
+                                                <h:dataTable id="editor-list"
+                                                             value="#{scientificForumBacking.editors}"
                                                              var="editor">
                                                     <h:column>
                                                         <f:facet name="header">#{labels.editors}</f:facet>
@@ -151,81 +161,81 @@
                                                         #{editor.lastName}
                                                         <h:commandButton id="delete-editor-cbtn"
                                                                          value="#{labels.delete}"
-                                                                         styleClass="btn-secondary btn" type="submit"
+                                                                         styleClass="btn-secondary btn"
+                                                                         type="submit"
                                                                          action="#{scientificForumBacking.removeEditor(editor)}">
                                                             <!-- todo -->
-                                                            <f:ajax execute="info-forum" render="info-forum"/>
+                                                            <f:ajax execute="editor-list-frm" render="editor-list-frm"/>
                                                         </h:commandButton>
                                                     </h:column>
                                                 </h:dataTable>
-                                            </div>
-                                        </div>
-
-                                        <!-- science field column -->
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <!-- add sciencefield -->
-                                                <!-- todo converter? -->
-                                                <!-- todo rendered -->
-                                                <!-- todo duplicates -->
-                                                <div class="p-field p-col-12 p-md-4">
-                                                    <h:form id="fields-add-frm">
-                                                        <div class="form-group">
-                                                            <p:outputLabel for="@next"
-                                                                           value="#{labels.addScienceField}"/>
-                                                            <p:selectOneMenu id="advanced"
-                                                                             value="#{scientificForumBacking.selectedScienceFieldInput}"
-                                                                             panelStyle="width:180px"
-                                                                             effect="fade"
-                                                                             var="s"
-                                                                             filter="true"
-                                                                             filterMatchMode="startsWith">
-                                                                <f:selectItems
-                                                                        value="#{scientificForumBacking.allScienceFields}"
-                                                                        var="scienceField"
-                                                                        itemLabel="#{scienceField.name}"
-                                                                        itemValue="#{scienceField}"/>
-
-                                                                <p:column>
-                                                                    <f:facet name="header">
-                                                                        <h:outputText value="Name"/>
-                                                                    </f:facet>
-                                                                    <h:outputText value="#{s.name}"/>
-                                                                </p:column>
-                                                            </p:selectOneMenu>
-                                                            <h:commandButton id="apply-field-add-cbtn"
-                                                                             value="#{labels.add}"
-                                                                             action="#{scientificForumBacking.addScienceField}"/>
-                                                            <!-- todo add f:ajax to reload form -->
-                                                        </div>
-                                                    </h:form>
-                                                </div>
-
-                                                <!-- fields list -->
-                                                <h:form id="fields-list-frm">
-                                                    <h:dataTable id="science-field-list"
-                                                                 value="#{scientificForumBacking.currentScienceFields}"
-                                                                 var="currField">
-                                                        <h:column>
-                                                            <f:facet name="header">#{labels.scienceFields}</f:facet>
-                                                            #{currField.name}
-                                                            <h:commandButton id="delete-field-cbtn"
-                                                                             value="#{labels.delete}"
-                                                                             styleClass="btn-secondary btn"
-                                                                             type="submit"
-                                                                             action="#{scientificForumBacking.removeScienceField(currField)}">
-                                                                <!-- todo -->
-                                                                <f:ajax execute="fields-list-frm"
-                                                                        render="fields-list-frm"/>
-                                                            </h:commandButton>
-                                                        </h:column>
-                                                    </h:dataTable>
-                                                </h:form>
-                                            </div>
+                                            </h:form>
                                         </div>
                                     </div>
 
-                                </h:form>
+                                    <!-- science field column -->
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <!-- add sciencefield -->
+                                            <!-- todo converter? -->
+                                            <!-- todo rendered -->
+                                            <!-- todo duplicates -->
+                                            <div class="p-field p-col-12 p-md-4">
+                                                <h:form id="fields-add-frm">
+                                                    <div class="form-group">
+                                                        <p:outputLabel for="@next"
+                                                                       value="#{labels.addScienceField}"/>
+                                                        <p:selectOneMenu id="advanced"
+                                                                         value="#{scientificForumBacking.selectedScienceFieldInput}"
+                                                                         panelStyle="width:180px"
+                                                                         effect="fade"
+                                                                         var="s"
+                                                                         filter="true"
+                                                                         filterMatchMode="startsWith">
+                                                            <f:selectItems
+                                                                    value="#{scientificForumBacking.allScienceFields}"
+                                                                    var="scienceField"
+                                                                    itemLabel="#{scienceField.name}"
+                                                                    itemValue="#{scienceField}"/>
+
+                                                            <p:column>
+                                                                <f:facet name="header">
+                                                                    <h:outputText value="Name"/>
+                                                                </f:facet>
+                                                                <h:outputText value="#{s.name}"/>
+                                                            </p:column>
+                                                        </p:selectOneMenu>
+                                                        <h:commandButton id="apply-field-add-cbtn"
+                                                                         value="#{labels.add}"
+                                                                         action="#{scientificForumBacking.addScienceField}"/>
+                                                        <!-- todo add f:ajax to reload form -->
+                                                    </div>
+                                                </h:form>
+                                            </div>
+
+                                            <!-- fields list -->
+                                            <h:form id="fields-list-frm">
+                                                <h:dataTable id="science-field-list"
+                                                             value="#{scientificForumBacking.currentScienceFields}"
+                                                             var="currField">
+                                                    <h:column>
+                                                        <f:facet name="header">#{labels.scienceFields}</f:facet>
+                                                        #{currField.name}
+                                                        <h:commandButton id="delete-field-cbtn"
+                                                                         value="#{labels.delete}"
+                                                                         styleClass="btn-secondary btn"
+                                                                         type="submit"
+                                                                         action="#{scientificForumBacking.removeScienceField(currField)}">
+                                                            <!-- todo -->
+                                                            <f:ajax execute="fields-list-frm"
+                                                                    render="fields-list-frm"/>
+                                                        </h:commandButton>
+                                                    </h:column>
+                                                </h:dataTable>
+                                            </h:form>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
