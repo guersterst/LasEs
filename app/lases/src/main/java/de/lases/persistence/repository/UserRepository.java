@@ -470,7 +470,6 @@ public class UserRepository {
             throws NotFoundException, DataNotWrittenException {
         User user = new User();
         user.setId(verification.getUserId());
-        Verification existingVerification;
         try {
             getVerification(verification, transaction);
         } catch (NotFoundException e) {
