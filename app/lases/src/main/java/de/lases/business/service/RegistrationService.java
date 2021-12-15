@@ -81,7 +81,6 @@ public class RegistrationService {
 
         try {
             user = UserRepository.add(user, t);
-            t.commit();
         } catch (DataNotWrittenException e) {
             uiMessageEvent.fire(new UIMessage(message.getString("registrationFailed"), MessageCategory.ERROR));
             return null;
@@ -95,7 +94,8 @@ public class RegistrationService {
         verification.setTimestampValidationStarted(LocalDateTime.now());
 
         try {
-            UserRepository.setVerification(verification, t);
+            UserRepository.addVerification(verification, t);
+            t.commit();
             l.fine("Verification for user " + user.getId() + " created.");
         } catch (NotFoundException | DataNotWrittenException e) {
             l.severe("Could not upload verification for user " + user.getId() + ".");

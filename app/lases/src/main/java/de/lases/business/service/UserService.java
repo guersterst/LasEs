@@ -290,7 +290,7 @@ public class UserService implements Serializable {
         if (verification.getValidationRandom().equals(storedVerification.getValidationRandom())) {
             storedVerification.setVerified(true);
             try {
-                UserRepository.setVerification(storedVerification, transaction);
+                UserRepository.changeVerification(storedVerification, transaction);
                 l.info("Successfully verified user with id " + storedVerification.getUserId());
             } catch (NotFoundException e) {
                 transaction.abort();
