@@ -346,7 +346,40 @@ public class UserRepository {
      */
     public static Verification getVerification(User user, Transaction transaction)
             throws NotFoundException {
-        return null;
+        if (user.getId() != null && user.getEmailAddress() != null) {
+            logger.severe("User dto is not filled with an id or email address.");
+            throw new IllegalArgumentException("User dto is not filled with an id or email address.");
+        }
+
+        Connection conn = transaction.getConnection();
+        String sql = """
+                SELECT v.* FROM verification v, "user" u
+                WHERE v.id = ?
+                OR (v.id = u.id AND u.email_address = ?);
+                """;
+
+        Verification result;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, user.getId());
+            stmt.setString(2, user.getEmailAddress());
+            ResultSet rs = stmt.executeQuery();
+
+            // Attempt to create a verification dto from the result set.
+            if (rs.next()) {
+                result = createVerificationFromResultSet(rs);
+                logger.finer("Found verification dto for user");
+            } else {
+                logger.warning("No verification dto for specified user found");
+                throw new NotFoundException("No verification dto for specified user found");
+            }
+        } catch (SQLException e) {
+            DatasourceUtil.logSQLException(e, logger);
+            transaction.abort();
+            throw new DatasourceQueryFailedException("Failed to retrieve verification from database.", e);
+        }
+
+        return result;
     }
 
     /**
