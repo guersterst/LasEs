@@ -5,12 +5,16 @@ import de.lases.control.exception.IllegalAccessException;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.event.Event;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.servlet.http.Part;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.PropertyResourceBundle;
+import java.util.logging.Logger;
 
 /**
  * Backing bean for the administration page.
@@ -21,6 +25,14 @@ public class AdministrationBacking {
 
     @Inject
     private CustomizationService customizationService;
+
+    @Inject
+    private Event<UIMessage> uiMessageEvent;
+
+    @Inject
+    private transient PropertyResourceBundle resourceBundle;
+
+    private static final Logger logger = Logger.getLogger(AdministrationBacking.class.getName());
 
     private SystemSettings systemSettings;
 
@@ -36,6 +48,8 @@ public class AdministrationBacking {
      */
     @PostConstruct
     public void init() {
+        systemSettings = customizationService.get();
+
     }
 
     /**
@@ -92,6 +106,23 @@ public class AdministrationBacking {
      */
     public void setUploadedLogo(Part uploadedLogo) {
         this.uploadedLogo = uploadedLogo;
+    }
+
+    /**
+     * Upload a new logo.
+     */
+    public void uploadNewLogo() {
+
+        try {
+            FileDTO logo = new FileDTO();
+            logo.setFile(uploadedLogo.getInputStream().readAllBytes());
+            customizationService.setLogo(logo);
+
+            logger.finest("Upload of a new logo was successful.");
+        } catch (IOException exception) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("uploadImage"), MessageCategory.WARNING));
+            logger.severe("Upload a logo went wrong.");
+        }
     }
 
     /**

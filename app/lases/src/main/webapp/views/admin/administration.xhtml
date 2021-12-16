@@ -15,6 +15,38 @@
                 <div class="col">
                     <div class="card">
                         <div class="card-header">
+                            <h:outputText id="logo-lbl" value="#{labels.logo}" styleClass="h3"/>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h:graphicImage id="logo-gimg" value="/image?id=logo" alt="#{labels.noLogo}"
+                                                    width="200" height="100"/>
+                                </div>
+                                <div class="col-md-9">
+                                    <h:form id="upload-logo" enctype="multipart/form-data">
+                                        <div class="form-group">
+                                            <h:outputLabel id="logo-upload-lbl" value="#{labels.uploadLogo}"
+                                                           styleClass="input-group"/>
+                                            <h:inputFile id="change-logo-ifile"
+                                                         value="#{administrationBacking.uploadedLogo}"
+                                                         title="#{help.chooseNewLogo}" required="true"
+                                                         requiredMessage="#{message.inputFile}"/>
+                                        </div>
+                                        <h:message for="change-logo-ifile"/>
+                                        <br/>
+                                        <div class="form-group">
+                                            <h:commandButton id="upload-logo-cbtn" value="#{labels.uploadLogoButton}"
+                                                             action="#{administrationBacking.uploadNewLogo}"
+                                                             title="#{help.uploadNewLogo}" styleClass="btn btn-primary"/>
+                                        </div>
+                                    </h:form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
                             <h:outputText id="thems-otxt" value="#{labels.theme}" styleClass="h3"/>
                         </div>
                         <div class="card-body">

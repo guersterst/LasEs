@@ -78,16 +78,9 @@ public class CustomizationService {
             throw new InvalidFieldsException();
         }
 
-        FileDTO thumbnailedLogo = new FileDTO();
-        try {
-            thumbnailedLogo = AvatarUtil.generateThumbnail(logo);
-        } catch (IOException e) {
-            uiMessageEvent.fire(new UIMessage(props.getString("imageNotThumbnailed"), MessageCategory.ERROR));
-        }
-
         Transaction transaction = new Transaction();
         try {
-            SystemSettingsRepository.setLogo(thumbnailedLogo, transaction);
+            SystemSettingsRepository.setLogo(logo, transaction);
             transaction.commit();
             logger.finest("Successfully set the logo of the application.");
         } catch (DataNotWrittenException ex) {
