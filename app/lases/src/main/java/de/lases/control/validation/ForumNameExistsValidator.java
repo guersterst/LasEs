@@ -11,21 +11,28 @@ import jakarta.faces.validator.FacesValidator;
 import jakarta.faces.validator.Validator;
 import jakarta.faces.validator.ValidatorException;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.PropertyResourceBundle;
 import java.util.logging.Logger;
 
 @FacesValidator
-public class ForumNameExistsValidator implements Validator<String> {
+public class ForumNameExistsValidator implements Validator<String>, Serializable {
+
+    @Serial
+    private static final long serialVersionUID = -729646507861287388L;
 
     private final Logger l = Logger.getLogger(EmailAddressUnoccupiedValidator.class.getName());
 
     @Override
     public void validate(FacesContext context, UIComponent component, String value) throws ValidatorException {
-        ScientificForum forum = new ScientificForum();
-        forum.setName(value);
+        ScientificForum nameForum = new ScientificForum();
+        nameForum.setName(value);
 
-        if (ScientificForumService.exists(forum) || Objects.equals(value, "") || Objects.equals(value, null)) {
+        ScientificForumBacking scientificForumBacking = CDI.current().select(ScientificForumBacking.class).get();
+        ScientificForum currentForum = scientificForumBacking.getForum();
+        if (ScientificForumService.exists(nameForum) && !currentForum.getName().equals(nameForum.getName())) {
             PropertyResourceBundle bundle = CDI.current().select(PropertyResourceBundle.class).get();
             l.finer("Validation failed: " + value + " forum name does already exist.");
             FacesMessage message

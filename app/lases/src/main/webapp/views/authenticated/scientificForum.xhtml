@@ -152,14 +152,18 @@
                                             </h:outputText>
 
                                             <!-- change deadline -->
+                                            <!--
                                             <div class="form-group">
                                                 <h:inputText id="change-deadline-itxt"
                                                              value="#{scientificForumBacking.forum.deadline}"
                                                              rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
                                                              title="#{labels.forumDeadLine}"
-                                                             a:type="date"/>
+                                                             a:type="date"
+                                                             converterMessage="#{message.wrongDate}">
+                                                    <f:convertDateTime type="localDate" pattern="yyyy-MM-dd"/>
+                                                </h:inputText>
                                             </div>
-
+                                            -->
                                             <br/>
 
                                             <!-- review manual -->
@@ -168,21 +172,21 @@
                                                           style="margin: 3px"
                                                           rendered="#{scientificForumBacking.forum.reviewManual != null}"/>
 
-                                                <h:commandButton id="review-manual-cbtn"
-                                                                 styleClass="btn btn-secondary"
-                                                                 value="#{labels.displayReviewManual}"
-                                                                 style="margin: 3px"
-                                                                 rendered="#{scientificForumBacking.forum.reviewManual != null}"
-                                                                 onclick="PF('revMnDlg').show()"
-                                                                 type="button"
-                                                                 title="#{help.forumReviewManual}"/>
-                                                <p:dialog id="review-manual-dlg"
-                                                          widgetVar="revMnDlg">
-                                                    <div class="text-center">
-                                                        <h:outputText id="review-manual-otxt"
-                                                                      value="#{scientificForumBacking.forum.reviewManual}"/>
-                                                    </div>
-                                                </p:dialog>
+                                            <h:commandButton id="review-manual-cbtn"
+                                                             styleClass="btn btn-secondary"
+                                                             value="#{labels.displayReviewManual}"
+                                                             style="margin: 3px"
+                                                             rendered="#{scientificForumBacking.forum.reviewManual != null}"
+                                                             onclick="PF('revMnDlg').show()"
+                                                             type="button"
+                                                             title="#{help.forumReviewManual}"/>
+                                            <p:dialog id="review-manual-dlg"
+                                                      widgetVar="revMnDlg">
+                                                <div class="text-center">
+                                                    <h:outputText id="review-manual-otxt"
+                                                                  value="#{scientificForumBacking.forum.reviewManual}"/>
+                                                </div>
+                                            </p:dialog>
 
 
                                             <!-- submit changes -->

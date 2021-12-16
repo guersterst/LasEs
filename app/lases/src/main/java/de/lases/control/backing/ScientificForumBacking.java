@@ -27,7 +27,7 @@ import java.util.logging.Logger;
 public class ScientificForumBacking implements Serializable {
 
     @Serial
-    private static final long serialVersionUID = -729646507861237388L;
+    private static final long serialVersionUID = -729646507861287388L;
 
     @Inject
     private SessionInformation sessionInformation;
