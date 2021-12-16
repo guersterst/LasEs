@@ -37,7 +37,7 @@ public class EmailAddressUnoccupiedValidator implements Validator<String> {
         User user = new User();
         user.setEmailAddress(address);
         UserService userService = CDI.current().select(UserService.class).get();
-        if (userService.emailExists(user)) {
+        if (userService.emailExists(user) && userService.get(user).isRegistered()) {
             PropertyResourceBundle bundle = CDI.current().select(PropertyResourceBundle.class).get();
             l.finer("Validation failed: " + address + " is already in use.");
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, bundle.getString("emailInUse"),
