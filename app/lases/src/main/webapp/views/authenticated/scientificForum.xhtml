@@ -33,26 +33,28 @@
 
                                         <!-- delete forum -->
                                         <h:form>
-                                            <h:commandButton styleClass="btn btn-primary" id="delete-sub-cbtn"
+                                            <h:commandButton styleClass="btn btn-primary"
+                                                             id="delete-sub-cbtn"
                                                              title="#{help.deleteSubmission}"
                                                              value="#{labels.deleteButton}"
                                                              onclick="PF('dlg').show()"
                                                              rendered="#{scientificForumBacking.sessionInformation.user.admin}"/>
+                                            <p:dialog id="delete-forum-dlg" widgetVar="dlg">
+                                                <div class="text-center">
+                                                    <h:outputText id="delete-warning-otxt"
+                                                                  value="#{message.deleteWarningOtxt}"/>
+                                                </div>
+                                                <br/>
+                                                <div class="text-center">
+                                                    <h:form>
+                                                        <h:commandButton styleClass="btn btn-primary"
+                                                                         id="agree-delete-cbtn"
+                                                                         value="#{labels.agreeButton}"
+                                                                         action="#{scientificForumBacking.deleteForum()}"/>
+                                                    </h:form>
+                                                </div>
+                                            </p:dialog>
                                         </h:form>
-                                        <p:dialog id="delete-forum-dlg" widgetVar="dlg">
-                                            <div class="text-center">
-                                                <h:outputText id="delete-warning-otxt"
-                                                              value="#{message.deleteWarningOtxt}"/>
-                                            </div>
-                                            <br/>
-                                            <div class="text-center">
-                                                <h:form>
-                                                    <h:commandButton styleClass="btn btn-primary" id="agree-delete-cbtn"
-                                                                     value="#{labels.agreeButton}"
-                                                                     action="#{scientificForumBacking.deleteForum()}"/>
-                                                </h:form>
-                                            </div>
-                                        </p:dialog>
                                     </div>
                                 </div>
                             </div>
@@ -71,7 +73,9 @@
                                                              readonly="#{!scientificForumBacking.loggedInUserIsEditor()}"
                                                              required="true"
                                                              requiredMessage="#{message.forumName}"
-                                                             styleClass="h4"/>
+                                                             styleClass="h4">
+                                                    <f:validator validatorId="forumNameExistsValidator"/>
+                                                </h:inputText>
                                             </div>
                                             <br/>
 
@@ -110,7 +114,7 @@
                                                 </div>
                                             </div>
 
-                                        <hr/>
+                                            <hr/>
 
                                             <div class="form-group">
                                                 <h:commandButton id="submit-forum-changes-cbtn"

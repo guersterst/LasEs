@@ -353,9 +353,9 @@ public class ScientificForumService implements Serializable {
      * @return {@code true} if this {@link ScientificForum} exists and {@code false} otherwise.
      */
     public static boolean exists(ScientificForum forum) {
-        if (forum.getId() == null) {
+        if (forum.getId() == null && forum.getName() == null) {
 
-            l.severe("Must contain a forum id to find out whether it exists.");
+            l.severe("Must contain a forum id or name to find out whether it exists.");
             throw new InvalidFieldsException();
         }
 
