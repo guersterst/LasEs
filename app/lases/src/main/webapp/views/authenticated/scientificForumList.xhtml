@@ -1,0 +1,21 @@
+<ui:composition template="/resources/templates/main.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:pg="http://xmlns.jcp.org/jsf/composite/templates/composites/pagination"
+                xmlns:col="http://xmlns.jcp.org/jsf/composite/templates/composites/sortsearchcolumn"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <!-- page title -->
+    <!--todo-->
+    <ui:define name="title">TODO</ui:define>
+
+    <!-- content of scientificForum.xhtml -->
+    <ui:define name="content">
+
+        <f:metadata>
+            <f:viewParam value="#{scientificForumBacking.forum.id}" name="id"/>
+            <f:event type="preRenderView" listener="#{scientificForumBacking.preRenderViewListener}"/>
+            <f:viewAction action="#{scientificForumBacking.onLoad()}"/>
+        </f:metadata>

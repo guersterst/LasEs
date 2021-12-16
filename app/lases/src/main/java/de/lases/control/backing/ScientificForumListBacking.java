@@ -1,8 +1,10 @@
 package de.lases.control.backing;
 
+import de.lases.business.internal.ConfigPropagator;
 import de.lases.business.service.ScientificForumService;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
+import de.lases.persistence.internal.ConfigReader;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -10,6 +12,7 @@ import jakarta.inject.Named;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.PropertyResourceBundle;
 
 /**
  * Backing bean for the scientific forum list page.
@@ -27,6 +30,9 @@ public class ScientificForumListBacking implements Serializable {
     @Inject
     private ScientificForumService scientificForumService;
 
+    @Inject
+    ConfigPropagator config;
+
     private Pagination<ScientificForum> scientificForumPagination;
 
     /**
@@ -35,12 +41,25 @@ public class ScientificForumListBacking implements Serializable {
      */
     @PostConstruct
     public void init() {
-    }
+        scientificForumPagination = new Pagination<>("title") {
 
-    /**
-     * Apply the selected deadline filter.
-     */
-    public void applyFilters() {
+            @Override
+            public void loadData() {
+                scientificForumPagination.getResultListParameters().setDateSelect(DateSelect.ALL);
+                scientificForumPagination.setEntries(scientificForumService.getList(getResultListParameters()));
+            }
+
+
+            @Override
+            protected Integer calculateNumberPages() {
+                int itemsPerPage = Integer.parseInt(config.getProperty("MAX_PAGINATION_LIST_LENGTH"));
+
+                return (int) Math.ceil((double) scientificForumService.getList(this.getResultListParameters()).size()
+                        / itemsPerPage);
+            }
+        };
+        scientificForumPagination.applyFilters();
+        scientificForumPagination.loadData();
     }
 
     /**
@@ -50,6 +69,10 @@ public class ScientificForumListBacking implements Serializable {
      */
     public Pagination<ScientificForum> getScientificForumPagination() {
         return scientificForumPagination;
+    }
+
+    public void setScientificForumPagination(Pagination<ScientificForum> scientificForumPagination) {
+        this.scientificForumPagination = scientificForumPagination;
     }
 
     /**

@@ -5,12 +5,15 @@ import de.lases.global.transport.ScienceField;
 import de.lases.global.transport.ScientificForum;
 import de.lases.global.transport.User;
 import de.lases.persistence.exception.*;
+import de.lases.persistence.util.DatasourceUtil;
 import org.postgresql.util.PSQLException;
 
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 /**
@@ -227,21 +230,6 @@ public class ScientificForumRepository {
         }
     }
 
-    public static void main(String[] args) {
-        ConnectionPool.init();
-        ScientificForum scientificForum = new ScientificForum();
-        scientificForum.setId(1);
-        scientificForum.setName("Konferenz der Tiere");
-        Transaction transaction = new Transaction();
-        try {
-            change(scientificForum, transaction);
-        } catch (NotFoundException | DataNotWrittenException | KeyExistsException e) {
-            e.printStackTrace();
-        } finally {
-            transaction.commit();
-        }
-    }
-
     /**
      * Takes a scientific forum dto that is filled with a valid id and removes
      * this scientific forum from the repository.
@@ -293,17 +281,37 @@ public class ScientificForumRepository {
      *                             parameters from the pagination like
      *                             filtering, sorting or number of elements.
      * @return A list of fully filled scientific forum dtos.
-     * @throws DataNotCompleteException       If the list is truncated.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
-     * @throws InvalidQueryParamsException    If the resultListParameters contain
-     *                                        an erroneous option.
      */
     public static List<ScientificForum> getList(Transaction transaction,
                                                 ResultListParameters
-                                                        resultListParameters)
-            throws DataNotCompleteException {
-        return null;
+                                                        resultListParameters) {
+        Connection conn = transaction.getConnection();
+
+        String query = """
+                SELECT name FROM scientific_forum
+                WHERE name ILIKE ?
+                """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1,
+                    "%" + Objects.requireNonNullElse(resultListParameters.getGlobalSearchWord(), "") + "%");
+            ResultSet resultSet = stmt.executeQuery();
+
+            List<ScientificForum> scientificForums = new ArrayList<>();
+            while (resultSet.next()) {
+                ScientificForum scientificForum = createScientificForumFromResultSet(resultSet);
+                scientificForums.add(scientificForum);
+            }
+
+            resultSet.close();
+            return scientificForums;
+        } catch (SQLException e) {
+            DatasourceUtil.logSQLException(e, l);
+            transaction.abort();
+            throw new DatasourceQueryFailedException("Science field could not be added", e);
+        }
     }
 
     /**

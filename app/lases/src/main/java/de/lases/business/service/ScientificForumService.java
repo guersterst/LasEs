@@ -372,6 +372,8 @@ public class ScientificForumService implements Serializable {
      * @return All scientific forums.
      */
     public List<ScientificForum> getList(ResultListParameters resultListParams) {
-        return null;
+        Transaction transaction = new Transaction();
+        l.finer("Fetched all scientific forums.");
+        return ScientificForumRepository.getList(transaction, resultListParams);
     }
 }
