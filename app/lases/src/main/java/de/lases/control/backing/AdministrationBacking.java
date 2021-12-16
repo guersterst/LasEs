@@ -18,6 +18,8 @@ import java.util.logging.Logger;
 
 /**
  * Backing bean for the administration page.
+ *
+ * @author Stefanie Gürster
  */
 @RequestScoped
 @Named
@@ -49,7 +51,6 @@ public class AdministrationBacking {
     @PostConstruct
     public void init() {
         systemSettings = customizationService.get();
-
     }
 
     /**
@@ -60,7 +61,9 @@ public class AdministrationBacking {
      * @return Show this page again.
      */
     public String save() {
-        return null;
+        customizationService.change(systemSettings);
+        uiMessageEvent.fire(new UIMessage(resourceBundle.getString("successSystemsetting"),MessageCategory.INFO));
+        return "administration?faces-redirect=true";
     }
 
     /**

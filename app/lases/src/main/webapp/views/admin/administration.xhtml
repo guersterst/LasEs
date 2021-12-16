@@ -10,24 +10,26 @@
     </ui:define>
 
     <ui:define name="content">
-        <div class="container">
+
+        <f:metadata>
+            <f:importConstants type="de.lases.control.internal.Constants" var="Const"/>
+        </f:metadata>
+
+        <div class="container container-fluid">
             <div class="row">
-                <div class="col">
+                <div class="col-md-6" style="width: 40%">
                     <div class="card">
                         <div class="card-header">
-                            <h:outputText id="logo-lbl" value="#{labels.logo}" styleClass="h3"/>
+                            <h:graphicImage id="logo-gimg" value="/image?id=logo" alt="#{labels.noLogo}"
+                                            width="200" height="100"/>
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-3">
-                                    <h:graphicImage id="logo-gimg" value="/image?id=logo" alt="#{labels.noLogo}"
-                                                    width="200" height="100"/>
-                                </div>
-                                <div class="col-md-9">
+                                <div class="col-md-8">
                                     <h:form id="upload-logo" enctype="multipart/form-data">
                                         <div class="form-group">
                                             <h:outputLabel id="logo-upload-lbl" value="#{labels.uploadLogo}"
-                                                           styleClass="input-group"/>
+                                                           styleClass="input-group" for="change-logo-ifile"/>
                                             <h:inputFile id="change-logo-ifile"
                                                          value="#{administrationBacking.uploadedLogo}"
                                                          title="#{help.chooseNewLogo}" required="true"
@@ -56,6 +58,72 @@
                                     <h:selectOneMenu value="#{administrationBacking.systemSettings.style}" id="select-theme-slctom">
                                         <f:selectItems value="#{administrationBacking.styles}" var="style" itemValue="#{style}" itemLabel="#{labels['themes.' += style]}"/>
                                     </h:selectOneMenu>
+                                </div>
+                            </h:form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6" style="width: 60%">
+                    <div class="card">
+                        <div class="card-header">
+                            <h:outputLabel id="welcome-lbl" value="#{labels.systemSettings}" styleClass="h3"/>
+                        </div>
+                        <div class="card-body">
+                            <h:form id="welcome-frm">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <h:outputLabel id="heading-lbl" value="#{labels.heading}" for="welcome-heading-itxt" styleClass="input-group-text"/>
+                                        <h:inputText id="welcome-heading-itxt"
+                                                     value="#{administrationBacking.systemSettings.headlineWelcomePage}"
+                                                     required="true" requiredMessage="#{message.headlineRequired}"
+                                                     maxlength="#{Const.WELCOME_HEADING_MAX}" styleClass="form-control"/>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <h:outputLabel id="text-lbl" for="welcome-text-itxt" value="#{labels.text}" styleClass="input-group-text"/>
+                                        <h:inputTextarea id="welcome-text-itxt"
+                                                         value="#{administrationBacking.systemSettings.messageWelcomePage}"
+                                                         required="true" requiredMessage="#{message.welcomeTextRequired}"
+                                                         styleClass="form-control">
+                                            <f:validateLength maximum="#{Const.WELCOME_DESCRIPTION_MAX}"/>
+                                        </h:inputTextarea>
+                                        <h:message for="welcome-text-itxt"/>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <h:outputLabel id="instition-lbl" value="#{labels.institution}"  for="institution-itxt" styleClass="input-group-text"/>
+                                        <h:inputText id="institution-itxt"
+                                                     value="#{administrationBacking.systemSettings.companyName}"
+                                                     required="true" requiredMessage="#{message.companyNameRequired}"
+                                                     maxlength="#{Const.SYSTEM_COMPANY_NAME_MAX}" styleClass="form-control"/>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <h:outputLabel id="imprint-lbl" value="#{labels.imprintLabel}" styleClass="input-group-text"/>
+                                        <h:inputTextarea id="imprint-itxt"
+                                                         value="#{administrationBacking.systemSettings.imprint}"
+                                                         required="true" requiredMessage="#{message.imprintRequired}"
+                                                         styleClass="form-control"/>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="form-group">
+                                    <div class="btn-group">
+                                        <h:commandButton id="save-cbtn" value="#{labels.saveButton}"
+                                                         action="#{administrationBacking.save}"
+                                                         styleClass="btn btn-primary"/>
+                                    </div>
+                                    <div class="btn-group">
+                                        <h:commandButton id="abort-cbtn" value="#{labels.abortButton}"
+                                                         action="#{administrationBacking.abort}"
+                                                         styleClass="btn btn-primary"/>
+                                    </div>
                                 </div>
                             </h:form>
                         </div>
