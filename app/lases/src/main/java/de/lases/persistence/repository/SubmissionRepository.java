@@ -346,12 +346,12 @@ public class SubmissionRepository {
                                     AND rb.reviewer_id = ?)
                         """;
                 default -> """
-                        SELECT * FROM submission s
-                        WHERE s.forum_id = ?
+                        SELECT * FROM submission
+                        WHERE submission.forum_id = ?
                           AND ? IN (
-                              SELECT s.author_id
+                              SELECT submission.author_id
                               UNION
-                              SELECT ca.user_id FROM co_authored ca WHERE ca.submission_id = s.id)
+                              SELECT ca.user_id FROM co_authored ca WHERE ca.submission_id = submission.id)
                         """;
             };
 
@@ -426,11 +426,11 @@ public class SubmissionRepository {
                                 AND rb.reviewer_id = ?)
                     """;
             default -> """
-                    SELECT * FROM submission s
+                    SELECT * FROM submission
                     WHERE ? IN (
-                        SELECT s.author_id
+                        SELECT submission.author_id
                         UNION
-                        SELECT ca.user_id FROM co_authored ca WHERE ca.submission_id = s.id)
+                        SELECT ca.user_id FROM co_authored ca WHERE ca.submission_id = submission.id)
                     """;
         };
 
@@ -706,11 +706,11 @@ public class SubmissionRepository {
                                 AND rb.reviewer_id = ?)
                     """;
             default -> """
-                    SELECT COUNT(*) FROM submission s
+                    SELECT COUNT(*) FROM submission
                     WHERE ? IN (
-                        SELECT s.author_id
+                        SELECT submission.author_id
                         UNION
-                        SELECT ca.user_id FROM co_authored ca WHERE ca.submission_id = s.id)
+                        SELECT ca.user_id FROM co_authored ca WHERE ca.submission_id = submission.id)
                     """;
         };
 
