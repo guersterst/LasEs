@@ -795,7 +795,7 @@ public class SubmissionRepository {
 
         if (limit) {
             // Sort according to sort column parameter
-            if (filterColumnNames.contains(params.getSortColumn())) {
+            if (params.getSortColumn() != null && filterColumnNames.contains(params.getSortColumn())) {
                 sb.append("ORDER BY ");
                 if (params.getSortColumn().equals("forum")) { // need to get forum name
                     sb.append("(SELECT f.name FROM scientific_forum f WHERE f.id = submission.forum_id)");

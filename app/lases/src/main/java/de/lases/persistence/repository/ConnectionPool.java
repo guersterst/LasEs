@@ -187,7 +187,7 @@ public class ConnectionPool {
             connection.setAutoCommit(false);
             return connection;
         } catch(SQLException ex) {
-            throw new DatasourceQueryFailedException("Connection could not"
+            throw new DatasourceQueryFailedException("Connection could not "
                     + "be created.", ex);
         }
     }
