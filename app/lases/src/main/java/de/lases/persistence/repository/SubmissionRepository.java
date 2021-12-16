@@ -26,7 +26,8 @@ public class SubmissionRepository {
 
     private static final Logger logger = Logger.getLogger(SubmissionRepository.class.getName());
 
-    private static final List<String> filterColumnNames = List.of("title", "state", "forum");
+    private static final List<String> filterColumnNames = List.of("title", "state", "timestamp_submission",
+            "timestamp_deadline_revision", "forum");
 
 
     /**
@@ -453,10 +454,12 @@ public class SubmissionRepository {
         sql += generateResultListParametersSQLSuffix(resultListParameters, true);
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            int parameterIndex = 1;
+
             if (privilege != Privilege.ADMIN) {
-                stmt.setInt(1, user.getId());
+                stmt.setInt(parameterIndex++, user.getId());
             }
-            fillResultListParameterSuffix(2, stmt, resultListParameters);
+            fillResultListParameterSuffix(parameterIndex, stmt, resultListParameters);
             resultSet = stmt.executeQuery();
 
             // Attempt to create a list of submissions from the result set.
@@ -798,11 +801,20 @@ public class SubmissionRepository {
             });
         }
 
+        // Filter according to filter column parameters
+        // Only append if filter column is specified because filtering for a null value would not return any results
+        // because of the AND operators.
         if (isFilled(params.getFilterColumns().get("title"))) {
             sb.append(" AND title ILIKE ?\n");
         }
         if (isFilled(params.getFilterColumns().get("state"))) {
             sb.append(" AND state::VARCHAR ILIKE ?\n");
+        }
+        if (isFilled(params.getFilterColumns().get("timestamp_submission"))) {
+            sb.append(" AND timestamp_submission::VARCHAR ILIKE ?\n");
+        }
+        if (isFilled(params.getFilterColumns().get("timestamp_deadline_revision"))) {
+            sb.append(" AND timestamp_deadline_revision::VARCHAR ILIKE ?\n");
         }
         if (isFilled(params.getFilterColumns().get("forum"))) {
             sb.append(" AND (SELECT f.name FROM scientific_forum f WHERE f.id = submission.forum_id) ILIKE ?\n");
@@ -813,6 +825,8 @@ public class SubmissionRepository {
                 AND (
                     title ILIKE ?
                     OR state::VARCHAR ILIKE ?
+                    OR timestamp_submission::VARCHAR ILIKE ?
+                    OR timestamp_deadline_revision::VARCHAR ILIKE ?
                     OR (SELECT f.name FROM scientific_forum f WHERE f.id = submission.forum_id) ILIKE ?
                 )
                 """);
