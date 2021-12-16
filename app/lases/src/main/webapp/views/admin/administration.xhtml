@@ -3,7 +3,8 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:p="http://primefaces.org/ui" xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+                xmlns:p="http://primefaces.org/ui" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:c="http://java.sun.com/jsf/html">
 
     <ui:define name="title">
         #{labels.administration}
@@ -17,26 +18,6 @@
 
         <div class="container container-fluid">
 
-            <!--Link to other pages-->
-            <div class="card">
-                <div class="card-header">
-                    <div class="form-group">
-                        <div class="btn-group">
-                            <div class="link">
-                                <h:link id="new-user-link" value="#{labels.goToNewUser}"
-                                        outcome="/views/admin/newUser" title="#{help.newUser}" styleClass="btn btn-primary"/>
-                            </div>
-                        </div>
-                        <div class="btn-group">
-                            <div class="link">
-                                <h:link id="new-forum-link" value="#{labels.goToNewScientificForum}"
-                                        outcome="/views/admin/newScientificForum" title="#{help.newForum}" styleClass="btn btn-primary"/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <br/>
             <div class="row">
                 <div class="col-md-6">
 
@@ -44,7 +25,7 @@
                     <div class="card">
                         <div class="card-header">
                             <h:graphicImage id="logo-gimg" value="/image?id=logo" alt="#{labels.noLogo}"
-                                            width="200" height="100"/>
+                                             height="100"/>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -72,6 +53,29 @@
                         </div>
                     </div>
                     <br/>
+                </div>
+                <div class="col-md-6">
+
+                    <!--Link to other pages-->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="form-group">
+                                <div class="btn-group">
+                                    <div class="link">
+                                        <h:link id="new-user-link" value="#{labels.goToNewUser}"
+                                                outcome="/views/admin/newUser" title="#{help.newUser}" styleClass="btn btn-primary"/>
+                                    </div>
+                                </div>
+                                <div class="btn-group">
+                                    <div class="link">
+                                        <h:link id="new-forum-link" value="#{labels.goToNewScientificForum}"
+                                                outcome="/views/admin/newScientificForum" title="#{help.newForum}" styleClass="btn btn-primary"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
 
                     <!--colorthemes-->
                     <div class="card">
@@ -81,91 +85,104 @@
                         <div class="card-body">
                             <h:form id="theme-frm">
                                 <div class="form-group">
+                                    <h:outputLabel id="current-style-lbl" for="current-style-itxt" value="#{labels.currentStyle}"/>
+                                    <br/>
+                                    <h:outputText id="current-style-itxt" value="#{administrationBacking.systemSettings.style}"
+                                                  styleClass="input-group-text"/>
+                                </div>
+                                <br/>
+                                <div class="form-group">
                                     <h:outputLabel id="select-theme-lbl" for="select-theme-slctom"
                                                    value="#{labels.theme}"/>
-                                    <h:selectOneMenu value="#{administrationBacking.systemSettings.style}"
-                                                     id="select-theme-slctom">
-                                        <f:selectItems value="#{administrationBacking.styles}" var="style"
-                                                       itemValue="#{style}" itemLabel="#{labels['themes.' += style]}"/>
-                                    </h:selectOneMenu>
+                                    <div class="btn-group">
+                                        <h:selectOneMenu value="#{administrationBacking.systemSettings.style}"
+                                                         id="select-theme-slctom" styleClass="btn btn-secondary dropdown-toggle">
+                                            <f:selectItems value="#{administrationBacking.styles}" var="style"
+                                                           itemValue="#{style}" itemLabel="#{style}"/>
+                                        </h:selectOneMenu>
+                                    </div>
+                                    <div class="btn-group">
+                                        <c:commandButton id="change-theme-cbtn" value="#{labels.save}"
+                                                         action="#{administrationBacking.save}"
+                                                         title="#{help.changeTheme}" styleClass="btn btn-primary"/>
+                                    </div>
                                 </div>
                             </h:form>
                         </div>
                     </div>
                     <br/>
+
+
                 </div>
-                <div class="col-md-6">
-
-                    <!--systemsetting-->
-                    <div class="card">
-                        <div class="card-header">
-                            <h:outputLabel id="welcome-lbl" value="#{labels.systemSettings}" styleClass="h3"/>
+            </div>
+            <!--systemsetting-->
+            <div class="card">
+                <div class="card-header">
+                    <h:outputLabel id="welcome-lbl" value="#{labels.systemSettings}" styleClass="h3"/>
+                </div>
+                <div class="card-body">
+                    <h:form id="welcome-frm">
+                        <div class="form-group">
+                            <h:outputLabel id="heading-lbl" value="#{labels.heading}"
+                                           for="welcome-heading-itxt"/>
+                            <h:inputText id="welcome-heading-itxt"
+                                         value="#{administrationBacking.systemSettings.headlineWelcomePage}"
+                                         required="true" requiredMessage="#{message.headlineRequired}"
+                                         maxlength="#{Const.WELCOME_HEADING_MAX}"
+                                         styleClass="form-control"/>
                         </div>
-                        <div class="card-body">
-                            <h:form id="welcome-frm">
-                                <div class="form-group">
-                                    <h:outputLabel id="heading-lbl" value="#{labels.heading}"
-                                                   for="welcome-heading-itxt"/>
-                                    <h:inputText id="welcome-heading-itxt"
-                                                 value="#{administrationBacking.systemSettings.headlineWelcomePage}"
-                                                 required="true" requiredMessage="#{message.headlineRequired}"
-                                                 maxlength="#{Const.WELCOME_HEADING_MAX}"
-                                                 styleClass="form-control"/>
-                                </div>
-                                <h:message for="welcome-heading-itxt"/>
-                                <br/>
+                        <h:message for="welcome-heading-itxt"/>
+                        <br/>
 
-                                <div class="form-group">
-                                    <h:outputLabel id="text-lbl" for="welcome-text-itxt" value="#{labels.text}"/>
-                                    <h:inputTextarea id="welcome-text-itxt"
-                                                     value="#{administrationBacking.systemSettings.messageWelcomePage}"
-                                                     required="true"
-                                                     requiredMessage="#{message.welcomeTextRequired}"
-                                                     styleClass="form-control" rows="9">
-                                        <f:validateLength maximum="#{Const.WELCOME_DESCRIPTION_MAX}"/>
-                                    </h:inputTextarea>
-                                </div>
-                                <h:message for="welcome-text-itxt"/>
-
-                                <br/>
-
-                                <div class="form-group">
-                                    <h:outputLabel id="instition-lbl" value="#{labels.institution}"
-                                                   for="institution-itxt"/>
-                                    <h:inputTextarea id="institution-itxt"
-                                                     value="#{administrationBacking.systemSettings.companyName}"
-                                                     required="true" requiredMessage="#{message.companyNameRequired}"
-                                                     maxlength="#{Const.SYSTEM_COMPANY_NAME_MAX}"
-                                                     styleClass="form-control" rows="2"/>
-                                </div>
-                                <h:message for="institution-itxt"/>
-
-                                <br/>
-
-                                <div class="form-group">
-                                    <h:outputLabel id="imprint-lbl" value="#{labels.imprintLabel}"/>
-                                    <h:inputTextarea id="imprint-itxt"
-                                                     value="#{administrationBacking.systemSettings.imprint}"
-                                                     required="true" requiredMessage="#{message.imprintRequired}"
-                                                     styleClass="form-control" rows="5"/>
-                                </div>
-                                <h:message for="imprint-itxt"/>
-                                <br/>
-                                <div class="form-group">
-                                    <div class="btn-group">
-                                        <h:commandButton id="save-cbtn" value="#{labels.saveButton}"
-                                                         action="#{administrationBacking.save}"
-                                                         styleClass="btn btn-primary"/>
-                                    </div>
-                                    <div class="btn-group">
-                                        <h:commandButton id="abort-cbtn" value="#{labels.abortButton}"
-                                                         action="#{administrationBacking.abort}"
-                                                         styleClass="btn btn-primary"/>
-                                    </div>
-                                </div>
-                            </h:form>
+                        <div class="form-group">
+                            <h:outputLabel id="text-lbl" for="welcome-text-itxt" value="#{labels.text}"/>
+                            <h:inputTextarea id="welcome-text-itxt"
+                                             value="#{administrationBacking.systemSettings.messageWelcomePage}"
+                                             required="true"
+                                             requiredMessage="#{message.welcomeTextRequired}"
+                                             styleClass="form-control" rows="9">
+                                <f:validateLength maximum="#{Const.WELCOME_DESCRIPTION_MAX}"/>
+                            </h:inputTextarea>
                         </div>
-                    </div>
+                        <h:message for="welcome-text-itxt"/>
+
+                        <br/>
+
+                        <div class="form-group">
+                            <h:outputLabel id="instition-lbl" value="#{labels.institution}"
+                                           for="institution-itxt"/>
+                            <h:inputTextarea id="institution-itxt"
+                                             value="#{administrationBacking.systemSettings.companyName}"
+                                             required="true" requiredMessage="#{message.companyNameRequired}"
+                                             maxlength="#{Const.SYSTEM_COMPANY_NAME_MAX}"
+                                             styleClass="form-control" rows="2"/>
+                        </div>
+                        <h:message for="institution-itxt"/>
+
+                        <br/>
+
+                        <div class="form-group">
+                            <h:outputLabel id="imprint-lbl" value="#{labels.imprintLabel}"/>
+                            <h:inputTextarea id="imprint-itxt"
+                                             value="#{administrationBacking.systemSettings.imprint}"
+                                             required="true" requiredMessage="#{message.imprintRequired}"
+                                             styleClass="form-control" rows="5"/>
+                        </div>
+                        <h:message for="imprint-itxt"/>
+                        <br/>
+                        <div class="form-group">
+                            <div class="btn-group">
+                                <h:commandButton id="save-cbtn" value="#{labels.saveButton}"
+                                                 action="#{administrationBacking.save}"
+                                                 styleClass="btn btn-primary"/>
+                            </div>
+                            <div class="btn-group">
+                                <h:commandButton id="abort-cbtn" value="#{labels.abortButton}"
+                                                 action="#{administrationBacking.abort}"
+                                                 styleClass="btn btn-primary"/>
+                            </div>
+                        </div>
+                    </h:form>
                 </div>
             </div>
         </div>
