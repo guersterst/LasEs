@@ -3,6 +3,7 @@ package de.lases.persistence.repository;
 import de.lases.global.transport.FileDTO;
 import de.lases.global.transport.SystemSettings;
 import de.lases.persistence.exception.*;
+import de.lases.persistence.util.DatasourceUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,6 +16,8 @@ import java.sql.*;
 /**
  * Offers get/update operations on the system settings and the
  * possibility to get and set the logo.
+ *
+ * @author Stefanie Gürster
  */
 public class SystemSettingsRepository {
 
@@ -35,6 +38,31 @@ public class SystemSettingsRepository {
     public static void updateSettings(SystemSettings systemSettings,
                                       Transaction transaction)
             throws DataNotWrittenException {
+        if (systemSettings.getImprint() == null || systemSettings.getCompanyName() == null
+                || systemSettings.getHeadlineWelcomePage() == null || systemSettings.getMessageWelcomePage() == null
+                || systemSettings.getStyle() == null) {
+            logger.severe("One of the fields in systemSettings is null.");
+            throw new InvalidFieldsException("Fields in systemSettings are null.");
+        }
+
+        Connection connection = transaction.getConnection();
+
+        String sql = "UPDATE system SET company_name = ?, welcome_heading = ? " +
+                ", welcome_description = ?, css_theme = ?, imprint = ? WHERE id = 0";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setString(1, systemSettings.getCompanyName());
+            statement.setString(2, systemSettings.getHeadlineWelcomePage());
+            statement.setString(3, systemSettings.getMessageWelcomePage());
+            statement.setString(4, systemSettings.getStyle());
+            statement.setString(5, systemSettings.getImprint());
+
+            statement.executeUpdate();
+        } catch (SQLException exception) {
+            transaction.abort();
+            DatasourceUtil.logSQLException(exception, logger);
+            throw new DatasourceQueryFailedException("A datasource exception occurred while changing the system settings.");
+        }
     }
 
     /**

@@ -366,7 +366,11 @@ public class SubmissionRepository {
                         """;
                 default -> """
                         SELECT * FROM submission
-                        WHERE forum_id = ? AND author_id = ?
+                        WHERE submission.forum_id = ?
+                          AND ? IN (
+                              SELECT submission.author_id
+                              UNION
+                              SELECT ca.user_id FROM co_authored ca WHERE ca.submission_id = submission.id)
                         """;
             };
 
@@ -447,7 +451,10 @@ public class SubmissionRepository {
                     """;
             default -> """
                     SELECT * FROM submission
-                    WHERE author_id = ?
+                    WHERE ? IN (
+                        SELECT submission.author_id
+                        UNION
+                        SELECT ca.user_id FROM co_authored ca WHERE ca.submission_id = submission.id)
                     """;
         };
 
@@ -687,7 +694,7 @@ public class SubmissionRepository {
     }
 
     /**
-     * Count the number of submissions where the specified user is author.
+     * Count the number of submissions that belong to the user under the specified role.
      *
      * @param user                 A user dto with a valid id.
      * @param privilege            As which role should the user act.
@@ -739,7 +746,10 @@ public class SubmissionRepository {
                     """;
             default -> """
                     SELECT COUNT(*) FROM submission
-                    WHERE author_id = ?
+                    WHERE ? IN (
+                        SELECT submission.author_id
+                        UNION
+                        SELECT ca.user_id FROM co_authored ca WHERE ca.submission_id = submission.id)
                     """;
         };
 
@@ -833,7 +843,7 @@ public class SubmissionRepository {
 
         if (limit) {
             // Sort according to sort column parameter
-            if (filterColumnNames.contains(params.getSortColumn())) {
+            if (params.getSortColumn() != null && filterColumnNames.contains(params.getSortColumn())) {
                 sb.append("ORDER BY ");
                 if (params.getSortColumn().equals("forum")) { // need to get forum name
                     sb.append("(SELECT f.name FROM scientific_forum f WHERE f.id = submission.forum_id)");
