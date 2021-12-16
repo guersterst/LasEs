@@ -29,7 +29,7 @@ public class EmailAddressLayoutValidator implements Validator<String> {
 
     private final Logger l = Logger.getLogger(EmailAddressLayoutValidator.class.getName());
 
-    private PropertyResourceBundle bundle = CDI.current().select(PropertyResourceBundle.class).get();
+    private final PropertyResourceBundle bundle = CDI.current().select(PropertyResourceBundle.class).get();
 
     /**
      * Validates an email address as specified in the class description.
