@@ -224,10 +224,6 @@ public class ScientificForumBacking implements Serializable {
         forum = forumService.get(forum);
         editors = userService.getList(forum);
 
-        //ResultListParameters params = new ResultListParameters();
-        //allEditors = userService.getList(params);
-
-        // Todo richtige ResultListParameters here?
         allScienceFields = scienceFieldService.getList(new ResultListParameters());
         currentScieneFields = scienceFieldService.getList(forum, new ResultListParameters());
         allScienceFields.removeAll(currentScieneFields);
@@ -421,16 +417,6 @@ public class ScientificForumBacking implements Serializable {
      */
     public boolean loggedInUserIsEditorOrAdmin() {
         return editors.contains(user) || user.isAdmin();
-    }
-
-    //TODO needed?
-    /**
-     * Return if the logged-in user is reviewer of this scientific forum.
-     *
-     * @return Is the logged-in user reviewer of this scientific forum?
-     */
-    public boolean loggedInUserIsReviewer() {
-        return false;
     }
 
     public String getOwnCssClassSuffix() {

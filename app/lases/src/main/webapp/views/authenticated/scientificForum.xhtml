@@ -96,14 +96,16 @@
 
                                                 <!-- desc -->
                                                 <div class="form-group">
-                                                    <h:inputText id="description-itxt"
-                                                                 value="#{scientificForumBacking.forum.description}"
-                                                                 readonly="#{!scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
-                                                                 rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
-                                                                 required="true"
-                                                                 requiredMessage="#{message.requiredForForum}"
-                                                                 styleClass="h4"
-                                                                 tite="#{help.forumDesc}"/>
+                                                    <h:inputTextarea
+                                                            id="description-itxt"
+                                                            value="#{scientificForumBacking.forum.description}"
+                                                            readonly="#{!scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
+                                                            rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
+                                                            required="true"
+                                                            requiredMessage="#{message.requiredForForum}"
+                                                            styleClass="h4"
+                                                            tite="#{help.forumDesc}"
+                                                            rows="5"/>
                                                 </div>
 
                                                 <!-- alternative desc output for non editors -->
@@ -172,8 +174,6 @@
                                                 </p:dialog>
                                             </h:form>
 
-                                            <hr/>
-
                                             <!-- submit changes -->
                                             <div class="form-group">
                                                 <h:commandButton id="submit-forum-changes-cbtn"
@@ -181,7 +181,8 @@
                                                                  styleClass="btn btn-primary"
                                                                  type="submit"
                                                                  action="#{scientificForumBacking.submitChanges}"
-                                                                 title="#{help.forumChanges}"/>
+                                                                 title="#{help.forumChanges}"
+                                                                 rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}"/>
                                             </div>
                                         </h:form>
                                     </div>
@@ -195,13 +196,14 @@
                                             <h:form>
                                                 <div class="form-group">
                                                     <h:outputLabel for="editor-email-itxt"
-                                                                   value="#{labels.forumAddEditor}"/>
+                                                                   value="#{labels.forumAddEditor}"
+                                                                   rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}"/>
                                                     <h:inputText id="editor-email-itxt"
                                                                  value="#{scientificForumBacking.newEditorInput.emailAddress}"
                                                                  class="form-control"
                                                                  required="true"
                                                                  requiredMessage="#{message.requiredToAddEditor}"
-                                                                 rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin}">
+                                                                 rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}">
                                                         <f:validator validatorId="emailAddressExistsValidator"/>
                                                     </h:inputText>
                                                 </div>
@@ -211,12 +213,12 @@
                                                                      styleClass="btn btn-primary mt-2"
                                                                      type="submit"
                                                                      action="#{scientificForumBacking.addEditor()}"
-                                                                     rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin}">
+                                                                     rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}">
+                                                        <hr/>
                                                     </h:commandButton>
                                                 </div>
                                             </h:form>
 
-                                            <hr/>
                                             <!--- editor list -->
                                             <h:form id="editor-list-frm">
                                                 <h:dataTable id="editor-list"
@@ -232,7 +234,7 @@
                                                                          styleClass="btn-secondary btn mx-2"
                                                                          type="submit"
                                                                          action="#{scientificForumBacking.removeEditor(editor)}"
-                                                                         rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin}">
+                                                                         rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}">
                                                             <f:ajax execute="editor-list-frm" render="editor-list-frm"/>
                                                         </h:commandButton>
                                                     </h:column>
@@ -246,11 +248,11 @@
                                         <div class="form-group">
 
                                             <!-- add sciencefield -->
-
                                             <h:form id="fields-add-frm">
                                                 <div class="form-group">
                                                     <p:outputLabel for="@next"
-                                                                   value="#{labels.addScienceField}"/>
+                                                                   value="#{labels.addScienceField}"
+                                                                   rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}"/>
                                                     <p:selectOneMenu id="advanced"
                                                                      value="#{scientificForumBacking.selectedScienceFieldInput}"
                                                                      panelStyle="width:180px"
@@ -258,7 +260,7 @@
                                                                      var="s"
                                                                      filter="true"
                                                                      filterMatchMode="startsWith"
-                                                                     rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin}">
+                                                                     rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}">
                                                         <f:selectItems
                                                                 value="#{scientificForumBacking.allScienceFields}"
                                                                 var="scienceField"
@@ -277,12 +279,13 @@
                                                                          value="#{labels.add}"
                                                                          styleClass="btn btn-primary"
                                                                          action="#{scientificForumBacking.addScienceField}"
-                                                                         rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin}"/>
+                                                                         rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}">
+                                                            <hr/>
+                                                        </h:commandButton>
                                                     </div>
                                                 </div>
                                             </h:form>
 
-                                            <hr/>
                                             <!-- fields list -->
                                             <h:form id="fields-list-frm">
                                                 <h:dataTable id="science-field-list"
@@ -296,7 +299,7 @@
                                                                          styleClass="btn-secondary btn mx-2"
                                                                          type="submit"
                                                                          action="#{scientificForumBacking.removeScienceField(currField)}"
-                                                                         rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin}">
+                                                                         rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}">
                                                             <f:ajax execute="fields-list-frm"
                                                                     render="fields-list-frm"/>
                                                         </h:commandButton>
