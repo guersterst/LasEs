@@ -1,5 +1,6 @@
 package de.lases.control.validation;
 
+import jakarta.enterprise.inject.spi.CDI;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
@@ -33,8 +34,7 @@ public class PasswordValidator implements Validator<String> {
 
     private final Logger l = Logger.getLogger(PasswordValidator.class.getName());
 
-    @Inject
-    PropertyResourceBundle bundle;
+    PropertyResourceBundle bundle = CDI.current().select(PropertyResourceBundle.class).get();
 
     /**
      * Validates passwords as specified in the class description.

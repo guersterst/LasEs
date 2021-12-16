@@ -7,6 +7,8 @@ import de.lases.persistence.util.DatasourceUtil;
 import de.lases.persistence.util.TransientSQLExceptionChecker;
 import jakarta.enterprise.inject.spi.CDI;
 
+import javax.sql.DataSource;
+import javax.xml.stream.events.DTD;
 import java.sql.*;
 import java.sql.Date;
 import java.util.*;
@@ -277,19 +279,25 @@ public class UserRepository {
 
     /**
      * Changes the given user in the repository. All fields that are not
-     * required will be deleted if left empty.
+     * required (except for the avatar, which has its own methods) will be deleted if left empty. Left empty means
+     * having the value null in this context. This means that primitive types will always be written through and
+     * cannot be deleted.
      *
      * @param user        A user dto with all required fields. Required are:
      *                    <ul>
-     *                    <li> id </li>
+     *                    <li> id to identify the user (cannot be changed) </li>
      *                    <li> a hashed password and a password salt </li>
      *                    <li> the first name </li>
      *                    <li> the last name </li>
      *                    <li> the email address </li>
+     *                    <li>
+     *                        all primitive types of the user except the number of submissions, which will be
+     *                        ignored
+     *                    </li>
      *                    </ul>
      * @param transaction The transaction to use.
      * @throws NotFoundException              If there is no user with the
-     *                                        provided id or email.
+     *                                        provided id.
      * @throws DataNotWrittenException        If writing the data to the repository
      *                                        fails.
      * @throws KeyExistsException             If the new email address of the user
@@ -298,10 +306,56 @@ public class UserRepository {
      *                                        is null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     *
+     * @author Sebastian Vogt
      */
     public static void change(User user, Transaction transaction)
             throws NotFoundException, DataNotWrittenException,
             KeyExistsException {
+        if (user.getId() == null || user.getPasswordHashed() == null || user.getPasswordSalt() == null
+                || user.getFirstName() == null || user.getLastName() == null || user.getEmailAddress() == null) {
+            transaction.abort();
+            throw new InvalidFieldsException("One of the required fields of the user was null!");
+        }
+
+        Connection conn = transaction.getConnection();
+
+        String sql = """
+                UPDATE "user"
+                SET email_address = ?, is_administrator = ?, firstname = ?, lastname = ?, title = ?, employer = ?,
+                birthdate = ?, is_registered = ?, password_hash = ?, password_salt = ?
+                WHERE id = ?
+                """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, user.getEmailAddress());
+            stmt.setBoolean(2, user.isAdmin());
+            stmt.setString(3, user.getFirstName());
+            stmt.setString(4, user.getLastName());
+            stmt.setString(4, user.getTitle());
+            stmt.setString(5, user.getEmployer());
+            stmt.setDate(6, Date.valueOf(user.getDateOfBirth()));
+            stmt.setBoolean(7, user.isRegistered());
+            stmt.setString(8, user.getPasswordHashed());
+            stmt.setString(9, user.getPasswordSalt());
+            int rowCount = stmt.executeUpdate();
+
+            if (rowCount == 0) {
+                throw new NotFoundException("The user to change was not found");
+            }
+        } catch (SQLException e) {
+            DatasourceUtil.logSQLException(e, logger);
+
+            // duplicate key value
+            if (e.getSQLState().equals("23505")) {
+                throw new KeyExistsException("The email address already exists");
+            } else if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                throw new DataNotWrittenException("The user could not be changed", e);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("The user could not be changed", e);
+            }
+        }
     }
 
     /**
@@ -879,7 +933,10 @@ public class UserRepository {
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setBytes(1, avatar == null ? null : avatar.getFile());
             stmt.setInt(2, user.getId());
-            stmt.executeUpdate();
+            int rowCount = stmt.executeUpdate();
+            if (rowCount == 0) {
+                throw new NotFoundException("The user could not be found!");
+            }
         } catch (SQLException e) {
             // TODO: was, wenn es den user nicht gibt?
             DatasourceUtil.logSQLException(e, logger);
