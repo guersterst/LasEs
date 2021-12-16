@@ -16,10 +16,13 @@ import de.lases.persistence.repository.Transaction;
 import de.lases.persistence.repository.UserRepository;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
+import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.List;
+import java.util.Map;
 import java.util.PropertyResourceBundle;
 import java.util.logging.Logger;
 
@@ -110,9 +113,36 @@ public class RegistrationService {
                 user = UserRepository.add(user, t);
             } catch (DataNotWrittenException e) {
                 uiMessageEvent.fire(new UIMessage(message.getString("registrationFailed"), MessageCategory.ERROR));
+                t.abort();
                 return user;
             }
         }
+
+        t.commit();
+
+        if (initiateVerificationProcess(user)) {
+            // Success message, containing verification random if test mode is enabled
+            String msg = message.getString("registrationSuccessful");
+            uiMessageEvent.fire(new UIMessage(msg, MessageCategory.INFO));
+
+            l.info("User " + user.getEmailAddress() + " registered.");
+        } else {
+            uiMessageEvent.fire(new UIMessage(message.getString("registrationFailed"), MessageCategory.ERROR));
+        }
+
+        return user;
+    }
+
+    /**
+     * Creates a verification dto with a random string and sends an email to the user.
+     * If the debug and test mode is enabled, the random string will be shown as a UIMessage.
+     * No other messages will be shown.
+     *
+     * @param user The user to be verified filled with id and email address.
+     * @return If the verification process was successfully initiated.
+     */
+    public boolean initiateVerificationProcess(User user) {
+        Transaction t = new Transaction();
 
         Verification verification = new Verification();
         verification.setVerified(false);
@@ -123,11 +153,10 @@ public class RegistrationService {
 
         try {
             UserRepository.addVerification(verification, t);
-            t.commit();
             l.fine("Verification for user " + user.getId() + " created.");
         } catch (NotFoundException | DataNotWrittenException e) {
-            l.severe("Could not upload verification for user " + user.getId() + ".");
-            uiMessageEvent.fire(new UIMessage(message.getString("registrationFailed"), MessageCategory.ERROR));
+            t.abort();
+            return false;
         }
 
         String emailBody = message.getString("email.verification.body.0")
@@ -139,25 +168,22 @@ public class RegistrationService {
             EmailUtil.sendEmail(configPropagator.getProperty("MAIL_ADDRESS_FROM"), new String[]{user.getEmailAddress()},
                     null, message.getString("email.verification.subject"), emailBody);
         } catch (EmailTransmissionFailedException e) {
-            uiMessageEvent.fire(new UIMessage(message.getString("registrationFailed"), MessageCategory.ERROR));
-            return null;
+            t.abort();
+            return false;
         }
 
-        // Success message, containing verification random if test mode is enabled
-        String msg = message.getString("registrationSuccessful");
         if (configPropagator.getProperty("DEBUG_AND_TEST_MODE").equalsIgnoreCase("true")) {
-            msg += "\n" + generateValidationUrl(verification);
+            uiMessageEvent.fire(new UIMessage(generateValidationUrl(verification), MessageCategory.INFO));
         }
-        uiMessageEvent.fire(new UIMessage(msg, MessageCategory.INFO));
 
-        l.info("User " + user.getEmailAddress() + " registered.");
-
-        return user;
+        t.commit();
+        return true;
     }
 
     private String generateValidationUrl(Verification verification) {
-        return configPropagator.getProperty("BASE_URL") + "/views/anonymous/verification.xhtml?validationRandom="
-                + verification.getValidationRandom();
+        String base = configPropagator.getProperty("BASE_URL") + "/views/anonymous/verification.xhtml";
+        return FacesContext.getCurrentInstance().getExternalContext().encodeBookmarkableURL(base,
+                Map.of("validationRandom", List.of(verification.getValidationRandom())));
     }
 
     /**
