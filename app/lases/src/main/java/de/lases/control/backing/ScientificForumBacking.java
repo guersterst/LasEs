@@ -15,6 +15,9 @@ import jakarta.inject.Named;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -60,6 +63,8 @@ public class ScientificForumBacking implements Serializable {
 
     private ScienceField selectedScienceFieldInput;
 
+    private LocalDate forumDeadLineInput;
+
     private Pagination<Submission> submissionPagination;
 
     private List<User> editors;
@@ -71,8 +76,6 @@ public class ScientificForumBacking implements Serializable {
     private enum Tab {
         OWN_SUBMISSIONS, SUBMISSIONS_TO_EDIT, SUBMISSIONS_TO_REVIEW;
     }
-
-    private static Logger l = Logger.getLogger(ScientificForumBacking.class.getName());
 
     private Tab tab;
 
@@ -382,6 +385,15 @@ public class ScientificForumBacking implements Serializable {
 
     public void setForum(ScientificForum forum) {
         this.forum = forum;
+    }
+
+    public LocalDate getForumDeadLineInput() {
+        return forumDeadLineInput;
+    }
+
+    public void setForumDeadLineInput(LocalDate forumDeadLineInput) {
+        this.forumDeadLineInput = forumDeadLineInput;
+        forum.setDeadline(LocalDateTime.of(forumDeadLineInput, LocalTime.MIDNIGHT));
     }
 
     /**

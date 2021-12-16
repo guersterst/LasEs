@@ -148,14 +148,13 @@
                                                           value="#{scientificForumBacking.forum.deadline}"
                                                           style="margin: 3px"
                                                           title="#{help.forumDeadLine}">
-                                                <f:convertDateTime type="localDate"/>
+                                                <f:convertDateTime type="localDateTime"/>
                                             </h:outputText>
 
                                             <!-- change deadline -->
-                                            <!--
                                             <div class="form-group">
                                                 <h:inputText id="change-deadline-itxt"
-                                                             value="#{scientificForumBacking.forum.deadline}"
+                                                             value="#{scientificForumBacking.forumDeadLineInput}"
                                                              rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
                                                              title="#{labels.forumDeadLine}"
                                                              a:type="date"
@@ -163,7 +162,6 @@
                                                     <f:convertDateTime type="localDate" pattern="yyyy-MM-dd"/>
                                                 </h:inputText>
                                             </div>
-                                            -->
                                             <br/>
 
                                             <!-- review manual -->
