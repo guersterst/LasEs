@@ -75,6 +75,7 @@ public class SubmissionRepository {
             if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
                 throw new DataNotCompleteException("Submission could not be retrieved", e);
             } else {
+                transaction.abort();
                 throw new DatasourceQueryFailedException("Submission could not be retrieved", e);
             }
         }
@@ -151,6 +152,7 @@ public class SubmissionRepository {
             }
         } catch (SQLException ex) {
             DatasourceUtil.logSQLException(ex, logger);
+            transaction.abort();
             throw new DatasourceQueryFailedException("A datasource exception"
                     + "occurred", ex);
         }
@@ -177,10 +179,10 @@ public class SubmissionRepository {
 
             stmt.executeUpdate();
         } catch (SQLException ex) {
+            DatasourceUtil.logSQLException(ex, logger);
             if (TransientSQLExceptionChecker.isTransient(ex.getSQLState())) {
                 throw new DataNotWrittenException("Submission could not be added", ex);
             } else {
-                DatasourceUtil.logSQLException(ex, logger);
                 transaction.abort();
                 throw new DatasourceQueryFailedException("A datasource exception "
                         + "occurred", ex);
@@ -250,6 +252,7 @@ public class SubmissionRepository {
 
         } catch (SQLException exception) {
             DatasourceUtil.logSQLException(exception, logger);
+            transaction.abort();
             throw new DatasourceQueryFailedException("A datasource exception occurred while changing a submission's data.", exception);
         }
 
@@ -299,6 +302,7 @@ public class SubmissionRepository {
 
         } catch (SQLException exception) {
             DatasourceUtil.logSQLException(exception, logger);
+            transaction.abort();
             throw new DatasourceQueryFailedException("A datasource exception occurred while removing a submission.", exception);
         }
     }
@@ -383,6 +387,7 @@ public class SubmissionRepository {
                 if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
                     throw new DataNotCompleteException("The list of submissions could not be retrieved.", e);
                 } else {
+                    transaction.abort();
                     throw new DatasourceQueryFailedException("The list of submissions could not be retrieved.", e);
                 }
             }
@@ -464,6 +469,7 @@ public class SubmissionRepository {
             if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
                 throw new DataNotCompleteException("The list of submissions could not be retrieved.", e);
             } else {
+                transaction.abort();
                 throw new DatasourceQueryFailedException("The list of submissions could not be retrieved.", e);
             }
         }
@@ -526,6 +532,7 @@ public class SubmissionRepository {
             if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
                 throw new DataNotCompleteException("The list of submissions could not be retrieved.", e);
             } else {
+                transaction.abort();
                 throw new DatasourceQueryFailedException("The list of submissions could not be retrieved.", e);
             }
         }
@@ -647,6 +654,7 @@ public class SubmissionRepository {
             if (exception.getSQLState().equals("23505")) {
                 throw new KeyAlreadyExistsException("Reviewer does already review this submission.");
             } else {
+                transaction.abort();
                 throw new DatasourceQueryFailedException("A datasource exception occurred while adding a new reviewer.");
             }
 
@@ -749,6 +757,7 @@ public class SubmissionRepository {
             } else {
                 logger.severe("The number of submissions authored by the user with id " + user.getId() +
                         " could not be retrieved.");
+                transaction.abort();
                 throw new DatasourceQueryFailedException("The number of submissions authored by the user with id "
                         + user.getId() + " could not be retrieved.");
             }
@@ -757,6 +766,7 @@ public class SubmissionRepository {
             if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
                 throw new DataNotCompleteException("The number of submissions could not be retrieved.", e);
             } else {
+                transaction.abort();
                 throw new DatasourceQueryFailedException("The list of submissions could not be retrieved.", e);
             }
         }
