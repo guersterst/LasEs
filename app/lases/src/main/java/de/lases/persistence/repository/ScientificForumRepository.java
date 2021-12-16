@@ -322,7 +322,7 @@ public class ScientificForumRepository {
         return scientificForums;
     }
 
-    private static String getStatementForumList(ResultListParameters resultListParameters, boolean doCount) {
+    private static String getStatementForumList(ResultListParameters params, boolean doCount) {
         StringBuilder sb = new StringBuilder();
 
         if (doCount) {
@@ -335,19 +335,19 @@ public class ScientificForumRepository {
                 FROM scientific_forum f
                 """).append("\n");
 
-        if (isFilled(resultListParameters.getFilterColumns().get("name"))) {
+        if (isFilled(params.getFilterColumns().get("name"))) {
             sb.append("WHERE f.name ILIKE ?\n");
         }
 
         if (!doCount) {
-            if (isFilled(resultListParameters.getSortColumn())) {
-                if (resultListParameters.getSortColumn().equals("name")) {
+            if (isFilled(params.getSortColumn())) {
+                if (params.getSortColumn().equals("name")) {
                     sb.append("ORDER BY f.name");
                 } else {
-                    sb.append("ORDER BY f.").append(resultListParameters.getSortColumn());
+                    sb.append("ORDER BY f.").append(params.getSortColumn());
                 }
                 sb.append(" ")
-                        .append(resultListParameters.getSortOrder() == SortOrder.ASCENDING ? "ASC" : "DESC")
+                        .append(params.getSortOrder() == SortOrder.ASCENDING ? "ASC" : "DESC")
                         .append("\n");
             }
 
@@ -355,7 +355,7 @@ public class ScientificForumRepository {
             ConfigReader configReader = CDI.current().select(ConfigReader.class).get();
             int paginationLength = Integer.parseInt(configReader.getProperty("MAX_PAGINATION_LIST_LENGTH"));
             sb.append("LIMIT ").append(paginationLength)
-                    .append(" OFFSET ").append(paginationLength * (resultListParameters.getPageNo() - 1));
+                    .append(" OFFSET ").append(paginationLength * (params.getPageNo() - 1));
         }
 
         return sb.toString();
