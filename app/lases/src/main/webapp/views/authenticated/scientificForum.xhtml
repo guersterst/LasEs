@@ -29,16 +29,17 @@
                             <!-- header -->
                             <div class="card-header">
                                 <div class="row">
-                                    <div class="col">
 
-                                        <!-- delete forum -->
+                                    <!-- delete forum -->
+                                    <div class="col">
                                         <h:form>
                                             <h:commandButton styleClass="btn btn-primary"
                                                              id="delete-sub-cbtn"
                                                              title="#{help.deleteSubmission}"
                                                              value="#{labels.deleteButton}"
                                                              onclick="PF('dlg').show()"
-                                                             rendered="#{scientificForumBacking.sessionInformation.user.admin}"/>
+                                                             rendered="#{scientificForumBacking.sessionInformation.user.admin}"
+                                                             type="button"/>
                                             <p:dialog id="delete-forum-dlg" widgetVar="dlg">
                                                 <div class="text-center">
                                                     <h:outputText id="delete-warning-otxt"
@@ -46,15 +47,17 @@
                                                 </div>
                                                 <br/>
                                                 <div class="text-center">
-                                                    <h:form>
-                                                        <h:commandButton styleClass="btn btn-primary"
-                                                                         id="agree-delete-cbtn"
-                                                                         value="#{labels.agreeButton}"
-                                                                         action="#{scientificForumBacking.deleteForum()}"/>
-                                                    </h:form>
+
+                                                    <h:commandButton styleClass="btn btn-primary"
+                                                                     id="agree-delete-cbtn"
+                                                                     value="#{labels.agreeButton}"
+                                                                     action="#{scientificForumBacking.deleteForum()}"/>
                                                 </div>
                                             </p:dialog>
                                         </h:form>
+                                    </div>
+                                    <div class="col ml-5">
+                                        <h:messages/>
                                     </div>
                                 </div>
                             </div>
@@ -114,12 +117,49 @@
                                                 </div>
                                             </div>
 
+                                            <!-- deadline -->
+                                            <h:outputText id="deadline-submission-otxt"
+                                                          value="#{labels.reviewDeadline}"
+                                                          style="margin: 3px"
+                                                          rendered="#{scientificForumBacking.forum.deadline != null}"/>
+                                            <h:outputText id="date-review-deadline-otxt"
+                                                          value="#{scientificForumBacking.forum.deadline}"
+                                                          style="margin: 3px">
+                                                <f:convertDateTime type="localDate"/>
+                                            </h:outputText>
+
+                                            <br/>
+                                            <!-- review manual -->
+                                            <!--todo does this trigger/interfere with the outer form? -->
+
+                                            <h:outputText id="reviewManual-otxt"
+                                                          value="#{labels.reviewManual}"
+                                                          style="margin: 3px"
+                                                          rendered="#{scientificForumBacking.forum.reviewManual != null}"/>
+                                            <h:form>
+                                                <h:commandButton id="review-manual-cbtn"
+                                                                 styleClass="btn btn-secondary"
+                                                                 value="#{labels.displayReviewManual}"
+                                                                 title=""
+                                                                 style="margin: 3px"
+                                                                 rendered="#{scientificForumBacking.forum.reviewManual != null}"
+                                                                 onclick="PF('revMnDlg').show()"
+                                                                 type="button"/>
+                                                <p:dialog id="review-manual-dlg"
+                                                          widgetVar="revMnDlg">
+                                                    <div class="text-center">
+                                                        <h:outputText id="review-manual-otxt"
+                                                                      value="#{scientificForumBacking.forum.reviewManual}"/>
+                                                    </div>
+                                                </p:dialog>
+                                            </h:form>
+
                                             <hr/>
 
                                             <div class="form-group">
                                                 <h:commandButton id="submit-forum-changes-cbtn"
                                                                  value="#{labels.submit}"
-                                                                 styleClass="btn btn-secondary"
+                                                                 styleClass="btn btn-primary"
                                                                  type="submit"
                                                                  action="#{scientificForumBacking.submitChanges}">
                                                     <!-- <f:ajax execute="co-authors-form" render="co-authors-form" /> -->
@@ -159,8 +199,6 @@
                                                                  requiredMessage="#{message.emailRequired}">
                                                         <f:validator validatorId="emailAddressExistsValidator"/>
                                                     </h:inputText>
-                                                    <!-- todo message aus service -->
-                                                    <h:messages/>
                                                 </div>
                                                 <div class="form-group">
                                                     <h:commandButton id="add-editor-cbtn" value="#{labels.add}"
