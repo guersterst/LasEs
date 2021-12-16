@@ -156,7 +156,7 @@
                                                           value="#{labels.reviewManual}"
                                                           style="margin: 3px"
                                                           rendered="#{scientificForumBacking.forum.reviewManual != null}"/>
-                                            <h:form>
+
                                                 <h:commandButton id="review-manual-cbtn"
                                                                  styleClass="btn btn-secondary"
                                                                  value="#{labels.displayReviewManual}"
@@ -172,7 +172,7 @@
                                                                       value="#{scientificForumBacking.forum.reviewManual}"/>
                                                     </div>
                                                 </p:dialog>
-                                            </h:form>
+
 
                                             <!-- submit changes -->
                                             <div class="form-group">
@@ -294,6 +294,9 @@
                                                     <h:column>
                                                         <f:facet name="header">#{labels.scienceFieldsForum}</f:facet>
                                                         #{currField.name}
+                                                    </h:column>
+                                                    <h:column>
+                                                        <f:facet name="header"/>
                                                         <h:commandButton id="delete-field-cbtn"
                                                                          value="#{labels.deleteX}"
                                                                          styleClass="btn-secondary btn mx-2"
