@@ -129,17 +129,16 @@ public class AdministrationBacking {
     }
 
     /**
+     * Creates the path to the current stylesheet.
      *
-     * @return
+     * @return Path to stylesheet.
      */
     public String getPathToStyle() {
-
-        InputStream inputStream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/resources/" +  PATH_TO_STYLE_DIRECTORY);
-
-        return null;
+        return PATH_TO_STYLE_DIRECTORY.concat(systemSettings.getStyle() + ".css");
     }
 
     public String[] getStyles() {
+        InputStream inputStream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/resources/" +  PATH_TO_STYLE_DIRECTORY);
         return null;
     }
 }
