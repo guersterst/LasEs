@@ -21,9 +21,6 @@ import java.util.logging.Logger;
 @FacesValidator
 public class EmailAddressExistsValidator implements Validator<String> {
 
-    @Inject
-    private UserService userService;
-
     private final Logger l = Logger.getLogger(EmailAddressUnoccupiedValidator.class.getName());
 
     /**
@@ -39,6 +36,7 @@ public class EmailAddressExistsValidator implements Validator<String> {
                          String address) throws ValidatorException {
         User user = new User();
         user.setEmailAddress(address);
+        UserService userService = CDI.current().select(UserService.class).get();
         if (!userService.emailExists(user)) {
             PropertyResourceBundle bundle = CDI.current().select(PropertyResourceBundle.class).get();
             l.finer("Validation failed: " + address + " does not exist.");

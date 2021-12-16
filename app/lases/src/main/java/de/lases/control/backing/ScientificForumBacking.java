@@ -6,6 +6,8 @@ import de.lases.control.exception.IllegalUserFlowException;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.NavigationHandler;
+import jakarta.faces.context.FacesContext;
 import jakarta.faces.event.ComponentSystemEvent;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -251,6 +253,8 @@ public class ScientificForumBacking implements Serializable {
      */
     public String deleteForum() {
         forumService.remove(forum);
+        //NavigationHandler navigationHandler = FacesContext.getCurrentInstance().getApplication().getNavigationHandler();
+        //navigationHandler.handleNavigation();
         return "/views/authenticated/homepage.xhtml?faces-redirect=true";
     }
 
@@ -258,19 +262,20 @@ public class ScientificForumBacking implements Serializable {
      * Add the currently selected user to the list of editors.
      */
     public void addEditor() {
-        forumService.addEditor(newEditorInput, forum);
-        editors.add(newEditorInput);
-        //TODO reload list of editors
-        //call onLoad f.e.
-        //does this work? -> ajax
-        //same on other action methods
+        newEditorInput = userService.get(newEditorInput);
+        if (newEditorInput.getId() != null) {
+            forumService.addEditor(newEditorInput, forum);
+            if (!editors.contains(newEditorInput)) {
+                editors.add(newEditorInput);
+            }
+        }
+        newEditorInput = new User();
     }
 
     /**
      * Add the currently selected scienceField to the list of science fields.
      */
     public void addScienceField() {
-        l.severe("sci field added");
         forumService.addScienceField(selectedScienceFieldInput, forum);
         currentScieneFields.add(selectedScienceFieldInput);
         allScienceFields.remove(selectedScienceFieldInput);
@@ -281,7 +286,6 @@ public class ScientificForumBacking implements Serializable {
      *
      */
     public void removeEditor(User editor) {
-        l.severe("Called remove");
         forumService.removeEditor(editor, forum);
         editors.remove(editor);
     }
@@ -323,7 +327,7 @@ public class ScientificForumBacking implements Serializable {
     }
 
     public User getNewEditorInput() {
-        return newEditorInput;
+            return newEditorInput;
     }
 
     public void setNewEditorInput(User newEditorInput) {

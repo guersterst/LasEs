@@ -210,6 +210,7 @@ public class ScientificForumRepository {
             preparedStatement.setString(2, scientificForum.getDescription());
             preparedStatement.setString(3, scientificForum.getUrl());
             preparedStatement.setString(4, scientificForum.getReviewManual());
+            preparedStatement.setInt(6, scientificForum.getId());
 
             if (scientificForum.getDeadline() != null) {
                 preparedStatement.setTimestamp(5, Timestamp.valueOf(scientificForum.getDeadline()));
