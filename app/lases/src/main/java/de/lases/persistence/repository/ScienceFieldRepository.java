@@ -94,7 +94,7 @@ public class ScienceFieldRepository {
         } catch (SQLException e) {
             DatasourceUtil.logSQLException(e, logger);
             transaction.abort();
-            throw new DatasourceQueryFailedException("Science field could not be added", e);
+            throw new DatasourceQueryFailedException("Science field could not be removed", e);
         }
 
     }

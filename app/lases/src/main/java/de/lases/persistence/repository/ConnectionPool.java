@@ -16,6 +16,8 @@ import java.util.logging.Logger;
 
 /**
  * Holds a set of open database connections that can be used by the program.
+ *
+ * @author Sebastian Vogt
  */
 public class ConnectionPool {
 
@@ -187,7 +189,7 @@ public class ConnectionPool {
             connection.setAutoCommit(false);
             return connection;
         } catch(SQLException ex) {
-            throw new DatasourceQueryFailedException("Connection could not"
+            throw new DatasourceQueryFailedException("Connection could not "
                     + "be created.", ex);
         }
     }

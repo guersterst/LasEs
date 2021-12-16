@@ -1,17 +1,27 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+<ui:composition template="/resources/templates/main.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
-<h:head>
-    <title>LasEs - Verification</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrap.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
-</h:head>
+    <f:metadata>
+        <f:viewParam name="validationRandom" value="#{verificationBacking.verification.validationRandom}"/>
+        <f:viewAction action="#{verificationBacking.onLoad}"/>
+    </f:metadata>
+    <ui:define name="title">#{labels['emailVerification']}</ui:define>
 
-<h:body>
-    <h:form>
-        <h:commandButton id="go-to-home-cbtn" action="#{verificationBacking.goToHome}"/>
-    </h:form>
-</h:body>
+    <ui:define name="content">
+        <div class="container">
+            <div class="card">
+                <div class="card-body">
+                    <h:link outcome="/views/authenticated/homepage" id="go-to-homepage-lnk"
+                            value="#{labels['homepageLink']}"
+                            rendered="#{verificationBacking.verification.verified}" styleClass="btn btn-primary"/>
+                    <h:link outcome="/views/anonymous/welcome" id="go-to-welcome-lnk" value="#{labels['welcomeLink']}"
+                            rendered="#{not verificationBacking.verification.verified}" styleClass="btn btn-primary"/>
+                </div>
+            </div>
+        </div>
+    </ui:define>
 
-</html>
+</ui:composition>

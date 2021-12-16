@@ -15,13 +15,18 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.servlet.http.Part;
 
+import java.io.IOException;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Backing bean for the profile page.
+ *
+ * @author Sebastian Vogt
  */
 @ViewScoped
 @Named
@@ -48,6 +53,8 @@ public class ProfileBacking implements Serializable {
     private Part uploadedAvatar;
 
     private User user;
+
+    private User userForAdminSettings;
 
     private List<ScienceField> usersScienceFields;
 
@@ -82,6 +89,13 @@ public class ProfileBacking implements Serializable {
      */
     @PostConstruct
     public void init() {
+        user = new User();
+        scienceFields = new ArrayList<>();
+        usersScienceFields = new ArrayList<>();
+        selectedScienceField = new ScienceField();
+        adminPasswordInPopup = new User();
+
+        scienceFields = scienceFieldService.getList(new ResultListParameters());
     }
 
     /**
@@ -96,19 +110,30 @@ public class ProfileBacking implements Serializable {
      *         the list of science fields of the user
      *     </li>
      * </ul>
+     * @throws IllegalUserFlowException If there is no integer provided as view
+     *                                  param
      */
-    public void onLoad() { }
+    public void onLoad() {
+        if (user.getId() == null) {
+            throw new IllegalUserFlowException("Profile page called without an id");
+        }
+        user = userService.get(user);
+        userForAdminSettings = user.clone();
+        usersScienceFields = scienceFieldService.getList(user, new ResultListParameters());
+    }
 
     /**
      * Checks if the view param is an integer and throws an exception if it is
      * not
      *
-     * @param event The component system event that happens before rendering
-     *              the view param.
      * @throws IllegalUserFlowException If there is no integer provided as view
      *                                  param
      */
-    public void preRenderViewListener(ComponentSystemEvent event) {}
+    public void preRenderViewListener() {
+        if (user.getId() == null) {
+            throw new IllegalUserFlowException("Profile page called without an id.");
+        }
+    }
 
     /**
      * Save the changes to the user profile excluding profile picture,
@@ -117,6 +142,7 @@ public class ProfileBacking implements Serializable {
      * shown that asks the user to check his inbox.
      */
     public void submitChanges() {
+        userService.change(user);
     }
 
     /**
@@ -127,25 +153,25 @@ public class ProfileBacking implements Serializable {
      * be displayed.
      */
     public void submitAdminChanges() {
-
-    }
-    /**
-     * Abort the changes made to the user and show a fresh profile page.
-     */
-    public void abort() {
+        userService.change(userForAdminSettings);
     }
 
 
     /**
      * Set a new avatar for the user.
      */
-    public void uploadAvatar() {
+    public void uploadAvatar() throws IOException {
+        // TODO: Hier IO Exception nach aussen?
+        FileDTO avatar = new FileDTO();
+        avatar.setFile(uploadedAvatar.getInputStream().readAllBytes());
+        userService.setAvatar(avatar, user);
     }
 
     /**
      * Delete the current avatar for the user.
      */
     public void deleteAvatar() {
+        userService.setAvatar(null, user);
     }
 
     /**
@@ -276,7 +302,25 @@ public class ProfileBacking implements Serializable {
      * @return true if they have edit rights.
      */
     public boolean hasViewerEditRights() {
-        return sessionInformation.getUser().getId() == user.getId()
+        return Objects.equals(sessionInformation.getUser(), user)
                 || sessionInformation.getUser().isAdmin();
+    }
+
+    /**
+     * Get the user object that should be used to write the admin changes.
+     *
+     * @return The user.
+     */
+    public User getUserForAdminSettings() {
+        return userForAdminSettings;
+    }
+
+    /**
+     * Set the user object that should be used to write the admin changes.
+     *
+     * @param userForAdminSettings The user.
+     */
+    public void setUserForAdminSettings(User userForAdminSettings) {
+        this.userForAdminSettings = userForAdminSettings;
     }
 }
