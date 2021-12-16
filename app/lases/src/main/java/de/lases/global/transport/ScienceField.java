@@ -1,6 +1,7 @@
 package de.lases.global.transport;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Represents a field of expertise in science.
@@ -31,7 +32,8 @@ public class ScienceField implements Cloneable {
     public ScienceField clone() {
         try {
             ScienceField clone = (ScienceField) super.clone();
-            // TODO: copy mutable state here, so the clone can't change the internals of the original
+
+            // nothing to do here, since science field has only immutable fields.
             return clone;
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
@@ -46,6 +48,12 @@ public class ScienceField implements Cloneable {
      */
     @Override
     public boolean equals(Object object) {
-        return false;
+        if (this == object) return true;
+
+        if (object instanceof ScienceField field) {
+            return Objects.equals(name, field.name);
+        } else {
+            return false;
+        }
     }
 }

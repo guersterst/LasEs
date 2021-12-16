@@ -404,7 +404,8 @@ public class UserRepository {
             }
             // Global Search Word
             for (String ignored : userListColumnNames) {
-                ps.setString(i[0], "%" + Objects.requireNonNullElse(resultListParameters.getGlobalSearchWord(), "") + "%");
+                ps.setString(i[0], "%"
+                        + Objects.requireNonNullElse(resultListParameters.getGlobalSearchWord(), "") + "%");
                 i[0]++;
             }
 

@@ -2,6 +2,7 @@ package de.lases.control.validation;
 
 import de.lases.business.service.UserService;
 import de.lases.global.transport.User;
+import jakarta.enterprise.inject.spi.CDI;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
@@ -26,9 +27,6 @@ public class EmailAddressUnoccupiedValidator implements Validator<String> {
 
     private final Logger l = Logger.getLogger(EmailAddressUnoccupiedValidator.class.getName());
 
-    @Inject
-    private PropertyResourceBundle bundle;
-
     /**
      * Validates an email address as specified in the class description.
      *
@@ -43,6 +41,7 @@ public class EmailAddressUnoccupiedValidator implements Validator<String> {
         User user = new User();
         user.setEmailAddress(address);
         if (userService.emailExists(user)) {
+            PropertyResourceBundle bundle = CDI.current().select(PropertyResourceBundle.class).get();
             l.finer("Validation failed: " + address + " is already in use.");
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, bundle.getString("emailInUse"),
                     null);
