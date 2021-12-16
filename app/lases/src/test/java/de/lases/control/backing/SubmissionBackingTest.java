@@ -89,13 +89,13 @@ class SubmissionBackingTest {
         verify(userService).getList(sub, Privilege.AUTHOR);
         verify(paperService).getList(eq(sub), eq(user), any());
         // TODO mergen von basti
-        verify(reviewService).getList(eq(sub), eq(user), any());
-        // TODO steffi
-        verify(submissionService).getReviewedBy(eq(sub), eq(user));
+//        verify(reviewService).getList(eq(sub), eq(user), any());
+//        verify(submissionService).getReviewedBy(eq(sub), eq(user));
     }
 
     @Test
     void testInitAndOnLoadIllegal() throws Exception {
+        // TODO steffi
         Submission sub = new Submission();
         sub.setId(EXAMPLE_SUBMISSION_ID);
         // User with no rights to view the submission
