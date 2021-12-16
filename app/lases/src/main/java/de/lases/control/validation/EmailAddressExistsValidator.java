@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  * Validator for email addresses that checks if a given email address is part
  * of the datasource.
  */
-@FacesValidator("emailAddressExits")
+@FacesValidator
 public class EmailAddressExistsValidator implements Validator<String> {
 
     @Inject
