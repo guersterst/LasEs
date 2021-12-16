@@ -4,6 +4,7 @@ import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
 import de.lases.persistence.internal.ConfigReader;
 import de.lases.persistence.util.DatasourceUtil;
+import de.lases.persistence.util.TransientSQLExceptionChecker;
 import jakarta.enterprise.inject.spi.CDI;
 
 import java.sql.*;
@@ -220,10 +221,10 @@ public class UserRepository {
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      * @return The user object with his id.
+     * @author Thomas Kirz
      */
     public static User add(User user, Transaction transaction)
             throws DataNotWrittenException {
-        // TODO: Ist noch nicht getestet, habe das nur schnell gebraucht.
         Connection conn = transaction.getConnection();
 
         if (user.getEmailAddress() == null || user.getFirstName() == null || user.getLastName() == null) {
@@ -268,12 +269,14 @@ public class UserRepository {
             user.setId(resultSet.getInt(1));
         } catch (SQLException ex) {
             DatasourceUtil.logSQLException(ex, logger);
-            transaction.abort();
-            throw new DatasourceQueryFailedException("A datasource exception"
-                    + "occurred", ex);
+            if (TransientSQLExceptionChecker.isTransient(ex.getSQLState())) {
+                throw new DataNotWrittenException("User could not be added", ex);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("A datasource exception occurred", ex);
+            }
         }
         return user;
-        // TODO: her auch Exceptins noch besser unterscheiden
     }
 
     /**
@@ -787,9 +790,8 @@ public class UserRepository {
             ResultSet resultSet = stmt.executeQuery();
             return resultSet.next();
         } catch (SQLException e) {
-            // TODO: hier eventuell unter Bedingungen eine checked Exception werfen
-            transaction.abort();
             DatasourceUtil.logSQLException(e, logger);
+            transaction.abort();
             throw new DatasourceQueryFailedException("the datasource could not be queried", e);
         }
     }
