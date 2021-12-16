@@ -5,9 +5,12 @@ import de.lases.control.exception.IllegalAccessException;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.servlet.http.Part;
+
+import java.io.InputStream;
 
 /**
  * Backing bean for the administration page.
@@ -22,6 +25,8 @@ public class AdministrationBacking {
     private SystemSettings systemSettings;
 
     private Part uploadedLogo;
+
+    private static final String PATH_TO_STYLE_DIRECTORY = "design/css/themes/";
 
     /**
      * Loads the current system settings from the datasource.
@@ -90,12 +95,17 @@ public class AdministrationBacking {
     }
 
     /**
-     * Return an array of all values the Style enum can have.
      *
-     * @return ALl options of Style.
+     * @return
      */
+    public String getPathToStyle() {
+
+        InputStream inputStream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/resources/" +  PATH_TO_STYLE_DIRECTORY);
+
+        return null;
+    }
+
     public String[] getStyles() {
-        
         return null;
     }
 }
