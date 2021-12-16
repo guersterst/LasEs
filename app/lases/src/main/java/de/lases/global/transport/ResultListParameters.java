@@ -31,6 +31,11 @@ public class ResultListParameters {
 
     private String globalSearchWord;
 
+    public ResultListParameters() {
+        this.pageNo = 1;
+        this.sortOrder = SortOrder.ASCENDING;
+    }
+
     public int getPageNo() {
         return pageNo;
     }
