@@ -11,10 +11,17 @@
     <ui:define name="title">#{labels['emailVerification']}</ui:define>
 
     <ui:define name="content">
-        <h:link outcome="/views/authenticated/homepage" id="go-to-homepage-lnk" value="#{labels['homepageLink']}"
-                rendered="#{verificationBacking.verification.verified}"/>
-        <h:link outcome="/views/anonymous/welcome" id="go-to-welcome-lnk" value="#{labels['welcomeLink']}"
-                rendered="#{not verificationBacking.verification.verified}"/>
+        <div class="container">
+            <div class="card">
+                <div class="card-body">
+                    <h:link outcome="/views/authenticated/homepage" id="go-to-homepage-lnk"
+                            value="#{labels['homepageLink']}"
+                            rendered="#{verificationBacking.verification.verified}" styleClass="btn btn-primary"/>
+                    <h:link outcome="/views/anonymous/welcome" id="go-to-welcome-lnk" value="#{labels['welcomeLink']}"
+                            rendered="#{not verificationBacking.verification.verified}" styleClass="btn btn-primary"/>
+                </div>
+            </div>
+        </div>
     </ui:define>
 
 </ui:composition>
