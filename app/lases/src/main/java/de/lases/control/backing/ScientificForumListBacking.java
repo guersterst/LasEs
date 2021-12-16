@@ -41,7 +41,10 @@ public class ScientificForumListBacking implements Serializable {
      */
     @PostConstruct
     public void init() {
-        scientificForumPagination = new Pagination<>("title") {
+    }
+
+    private void initPagination() {
+        scientificForumPagination = new Pagination<>("name") {
 
             @Override
             public void loadData() {
@@ -49,17 +52,17 @@ public class ScientificForumListBacking implements Serializable {
                 scientificForumPagination.setEntries(scientificForumService.getList(getResultListParameters()));
             }
 
-
             @Override
             protected Integer calculateNumberPages() {
-                int itemsPerPage = Integer.parseInt(config.getProperty("MAX_PAGINATION_LIST_LENGTH"));
-
-                return (int) Math.ceil((double) scientificForumService.getList(this.getResultListParameters()).size()
-                        / itemsPerPage);
+                return scientificForumService.getListCountPages(scientificForumPagination.getResultListParameters());
             }
         };
         scientificForumPagination.applyFilters();
         scientificForumPagination.loadData();
+    }
+
+    public void onLoad() {
+        initPagination();
     }
 
     /**

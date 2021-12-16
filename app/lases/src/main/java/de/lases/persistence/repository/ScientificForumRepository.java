@@ -1,11 +1,10 @@
 package de.lases.persistence.repository;
 
-import de.lases.global.transport.ResultListParameters;
-import de.lases.global.transport.ScienceField;
-import de.lases.global.transport.ScientificForum;
-import de.lases.global.transport.User;
+import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
+import de.lases.persistence.internal.ConfigReader;
 import de.lases.persistence.util.DatasourceUtil;
+import jakarta.enterprise.inject.spi.CDI;
 import org.postgresql.util.PSQLException;
 
 import java.sql.*;
@@ -273,6 +272,10 @@ public class ScientificForumRepository {
         }
     }
 
+    private static boolean isFilled(String s) {
+        return s != null && !s.isEmpty();
+    }
+
     /**
      * Gets a list all scientific forums.
      *
@@ -287,31 +290,108 @@ public class ScientificForumRepository {
     public static List<ScientificForum> getList(Transaction transaction,
                                                 ResultListParameters
                                                         resultListParameters) {
+        if (transaction == null) {
+            l.severe("Passed transaction is null.");
+            throw new IllegalArgumentException("Transaction must not be null.");
+        }
+        if (resultListParameters == null) {
+            l.severe("Passed result-list parameters is null.");
+            throw new IllegalArgumentException("ResultListParameters must not be null.");
+        }
+
         Connection conn = transaction.getConnection();
+        ResultSet resultSet;
+        List<ScientificForum> scientificForums = new ArrayList<>();
 
-        String query = """
-                SELECT name FROM scientific_forum
-                WHERE name ILIKE ?
-                """;
+        try (PreparedStatement ps = conn.prepareStatement(getStatementForumList(resultListParameters, false))) {
+            if (isFilled(resultListParameters.getFilterColumns().get("name"))) {
+                ps.setString(1, "%" + resultListParameters.getFilterColumns().get("name") + "%");
 
-        try (PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setString(1,
-                    "%" + Objects.requireNonNullElse(resultListParameters.getGlobalSearchWord(), "") + "%");
-            ResultSet resultSet = stmt.executeQuery();
-
-            List<ScientificForum> scientificForums = new ArrayList<>();
-            while (resultSet.next()) {
-                ScientificForum scientificForum = createScientificForumFromResultSet(resultSet);
-                scientificForums.add(scientificForum);
             }
 
-            resultSet.close();
-            return scientificForums;
+            resultSet = ps.executeQuery();
+
+            while (resultSet.next()) {
+                ScientificForum forum = createScientificForumFromResultSet(resultSet);
+                scientificForums.add(forum);
+            }
         } catch (SQLException e) {
-            DatasourceUtil.logSQLException(e, l);
-            transaction.abort();
-            throw new DatasourceQueryFailedException("Science field could not be added", e);
+            l.severe(e.getMessage());
+            throw new DatasourceQueryFailedException(e.getMessage(), e);
         }
+        return scientificForums;
+    }
+
+    private static String getStatementForumList(ResultListParameters resultListParameters, boolean doCount) {
+        StringBuilder sb = new StringBuilder();
+
+        if (doCount) {
+            sb.append("SELECT COUNT (DISTINCT f.name) as count\n");
+        } else {
+            sb.append("SELECT *\n");
+        }
+
+        sb.append("""
+                FROM scientific_forum f
+                """).append("\n");
+
+        if (isFilled(resultListParameters.getFilterColumns().get("name"))) {
+            sb.append(" AND f.name ILIKE ?\n");
+        }
+
+        if (!doCount) {
+            if (isFilled(resultListParameters.getSortColumn())) {
+                if (resultListParameters.getSortColumn().equals("name")) {
+                    sb.append("ORDER BY f.name");
+                } else {
+                    sb.append("ORDER BY f.").append(resultListParameters.getSortColumn());
+                }
+                sb.append(" ")
+                        .append(resultListParameters.getSortOrder() == SortOrder.ASCENDING ? "ASC" : "DESC")
+                        .append("\n");
+            }
+
+            // Set limit and offset
+            ConfigReader configReader = CDI.current().select(ConfigReader.class).get();
+            int paginationLength = Integer.parseInt(configReader.getProperty("MAX_PAGINATION_LIST_LENGTH"));
+            sb.append("LIMIT ").append(paginationLength)
+                    .append(" OFFSET ").append(paginationLength * (resultListParameters.getPageNo() - 1));
+        }
+
+        return sb.toString();
+    }
+
+
+    public static int getCountItemsList(Transaction transaction, ResultListParameters resultListParameters)
+            throws DataNotCompleteException, NotFoundException {
+        if (transaction == null) {
+            l.severe("Passed transaction is null.");
+            throw new IllegalArgumentException("Transaction can not be null.");
+        }
+        if (resultListParameters == null) {
+            l.severe("Passed result-list parameters is null.");
+            throw new IllegalArgumentException("ResultListParameters must not be null.");
+        }
+
+        Connection connection = transaction.getConnection();
+        ResultSet resultSet;
+
+        try (PreparedStatement ps = connection.prepareStatement(getStatementForumList(resultListParameters, true))) {
+            if (isFilled(resultListParameters.getFilterColumns().get("name"))) {
+                ps.setString(1, "%" + resultListParameters.getFilterColumns().get("name") + "%");
+            }
+            resultSet = ps.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getInt("count");
+            }
+
+        } catch (SQLException e) {
+            l.severe(e.getMessage());
+            throw new DatasourceQueryFailedException(e.getMessage(), e);
+        }
+
+        return -1;
     }
 
     /**

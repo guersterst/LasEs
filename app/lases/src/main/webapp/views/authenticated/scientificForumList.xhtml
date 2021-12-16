@@ -4,18 +4,96 @@
                 xmlns:pg="http://xmlns.jcp.org/jsf/composite/templates/composites/pagination"
                 xmlns:col="http://xmlns.jcp.org/jsf/composite/templates/composites/sortsearchcolumn"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <!-- page title -->
     <!--todo-->
     <ui:define name="title">TODO</ui:define>
 
-    <!-- content of scientificForum.xhtml -->
-    <ui:define name="content">
+    <f:metadata>
+        <f:viewAction action="#{scientificForumListBacking.onLoad()}"/>
+    </f:metadata>
 
-        <f:metadata>
-            <f:viewParam value="#{scientificForumBacking.forum.id}" name="id"/>
-            <f:event type="preRenderView" listener="#{scientificForumBacking.preRenderViewListener}"/>
-            <f:viewAction action="#{scientificForumBacking.onLoad()}"/>
-        </f:metadata>
+    <!-- content of scientificForumList.xhtml -->
+    <ui:define name="content">
+        <div id="forum-list-pagination" class="col-md-10">
+            <div class="container mt-5">
+                <div class="card">
+                    <div class="card-body">
+                        <h:form>
+
+
+                            <!-- Filter controls -->
+                            <!--
+                            <div class="btn-group">
+
+                                <h:selectOneMenu id="date-slctom"
+                                                 value="#{scientificForumListBacking.scientificForumPagination.resultListParameters.dateSelect}"
+                                                 title="#{help.dateSelect}"
+                                                 styleClass="btn btn-secondary">
+                                    <f:selectItems value="#{scientificForumListBacking.dateSelects}"
+                                                   var="select"
+                                                   itemLabel="#{labels['dateSelect.' += select]}"
+                                                   itemValue="#{select}"/>
+                                </h:selectOneMenu>
+
+
+                                <h:selectOneMenu id="state-slctom"
+                                                 value="#{scientificForumListBacking.submissionPagination.resultListParameters.submissionState}"
+                                                 title="#{help.stateSubSelect}"
+                                                 styleClass="btn btn-secondary">
+                                    <f:selectItem itemValue="#{null}"
+                                                  itemLabel="#{labels['stateSelect.ALL']}"/>
+                                    <f:selectItems value="#{scientificForumBacking.submissionStates}"
+                                                   var="select"
+                                                   itemLabel="#{labels['stateSelect.' += select]}"
+                                                   itemValue="#{select}"/>
+                                </h:selectOneMenu>
+                            </div>
+                    -->
+
+                            <pg:pagination paginator="#{scientificForumListBacking.scientificForumPagination}">
+
+                                <h:column>
+                                    <f:facet name="header">
+                                        <col:sortsearchcolumn id="name-ssc"
+                                                              paginator="#{scientificForumListBacking.scientificForumPagination}"
+                                                              columnIdentifier="name"
+                                                              columnNamei18n="#{labels.name}"/>
+                                    </f:facet>
+                                    <h:link value="#{var.title}"
+                                            outcome="/views/authenticated/scientificForum"
+                                            includeViewParams="true">
+                                        <f:param name="id" value="#{var.id}"/>
+                                    </h:link>
+                                </h:column>
+
+                                <h:column>
+                                    <f:facet name="header">
+                                        <div class="input-group">
+                                            <h:outputText value="#{labels.deadline}"
+                                                          styleClass="input-group-text"/>
+                                        </div>
+                                    </f:facet>
+                                    <h:outputText value="#{var.deadline}">
+                                        <f:convertDateTime type="localDate"/>
+                                    </h:outputText>
+                                </h:column>
+
+                                <h:column>
+                                    <f:facet name="header">
+                                        <div class="input-group">
+                                            <h:outputText value="#{labels.description}"
+                                                          styleClass="input-group-text"/>
+                                        </div>
+                                    </f:facet>
+                                    <h:outputText id="description-otxt" value="#{var.description}"/>
+                                </h:column>
+                            </pg:pagination>
+                        </h:form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>

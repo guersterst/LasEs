@@ -2,12 +2,11 @@ package de.lases.business.service;
 
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
-import de.lases.persistence.repository.ScienceFieldRepository;
-import de.lases.persistence.repository.ScientificForumRepository;
-import de.lases.persistence.repository.Transaction;
-import de.lases.persistence.repository.UserRepository;
+import de.lases.persistence.internal.ConfigReader;
+import de.lases.persistence.repository.*;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
+import jakarta.enterprise.inject.spi.CDI;
 import jakarta.inject.Inject;
 
 import java.io.Serial;
@@ -366,14 +365,38 @@ public class ScientificForumService implements Serializable {
     }
 
     /**
-     * Gets all scientific forums.
+     * Gets all {@link Review}s that can be viewed by a given {@link User}.
+     * For example, a reviewer can only view his own reviews.
      *
-     * @param resultListParams The parameters, that control filtering and sorting of the resulting list.
-     * @return All scientific forums.
+     * @param resultListParameters The parameters, that control filtering and
+     *                             sorting of the resulting list.
+     * @return The requested reviews, which the given user is allowed to view.
      */
-    public List<ScientificForum> getList(ResultListParameters resultListParams) {
+    public List<ScientificForum> getList(ResultListParameters resultListParameters) {
         Transaction transaction = new Transaction();
-        l.finer("Fetched all scientific forums.");
-        return ScientificForumRepository.getList(transaction, resultListParams);
+        try {
+            return ScientificForumRepository.getList(transaction, resultListParameters);
+        } finally {
+            transaction.commit();
+        }
+    }
+
+    public int getListCountPages(ResultListParameters resultListParameters) {
+        Transaction transaction = new Transaction();
+        int items = 0;
+        int pages = 0;
+        try {
+            items = ScientificForumRepository.getCountItemsList(transaction, resultListParameters);
+            ConfigReader configReader = CDI.current().select(ConfigReader.class).get();
+            int paginationLength = Integer.parseInt(configReader.getProperty("MAX_PAGINATION_LIST_LENGTH"));
+
+            // Calculate number of pages.
+            pages =  (int) Math.ceil((double) items / paginationLength);
+        } catch (DataNotCompleteException | NotFoundException e) {
+            l.severe(e.getMessage());
+        } finally {
+            transaction.commit();
+        }
+        return pages;
     }
 }
