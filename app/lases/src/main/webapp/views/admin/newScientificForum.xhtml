@@ -1,0 +1,111 @@
+<!--Please take care about following: Don not add something outside of ui:composition. JSF would just ignore this-->
+<ui:composition template="/resources/templates/main.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui" xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+
+    <ui:define name="title">#{''.concat(labels.appName).concat(' - ').concat(labels.newForumTitle)}</ui:define>
+
+    <ui:define name="content">
+
+        <f:metadata>
+            <f:importConstants type="de.lases.control.internal.Constants" var="Const"/>
+        </f:metadata>
+
+        <div class="col d-flex justify-content-center">
+            <div class="card" id="new-forum-box" style="max-width: 70rem; min-width: 50rem">
+                <div id="new-forum-card-body" class="card-body">
+                    <h2>#{labels.newForumTitle}</h2>
+                    <hr/>
+                    <h:form id="create-forum-form">
+                        <div class="form-group" style="margin-top: 1rem">
+                            <label for="forum-name-itxt">#{labels.newForumName}</label>
+                            <h:inputText id="forum-name-itxt"
+                                         value="#{newScientificForumBacking.newScientificForum.name}"
+                                         a:placeholder="#{labels.newForumNamePlaceHolder}"
+                                         styleClass="form-control" required="true"
+                                         requiredMessage="message.forumName"
+                                         maxlength="#{Const.FORUM_NAME_MAX}"/>
+                        </div>
+
+                        <div class="form-group" style="margin-top: 1rem">
+                            <label for="editor-list">#{labels.newForumEditors}</label>
+                            <h:dataTable id="editor-list"
+                                         value="#{newScientificForumBacking.editors}" var="item"
+                                         styleClass="table table-striped">
+                                <h:column>
+                                    <f:facet name="header">
+                                        <div class="input-group">
+                                            <h:outputText id="email-col" value="#{labels.email}"
+                                                          styleClass=""/>
+                                        </div>
+                                    </f:facet>
+                                    <h:outputText id="email-address-otxt" value="#{item.emailAddress}"/>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">
+                                        <div class="input-group">
+                                            <h:outputText id="firstname-col" value="#{labels.firstName}"
+                                                          styleClass=""/>
+                                        </div>
+                                    </f:facet>
+                                    <h:outputText id="firstname-otxt" value="#{item.firstName}"/>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">
+                                        <div class="input-group">
+                                            <h:outputText id="lastname-col" value="#{labels.lastName}"
+                                                          styleClass=""/>
+                                        </div>
+                                    </f:facet>
+                                    <h:outputText id="lastname-otxt" value="#{item.lastName}"/>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">
+                                        <div class="input-group">
+                                            <h:outputText id="remove-col" value="#{labels.delete}"
+                                                          styleClass=""/>
+                                        </div>
+                                    </f:facet>
+                                    <h:commandButton id="delete-editor-btn" value="#{labels.delete}"
+                                                     action="#{newScientificForumBacking.removeEditor(item)}"
+                                                     styleClass="btn btn-outline-dark"/>
+                                </h:column>
+                            </h:dataTable>
+                        </div>
+
+                        <div class="form-group" style="margin-top: 1rem">
+                            <label for="email-editor-itxt">#{labels.newForumEditorAdd}</label>
+                            <h:inputText id="email-editor-itxt"
+                                         value="#{newScientificForumBacking.newEditorInput.emailAddress}"
+                                         a:placeholder="#{labels.newForumEditorEmailPlaceHolder}"
+                                         styleClass="form-control"/>
+
+                            <h:commandButton id="add-editor-btn" type="submit" value="#{labels.add}"
+                                             action="#{newScientificForumBacking.addEditor()}"
+                                             title="#{help.addEditor}"/>
+                        </div>
+
+                        <div class="form-group">
+                            <hr/>
+                            <h:commandButton id="save-btn" value="#{labels.newForumCreate}"
+                                             action="#{newScientificForumBacking.create()}"
+                                             title="#{help.newForumCreate}"
+                                             style="margin: 3px"
+                                             type="submit"/>
+                            <h:commandButton id="abort-btn" value="#{labels.newForumAbort}"
+                                             action="#{newScientificForumBacking.abort()}"
+                                             title="#{help.newForumAbort}"
+                                             style="margin: 3px"
+                                             type="submit"/>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+</ui:composition>

@@ -2,7 +2,9 @@ package de.lases.control.backing;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import de.lases.business.service.ScienceFieldService;
 import de.lases.business.service.ScientificForumService;
@@ -17,6 +19,8 @@ import jakarta.inject.Named;
 
 /**
  * Backing bean for the new scientific forum page.
+ *
+ * @author Johann Schicho
  */
 @ViewScoped
 @Named
@@ -70,12 +74,20 @@ public class NewScientificForumBacking implements Serializable {
      */
     @PostConstruct
     public void init() {
+        newScientificForum = new ScientificForum();
+        newEditorInput = new User();
+        editors = new ArrayList<>();
     }
 
     /**
      * Add the editor that is currently entered to the list of editors.
      */
     public void addEditor() {
+        Random random = new Random();
+        newEditorInput.setId(random.nextInt());
+        editors.add(newEditorInput);
+        // reset new editor
+        newEditorInput = new User();
     }
 
     /**
@@ -84,6 +96,7 @@ public class NewScientificForumBacking implements Serializable {
      * @param editor Editor to remove.
      */
     public void removeEditor(User editor) {
+        editors.remove(editor);
     }
 
     /**
