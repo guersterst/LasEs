@@ -21,7 +21,7 @@ public class ResultListParameters {
 
     private Visibility visibleFilter;
 
-    private boolean recommendationFilter;
+    private Recommendation recommendedFilter = Recommendation.ALL;
 
     private int pageNo;
 
@@ -83,17 +83,17 @@ public class ResultListParameters {
         this.visibleFilter = visibleFilter;
     }
 
-    public boolean isRecommendationFilter() {
-        return recommendationFilter;
+    public Recommendation getRecommendedFilter() {
+        return recommendedFilter;
     }
 
     /**
      * Set filtering for a recommendation (only used by reviews).
      *
-     * @param recommendationFilter true/false.
+     * @param recommendedFilter true/false.
      */
-    public void setRecommendationFilter(boolean recommendationFilter) {
-        this.recommendationFilter = recommendationFilter;
+    public void setRecommendedFilter(Recommendation recommendedFilter) {
+        this.recommendedFilter = recommendedFilter;
     }
 
     /**

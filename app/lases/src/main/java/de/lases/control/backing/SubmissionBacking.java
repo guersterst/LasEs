@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PropertyResourceBundle;
+import java.util.logging.Logger;
 
 /**
  * @author Stefanie Gürster
@@ -56,9 +57,6 @@ public class SubmissionBacking implements Serializable {
     private PaperService paperService;
 
     @Inject
-    private NewReviewBacking newReviewBacking;
-
-    @Inject
     private ToolbarBacking toolbarBacking;
 
     @Inject
@@ -66,6 +64,8 @@ public class SubmissionBacking implements Serializable {
 
     @Inject
     private transient PropertyResourceBundle resourceBundle;
+
+    private static final Logger logger = Logger.getLogger(SubmissionBacking.class.getName());
 
     private Part uploadedRevisionPDF;
 
@@ -75,13 +75,13 @@ public class SubmissionBacking implements Serializable {
 
     private List<User> coAuthors;
 
+    private List<User> reviewers;
+
     private User author;
 
     private Pagination<Paper> paperPagination;
 
     private Pagination<Review> reviewPagination;
-
-    private ReviewedBy reviewedBy;
 
     private Paper newestPaper;
 
@@ -136,6 +136,17 @@ public class SubmissionBacking implements Serializable {
             }
         };
 
+        reviewPagination = new Pagination<Review>("version") {
+            @Override
+            public void loadData() {
+                reviewPagination.setEntries(reviewService.getList(submission, sessionInformation.getUser(), reviewPagination.getResultListParameters()));
+            }
+
+            @Override
+            protected Integer calculateNumberPages() {
+                return reviewService.getListCountPages(submission, sessionInformation.getUser(), reviewPagination.getResultListParameters());
+            }
+        };
     }
 
     /**
@@ -169,27 +180,31 @@ public class SubmissionBacking implements Serializable {
      * @throws IllegalAccessException If the user has no access rights for this
      *                                submission
      */
-    public void onLoad() {/*
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        if (!facesContext.isPostback()) {
-            //TODO: rausnehmen.
-
-        }*/
+    public void onLoad() {
         submission = submissionService.get(submission);
 
-        author.setId(submission.getAuthorId());
-        author = userService.get(author);
+        if (submissionService.canView(submission, sessionInformation.getUser())) {
+            author.setId(submission.getAuthorId());
+            author = userService.get(author);
 
-        scientificForum.setId(submission.getScientificForumId());
-        scientificForum = scientificForumService.get(scientificForum);
+            scientificForum.setId(submission.getScientificForumId());
+            scientificForum = scientificForumService.get(scientificForum);
 
-        coAuthors = userService.getList(submission, Privilege.AUTHOR);
+            newestPaper = paperService.getLatest(submission);
 
-        coAuthors.removeIf(user -> user.getId().equals(author.getId()));
+            coAuthors = userService.getList(submission, Privilege.AUTHOR);
+            coAuthors.removeIf(user -> user.getId().equals(author.getId()));
 
-        paperPagination.loadData();
+            reviewers = userService.getList(submission, Privilege.REVIEWER);
 
+            paperPagination.loadData();
+            reviewPagination.loadData();
 
+            toolbarBacking.onLoad(submission);
+        } else {
+            logger.severe("Access denied to submission: " + submission.getId() + " for user with id: " + sessionInformation.getUser().getId());
+            throw new IllegalAccessException("Access denied to this submission because user is not allowed to access it.");
+        }
     }
 
 
@@ -197,13 +212,10 @@ public class SubmissionBacking implements Serializable {
      * Checks if the view param is an integer and throws an exception if it is
      * not
      *
-     * @param event The component system event that happens before rendering
-     *              the view param.
      * @throws IllegalUserFlowException If there is no integer provided as view
      *                                  param
      */
-    public void preRenderViewListener(ComponentSystemEvent event) {
-    }
+    public void preRenderViewListener(ComponentSystemEvent event) {}
 
     /**
      * Set the state of the submission, which can be SUBMITTED,
@@ -221,6 +233,34 @@ public class SubmissionBacking implements Serializable {
      * @throws IOException If the download fails.
      */
     public void downloadReview(Review review) throws IOException {
+        FileDTO file = reviewService.getFile(review);
+        byte[] pdf = file.getFile();
+
+        if (pdf == null) {
+            // Error occured and a message event has been fired by the service.
+            return;
+        }
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(pdf.length);
+        baos.write(pdf, 0, pdf.length);
+
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+
+        HttpServletResponse response = (HttpServletResponse) facesContext.getExternalContext().getResponse();
+        response.setContentType(submission.getTitle() + "/pdf");
+        response.setContentLength(pdf.length);
+        response.setHeader("Content-disposition", "attachment;filename=review_" + getReviewerForReview(review).getLastName() + "_" + submission.getTitle() + ".pdf");
+
+        try {
+            ServletOutputStream outputStream = response.getOutputStream();
+            baos.writeTo(outputStream);
+            outputStream.flush();
+            response.flushBuffer();
+        } catch (IOException exception) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("failedDownload"), MessageCategory.WARNING));
+        }
+
+        facesContext.responseComplete();
     }
 
     /**
@@ -229,6 +269,11 @@ public class SubmissionBacking implements Serializable {
      * @param review The review to release.
      */
     public void releaseReview(Review review) {
+        if (review == null) {
+            throw new IllegalArgumentException("Cannot release null review");
+        }
+        review.setVisible(true);
+        reviewService.change(review);
     }
 
     /**
@@ -270,7 +315,27 @@ public class SubmissionBacking implements Serializable {
      * @return The page for a new review
      */
     public String uploadReview() {
-        return null;
+        return "/views/reviewer/newReview.xhtml?faces-redirect=true&id=" + submission.getId();
+    }
+
+    /**
+     * Checks if the "upload review" button should be disabled.
+     * Disabled if reviewer has already uploaded a review.
+     * @return whether the button needs to be disabled.
+     */
+    public boolean disableReviewUploadButton() {
+        boolean disable = true;
+        if (sessionInformation.getUser().isAdmin() || loggedInUserIsReviewer()) {
+            Review reviewAlreadyWritten = new Review();
+            reviewAlreadyWritten.setSubmissionId(submission.getId());
+            reviewAlreadyWritten.setReviewerId(sessionInformation.getUser().getId());
+            reviewAlreadyWritten.setPaperVersion(newestPaper.getVersionNumber());
+            // Only render if no review has been written yet.
+            if (reviewService.get(reviewAlreadyWritten) == null && newestPaper.isVisible()) {
+                disable = false;
+            }
+        }
+        return disable;
     }
 
     /**
@@ -279,6 +344,9 @@ public class SubmissionBacking implements Serializable {
      * @param user The user that accepted to be a reviewer.
      */
     public void acceptReviewing(User user) {
+        ReviewedBy update = submissionService.getReviewedBy(submission, user);
+        update.setHasAccepted(AcceptanceStatus.ACCEPTED);
+        submissionService.changeReviewedBy(update);
     }
 
     /**
@@ -287,6 +355,27 @@ public class SubmissionBacking implements Serializable {
      * @param user The user that declined to be a reviewer.
      */
     public void declineReviewing(User user) {
+        ReviewedBy update = submissionService.getReviewedBy(submission, user);
+        update.setHasAccepted(AcceptanceStatus.REJECTED);
+        submissionService.changeReviewedBy(update);
+    }
+
+    /**
+     * Get the Deadline for a reviewer.
+     * @param user user DTO of the reviewer with a valid ID.
+     * @return LocalDateTime of the Deadline
+     */
+    public LocalDateTime getDeadlineForReviewer(User user) {
+        ReviewedBy reviewedBy = reviewedByForUser(user);
+        if (reviewedBy != null) {
+            return reviewedBy.getTimestampDeadline();
+        } else {
+            return LocalDateTime.of(1970, 1, 1, 0, 0);
+        }
+    }
+
+    private ReviewedBy reviewedByForUser(User user) {
+        return submissionService.getReviewedBy(submission, user);
     }
 
     /**
@@ -317,6 +406,11 @@ public class SubmissionBacking implements Serializable {
      * @return The reviewer who submitted the review.
      */
     public User getReviewerForReview(Review review) {
+        for (User reviewer: reviewers) {
+            if (reviewer.getId() == review.getReviewerId()) {
+                return reviewer;
+            }
+        }
         return null;
     }
 
@@ -330,13 +424,6 @@ public class SubmissionBacking implements Serializable {
         return author;
     }
 
-    /**
-     * Apply changes for the submission state.
-     */
-    public void applyState() {
-        submission.setRevisionRequired(submission.getState() == SubmissionState.REVISION_REQUIRED);
-        submissionService.change(submission.clone());
-    }
 
     /**
      * Upload a new revision as a pdf.
@@ -360,8 +447,11 @@ public class SubmissionBacking implements Serializable {
             Submission newSubmission = submission.clone();
             newSubmission.setState(SubmissionState.SUBMITTED);
             newSubmission.setRevisionRequired(newSubmission.getState() == SubmissionState.REVISION_REQUIRED);
+            newSubmission.setDeadlineRevision(null);
 
             submissionService.change(newSubmission);
+            submission = newSubmission;
+            toolbarBacking.onLoad(submission);
 
         }catch (IOException e) {
 
@@ -402,6 +492,20 @@ public class SubmissionBacking implements Serializable {
     public void setUploadedRevisionPDF(Part uploadedRevisionPDF) {
         this.uploadedRevisionPDF = uploadedRevisionPDF;
     }
+
+    /**
+     * Apply changes for the submission state.
+     */
+    /*
+    public void applyState(Submission submission) {
+
+        if (submission.getState() != SubmissionState.REVISION_REQUIRED) {
+            submission.setDeadlineRevision(null);
+        }
+        submissionService.change(submission);
+    }
+
+     */
 
     /**
      * Get the submission this page belongs to.
@@ -507,13 +611,12 @@ public class SubmissionBacking implements Serializable {
     }
 
     /**
-     * Get the possible reviewed-by relationship between this submission and
-     * the logged-in user. May be null if there is none.
+     * Array  of all possible recommendation filter options.
      *
-     * @return Reviewed-by between the logged-in user and this submission.
+     * @return All options.
      */
-    public ReviewedBy getReviewedBy() {
-        return reviewedBy;
+    public Recommendation[] getRecommendation() {
+        return Recommendation.values();
     }
 
     /**
@@ -531,7 +634,8 @@ public class SubmissionBacking implements Serializable {
      * @return Is the logged-in user editor of this submission?
      */
     public boolean loggedInUserIsEditor() {
-        return sessionInformation.getUser().getId().equals(submission.getEditorId());
+        boolean b = sessionInformation.getUser().getId().equals(submission.getEditorId()) || sessionInformation.getUser().isAdmin();
+        return b;
     }
 
     /**
@@ -540,6 +644,25 @@ public class SubmissionBacking implements Serializable {
      * @return Is the logged-in user reviewer of this submission?
      */
     public boolean loggedInUserIsReviewer() {
-        return false;
+        return reviewers.contains(sessionInformation.getUser());
+    }
+
+    /**
+     * Return if the logged-in user is a reviewer of this submission,
+     * and whether they have accepted the review request.
+     *
+     * @return false if user is not a reviewer, yes or no depending on the acceptance state.
+     */
+    public boolean loggedInUserHasPendingReviewRequest() {
+        if (loggedInUserIsReviewer()) {
+            ReviewedBy reviewedBy = submissionService.getReviewedBy(submission, sessionInformation.getUser());
+            if (reviewedBy == null) {
+                return false;
+            } else {
+                return reviewedBy.getHasAccepted() == AcceptanceStatus.NO_DECISION;
+            }
+        } else {
+            return false;
+        }
     }
 }

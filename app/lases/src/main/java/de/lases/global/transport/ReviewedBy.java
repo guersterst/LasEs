@@ -8,9 +8,9 @@ import java.time.LocalDateTime;
  */
 public class ReviewedBy implements Cloneable {
 
-    private int reviewerId;
+    private Integer reviewerId;
 
-    private int submissionId;
+    private Integer submissionId;
 
     private LocalDateTime timestampDeadline;
 
@@ -20,7 +20,7 @@ public class ReviewedBy implements Cloneable {
         return timestampDeadline;
     }
 
-    public int getReviewerId() {
+    public Integer getReviewerId() {
         return reviewerId;
     }
 
@@ -29,11 +29,11 @@ public class ReviewedBy implements Cloneable {
      *
      * @param reviewerId Id of the reviewer.
      */
-    public void setReviewerId(int reviewerId) {
+    public void setReviewerId(Integer reviewerId) {
         this.reviewerId = reviewerId;
     }
 
-    public int getSubmissionId() {
+    public Integer getSubmissionId() {
         return submissionId;
     }
 
@@ -42,7 +42,7 @@ public class ReviewedBy implements Cloneable {
      *
      * @param submissionId Id of the submission.
      */
-    public void setSubmissionId(int submissionId) {
+    public void setSubmissionId(Integer submissionId) {
         this.submissionId = submissionId;
     }
 
@@ -78,7 +78,10 @@ public class ReviewedBy implements Cloneable {
     public ReviewedBy clone() {
         try {
             ReviewedBy clone = (ReviewedBy) super.clone();
-            // TODO: copy mutable state here, so the clone can't change the internals of the original
+            /*
+             * Nothing to do here, since all references of Submission are
+             * immutable.
+             */
             return clone;
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
