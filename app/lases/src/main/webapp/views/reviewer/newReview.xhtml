@@ -1,0 +1,53 @@
+<!--Please take care about following: Don not add something outside of ui:composition. JSF would just ignore this-->
+<ui:composition template="/resources/templates/main.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui" xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+
+    <ui:define name="title">#{''.concat(labels.appName).concat(' - ').concat('Upload')}</ui:define>
+
+    <ui:define name="content">
+        <f:metadata>
+            <f:viewParam name="id" value="#{newReviewBacking.review.submissionId}"/>
+            <f:viewAction action="#{newReviewBacking.onLoad()}"/>
+        </f:metadata>
+
+        <div class="col d-flex justify-content-center">
+            <div class="card" id="review-upload-box" style="width: 50rem;">
+                <div id="upload-box-body" class="card-body">
+                    <h2>#{labels.uploadReview}</h2>
+                    <hr/>
+                    <h:form id="upload-review-form" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="comment-itxt-area">#{labels.reviewComment}</label>
+                            <h:inputTextarea id="comment-itxt-area" value="#{newReviewBacking.review.comment}"
+                                             a:placeholder="#{labels.reviewCommentPlaceHolder}"
+                                             styleClass="form-control" required="false" rows="10"/>
+                        </div>
+                        <div class="form-group" style="margin-top: 1rem">
+                            <label for="recommend-cbx">#{labels.reviewRecommendation}</label>
+                            <h:selectBooleanCheckbox id="recommend-cbx" value="#{newReviewBacking.review.acceptPaper}" style="margin-left: 1rem"/>
+                        </div>
+                        <div class="form-group">
+                            <h:inputFile id="pdf-upload-ifile" value="#{newReviewBacking.uploadedPDF}"
+                                         required="false"
+                                         validator="pdfValidator"
+                                         class="form-control"/>
+                            <h:message for="pdf-upload-ifile"/>
+                        </div>
+                        <div class="form-group">
+                            <hr/>
+                            <h:commandButton id="upload-cbtn" value="#{labels.uploadReview}"
+                                             action="#{newReviewBacking.addReview()}"
+                                             title="#{help.uploadDesc}"/>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+</ui:composition>

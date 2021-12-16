@@ -1,21 +1,24 @@
 package de.lases.persistence.repository;
 
-import de.lases.control.internal.LifeTimeListener;
 import de.lases.global.transport.FileDTO;
 import de.lases.global.transport.ResultListParameters;
 import de.lases.global.transport.ScienceField;
 import de.lases.global.transport.ScientificForum;
-import de.lases.persistence.exception.*;
+import de.lases.persistence.exception.DataNotCompleteException;
+import de.lases.persistence.exception.DataNotWrittenException;
+import de.lases.persistence.exception.KeyExistsException;
+import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.internal.ConfigReader;
-import de.lases.persistence.util.DatasourceUtil;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.context.SessionScoped;
 import org.jboss.weld.junit5.WeldInitiator;
 import org.jboss.weld.junit5.WeldJunit5Extension;
 import org.jboss.weld.junit5.WeldSetup;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.InputStream;
 import java.sql.Connection;
@@ -23,6 +26,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(WeldJunit5Extension.class)
 class ScienceFieldRepositoryTest {
