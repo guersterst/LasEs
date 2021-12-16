@@ -1,6 +1,7 @@
 package de.lases.business.service;
 
 import de.lases.business.util.AvatarUtil;
+import de.lases.business.util.Hashing;
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
 import de.lases.persistence.repository.Transaction;
@@ -84,9 +85,14 @@ public class UserService implements Serializable {
     public void change(User newUser) {
         Transaction transaction = new Transaction();
         // TODO: Email verification process
+        newUser.setPasswordSalt(Hashing.generateRandomSalt());
+        newUser.setPasswordHashed(Hashing.hashWithGivenSalt(newUser.getPasswordNotHashed(),
+                newUser.getPasswordSalt()));
         try {
             UserRepository.change(newUser, transaction);
             transaction.commit();
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataSaved"),
+                    MessageCategory.INFO));
         } catch (NotFoundException e) {
             transaction.abort();
             uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("userNotFound"),

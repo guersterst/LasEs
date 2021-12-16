@@ -279,9 +279,9 @@ public class UserRepository {
 
     /**
      * Changes the given user in the repository. All fields that are not
-     * required (except for the avatar, which has its own methods) will be deleted if left empty. Left empty means
-     * having the value null in this context. This means that primitive types will always be written through and
-     * cannot be deleted.
+     * required will be deleted if left empty. Exceptions to this are the avatar and the unhashed password, which
+     * are ignored. Left empty means having the value null in this context. This means that primitive types will always
+     * be written through and cannot be deleted.
      *
      * @param user        A user dto with all required fields. Required are:
      *                    <ul>
@@ -332,12 +332,13 @@ public class UserRepository {
             stmt.setBoolean(2, user.isAdmin());
             stmt.setString(3, user.getFirstName());
             stmt.setString(4, user.getLastName());
-            stmt.setString(4, user.getTitle());
-            stmt.setString(5, user.getEmployer());
-            stmt.setDate(6, Date.valueOf(user.getDateOfBirth()));
-            stmt.setBoolean(7, user.isRegistered());
-            stmt.setString(8, user.getPasswordHashed());
-            stmt.setString(9, user.getPasswordSalt());
+            stmt.setString(5, user.getTitle());
+            stmt.setString(6, user.getEmployer());
+            stmt.setDate(7, user.getDateOfBirth() == null ? null : Date.valueOf(user.getDateOfBirth()));
+            stmt.setBoolean(8, user.isRegistered());
+            stmt.setString(9, user.getPasswordHashed());
+            stmt.setString(10, user.getPasswordSalt());
+            stmt.setInt(11, user.getId());
             int rowCount = stmt.executeUpdate();
 
             if (rowCount == 0) {

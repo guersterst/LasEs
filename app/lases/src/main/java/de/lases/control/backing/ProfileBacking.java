@@ -25,6 +25,8 @@ import java.util.Objects;
 
 /**
  * Backing bean for the profile page.
+ *
+ * @author Sebastian Vogt
  */
 @ViewScoped
 @Named
@@ -51,6 +53,8 @@ public class ProfileBacking implements Serializable {
     private Part uploadedAvatar;
 
     private User user;
+
+    private User userForAdminSettings;
 
     private List<ScienceField> usersScienceFields;
 
@@ -114,6 +118,7 @@ public class ProfileBacking implements Serializable {
             throw new IllegalUserFlowException("Profile page called without an id");
         }
         user = userService.get(user);
+        userForAdminSettings = user.clone();
         usersScienceFields = scienceFieldService.getList(user, new ResultListParameters());
     }
 
@@ -121,8 +126,6 @@ public class ProfileBacking implements Serializable {
      * Checks if the view param is an integer and throws an exception if it is
      * not
      *
-     * @param event The component system event that happens before rendering
-     *              the view param.
      * @throws IllegalUserFlowException If there is no integer provided as view
      *                                  param
      */
@@ -139,6 +142,7 @@ public class ProfileBacking implements Serializable {
      * shown that asks the user to check his inbox.
      */
     public void submitChanges() {
+        userService.change(user);
     }
 
     /**
@@ -305,5 +309,23 @@ public class ProfileBacking implements Serializable {
     public boolean hasViewerEditRights() {
         return Objects.equals(sessionInformation.getUser(), user)
                 || sessionInformation.getUser().isAdmin();
+    }
+
+    /**
+     * Get the user object that should be used to write the admin changes.
+     *
+     * @return The user.
+     */
+    public User getUserForAdminSettings() {
+        return userForAdminSettings;
+    }
+
+    /**
+     * Set the user object that should be used to write the admin changes.
+     *
+     * @param userForAdminSettings The user.
+     */
+    public void setUserForAdminSettings(User userForAdminSettings) {
+        this.userForAdminSettings = userForAdminSettings;
     }
 }

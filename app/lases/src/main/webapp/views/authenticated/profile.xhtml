@@ -81,21 +81,30 @@
             <div class="row">
                 <div class="col-md-12">
 
-                    <div class="card" id="admin-card">
-                        <div class="card-header">
-                            #{labels.editAdmin}
-                        </div>
-                        <div class="card-body">
-                            <h:form id="edit-admin-form">
-                                <h:panelGroup layout="block" styleClass="form-group form-check" rendered="#{sessionInformation.user.admin}">
-                                    <h:selectBooleanCheckbox styleClass="form-check-input" id="is-admin-cbx" value="#{profileBacking.user.admin}"/><h:outputLabel for="is-admin-cbx" styleClass="form-check-label" value="#{labels.adminRights}"/><br/>
-                                    <h:commandButton id="is-admin-cbtn" styleClass="btn-secondary btn" type="submit" value="Lorem Ipsum" onclick="PF('dlg').show()" rendered="#{sessionInformation.user.admin}"/>
-                                </h:panelGroup>
-                            </h:form>
-                        </div>
-                    </div>
+                    <h:panelGroup rendered="#{sessionInformation.user.admin}">
+                        <h:panelGroup layout="block" styleClass="card" id="admin-card">
+                            <div class="card-header">
+                                #{labels.editAdmin}
+                            </div>
+                            <div class="card-body">
+                                <h:form id="edit-admin-form">
+                                    <h:panelGroup layout="block" styleClass="form-group form-check">
+                                        <h:selectBooleanCheckbox styleClass="form-check-input" id="is-admin-cbx" value="#{profileBacking.userForAdminSettings.admin}"/><h:outputLabel for="is-admin-cbx" styleClass="form-check-label" value="#{labels.adminRights}"/><br/>
+                                        <p:commandButton id="is-admin-cbtn" styleClass="btn-secondary btn" type="button" value="#{labels.save}" onclick="PF('dlg').show()" />
+                                        <p:confirmDialog id="dlg" widgetVar="dlg" header="Lorem Ipsum">
+                                            <h:inputSecret id="password-admin-iscrt" value="#{profileBacking.adminPassword.passwordNotHashed}" required="true" requiredMessage="#{message.passwordNeeded}"/>
+                                            <h:outputText value="Lorem Ipsum"/>
+                                            <h:commandButton value="Lorem Ipsum" action="#{profileBacking.abort()}"/>
+                                            <h:commandButton value="Lorem Ipsum" action="#{profileBacking.submitAdminChanges}"/>
+                                        </p:confirmDialog>
+                                    </h:panelGroup>
+                                </h:form>
+                            </div>
 
-                    <hr/>
+                        </h:panelGroup>
+                        <hr/>
+
+                    </h:panelGroup>
 
                     <div class="card" id="profile-card">
                         <div class="card-header">
@@ -163,7 +172,7 @@
                                 <hr/>
 
                                 <div class="form-group">
-                                    <h:commandButton id="save-cbtn" value="#{labels.save}" action="#{profileBacking.submitChanges()}" readonly="#{!profileBacking.hasViewerEditRights()}" styleClass="btn btn-primary"/>
+                                    <h:commandButton id="save-cbtn" value="#{labels.save}" action="#{profileBacking.submitChanges()}" readonly="#{!profileBacking.hasViewerEditRights()}" styleClass="btn btn-primary" disabled="#{!profileBacking.hasViewerEditRights()}"/>
                                 </div>
 
 <!--                                <div class="form-group">-->
