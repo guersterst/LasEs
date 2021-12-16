@@ -4,6 +4,7 @@ import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
 import de.lases.persistence.internal.ConfigReader;
 import de.lases.persistence.util.DatasourceUtil;
+import de.lases.persistence.util.TransientSQLExceptionChecker;
 import jakarta.enterprise.inject.spi.CDI;
 import org.postgresql.util.PSQLException;
 
@@ -118,6 +119,9 @@ public class SubmissionRepository {
      *                                        submission is null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     * @return The submission that was added, but filled with its id.
+     *
+     * @author Sebastian Vogt
      */
     public static Submission add(Submission submission, Transaction transaction)
             throws DataNotWrittenException {
@@ -166,10 +170,14 @@ public class SubmissionRepository {
 
             stmt.executeUpdate();
         } catch (SQLException ex) {
-            DatasourceUtil.logSQLException(ex, logger);
-            transaction.abort();
-            throw new DatasourceQueryFailedException("A datasource exception "
-                    + "occurred", ex);
+            if (TransientSQLExceptionChecker.isTransient(ex.getSQLState())) {
+                throw new DataNotWrittenException("Submission could not be added", ex);
+            } else {
+                DatasourceUtil.logSQLException(ex, logger);
+                transaction.abort();
+                throw new DatasourceQueryFailedException("A datasource exception "
+                        + "occurred", ex);
+            }
         }
         return submission;
     }
