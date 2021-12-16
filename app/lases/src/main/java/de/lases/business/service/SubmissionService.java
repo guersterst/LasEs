@@ -477,6 +477,8 @@ public class SubmissionService implements Serializable {
         ScientificForum forum = new ScientificForum();
         forum.setId(submission.getScientificForumId());
 
+        t.commit();
+
         // Check if the user is admin, editor of the forum
         // or reviewer or author of the submission
         return user.isAdmin()

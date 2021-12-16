@@ -46,8 +46,11 @@ public class ReviewService implements Serializable {
     public Review get(Review review) {
         Transaction transaction = new Transaction();
         try {
-            return ReviewRepository.get(review, transaction);
+            Review retReview = ReviewRepository.get(review, transaction);
+            transaction.commit();
+            return retReview;
         } catch (NotFoundException e) {
+            transaction.abort();
             return null;
         }
     }
