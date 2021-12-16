@@ -342,7 +342,7 @@ public class UserService implements Serializable {
 
         if (storedVerification.isVerified()) {
             transaction.abort();
-            l.fine("User already verified");
+            l.warning("User already verified");
             uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("verification.alreadyVerified"),
                     MessageCategory.ERROR));
             return verification;
@@ -350,6 +350,7 @@ public class UserService implements Serializable {
 
         if (verification.getValidationRandom().equals(storedVerification.getValidationRandom())) {
             storedVerification.setVerified(true);
+            storedVerification.setValidationRandom(null);
             try {
                 UserRepository.changeVerification(storedVerification, transaction);
                 l.info("Successfully verified user with id " + storedVerification.getUserId());

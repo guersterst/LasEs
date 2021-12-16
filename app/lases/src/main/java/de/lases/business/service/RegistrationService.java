@@ -92,7 +92,7 @@ public class RegistrationService {
             }
             user.setId(oldUser.getId());
             try {
-                UserRepository.change(oldUser, t);
+                UserRepository.change(user, t);
             } catch (DataNotWrittenException e) {
                 l.severe("User with email " + user.getEmailAddress() + " could not be updated: "
                         + e.getMessage());

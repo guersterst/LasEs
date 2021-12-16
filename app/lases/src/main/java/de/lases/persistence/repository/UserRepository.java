@@ -7,11 +7,11 @@ import de.lases.persistence.util.DatasourceUtil;
 import de.lases.persistence.util.TransientSQLExceptionChecker;
 import jakarta.enterprise.inject.spi.CDI;
 
-import javax.sql.DataSource;
-import javax.xml.stream.events.DTD;
 import java.sql.*;
-import java.sql.Date;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 /**
@@ -567,7 +567,7 @@ public class UserRepository {
         User user = new User();
         user.setId(verification.getUserId());
         try {
-            getVerification(verification, transaction);
+            getVerification(user, transaction);
         } catch (NotFoundException e) {
             logger.severe("Verification does not exist.");
             throw new NotFoundException("Verification does not exist.");
