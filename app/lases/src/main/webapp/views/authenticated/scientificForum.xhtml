@@ -15,7 +15,6 @@
 
         <f:metadata>
             <f:viewParam value="#{scientificForumBacking.forum.id}" name="id"/>
-            <!--TODO:evtl mit parameter übergabe-->
             <f:event type="preRenderView" listener="#{scientificForumBacking.preRenderViewListener}"/>
             <f:viewAction action="#{scientificForumBacking.onLoad()}"/>
         </f:metadata>
@@ -35,19 +34,18 @@
                                         <h:form>
                                             <h:commandButton styleClass="btn btn-primary"
                                                              id="delete-sub-cbtn"
-                                                             title="#{help.deleteSubmission}"
-                                                             value="#{labels.deleteButton}"
+                                                             title="#{help.deleteForum}"
+                                                             value="#{labels.deleteButtonForum}"
                                                              onclick="PF('dlg').show()"
                                                              rendered="#{scientificForumBacking.sessionInformation.user.admin}"
                                                              type="button"/>
                                             <p:dialog id="delete-forum-dlg" widgetVar="dlg">
                                                 <div class="text-center">
                                                     <h:outputText id="delete-warning-otxt"
-                                                                  value="#{message.deleteWarningOtxt}"/>
+                                                                  value="#{message.deleteWarningForum}"/>
                                                 </div>
                                                 <br/>
                                                 <div class="text-center">
-
                                                     <h:commandButton styleClass="btn btn-primary"
                                                                      id="agree-delete-cbtn"
                                                                      value="#{labels.agreeButton}"
@@ -56,29 +54,42 @@
                                             </p:dialog>
                                         </h:form>
                                     </div>
+
+                                    <!-- all messages produced from the following sections -->
                                     <div class="col ml-5">
                                         <h:messages/>
                                     </div>
                                 </div>
                             </div>
 
-                            <!--General inomformation about the forum-->
+                            <!--general inomformation about the forum-->
                             <div class="card-body">
                                 <div class="row">
 
-                                    <!-- leftmost column -->
+                                    <!-- forum information column -->
                                     <div class="col-md-6">
                                         <h:form>
                                             <!-- name -->
                                             <div class="form-group">
                                                 <h:inputText id="forum-name-itxt"
                                                              value="#{scientificForumBacking.forum.name}"
+                                                             rendered="#{scientificForumBacking.loggedInUserIsEditor()}"
                                                              readonly="#{!scientificForumBacking.loggedInUserIsEditor()}"
+                                                             title="#{help.forumName}"
                                                              required="true"
-                                                             requiredMessage="#{message.forumName}"
+                                                             requiredMessage="#{message.requiredForForum}"
                                                              styleClass="h4">
                                                     <f:validator validatorId="forumNameExistsValidator"/>
                                                 </h:inputText>
+                                            </div>
+
+                                            <!-- alternative name output for non editors -->
+                                            <div class="form-group">
+                                                <h:outputText id="forum-name-otxt"
+                                                              value="#{scientificForumBacking.forum.name}"
+                                                              rendered="#{!scientificForumBacking.loggedInUserIsEditor()}"
+                                                              tite="#{help.forumName}"
+                                                              styleClass="h4"/>
                                             </div>
                                             <br/>
 
@@ -91,27 +102,35 @@
                                                                  readonly="#{!scientificForumBacking.loggedInUserIsEditor()}"
                                                                  rendered="#{scientificForumBacking.loggedInUserIsEditor()}"
                                                                  required="true"
-                                                                 requiredMessage="#{message.description}"
-                                                                 styleClass="h4"/>
+                                                                 requiredMessage="#{message.requiredForForum}"
+                                                                 styleClass="h4"
+                                                                 tite="#{help.forumDesc}"/>
                                                 </div>
 
                                                 <!-- alternative desc output for non editors -->
                                                 <div class="form-group">
-                                                    <h:outputText id="description-otxtx"
+                                                    <h:outputText id="description-otxt"
                                                                   value="#{scientificForumBacking.forum.description}"
                                                                   rendered="#{!scientificForumBacking.loggedInUserIsEditor()}"
-                                                                  styleClass="h4"/>
+                                                                  styleClass="h4"
+                                                                  tite="#{help.forumDesc}"/>
                                                 </div>
+
                                                 <!-- url -->
                                                 <div class="form-group">
                                                     <h:inputText id="change-url-itxt"
                                                                  value="#{scientificForumBacking.forum.url}"
-                                                                 rendered="#{scientificForumBacking.loggedInUserIsEditor()}"/>
+                                                                 rendered="#{scientificForumBacking.loggedInUserIsEditor()}"
+                                                                 required="true"
+                                                                 requiredMessage="#{message.requiredForForum}"
+                                                                 title="#{labels.forumURL}"/>
                                                 </div>
+
+                                                <!-- alternative url output for non editors -->
                                                 <div class="form-group">
-                                                    <!-- alternative url output for non editors -->
                                                     <h:outputLink value="#{scientificForumBacking.forum.url}"
-                                                                  rendered="#{!scientificForumBacking.loggedInUserIsEditor()}">
+                                                                  rendered="#{!scientificForumBacking.loggedInUserIsEditor()}"
+                                                                  title="#{help.forumURL}">
                                                         <h:outputText value="#{scientificForumBacking.forum.url}"/>
                                                     </h:outputLink>
                                                 </div>
@@ -119,19 +138,19 @@
 
                                             <!-- deadline -->
                                             <h:outputText id="deadline-submission-otxt"
-                                                          value="#{labels.reviewDeadline}"
+                                                          value="#{labels.submissionDeadline}"
                                                           style="margin: 3px"
                                                           rendered="#{scientificForumBacking.forum.deadline != null}"/>
                                             <h:outputText id="date-review-deadline-otxt"
                                                           value="#{scientificForumBacking.forum.deadline}"
-                                                          style="margin: 3px">
+                                                          style="margin: 3px"
+                                                          title="#{help.forumDeadLine}">
                                                 <f:convertDateTime type="localDate"/>
                                             </h:outputText>
 
                                             <br/>
-                                            <!-- review manual -->
-                                            <!--todo does this trigger/interfere with the outer form? -->
 
+                                            <!-- review manual -->
                                             <h:outputText id="reviewManual-otxt"
                                                           value="#{labels.reviewManual}"
                                                           style="margin: 3px"
@@ -140,11 +159,11 @@
                                                 <h:commandButton id="review-manual-cbtn"
                                                                  styleClass="btn btn-secondary"
                                                                  value="#{labels.displayReviewManual}"
-                                                                 title=""
                                                                  style="margin: 3px"
                                                                  rendered="#{scientificForumBacking.forum.reviewManual != null}"
                                                                  onclick="PF('revMnDlg').show()"
-                                                                 type="button"/>
+                                                                 type="button"
+                                                                 title="#{help.forumReviewManual}"/>
                                                 <p:dialog id="review-manual-dlg"
                                                           widgetVar="revMnDlg">
                                                     <div class="text-center">
@@ -156,47 +175,33 @@
 
                                             <hr/>
 
+                                            <!-- submit changes -->
                                             <div class="form-group">
                                                 <h:commandButton id="submit-forum-changes-cbtn"
-                                                                 value="#{labels.submit}"
+                                                                 value="#{labels.agreeButton}"
                                                                  styleClass="btn btn-primary"
                                                                  type="submit"
-                                                                 action="#{scientificForumBacking.submitChanges}">
-                                                    <!-- <f:ajax execute="co-authors-form" render="co-authors-form" /> -->
-                                                </h:commandButton>
+                                                                 action="#{scientificForumBacking.submitChanges}"
+                                                                 title="#{help.forumChanges}"/>
                                             </div>
-
                                         </h:form>
                                     </div>
-
-                                    <!-- deadline for submission -->
-                                    <!-- todo hier text input? -> converter -->
-                                    <!--
-                                    <h:inputText id = "deadline-itxt"
-                                                 value = "#{scientificForumBacking.forum.deadline}"
-                                                 readonly="#{!scientificForumBacking.loggedInUserIsEditor()}"
-                                                 required="true"
-                                                 requiredMessage="#{message.deadline}" />
-                                                 -->
 
                                     <!-- editor column -->
                                     <div class="col-md-3">
                                         <div class="form-group">
 
                                             <!-- editor controls -->
-                                            <!-- todo rendered -->
-
                                             <!-- add editor -->
                                             <h:form>
                                                 <div class="form-group">
-                                                    <h:outputLabel for="editor-email-itxt" value="#{labels.email}"/>
-                                                    <!-- todo req. message und label und hilfe text-->
-                                                    <!--todo what if already exists -->
+                                                    <h:outputLabel for="editor-email-itxt"
+                                                                   value="#{labels.forumAddEditor}"/>
                                                     <h:inputText id="editor-email-itxt"
                                                                  value="#{scientificForumBacking.newEditorInput.emailAddress}"
                                                                  class="form-control"
                                                                  required="true"
-                                                                 requiredMessage="#{message.emailRequired}">
+                                                                 requiredMessage="#{message.requiredToAddEditor}">
                                                         <f:validator validatorId="emailAddressExistsValidator"/>
                                                     </h:inputText>
                                                 </div>
@@ -205,8 +210,6 @@
                                                                      styleClass="btn btn-secondary"
                                                                      type="submit"
                                                                      action="#{scientificForumBacking.addEditor()}">
-                                                        <!-- todo what about this -> render & execute list-->
-                                                        <!-- <f:ajax execute="info-forum" render="info-forum"/> -->
                                                     </h:commandButton>
                                                 </div>
                                             </h:form>
@@ -217,7 +220,7 @@
                                                              value="#{scientificForumBacking.editors}"
                                                              var="editor">
                                                     <h:column>
-                                                        <f:facet name="header">#{labels.editors}</f:facet>
+                                                        <f:facet name="header">#{labels.editorsForum}</f:facet>
                                                         #{editor.title}
                                                         #{editor.firstName}
                                                         #{editor.lastName}
@@ -226,7 +229,6 @@
                                                                          styleClass="btn-secondary btn"
                                                                          type="submit"
                                                                          action="#{scientificForumBacking.removeEditor(editor)}">
-                                                            <!-- todo -->
                                                             <f:ajax execute="editor-list-frm" render="editor-list-frm"/>
                                                         </h:commandButton>
                                                     </h:column>
@@ -238,10 +240,8 @@
                                     <!-- science field column -->
                                     <div class="col-md-3">
                                         <div class="form-group">
+
                                             <!-- add sciencefield -->
-                                            <!-- todo converter? -->
-                                            <!-- todo rendered -->
-                                            <!-- todo duplicates -->
                                             <div class="p-field p-col-12 p-md-4">
                                                 <h:form id="fields-add-frm">
                                                     <div class="form-group">
@@ -259,7 +259,6 @@
                                                                     var="scienceField"
                                                                     itemLabel="#{scienceField.name}"
                                                                     itemValue="#{scienceField}"/>
-
                                                             <p:column>
                                                                 <f:facet name="header">
                                                                     <h:outputText value="Name"/>
@@ -270,7 +269,6 @@
                                                         <h:commandButton id="apply-field-add-cbtn"
                                                                          value="#{labels.add}"
                                                                          action="#{scientificForumBacking.addScienceField}"/>
-                                                        <!-- todo add f:ajax to reload form -->
                                                     </div>
                                                 </h:form>
                                             </div>
@@ -281,14 +279,13 @@
                                                              value="#{scientificForumBacking.currentScienceFields}"
                                                              var="currField">
                                                     <h:column>
-                                                        <f:facet name="header">#{labels.scienceFields}</f:facet>
+                                                        <f:facet name="header">#{labels.scienceFieldsForum}</f:facet>
                                                         #{currField.name}
                                                         <h:commandButton id="delete-field-cbtn"
                                                                          value="#{labels.delete}"
                                                                          styleClass="btn-secondary btn"
                                                                          type="submit"
                                                                          action="#{scientificForumBacking.removeScienceField(currField)}">
-                                                            <!-- todo -->
                                                             <f:ajax execute="fields-list-frm"
                                                                     render="fields-list-frm"/>
                                                         </h:commandButton>
@@ -302,6 +299,7 @@
                         </div>
                     </div>
                 </div>
+
                 <!-- submission pagination -->
                 <div id="submission-pagination">
                     <div class="container">

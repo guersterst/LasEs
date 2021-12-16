@@ -420,7 +420,7 @@ public class ScientificForumBacking implements Serializable {
      * @return Is the logged-in user editor of this scientific forum?
      */
     public boolean loggedInUserIsEditor() {
-        return editors.contains(user);
+        return editors.contains(user) || user.isAdmin();
     }
 
     //TODO needed?

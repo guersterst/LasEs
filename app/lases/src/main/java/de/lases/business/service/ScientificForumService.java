@@ -174,7 +174,7 @@ public class ScientificForumService implements Serializable {
             for (User oldEditor : editors) {
                 if (oldEditor.equals(editor)) {
                     l.warning("Cannot add an editor, that already exists.");
-                    uiMessageEvent.fire(new UIMessage("editorAlreadyExistsInForum", MessageCategory.INFO));
+                    uiMessageEvent.fire(new UIMessage(message.getString("editorAlreadyExistsInForum"), MessageCategory.INFO));
                     return;
                 }
             }
