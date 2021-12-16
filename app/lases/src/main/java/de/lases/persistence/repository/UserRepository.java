@@ -395,6 +395,7 @@ public class UserRepository {
      * provided validation random exists, otherwise null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     * @author Thomas Kirz
      */
     public static Verification getVerification(Verification verification, Transaction transaction)
             throws NotFoundException {
@@ -486,8 +487,12 @@ public class UserRepository {
                 stmt.executeUpdate();
         } catch (SQLException e) {
             DatasourceUtil.logSQLException(e, logger);
-            // todo handle sql exception
-            throw new DataNotWrittenException("Failed to add verification to database.", e);
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                transaction.abort();
+                throw new DataNotWrittenException("Failed to add verification to database.", e);
+            } else {
+                throw new DatasourceQueryFailedException("Failed to add verification to database.", e);
+            }
         }
     }
 
@@ -532,8 +537,12 @@ public class UserRepository {
             stmt.executeUpdate();
         } catch (SQLException e) {
             DatasourceUtil.logSQLException(e, logger);
-            // todo handle sql exception
-            throw new DataNotWrittenException("Failed to add verification to database.", e);
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                transaction.abort();
+                throw new DataNotWrittenException("Failed to add verification to database.", e);
+            } else {
+                throw new DatasourceQueryFailedException("Failed to add verification to database.", e);
+            }
         }
     }
 
