@@ -7,85 +7,121 @@
     <f:metadata>
         <f:importConstants type="de.lases.control.internal.Constants" var="Const"/>
     </f:metadata>
-    <ui:define name="title">#{labels['appName'] += ' - ' += labels['register']}</ui:define>
+    <ui:define name="title">#{labels['register']}</ui:define>
 
     <ui:define name="content">
-        <div class="container-fluid">
-            <h1>#{labels['register']}</h1>
-            <div>
-                <h:form id="register-frm">
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    <div class="col-md-6">
+                        <h:outputText value="#{labels['register']}"/>
+                    </div>
+                </div>
+                <h:form id="register-frm" styleClass="card-body">
                     <!-- Title -->
-                    <div class="input-group">
-                        <div class="input-group-prepend">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
                             <span class="input-group-text">
                                 <h:outputText value="#{labels['titleInput']}"/>
                             </span>
+                                </div>
+                                <h:inputText id="title-itxt" value="#{registrationBacking.newUser.title}"
+                                             maxlength="#{Const.TITLE_MAX}" styleClass="form-control"/>
+                            </div>
                         </div>
-                        <h:inputText id="title-itxt" value="#{registrationBacking.newUser.title}"
-                                     maxlength="#{Const.TITLE_MAX}" styleClass="form-control"/>
+                        <div class="col-4"><h:message for="title-itxt"/></div>
                     </div>
                     <!-- First name -->
-                    <div class="input-group">
-                        <div class="input-group-prepend">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
                             <span class="input-group-text">
                                 <h:outputText value="#{labels['firstName']}"/>
                             </span>
+                                </div>
+                                <h:inputText id="first-name-itxt" value="#{registrationBacking.newUser.firstName}"
+                                             title="#{help.firstName}" required="true"
+                                             requiredMessage="#{message.firstNameRequired}"
+                                             maxlength="#{Const.FIRST_NAME_MAX}"
+                                             styleClass="form-control"/>
+                            </div>
                         </div>
-                        <h:inputText id="first-name-itxt" value="#{registrationBacking.newUser.firstName}"
-                                     title="#{help.firstName}" required="true"
-                                     requiredMessage="#{message.firstNameRequired}" maxlength="#{Const.FIRST_NAME_MAX}"
-                                     styleClass="form-control"/>
+                        <div class="col-4"><h:message for="first-name-itxt"/></div>
                     </div>
                     <!-- Last Name -->
-                    <div class="input-group">
-                        <div class="input-group-prepend">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
                             <span class="input-group-text">
                                 <h:outputText value="#{labels['lastName']}"/>
                             </span>
+                                </div>
+                                <h:inputText id="last-name-itxt" value="#{registrationBacking.newUser.lastName}"
+                                             title="#{help.lastName}" required="true"
+                                             requiredMessage="#{message.lastNameRequired}"
+                                             maxlength="#{Const.LAST_NAME_MAX}"
+                                             styleClass="form-control"/>
+                            </div>
                         </div>
-                        <h:inputText id="last-name-itxt" value="#{registrationBacking.newUser.lastName}"
-                                     title="#{help.lastName}" required="true"
-                                     requiredMessage="#{message.lastNameRequired}" maxlength="#{Const.LAST_NAME_MAX}"
-                                     styleClass="form-control"/>
+                        <div class="col-4"><h:message for="last-name-itxt"/></div>
                     </div>
                     <!-- Email -->
-                    <div class="input-group">
-                        <div class="input-group-prepend">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
                             <span class="input-group-text">
                                 <h:outputText value="#{labels['email']}"/>
                             </span>
+                                </div>
+                                <h:inputText id="email-itxt" value="#{registrationBacking.newUser.emailAddress}"
+                                             title="#{help.email}" required="true"
+                                             requiredMessage="#{message.emailRequired}" maxlength="#{Const.EMAIL_MAX}"
+                                             styleClass="form-control">
+                                    <f:validator for="email-itxt" validatorId="emailAddressUnoccupiedValidator"/>
+                                    <f:validator for="email-itxt" validatorId="emailAddressLayoutValidator"/>
+                                </h:inputText>
+                            </div>
                         </div>
-                        <h:inputText id="email-itxt" value="#{registrationBacking.newUser.emailAddress}"
-                                     title="#{help.email}" required="true"
-                                     requiredMessage="#{message.emailRequired}" maxlength="#{Const.EMAIL_MAX}"
-                                     styleClass="form-control">
-                            <f:validator for="email-itxt" validatorId="emailAddressExistsValidator"/>
-                            <f:validator for="email-itxt" validatorId="emailAddressLayoutValidator"/>
-                        </h:inputText>
+                        <div class="col-4"><h:message for="email-itxt"/></div>
                     </div>
                     <!-- Password -->
-                    <div class="input-group">
-                        <div class="input-group-prepend">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
                             <span class="input-group-text">
                                 <h:outputText value="#{labels['password']}"/>
                             </span>
+                                </div>
+                                <h:inputSecret id="password-iscrt"
+                                               value="#{registrationBacking.newUser.passwordNotHashed}"
+                                               title="#{help.password}" required="true"
+                                               requiredMessage="#{message.passwordNeeded}" styleClass="form-control">
+                                    <f:validator for="password-iscrt" validatorId="passwordValidator"/>
+                                </h:inputSecret>
+                            </div>
                         </div>
-                        <h:inputSecret id="password-iscrt" value="#{registrationBacking.newUser.passwordNotHashed}"
-                                       title="#{help.password}" required="true"
-                                       requiredMessage="#{message.passwordNeeded}" styleClass="form-control">
-                            <f:validator for="password-iscrt" validatorId="passwordValidator"/>
-                        </h:inputSecret>
+                        <div class="col-4"><h:message for="password-iscrt"/></div>
                     </div>
 
-                    <!-- Register button -->
-                    <div>
-                        <h:commandButton id="register-cbtn" value="#{labels.register}"
-                                         action="#{registrationBacking.register}"/>
-                    </div>
-                    <!-- Login link -->
-                    <div>
-                        <h:link id="welcomepage-lnk" value="#{labels.welcomeLink}" outcome="/views/anonymous/welcome"
-                                title="#{help.welcomePage}"/>
+                    <div class="row">
+                        <!-- Register button -->
+                        <div class="col-2">
+                            <h:commandButton id="register-cbtn" value="#{labels.register}"
+                                             action="#{registrationBacking.register}"
+                                             styleClass="form-control"/>
+                        </div>
+                        <!-- Login link -->
+                        <div class="col-2">
+                            <h:link id="welcomepage-lnk" value="#{labels.welcomeLink}"
+                                    outcome="/views/anonymous/welcome" title="#{help.welcomePage}"
+                                    styleClass="btn btn-secondary"/>
+                        </div>
                     </div>
                 </h:form>
             </div>

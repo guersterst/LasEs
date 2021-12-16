@@ -3,10 +3,16 @@ package de.lases.persistence.repository;
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.DataNotWrittenException;
 import de.lases.persistence.exception.NotFoundException;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import de.lases.persistence.internal.ConfigReader;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.context.SessionScoped;
+import org.jboss.weld.junit5.WeldInitiator;
+import org.jboss.weld.junit5.WeldJunit5Extension;
+import org.jboss.weld.junit5.WeldSetup;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,31 +22,37 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(WeldJunit5Extension.class)
 class SubmissionRepositoryTest {
 
     private static final int EXAMPLE_SUBMISSION_ID_1 = 1;
     private static final int EXAMPLE_SUBMISSION_ID_2 = 2;
     private static int EXAMPLE_USER_ID;
+    private static int EXAMPLE_USER_ID_2;
     private static final String EXAMPLE_SUBMISSION_TITLE_1 = "Submission title";
     private static final String EXAMPLE_SUBMISSION_TITLE_2 = "Different title";
 
-    @BeforeAll
-    static void initConnectionPool() {
+    @WeldSetup
+    public WeldInitiator weld  = WeldInitiator.from(ConnectionPool.class, ConfigReader.class)
+            .activate(RequestScoped.class, SessionScoped.class).build();
+
+    @BeforeEach
+    void startConnectionPool() {
+        FileDTO file = new FileDTO();
+
+        Class c = SubmissionRepositoryTest.class;
+        InputStream inputStream = c.getResourceAsStream("/config.properties");
+
+        file.setInputStream(inputStream);
+
+        weld.select(ConfigReader.class).get().setProperties(file);
         ConnectionPool.init();
     }
 
-    @AfterAll
-    static void shutDownConnectionPool() {
+    @AfterEach
+    void shutDownConnectionPool() {
         ConnectionPool.shutDown();
     }
-
-//    @BeforeAll
-//    static void addUser() throws Exception {
-//        Transaction transaction = new Transaction();
-//        UserRepository.add(new User(), transaction);
-//        EXAMPLE_USER_ID = UserRepository.getList(transaction, new ResultListParameters()).get(0).getId();
-//        transaction.commit();
-//    }
 
     @Test
     void testAddSubmission() throws DataNotWrittenException, SQLException {
@@ -135,29 +147,87 @@ class SubmissionRepositoryTest {
         transaction.abort();
     }
 
+    @Test
+    void testAddReviewer() throws SQLException, DataNotWrittenException, NotFoundException {
+        Transaction transaction = new Transaction();
+        Connection connection = transaction.getConnection();
+
+        PreparedStatement statement = connection.prepareStatement("""
+                SELECT * FROM reviewed_by
+                """);
+
+        ResultSet resultSetBefore = statement.executeQuery();
+        int before = 0;
+        while (resultSetBefore.next()){
+            before++;
+        }
+
+        ReviewedBy reviewedBy = new ReviewedBy();
+        reviewedBy.setReviewerId(1);
+        reviewedBy.setSubmissionId(5);
+        reviewedBy.setHasAccepted(AcceptanceStatus.NO_DECISION);
+        reviewedBy.setTimestampDeadline(LocalDateTime.now());
+
+        SubmissionRepository.addReviewer(reviewedBy, transaction);
+
+        ResultSet resultSetAfter = statement.executeQuery();
+        int after = 0;
+        while (resultSetAfter.next()) {
+            after++;
+        }
+
+        assertEquals(before, after - 1);
+        transaction.abort();
+    }
+
+    static void addReferences(Transaction transaction) throws Exception {
+        User user = new User();
+        user.setFirstName("Joseph");
+        user.setLastName("Adenuga");
+        user.setEmailAddress("test@test.ts");
+        user = UserRepository.add(user, transaction);
+        EXAMPLE_USER_ID = user.getId();
+
+        User user2 = new User();
+        user2.setFirstName("Joseph");
+        user2.setLastName("Adenuga");
+        user2.setEmailAddress("test2@test.ts");
+        user2 = UserRepository.add(user2, transaction);
+        EXAMPLE_USER_ID_2 = user2.getId();
+    }
+
+    @Test
     void testAddAndGetList() throws Exception {
         Transaction transaction = new Transaction();
-
+        addReferences(transaction);
         User user = new User();
         user.setId(EXAMPLE_USER_ID);
 
         Submission submission1 = new Submission();
         submission1.setId(EXAMPLE_SUBMISSION_ID_1);
         submission1.setAuthorId(EXAMPLE_USER_ID);
+        submission1.setEditorId(EXAMPLE_USER_ID_2);
         submission1.setTitle(EXAMPLE_SUBMISSION_TITLE_1);
+        submission1.setScientificForumId(1);
+        submission1.setState(SubmissionState.ACCEPTED);
+        submission1.setSubmissionTime(LocalDateTime.now());
 
         Submission submission2 = new Submission();
         submission2.setId(EXAMPLE_SUBMISSION_ID_2);
+        submission2.setAuthorId(EXAMPLE_USER_ID_2);
         submission2.setEditorId(EXAMPLE_USER_ID);
         submission2.setTitle(EXAMPLE_SUBMISSION_TITLE_2);
+        submission2.setScientificForumId(1);
+        submission2.setState(SubmissionState.SUBMITTED);
+        submission2.setSubmissionTime(LocalDateTime.now());
 
         SubmissionRepository.add(submission1, transaction);
         SubmissionRepository.add(submission2, transaction);
 
         List<Submission> authoredList = SubmissionRepository
-                .getList(user, Privilege.AUTHOR, transaction, null);
+                .getList(user, Privilege.AUTHOR, transaction, new ResultListParameters());
         List<Submission> editedList = SubmissionRepository
-                .getList(user, Privilege.EDITOR, transaction, null);
+                .getList(user, Privilege.EDITOR, transaction, new ResultListParameters());
 
         assertAll(
                 () -> assertEquals(1, authoredList.size()),
@@ -168,39 +238,62 @@ class SubmissionRepositoryTest {
         transaction.abort();
     }
 
+    @Test
     void testAddAndAbort() throws Exception {
         Transaction transaction = new Transaction();
+        addReferences(transaction);
         Submission submission = new Submission();
         submission.setId(EXAMPLE_SUBMISSION_ID_1);
         submission.setAuthorId(EXAMPLE_USER_ID);
+        submission.setEditorId(EXAMPLE_USER_ID_2);
         submission.setTitle(EXAMPLE_SUBMISSION_TITLE_1);
+        submission.setScientificForumId(1);
+        submission.setState(SubmissionState.ACCEPTED);
+        submission.setSubmissionTime(LocalDateTime.now());
         SubmissionRepository.add(submission, transaction);
         transaction.abort();
-        List<Submission> authoredList = SubmissionRepository.getList(new User(), Privilege.AUTHOR, transaction, null);
+
+        User user = new User();
+        user.setId(EXAMPLE_USER_ID);
+
+        Transaction transaction2 = new Transaction();
+        List<Submission> authoredList = SubmissionRepository.getList(user, Privilege.AUTHOR, transaction2,
+                new ResultListParameters());
         assertEquals(0, authoredList.size());
+        transaction2.abort();
     }
 
-    // add two submissions and test countSubmissions()
+    @Test
     void testCountSubmissions() throws Exception {
+        Transaction transaction = new Transaction();
+        addReferences(transaction);
+
         User user = new User();
         user.setId(EXAMPLE_USER_ID);
 
         Submission submission1 = new Submission();
         submission1.setId(EXAMPLE_SUBMISSION_ID_1);
         submission1.setAuthorId(EXAMPLE_USER_ID);
+        submission1.setEditorId(EXAMPLE_USER_ID_2);
         submission1.setTitle(EXAMPLE_SUBMISSION_TITLE_1);
+        submission1.setScientificForumId(1);
+        submission1.setState(SubmissionState.ACCEPTED);
+        submission1.setSubmissionTime(LocalDateTime.now());
 
         Submission submission2 = new Submission();
         submission2.setId(EXAMPLE_SUBMISSION_ID_2);
+        submission2.setAuthorId(EXAMPLE_USER_ID_2);
         submission2.setEditorId(EXAMPLE_USER_ID);
         submission2.setTitle(EXAMPLE_SUBMISSION_TITLE_2);
-
-        Transaction transaction = new Transaction();
+        submission2.setScientificForumId(1);
+        submission2.setState(SubmissionState.SUBMITTED);
+        submission2.setSubmissionTime(LocalDateTime.now());
 
         SubmissionRepository.add(submission1, transaction);
         SubmissionRepository.add(submission2, transaction);
 
-        assertEquals(1, SubmissionRepository.countSubmissions(user, Privilege.AUTHOR, transaction, null));
+        assertEquals(1, SubmissionRepository.countSubmissions(user, Privilege.AUTHOR, transaction,
+                new ResultListParameters()));
 
         transaction.abort();
     }

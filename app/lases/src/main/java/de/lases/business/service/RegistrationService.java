@@ -10,14 +10,19 @@ import de.lases.global.transport.User;
 import de.lases.global.transport.Verification;
 import de.lases.persistence.exception.DataNotWrittenException;
 import de.lases.persistence.exception.EmailTransmissionFailedException;
+import de.lases.persistence.exception.KeyExistsException;
 import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.repository.Transaction;
 import de.lases.persistence.repository.UserRepository;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
+import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.List;
+import java.util.Map;
 import java.util.PropertyResourceBundle;
 import java.util.logging.Logger;
 
@@ -55,6 +60,7 @@ public class RegistrationService {
      *             and a name and surname.
      *             </p>
      * @return The user with all their data, if successful, and {@code null} otherwise.
+     * @author Thomas Kirz
      */
     public User selfRegister(User user) {
         if (!userSufficientlyFilled(user)) {
@@ -64,61 +70,120 @@ public class RegistrationService {
 
         Transaction t = new Transaction();
 
-        // make sure that the user's email address is not already in use
-        if (UserRepository.emailExists(user, t)) {
-            l.warning("User with email address " + user.getEmailAddress() + " already exists.");
-            uiMessageEvent.fire(new UIMessage(message.getString("emailInUse"),
-                    MessageCategory.ERROR));
-            t.abort();
-            return null;
-        }
-
         user.setRegistered(true);
         hashPassword(user);
 
-        try {
-            user = UserRepository.add(user, t);
-            t.commit();
-        } catch (DataNotWrittenException e) {
-            uiMessageEvent.fire(new UIMessage(message.getString("registrationFailed"), MessageCategory.ERROR));
-            return null;
+        // check if a user with that email address already exists
+        if (UserRepository.emailExists(user, t)) {
+            User oldUser;
+            try {
+                oldUser = UserRepository.get(user, t);
+            } catch (NotFoundException e) {
+                l.severe("User with email " + user.getEmailAddress() + " should exist but was not found.");
+                t.abort();
+                return user;
+            }
+            if (oldUser.isRegistered()) {
+                l.fine("User with email address " + user.getEmailAddress() + " is already registered.");
+                uiMessageEvent.fire(new UIMessage(message.getString("emailInUse"),
+                        MessageCategory.ERROR));
+                t.abort();
+                return user;
+            }
+            user.setId(oldUser.getId());
+            try {
+                UserRepository.change(user, t);
+            } catch (DataNotWrittenException e) {
+                l.severe("User with email " + user.getEmailAddress() + " could not be updated: "
+                        + e.getMessage());
+                t.abort();
+                return null;
+            } catch (NotFoundException e) {
+                l.severe("User with email " + user.getEmailAddress() + " should exist but was not found.");
+                t.abort();
+                return null;
+            } catch (KeyExistsException e) {
+                l.severe("User with combination of email " + user.getEmailAddress() + " and id " + user.getId()
+                        + " could not be updated: " + e.getMessage());
+                t.abort();
+                return null;
+            }
+        } else {
+            try {
+                user = UserRepository.add(user, t);
+            } catch (DataNotWrittenException e) {
+                uiMessageEvent.fire(new UIMessage(message.getString("registrationFailed"), MessageCategory.ERROR));
+                t.abort();
+                return user;
+            }
         }
+
+        t.commit();
+
+        if (initiateVerificationProcess(user)) {
+            // Success message, containing verification random if test mode is enabled
+            String msg = message.getString("registrationSuccessful");
+            uiMessageEvent.fire(new UIMessage(msg, MessageCategory.INFO));
+
+            l.info("User " + user.getEmailAddress() + " registered.");
+        } else {
+            uiMessageEvent.fire(new UIMessage(message.getString("registrationFailed"), MessageCategory.ERROR));
+        }
+
+        return user;
+    }
+
+    /**
+     * Creates a verification dto with a random string and sends an email to the user.
+     * If the debug and test mode is enabled, the random string will be shown as a UIMessage.
+     * No other messages will be shown.
+     *
+     * @param user The user to be verified filled with id and email address.
+     * @return If the verification process was successfully initiated.
+     */
+    public boolean initiateVerificationProcess(User user) {
+        Transaction t = new Transaction();
 
         Verification verification = new Verification();
         verification.setVerified(false);
         verification.setUserId(user.getId());
         verification.setNonVerifiedEmailAddress(user.getEmailAddress());
         verification.setValidationRandom(Hashing.generateRandomSalt());
-        verification.setTimestampValidationStarted(LocalDateTime.now());
+        verification.setTimestampValidationStarted(LocalDateTime.now(ZoneOffset.UTC));
 
         try {
-            UserRepository.setVerification(verification, t);
+            UserRepository.addVerification(verification, t);
             l.fine("Verification for user " + user.getId() + " created.");
-        } catch (NotFoundException e) {
-            l.severe("Could not upload verification for user " + user.getId() + ".");
-            uiMessageEvent.fire(new UIMessage(message.getString("registrationFailed"), MessageCategory.ERROR));
+        } catch (NotFoundException | DataNotWrittenException e) {
+            t.abort();
+            return false;
         }
 
-        String emailBody = message.getString("email.verification.body.0") + user.getFirstName()
-                + message.getString("email.verification.body.1") + verification.getValidationRandom();
+        String emailBody = message.getString("email.verification.body.0")
+                + user.getFirstName()
+                + message.getString("email.verification.body.1")
+                + generateValidationUrl(verification);
+
         try {
             EmailUtil.sendEmail(configPropagator.getProperty("MAIL_ADDRESS_FROM"), new String[]{user.getEmailAddress()},
                     null, message.getString("email.verification.subject"), emailBody);
         } catch (EmailTransmissionFailedException e) {
-            uiMessageEvent.fire(new UIMessage(message.getString("registrationFailed"), MessageCategory.ERROR));
-            return null;
+            t.abort();
+            return false;
         }
 
-        // Success message, containing verification random if test mode is enabled
-        String msg = message.getString("registrationSuccessful");
         if (configPropagator.getProperty("DEBUG_AND_TEST_MODE").equalsIgnoreCase("true")) {
-            msg += "\n" + verification.getValidationRandom();
+            uiMessageEvent.fire(new UIMessage(generateValidationUrl(verification), MessageCategory.INFO));
         }
-        uiMessageEvent.fire(new UIMessage(msg, MessageCategory.INFO));
 
-        l.info("User " + user.getEmailAddress() + " registered.");
+        t.commit();
+        return true;
+    }
 
-        return user;
+    private String generateValidationUrl(Verification verification) {
+        String base = configPropagator.getProperty("BASE_URL") + "/views/anonymous/verification.xhtml";
+        return FacesContext.getCurrentInstance().getExternalContext().encodeBookmarkableURL(base,
+                Map.of("validationRandom", List.of(verification.getValidationRandom())));
     }
 
     /**

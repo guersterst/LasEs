@@ -7,11 +7,11 @@ import de.lases.persistence.util.DatasourceUtil;
 import de.lases.persistence.util.TransientSQLExceptionChecker;
 import jakarta.enterprise.inject.spi.CDI;
 
-import javax.sql.DataSource;
-import javax.xml.stream.events.DTD;
 import java.sql.*;
-import java.sql.Date;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 /**
@@ -20,6 +20,7 @@ import java.util.logging.Logger;
  *
  * @author Johann Schicho
  * @author Johannes Garstenauer
+ * @author Thomas Kirz
  */
 public class UserRepository {
 
@@ -52,11 +53,10 @@ public class UserRepository {
 
 
         String sql_number_of_submissions_and_editor_info = """
-                 SELECT (SELECT COUNT(*)
-                 FROM submission, "user"
-                 WHERE "user".id = submission.author_id
-                   AND "user".id = ?) as number_of_submissions,
-                (SELECT member_of.editor_id
+                 SELECT (SELECT count_submissions
+                 FROM user_data
+                 WHERE user_data.id = ?) as number_of_submissions,
+                (SELECT COUNT(member_of.editor_id)
                  FROM "user", member_of
                  WHERE "user".id = ?
                    AND member_of.editor_id = "user".id) as editor_id
@@ -135,6 +135,9 @@ public class UserRepository {
         } catch (SQLException ex) {
             throw new DatasourceQueryFailedException(ex.getMessage());
         }
+
+        setVerifiedStatus(result, transaction);
+
         return result;
     }
 
@@ -182,7 +185,7 @@ public class UserRepository {
 
         // Set the extra data gathered from other database entities.
         try {
-            if (submissionAndEditorResult.getInt("editor_id") != 0) {
+            if (submissionAndEditorResult.getInt("editor_id") > 0) {
                 privileges.add(Privilege.EDITOR);
             }
         } catch (SQLException ex) {
@@ -221,10 +224,10 @@ public class UserRepository {
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      * @return The user object with his id.
+     * @author Thomas Kirz
      */
     public static User add(User user, Transaction transaction)
             throws DataNotWrittenException {
-        // TODO: Ist noch nicht getestet, habe das nur schnell gebraucht.
         Connection conn = transaction.getConnection();
 
         if (user.getEmailAddress() == null || user.getFirstName() == null || user.getLastName() == null) {
@@ -269,12 +272,14 @@ public class UserRepository {
             user.setId(resultSet.getInt(1));
         } catch (SQLException ex) {
             DatasourceUtil.logSQLException(ex, logger);
-            transaction.abort();
-            throw new DatasourceQueryFailedException("A datasource exception"
-                    + "occurred", ex);
+            if (TransientSQLExceptionChecker.isTransient(ex.getSQLState())) {
+                throw new DataNotWrittenException("User could not be added", ex);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("A datasource exception occurred", ex);
+            }
         }
         return user;
-        // TODO: her auch Exceptins noch besser unterscheiden
     }
 
     /**
@@ -425,24 +430,202 @@ public class UserRepository {
      */
     public static Verification getVerification(User user, Transaction transaction)
             throws NotFoundException {
-        return null;
+        if (user.getId() == null && user.getEmailAddress() == null) {
+            logger.severe("User dto is not filled with an id or email address.");
+            throw new IllegalArgumentException("User dto is not filled with an id or email address.");
+        }
+
+        Connection conn = transaction.getConnection();
+        String sql = """
+                SELECT v.* FROM verification v, "user" u
+                WHERE v.id = ?
+                OR (v.id = u.id AND u.email_address = ?);
+                """;
+
+        Verification result;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, user.getId());
+            stmt.setString(2, user.getEmailAddress());
+            ResultSet rs = stmt.executeQuery();
+
+            // Attempt to create a verification dto from the result set.
+            if (rs.next()) {
+                result = createVerificationFromResultSet(rs);
+                logger.finer("Found verification dto for user");
+            } else {
+                logger.warning("No verification dto for specified user found");
+                throw new NotFoundException("No verification dto for specified user found");
+            }
+        } catch (SQLException e) {
+            DatasourceUtil.logSQLException(e, logger);
+            transaction.abort();
+            throw new DatasourceQueryFailedException("Failed to retrieve verification from database.", e);
+        }
+
+        return result;
     }
 
     /**
-     * Takes a verification dto that is filled with a valid userId and adds the
-     * verification to the user.
+     * Takes a verification dto that is filled with a validation random returns the
+     * filled verification dto.
+     *
+     * @param verification A {@code Verification} dto that must be filled
+     *                     with a validation random.
+     * @param transaction  The transaction to use.
+     * @return A fully filled {@code Verification} dto if a verification with the
+     * provided validation random exists, otherwise null.
+     * @throws DatasourceQueryFailedException If the datasource cannot be
+     *                                        queried.
+     * @author Thomas Kirz
+     */
+    public static Verification getVerification(Verification verification, Transaction transaction)
+            throws NotFoundException {
+        if (verification.getValidationRandom() == null) {
+            logger.severe("Verification dto is not filled with a validation random.");
+            throw new IllegalArgumentException("Verification dto is not filled with a validation random.");
+        }
+
+        Connection conn = transaction.getConnection();
+        String sql = "SELECT * FROM verification WHERE validation_random = ?";
+
+        Verification result;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, verification.getValidationRandom());
+            ResultSet rs = stmt.executeQuery();
+
+            // Attempt to create a verification dto from the result set.
+            if (rs.next()) {
+                result = createVerificationFromResultSet(rs);
+                logger.finer("Found verification dto with validation random "
+                        + verification.getValidationRandom());
+            } else {
+                logger.warning("No verification dto with validation random " + verification.getValidationRandom()
+                        + " found.");
+                throw new NotFoundException("No verification dto with the specified validation random found.");
+            }
+        } catch (SQLException e) {
+            DatasourceUtil.logSQLException(e, logger);
+            transaction.abort();
+            throw new DatasourceQueryFailedException("Failed to retrieve Verification from database.", e);
+        }
+
+        return result;
+    }
+
+    private static Verification createVerificationFromResultSet(ResultSet rs) throws SQLException {
+        Verification verification = new Verification();
+
+        verification.setUserId(rs.getInt("id"));
+        verification.setValidationRandom(rs.getString("validation_random"));
+        verification.setVerified(rs.getBoolean("is_verified"));
+        Timestamp timestamp = rs.getTimestamp("timestamp_validation_started");
+        verification.setTimestampValidationStarted(timestamp == null ? null : timestamp.toLocalDateTime());
+        verification.setNonVerifiedEmailAddress(rs.getString("unvalidated_email_address"));
+
+        return verification;
+    }
+
+    /**
+     * Takes a filled verification dto and adds it to the database.
      *
      * @param verification A fully filled Verification dto.
      * @param transaction  The transaction to use.
      * @throws NotFoundException              If there is no user with the
      *                                        provided userId.
+     * @throws DataNotWrittenException        If the verification could not be added but has
+     *                                        high probability of succeeding after retrying.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     * @author Thomas Kirz
      */
-    public static void setVerification(Verification verification,
+    public static void addVerification(Verification verification,
                                        Transaction transaction)
-            throws NotFoundException {
-        // TODO: Implement this method
+            throws NotFoundException, DataNotWrittenException {
+        User user = new User();
+        user.setId(verification.getUserId());
+        try {
+            get(user, transaction);
+        } catch (NotFoundException e) {
+            logger.severe("User belonging to verification dto was not found.");
+            throw new NotFoundException("User belonging to verification dto was not found.");
+        }
+
+        // insert new verification
+        Connection conn = transaction.getConnection();
+        String sql = """
+                INSERT INTO verification (id, validation_random, is_verified, timestamp_validation_started,
+                unvalidated_email_address)
+                VALUES (?, ?, ?, ?, ?);
+                """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setInt(1, verification.getUserId());
+                stmt.setString(2, verification.getValidationRandom());
+                stmt.setBoolean(3, verification.isVerified());
+                stmt.setTimestamp(4, Timestamp.valueOf(verification.getTimestampValidationStarted()));
+                stmt.setString(5, verification.getNonVerifiedEmailAddress());
+                stmt.executeUpdate();
+        } catch (SQLException e) {
+            DatasourceUtil.logSQLException(e, logger);
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                transaction.abort();
+                throw new DataNotWrittenException("Failed to add verification to database.", e);
+            } else {
+                throw new DatasourceQueryFailedException("Failed to add verification to database.", e);
+            }
+        }
+    }
+
+    /**
+     * Takes a filled verification dto and replaces the user's verification with this one.
+     *
+     * @param verification A fully filled Verification dto.
+     * @param transaction  The transaction to use.
+     * @throws NotFoundException              If the verification could not be found in the database.
+     * @throws DataNotWrittenException        If the verification could not be added but has
+     *                                        high probability of succeeding after retrying.
+     * @throws DatasourceQueryFailedException If the datasource cannot be
+     *                                        queried.
+     * @author Thomas Kirz
+     */
+    public static void changeVerification(Verification verification,
+                                       Transaction transaction)
+            throws NotFoundException, DataNotWrittenException {
+        User user = new User();
+        user.setId(verification.getUserId());
+        try {
+            getVerification(user, transaction);
+        } catch (NotFoundException e) {
+            logger.severe("Verification does not exist.");
+            throw new NotFoundException("Verification does not exist.");
+        }
+
+        // update existing verification
+        Connection conn = transaction.getConnection();
+        String sql = """
+                UPDATE verification
+                SET validation_random = ?, is_verified = ?, timestamp_validation_started = ?,
+                unvalidated_email_address = ?
+                WHERE id = ?;
+                """;
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, verification.getValidationRandom());
+            stmt.setBoolean(2, verification.isVerified());
+            stmt.setTimestamp(3, Timestamp.valueOf(verification.getTimestampValidationStarted()));
+            stmt.setString(4, verification.getNonVerifiedEmailAddress());
+            stmt.setInt(5, verification.getUserId());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            DatasourceUtil.logSQLException(e, logger);
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                transaction.abort();
+                throw new DataNotWrittenException("Failed to add verification to database.", e);
+            } else {
+                throw new DatasourceQueryFailedException("Failed to add verification to database.", e);
+            }
+        }
     }
 
     /**
@@ -635,6 +818,7 @@ public class UserRepository {
                             user.setDateOfBirth(birthdate.toLocalDate());
                         }
                         user.setEmployer(rs.getString("employer"));
+                        setVerifiedStatus(user, transaction);
 
                         userList.add(user);
                     }
@@ -666,6 +850,7 @@ public class UserRepository {
                             user.setDateOfBirth(birthdate.toLocalDate());
                         }
                         user.setEmployer(rs.getString("employer"));
+                        setVerifiedStatus(user, transaction);
 
                         userList.add(user);
                     }
@@ -787,6 +972,7 @@ public class UserRepository {
                     user.setDateOfBirth(birthdate.toLocalDate());
                 }
                 user.setEmployer(rs.getString("employer"));
+                setVerifiedStatus(user, transaction);
 
                 userList.add(user);
             }
@@ -926,9 +1112,8 @@ public class UserRepository {
             ResultSet resultSet = stmt.executeQuery();
             return resultSet.next();
         } catch (SQLException e) {
-            // TODO: hier eventuell unter Bedingungen eine checked Exception werfen
-            transaction.abort();
             DatasourceUtil.logSQLException(e, logger);
+            transaction.abort();
             throw new DatasourceQueryFailedException("the datasource could not be queried", e);
         }
     }
@@ -1035,6 +1220,17 @@ public class UserRepository {
                 throw new DatasourceQueryFailedException("The avatar could not be written!", e);
             }
         }
+    }
+
+    private static void setVerifiedStatus(User user, Transaction transaction) {
+        Verification verification;
+        try {
+            verification = getVerification(user, transaction);
+        } catch (NotFoundException e) {
+            verification = null;
+            logger.fine("No verification found for user: " + user.getEmailAddress());
+        }
+        user.setVerified(verification != null && verification.isVerified());
     }
 
 }

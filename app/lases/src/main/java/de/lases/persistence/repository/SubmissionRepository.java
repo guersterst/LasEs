@@ -8,6 +8,7 @@ import de.lases.persistence.util.TransientSQLExceptionChecker;
 import jakarta.enterprise.inject.spi.CDI;
 import org.postgresql.util.PSQLException;
 
+import javax.management.openmbean.KeyAlreadyExistsException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,8 @@ public class SubmissionRepository {
 
     private static final Logger logger = Logger.getLogger(SubmissionRepository.class.getName());
 
-    private static final List<String> filterColumnNames = List.of("title", "state", "forum");
+    private static final List<String> filterColumnNames = List.of("title", "state", "timestamp_submission",
+            "timestamp_deadline_revision", "forum");
 
 
     /**
@@ -38,11 +40,14 @@ public class SubmissionRepository {
      * @return A fully filled {@code Submission} dto.
      * @throws NotFoundException              If there is no submission with the
      *                                        provided id.
+     * @throws DataNotCompleteException       If retrieving the data failed but has a high probability of succeeding
+     *                                        after a retry.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     * @author Thomas Kirz
      */
     public static Submission get(Submission submission, Transaction transaction)
-            throws NotFoundException {
+            throws NotFoundException, DataNotCompleteException {
         if (submission.getId() == null) {
             logger.severe("The passed Submission-DTO does not contain an id.");
             throw new IllegalArgumentException("The passed Submission-DTO does not contain an id.");
@@ -67,8 +72,13 @@ public class SubmissionRepository {
                 throw new NotFoundException("No submission with id " + submission.getId() + " found.");
             }
         } catch (SQLException e) {
-            logger.severe(e.getMessage());
-            throw new DatasourceQueryFailedException(e.getMessage(), e);
+            DatasourceUtil.logSQLException(e, logger);
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                throw new DataNotCompleteException("Submission could not be retrieved", e);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("Submission could not be retrieved", e);
+            }
         }
 
         return result;
@@ -111,6 +121,7 @@ public class SubmissionRepository {
      *                    (The id must not be specified, as the repository will
      *                    create the id)
      * @param transaction The transaction to use.
+     * @return The submission that was added, but filled with its id.
      * @throws DataNotWrittenException        If writing the data to the repository
      *                                        fails.
      * @throws InvalidFieldsException         If one of the required fields of the
@@ -142,6 +153,7 @@ public class SubmissionRepository {
             }
         } catch (SQLException ex) {
             DatasourceUtil.logSQLException(ex, logger);
+            transaction.abort();
             throw new DatasourceQueryFailedException("A datasource exception"
                     + "occurred", ex);
         }
@@ -168,10 +180,10 @@ public class SubmissionRepository {
 
             stmt.executeUpdate();
         } catch (SQLException ex) {
+            DatasourceUtil.logSQLException(ex, logger);
             if (TransientSQLExceptionChecker.isTransient(ex.getSQLState())) {
                 throw new DataNotWrittenException("Submission could not be added", ex);
             } else {
-                DatasourceUtil.logSQLException(ex, logger);
                 transaction.abort();
                 throw new DatasourceQueryFailedException("A datasource exception "
                         + "occurred", ex);
@@ -229,7 +241,11 @@ public class SubmissionRepository {
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, submission.getState().toString());
             statement.setBoolean(2, submission.isRevisionRequired());
-            statement.setTimestamp(3, Timestamp.valueOf(submission.getDeadlineRevision()));
+            if (submission.getDeadlineRevision() == null) {
+                statement.setTimestamp(3, null);
+            } else {
+                statement.setTimestamp(3, Timestamp.valueOf(submission.getDeadlineRevision()));
+            }
             statement.setInt(4, submission.getEditorId());
             statement.setInt(5, submission.getId());
 
@@ -237,6 +253,7 @@ public class SubmissionRepository {
 
         } catch (SQLException exception) {
             DatasourceUtil.logSQLException(exception, logger);
+            transaction.abort();
             throw new DatasourceQueryFailedException("A datasource exception occurred while changing a submission's data.", exception);
         }
 
@@ -286,6 +303,7 @@ public class SubmissionRepository {
 
         } catch (SQLException exception) {
             DatasourceUtil.logSQLException(exception, logger);
+            transaction.abort();
             throw new DatasourceQueryFailedException("A datasource exception occurred while removing a submission.", exception);
         }
     }
@@ -312,6 +330,7 @@ public class SubmissionRepository {
      *                                        queried.
      * @throws InvalidQueryParamsException    If the resultListParameters contain
      *                                        an erroneous option.
+     * @author Thomas Kirz
      */
     public static List<Submission> getList(User user, Privilege privilege,
                                            ScientificForum scientificForum,
@@ -347,7 +366,11 @@ public class SubmissionRepository {
                         """;
                 default -> """
                         SELECT * FROM submission
-                        WHERE forum_id = ? AND author_id = ?
+                        WHERE submission.forum_id = ?
+                          AND ? IN (
+                              SELECT submission.author_id
+                              UNION
+                              SELECT ca.user_id FROM co_authored ca WHERE ca.submission_id = submission.id)
                         """;
             };
 
@@ -365,8 +388,13 @@ public class SubmissionRepository {
                 }
                 logger.finer("Retrieved a list of submissions from the database.");
             } catch (SQLException e) {
-                logger.severe(e.getMessage());
-                throw new DatasourceQueryFailedException(e.getMessage(), e);
+                DatasourceUtil.logSQLException(e, logger);
+                if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                    throw new DataNotCompleteException("The list of submissions could not be retrieved.", e);
+                } else {
+                    transaction.abort();
+                    throw new DatasourceQueryFailedException("The list of submissions could not be retrieved.", e);
+                }
             }
             return result;
         }
@@ -390,6 +418,7 @@ public class SubmissionRepository {
      *                                        queried.
      * @throws InvalidQueryParamsException    If the resultListParameters contain
      *                                        an erroneous option.
+     * @author Thomas Kirz
      */
     public static List<Submission> getList(User user, Privilege privilege,
                                            Transaction transaction,
@@ -422,17 +451,22 @@ public class SubmissionRepository {
                     """;
             default -> """
                     SELECT * FROM submission
-                    WHERE author_id = ?
+                    WHERE ? IN (
+                        SELECT submission.author_id
+                        UNION
+                        SELECT ca.user_id FROM co_authored ca WHERE ca.submission_id = submission.id)
                     """;
         };
 
         sql += generateResultListParametersSQLSuffix(resultListParameters, true);
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            int parameterIndex = 1;
+
             if (privilege != Privilege.ADMIN) {
-                stmt.setInt(1, user.getId());
+                stmt.setInt(parameterIndex++, user.getId());
             }
-            fillResultListParameterSuffix(2, stmt, resultListParameters);
+            fillResultListParameterSuffix(parameterIndex, stmt, resultListParameters);
             resultSet = stmt.executeQuery();
 
             // Attempt to create a list of submissions from the result set.
@@ -441,8 +475,13 @@ public class SubmissionRepository {
             }
             logger.finer("Retrieved a list of submissions from the database.");
         } catch (SQLException e) {
-            logger.severe(e.getMessage());
-            throw new DatasourceQueryFailedException(e.getMessage(), e);
+            DatasourceUtil.logSQLException(e, logger);
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                throw new DataNotCompleteException("The list of submissions could not be retrieved.", e);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("The list of submissions could not be retrieved.", e);
+            }
         }
         return result;
     }
@@ -465,6 +504,7 @@ public class SubmissionRepository {
      *                                        queried.
      * @throws InvalidQueryParamsException    If the resultListParameters contain
      *                                        an erroneous option.
+     * @author Thomas Kirz
      */
     public static List<Submission> getList(ScientificForum scientificForum,
                                            Transaction transaction,
@@ -498,8 +538,13 @@ public class SubmissionRepository {
             }
             logger.finer("Retrieved a list of submissions from the database.");
         } catch (SQLException e) {
-            logger.severe(e.getMessage());
-            throw new DatasourceQueryFailedException(e.getMessage(), e);
+            DatasourceUtil.logSQLException(e, logger);
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                throw new DataNotCompleteException("The list of submissions could not be retrieved.", e);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("The list of submissions could not be retrieved.", e);
+            }
         }
         return null;
     }
@@ -524,7 +569,7 @@ public class SubmissionRepository {
 
         if (user.getId() == null || submission.getId() == null) {
             transaction.abort();
-            String nullArgument = user.getId() == null ? "user": "submission";
+            String nullArgument = user.getId() == null ? "user" : "submission";
             throw new InvalidFieldsException("The ids of the " + nullArgument + " must not be null");
         }
         Connection conn = transaction.getConnection();
@@ -543,7 +588,7 @@ public class SubmissionRepository {
             // 23503: Foreign key constraint violated
             if (ex.getSQLState().equals("23503")) {
                 throw new NotFoundException("Either the specified user or submission does not exist");
-            } else if (! (ex instanceof PSQLException)) {
+            } else if (!(ex instanceof PSQLException)) {
                 throw new DataNotWrittenException("The co-author was not added", ex);
             } else {
                 transaction.abort();
@@ -556,10 +601,9 @@ public class SubmissionRepository {
     /**
      * Adds the specified user to the specified submission as a reviewer.
      *
-     * @param submission  A scientific forum dto with a valid id.
-     * @param user        A user dto with a valid id.
+     * @param reviewedBy  A relation between submission and a user in a role of a reviewer.
      * @param transaction The transaction to use.
-     * @throws NotFoundException              If there is no scientific forum with the
+     * @throws NotFoundException              If there is no submission forum with the
      *                                        provided id or there is no user with the
      *                                        provided id.
      * @throws DataNotWrittenException        If writing the data to the repository
@@ -567,9 +611,65 @@ public class SubmissionRepository {
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
-    public static void addReviewer(Submission submission, User user,
+    public static void addReviewer(ReviewedBy reviewedBy,
                                    Transaction transaction)
-            throws NotFoundException, DataNotWrittenException {
+            throws NotFoundException, DataNotWrittenException, KeyAlreadyExistsException {
+        if (reviewedBy.getSubmissionId() == null) {
+            transaction.abort();
+            logger.severe("Passed submission DTO is not sufficiently filled.");
+            throw new InvalidFieldsException("Submission with id: " + reviewedBy.getSubmissionId() + " must not be null.");
+        }
+        if (reviewedBy.getReviewerId() == null) {
+            transaction.abort();
+            logger.severe("Passed user DTO is not sufficiently filled.");
+            throw new InvalidFieldsException("User with id: " + reviewedBy.getReviewerId() + " must not be null.");
+        }
+
+        Connection connection = transaction.getConnection();
+        String findSubmission = "SELECT s.id FROM submission s WHERE s.id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(findSubmission)) {
+
+            statement.setInt(1, reviewedBy.getSubmissionId());
+
+        } catch (SQLException exception) {
+            transaction.abort();
+            logger.warning("Searching for a submission with the id: " + reviewedBy.getSubmissionId());
+            throw new NotFoundException(exception.getMessage());
+        }
+        String findUser = "SELECT * FROM \"user\" u WHERE u.id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(findUser)) {
+            statement.setInt(1, reviewedBy.getReviewerId());
+            statement.executeQuery();
+        } catch (SQLException exception) {
+            transaction.abort();
+            logger.warning("Searching for an user with the id: " + reviewedBy.getReviewerId());
+            throw new NotFoundException(exception.getMessage());
+        }
+
+        String sql = "INSERT INTO reviewed_by VALUES (?, ?, CAST (? as review_task_state), ?)";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, reviewedBy.getReviewerId());
+            statement.setInt(2, reviewedBy.getSubmissionId());
+            statement.setString(3, reviewedBy.getHasAccepted().name());
+            statement.setTimestamp(4, Timestamp.valueOf(reviewedBy.getTimestampDeadline()));
+
+            statement.executeUpdate();
+
+        } catch (SQLException exception) {
+            transaction.abort();
+            DatasourceUtil.logSQLException(exception, logger);
+            if (exception.getSQLState().equals("23505")) {
+                throw new KeyAlreadyExistsException("Reviewer does already review this submission.");
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("A datasource exception occurred while adding a new reviewer.");
+            }
+
+        }
+
     }
 
     /**
@@ -594,28 +694,7 @@ public class SubmissionRepository {
     }
 
     /**
-     * Removes the specified reviewer from the specified scientific forum.
-     *
-     * @param submission  A scientific forum dto with a valid id.
-     * @param user        A user dto with a valid id, which is a reviewer in the
-     *                    aforementioned submission.
-     * @param transaction The transaction to use.
-     * @throws NotFoundException              If there is no scientific forum with the
-     *                                        provided id or there is no user with the
-     *                                        provided id or the provided user is not
-     *                                        a reviewer for the provided submission.
-     * @throws DataNotWrittenException        If writing the data to the repository
-     *                                        fails.
-     * @throws DatasourceQueryFailedException If the datasource cannot be
-     *                                        queried.
-     */
-    public static void removeReviewer(Submission submission, User user,
-                                      Transaction transaction)
-            throws NotFoundException, DataNotWrittenException {
-    }
-
-    /**
-     * Count the number of submissions where the specified user is author.
+     * Count the number of submissions that belong to the user under the specified role.
      *
      * @param user                 A user dto with a valid id.
      * @param privilege            As which role should the user act.
@@ -626,14 +705,17 @@ public class SubmissionRepository {
      * @return The number of submission the specified user is author, editor
      * or reviewer of.
      * @throws NotFoundException              If there is no user with the provided id.
+     * @throws DataNotCompleteException       If retrieving the data failed but has a high probability of succeeding
+     *                                        after a retry.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     * @author Thomas Kirz
      */
     public static int countSubmissions(User user, Privilege privilege,
                                        Transaction transaction,
                                        ResultListParameters
                                                resultListParameters)
-            throws NotFoundException {
+            throws NotFoundException, DataNotCompleteException {
         if (user.getId() == null) {
 
             logger.severe("Passed  User-DTO is not sufficiently filled.");
@@ -664,7 +746,10 @@ public class SubmissionRepository {
                     """;
             default -> """
                     SELECT COUNT(*) FROM submission
-                    WHERE author_id = ?
+                    WHERE ? IN (
+                        SELECT submission.author_id
+                        UNION
+                        SELECT ca.user_id FROM co_authored ca WHERE ca.submission_id = submission.id)
                     """;
         };
 
@@ -685,12 +770,18 @@ public class SubmissionRepository {
             } else {
                 logger.severe("The number of submissions authored by the user with id " + user.getId() +
                         " could not be retrieved.");
+                transaction.abort();
                 throw new DatasourceQueryFailedException("The number of submissions authored by the user with id "
                         + user.getId() + " could not be retrieved.");
             }
         } catch (SQLException e) {
-            logger.severe(e.getMessage());
-            throw new DatasourceQueryFailedException(e.getMessage(), e);
+            DatasourceUtil.logSQLException(e, logger);
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                throw new DataNotCompleteException("The number of submissions could not be retrieved.", e);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("The list of submissions could not be retrieved.", e);
+            }
         }
     }
 
@@ -720,11 +811,20 @@ public class SubmissionRepository {
             });
         }
 
+        // Filter according to filter column parameters
+        // Only append if filter column is specified because filtering for a null value would not return any results
+        // because of the AND operators.
         if (isFilled(params.getFilterColumns().get("title"))) {
             sb.append(" AND title ILIKE ?\n");
         }
         if (isFilled(params.getFilterColumns().get("state"))) {
             sb.append(" AND state::VARCHAR ILIKE ?\n");
+        }
+        if (isFilled(params.getFilterColumns().get("timestamp_submission"))) {
+            sb.append(" AND timestamp_submission::VARCHAR ILIKE ?\n");
+        }
+        if (isFilled(params.getFilterColumns().get("timestamp_deadline_revision"))) {
+            sb.append(" AND timestamp_deadline_revision::VARCHAR ILIKE ?\n");
         }
         if (isFilled(params.getFilterColumns().get("forum"))) {
             sb.append(" AND (SELECT f.name FROM scientific_forum f WHERE f.id = submission.forum_id) ILIKE ?\n");
@@ -735,13 +835,15 @@ public class SubmissionRepository {
                 AND (
                     title ILIKE ?
                     OR state::VARCHAR ILIKE ?
+                    OR timestamp_submission::VARCHAR ILIKE ?
+                    OR timestamp_deadline_revision::VARCHAR ILIKE ?
                     OR (SELECT f.name FROM scientific_forum f WHERE f.id = submission.forum_id) ILIKE ?
                 )
                 """);
 
         if (limit) {
             // Sort according to sort column parameter
-            if (filterColumnNames.contains(params.getSortColumn())) {
+            if (params.getSortColumn() != null && filterColumnNames.contains(params.getSortColumn())) {
                 sb.append("ORDER BY ");
                 if (params.getSortColumn().equals("forum")) { // need to get forum name
                     sb.append("(SELECT f.name FROM scientific_forum f WHERE f.id = submission.forum_id)");

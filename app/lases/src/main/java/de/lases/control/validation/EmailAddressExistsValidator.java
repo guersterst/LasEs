@@ -2,13 +2,13 @@ package de.lases.control.validation;
 
 import de.lases.business.service.UserService;
 import de.lases.global.transport.User;
+import jakarta.enterprise.inject.spi.CDI;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.validator.FacesValidator;
 import jakarta.faces.validator.Validator;
 import jakarta.faces.validator.ValidatorException;
-import jakarta.inject.Inject;
 
 import java.util.PropertyResourceBundle;
 import java.util.logging.Logger;
@@ -20,13 +20,7 @@ import java.util.logging.Logger;
 @FacesValidator
 public class EmailAddressExistsValidator implements Validator<String> {
 
-    @Inject
-    private UserService userService;
-
     private final Logger l = Logger.getLogger(EmailAddressUnoccupiedValidator.class.getName());
-
-    @Inject
-    private PropertyResourceBundle bundle;
 
     /**
      * Validates an email address as specified in the class description.
@@ -41,7 +35,9 @@ public class EmailAddressExistsValidator implements Validator<String> {
                          String address) throws ValidatorException {
         User user = new User();
         user.setEmailAddress(address);
+        UserService userService = CDI.current().select(UserService.class).get();
         if (!userService.emailExists(user)) {
+            PropertyResourceBundle bundle = CDI.current().select(PropertyResourceBundle.class).get();
             l.finer("Validation failed: " + address + " does not exist.");
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, bundle.getString("emailNotExists"),
                     null);

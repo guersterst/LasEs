@@ -12,10 +12,12 @@ import de.lases.persistence.repository.SystemSettingsRepository;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
+import jakarta.enterprise.inject.spi.CDI;
 import jakarta.inject.Inject;
 
 import java.io.IOException;
 import java.util.PropertyResourceBundle;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -40,6 +42,26 @@ public class CustomizationService {
      * @param systemSettings The filled {@link SystemSettings}.
      */
     public void change(SystemSettings systemSettings) {
+        if (systemSettings.getImprint() == null || systemSettings.getCompanyName() == null
+                || systemSettings.getHeadlineWelcomePage() == null || systemSettings.getMessageWelcomePage() == null
+                || systemSettings.getStyle() == null) {
+            logger.severe("One of the fields in systemSettings is null.");
+            throw new InvalidFieldsException("Fields in systemSettings are null.");
+        }
+
+        Transaction transaction = new Transaction();
+
+        try {
+            SystemSettingsRepository.updateSettings(systemSettings, transaction);
+            transaction.commit();
+            logger.finest("Changed system settings");
+        }  catch (DataNotWrittenException exception) {
+
+            logger.log(Level.WARNING, exception.getMessage());
+            uiMessageEvent.fire(new UIMessage(props.getString("dataNotWritten"), MessageCategory.ERROR));
+
+            transaction.abort();
+        }
     }
 
     /**
@@ -78,16 +100,9 @@ public class CustomizationService {
             throw new InvalidFieldsException();
         }
 
-        FileDTO thumbnailedLogo = new FileDTO();
-        try {
-            thumbnailedLogo = AvatarUtil.generateThumbnail(logo);
-        } catch (IOException e) {
-            uiMessageEvent.fire(new UIMessage(props.getString("imageNotThumbnailed"), MessageCategory.ERROR));
-        }
-
         Transaction transaction = new Transaction();
         try {
-            SystemSettingsRepository.setLogo(thumbnailedLogo, transaction);
+            SystemSettingsRepository.setLogo(logo, transaction);
             transaction.commit();
             logger.finest("Successfully set the logo of the application.");
         } catch (DataNotWrittenException ex) {

@@ -7,7 +7,6 @@ import jakarta.faces.context.FacesContext;
 import jakarta.faces.validator.FacesValidator;
 import jakarta.faces.validator.Validator;
 import jakarta.faces.validator.ValidatorException;
-import jakarta.inject.Inject;
 
 import java.util.PropertyResourceBundle;
 import java.util.logging.Logger;
@@ -33,8 +32,6 @@ import java.util.logging.Logger;
 public class PasswordValidator implements Validator<String> {
 
     private final Logger l = Logger.getLogger(PasswordValidator.class.getName());
-
-    PropertyResourceBundle bundle = CDI.current().select(PropertyResourceBundle.class).get();
 
     /**
      * Validates passwords as specified in the class description.
@@ -67,6 +64,7 @@ public class PasswordValidator implements Validator<String> {
 
         // Throw exception if password is not valid
         if (!valid) {
+            PropertyResourceBundle bundle = CDI.current().select(PropertyResourceBundle.class).get();
             l.finer("Validation failed: " + password + " is an invalid password");
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     bundle.getString("invalidPassword"), null);

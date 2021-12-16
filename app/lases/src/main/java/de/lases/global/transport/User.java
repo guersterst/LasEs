@@ -35,6 +35,8 @@ public class User implements Cloneable {
 
     private boolean isRegistered; // SQL: is_registered
 
+    private boolean isVerified; // SQL implicit
+
     private int numberOfSubmissions; // SQL
 
     public User() {
@@ -206,6 +208,18 @@ public class User implements Cloneable {
      */
     public void setRegistered(boolean registered) {
         isRegistered = registered;
+    }
+
+    public boolean isVerified() {
+        return isVerified;
+    }
+
+    /**
+     * Decide if the user's email address verified or not.
+     * @param verified If the user's email address is verified.
+     */
+    public void setVerified(boolean verified) {
+        isVerified = verified;
     }
 
     public List<Privilege> getPrivileges() {
