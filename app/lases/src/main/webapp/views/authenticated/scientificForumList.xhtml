@@ -22,11 +22,8 @@
                     <div class="card-body">
                         <h:form>
 
-
-                            <!-- Filter controls -->
-                            <!--
+                            <!-- Filter controls: deadline -->
                             <div class="btn-group">
-
                                 <h:selectOneMenu id="date-slctom"
                                                  value="#{scientificForumListBacking.scientificForumPagination.resultListParameters.dateSelect}"
                                                  title="#{help.dateSelect}"
@@ -36,21 +33,7 @@
                                                    itemLabel="#{labels['dateSelect.' += select]}"
                                                    itemValue="#{select}"/>
                                 </h:selectOneMenu>
-
-
-                                <h:selectOneMenu id="state-slctom"
-                                                 value="#{scientificForumListBacking.submissionPagination.resultListParameters.submissionState}"
-                                                 title="#{help.stateSubSelect}"
-                                                 styleClass="btn btn-secondary">
-                                    <f:selectItem itemValue="#{null}"
-                                                  itemLabel="#{labels['stateSelect.ALL']}"/>
-                                    <f:selectItems value="#{scientificForumBacking.submissionStates}"
-                                                   var="select"
-                                                   itemLabel="#{labels['stateSelect.' += select]}"
-                                                   itemValue="#{select}"/>
-                                </h:selectOneMenu>
                             </div>
-                    -->
 
                             <pg:pagination paginator="#{scientificForumListBacking.scientificForumPagination}">
 

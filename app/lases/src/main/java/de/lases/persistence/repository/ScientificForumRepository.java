@@ -339,6 +339,13 @@ public class ScientificForumRepository {
             sb.append("WHERE f.name ILIKE ?\n");
         }
 
+        // Filter according to date select parameter
+        if (params.getDateSelect() == DateSelect.FUTURE) {
+            sb.append(" AND (timestamp_deadline::date >= CURRENT_DATE\n");
+        } else if (params.getDateSelect() == DateSelect.PAST) {
+            sb.append(" AND (timestamp_deadline::date <= CURRENT_DATE\n");
+        }
+
         if (!doCount) {
             if (isFilled(params.getSortColumn())) {
                 if (params.getSortColumn().equals("name")) {
