@@ -153,12 +153,7 @@ public class ProfileBacking implements Serializable {
      * be displayed.
      */
     public void submitAdminChanges() {
-
-    }
-    /**
-     * Abort the changes made to the user and show a fresh profile page.
-     */
-    public void abort() {
+        userService.change(userForAdminSettings);
     }
 
 

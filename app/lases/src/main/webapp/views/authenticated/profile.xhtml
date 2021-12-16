@@ -90,13 +90,20 @@
                                 <h:form id="edit-admin-form">
                                     <h:panelGroup layout="block" styleClass="form-group form-check">
                                         <h:selectBooleanCheckbox styleClass="form-check-input" id="is-admin-cbx" value="#{profileBacking.userForAdminSettings.admin}"/><h:outputLabel for="is-admin-cbx" styleClass="form-check-label" value="#{labels.adminRights}"/><br/>
+                                        <h:message for="password-admin-iscrt"/><br/>
                                         <p:commandButton id="is-admin-cbtn" styleClass="btn-secondary btn" type="button" value="#{labels.save}" onclick="PF('dlg').show()" />
                                         <p:confirmDialog id="dlg" widgetVar="dlg" header="Lorem Ipsum">
-                                            <h:inputSecret id="password-admin-iscrt" value="#{profileBacking.adminPassword.passwordNotHashed}" required="true" requiredMessage="#{message.passwordNeeded}"/>
-                                            <h:outputText value="Lorem Ipsum"/>
-                                            <h:commandButton value="Lorem Ipsum" action="#{profileBacking.abort()}"/>
-                                            <h:commandButton value="Lorem Ipsum" action="#{profileBacking.submitAdminChanges}"/>
+
+                                            <div class="form-group">
+                                                <h:outputLabel for="password-admin-iscrt" value="#{message.passwordNeeded}" styleClass="form-label"/>
+                                                <h:inputSecret id="password-admin-iscrt" value="#{profileBacking.adminPassword.passwordNotHashed}" required="true" requiredMessage="#{message.passwordNeeded}" styleClass="form-control"/>
+                                                <h:commandButton id="admin-save-cbtn" value="Lorem Ipsum" action="#{profileBacking.submitAdminChanges()}" styleClass="btn-primary btn">
+                                                    <f:ajax execute="edit-admin-form" render="edit-admin-form" />
+                                                </h:commandButton>
+                                            </div>
+
                                         </p:confirmDialog>
+
                                     </h:panelGroup>
                                 </h:form>
                             </div>

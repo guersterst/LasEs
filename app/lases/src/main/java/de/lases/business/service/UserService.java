@@ -85,9 +85,13 @@ public class UserService implements Serializable {
     public void change(User newUser) {
         Transaction transaction = new Transaction();
         // TODO: Email verification process
-        newUser.setPasswordSalt(Hashing.generateRandomSalt());
-        newUser.setPasswordHashed(Hashing.hashWithGivenSalt(newUser.getPasswordNotHashed(),
-                newUser.getPasswordSalt()));
+
+        if (newUser.getPasswordNotHashed() != null) {
+            newUser.setPasswordSalt(Hashing.generateRandomSalt());
+            newUser.setPasswordHashed(Hashing.hashWithGivenSalt(newUser.getPasswordNotHashed(),
+                    newUser.getPasswordSalt()));
+        }
+
         try {
             UserRepository.change(newUser, transaction);
             transaction.commit();
