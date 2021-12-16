@@ -38,10 +38,12 @@ class SubmissionBackingTest {
 
     @Mock ScientificForumService scientificForumService;
 
+    @Mock ToolbarBacking toolbarBacking;
+
     SubmissionBacking submissionBacking = new SubmissionBacking();
 
     @BeforeEach
-    void setBackingDependencies() throws Exception{
+    void setBackingDependencies() throws Exception {
         Field submissionServiceField = submissionBacking.getClass().getDeclaredField("submissionService");
         submissionServiceField.setAccessible(true);
         submissionServiceField.set(submissionBacking, submissionService);
@@ -65,6 +67,10 @@ class SubmissionBackingTest {
         Field sessionInformationField = submissionBacking.getClass().getDeclaredField("sessionInformation");
         sessionInformationField.setAccessible(true);
         sessionInformationField.set(submissionBacking, sessionInformation);
+
+        Field toolbarBackingField = submissionBacking.getClass().getDeclaredField("toolbarBacking");
+        toolbarBackingField.setAccessible(true);
+        toolbarBackingField.set(submissionBacking, toolbarBacking);
     }
 
     @Test
@@ -77,6 +83,7 @@ class SubmissionBackingTest {
         when(sessionInformation.getUser()).thenReturn(user);
 
         when(submissionService.get(sub)).thenReturn(sub);
+        when(submissionService.canView(sub, user)).thenReturn(true);
 
         submissionBacking.init();
         // Fake view params
@@ -88,9 +95,7 @@ class SubmissionBackingTest {
         verify(submissionService).get(sub);
         verify(userService).getList(sub, Privilege.AUTHOR);
         verify(paperService).getList(eq(sub), eq(user), any());
-        // TODO mergen von basti
-//        verify(reviewService).getList(eq(sub), eq(user), any());
-//        verify(submissionService).getReviewedBy(eq(sub), eq(user));
+        verify(reviewService).getList(eq(sub), eq(user), any());
     }
 
     @Test
@@ -104,6 +109,7 @@ class SubmissionBackingTest {
 
         when(sessionInformation.getUser()).thenReturn(user);
         when(submissionService.get(sub)).thenReturn(sub);
+        when(submissionService.canView(sub, user)).thenReturn(false);
 
         submissionBacking.init();
 
