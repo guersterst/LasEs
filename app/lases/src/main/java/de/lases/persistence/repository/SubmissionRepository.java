@@ -41,6 +41,7 @@ public class SubmissionRepository {
      *                                        provided id.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     * @author Thomas Kirz
      */
     public static Submission get(Submission submission, Transaction transaction)
             throws NotFoundException {
@@ -318,6 +319,7 @@ public class SubmissionRepository {
      *                                        queried.
      * @throws InvalidQueryParamsException    If the resultListParameters contain
      *                                        an erroneous option.
+     * @author Thomas Kirz
      */
     public static List<Submission> getList(User user, Privilege privilege,
                                            ScientificForum scientificForum,
@@ -353,7 +355,11 @@ public class SubmissionRepository {
                         """;
                 default -> """
                         SELECT * FROM submission
-                        WHERE forum_id = ? AND author_id = ?
+                        WHERE submission.forum_id = ?
+                          AND ? IN (
+                              SELECT submission.author_id
+                              UNION
+                              SELECT ca.user_id FROM co_authored ca WHERE ca.submission_id = submission.id)
                         """;
             };
 
@@ -396,6 +402,7 @@ public class SubmissionRepository {
      *                                        queried.
      * @throws InvalidQueryParamsException    If the resultListParameters contain
      *                                        an erroneous option.
+     * @author Thomas Kirz
      */
     public static List<Submission> getList(User user, Privilege privilege,
                                            Transaction transaction,
@@ -428,7 +435,10 @@ public class SubmissionRepository {
                     """;
             default -> """
                     SELECT * FROM submission
-                    WHERE author_id = ?
+                    WHERE ? IN (
+                        SELECT submission.author_id
+                        UNION
+                        SELECT ca.user_id FROM co_authored ca WHERE ca.submission_id = submission.id)
                     """;
         };
 
@@ -471,6 +481,7 @@ public class SubmissionRepository {
      *                                        queried.
      * @throws InvalidQueryParamsException    If the resultListParameters contain
      *                                        an erroneous option.
+     * @author Thomas Kirz
      */
     public static List<Submission> getList(ScientificForum scientificForum,
                                            Transaction transaction,
@@ -654,7 +665,7 @@ public class SubmissionRepository {
     }
 
     /**
-     * Count the number of submissions where the specified user is author.
+     * Count the number of submissions that belong to the user under the specified role.
      *
      * @param user                 A user dto with a valid id.
      * @param privilege            As which role should the user act.
@@ -667,6 +678,7 @@ public class SubmissionRepository {
      * @throws NotFoundException              If there is no user with the provided id.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     * @author Thomas Kirz
      */
     public static int countSubmissions(User user, Privilege privilege,
                                        Transaction transaction,
@@ -703,7 +715,10 @@ public class SubmissionRepository {
                     """;
             default -> """
                     SELECT COUNT(*) FROM submission
-                    WHERE author_id = ?
+                    WHERE ? IN (
+                        SELECT submission.author_id
+                        UNION
+                        SELECT ca.user_id FROM co_authored ca WHERE ca.submission_id = submission.id)
                     """;
         };
 
