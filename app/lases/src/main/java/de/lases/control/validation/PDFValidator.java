@@ -55,8 +55,8 @@ public class PDFValidator implements Validator<Part> {
         double fileSizeMB = (((double) fileLength / CONVERT_LENGTH) / CONVERT_LENGTH);
 
         if (fileSizeMB >= fileMax){
-            String message = messageResourceBundle.getString("validatePDFSize");
-            FacesMessage facesMessage = new FacesMessage(message);
+            String message = messageResourceBundle.getString("validateFileSize");
+            FacesMessage facesMessage = new FacesMessage(message + " " + fileMax + "MB");
             facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
             throw new ValidatorException(facesMessage);
         }

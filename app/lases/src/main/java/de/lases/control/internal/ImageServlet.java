@@ -36,7 +36,6 @@ public class ImageServlet extends HttpServlet {
 
     private static final Logger logger = Logger.getLogger(ImageServlet.class.getName());
 
-
     /**
      * Answers a get request that requests a specific image resource specified
      * over the url. Redirects to a 404 page if the user does not have the

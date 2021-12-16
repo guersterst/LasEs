@@ -16,6 +16,8 @@ import java.util.logging.Logger;
 
 /**
  * Holds a set of open database connections that can be used by the program.
+ *
+ * @author Sebastian Vogt
  */
 public class ConnectionPool {
 

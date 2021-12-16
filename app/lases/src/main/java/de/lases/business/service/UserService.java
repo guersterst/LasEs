@@ -1,16 +1,16 @@
 package de.lases.business.service;
 
+import de.lases.business.util.AvatarUtil;
+import de.lases.business.util.Hashing;
 import de.lases.global.transport.*;
-import de.lases.persistence.exception.DataNotCompleteException;
-import de.lases.persistence.exception.InvalidFieldsException;
-import de.lases.persistence.exception.InvalidQueryParamsException;
-import de.lases.persistence.exception.NotFoundException;
+import de.lases.persistence.exception.*;
 import de.lases.persistence.repository.Transaction;
 import de.lases.persistence.repository.UserRepository;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 
+import java.io.IOException;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -83,6 +83,33 @@ public class UserService implements Serializable {
      *                   using the {@code EmailUtil} utility.
      */
     public void change(User newUser) {
+        Transaction transaction = new Transaction();
+        // TODO: Email verification process
+
+        if (newUser.getPasswordNotHashed() != null) {
+            newUser.setPasswordSalt(Hashing.generateRandomSalt());
+            newUser.setPasswordHashed(Hashing.hashWithGivenSalt(newUser.getPasswordNotHashed(),
+                    newUser.getPasswordSalt()));
+        }
+
+        try {
+            UserRepository.change(newUser, transaction);
+            transaction.commit();
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataSaved"),
+                    MessageCategory.INFO));
+        } catch (NotFoundException e) {
+            transaction.abort();
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("userNotFound"),
+                    MessageCategory.ERROR));
+        } catch (KeyExistsException e) {
+            transaction.abort();
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("emailInUse"),
+                    MessageCategory.ERROR));
+        } catch (DataNotWrittenException e) {
+            transaction.abort();
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataNorWritten"),
+                    MessageCategory.ERROR));
+        }
     }
 
     /**
@@ -109,7 +136,7 @@ public class UserService implements Serializable {
     }
 
     /**
-     * Sets a user's avatar.
+     * Sets a user's avatar. If the avatar file or the contained byte[] are null, the current avatar will be removed.
      * <p>
      * The avatar is parsed into a thumbnail using the
      * {@link de.lases.business.util.AvatarUtil} utility.
@@ -118,18 +145,48 @@ public class UserService implements Serializable {
      * @param avatar The {@link FileDTO} containing the image as a byte-array.
      * @param user   The {@link User} whose avatar is being set.
      *               Must contain a valid id.
+     *
+     * @author Sebastian Vogt
      */
     public void setAvatar(FileDTO avatar, User user) {
+        Transaction transaction = new Transaction();
+        try {
+            UserRepository.setAvatar(user, avatar == null ? null : AvatarUtil.generateThumbnail(avatar), transaction);
+            transaction.commit();
+        } catch (DataNotWrittenException | IOException e) {
+            transaction.abort();
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataNorWritten"),
+                    MessageCategory.ERROR));
+        } catch (NotFoundException e) {
+            transaction.abort();
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("userNotFound"),
+                    MessageCategory.ERROR));
+        }
     }
 
     /**
-     * Gets the user's avatar.
+     * Gets the user's avatar. Is null if the user has no avatar.
      *
      * @param user The {@link User} whose avatar is being requested.
      *             Must contain a valid id.
      * @return The user's avatar as a byte-array, wrapped by a {@code FileDTO}.
      */
     public FileDTO getAvatar(User user) {
+        Transaction transaction = new Transaction();
+
+        try {
+            FileDTO avatar = UserRepository.getAvatar(user, transaction);
+            transaction.commit();
+            return avatar;
+        } catch (DataNotCompleteException e) {
+            transaction.abort();
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("avatarNotLoaded"),
+                    MessageCategory.ERROR));
+        } catch (NotFoundException e) {
+            transaction.abort();
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("userNotFound"),
+                    MessageCategory.ERROR));
+        }
         return null;
     }
 
@@ -253,5 +310,66 @@ public class UserService implements Serializable {
      */
     public Verification getVerification(User user) {
         return null;
+    }
+
+    /**
+     * Verifies a user's email-address.
+     *
+     * @param verification The {@link Verification}, containing the validation random, otherwise
+     *                     a UIMessage is fired.
+     * @return The filled {@link Verification} with verified set to true if the verification
+     *         was successful.
+     * @author Thomas Kirz
+     */
+    public Verification verify(Verification verification) {
+        if (verification.getValidationRandom() == null) {
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("verification.noRandom"),
+                    MessageCategory.ERROR));
+            return verification;
+        }
+
+        Transaction transaction = new Transaction();
+        Verification storedVerification;
+        try {
+            storedVerification = UserRepository.getVerification(verification, transaction);
+        } catch (NotFoundException e) {
+            transaction.abort();
+            l.warning("Could not find verification.");
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("verification.failure"),
+                    MessageCategory.ERROR));
+            return verification;
+        }
+
+        if (storedVerification.isVerified()) {
+            transaction.abort();
+            l.warning("User already verified");
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("verification.alreadyVerified"),
+                    MessageCategory.ERROR));
+            return verification;
+        }
+
+        if (verification.getValidationRandom().equals(storedVerification.getValidationRandom())) {
+            storedVerification.setVerified(true);
+            storedVerification.setValidationRandom(null);
+            try {
+                UserRepository.changeVerification(storedVerification, transaction);
+                l.info("Successfully verified user with id " + storedVerification.getUserId());
+            } catch (NotFoundException e) {
+                transaction.abort();
+                l.severe("Could not update verification as the user does not exist.");
+                uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("verification.failure"),
+                        MessageCategory.ERROR));
+            } catch (DataNotWrittenException e) {
+                transaction.abort();
+                l.severe("Verification could not be updated in data source.");
+                uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("verification.failure"),
+                        MessageCategory.ERROR));
+            }
+        }
+
+        transaction.commit();
+        uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("verification.success"),
+                MessageCategory.INFO));
+        return storedVerification;
     }
 }

@@ -120,7 +120,6 @@ public class PaperRepository {
         Integer id = null;
 
         try (PreparedStatement stmt = conn.prepareStatement(sqlMaxVersion)){
-
             stmt.setInt(1, paper.getSubmissionId());
             ResultSet resultSet = stmt.executeQuery();
             if (resultSet.next()) {

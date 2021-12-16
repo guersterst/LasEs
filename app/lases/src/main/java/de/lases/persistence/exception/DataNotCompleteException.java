@@ -13,6 +13,15 @@ public class DataNotCompleteException extends Exception {
     private static final long serialVersionUID = 695814409120288262L;
 
     /**
+     * Constructs an exception with a message.
+     *
+     * @param message Error message.
+     */
+    public DataNotCompleteException(String message) {
+        super(message);
+    }
+
+    /**
      * Constructs an exception with a message and a cause.
      *
      * @param message Error message.
@@ -20,5 +29,12 @@ public class DataNotCompleteException extends Exception {
      */
     public DataNotCompleteException(String message, Throwable cause) {
         super(message, cause);
+    }
+
+    /**
+     * Constructs an exception.
+     */
+    public DataNotCompleteException() {
+        super();
     }
 }
