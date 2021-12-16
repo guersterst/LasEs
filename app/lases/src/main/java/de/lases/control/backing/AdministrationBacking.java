@@ -72,7 +72,7 @@ public class AdministrationBacking {
      * @return Show the homepage.
      */
     public String abort() {
-        return null;
+        return "administration?faces-redirect=true";
     }
 
     /**

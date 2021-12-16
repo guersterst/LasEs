@@ -78,6 +78,7 @@
                                                      required="true" requiredMessage="#{message.headlineRequired}"
                                                      maxlength="#{Const.WELCOME_HEADING_MAX}" styleClass="form-control"/>
                                     </div>
+                                    <h:message for="welcome-heading-itxt"/>
                                 </div>
                                 <br/>
                                 <div class="form-group">
@@ -89,8 +90,8 @@
                                                          styleClass="form-control">
                                             <f:validateLength maximum="#{Const.WELCOME_DESCRIPTION_MAX}"/>
                                         </h:inputTextarea>
-                                        <h:message for="welcome-text-itxt"/>
                                     </div>
+                                    <h:message for="welcome-text-itxt"/>
                                 </div>
                                 <br/>
                                 <div class="form-group">
@@ -101,6 +102,7 @@
                                                      required="true" requiredMessage="#{message.companyNameRequired}"
                                                      maxlength="#{Const.SYSTEM_COMPANY_NAME_MAX}" styleClass="form-control"/>
                                     </div>
+                                    <h:message for="institution-itxt"/>
                                 </div>
                                 <br/>
                                 <div class="form-group">
@@ -111,6 +113,7 @@
                                                          required="true" requiredMessage="#{message.imprintRequired}"
                                                          styleClass="form-control"/>
                                     </div>
+                                    <h:message for="imprint-itxt"/>
                                 </div>
                                 <br/>
                                 <div class="form-group">
