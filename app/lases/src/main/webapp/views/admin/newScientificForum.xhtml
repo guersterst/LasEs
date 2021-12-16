@@ -16,7 +16,7 @@
         </f:metadata>
 
         <div class="col d-flex justify-content-center">
-            <div class="card" id="new-forum-box" style="max-width: 70rem; min-width: 50rem">
+            <div class="card" id="new-forum-box" style="max-width: 80rem; min-width: 55rem">
                 <div id="new-forum-card-body" class="card-body">
                     <h2>#{labels.newForumTitle}</h2>
                     <hr/>
@@ -39,6 +39,7 @@
                             <h:message for="email-editor-itxt"/>
                         </div>
                     </h:form>
+
                     <h:form id="list-editors-form">
                         <div class="form-group" style="margin-top: 1rem">
                             <h:dataTable id="editor-list"
@@ -79,6 +80,66 @@
                                                      styleClass="btn btn-sm btn-outline-dark"/>
                                 </h:column>
                             </h:dataTable>
+                            <h:outputText value="#{message.newForumEditorsNotice}"
+                                          rendered="#{newScientificForumBacking.editors.isEmpty()}"/>
+                        </div>
+                    </h:form>
+
+                    <h:form id="science-fields-form">
+                        <div class="form-group" style="margin-top: 1rem">
+                            <div class="row row-cols-1 row-cols-md-2 g-4">
+                                <div class="col-lg-6 mb-4">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h:dataTable id="selected-fields-list"
+                                                         value="#{newScientificForumBacking.selectedScienceFields}"
+                                                         var="itemField"
+                                                         styleClass="table table-striped">
+                                                <h:column class="align-middle">
+                                                    <f:facet name="header">
+                                                        <div class="input-group">
+                                                            <h:outputText id="field-name-col"
+                                                                          value="#{labels.newForumFields}"/>
+                                                        </div>
+                                                    </f:facet>
+                                                    <h:outputText id="field-name-otxt" value="#{itemField.name}"/>
+                                                </h:column>
+                                                <h:column class="align-middle">
+                                                    <f:facet name="header">
+                                                        <div class="input-group">
+                                                            <h:outputText id="field-remove-col" value=""/>
+                                                        </div>
+                                                    </f:facet>
+                                                    <h:commandButton id="remove-science-field-btn"
+                                                                     value="#{labels.delete}"
+                                                                     action="#{newScientificForumBacking.removeSelectedScienceField(itemField)}"
+                                                                     styleClass="btn btn-sm btn-outline-dark"/>
+                                                </h:column>
+                                            </h:dataTable>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 mb-4">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <p:selectOneListbox id="science-field-slct"
+                                                                value="#{newScientificForumBacking.scienceFieldSelectionInput}"
+                                                                var="sc" filter="true" scrollHeight="300">
+                                                <f:selectItems value="#{newScientificForumBacking.scienceFields}"
+                                                               var="scVar" itemLabel="#{scVar.name}"
+                                                               itemValue="#{scVar}"/>
+                                                <p:column>
+                                                    <h:outputText value="#{sc.name}"/>
+                                                </p:column>
+                                                <p:column>
+                                                    <p:commandButton value="#{labels.add}"
+                                                                     action="#{newScientificForumBacking.addScienceField(scVar)}"/>
+                                                </p:column>
+                                            </p:selectOneListbox>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </h:form>
 
@@ -137,20 +198,27 @@
                             <h:message for="review-manual-itxt"/>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group" style="text-align: right">
                             <hr/>
                             <h:commandButton id="save-btn" value="#{labels.newForumCreate}"
                                              action="#{newScientificForumBacking.create()}"
                                              title="#{help.newForumCreate}"
-                                             style="margin: 3px"
-                                             type="submit"/>
-                            <h:commandButton id="abort-btn" value="#{labels.newForumAbort}"
-                                             action="#{newScientificForumBacking.abort()}"
-                                             title="#{help.newForumAbort}"
-                                             style="margin: 3px"
+                                             style="margin: 3px; min-width: 6rem"
+                                             styleClass="btn btn-sm btn-primary"
                                              type="submit"/>
                         </div>
                     </h:form>
+
+                    <div class="form-group" style="text-align: right">
+                        <h:form>
+                            <h:commandButton id="abort-btn" value="#{labels.newForumAbort}"
+                                             action="#{newScientificForumBacking.abort()}"
+                                             title="#{help.newForumAbort}"
+                                             style="margin: 3px; min-width: 6rem"
+                                             styleClass="btn btn-sm btn-secondary"
+                                             type="submit"/>
+                        </h:form>
+                    </div>
                 </div>
             </div>
         </div>
