@@ -85,12 +85,37 @@
                         </div>
                     </h:form>
 
-                    <h:form id="science-fields-form">
-                        <div class="form-group" style="margin-top: 1rem">
-                            <div class="row row-cols-1 row-cols-md-2 g-4">
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card">
-                                        <div class="card-body">
+                    <hr/>
+
+                    <h:form>
+                        <div id="add-new-science-field" class="form-group" style="margin-top: 1rem">
+                            <label for="new-science-field-itxt"
+                                   class="form-label">#{labels.newForumNewScienceField}</label>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="new-science-field-itxt"
+                                             value="#{newScientificForumBacking.scienceFieldToAdd}"
+                                             a:placeholder="#{labels.newForumNewScienceFieldPlaceHolder}"
+                                             size="40"
+                                             required="true"
+                                             requiredMessage="#{message.newScienceField}"
+                                             maxlength="#{Const.SCIENCE_FIELD_MAX}"/>
+                                <h:commandButton id="add-science-field-btn" value="#{labels.add}"
+                                                 action="#{newScientificForumBacking.createNewScienceField}"/>
+                            </h:panelGrid>
+                            <h:message for="new-science-field-itxt"/>
+                        </div>
+                    </h:form>
+
+                    <hr/>
+
+                    <div class="form-group" style="margin-top: 1rem">
+                        <label for="science-fields-add-cards"
+                               class="form-label">#{labels.newForumFieldsSelected}</label>
+                        <div id="science-fields-add-cards" class="row row-cols-1 row-cols-md-2 g-4">
+                            <div class="col-lg-6 mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h:form>
                                             <h:dataTable id="selected-fields-list"
                                                          value="#{newScientificForumBacking.selectedScienceFields}"
                                                          var="itemField"
@@ -116,32 +141,40 @@
                                                                      styleClass="btn btn-sm btn-outline-dark"/>
                                                 </h:column>
                                             </h:dataTable>
-                                        </div>
+                                        </h:form>
                                     </div>
                                 </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <p:selectOneListbox id="science-field-slct"
-                                                                value="#{newScientificForumBacking.scienceFieldSelectionInput}"
-                                                                var="sc" filter="true" scrollHeight="300">
-                                                <f:selectItems value="#{newScientificForumBacking.scienceFields}"
-                                                               var="scVar" itemLabel="#{scVar.name}"
-                                                               itemValue="#{scVar}"/>
-                                                <p:column>
-                                                    <h:outputText value="#{sc.name}"/>
-                                                </p:column>
-                                                <p:column>
-                                                    <p:commandButton value="#{labels.add}"
-                                                                     action="#{newScientificForumBacking.addScienceField(scVar)}"/>
-                                                </p:column>
-                                            </p:selectOneListbox>
-                                        </div>
+                            </div>
+
+
+                            <div class="col-lg-6 mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h:form>
+                                            <div class="card-header">
+                                                <p:selectOneListbox id="science-field-slct"
+                                                                    value="#{newScientificForumBacking.scienceFieldSelectionInput}"
+                                                                    var="s" filter="true" scrollHeight="300">
+                                                    <f:selectItems value="#{newScientificForumBacking.scienceFields}"
+                                                                   var="scienceField" itemLabel="#{scienceField.name}"
+                                                                   itemValue="#{scienceField}"/>
+                                                    <p:column>
+                                                        <h:outputText value="#{s.name}"/>
+                                                    </p:column>
+                                                </p:selectOneListbox>
+                                            </div>
+                                            <div class="card-body">
+                                                <h:commandButton id="add-science-field" value="#{labels.add}"
+                                                                 action="#{newScientificForumBacking.addScienceField()}"/>
+                                                <h:message for="science-field-slct"/>
+                                            </div>
+                                        </h:form>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </h:form>
+                    </div>
+
 
                     <h:form id="create-forum-form">
                         <div class="form-group" style="margin-top: 1rem">

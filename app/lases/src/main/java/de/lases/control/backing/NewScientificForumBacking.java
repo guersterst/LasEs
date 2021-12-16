@@ -52,7 +52,7 @@ public class NewScientificForumBacking implements Serializable {
 
     private ScienceField scienceFieldSelectionInput;
 
-    private ScienceField newScienceFieldInput;
+    private ScienceField scienceFieldToAdd;
 
     private List<ScienceField> selectedScienceFields;
 
@@ -118,20 +118,18 @@ public class NewScientificForumBacking implements Serializable {
     }
 
     /**
-     * Add the science field that is currently entered to the global list of
-     * science fields.
+     * Create a new science field.
      */
-    public void addNewScienceField() {
+    public void createNewScienceField() {
     }
 
     /**
      * Add the currently selected science field to the list of science fields
      * for this scientific forum.
      */
-    public void addScienceField(ScienceField scienceField) {
-        System.out.println("adding" + scienceField);
-        if (scienceField != null) {
-            selectedScienceFields.add(scienceField);
+    public void addScienceField() {
+        if (scienceFieldSelectionInput != null && !selectedScienceFields.contains(scienceFieldSelectionInput)) {
+            selectedScienceFields.add(scienceFieldSelectionInput);
         }
     }
 
@@ -224,19 +222,19 @@ public class NewScientificForumBacking implements Serializable {
      * @return The science field the administrator has
      * entered.
      */
-    public ScienceField getNewScienceFieldInput() {
-        return newScienceFieldInput;
+    public ScienceField getScienceFieldToAdd() {
+        return scienceFieldToAdd;
     }
 
     /**
      * Set the science field that the administrator has entered in order to add
      * it to the list of global science fields.
      *
-     * @param newScienceFieldInput The science field the administrator has
-     *                             entered.
+     * @param scienceFieldToAdd The science field the administrator has
+     *                          entered.
      */
-    public void setNewScienceFieldInput(ScienceField newScienceFieldInput) {
-        this.newScienceFieldInput = newScienceFieldInput;
+    public void setScienceFieldToAdd(ScienceField scienceFieldToAdd) {
+        this.scienceFieldToAdd = scienceFieldToAdd;
     }
 
     /**
