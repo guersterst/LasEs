@@ -13,7 +13,7 @@ public class User implements Cloneable {
 
     private Integer id; // SQL: id
 
-    private List<Privilege> privileges = new ArrayList<>(); // SQL implicit
+    private List<Privilege> privileges; // SQL implicit
 
     private String title; // SQL: title
 
@@ -233,7 +233,8 @@ public class User implements Cloneable {
      * @param privileges The list of privileges.
      */
     public void setPrivileges(List<Privilege> privileges) {
-        this.privileges = privileges;
+        this.privileges.clear();
+        this.privileges.addAll(privileges);
     }
 
     /**
@@ -285,7 +286,8 @@ public class User implements Cloneable {
     public User clone() {
         try {
             User clone = (User) super.clone();
-            clone.privileges = List.copyOf(this.privileges);
+            clone.privileges = new ArrayList<>();
+            clone.privileges.addAll(this.privileges);
             return clone;
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();

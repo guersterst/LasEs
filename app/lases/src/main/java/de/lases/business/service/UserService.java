@@ -1,6 +1,7 @@
 package de.lases.business.service;
 
 import de.lases.business.util.AvatarUtil;
+import de.lases.business.util.Hashing;
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
 import de.lases.persistence.repository.Transaction;
@@ -82,6 +83,33 @@ public class UserService implements Serializable {
      *                   using the {@code EmailUtil} utility.
      */
     public void change(User newUser) {
+        Transaction transaction = new Transaction();
+        // TODO: Email verification process
+
+        if (newUser.getPasswordNotHashed() != null) {
+            newUser.setPasswordSalt(Hashing.generateRandomSalt());
+            newUser.setPasswordHashed(Hashing.hashWithGivenSalt(newUser.getPasswordNotHashed(),
+                    newUser.getPasswordSalt()));
+        }
+
+        try {
+            UserRepository.change(newUser, transaction);
+            transaction.commit();
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataSaved"),
+                    MessageCategory.INFO));
+        } catch (NotFoundException e) {
+            transaction.abort();
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("userNotFound"),
+                    MessageCategory.ERROR));
+        } catch (KeyExistsException e) {
+            transaction.abort();
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("emailInUse"),
+                    MessageCategory.ERROR));
+        } catch (DataNotWrittenException e) {
+            transaction.abort();
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataNorWritten"),
+                    MessageCategory.ERROR));
+        }
     }
 
     /**

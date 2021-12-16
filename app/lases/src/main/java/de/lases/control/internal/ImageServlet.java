@@ -127,7 +127,7 @@ public class ImageServlet extends HttpServlet {
      */
     private static void configureResponse(HttpServletResponse response, byte[] imgBytes) {
         response.setContentLength(imgBytes.length);
-        response.setContentType("image/jpg");
+        response.setContentType("image/*");
         response.setStatus(HttpServletResponse.SC_OK);
     }
 

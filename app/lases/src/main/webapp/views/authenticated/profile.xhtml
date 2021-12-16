@@ -2,7 +2,9 @@
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
 
     <ui:define name="title">Lorem ipsum</ui:define>
 
@@ -78,6 +80,39 @@
 
             <div class="row">
                 <div class="col-md-12">
+
+                    <h:panelGroup rendered="#{sessionInformation.user.admin}">
+                        <h:panelGroup layout="block" styleClass="card" id="admin-card">
+                            <div class="card-header">
+                                #{labels.editAdmin}
+                            </div>
+                            <div class="card-body">
+                                <h:form id="edit-admin-form">
+                                    <h:panelGroup layout="block" styleClass="form-group form-check">
+                                        <h:selectBooleanCheckbox styleClass="form-check-input" id="is-admin-cbx" value="#{profileBacking.userForAdminSettings.admin}"/><h:outputLabel for="is-admin-cbx" styleClass="form-check-label" value="#{labels.adminRights}"/><br/>
+                                        <h:message for="password-admin-iscrt"/><br/>
+                                        <p:commandButton id="is-admin-cbtn" styleClass="btn-secondary btn" type="button" value="#{labels.save}" onclick="PF('dlg').show()" />
+                                        <p:confirmDialog id="dlg" widgetVar="dlg" header="Lorem Ipsum">
+
+                                            <div class="form-group">
+                                                <h:outputLabel for="password-admin-iscrt" value="#{message.passwordNeeded}" styleClass="form-label"/>
+                                                <h:inputSecret id="password-admin-iscrt" value="#{profileBacking.adminPassword.passwordNotHashed}" required="true" requiredMessage="#{message.passwordNeeded}" styleClass="form-control"/>
+                                                <h:commandButton id="admin-save-cbtn" value="Lorem Ipsum" action="#{profileBacking.submitAdminChanges()}" styleClass="btn-primary btn">
+                                                    <f:ajax execute="edit-admin-form" render="edit-admin-form" />
+                                                </h:commandButton>
+                                            </div>
+
+                                        </p:confirmDialog>
+
+                                    </h:panelGroup>
+                                </h:form>
+                            </div>
+
+                        </h:panelGroup>
+                        <hr/>
+
+                    </h:panelGroup>
+
                     <div class="card" id="profile-card">
                         <div class="card-header">
                             #{labels.editProfile}
@@ -86,25 +121,104 @@
                             <h:form id="edit-profile-form">
 
                                 <div class="form-group">
-                                    <h:outputLabel for="is-admin-cbx" value="Lorem Ipsum"/>
-                                    <h:selectBooleanCheckbox id="is-admin-cbx" value="#{profileBacking.user.admin}" rendered="#{sessionInformation.user.admin}"/>
-                                    <h:message for="is-admin-cbx"/>
-                                </div>
-                                <hr/>
-
-                                <div class="form-group">
-                                    <h:outputLabel for="is-admin-cbtn" value="Lorem Ipsum"/>
-                                    <h:commandButton id="is-admin-cbtn" value="Lorem Ipsum" onclick="PF('dlg').show()" rendered="#{sessionInformation.user.admin}"/>
-                                    <h:message for="is-admin-cbtn"/>
-                                </div>
-                                <hr/>
-
-                                <div class="form-group">
-                                    <h:outputLabel for="title-itxt" value="Lorem Ipsum"/>
-                                    <h:inputText id="title-itxt" value="#{profileBacking.user.title}" readonly="#{!profileBacking.hasViewerEditRights}" maxlength="#{Const.TITLE_MAX}"/>
+                                    <h:outputLabel for="title-itxt" value="#{labels.titleInput}" styleClass="form-label"/>
+                                    <h:inputText id="title-itxt" value="#{profileBacking.user.title}" readonly="#{!profileBacking.hasViewerEditRights()}" maxlength="#{Const.TITLE_MAX}"
+                                                styleClass="form-control"/>
                                     <h:message for="title-itxt"/>
                                 </div>
                                 <hr/>
+
+                                <div class="form-group">
+                                    <h:outputLabel for="firstname-itxt" value="#{labels.firstName}" styleClass="form-label"/>
+                                    <h:inputText id="firstname-itxt" value="#{profileBacking.user.firstName}" readonly="#{!profileBacking.hasViewerEditRights()}" required="true" requiredMessage="#{message.firstNameRequired}" maxlength="#{Const.FIRST_NAME_MAX}"
+                                                    styleClass="form-control"/>
+                                    <h:message for="firstname-itxt"/>
+                                </div>
+                                <hr/>
+
+                                <div class="form-group">
+                                    <h:outputLabel for="lastname-itxt" value="#{labels.lastName}" styleClass="form-label"/>
+                                    <h:inputText id="lastname-itxt" value="#{profileBacking.user.lastName}" readonly="#{!profileBacking.hasViewerEditRights()}" required="true" requiredMessage="#{message.lastNameRequired}" maxlength="#{Const.LAST_NAME_MAX}"
+                                                    styleClass="form-control"/>
+                                    <h:message for="lastname-itxt"/>
+                                </div>
+                                <hr/>
+
+                                <div class="form-group">
+                                    <h:outputLabel for="password-iscrt" value="#{labels.password}" styleClass="form-label"/>
+                                    <h:inputSecret id="password-iscrt" value="#{profileBacking.user.passwordNotHashed}" readonly="#{!profileBacking.hasViewerEditRights()}" validator="passwordValidator" required="true" requiredMessage="#{message.passwordNeeded}"
+                                                    styleClass="form-control"/>
+                                    <h:message for="password-iscrt"/>
+                                </div>
+                                <hr/>
+
+                                <div class="form-group">
+                                    <h:outputLabel for="email-itxt" value="#{labels.email}" styleClass="form-label"/>
+                                    <h:inputText id="email-itxt" value="#{profileBacking.user.emailAddress}" readonly="#{!profileBacking.hasViewerEditRights()}" validator="emailAddressLayoutValidator" required="true" requiredMessage="#{message.emailRequired}"
+                                                 maxlength="#{Const.EMAIL_MAX}" styleClass="form-control">
+<!--                                        <f:attribute name="id" value="#{profileBacking.user.id}"/>-->
+                                    </h:inputText>
+                                    <h:message for="email-itxt"/>
+                                </div>
+                                <hr/>
+
+                                <div class="form-group">
+                                    <h:outputLabel for="employer-itxt" value="#{labels.employer}" styleClass="form-label"/>
+                                    <h:inputText id="employer-itxt" value="#{profileBacking.user.employer}" readonly="#{!profileBacking.hasViewerEditRights()}" styleClass="form-control"/>
+                                    <h:message for="employer-itxt"/>
+                                </div>
+                                <hr/>
+
+                                <div class="form-group">
+                                    <h:outputLabel for="date-of-birth-itxt" value="#{labels.birthDay}" styleClass="form-label"/>
+                                    <h:inputText id="date-of-birth-itxt" value="#{profileBacking.user.dateOfBirth}" a:type="date" readonly="#{!profileBacking.hasViewerEditRights()}" styleClass="form-control" converterMessage="#{message.wrongDate}">
+                                            <f:convertDateTime type="localDate" pattern="yyyy-MM-dd"/>
+                                    </h:inputText>
+                                    <h:message for="date-of-birth-itxt"/>
+                                </div>
+                                <hr/>
+
+                                <div class="form-group">
+                                    <h:commandButton id="save-cbtn" value="#{labels.save}" action="#{profileBacking.submitChanges()}" readonly="#{!profileBacking.hasViewerEditRights()}" styleClass="btn btn-primary" disabled="#{!profileBacking.hasViewerEditRights()}"/>
+                                </div>
+
+<!--                                <div class="form-group">-->
+<!--                                    <h:outputLabel for="submission-number-otxt" value="Lorem Ipsum"/>-->
+<!--                                    <h:outputText id="submission-number-otxt" value="#{profileBacking.numberOfSubmissions}"/>-->
+<!--                                </div>-->
+<!--                                <hr/>-->
+
+<!--                                <div class="form-group">-->
+<!--                                    <h:outputLabel for="science-field-lst" value="Lorem Ipsum"/>-->
+<!--                                    <h:dataTable id="science-field-lst" value="#{profileBacking.usersScienceFields}" var="field">-->
+<!--                                            <h:commandButton value="Lorem Ipsum" action="#{profileBacking.deleteScienceField(field)}" rendered="#{!profileBacking.hasViewerEditRights}"/>-->
+<!--                                    </h:dataTable>-->
+<!--                                </div>-->
+<!--                                <hr/>-->
+
+<!--                                <div class="form-group">-->
+<!--                                    <h:outputLabel for="add-science-field-slctolb" value="Lorem Ipsum"/>-->
+<!--                                    <p:selectOneListbox id="add-science-field-slctolb" value="#{profileBacking.selectedScienceField}" rendered="#{!profileBacking.hasViewerEditRights}">-->
+<!--                                            <f:selectItems value="#{profileBacking.scienceFields}"/>-->
+<!--                                    </p:selectOneListbox>-->
+<!--                                </div>-->
+<!--                                <hr/>-->
+
+<!--                                <div class="form-group">-->
+<!--                                    <h:commandButton id="add-field-cbtn" value="Lorem Ipsum" action="#{profileBacking.addScienceField}" rendered="#{!profileBacking.hasViewerEditRights}"/>-->
+<!--                                </div>-->
+<!--                                <hr/>-->
+
+<!--                                <div class="form-group">-->
+<!--                                    <h:commandButton id="delete-cbtn" value="Lorem Ipsum" action="#{profileBacking.deleteProfile}" rendered="#{!profileBacking.hasViewerEditRights}"/>-->
+<!--                                </div>-->
+<!--                                <hr/>-->
+
+
+
+
+
+
 
                             </h:form>
                         </div>

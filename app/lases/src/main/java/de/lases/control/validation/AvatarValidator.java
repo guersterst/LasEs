@@ -33,6 +33,8 @@ import java.util.PropertyResourceBundle;
  *         The ration of width to height cannot be above 2 : 1 or below 1 : 2
  *     </li>
  * </ul>
+ *
+ * @author Sebastian Vogt
  */
 @FacesValidator("avatarValidator")
 public class AvatarValidator implements Validator<Part> {
