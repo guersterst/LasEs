@@ -4,6 +4,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PropertyResourceBundle;
 import java.util.Random;
 
 import de.lases.business.service.ScienceFieldService;
@@ -13,6 +14,7 @@ import de.lases.control.internal.*;
 import de.lases.global.transport.*;
 import de.lases.control.exception.IllegalAccessException;
 import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.event.Event;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -28,6 +30,12 @@ public class NewScientificForumBacking implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 6091783394131851720L;
+
+    @Inject
+    private Event<UIMessage> uiMessageEvent;
+
+    @Inject
+    private transient PropertyResourceBundle propertyResourceBundle;
 
     @Inject
     private ScienceFieldService scienceFieldService;
@@ -83,9 +91,14 @@ public class NewScientificForumBacking implements Serializable {
      * Add the editor that is currently entered to the list of editors.
      */
     public void addEditor() {
-        Random random = new Random();
-        newEditorInput.setId(random.nextInt());
-        editors.add(newEditorInput);
+        User userToAdd = userService.get(newEditorInput);
+        if (userToAdd == null) {
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("newForumUserUserNotExists"), MessageCategory.ERROR));
+        } else if (editors.contains(userToAdd)) {
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("newForumUserAlreadyAdded"), MessageCategory.INFO));
+        } else {
+            editors.add(userToAdd);
+        }
         // reset new editor
         newEditorInput = new User();
     }

@@ -20,73 +20,121 @@
                 <div id="new-forum-card-body" class="card-body">
                     <h2>#{labels.newForumTitle}</h2>
                     <hr/>
-                    <h:form id="create-forum-form">
+                    <h:form id="add-editors-form">
                         <div class="form-group" style="margin-top: 1rem">
-                            <label for="forum-name-itxt">#{labels.newForumName}</label>
-                            <h:inputText id="forum-name-itxt"
-                                         value="#{newScientificForumBacking.newScientificForum.name}"
-                                         a:placeholder="#{labels.newForumNamePlaceHolder}"
-                                         styleClass="form-control" required="true"
-                                         requiredMessage="message.forumName"
-                                         maxlength="#{Const.FORUM_NAME_MAX}"/>
-                        </div>
+                            <label for="email-editor-itxt" class="form-label">#{labels.newForumEditorAdd}</label>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="email-editor-itxt"
+                                             value="#{newScientificForumBacking.newEditorInput.emailAddress}"
+                                             a:placeholder="#{labels.newForumEditorEmailPlaceHolder}"
+                                             styleClass="form-control"
+                                             required="true"
+                                             requiredMessage="#{message.newForumEmail}"
+                                             size="40"/>
 
+                                <h:commandButton id="add-editor-btn" type="submit" value="#{labels.add}"
+                                                 action="#{newScientificForumBacking.addEditor()}"
+                                                 title="#{help.addEditor}"/>
+                            </h:panelGrid>
+                            <h:message for="email-editor-itxt"/>
+                        </div>
+                    </h:form>
+                    <h:form id="list-editors-form">
                         <div class="form-group" style="margin-top: 1rem">
-                            <label for="editor-list">#{labels.newForumEditors}</label>
                             <h:dataTable id="editor-list"
                                          value="#{newScientificForumBacking.editors}" var="item"
                                          styleClass="table table-striped">
-                                <h:column>
+                                <h:column class="align-middle">
                                     <f:facet name="header">
-                                        <div class="input-group">
-                                            <h:outputText id="email-col" value="#{labels.email}"
-                                                          styleClass=""/>
+                                        <div class="align-middle">
+                                            <h:outputText id="email-col" value="#{labels.email}"/>
                                         </div>
                                     </f:facet>
                                     <h:outputText id="email-address-otxt" value="#{item.emailAddress}"/>
                                 </h:column>
-                                <h:column>
+                                <h:column class="align-middle">
                                     <f:facet name="header">
                                         <div class="input-group">
-                                            <h:outputText id="firstname-col" value="#{labels.firstName}"
-                                                          styleClass=""/>
+                                            <h:outputText id="firstname-col" value="#{labels.firstName}"/>
                                         </div>
                                     </f:facet>
                                     <h:outputText id="firstname-otxt" value="#{item.firstName}"/>
                                 </h:column>
-                                <h:column>
+                                <h:column class="align-middle">
                                     <f:facet name="header">
                                         <div class="input-group">
-                                            <h:outputText id="lastname-col" value="#{labels.lastName}"
-                                                          styleClass=""/>
+                                            <h:outputText id="lastname-col" value="#{labels.lastName}"/>
                                         </div>
                                     </f:facet>
                                     <h:outputText id="lastname-otxt" value="#{item.lastName}"/>
                                 </h:column>
-                                <h:column>
+                                <h:column class="align-middle">
                                     <f:facet name="header">
                                         <div class="input-group">
-                                            <h:outputText id="remove-col" value="#{labels.delete}"
-                                                          styleClass=""/>
+                                            <h:outputText id="remove-col" value=""/>
                                         </div>
                                     </f:facet>
                                     <h:commandButton id="delete-editor-btn" value="#{labels.delete}"
                                                      action="#{newScientificForumBacking.removeEditor(item)}"
-                                                     styleClass="btn btn-outline-dark"/>
+                                                     styleClass="btn btn-sm btn-outline-dark"/>
                                 </h:column>
                             </h:dataTable>
                         </div>
+                    </h:form>
+
+                    <h:form id="create-forum-form">
+                        <div class="form-group" style="margin-top: 1rem">
+                            <label for="forum-name-itxt" class="form-label">#{labels.newForumName}</label>
+                            <h:inputText id="forum-name-itxt"
+                                         value="#{newScientificForumBacking.newScientificForum.name}"
+                                         a:placeholder="#{labels.newForumNamePlaceHolder}"
+                                         styleClass="form-control" required="true"
+                                         requiredMessage="#{message.forumName}"
+                                         maxlength="#{Const.FORUM_NAME_MAX}"/>
+                            <h:message for="forum-name-itxt"/>
+                        </div>
 
                         <div class="form-group" style="margin-top: 1rem">
-                            <label for="email-editor-itxt">#{labels.newForumEditorAdd}</label>
-                            <h:inputText id="email-editor-itxt"
-                                         value="#{newScientificForumBacking.newEditorInput.emailAddress}"
-                                         a:placeholder="#{labels.newForumEditorEmailPlaceHolder}"
-                                         styleClass="form-control"/>
+                            <label for="forum-name-itxt" class="form-label">#{labels.newForumDeadline}</label>
+                            <h:inputText id="dealine-itxt"
+                                         value="#{newScientificForumBacking.newScientificForum.deadline}"
+                                         a:placeholder="#{labels.date}"
+                                         styleClass="form-control">
+                                <f:convertDateTime type="localDateTime"/>
+                            </h:inputText>
+                        </div>
 
-                            <h:commandButton id="add-editor-btn" type="submit" value="#{labels.add}"
-                                             action="#{newScientificForumBacking.addEditor()}"
-                                             title="#{help.addEditor}"/>
+                        <div class="form-group" style="margin-top: 1rem">
+                            <label for="url-itxt" class="form-label">#{labels.newForumURL}</label>
+                            <h:inputText id="url-itxt"
+                                         value="#{newScientificForumBacking.newScientificForum.url}"
+                                         styleClass="form-control"
+                                         a:placeholder="#{labels.newForumURLPlaceHolder}"
+                                         maxlength="#{Const.FORUM_URL_MAX}"/>
+                            <h:message for="url-itxt"/>
+                        </div>
+
+                        <div class="form-group" style="margin-top: 1rem">
+                            <label for="description-itxt" class="form-label">#{labels.newForumDescription}</label>
+                            <h:inputTextarea id="description-itxt"
+                                             value="#{newScientificForumBacking.newScientificForum.description}"
+                                             a:placeholder="#{labels.newForumDescriptionPlaceHolder}"
+                                             styleClass="form-control" required="true"
+                                             requiredMessage="#{message.description}"
+                                             maxlength="#{Const.FORUM_DESCRIPTION_MAX}"/>
+                            <h:message for="description-itxt"/>
+                        </div>
+
+                        <div class="form-group" style="margin-top: 1rem">
+                            <label for="review-manual-itxt" class="form-label">#{labels.newForumReviewManual}</label>
+                            <h:inputTextarea id="review-manual-itxt"
+                                             value="#{newScientificForumBacking.newScientificForum.reviewManual}"
+                                             a:placeholder="#{labels.newForumReviewManualPlaceHolder}"
+                                             styleClass="form-control"
+                                             required="true"
+                                             requiredMessage="#{message.manual}"
+                                             maxlength="#{Const.FORUM_MANUAL_MAX}"/>
+                            <h:message for="review-manual-itxt"/>
                         </div>
 
                         <div class="form-group">
