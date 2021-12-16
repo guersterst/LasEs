@@ -1,14 +1,21 @@
 package de.lases.control.backing;
 
+import de.lases.business.service.PaperService;
 import de.lases.business.service.ReviewService;
+import de.lases.business.service.SubmissionService;
 import de.lases.control.exception.IllegalUserFlowException;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.servlet.http.Part;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * Backing bean for the new review page.
@@ -19,6 +26,12 @@ public class NewReviewBacking {
 
     @Inject
     private ReviewService reviewService;
+
+    @Inject
+    private SubmissionService submissionService;
+
+    @Inject
+    private PaperService paperService;
 
     @Inject
     private SessionInformation sessionInformation;
@@ -37,6 +50,29 @@ public class NewReviewBacking {
      */
     @PostConstruct
     public void init() throws IllegalUserFlowException {
+        review = new Review();
+        review.setReviewerId(sessionInformation.getUser().getId());
+        // Submission ID is set per URL parameter.
+    }
+
+    public void onLoad() throws IllegalUserFlowException {
+        Submission submission = new Submission();
+        submission.setId(review.getSubmissionId());
+        ReviewedBy reviewedBy = submissionService.getReviewedBy(submission, sessionInformation.getUser());
+
+        if (reviewedBy == null) {
+            throw new IllegalUserFlowException("Not a reviewer for this paper.");
+        }
+
+        Paper newestPaper = paperService.getLatest(submission);
+        if (newestPaper == null) {
+            throw new IllegalUserFlowException("Can not submit a review for a submission without a paper.");
+        }
+        review.setPaperVersion(newestPaper.getVersionNumber());
+
+        if (reviewService.get(review) != null) {
+            throw new IllegalUserFlowException("Can not add a second review.");
+        }
     }
 
     /**
@@ -44,8 +80,25 @@ public class NewReviewBacking {
      *
      * @return Return to the submission page.
      */
-    public String addReview() {
-        return null;
+    public String addReview() throws IOException {
+        // Get the newest Paper first, so we know the version of the paper for the review.
+        Submission submission = new Submission();
+        submission.setId(review.getSubmissionId());
+
+        FileDTO file = new FileDTO();
+        if (uploadedPDF != null) {
+            file.setFile(uploadedPDF.getInputStream().readAllBytes());
+        }
+
+        Paper newestPaper = paperService.getLatest(submission);
+        if (newestPaper == null) {
+            return null;
+        }
+        review.setPaperVersion(newestPaper.getVersionNumber());
+
+        reviewService.add(review, file);
+        return "/views/authenticated/submission.xhtml?faces-redirect=true&id=" + review.getSubmissionId();
+
     }
 
     /**

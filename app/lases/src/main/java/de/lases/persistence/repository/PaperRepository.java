@@ -503,14 +503,17 @@ public class PaperRepository {
      * submission.
      *
      * @param submission  A submission dto that must be filled with a valid id.
-     * @param user        The user who requests the papers.
      * @param transaction The transaction to use.
      * @return A fully filled paper dto.
      * @throws NotFoundException              If there is no submission with the provided id.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
-    public static Paper getNewestPaperForSubmission(Submission submission, User user, Transaction transaction) throws NotFoundException {
+    public static Paper getNewestPaperForSubmission(Submission submission, Transaction transaction) throws NotFoundException {
+        if (submission == null) {
+            logger.severe("Invalid null trying to get newest paper.");
+            throw new InvalidFieldsException("The submission must not be null.");
+        }
         if (submission.getId() == null) {
             transaction.abort();
             logger.severe("Invalid submission id when tried to get newest paper.");
@@ -518,50 +521,28 @@ public class PaperRepository {
         }
 
         Connection connection = transaction.getConnection();
-        String sql = "SELECT s.* FROM submission s, \"user\" u WHERE s.id = ? AND u.id = ? AND s.author_id = u.id";
+        String sql = "SELECT p.* FROM submission s, paper p WHERE s.id = p.submission_id AND s.id = ? ORDER BY p.timestamp_upload DESC";
         Paper paper = new Paper();
 
-        try (PreparedStatement find = connection.prepareStatement(sql)){
+        try (PreparedStatement find = connection.prepareStatement(sql)) {
             find.setInt(1, submission.getId());
-            find.setInt(2, user.getId());
 
             ResultSet found = find.executeQuery();
 
-        } catch (SQLException e) {
-            logger.warning("Searching for a submission with the id: " + submission.getId()
-                    + " for an author with the id: " + user.getId() + " in order to proof if the ids are valid.");
-            throw new NotFoundException();
-        }
-
-        String newestPaperSql = "SELECT p2.* FROM paper p2, ( SELECT s.* FROM submission s, \"user\" u WHERE s.id = ? " +
-                "AND u.id = ? AND s.author_id = u.id) AS sub WHERE p2.submission_id = sub.id " +
-                "AND p2.version = (SELECT max (p3.version) from paper p3 WHERE sub.id = p3.submission_id)";
-        try (PreparedStatement statement = connection.prepareStatement(newestPaperSql)){
-
-            statement.setInt(1, submission.getId());
-            statement.setInt(2, user.getId());
-
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-
-                paper.setVersionNumber(resultSet.getInt("version"));
-                paper.setSubmissionId(resultSet.getInt("submission_id"));
-                paper.setUploadTime(resultSet.getTimestamp("timestamp_upload").toLocalDateTime());
-                paper.setVisible(resultSet.getBoolean("is_visible"));
-
+            if (found.next()) {
+                paper.setSubmissionId(submission.getId());
+                paper.setVersionNumber(found.getInt("version"));
+                paper.setVisible(found.getBoolean("is_visible"));
+                paper.setUploadTime(found.getTimestamp("timestamp_upload").toLocalDateTime());
+                return paper;
             } else {
-                logger.warning("Loading newest paper of a submission with the id: " + submission.getId()
-                        + " for an author with the id: " + user.getId());
-                throw new NotFoundException();
+                logger.fine("No paper exists for submission: " + submission + ". When trying to find newest paper.");
+                throw new NotFoundException("No paper exists for this submission: " + submission);
             }
-
-        } catch (SQLException exception) {
-            transaction.abort();
-            DatasourceUtil.logSQLException(exception, logger);
-            throw new DatasourceQueryFailedException("A datasource exception occurred while loading the newest paper of a submission.", exception);
-
+        } catch (SQLException e) {
+            logger.severe("Finding newest paper: " + e.getMessage());
+            throw new DatasourceQueryFailedException(e.getMessage());
         }
-        return paper;
     }
 
 
@@ -577,9 +558,9 @@ public class PaperRepository {
         find.setInt(1, paper.getVersionNumber());
         find.setInt(2, paper.getSubmissionId());
 
+        ResultSet rs = find.executeQuery();
         find.close();
-
-        return find.executeQuery();
+        return rs;
     }
 
 }

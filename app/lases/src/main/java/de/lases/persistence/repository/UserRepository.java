@@ -51,11 +51,10 @@ public class UserRepository {
 
 
         String sql_number_of_submissions_and_editor_info = """
-                 SELECT (SELECT COUNT(*)
-                 FROM submission, "user"
-                 WHERE "user".id = submission.author_id
-                   AND "user".id = ?) as number_of_submissions,
-                (SELECT member_of.editor_id
+                 SELECT (SELECT count_submissions
+                 FROM user_data
+                 WHERE user_data.id = ?) as number_of_submissions,
+                (SELECT COUNT(member_of.editor_id)
                  FROM "user", member_of
                  WHERE "user".id = ?
                    AND member_of.editor_id = "user".id) as editor_id
@@ -181,7 +180,7 @@ public class UserRepository {
 
         // Set the extra data gathered from other database entities.
         try {
-            if (submissionAndEditorResult.getInt("editor_id") != 0) {
+            if (submissionAndEditorResult.getInt("editor_id") > 0) {
                 privileges.add(Privilege.EDITOR);
             }
         } catch (SQLException ex) {

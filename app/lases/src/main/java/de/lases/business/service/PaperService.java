@@ -287,7 +287,7 @@ public class PaperService implements Serializable {
             paperList = PaperRepository.getList(submission, transaction, user, resultListParameters);
             transaction.commit();
         } catch (DataNotCompleteException e) {
-
+            transaction.abort();
             logger.fine("Error while loading a list of a paper with the submission id: " + submission.getId()
                     + " and a user with the id: " + user.getId());
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotComplete"), MessageCategory.WARNING));
@@ -295,6 +295,7 @@ public class PaperService implements Serializable {
             transaction.abort();
 
         } catch (NotFoundException e) {
+            transaction.abort();
             logger.fine("Error while loading a list of a paper with the submission id: " + submission.getId()
                     + " and a user with the id: " + user.getId());
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotFound"), MessageCategory.WARNING));
@@ -315,11 +316,19 @@ public class PaperService implements Serializable {
      * </p>
      *
      * @param submission A {@link Submission}-DTO containing a valid id.
-     * @param user       The user who requests the papers, containing a valid view-privilege.
      * @return The submissions paper, which was least recently uploaded.
      */
-    public Paper getLatest(Submission submission, User user) {
-        return null;
+    public Paper getLatest(Submission submission) {
+        Transaction transaction = new Transaction();
+        Paper paper = null;
+        try {
+            paper = PaperRepository.getNewestPaperForSubmission(submission, transaction);
+        } catch (NotFoundException e) {
+            uiMessageEvent.fire(new UIMessage("No review can be uploaded, as no paper was submitted.", MessageCategory.ERROR));
+        } finally {
+            transaction.commit();
+        }
+        return paper;
     }
 
 }
