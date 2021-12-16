@@ -67,6 +67,9 @@ public class RegistrationService {
 
         Transaction t = new Transaction();
 
+        user.setRegistered(true);
+        hashPassword(user);
+
         // check if a user with that email address already exists
         if (UserRepository.emailExists(user, t)) {
             User oldUser;
@@ -84,25 +87,26 @@ public class RegistrationService {
                 t.abort();
                 return user;
             }
-            oldUser.setRegistered(true);
-            oldUser.setPasswordNotHashed(user.getPasswordNotHashed());
-            hashPassword(oldUser);
+            user.setId(oldUser.getId());
             try {
                 UserRepository.change(oldUser, t);
             } catch (DataNotWrittenException e) {
-                // todo: handle this
-                e.printStackTrace();
+                l.severe("User with email " + user.getEmailAddress() + " could not be updated: "
+                        + e.getMessage());
+                t.abort();
+                return null;
             } catch (NotFoundException e) {
-                // todo: handle this
-                e.printStackTrace();
+                l.severe("User with email " + user.getEmailAddress() + " should exist but was not found.");
+                t.abort();
+                return null;
             } catch (KeyExistsException e) {
-                // todo: handle this
-                e.printStackTrace();
+                l.severe("User with combination of email " + user.getEmailAddress() + " and id " + user.getId()
+                        + " could not be updated: " + e.getMessage());
+                t.abort();
+                return null;
             }
         } else {
             try {
-                user.setRegistered(true);
-                hashPassword(user);
                 user = UserRepository.add(user, t);
             } catch (DataNotWrittenException e) {
                 uiMessageEvent.fire(new UIMessage(message.getString("registrationFailed"), MessageCategory.ERROR));
