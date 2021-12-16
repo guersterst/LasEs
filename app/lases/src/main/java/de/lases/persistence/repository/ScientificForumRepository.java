@@ -336,7 +336,7 @@ public class ScientificForumRepository {
                 """).append("\n");
 
         if (isFilled(resultListParameters.getFilterColumns().get("name"))) {
-            sb.append(" AND f.name ILIKE ?\n");
+            sb.append("WHERE f.name ILIKE ?\n");
         }
 
         if (!doCount) {
