@@ -38,7 +38,7 @@
                         styleClass="nav-item nav-link"/>
                 <h:link
                         value="#{labels.navProfile}"
-                        outcome="/views/authenticated/profile"
+                        outcome="#{'/views/authenticated/profile?id='.concat(sessionInformation.user.id)}"
                         rendered="#{navigationBacking.sessionInformation.user != null}"
                         styleClass="nav-item nav-link"/>
 

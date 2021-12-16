@@ -15,9 +15,7 @@ import java.util.logging.Logger;
  */
 public final class AvatarUtil {
 
-    private static final int IMAGE_WIDTH = 150;
-
-    private static final int IMAGE_HEIGHT = 150;
+    private static final int IMAGE_WIDTH = 300;
 
     private static final Logger logger = Logger.getLogger(AvatarUtil.class.getName());
 
@@ -38,7 +36,9 @@ public final class AvatarUtil {
         try {
 
             // Create image instance, scale and write to an output stream.
-            Image scaledImg = castToBufferedImageFromFileDTO(imageFile).getScaledInstance(IMAGE_WIDTH, IMAGE_HEIGHT,
+            BufferedImage bufferedImage = castToBufferedImageFromFileDTO(imageFile);
+            int imageHeight = (int) (bufferedImage.getHeight() * ((double) IMAGE_WIDTH / bufferedImage.getWidth()));
+            Image scaledImg = bufferedImage.getScaledInstance(IMAGE_WIDTH, imageHeight,
                     BufferedImage.SCALE_SMOOTH);
             ImageIO.write(castToBufferedImageFromImage(scaledImg), "jpg", bos);
             bos.flush();

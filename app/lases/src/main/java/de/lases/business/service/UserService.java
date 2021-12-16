@@ -1,5 +1,6 @@
 package de.lases.business.service;
 
+import de.lases.business.util.AvatarUtil;
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
 import de.lases.persistence.repository.Transaction;
@@ -8,6 +9,7 @@ import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 
+import java.io.IOException;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -106,7 +108,7 @@ public class UserService implements Serializable {
     }
 
     /**
-     * Sets a user's avatar.
+     * Sets a user's avatar. If the avatar file or the contained byte[] are null, the current avatar will be removed.
      * <p>
      * The avatar is parsed into a thumbnail using the
      * {@link de.lases.business.util.AvatarUtil} utility.
@@ -115,18 +117,48 @@ public class UserService implements Serializable {
      * @param avatar The {@link FileDTO} containing the image as a byte-array.
      * @param user   The {@link User} whose avatar is being set.
      *               Must contain a valid id.
+     *
+     * @author Sebastian Vogt
      */
     public void setAvatar(FileDTO avatar, User user) {
+        Transaction transaction = new Transaction();
+        try {
+            UserRepository.setAvatar(user, avatar == null ? null : AvatarUtil.generateThumbnail(avatar), transaction);
+            transaction.commit();
+        } catch (DataNotWrittenException | IOException e) {
+            transaction.abort();
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataNorWritten"),
+                    MessageCategory.ERROR));
+        } catch (NotFoundException e) {
+            transaction.abort();
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("userNotFound"),
+                    MessageCategory.ERROR));
+        }
     }
 
     /**
-     * Gets the user's avatar.
+     * Gets the user's avatar. Is null if the user has no avatar.
      *
      * @param user The {@link User} whose avatar is being requested.
      *             Must contain a valid id.
      * @return The user's avatar as a byte-array, wrapped by a {@code FileDTO}.
      */
     public FileDTO getAvatar(User user) {
+        Transaction transaction = new Transaction();
+
+        try {
+            FileDTO avatar = UserRepository.getAvatar(user, transaction);
+            transaction.commit();
+            return avatar;
+        } catch (DataNotCompleteException e) {
+            transaction.abort();
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("avatarNotLoaded"),
+                    MessageCategory.ERROR));
+        } catch (NotFoundException e) {
+            transaction.abort();
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("userNotFound"),
+                    MessageCategory.ERROR));
+        }
         return null;
     }
 
