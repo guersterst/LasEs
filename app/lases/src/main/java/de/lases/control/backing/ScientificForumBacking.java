@@ -234,12 +234,13 @@ public class ScientificForumBacking implements Serializable {
      * Checks if the view param is an integer and throws an exception if it is
      * not
      *
-     * @param event The component system event that happens before rendering
-     *              the view param.
      * @throws IllegalUserFlowException If there is no integer provided as view
      *                                  param
      */
-    public void preRenderViewListener(ComponentSystemEvent event) {
+    public void preRenderViewListener() {
+        if(forum.getId() == null) {
+            throw new IllegalUserFlowException("The view parameter was not transmitted correctly (must not be null).");
+        }
     }
 
     /**
