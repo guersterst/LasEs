@@ -5,7 +5,8 @@
                 xmlns:col="http://xmlns.jcp.org/jsf/composite/templates/composites/sortsearchcolumn"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
 
     <!-- page title -->
     <ui:define name="title">#{scientificForumBacking.forum.name}</ui:define>
@@ -70,6 +71,7 @@
                                     <!-- forum information column -->
                                     <div class="col-md-6">
                                         <h:form>
+
                                             <!-- name -->
                                             <div class="form-group">
                                                 <h:inputText id="forum-name-itxt"
@@ -148,6 +150,15 @@
                                                           title="#{help.forumDeadLine}">
                                                 <f:convertDateTime type="localDate"/>
                                             </h:outputText>
+
+                                            <!-- change deadline -->
+                                            <div class="form-group">
+                                                <h:inputText id="change-deadline-itxt"
+                                                             value="#{scientificForumBacking.forum.deadline}"
+                                                             rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
+                                                             title="#{labels.forumDeadLine}"
+                                                             a:type="date"/>
+                                            </div>
 
                                             <br/>
 
