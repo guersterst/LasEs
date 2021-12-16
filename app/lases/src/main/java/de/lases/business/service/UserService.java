@@ -82,6 +82,24 @@ public class UserService implements Serializable {
      *                   using the {@code EmailUtil} utility.
      */
     public void change(User newUser) {
+        Transaction transaction = new Transaction();
+        // TODO: Email verification process
+        try {
+            UserRepository.change(newUser, transaction);
+            transaction.commit();
+        } catch (NotFoundException e) {
+            transaction.abort();
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("userNotFound"),
+                    MessageCategory.ERROR));
+        } catch (KeyExistsException e) {
+            transaction.abort();
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("emailInUse"),
+                    MessageCategory.ERROR));
+        } catch (DataNotWrittenException e) {
+            transaction.abort();
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataNorWritten"),
+                    MessageCategory.ERROR));
+        }
     }
 
     /**
