@@ -83,8 +83,9 @@ public class NewScientificForumBacking implements Serializable {
         newEditorInput = new User();
         editors = new ArrayList<>();
 
+        scienceFieldToAdd = new ScienceField();
         scienceFieldSelectionInput = new ScienceField();
-        selectedScienceFields = new LinkedList<>();
+        selectedScienceFields = new ArrayList<>();
         scienceFields = scienceFieldService.getList(new ResultListParameters());
     }
 
@@ -121,6 +122,10 @@ public class NewScientificForumBacking implements Serializable {
      * Create a new science field.
      */
     public void createNewScienceField() {
+        scienceFieldService.add(scienceFieldToAdd);
+        scienceFieldToAdd = new ScienceField();
+
+        scienceFields = scienceFieldService.getList(new ResultListParameters());
     }
 
     /**
@@ -139,7 +144,8 @@ public class NewScientificForumBacking implements Serializable {
      * @return Go to the overview page of the crated scientific forum.
      */
     public String create() {
-        return null;
+        ScientificForum ret = scientificForumService.add(newScientificForum, selectedScienceFields, editors);
+        return "/views/authenticated/scientificForum?faces-redirect=true&id=" + ret.getId();
     }
 
     /**

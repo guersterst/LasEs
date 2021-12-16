@@ -93,13 +93,13 @@
                                    class="form-label">#{labels.newForumNewScienceField}</label>
                             <h:panelGrid columns="2">
                                 <h:inputText id="new-science-field-itxt"
-                                             value="#{newScientificForumBacking.scienceFieldToAdd}"
+                                             value="#{newScientificForumBacking.scienceFieldToAdd.name}"
                                              a:placeholder="#{labels.newForumNewScienceFieldPlaceHolder}"
                                              size="40"
                                              required="true"
                                              requiredMessage="#{message.newScienceField}"
                                              maxlength="#{Const.SCIENCE_FIELD_MAX}"/>
-                                <h:commandButton id="add-science-field-btn" value="#{labels.add}"
+                                <h:commandButton id="add-science-field-btn" value="#{labels.newForumCreate}"
                                                  action="#{newScientificForumBacking.createNewScienceField}"/>
                             </h:panelGrid>
                             <h:message for="new-science-field-itxt"/>
