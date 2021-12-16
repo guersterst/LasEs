@@ -7,19 +7,15 @@ import de.lases.persistence.exception.*;
 import de.lases.persistence.exception.DataNotCompleteException;
 import de.lases.persistence.exception.NotFoundException;
 
-import de.lases.persistence.repository.PaperRepository;
-import de.lases.persistence.repository.SubmissionRepository;
-import de.lases.persistence.repository.Transaction;
-import de.lases.persistence.repository.UserRepository;
+import de.lases.persistence.repository.*;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 
+import javax.management.openmbean.KeyAlreadyExistsException;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.List;
-import java.util.Objects;
-import java.util.PropertyResourceBundle;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.PropertyResourceBundle;
 import java.util.logging.Logger;
@@ -28,7 +24,7 @@ import java.util.logging.Logger;
  * Provides functionality regarding the management and handling of submissions.
  * In case of an unexpected state, a {@link UIMessage} event will be fired.
  *
- * @author Thomas Kirz
+ * @author Thomas Kirz, Stefanie Gürster
  */
 @Dependent
 public class SubmissionService implements Serializable {
@@ -268,11 +264,39 @@ public class SubmissionService implements Serializable {
      * {@code EmailUtil} utility.
      * </p>
      *
-     * @param submission The submission, with a valid id, that receives a new reviewer.
      * @param reviewer   The reviewer to be added to the submission.
      * @param reviewedBy Information about the review-request relationship.
      */
-    public void addReviewer(Submission submission, User reviewer, ReviewedBy reviewedBy) {
+    public void addReviewer(User reviewer, ReviewedBy reviewedBy) {
+        if (reviewer.getId() != reviewedBy.getReviewerId() || reviewer.getId() == null) {
+            logger.severe("The id in the reviewed_by DTO and the id in the user DTO does not match or at least one of them are null");
+            throw new InvalidFieldsException("The id's need to be equal and must not be null.");
+        }
+
+        Transaction transaction = new Transaction();
+
+        try {
+            SubmissionRepository.addReviewer(reviewedBy,transaction);
+            transaction.commit();
+        } catch (DataNotWrittenException e) {
+
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotWritten"), MessageCategory.WARNING));
+            logger.log(Level.WARNING, e.getMessage());
+
+            transaction.abort();
+
+        } catch (NotFoundException e) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotFound"), MessageCategory.WARNING));
+            logger.log(Level.WARNING, e.getMessage());
+
+            transaction.abort();
+        } catch (KeyAlreadyExistsException e) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("alreadyExistsReviewer"), MessageCategory.WARNING));
+            logger.log(Level.WARNING, e.getMessage());
+            transaction.abort();
+        }
+
+        //TODO:Need to send E-Mail when adding the user as reviewer is successful
     }
 
 
@@ -287,7 +311,45 @@ public class SubmissionService implements Serializable {
      * submission and the reviewer. Returns null if no such relationship exists.
      */
     public ReviewedBy getReviewedBy(Submission submission, User reviewer) {
-        return null;
+        Transaction transaction = new Transaction();
+        try {
+            return ReviewedByRepository.get(submission, reviewer, transaction);
+        } catch (NotFoundException e) {
+            return null;
+        } finally {
+            transaction.commit();
+        }
+    }
+
+    /**
+     * Gets a list of all relations between the specific {@code submission} and the reviewer of it.
+     *
+     * @param submission The submission which is requested to be reviewed by a reviewer.
+     * @return A List of {@link ReviewedBy}-DTO containing information about the review-request relationship of a
+     * submission and the reviewer.
+     */
+    public List<ReviewedBy> getList(Submission submission) {
+        if (submission.getId() ==  null) {
+            logger.severe("The id of the submission is null. The requested list could not be loaded.");
+            throw new InvalidFieldsException(resourceBundle.getString("idMissing"));
+        }
+
+        Transaction transaction = new Transaction();
+
+        List<ReviewedBy> resultList = new ArrayList<>();
+
+        try {
+            resultList = ReviewedByRepository.getList(submission, transaction);
+            transaction.commit();
+        } catch (NotFoundException e) {
+
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotFound"), MessageCategory.ERROR));
+            logger.severe("A Relation between this submission and users is not existing.");
+
+            transaction.abort();
+
+        }
+        return resultList;
     }
 
     /**
@@ -296,6 +358,19 @@ public class SubmissionService implements Serializable {
      * @param reviewedBy The fully filled {@link ReviewedBy}.
      */
     public void changeReviewedBy(ReviewedBy reviewedBy) {
+        Transaction transaction = new Transaction();
+        try {
+            ReviewedByRepository.change(reviewedBy, transaction);
+            transaction.commit();
+        } catch (NotFoundException e) {
+            transaction.abort();
+            logger.info("Could not update ReviewedBy: " + reviewedBy + e.getMessage());
+            uiMessageEvent.fire(new UIMessage("Review Request does not exist.", MessageCategory.ERROR));
+        } catch (DataNotWrittenException e) {
+            transaction.abort();
+            logger.info("Could not update ReviewedBy: " + reviewedBy + e.getMessage());
+            uiMessageEvent.fire(new UIMessage("Could not update status.", MessageCategory.ERROR));
+        }
     }
 
     /**
@@ -309,6 +384,33 @@ public class SubmissionService implements Serializable {
      * @param reviewer   The reviewer to be removed from the submission.
      */
     public void removeReviewer(Submission submission, User reviewer) {
+        if (submission.getId() == null) {
+            logger.severe("The id of the submission is null.");
+            throw new InvalidFieldsException(resourceBundle.getString("idMissing"));
+        }
+        if (reviewer.getId() == null) {
+            logger.severe("The id of the reviewer is null.");
+            throw new InvalidFieldsException(resourceBundle.getString("idMissing"));
+        }
+
+        Transaction transaction = new Transaction();
+
+        try {
+            ReviewedByRepository.removeReviewer(submission, reviewer, transaction);
+            transaction.commit();
+        } catch (DataNotWrittenException e) {
+
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotWritten"), MessageCategory.WARNING));
+            logger.log(Level.WARNING, e.getMessage());
+
+            transaction.abort();
+        } catch (NotFoundException e) {
+
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotFound"), MessageCategory.ERROR));
+            logger.severe("A Relation between this submission and users is not existing.");
+
+            transaction.abort();
+        }
     }
 
     /**

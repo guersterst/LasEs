@@ -23,6 +23,7 @@
                         </div>
                         <h:inputText id="title-itxt" value="#{registrationBacking.newUser.title}"
                                      maxlength="#{Const.TITLE_MAX}" styleClass="form-control"/>
+                        <div><h:message for="title-itxt"/></div>
                     </div>
                     <!-- First name -->
                     <div class="input-group">
@@ -35,6 +36,7 @@
                                      title="#{help.firstName}" required="true"
                                      requiredMessage="#{message.firstNameRequired}" maxlength="#{Const.FIRST_NAME_MAX}"
                                      styleClass="form-control"/>
+                        <div><h:message for="first-name-itxt"/></div>
                     </div>
                     <!-- Last Name -->
                     <div class="input-group">
@@ -47,6 +49,7 @@
                                      title="#{help.lastName}" required="true"
                                      requiredMessage="#{message.lastNameRequired}" maxlength="#{Const.LAST_NAME_MAX}"
                                      styleClass="form-control"/>
+                        <div><h:message for="last-name-itxt"/></div>
                     </div>
                     <!-- Email -->
                     <div class="input-group">
@@ -59,9 +62,10 @@
                                      title="#{help.email}" required="true"
                                      requiredMessage="#{message.emailRequired}" maxlength="#{Const.EMAIL_MAX}"
                                      styleClass="form-control">
-                            <f:validator for="email-itxt" validatorId="emailAddressExistsValidator"/>
+                            <f:validator for="email-itxt" validatorId="emailAddressUnoccupiedValidator"/>
                             <f:validator for="email-itxt" validatorId="emailAddressLayoutValidator"/>
                         </h:inputText>
+                        <div><h:message for="email-itxt"/></div>
                     </div>
                     <!-- Password -->
                     <div class="input-group">
@@ -75,6 +79,7 @@
                                        requiredMessage="#{message.passwordNeeded}" styleClass="form-control">
                             <f:validator for="password-iscrt" validatorId="passwordValidator"/>
                         </h:inputSecret>
+                        <div><h:message for="password-iscrt"/></div>
                     </div>
 
                     <!-- Register button -->

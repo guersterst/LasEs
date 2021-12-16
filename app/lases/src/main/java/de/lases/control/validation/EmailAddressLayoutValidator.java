@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  * email address.
  * @author Thomas Kirz
  */
-@FacesValidator
+@FacesValidator("emailAddressLayout")
 public class EmailAddressLayoutValidator implements Validator<String> {
 
     /**

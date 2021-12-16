@@ -1,16 +1,23 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.*;
+import de.lases.persistence.exception.DataNotCompleteException;
+import de.lases.persistence.exception.DataNotWrittenException;
+import de.lases.persistence.exception.NotFoundException;
+import de.lases.persistence.internal.ConfigReader;
 import de.lases.persistence.repository.ReviewRepository;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
-import jakarta.faces.component.UIMessage;
+import jakarta.enterprise.inject.spi.CDI;
 import jakarta.inject.Inject;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.PropertyResourceBundle;
+import java.util.logging.Logger;
 
 /**
  * Provides functionality for dealing with reviews of submission papers.
@@ -26,16 +33,23 @@ public class ReviewService implements Serializable {
     private Event<UIMessage> uiMessageEvent;
 
     @Inject
-    private ReviewRepository reviewRepository;
+    private transient PropertyResourceBundle resourceBundle;
+
+    private static final Logger logger = Logger.getLogger(PaperService.class.getName());
 
     /**
      * Gets a {@link Review}.
      *
-     * @param review The requested {@code Review} containing a valid id.
-     * @return The fully filled requested {@code Review}.
+     * @param review The requested {@code Review} containing submissionId, versionNumber, reviewerId.
+     * @return The fully filled requested {@code Review}, null if not found.
      */
     public Review get(Review review) {
-        return null;
+        Transaction transaction = new Transaction();
+        try {
+            return ReviewRepository.get(review, transaction);
+        } catch (NotFoundException e) {
+            return null;
+        }
     }
 
     /**
@@ -48,6 +62,22 @@ public class ReviewService implements Serializable {
      *                  </p>
      */
     public void change(Review newReview) {
+        if (newReview == null) {
+            throw new IllegalArgumentException("Cannot change null review.");
+        }
+        Transaction transaction = new Transaction();
+        try {
+            ReviewRepository.change(newReview, transaction);
+            transaction.commit();
+        } catch (DataNotWrittenException e) {
+            logger.severe("Cannot change revision: " + newReview + e.getMessage());
+            uiMessageEvent.fire(new UIMessage("Could not update the state of this review.", MessageCategory.FATAL));
+            transaction.abort();
+        } catch (NotFoundException e) {
+            logger.info("Did not find: " + newReview + e.getMessage());
+            uiMessageEvent.fire(new UIMessage("This review does not exist.", MessageCategory.ERROR));
+            transaction.abort();
+        }
     }
 
     /**
@@ -62,28 +92,20 @@ public class ReviewService implements Serializable {
      * @param review The {@code Review} that is submitted.
      *               Must be filled with a valid
      *               reviewerId, paperVersion and submissionId.
-     * @param file   The {@link FileDTO} containing the pdf review itself..
+     * @param file   The {@link FileDTO} containing the pdf review itself.
      */
     public void add(Review review, FileDTO file) {
-
-    }
-
-    /**
-     * Removes a {@link Review}.
-     * <p>
-     * If the {@code User} removing the review is not
-     * the reviewer himself an email will be dispatched to the
-     * reviewer informing him about this action.
-     * The {@link de.lases.business.util.EmailUtil} utility will
-     * be used for this.
-     * </p>
-     *
-     * @param review The {@code Review} that is to be removed. Must be filled with a valid
-     *               reviewerId, paperId and submissionId.
-     * @param user The {@link User} who removes the {@code Review}.
-     *             Must contain a valid id.
-     */
-    public void remove(Review review, User user) {
+        Transaction transaction = new Transaction();
+        try {
+            ReviewRepository.add(review, file, transaction);
+            transaction.commit();
+        } catch (DataNotWrittenException e) {
+            uiMessageEvent.fire(new UIMessage("Upload of review failed.", MessageCategory.ERROR));
+            transaction.abort();
+        } catch (NotFoundException e) {
+            uiMessageEvent.fire(new UIMessage("This submission does not have a paper to review.", MessageCategory.ERROR));
+            transaction.abort();
+        }
     }
 
     /**
@@ -98,7 +120,35 @@ public class ReviewService implements Serializable {
      */
     public List<Review> getList(Submission submission, User user,
                                 ResultListParameters resultListParameters) {
-        return null;
+        Transaction transaction = new Transaction();
+        try {
+            return ReviewRepository.getList(submission, user, transaction, resultListParameters);
+        } catch (DataNotCompleteException e) {
+            e.printStackTrace();
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            transaction.commit();
+        }
+        return new ArrayList<>();
+    }
+
+    public int getListCountPages(Submission submission, User user, ResultListParameters resultListParameters) {
+        Transaction transaction = new Transaction();
+        int items = 0;
+        int pages = 0;
+        try {
+            items = ReviewRepository.getCountItemsList(submission, user, transaction, resultListParameters);
+            ConfigReader configReader = CDI.current().select(ConfigReader.class).get();
+            int paginationLength = Integer.parseInt(configReader.getProperty("MAX_PAGINATION_LIST_LENGTH"));
+            // Calculate number of pages.
+            pages =  (int) Math.ceil((double) items / paginationLength);
+        } catch (DataNotCompleteException | NotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            transaction.commit();
+        }
+        return pages;
     }
 
     /**
@@ -109,6 +159,28 @@ public class ReviewService implements Serializable {
      * @return The requested {@code File}.
      */
     public FileDTO getFile(Review review) {
-        return null;
+        if (review == null) {
+            logger.severe("This review is not valid. Therefore no file dto can be queried.");
+            throw new IllegalArgumentException(resourceBundle.getString("idMissing"));
+        } else {
+            Transaction transaction = new Transaction();
+            FileDTO file = null;
+            try {
+                file = ReviewRepository.getPDF(review, transaction);
+                transaction.commit();
+            }  catch (NotFoundException exception) {
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewNotFound"), MessageCategory.ERROR));
+                logger.fine("Error while loading a file of a review with the submission id: " + review.getSubmissionId()
+                        + " and version number: " + review.getPaperVersion() + "and reviewer id: " + review.getReviewerId());
+                transaction.abort();
+            }
+
+            if (file.getFile() == null) {
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewNotFound"), MessageCategory.INFO));
+                logger.info("No file gotten for review: " + review);
+            }
+
+            return file;
+        }
     }
 }

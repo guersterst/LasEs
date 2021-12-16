@@ -3,10 +3,16 @@ package de.lases.persistence.repository;
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.DataNotWrittenException;
 import de.lases.persistence.exception.NotFoundException;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import de.lases.persistence.internal.ConfigReader;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.context.SessionScoped;
+import org.jboss.weld.junit5.WeldInitiator;
+import org.jboss.weld.junit5.WeldJunit5Extension;
+import org.jboss.weld.junit5.WeldSetup;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,6 +22,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(WeldJunit5Extension.class)
 class SubmissionRepositoryTest {
 
     private static final int EXAMPLE_SUBMISSION_ID_1 = 1;
@@ -24,15 +31,33 @@ class SubmissionRepositoryTest {
     private static final String EXAMPLE_SUBMISSION_TITLE_1 = "Submission title";
     private static final String EXAMPLE_SUBMISSION_TITLE_2 = "Different title";
 
-    @BeforeAll
-    static void initConnectionPool() {
+
+    @WeldSetup
+    public WeldInitiator weld = WeldInitiator.from(ConnectionPool.class, ConfigReader.class, ConfigReader.class)
+            .activate(RequestScoped.class, SessionScoped.class).build();
+
+    /*
+     * Unfortunately we have to do this before every single test, since @BeforeAll methods are static and static
+     * methods don't work with our weld plugin.
+     */
+    @BeforeEach
+    void startConnectionPool() {
+        FileDTO file = new FileDTO();
+
+        Class clazz = SubmissionRepositoryTest.class;
+        InputStream inputStream = clazz.getResourceAsStream("/config.properties");
+
+        file.setInputStream(inputStream);
+
+        weld.select(ConfigReader.class).get().setProperties(file);
         ConnectionPool.init();
     }
 
-    @AfterAll
-    static void shutDownConnectionPool() {
+    @AfterEach
+    void shutDownConnectionPool() {
         ConnectionPool.shutDown();
     }
+
 
 //    @BeforeAll
 //    static void addUser() throws Exception {
@@ -132,6 +157,39 @@ class SubmissionRepositoryTest {
         user.setId(2000);
 
         assertThrows(NotFoundException.class, () -> SubmissionRepository.addCoAuthor(submission, user, transaction));
+        transaction.abort();
+    }
+
+    @Test
+    void testAddReviewer() throws SQLException, DataNotWrittenException, NotFoundException {
+        Transaction transaction = new Transaction();
+        Connection connection = transaction.getConnection();
+
+        PreparedStatement statement = connection.prepareStatement("""
+                SELECT * FROM reviewed_by
+                """);
+
+        ResultSet resultSetBefore = statement.executeQuery();
+        int before = 0;
+        while (resultSetBefore.next()){
+            before++;
+        }
+
+        ReviewedBy reviewedBy = new ReviewedBy();
+        reviewedBy.setReviewerId(1);
+        reviewedBy.setSubmissionId(5);
+        reviewedBy.setHasAccepted(AcceptanceStatus.NO_DECISION);
+        reviewedBy.setTimestampDeadline(LocalDateTime.now());
+
+        SubmissionRepository.addReviewer(reviewedBy, transaction);
+
+        ResultSet resultSetAfter = statement.executeQuery();
+        int after = 0;
+        while (resultSetAfter.next()) {
+            after++;
+        }
+
+        assertEquals(before, after - 1);
         transaction.abort();
     }
 
