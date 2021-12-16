@@ -39,11 +39,14 @@ public class SubmissionRepository {
      * @return A fully filled {@code Submission} dto.
      * @throws NotFoundException              If there is no submission with the
      *                                        provided id.
+     * @throws DataNotCompleteException       If retrieving the data failed but has a high probability of succeeding
+     *                                        after a retry.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     * @author Thomas Kirz
      */
     public static Submission get(Submission submission, Transaction transaction)
-            throws NotFoundException {
+            throws NotFoundException, DataNotCompleteException {
         if (submission.getId() == null) {
             logger.severe("The passed Submission-DTO does not contain an id.");
             throw new IllegalArgumentException("The passed Submission-DTO does not contain an id.");
@@ -68,8 +71,12 @@ public class SubmissionRepository {
                 throw new NotFoundException("No submission with id " + submission.getId() + " found.");
             }
         } catch (SQLException e) {
-            logger.severe(e.getMessage());
-            throw new DatasourceQueryFailedException(e.getMessage(), e);
+            DatasourceUtil.logSQLException(e, logger);
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                throw new DataNotCompleteException("Submission could not be retrieved", e);
+            } else {
+                throw new DatasourceQueryFailedException("Submission could not be retrieved", e);
+            }
         }
 
         return result;
@@ -318,6 +325,7 @@ public class SubmissionRepository {
      *                                        queried.
      * @throws InvalidQueryParamsException    If the resultListParameters contain
      *                                        an erroneous option.
+     * @author Thomas Kirz
      */
     public static List<Submission> getList(User user, Privilege privilege,
                                            ScientificForum scientificForum,
@@ -371,8 +379,12 @@ public class SubmissionRepository {
                 }
                 logger.finer("Retrieved a list of submissions from the database.");
             } catch (SQLException e) {
-                logger.severe(e.getMessage());
-                throw new DatasourceQueryFailedException(e.getMessage(), e);
+                DatasourceUtil.logSQLException(e, logger);
+                if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                    throw new DataNotCompleteException("The list of submissions could not be retrieved.", e);
+                } else {
+                    throw new DatasourceQueryFailedException("The list of submissions could not be retrieved.", e);
+                }
             }
             return result;
         }
@@ -396,6 +408,7 @@ public class SubmissionRepository {
      *                                        queried.
      * @throws InvalidQueryParamsException    If the resultListParameters contain
      *                                        an erroneous option.
+     * @author Thomas Kirz
      */
     public static List<Submission> getList(User user, Privilege privilege,
                                            Transaction transaction,
@@ -447,8 +460,12 @@ public class SubmissionRepository {
             }
             logger.finer("Retrieved a list of submissions from the database.");
         } catch (SQLException e) {
-            logger.severe(e.getMessage());
-            throw new DatasourceQueryFailedException(e.getMessage(), e);
+            DatasourceUtil.logSQLException(e, logger);
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                throw new DataNotCompleteException("The list of submissions could not be retrieved.", e);
+            } else {
+                throw new DatasourceQueryFailedException("The list of submissions could not be retrieved.", e);
+            }
         }
         return result;
     }
@@ -471,6 +488,7 @@ public class SubmissionRepository {
      *                                        queried.
      * @throws InvalidQueryParamsException    If the resultListParameters contain
      *                                        an erroneous option.
+     * @author Thomas Kirz
      */
     public static List<Submission> getList(ScientificForum scientificForum,
                                            Transaction transaction,
@@ -504,8 +522,12 @@ public class SubmissionRepository {
             }
             logger.finer("Retrieved a list of submissions from the database.");
         } catch (SQLException e) {
-            logger.severe(e.getMessage());
-            throw new DatasourceQueryFailedException(e.getMessage(), e);
+            DatasourceUtil.logSQLException(e, logger);
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                throw new DataNotCompleteException("The list of submissions could not be retrieved.", e);
+            } else {
+                throw new DatasourceQueryFailedException("The list of submissions could not be retrieved.", e);
+            }
         }
         return null;
     }
@@ -665,14 +687,17 @@ public class SubmissionRepository {
      * @return The number of submission the specified user is author, editor
      * or reviewer of.
      * @throws NotFoundException              If there is no user with the provided id.
+     * @throws DataNotCompleteException       If retrieving the data failed but has a high probability of succeeding
+     *                                        after a retry.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     * @author Thomas Kirz
      */
     public static int countSubmissions(User user, Privilege privilege,
                                        Transaction transaction,
                                        ResultListParameters
                                                resultListParameters)
-            throws NotFoundException {
+            throws NotFoundException, DataNotCompleteException {
         if (user.getId() == null) {
 
             logger.severe("Passed  User-DTO is not sufficiently filled.");
@@ -728,8 +753,12 @@ public class SubmissionRepository {
                         + user.getId() + " could not be retrieved.");
             }
         } catch (SQLException e) {
-            logger.severe(e.getMessage());
-            throw new DatasourceQueryFailedException(e.getMessage(), e);
+            DatasourceUtil.logSQLException(e, logger);
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                throw new DataNotCompleteException("The number of submissions could not be retrieved.", e);
+            } else {
+                throw new DatasourceQueryFailedException("The list of submissions could not be retrieved.", e);
+            }
         }
     }
 
