@@ -782,6 +782,8 @@ public class UserRepository {
      * @throws InvalidFieldsException         If the use id is null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     *
+     * @author Sebastian Vogt
      */
     public static void addScienceField(User user, ScienceField scienceField,
                                        Transaction transaction)
@@ -830,6 +832,8 @@ public class UserRepository {
      * @throws InvalidFieldsException         If the user id or science field name are null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     *
+     * @author Sebastian Vogt
      */
     public static void removeScienceField(User user, ScienceField scienceField,
                                           Transaction transaction)
@@ -911,6 +915,8 @@ public class UserRepository {
      * @throws DataNotCompleteException If the data cannot be fetched due to a transient fault.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     *
+     * @author Sebastian Vogt
      */
     public static FileDTO getAvatar(User user, Transaction transaction)
             throws NotFoundException, DataNotCompleteException {

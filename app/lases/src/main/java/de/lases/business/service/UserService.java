@@ -4,6 +4,7 @@ import de.lases.business.util.AvatarUtil;
 import de.lases.business.util.Hashing;
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
+import de.lases.persistence.repository.ScienceFieldRepository;
 import de.lases.persistence.repository.Transaction;
 import de.lases.persistence.repository.UserRepository;
 import jakarta.enterprise.context.Dependent;
@@ -170,6 +171,8 @@ public class UserService implements Serializable {
      * @param user The {@link User} whose avatar is being requested.
      *             Must contain a valid id.
      * @return The user's avatar as a byte-array, wrapped by a {@code FileDTO}.
+     *
+     * @author Sebstian Vogt
      */
     public FileDTO getAvatar(User user) {
         Transaction transaction = new Transaction();
@@ -205,8 +208,22 @@ public class UserService implements Serializable {
      * @param user         The user who receives a new {@code ScienceField}.
      *                     Must contain a valid id.
      * @param scienceField A {@code ScienceField} containing a valid id.
+     *
+     * @author Sebastian Vogt
      */
     public void addScienceField(User user, ScienceField scienceField) {
+        Transaction transaction = new Transaction();
+        try {
+            UserRepository.addScienceField(user, scienceField, transaction);
+            transaction.commit();
+        } catch (NotFoundException e) {
+            transaction.abort();
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataNotFound"), MessageCategory.ERROR));
+        } catch (DataNotWrittenException e) {
+            transaction.abort();
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataNotWritten"), MessageCategory.ERROR));
+        }
+
     }
 
     /**
@@ -215,8 +232,21 @@ public class UserService implements Serializable {
      * @param user         The user who loses a {@code ScienceField}.
      *                     Must contain a valid id.
      * @param scienceField A {@code ScienceField} containing a valid id.
+     *
+     * @author Sebastian Vogt
      */
     public void removeScienceField(User user, ScienceField scienceField) {
+        Transaction transaction = new Transaction();
+        try {
+            UserRepository.removeScienceField(user, scienceField, transaction);
+            transaction.commit();
+        } catch (NotFoundException e) {
+            transaction.abort();
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataNotFound"), MessageCategory.ERROR));
+        } catch (DataNotWrittenException e) {
+            transaction.abort();
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataNotWritten"), MessageCategory.ERROR));
+        }
     }
 
     /**
