@@ -360,23 +360,52 @@ public class UserRepository {
     }
 
     /**
-     * Takes a user dto that is filled with a valid id or email address and
+     * Takes a user dto that is filled with a valid id and
      * removes this user from the repository.
      *
-     * @param user        The user forum to remove. Must be filled
-     *                    with a valid id or email.
+     * @param user        The user to remove. Must be filled
+     *                    with a valid id.
      * @param transaction The transaction to use.
      * @throws NotFoundException              The specified user forum was not found in
      *                                        the repository.
      * @throws DataNotWrittenException        If writing the data to the repository
      *                                        fails.
-     * @throws InvalidFieldsException         If both id and email are provided, but
-     *                                        they belong to two different users.
+     * @throws InvalidFieldsException         If the user id is null
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     *
+     * @user Sebastian Vogt
      */
     public static void remove(User user, Transaction transaction)
             throws NotFoundException, DataNotWrittenException {
+        if (user.getId() == null) {
+            throw new InvalidFieldsException("The user id is null");
+        }
+
+        Connection conn = transaction.getConnection();
+
+        String sql = """
+                DELETE FROM "user"
+                WHERE id = ?
+                """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, user.getId());
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new NotFoundException("The user to delete was not found.");
+            }
+        } catch (SQLException e) {
+            DatasourceUtil.logSQLException(e, logger);
+
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                throw new DataNotWrittenException("User was not deleted", e);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("User was not deleted", e);
+            }
+        }
+
     }
 
     /**

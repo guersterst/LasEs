@@ -119,6 +119,20 @@ public class UserService implements Serializable {
      * @param user A {@link User}-DTO containing a valid id.
      */
     public void remove(User user) {
+        Transaction transaction = new Transaction();
+
+        try {
+            UserRepository.remove(user, transaction);
+            transaction.commit();
+        } catch (NotFoundException e) {
+            transaction.abort();
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dateNotFound"),
+                    MessageCategory.ERROR));
+        } catch (DataNotWrittenException e) {
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataNotWritten"),
+                    MessageCategory.ERROR));
+            transaction.abort();
+        }
     }
 
     /**

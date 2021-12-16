@@ -6,7 +6,7 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
 
-    <ui:define name="title">Lorem ipsum</ui:define>
+    <ui:define name="title">#{labels.profile}</ui:define>
 
     <ui:define name="content">
 
@@ -156,32 +156,30 @@
 <!--                                </div>-->
 <!--                                <hr/>-->
 
-<!--                                <div class="form-group">-->
-<!--                                    <h:outputLabel for="science-field-lst" value="Lorem Ipsum"/>-->
-<!--                                    <h:dataTable id="science-field-lst" value="#{profileBacking.usersScienceFields}" var="field">-->
-<!--                                            <h:commandButton value="Lorem Ipsum" action="#{profileBacking.deleteScienceField(field)}" rendered="#{!profileBacking.hasViewerEditRights}"/>-->
-<!--                                    </h:dataTable>-->
-<!--                                </div>-->
-<!--                                <hr/>-->
-
-<!--                                <div class="form-group">-->
-<!--                                    <h:outputLabel for="add-science-field-slctolb" value="Lorem Ipsum"/>-->
-<!--                                    <p:selectOneListbox id="add-science-field-slctolb" value="#{profileBacking.selectedScienceField}" rendered="#{!profileBacking.hasViewerEditRights()}">-->
-<!--                                            <f:selectItems value="#{profileBacking.scienceFields}"/>-->
-<!--                                    </p:selectOneListbox>-->
-<!--                                </div>-->
-<!--                                <hr/>-->
-
-<!--                                <div class="form-group">-->
-<!--                                    <h:commandButton id="add-field-cbtn" value="Lorem Ipsum" action="#{profileBacking.addScienceField}" rendered="#{!profileBacking.hasViewerEditRights()}"/>-->
-<!--                                </div>-->
-<!--                                <hr/>-->
-
-<!--                                <div class="form-group">-->
-<!--                                    <h:commandButton id="delete-cbtn" value="Lorem Ipsum" action="#{profileBacking.deleteProfile}" rendered="#{!profileBacking.hasViewerEditRights()}"/>-->
-<!--                                </div>-->
-<!--                                <hr/>-->
                             </h:form>
+
+                            <hr/>
+                            <!-- delete Profile -->
+                            <h:form id="delete-profile-form">
+                                <p:commandButton id="delete-cbtn" value="#{labels.delete}"
+                                                 onclick="PF('delte-dlg').show()"
+                                                 readonly="#{!profileBacking.hasViewerEditRights()}"
+                                                 type="button"
+                                                 styleClass="btn btn-danger"
+                                                 disabled="#{!profileBacking.hasViewerEditRights()}"/>
+
+                                <p:confirmDialog id="delte-dlg" widgetVar="delte-dlg" header="#{labels.delete}">
+
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <h:outputLabel for="delete-really-cbtn" value="#{labels.deleteReally}" styleClass="form-label"/> <br/>
+                                            <h:commandButton id="delete-really-cbtn" value="#{labels.delete}" action="#{profileBacking.deleteProfile()}" styleClass="btn-danger btn"/>
+                                        </div>
+                                    </div>
+
+                                </p:confirmDialog>
+                            </h:form>
+
                         </div>
                     </div>
 
@@ -199,12 +197,12 @@
                                         <h:selectBooleanCheckbox styleClass="form-check-input" id="is-admin-cbx" value="#{profileBacking.userForAdminSettings.admin}"/><h:outputLabel for="is-admin-cbx" styleClass="form-check-label" value="#{labels.adminRights}"/><br/>
                                         <h:message for="password-admin-iscrt"/><br/>
                                         <p:commandButton id="is-admin-cbtn" styleClass="btn-secondary btn" type="button" value="#{labels.save}" onclick="PF('dlg').show()" />
-                                        <p:confirmDialog id="dlg" widgetVar="dlg" header="Lorem Ipsum">
+                                        <p:confirmDialog id="dlg" widgetVar="dlg" header="#{message.passwordNeeded}">
 
                                             <div class="form-group">
                                                 <h:outputLabel for="password-admin-iscrt" value="#{message.passwordNeeded}" styleClass="form-label"/>
                                                 <h:inputSecret id="password-admin-iscrt" value="#{profileBacking.adminPassword.passwordNotHashed}" required="true" requiredMessage="#{message.passwordNeeded}" styleClass="form-control"/>
-                                                <h:commandButton id="admin-save-cbtn" value="Lorem Ipsum" action="#{profileBacking.submitAdminChanges()}" styleClass="btn-primary btn">
+                                                <h:commandButton id="admin-save-cbtn" value="#{labels.save}" action="#{profileBacking.submitAdminChanges()}" styleClass="btn-primary btn">
                                                     <f:ajax execute="edit-admin-form" render="edit-admin-form" />
                                                 </h:commandButton>
                                             </div>
@@ -220,6 +218,7 @@
 
                     </h:panelGroup>
 
+                    <!-- Science Fields -->
                     <div class="card" id="addScienceFields">
                         <div class="card-header">
                             #{labels.editScienceFields}
@@ -251,7 +250,7 @@
                                     <div class="form-group">
                                         <h:commandButton id="apply-field-add-cbtn"
                                                          value="#{labels.add}"
-                                                         styleClass="btn btn-secondary"
+                                                         styleClass="btn btn-primary"
                                                          action="#{profileBacking.addScienceField()}"
                                                          disabled="#{!profileBacking.hasViewerEditRights()}">
                                             <f:ajax execute="fields-add-frm"
@@ -259,6 +258,9 @@
                                         </h:commandButton>
                                     </div>
                                 </div>
+
+                                <hr/>
+
                                 <h:dataTable id="science-field-list"
                                              value="#{profileBacking.usersScienceFields}"
                                              var="currField">

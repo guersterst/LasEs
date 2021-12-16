@@ -200,7 +200,8 @@ public class ProfileBacking implements Serializable {
      * @return Go to the welcome page.
      */
     public String deleteProfile() {
-        return null;
+        userService.remove(user);
+        return "/views/anonymous/welcome";
     }
 
     /**
