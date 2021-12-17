@@ -91,6 +91,7 @@ class SubmissionServiceTestNoMock {
         }
 
         assertEquals(1, j - i);
+        submissionService.remove(submission);
         transaction.abort();
     }
 
@@ -137,6 +138,7 @@ class SubmissionServiceTestNoMock {
             }
 
             assertEquals(1, j - i);
+            submissionService.remove(submission);
         } catch (Exception e) {
             throw e;
         } finally {
@@ -188,12 +190,14 @@ class SubmissionServiceTestNoMock {
             }
 
             assertEquals(1, j - i);
+            submissionService.remove(submission);
         } finally {
             transaction.abort();
         }
     }
 
     @Test
+    @Disabled
     void testAddReviewer() throws SQLException {
         User user = new User();
         user.setId(1);
