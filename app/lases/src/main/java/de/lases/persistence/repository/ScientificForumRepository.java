@@ -165,7 +165,11 @@ public class ScientificForumRepository {
         try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, scientificForum.getName());
             ps.setString(2, scientificForum.getDescription());
-            ps.setString(3, scientificForum.getUrl());
+            if (scientificForum.getUrl() == null || scientificForum.getUrl().isEmpty()) {
+                ps.setString(3, null);
+            } else {
+                ps.setString(3, scientificForum.getUrl());
+            }
             ps.setString(4, scientificForum.getReviewManual());
             if (scientificForum.getDeadline() != null) {
                 ps.setTimestamp(5, Timestamp.valueOf(scientificForum.getDeadline()));
