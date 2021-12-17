@@ -37,7 +37,8 @@ xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
                                  value="#{labels.addReviewer}"
                                  action="#{toolbarBacking.addReviewer()}"
                                  styleClass="btn btn-primary"
-                                 title="#{help.addReviewerButton}"/>
+                                 title="#{help.addReviewerButton}"
+                                 disabled="#{toolbarBacking.accepted || toolbarBacking.rejected}"/>
             </div>
         </h:form>
         <h:form>
@@ -48,7 +49,8 @@ xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
                         <h:column>
                                 <h:commandButton value="#{labels.deleteButton}"
                                                  action="#{toolbarBacking.removeReviewer(user)}"
-                                                 styleClass="btn btn-secondary btn-sm" />
+                                                 styleClass="btn btn-secondary btn-sm"
+                                                 disabled="#{toolbarBacking.accepted || toolbarBacking.rejected}"/>
 
                         </h:column>
                         <h:column>
@@ -93,7 +95,8 @@ xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
                 <div class="btn-group">
                     <h:commandButton id="save-editor-cbtn" value="#{labels.saveButton}"
                                      action="#{toolbarBacking.chooseNewManagingEditor}"
-                                     styleClass="btn btn-primary"/>
+                                     styleClass="btn btn-primary"
+                                     disabled="#{toolbarBacking.accepted || toolbarBacking.rejected}"/>
                 </div>
             </div>
         </h:form>
@@ -112,7 +115,8 @@ xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
             <br/>
             <div class="form-group btn-group">
                 <h:commandButton id="revision-required-cbtn" value="#{labels.revisionBtn}" action="#{toolbarBacking.requireRevision}"
-                                 title="#{help.revisionRequired}" styleClass="btn btn-primary"/>
+                                 title="#{help.revisionRequired}" styleClass="btn btn-primary"
+                                 disabled="#{toolbarBacking.accepted || toolbarBacking.rejected}"/>
             </div>
         </h:form>
         <br/>

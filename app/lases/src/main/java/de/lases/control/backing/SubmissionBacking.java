@@ -388,11 +388,17 @@ public class SubmissionBacking implements Serializable {
      */
     public void releaseRevision(Paper paper) {
        if (loggedInUserIsEditor()) {
-           paper.setVisible(true);
-           paperService.change(paper);
+           if (submission.getState() != SubmissionState.REJECTED) {
+               paper.setVisible(true);
+               paperService.change(paper);
+               uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reminder"), MessageCategory.WARNING));
+           } else {
+               uiMessageEvent.fire(new UIMessage(resourceBundle.getString("rejected"), MessageCategory.WARNING));
+           }
        } else {
            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("releaseRevision"), MessageCategory.WARNING));
        }
+       toolbarBacking.onLoad(submission);
     }
 
     /**

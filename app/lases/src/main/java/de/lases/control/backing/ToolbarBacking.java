@@ -116,6 +116,7 @@ public class ToolbarBacking implements Serializable {
      */
     public void onLoad(Submission sub) {
         submission = sub;
+
         loadReviewerList();
 
         currentEditor.setId(submission.getEditorId());
@@ -167,12 +168,12 @@ public class ToolbarBacking implements Serializable {
         reviewedBy.setHasAccepted(AcceptanceStatus.NO_DECISION);
 
         if (reviewer.containsKey(newReviewer)) {
-            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("alreadyExistsReviewer"), MessageCategory.WARNING));
-            return;
+            submissionService.changeReviewedBy(reviewedBy);
+
+            reviewer.remove(newReviewer);
+        } else {
+            submissionService.addReviewer(newReviewer, reviewedBy);
         }
-
-        submissionService.addReviewer(newReviewer, reviewedBy);
-
 
         reviewer.put(newReviewer, reviewedBy);
 

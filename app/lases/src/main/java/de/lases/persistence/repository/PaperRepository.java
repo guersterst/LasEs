@@ -201,6 +201,20 @@ public class PaperRepository {
             DatasourceUtil.logSQLException(exception, logger);
             throw new DatasourceQueryFailedException("A datasource exception occurred while changing paper data.", exception);
         }
+
+        if (paper.isVisible()) {
+            String sqlDeadline = "UPDATE reviewed_by SET timestamp_deadline = NULL WHERE submission_id = ?";
+
+            try (PreparedStatement statement = connection.prepareStatement(sqlDeadline)){
+                statement.setInt(1, paper.getSubmissionId());
+
+                statement.executeUpdate();
+            } catch (SQLException exception) {
+                transaction.abort();
+                DatasourceUtil.logSQLException(exception, logger);
+                throw new DatasourceQueryFailedException("A datasource exception occurred while changing reviewed_by data.", exception);
+            }
+        }
     }
 
     /**
