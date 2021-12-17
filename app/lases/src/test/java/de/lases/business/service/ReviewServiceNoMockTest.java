@@ -20,6 +20,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * @author Johann Schicho
+ */
 @ExtendWith(WeldJunit5Extension.class)
 class ReviewServiceNoMockTest {
 

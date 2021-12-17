@@ -1,34 +1,55 @@
 package de.lases.persistence.repository;
 
-import de.lases.global.transport.Privilege;
-import de.lases.global.transport.ScientificForum;
-import de.lases.global.transport.Submission;
-import de.lases.global.transport.User;
+import de.lases.global.transport.*;
 import de.lases.persistence.exception.DataNotCompleteException;
 import de.lases.persistence.exception.NotFoundException;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import de.lases.persistence.internal.ConfigReader;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.context.SessionScoped;
+import org.jboss.weld.junit5.WeldInitiator;
+import org.jboss.weld.junit5.WeldJunit5Extension;
+import org.jboss.weld.junit5.WeldSetup;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 
+import java.io.InputStream;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(WeldJunit5Extension.class)
 public class UserRepositoryGetListNoMocksTest {
 
-    private static Transaction transaction;
+    @WeldSetup
+    public WeldInitiator weld = WeldInitiator.from(ConnectionPool.class, ConfigReader.class, ConfigReader.class)
+            .activate(RequestScoped.class, SessionScoped.class).build();
 
-    @BeforeAll
-    static void init() {
+    /*
+     * Unfortunately we have to do this before every single test, since @BeforeAll methods are static and static
+     * methods don't work with our weld plugin.
+     */
+    @BeforeEach
+    void startConnectionPool() {
+        FileDTO file = new FileDTO();
+
+        Class reviewService = UserRepositoryGetListNoMocksTest.class;
+        InputStream inputStream = reviewService.getResourceAsStream("/config.properties");
+
+        file.setInputStream(inputStream);
+
+        weld.select(ConfigReader.class).get().setProperties(file);
         ConnectionPool.init();
+
         transaction = new Transaction();
     }
 
-    @AfterAll
-    static void destruct() {
+    @AfterEach
+    void shutDownConnectionPool() {
         transaction.abort();
         ConnectionPool.shutDown();
     }
+
+    private static Transaction transaction;
 
     @Test
     void testGetListUsersForSubmissionAuthors() throws NotFoundException, DataNotCompleteException {
@@ -44,7 +65,7 @@ public class UserRepositoryGetListNoMocksTest {
         List<User> userList = UserRepository.getList(transaction, submission, Privilege.AUTHOR);
 
         assertAll(
-                () -> assertEquals(8, userList.size()),
+                () -> assertEquals(2, userList.size()),
                 () -> assertTrue(userList.contains(basti)),
                 () -> assertTrue(userList.contains(alfred))
         );
@@ -55,14 +76,14 @@ public class UserRepositoryGetListNoMocksTest {
         Submission submission = new Submission();
         submission.setId(666);
 
-        User edith = new User();
-        edith.setId(1001);
+        User carl = new User();
+        carl.setId(1003);
 
         List<User> userList = UserRepository.getList(transaction, submission, Privilege.REVIEWER);
 
         assertAll(
-                () -> assertEquals(1, userList.size()),
-                () -> assertTrue(userList.contains(edith))
+                () -> assertEquals(2, userList.size()),
+                () -> assertTrue(userList.contains(carl))
         );
     }
 
@@ -79,9 +100,9 @@ public class UserRepositoryGetListNoMocksTest {
         List<User> userList = UserRepository.getList(transaction, sf);
 
         assertAll(
-                () -> assertEquals(2, userList.size()),
+                () -> assertEquals(8, userList.size()),
                 () -> assertTrue(userList.contains(edith)),
-                () -> assertTrue(userList.contains(peter))
+                () -> assertFalse(userList.contains(peter))
         );
     }
 
