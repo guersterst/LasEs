@@ -8,7 +8,7 @@ import jakarta.faces.convert.FacesConverter;
 
 @FacesConverter(forClass = ScienceField.class)
 public class ScienceFieldConverter implements Converter<ScienceField> {
-    //TODO fehlerfall und facesmsgs
+
     @Override
     public ScienceField getAsObject(FacesContext context, UIComponent component, String value) {
         ScienceField scienceField = new ScienceField();

@@ -1,8 +1,10 @@
 package de.lases.control.backing;
 
 import de.lases.business.service.ScientificForumService;
-import de.lases.control.internal.*;
-import de.lases.global.transport.*;
+import de.lases.control.internal.Pagination;
+import de.lases.control.internal.SessionInformation;
+import de.lases.global.transport.DateSelect;
+import de.lases.global.transport.ScientificForum;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -29,18 +31,29 @@ public class ScientificForumListBacking implements Serializable {
 
     private Pagination<ScientificForum> scientificForumPagination;
 
-    /**
-     * Initialize the scientific forum pagination and load the first page from
-     * the datasource.
-     */
-    @PostConstruct
-    public void init() {
+    private void initPagination() {
+        scientificForumPagination = new Pagination<>("name") {
+
+            @Override
+            public void loadData() {
+                setEntries(scientificForumService.getList(getResultListParameters()));
+            }
+
+            @Override
+            protected Integer calculateNumberPages() {
+                return scientificForumService.getListCountPages(scientificForumPagination.getResultListParameters());
+            }
+        };
+        scientificForumPagination.applyFilters();
+        scientificForumPagination.loadData();
     }
 
     /**
-     * Apply the selected deadline filter.
+     * Initializes the pagination.
      */
-    public void applyFilters() {
+    @PostConstruct
+    public void init() {
+        initPagination();
     }
 
     /**
@@ -69,5 +82,4 @@ public class ScientificForumListBacking implements Serializable {
     public DateSelect[] getDateSelects() {
         return DateSelect.values();
     }
-
 }
