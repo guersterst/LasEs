@@ -120,7 +120,6 @@
             <version>${weld-junit5.version}</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
     <build>

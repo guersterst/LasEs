@@ -930,7 +930,7 @@ public class UserRepository {
      */
     public static List<User> getList(Transaction transaction,
                                      ScientificForum scientificForum)
-            throws DataNotCompleteException, NotFoundException, InvalidQueryParamsException {
+            throws DataNotCompleteException,  NotFoundException, InvalidQueryParamsException {
         if (transaction == null || scientificForum == null) {
             throw new InvalidQueryParamsException("Parameter was null");
         }

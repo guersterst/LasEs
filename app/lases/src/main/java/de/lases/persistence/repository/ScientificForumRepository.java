@@ -7,6 +7,10 @@ import de.lases.persistence.util.DatasourceUtil;
 import de.lases.persistence.util.TransientSQLExceptionChecker;
 import jakarta.enterprise.inject.spi.CDI;
 import org.postgresql.util.PSQLException;
+import de.lases.persistence.internal.ConfigReader;
+import de.lases.persistence.util.DatasourceUtil;
+import jakarta.enterprise.inject.spi.CDI;
+import org.postgresql.util.PSQLException;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -232,18 +236,6 @@ public class ScientificForumRepository {
             throw new NotFoundException();
         }
 
-        /*
-        // Determine whether a name change would be allowed -> Alternative to exception schtuff
-        ScientificForum forumWithOldName = get(scientificForum, transaction);
-        boolean isNameChange = forumWithOldName.getName().equals(scientificForum.getName());
-        ScientificForum queryForumWithOnlyName = new ScientificForum();
-        queryForumWithOnlyName.setName(scientificForum.getName());
-        if (isNameChange && exists(queryForumWithOnlyName, transaction)) {
-            throw new KeyExistsException();
-        }
-         */
-
-
         String sql = """
                 UPDATE scientific_forum
                 SET name = ?, description = ?, url = ?, review_manual = ?, timestamp_deadline = ?
@@ -334,7 +326,7 @@ public class ScientificForumRepository {
     public static List<ScientificForum> getList(Transaction transaction,
                                                 ResultListParameters
                                                         resultListParameters) {
-        if (transaction == null) {
+            if (transaction == null) {
             l.severe("Passed transaction is null.");
             throw new IllegalArgumentException("Transaction must not be null.");
         }
@@ -377,17 +369,24 @@ public class ScientificForumRepository {
 
         sb.append("""
                 FROM scientific_forum f
+                WHERE
                 """).append("\n");
 
         if (isFilled(params.getFilterColumns().get("name"))) {
-            sb.append("WHERE f.name ILIKE ?\n");
+            sb.append("f.name ILIKE ?\n AND");
         }
 
         // Filter according to date select parameter
         if (params.getDateSelect() == DateSelect.FUTURE) {
-            sb.append(" AND (timestamp_deadline::date >= CURRENT_DATE\n");
+            sb.append(" (timestamp_deadline::date >= CURRENT_DATE)\n");
         } else if (params.getDateSelect() == DateSelect.PAST) {
-            sb.append(" AND (timestamp_deadline::date <= CURRENT_DATE\n");
+            sb.append(" (timestamp_deadline::date <= CURRENT_DATE)\n");
+        }
+
+        if (!sb.toString().contains("ILIKE") && !sb.toString().contains("CURRENT")) {
+            StringBuilder newSb = new StringBuilder();
+            newSb.append(sb.toString().replace("WHERE", ""));
+            sb = newSb;
         }
 
         if (!doCount) {
@@ -465,7 +464,7 @@ public class ScientificForumRepository {
 
             l.severe("Must have a editor and forum id to update relationship.");
             throw new InvalidFieldsException();
-        } else if (!exists(scientificForum, transaction) || !userExists(editor, transaction)) {
+        } else if (!exists(scientificForum, transaction)) {
 
             l.severe("Forum (" + scientificForum.getId() + ") and user (" + editor.getId() + ") must exist"
                     + "in order to update their relationship.");
@@ -512,7 +511,8 @@ public class ScientificForumRepository {
 
             l.severe("Must contain a sciencefield name and forum id to add as a topic.");
             throw new InvalidFieldsException();
-        } else if (!exists(scientificForum, transaction) ||  !scienceFieldExists(scienceField, transaction)) {
+        } else if (!exists(scientificForum, transaction)
+                || !ScienceFieldRepository.isScienceField(scienceField, transaction)) {
 
             l.severe("Forum (" + scientificForum.getId() + ") and sciencefield (" + scienceField.getName() + ") must exist"
                     + "in order to update their relationship.");
@@ -560,7 +560,7 @@ public class ScientificForumRepository {
 
             l.severe("Must contain an editor id and forum id to remove an editor.");
             throw new InvalidFieldsException();
-        } else if (!exists(scientificForum, transaction) || !userExists(editor, transaction)) {
+        } else if (!exists(scientificForum, transaction)) {
 
             l.severe("Forum (" + scientificForum.getId() + ") and editor ("
                     + scientificForum.getId() + ") must exist in order to be put in a relationship.");
@@ -610,7 +610,8 @@ public class ScientificForumRepository {
 
             l.severe("Must contain a forum and editor id in order to remove an editor.");
             throw new InvalidFieldsException();
-        } else if (!exists(scientificForum, transaction) ||  !scienceFieldExists(scienceField, transaction)) {
+        } else if (!exists(scientificForum, transaction)
+                || !ScienceFieldRepository.isScienceField(scienceField, transaction)) {
 
             l.severe("Forum (" + scientificForum.getId() + ") and editor ("
                     + scientificForum.getId() + ") must exist in order to be cease their relationship.");
@@ -634,46 +635,6 @@ public class ScientificForumRepository {
             l.severe("Forum (" + scientificForum.getId() + ") and editor ("
                     + scientificForum.getId() + ") relationship could not be dissolved.");
             throw new DataNotWrittenException(ex.getMessage(), ex);
-        }
-    }
-
-    // TODO move to UserRepo
-    private static boolean userExists(User user, Transaction transaction) {
-        if (user.getId() == null ) {
-            throw new InvalidFieldsException();
-        }
-
-        String sql = """
-                SELECT id 
-                FROM "user" 
-                WHERE id=?
-                """;
-
-        try (PreparedStatement preparedStatement = transaction.getConnection().prepareStatement(sql)) {
-            preparedStatement.setInt(1, user.getId());
-            return preparedStatement.executeQuery().next();
-        } catch (SQLException e) {
-            throw new DatasourceQueryFailedException(e.getMessage());
-        }
-    }
-
-    // TODO move to ScienceFieldRepo
-    private static boolean scienceFieldExists(ScienceField scienceField, Transaction transaction) {
-        if (scienceField.getName() == null ) {
-            throw new InvalidFieldsException();
-        }
-
-        String sql = """
-                SELECT name 
-                FROM science_field 
-                WHERE name=?
-                """;
-
-        try (PreparedStatement preparedStatement = transaction.getConnection().prepareStatement(sql)) {
-            preparedStatement.setString(1, scienceField.getName());
-            return preparedStatement.executeQuery().next();
-        } catch (SQLException e) {
-            throw new DatasourceQueryFailedException(e.getMessage(), e);
         }
     }
 }

@@ -21,7 +21,7 @@ import java.util.logging.Logger;
  * In case of an unexpected state, a {@link UIMessage} event will be fired.
  */
 @Dependent
-public class ScienceFieldService implements Serializable {
+public class    ScienceFieldService implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 4604784260646118101L;

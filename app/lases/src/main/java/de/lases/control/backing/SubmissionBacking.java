@@ -208,7 +208,6 @@ public class SubmissionBacking implements Serializable {
     }
 
 
-
     /**
      * Checks if the view param is an integer and throws an exception if it is
      * not
@@ -216,8 +215,7 @@ public class SubmissionBacking implements Serializable {
      * @throws IllegalUserFlowException If there is no integer provided as view
      *                                  param
      */
-    public void preRenderViewListener() {
-    }
+    public void preRenderViewListener(ComponentSystemEvent event) {}
 
     /**
      * Set the state of the submission, which can be SUBMITTED,
@@ -296,7 +294,7 @@ public class SubmissionBacking implements Serializable {
         HttpServletResponse response = (HttpServletResponse) facesContext.getExternalContext().getResponse();
         response.setContentType(submission.getTitle() + "/pdf");
         response.setContentLength(pdf.length);
-        response.setHeader("Content-disposition","attachment;filename="+ submission.getTitle() + ".pdf");
+        response.setHeader("Content-disposition", "attachment;filename=" + submission.getTitle() + ".pdf");
 
         try {
             ServletOutputStream outputStream = response.getOutputStream();
@@ -393,12 +391,12 @@ public class SubmissionBacking implements Serializable {
      * @param paper The revision (which is a {@code paper}) to release
      */
     public void releaseRevision(Paper paper) {
-       if (loggedInUserIsEditor()) {
-           paper.setVisible(true);
-           paperService.change(paper);
-       } else {
-           uiMessageEvent.fire(new UIMessage(resourceBundle.getString("releaseRevision"), MessageCategory.WARNING));
-       }
+        if (loggedInUserIsEditor()) {
+            paper.setVisible(true);
+            paperService.change(paper);
+        } else {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("releaseRevision"), MessageCategory.WARNING));
+        }
     }
 
     /**
@@ -444,7 +442,7 @@ public class SubmissionBacking implements Serializable {
             revision.setSubmissionId(submission.getId());
             revision.setUploadTime(LocalDateTime.now());
 
-            paperService.add(file,revision);
+            paperService.add(file, revision);
 
             Submission newSubmission = submission.clone();
             newSubmission.setState(SubmissionState.SUBMITTED);
@@ -675,5 +673,4 @@ public class SubmissionBacking implements Serializable {
             return false;
         }
     }
-
 }
