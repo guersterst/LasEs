@@ -118,16 +118,15 @@ public class RegistrationService {
             }
         }
 
-        t.commit();
-
-        if (initiateVerificationProcess(user)) {
-            // Success message, containing verification random if test mode is enabled
+        if (initiateVerificationProcess(user, t)) {
             String msg = message.getString("registrationSuccessful");
             uiMessageEvent.fire(new UIMessage(msg, MessageCategory.INFO));
 
             l.info("User " + user.getEmailAddress() + " registered.");
+            t.commit();
         } else {
             uiMessageEvent.fire(new UIMessage(message.getString("registrationFailed"), MessageCategory.ERROR));
+            t.abort();
         }
 
         return user;
@@ -141,8 +140,7 @@ public class RegistrationService {
      * @param user The user to be verified filled with id and email address.
      * @return If the verification process was successfully initiated.
      */
-    public boolean initiateVerificationProcess(User user) {
-        Transaction t = new Transaction();
+    public boolean initiateVerificationProcess(User user, Transaction t) {
 
         Verification verification = new Verification();
         verification.setVerified(false);
@@ -155,7 +153,6 @@ public class RegistrationService {
             UserRepository.addVerification(verification, t);
             l.fine("Verification for user " + user.getId() + " created.");
         } catch (NotFoundException | DataNotWrittenException e) {
-            t.abort();
             return false;
         }
 
@@ -168,15 +165,14 @@ public class RegistrationService {
             EmailUtil.sendEmail(configPropagator.getProperty("MAIL_ADDRESS_FROM"), new String[]{user.getEmailAddress()},
                     null, message.getString("email.verification.subject"), emailBody);
         } catch (EmailTransmissionFailedException e) {
-            t.abort();
             return false;
         }
 
+        // UIMessage containing verification random if test mode is enabled
         if (configPropagator.getProperty("DEBUG_AND_TEST_MODE").equalsIgnoreCase("true")) {
             uiMessageEvent.fire(new UIMessage(generateValidationUrl(verification), MessageCategory.INFO));
         }
 
-        t.commit();
         return true;
     }
 

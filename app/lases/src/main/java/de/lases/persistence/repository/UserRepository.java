@@ -365,23 +365,52 @@ public class UserRepository {
     }
 
     /**
-     * Takes a user dto that is filled with a valid id or email address and
+     * Takes a user dto that is filled with a valid id and
      * removes this user from the repository.
      *
-     * @param user        The user forum to remove. Must be filled
-     *                    with a valid id or email.
+     * @param user        The user to remove. Must be filled
+     *                    with a valid id.
      * @param transaction The transaction to use.
      * @throws NotFoundException              The specified user forum was not found in
      *                                        the repository.
      * @throws DataNotWrittenException        If writing the data to the repository
      *                                        fails.
-     * @throws InvalidFieldsException         If both id and email are provided, but
-     *                                        they belong to two different users.
+     * @throws InvalidFieldsException         If the user id is null
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     *
+     * @user Sebastian Vogt
      */
     public static void remove(User user, Transaction transaction)
             throws NotFoundException, DataNotWrittenException {
+        if (user.getId() == null) {
+            throw new InvalidFieldsException("The user id is null");
+        }
+
+        Connection conn = transaction.getConnection();
+
+        String sql = """
+                DELETE FROM "user"
+                WHERE id = ?
+                """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, user.getId());
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new NotFoundException("The user to delete was not found.");
+            }
+        } catch (SQLException e) {
+            DatasourceUtil.logSQLException(e, logger);
+
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                throw new DataNotWrittenException("User was not deleted", e);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("User was not deleted", e);
+            }
+        }
+
     }
 
     /**
@@ -957,45 +986,101 @@ public class UserRepository {
     /**
      * Adds the specified science field to the specified scientific user.
      *
-     * @param user         A user dto with a valid id or email.
+     * @param user         A user dto with a valid id.
      * @param scienceField A science field dto with a valid id.
      * @param transaction  The transaction to use.
      * @throws NotFoundException              If there is no user with the
-     *                                        provided id or email or there is no science
-     *                                        field with the provided id.
+     *                                        provided id or there is no science
+     *                                        field with the provided name.
      * @throws DataNotWrittenException        If writing the data to the repository
      *                                        fails.
-     * @throws InvalidFieldsException         If both id and email are provided, but
-     *                                        they belong to two different users.
+     * @throws InvalidFieldsException         If the use id is null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     *
+     * @author Sebastian Vogt
      */
     public static void addScienceField(User user, ScienceField scienceField,
                                        Transaction transaction)
             throws NotFoundException, DataNotWrittenException {
+        Connection conn = transaction.getConnection();
+
+        if (user.getId() == null || scienceField.getName() == null) {
+            throw new InvalidFieldsException("The user id or science field name was null");
+        }
+
+        String sql = """
+                INSERT INTO interests
+                VALUES (?, ?)
+                """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, user.getId());
+            stmt.setString(2, scienceField.getName());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            DatasourceUtil.logSQLException(e, logger);
+
+            // 23503: Foreign key constraint violated
+            if (e.getSQLState().equals("23503")) {
+                throw new NotFoundException("Either the specified user or science field do not exist");
+            } if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                throw new DataNotWrittenException("Science field could not be added", e);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("Science field could not be added", e);
+            }
+        }
+
     }
 
     /**
      * Removes the specified science field from the specified user.
      *
-     * @param user         A user dto with a valid id or email.
-     * @param scienceField A science field dto with a valid id that belongs to
+     * @param user         A user dto with a valid id.
+     * @param scienceField A science field dto with a valid name that belongs to
      *                     the specified user.
      * @param transaction  The transaction to use.
-     * @throws NotFoundException              If there is no user with the
-     *                                        provided id or email or there is no science
-     *                                        field with the provided id or the science field
-     *                                        does not belong to the specified user.
+     * @throws NotFoundException              If this science field never belonged to this user.
      * @throws DataNotWrittenException        If writing the data to the repository
      *                                        fails.
-     * @throws InvalidFieldsException         If both id and email are provided, but
-     *                                        they belong to two different users.
+     * @throws InvalidFieldsException         If the user id or science field name are null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     *
+     * @author Sebastian Vogt
      */
     public static void removeScienceField(User user, ScienceField scienceField,
                                           Transaction transaction)
             throws NotFoundException, DataNotWrittenException {
+        if (user.getId() == null || scienceField.getName() == null) {
+            throw new InvalidFieldsException("The user id or science field name was null");
+        }
+
+        Connection conn = transaction.getConnection();
+
+        String sql = """
+                DELETE FROM interests
+                WHERE user_id = ? AND science_field_name = ?
+                """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, user.getId());
+            stmt.setString(2, scienceField.getName());
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows == 0) {
+                throw new NotFoundException("Either the user or science field could not be found");
+            }
+        } catch (SQLException e) {
+            DatasourceUtil.logSQLException(e, logger);
+
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                throw new DataNotWrittenException("The science field could not be removed from the user");
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("The science field could not be removed from the user");
+            }
+        }
     }
 
     /**
@@ -1044,6 +1129,8 @@ public class UserRepository {
      * @throws DataNotCompleteException If the data cannot be fetched due to a transient fault.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     *
+     * @author Sebastian Vogt
      */
     public static FileDTO getAvatar(User user, Transaction transaction)
             throws NotFoundException, DataNotCompleteException {

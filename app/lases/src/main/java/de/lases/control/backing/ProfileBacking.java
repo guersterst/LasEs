@@ -156,7 +156,6 @@ public class ProfileBacking implements Serializable {
         userService.change(userForAdminSettings);
     }
 
-
     /**
      * Set a new avatar for the user.
      */
@@ -178,6 +177,11 @@ public class ProfileBacking implements Serializable {
      * Add selected science field to the user's science fields.
      */
     public void addScienceField() {
+        if (!usersScienceFields.contains(selectedScienceField)) {
+            ScienceField selectedClone = selectedScienceField.clone();
+            usersScienceFields.add(selectedClone);
+            userService.addScienceField(user, selectedClone);
+        }
     }
 
     /**
@@ -186,6 +190,8 @@ public class ProfileBacking implements Serializable {
      * @param field The science field to be removed.
      */
     public void deleteScienceField(ScienceField field) {
+        usersScienceFields.remove(field);
+        userService.removeScienceField(user, field);
     }
 
     /**
@@ -194,7 +200,8 @@ public class ProfileBacking implements Serializable {
      * @return Go to the welcome page.
      */
     public String deleteProfile() {
-        return null;
+        userService.remove(user);
+        return "/views/anonymous/welcome";
     }
 
     /**
