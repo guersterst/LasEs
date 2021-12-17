@@ -40,7 +40,7 @@ class UserRepositoryTest {
     void startConnectionPool() {
         FileDTO file = new FileDTO();
 
-        Class clazz = ScienceFieldRepositoryTest.class;
+        Class clazz = UserRepositoryTest.class;
         InputStream inputStream = clazz.getResourceAsStream("/config.properties");
 
         file.setInputStream(inputStream);
@@ -81,6 +81,9 @@ class UserRepositoryTest {
         transaction.abort();
     }
 
+    /**
+     * @author Johannes Garstenauer
+     */
     @Test
     void testGetUser() {
         ConnectionPool.init();
