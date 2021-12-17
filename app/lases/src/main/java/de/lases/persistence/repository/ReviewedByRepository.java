@@ -89,7 +89,11 @@ public class ReviewedByRepository {
         Connection conn = transaction.getConnection();
         String query = "UPDATE reviewed_by SET timestamp_deadline = ?, has_accepted = CAST(? as review_task_state)  WHERE submission_id = ? AND reviewer_id = ?";
         try (PreparedStatement ps = conn.prepareStatement(query)) {
+            if(reviewedBy.getTimestampDeadline() == null) {
+                ps.setTimestamp(1, null);
+            } else {
                 ps.setTimestamp(1, Timestamp.valueOf(reviewedBy.getTimestampDeadline()));
+            }
                 ps.setString(2, reviewedBy.getHasAccepted().toString());
                 ps.setInt(3, reviewedBy.getSubmissionId());
                 ps.setInt(4, reviewedBy.getReviewerId());
