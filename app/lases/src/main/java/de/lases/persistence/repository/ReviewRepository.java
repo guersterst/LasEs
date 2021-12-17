@@ -310,7 +310,7 @@ public class ReviewRepository {
 
         sb.append("""
                 FROM submission s, paper p, review r, "user" u
-                WHERE s.id = p.submission_id AND p.version = r.version AND r.reviewer_id = u.id
+                WHERE s.id = p.submission_id AND p.version = r.version AND s.id = r.submission_id AND r.reviewer_id = u.id
                 """).append(" AND s.id=" + submission.getId()).append("\n");
 
         if (privilege == Privilege.REVIEWER) {
