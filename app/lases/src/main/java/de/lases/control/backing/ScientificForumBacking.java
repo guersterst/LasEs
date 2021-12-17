@@ -124,6 +124,7 @@ public class ScientificForumBacking implements Serializable {
         removeEditorInput = new User();
         currentScieneFields = new ArrayList<>();
         selectedScienceFieldInput = new ScienceField();
+        displayOwnSubmissionsTab();
     }
 
     public void displayOwnSubmissionsTab() {
@@ -146,18 +147,13 @@ public class ScientificForumBacking implements Serializable {
             }
         };
         tab = Tab.OWN_SUBMISSIONS;
-        submissionPagination.loadData();
     }
 
     public void displayReviewSubmissionsTab() {
-        submissionPagination = new Pagination<Submission>("submissionTime") {
+        submissionPagination = new Pagination<>("submissionTime") {
 
             @Override
             public void loadData() {
-                //reviewedPagination.getResultListParameters().setDateSelect(DateSelect.ALL);
-                // Todo müssen reviews freigeschaltet werden?
-                //reviewedPagination.getResultListParameters().setVisibleFilter(Visibility.RELEASED);
-
                 submissionPagination.setEntries(submissionService.getList(forum,
                         sessionInformation.getUser(), Privilege.REVIEWER, getResultListParameters()));
             }
@@ -175,7 +171,7 @@ public class ScientificForumBacking implements Serializable {
     }
 
     public void displayEditSubmissionsTab() {
-        submissionPagination = new Pagination<Submission>("submissionTime") {
+        submissionPagination = new Pagination<>("submissionTime") {
 
             @Override
             public void loadData() {
@@ -235,7 +231,7 @@ public class ScientificForumBacking implements Serializable {
         allScienceFields = scienceFieldService.getList(new ResultListParameters());
         currentScieneFields = scienceFieldService.getList(forum, new ResultListParameters());
         allScienceFields.removeAll(currentScieneFields);
-        displayOwnSubmissionsTab();
+        submissionPagination.loadData();
     }
 
     /**

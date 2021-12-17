@@ -30,26 +30,14 @@ public class ScientificForumListBacking implements Serializable {
     @Inject
     private ScientificForumService scientificForumService;
 
-    @Inject
-    ConfigPropagator config;
-
     private Pagination<ScientificForum> scientificForumPagination;
-
-    /**
-     * Initialize the scientific forum pagination and load the first page from
-     * the datasource.
-     */
-    @PostConstruct
-    public void init() {
-    }
 
     private void initPagination() {
         scientificForumPagination = new Pagination<>("name") {
 
             @Override
             public void loadData() {
-                scientificForumPagination.getResultListParameters().setDateSelect(DateSelect.ALL);
-                scientificForumPagination.setEntries(scientificForumService.getList(getResultListParameters()));
+                setEntries(scientificForumService.getList(getResultListParameters()));
             }
 
             @Override
@@ -60,8 +48,8 @@ public class ScientificForumListBacking implements Serializable {
         scientificForumPagination.applyFilters();
         scientificForumPagination.loadData();
     }
-
-    public void onLoad() {
+    @PostConstruct
+    public void init() {
         initPagination();
     }
 
@@ -72,10 +60,6 @@ public class ScientificForumListBacking implements Serializable {
      */
     public Pagination<ScientificForum> getScientificForumPagination() {
         return scientificForumPagination;
-    }
-
-    public void setScientificForumPagination(Pagination<ScientificForum> scientificForumPagination) {
-        this.scientificForumPagination = scientificForumPagination;
     }
 
     /**

@@ -290,7 +290,7 @@ public class ScientificForumRepository {
     public static List<ScientificForum> getList(Transaction transaction,
                                                 ResultListParameters
                                                         resultListParameters) {
-        if (transaction == null) {
+            if (transaction == null) {
             l.severe("Passed transaction is null.");
             throw new IllegalArgumentException("Transaction must not be null.");
         }
@@ -333,17 +333,24 @@ public class ScientificForumRepository {
 
         sb.append("""
                 FROM scientific_forum f
+                WHERE
                 """).append("\n");
 
         if (isFilled(params.getFilterColumns().get("name"))) {
-            sb.append("WHERE f.name ILIKE ?\n");
+            sb.append("f.name ILIKE ?\n AND");
         }
 
         // Filter according to date select parameter
         if (params.getDateSelect() == DateSelect.FUTURE) {
-            sb.append(" AND (timestamp_deadline::date >= CURRENT_DATE\n");
+            sb.append(" (timestamp_deadline::date >= CURRENT_DATE)\n");
         } else if (params.getDateSelect() == DateSelect.PAST) {
-            sb.append(" AND (timestamp_deadline::date <= CURRENT_DATE\n");
+            sb.append(" (timestamp_deadline::date <= CURRENT_DATE)\n");
+        }
+
+        if (!sb.toString().contains("ILIKE") && !sb.toString().contains("CURRENT")) {
+            StringBuilder newSb = new StringBuilder();
+            newSb.append(sb.toString().replace("WHERE", ""));
+            sb = newSb;
         }
 
         if (!doCount) {

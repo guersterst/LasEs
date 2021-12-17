@@ -9,10 +9,6 @@
     <!-- page title -->
     <ui:define name="title">#{labels['forumListTitle']}</ui:define>
 
-    <f:metadata>
-        <f:viewAction action="#{scientificForumListBacking.onLoad()}"/>
-    </f:metadata>
-
     <!-- content of scientificForumList.xhtml -->
     <ui:define name="content">
         <div id="forum-list-pagination" class="col-md-10">
@@ -35,7 +31,6 @@
                             </div>
 
                             <pg:pagination paginator="#{scientificForumListBacking.scientificForumPagination}">
-
                                 <h:column>
                                     <f:facet name="header">
                                         <col:sortsearchcolumn id="name-ssc"
