@@ -135,7 +135,7 @@
                                                                  required="true"
                                                                  size="60"
                                                                  requiredMessage="#{message.requiredForForum}"
-                                                                 title="#{labels.forumURL}"/>
+                                                                 title="#{help.forumURL}"/>
 
                                                     <!-- alternative url output for non editors -->
                                                     <h:outputLink value="#{scientificForumBacking.forum.url}"
@@ -166,7 +166,7 @@
                                                 <h:inputText id="change-deadline-itxt"
                                                              value="#{scientificForumBacking.forumDeadLineInput}"
                                                              rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
-                                                             title="#{labels.forumDeadLine}"
+                                                             title="#{help.forumDeadLine}"
                                                              a:type="date"
                                                              converterMessage="#{message.wrongDate}">
                                                     <f:convertDateTime type="localDate" pattern="yyyy-MM-dd"/>
@@ -396,7 +396,7 @@
                                         <!-- Date filtering -->
                                         <h:selectOneMenu id="date-slctom"
                                                          value="#{scientificForumBacking.submissionPagination.resultListParameters.dateSelect}"
-                                                         title="#{help.dateSelect}"
+                                                         title="#{help.dateSelectForum}"
                                                          styleClass="btn btn-secondary">
                                             <f:selectItems value="#{scientificForumBacking.dateSelects}"
                                                            var="select"
@@ -406,7 +406,7 @@
                                         <!-- Submission state filtering -->
                                         <h:selectOneMenu id="state-slctom"
                                                          value="#{scientificForumBacking.submissionPagination.resultListParameters.submissionState}"
-                                                         title="#{help.stateSubSelect}"
+                                                         title="#{help.stateSelectForum}"
                                                          styleClass="btn btn-secondary">
                                             <f:selectItem itemValue="#{null}"
                                                           itemLabel="#{labels['stateSelect.ALL']}"/>

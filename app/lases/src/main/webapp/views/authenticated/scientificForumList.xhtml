@@ -7,8 +7,7 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <!-- page title -->
-    <!--todo-->
-    <ui:define name="title">TODO</ui:define>
+    <ui:define name="title">#{labels['forumListTitle']}</ui:define>
 
     <f:metadata>
         <f:viewAction action="#{scientificForumListBacking.onLoad()}"/>
@@ -26,7 +25,7 @@
                             <div class="btn-group">
                                 <h:selectOneMenu id="date-slctom"
                                                  value="#{scientificForumListBacking.scientificForumPagination.resultListParameters.dateSelect}"
-                                                 title="#{help.dateSelect}"
+                                                 title="#{help.dateSelectForum}"
                                                  styleClass="btn btn-secondary">
                                     <f:selectItems value="#{scientificForumListBacking.dateSelects}"
                                                    var="select"
