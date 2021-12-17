@@ -21,4 +21,3 @@ public class ScienceFieldConverter implements Converter<ScienceField> {
         return value.getName();
     }
 }
-

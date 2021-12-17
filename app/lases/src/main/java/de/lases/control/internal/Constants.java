@@ -38,7 +38,7 @@ public final class Constants {
     /**
      * Maximal Length that is allowed for the name of a forum.
      */
-    public static final String FORUM_NAME_MAX = "200";
+    public static final Integer FORUM_NAME_MAX = 200;
 
     /**
      * Maximal Length that is allowed for the description of a forum.
