@@ -223,8 +223,7 @@
                                             <h:commandButton id="release-revision-cbtn" styleClass="btn btn-primary"
                                                              value="#{var.visible == true? labels.released : labels.notReleased}"
                                                              action="#{submissionBacking.releaseRevision(var)}"
-                                                             title="#{help.releaseBtn}" disabled="#{!submissionBacking.isViewerSubmitter()}"/>
-
+                                                             title="#{help.releaseBtn}" disabled="#{ (submissionBacking.viewerSubmitter and !submissionBacking.admin) || var.visible == true}"/>
                                         </h:column>
 
                                         <!--Download-->

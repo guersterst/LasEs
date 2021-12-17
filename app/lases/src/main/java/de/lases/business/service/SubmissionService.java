@@ -622,15 +622,18 @@ public class SubmissionService implements Serializable {
         }
 
         Transaction t = new Transaction();
+        int count = 0;
         try {
-            return SubmissionRepository.countSubmissions(user, privilege, t, resultParams);
+            count = SubmissionRepository.countSubmissions(user, privilege, t, resultParams);
+            t.commit();
         } catch (NotFoundException | DataNotCompleteException e) {
+
             logger.severe("User to count submissions for not found.");
             uiMessageEvent.fire(new UIMessage(
                     resourceBundle.getString("error.findingSubmissionListFailed"),
                     MessageCategory.ERROR));
             t.abort();
-            return -1;
         }
+        return count;
     }
 }

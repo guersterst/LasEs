@@ -127,12 +127,12 @@ public class SubmissionBacking implements Serializable {
         paperPagination = new Pagination<>("version") {
             @Override
             public void loadData() {
-               setEntries(paperService.getList(submission, sessionInformation.getUser(), getResultListParameters()));
+               setEntries(paperService.getList(submission, sessionInformation.getUser(), paperPagination.getResultListParameters()));
                 }
 
             @Override
             protected Integer calculateNumberPages() {
-                return 1;
+                return paperService.countPaper(submission, sessionInformation.getUser(), paperPagination.getResultListParameters());
             }
         };
 
@@ -144,7 +144,7 @@ public class SubmissionBacking implements Serializable {
 
             @Override
             protected Integer calculateNumberPages() {
-                return reviewService.getListCountPages(submission, sessionInformation.getUser(), reviewPagination.getResultListParameters());
+               return reviewService.getListCountPages(submission, sessionInformation.getUser(), reviewPagination.getResultListParameters());
             }
         };
     }
@@ -378,12 +378,6 @@ public class SubmissionBacking implements Serializable {
         return submissionService.getReviewedBy(submission, user);
     }
 
-    /**
-     * Apply all the filters that are specified outside the pagination to
-     * the table.
-     */
-    public void applyFilters() {
-    }
 
     /**
      * Release a specific revision so that it can be viewed by the reviewers.
@@ -391,12 +385,18 @@ public class SubmissionBacking implements Serializable {
      * @param paper The revision (which is a {@code paper}) to release
      */
     public void releaseRevision(Paper paper) {
-        if (loggedInUserIsEditor()) {
-            paper.setVisible(true);
-            paperService.change(paper);
-        } else {
-            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("releaseRevision"), MessageCategory.WARNING));
-        }
+       if (loggedInUserIsEditor()) {
+           if (submission.getState() != SubmissionState.REJECTED) {
+               paper.setVisible(true);
+               paperService.change(paper);
+               uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reminder"), MessageCategory.WARNING));
+           } else {
+               uiMessageEvent.fire(new UIMessage(resourceBundle.getString("rejected"), MessageCategory.WARNING));
+           }
+       } else {
+           uiMessageEvent.fire(new UIMessage(resourceBundle.getString("releaseRevision"), MessageCategory.WARNING));
+       }
+       toolbarBacking.onLoad(submission);
     }
 
     /**

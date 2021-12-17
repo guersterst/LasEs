@@ -89,7 +89,11 @@ public class ReviewedByRepository {
         Connection conn = transaction.getConnection();
         String query = "UPDATE reviewed_by SET timestamp_deadline = ?, has_accepted = CAST(? as review_task_state)  WHERE submission_id = ? AND reviewer_id = ?";
         try (PreparedStatement ps = conn.prepareStatement(query)) {
+            if(reviewedBy.getTimestampDeadline() == null) {
+                ps.setTimestamp(1, null);
+            } else {
                 ps.setTimestamp(1, Timestamp.valueOf(reviewedBy.getTimestampDeadline()));
+            }
                 ps.setString(2, reviewedBy.getHasAccepted().toString());
                 ps.setInt(3, reviewedBy.getSubmissionId());
                 ps.setInt(4, reviewedBy.getReviewerId());
@@ -187,12 +191,13 @@ public class ReviewedByRepository {
                 reviewed.setReviewerId(resultSet.getInt("reviewer_id"));
                 reviewed.setHasAccepted(AcceptanceStatus.valueOf(resultSet.getString("has_accepted")));
                 reviewed.setSubmissionId(resultSet.getInt("submission_id"));
-                Timestamp timestamp = resultSet.getTimestamp("timestamp_deadline");
-                if (timestamp != null) {
-                    reviewed.setTimestampDeadline(timestamp.toLocalDateTime());
-                }else {
+                if (resultSet.getTimestamp("timestamp_deadline") != null) {
+                    reviewed.setTimestampDeadline(resultSet.getTimestamp("timestamp_deadline").toLocalDateTime());
+                } else {
                     reviewed.setTimestampDeadline(null);
+
                 }
+
                 reviewedByList.add(reviewed);
             }
         } catch (SQLException exception) {

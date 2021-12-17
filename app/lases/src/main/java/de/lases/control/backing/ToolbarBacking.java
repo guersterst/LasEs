@@ -116,6 +116,7 @@ public class ToolbarBacking implements Serializable {
      */
     public void onLoad(Submission sub) {
         submission = sub;
+
         loadReviewerList();
 
         currentEditor.setId(submission.getEditorId());
@@ -159,22 +160,28 @@ public class ToolbarBacking implements Serializable {
 
         if (newReviewer != null) {
             logger.finest("Reviewer is an existing person.");
-        }
-
-        ReviewedBy reviewedBy = reviewedByInput.clone();
-        reviewedBy.setReviewerId(newReviewer.getId());
-        reviewedBy.setSubmissionId(submission.getId());
-        reviewedBy.setHasAccepted(AcceptanceStatus.NO_DECISION);
-
-        if (reviewer.containsKey(newReviewer)) {
-            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("alreadyExistsReviewer"), MessageCategory.WARNING));
+        } else {
             return;
         }
 
-        submissionService.addReviewer(newReviewer, reviewedBy);
+        if (submission.getAuthorId() != newReviewer.getId() || newReviewer.isAdmin()) {
+            ReviewedBy reviewedBy = reviewedByInput.clone();
+            reviewedBy.setReviewerId(newReviewer.getId());
+            reviewedBy.setSubmissionId(submission.getId());
+            reviewedBy.setHasAccepted(AcceptanceStatus.NO_DECISION);
 
+            if (reviewer.containsKey(newReviewer)) {
+                submissionService.changeReviewedBy(reviewedBy);
 
-        reviewer.put(newReviewer, reviewedBy);
+                reviewer.remove(newReviewer);
+            } else {
+                submissionService.addReviewer(newReviewer, reviewedBy);
+            }
+
+            reviewer.put(newReviewer, reviewedBy);
+        } else {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("alreadyAuthor"), MessageCategory.WARNING));
+        }
 
     }
 

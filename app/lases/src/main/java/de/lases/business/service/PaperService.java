@@ -5,11 +5,13 @@ import de.lases.persistence.exception.DataNotCompleteException;
 import de.lases.persistence.exception.DataNotWrittenException;
 import de.lases.persistence.exception.InvalidFieldsException;
 import de.lases.persistence.exception.NotFoundException;
+import de.lases.persistence.internal.ConfigReader;
 import de.lases.persistence.repository.PaperRepository;
 import de.lases.persistence.repository.SubmissionRepository;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
+import jakarta.enterprise.inject.spi.CDI;
 import jakarta.inject.Inject;
 
 import java.io.Serializable;
@@ -329,6 +331,40 @@ public class PaperService implements Serializable {
             transaction.commit();
         }
         return paper;
+    }
+
+    public int countPaper(Submission submission, User user, ResultListParameters resultListParameters) {
+        if (submission.getId() == null || user.getId() == null){
+            logger.severe("Submission id: " + submission.getId() + " user id: " + user.getId() + " must not be null.");
+            throw new InvalidFieldsException("Id of submission or user should not be null.");
+        }
+
+        Transaction transaction = new Transaction();
+        int pages = 0;
+
+        try {
+            int items = PaperRepository.countPaper(user,submission,transaction,resultListParameters);
+            transaction.commit();
+
+            ConfigReader configReader = CDI.current().select(ConfigReader.class).get();
+            int maxLengthOfPagination = Integer.parseInt(configReader.getProperty("MAX_PAGINATION_LIST_LENGTH"));
+
+            pages = (int) Math.ceil((double) items / maxLengthOfPagination);
+
+        } catch (DataNotCompleteException e) {
+            logger.severe("Data is not complete.");
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("notComplete"), MessageCategory.ERROR));
+
+            transaction.abort();
+
+        } catch (NotFoundException e) {
+            logger.severe("Submission or user not found.");
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("getPaperListFailed"), MessageCategory.ERROR));
+
+            transaction.abort();
+        }
+
+        return pages;
     }
 
 }
