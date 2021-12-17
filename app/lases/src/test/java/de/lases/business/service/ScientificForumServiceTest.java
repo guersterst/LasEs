@@ -1,19 +1,26 @@
 package de.lases.business.service;
 
+import de.lases.global.transport.FileDTO;
 import de.lases.global.transport.ScientificForum;
 import de.lases.global.transport.User;
+import de.lases.persistence.internal.ConfigReader;
+import de.lases.persistence.repository.ConnectionPool;
 import de.lases.persistence.repository.ScientificForumRepository;
 import de.lases.persistence.repository.Transaction;
 import de.lases.persistence.repository.UserRepository;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.context.SessionScoped;
+import org.jboss.weld.junit5.WeldInitiator;
+import org.jboss.weld.junit5.WeldJunit5Extension;
+import org.jboss.weld.junit5.WeldSetup;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.InputStream;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,8 +28,39 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mockStatic;
 
+/**
+ * @author Johannes Garstenauer
+ */
 @ExtendWith(MockitoExtension.class)
+@ExtendWith(WeldJunit5Extension.class)
 public class ScientificForumServiceTest {
+
+    @WeldSetup
+    public WeldInitiator weld = WeldInitiator.from(ConnectionPool.class, ConfigReader.class, ConfigReader.class)
+            .activate(RequestScoped.class, SessionScoped.class).build();
+
+    /*
+     * Unfortunately we have to do this before every single test, since @BeforeAll methods are static and static
+     * methods don't work with our weld plugin.
+     */
+
+    @BeforeEach
+    void startConnectionPool() {
+        FileDTO file = new FileDTO();
+
+        Class clazz = ScientificForumServiceTest.class;
+        InputStream inputStream = clazz.getResourceAsStream("/config.properties");
+
+        file.setInputStream(inputStream);
+
+        weld.select(ConfigReader.class).get().setProperties(file);
+        ConnectionPool.init();
+    }
+
+    @AfterEach
+    void shutDownConnectionPool() {
+        ConnectionPool.shutDown();
+    }
 
     // The required repository.
     private static MockedStatic<ScientificForumRepository> forumRepoMock;
@@ -46,25 +84,19 @@ public class ScientificForumServiceTest {
 
     @BeforeAll
     static void init() {
-
+        forum = new ScientificForum();
         // Mock repository and initialize services.
         forumRepoMock = mockStatic(ScientificForumRepository.class);
         userRepoMock = mockStatic(UserRepository.class);
         forumService = new ScientificForumService();
+        forum.setId(EXAMPLE_FORUM_ID);
+        forum.setName(EXAMPLE_FORUM_NAME);
 
         // Mock get to return a forum with a name if the id is correct.
         forumRepoMock.when(() -> ScientificForumRepository
                 .get(eq(forum), any(Transaction.class))).thenReturn(forum);
     }
 
-    @BeforeEach
-    void resetDTOS() {
-
-        // Reset the dto's value's after each test.
-        forum = new ScientificForum();
-        forum.setId(EXAMPLE_FORUM_ID);
-        forum.setName(EXAMPLE_FORUM_NAME);
-    }
 
     @AfterAll
     static void closeRepositoryMocks() {
@@ -76,7 +108,7 @@ public class ScientificForumServiceTest {
 
     @Test
     void testGet() {
-        forumService.add(forum, null, null);
+        forumService.add(forum, Collections.emptyList(), Collections.emptyList());
 
         // Request the forum with name from the forum with just an id.
         ScientificForum result = forumService.get(forum);
@@ -91,7 +123,7 @@ public class ScientificForumServiceTest {
 
         // A forum containing an old name.
         forum.setDescription(EXAMPLE_FORUM_DESCRIPTION);
-        forumService.add(forum, null, null);
+        forumService.add(forum, Collections.emptyList(), Collections.emptyList());
 
         // Create a forum with a new name but the same id.
         ScientificForum newForum = new ScientificForum();
