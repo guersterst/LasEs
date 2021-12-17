@@ -127,12 +127,12 @@ public class SubmissionBacking implements Serializable {
         paperPagination = new Pagination<>("version") {
             @Override
             public void loadData() {
-               setEntries(paperService.getList(submission, sessionInformation.getUser(), getResultListParameters()));
+               setEntries(paperService.getList(submission, sessionInformation.getUser(), paperPagination.getResultListParameters()));
                 }
 
             @Override
             protected Integer calculateNumberPages() {
-                return 1;
+                return paperService.countPaper(submission, sessionInformation.getUser(), paperPagination.getResultListParameters());
             }
         };
 
@@ -144,7 +144,7 @@ public class SubmissionBacking implements Serializable {
 
             @Override
             protected Integer calculateNumberPages() {
-                return reviewService.getListCountPages(submission, sessionInformation.getUser(), reviewPagination.getResultListParameters());
+               return reviewService.getListCountPages(submission, sessionInformation.getUser(), reviewPagination.getResultListParameters());
             }
         };
     }
@@ -380,12 +380,6 @@ public class SubmissionBacking implements Serializable {
         return submissionService.getReviewedBy(submission, user);
     }
 
-    /**
-     * Apply all the filters that are specified outside the pagination to
-     * the table.
-     */
-    public void applyFilters() {
-    }
 
     /**
      * Release a specific revision so that it can be viewed by the reviewers.
