@@ -121,7 +121,6 @@ public class ScientificForumBacking implements Serializable {
         removeEditorInput = new User();
         currentScieneFields = new ArrayList<>();
         selectedScienceFieldInput = new ScienceField();
-        displayOwnSubmissionsTab();
     }
 
     public void displayOwnSubmissionsTab() {
@@ -142,6 +141,7 @@ public class ScientificForumBacking implements Serializable {
             }
         };
         tab = Tab.OWN_SUBMISSIONS;
+        submissionPagination.loadData();
     }
 
     public void displayReviewSubmissionsTab() {
@@ -162,6 +162,7 @@ public class ScientificForumBacking implements Serializable {
             }
         };
         tab = Tab.SUBMISSIONS_TO_REVIEW;
+        submissionPagination.loadData();
     }
 
     public void displayEditSubmissionsTab() {
@@ -184,6 +185,7 @@ public class ScientificForumBacking implements Serializable {
             }
         };
         tab = Tab.SUBMISSIONS_TO_EDIT;
+        submissionPagination.loadData();
     }
 
     /**
@@ -223,7 +225,7 @@ public class ScientificForumBacking implements Serializable {
         allScienceFields = scienceFieldService.getList(new ResultListParameters());
         currentScieneFields = scienceFieldService.getList(forum, new ResultListParameters());
         allScienceFields.removeAll(currentScieneFields);
-        submissionPagination.loadData();
+        displayOwnSubmissionsTab();
     }
 
     /**
