@@ -379,7 +379,7 @@ public class UserRepository {
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      *
-     * @user Sebastian Vogt
+     * @author Sebastian Vogt
      */
     public static void remove(User user, Transaction transaction)
             throws NotFoundException, DataNotWrittenException {
