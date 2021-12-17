@@ -39,9 +39,6 @@ public class ScientificForumBacking implements Serializable {
     private SubmissionService submissionService;
 
     @Inject
-    private ReviewService reviewService;
-
-    @Inject
     private ScientificForumService forumService;
 
     @Inject
@@ -128,12 +125,10 @@ public class ScientificForumBacking implements Serializable {
     }
 
     public void displayOwnSubmissionsTab() {
-        //Todo defaultsortedby not working
-        submissionPagination = new Pagination<Submission>("submissionTime") {
+        submissionPagination = new Pagination<>("title") {
 
             @Override
             public void loadData() {
-                //.getResultListParameters().setDateSelect(DateSelect.ALL);
                 submissionPagination.setEntries(submissionService.getList(forum, user,
                         Privilege.AUTHOR, getResultListParameters()));
             }
@@ -150,7 +145,7 @@ public class ScientificForumBacking implements Serializable {
     }
 
     public void displayReviewSubmissionsTab() {
-        submissionPagination = new Pagination<>("submissionTime") {
+        submissionPagination = new Pagination<>("title") {
 
             @Override
             public void loadData() {
@@ -167,11 +162,10 @@ public class ScientificForumBacking implements Serializable {
             }
         };
         tab = Tab.SUBMISSIONS_TO_REVIEW;
-        submissionPagination.loadData();
     }
 
     public void displayEditSubmissionsTab() {
-        submissionPagination = new Pagination<>("submissionTime") {
+        submissionPagination = new Pagination<>("title") {
 
             @Override
             public void loadData() {
@@ -189,9 +183,7 @@ public class ScientificForumBacking implements Serializable {
                                 getResultListParameters()) / itemsPerPage);
             }
         };
-        submissionPagination.applyFilters();
         tab = Tab.SUBMISSIONS_TO_EDIT;
-        submissionPagination.loadData();
     }
 
     /**
@@ -254,9 +246,6 @@ public class ScientificForumBacking implements Serializable {
      */
     public String deleteForum() {
         forumService.remove(forum);
-        //TODO
-        //NavigationHandler navigationHandler = FacesContext.getCurrentInstance().getApplication().getNavigationHandler();
-        //navigationHandler.handleNavigation();
         return "/views/authenticated/homepage.xhtml?faces-redirect=true";
     }
 

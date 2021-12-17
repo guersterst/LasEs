@@ -25,6 +25,11 @@ public class ForumNameExistsValidator implements Validator<String>, Serializable
 
     private final Logger l = Logger.getLogger(EmailAddressUnoccupiedValidator.class.getName());
 
+    /**
+     * Validates whether a forum name exists and does not belong to the current forum.
+     *
+     * @throws ValidatorException if the name exists and does not belong to the current forum.
+     */
     @Override
     public void validate(FacesContext context, UIComponent component, String value) throws ValidatorException {
         ScientificForum nameForum = new ScientificForum();
@@ -40,5 +45,4 @@ public class ForumNameExistsValidator implements Validator<String>, Serializable
             throw new ValidatorException(message);
         }
     }
-    //TODO javadoc
 }

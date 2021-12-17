@@ -1,10 +1,10 @@
 package de.lases.control.backing;
 
-import de.lases.business.internal.ConfigPropagator;
 import de.lases.business.service.ScientificForumService;
-import de.lases.control.internal.*;
-import de.lases.global.transport.*;
-import de.lases.persistence.internal.ConfigReader;
+import de.lases.control.internal.Pagination;
+import de.lases.control.internal.SessionInformation;
+import de.lases.global.transport.DateSelect;
+import de.lases.global.transport.ScientificForum;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -12,7 +12,6 @@ import jakarta.inject.Named;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.PropertyResourceBundle;
 
 /**
  * Backing bean for the scientific forum list page.
@@ -48,6 +47,10 @@ public class ScientificForumListBacking implements Serializable {
         scientificForumPagination.applyFilters();
         scientificForumPagination.loadData();
     }
+
+    /**
+     * Initializes the pagination.
+     */
     @PostConstruct
     public void init() {
         initPagination();
@@ -79,7 +82,4 @@ public class ScientificForumListBacking implements Serializable {
     public DateSelect[] getDateSelects() {
         return DateSelect.values();
     }
-
-
-
 }

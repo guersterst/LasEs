@@ -188,18 +188,6 @@ public class ScientificForumRepository {
             throw new NotFoundException();
         }
 
-        /*
-        // Determine whether a name change would be allowed -> Alternative to exception schtuff
-        ScientificForum forumWithOldName = get(scientificForum, transaction);
-        boolean isNameChange = forumWithOldName.getName().equals(scientificForum.getName());
-        ScientificForum queryForumWithOnlyName = new ScientificForum();
-        queryForumWithOnlyName.setName(scientificForum.getName());
-        if (isNameChange && exists(queryForumWithOnlyName, transaction)) {
-            throw new KeyExistsException();
-        }
-         */
-
-
         String sql = """
                 UPDATE scientific_forum
                 SET name = ?, description = ?, url = ?, review_manual = ?, timestamp_deadline = ?
