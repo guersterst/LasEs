@@ -1,0 +1,260 @@
+<!--Please take care about following: Don not add something outside of ui:composition. JSF would just ignore this-->
+<ui:composition template="/resources/templates/main.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui" xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+
+    <ui:define name="title">#{''.concat(labels.appName).concat(' - ').concat(labels.newForumTitle)}</ui:define>
+
+    <ui:define name="content">
+
+        <f:metadata>
+            <f:importConstants type="de.lases.control.internal.Constants" var="Const"/>
+        </f:metadata>
+
+        <div class="col d-flex justify-content-center">
+            <div class="card" id="new-forum-box" style="max-width: 80rem; min-width: 55rem">
+                <div id="new-forum-card-body" class="card-body">
+                    <h2>#{labels.newForumTitle}</h2>
+                    <hr/>
+                    <h:form id="add-editors-form">
+                        <div class="form-group" style="margin-top: 1rem">
+                            <label for="email-editor-itxt" class="form-label">#{labels.newForumEditorAdd}</label>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="email-editor-itxt"
+                                             value="#{newScientificForumBacking.newEditorInput.emailAddress}"
+                                             a:placeholder="#{labels.newForumEditorEmailPlaceHolder}"
+                                             styleClass="form-control"
+                                             required="true"
+                                             requiredMessage="#{message.newForumEmail}"
+                                             size="40"/>
+
+                                <h:commandButton id="add-editor-btn" type="submit" value="#{labels.add}"
+                                                 action="#{newScientificForumBacking.addEditor()}"
+                                                 title="#{help.addEditor}"/>
+                            </h:panelGrid>
+                            <h:message for="email-editor-itxt"/>
+                        </div>
+                    </h:form>
+
+                    <h:form id="list-editors-form">
+                        <div class="form-group" style="margin-top: 1rem">
+                            <h:dataTable id="editor-list"
+                                         value="#{newScientificForumBacking.editors}" var="item"
+                                         styleClass="table table-striped">
+                                <h:column class="align-middle">
+                                    <f:facet name="header">
+                                        <div class="align-middle">
+                                            <h:outputText id="email-col" value="#{labels.email}"/>
+                                        </div>
+                                    </f:facet>
+                                    <h:outputText id="email-address-otxt" value="#{item.emailAddress}"/>
+                                </h:column>
+                                <h:column class="align-middle">
+                                    <f:facet name="header">
+                                        <div class="input-group">
+                                            <h:outputText id="firstname-col" value="#{labels.firstName}"/>
+                                        </div>
+                                    </f:facet>
+                                    <h:outputText id="firstname-otxt" value="#{item.firstName}"/>
+                                </h:column>
+                                <h:column class="align-middle">
+                                    <f:facet name="header">
+                                        <div class="input-group">
+                                            <h:outputText id="lastname-col" value="#{labels.lastName}"/>
+                                        </div>
+                                    </f:facet>
+                                    <h:outputText id="lastname-otxt" value="#{item.lastName}"/>
+                                </h:column>
+                                <h:column class="align-middle">
+                                    <f:facet name="header">
+                                        <div class="input-group">
+                                            <h:outputText id="remove-col" value=""/>
+                                        </div>
+                                    </f:facet>
+                                    <h:commandButton id="delete-editor-btn" value="#{labels.delete}"
+                                                     action="#{newScientificForumBacking.removeEditor(item)}"
+                                                     styleClass="btn btn-sm btn-outline-dark"/>
+                                </h:column>
+                            </h:dataTable>
+                            <h:outputText value="#{message.newForumEditorsNotice}"
+                                          rendered="#{newScientificForumBacking.editors.isEmpty()}"/>
+                        </div>
+                    </h:form>
+
+                    <hr/>
+
+                    <h:form>
+                        <div id="add-new-science-field" class="form-group" style="margin-top: 1rem">
+                            <label for="new-science-field-itxt"
+                                   class="form-label">#{labels.newForumNewScienceField}</label>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="new-science-field-itxt"
+                                             value="#{newScientificForumBacking.scienceFieldToAdd.name}"
+                                             a:placeholder="#{labels.newForumNewScienceFieldPlaceHolder}"
+                                             size="40"
+                                             required="true"
+                                             requiredMessage="#{message.newScienceField}"
+                                             maxlength="#{Const.SCIENCE_FIELD_MAX}"/>
+                                <h:commandButton id="add-science-field-btn" value="#{labels.newForumCreate}"
+                                                 action="#{newScientificForumBacking.createNewScienceField}"/>
+                            </h:panelGrid>
+                            <h:message for="new-science-field-itxt"/>
+                        </div>
+                    </h:form>
+
+                    <hr/>
+
+                    <div class="form-group" style="margin-top: 1rem">
+                        <label for="science-fields-add-cards"
+                               class="form-label">#{labels.newForumFieldsSelected}</label>
+                        <div id="science-fields-add-cards" class="row row-cols-1 row-cols-md-2 g-4">
+                            <div class="col-lg-6 mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h:form>
+                                            <h:dataTable id="selected-fields-list"
+                                                         value="#{newScientificForumBacking.selectedScienceFields}"
+                                                         var="itemField"
+                                                         styleClass="table table-striped">
+                                                <h:column class="align-middle">
+                                                    <f:facet name="header">
+                                                        <div class="input-group">
+                                                            <h:outputText id="field-name-col"
+                                                                          value="#{labels.newForumFields}"/>
+                                                        </div>
+                                                    </f:facet>
+                                                    <h:outputText id="field-name-otxt" value="#{itemField.name}"/>
+                                                </h:column>
+                                                <h:column class="align-middle">
+                                                    <f:facet name="header">
+                                                        <div class="input-group">
+                                                            <h:outputText id="field-remove-col" value=""/>
+                                                        </div>
+                                                    </f:facet>
+                                                    <h:commandButton id="remove-science-field-btn"
+                                                                     value="#{labels.delete}"
+                                                                     action="#{newScientificForumBacking.removeSelectedScienceField(itemField)}"
+                                                                     styleClass="btn btn-sm btn-outline-dark"/>
+                                                </h:column>
+                                            </h:dataTable>
+                                        </h:form>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-lg-6 mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h:form>
+                                            <div class="card-header">
+                                                <p:selectOneListbox id="science-field-slct"
+                                                                    value="#{newScientificForumBacking.scienceFieldSelectionInput}"
+                                                                    var="s" filter="true" scrollHeight="300">
+                                                    <f:selectItems value="#{newScientificForumBacking.scienceFields}"
+                                                                   var="scienceField" itemLabel="#{scienceField.name}"
+                                                                   itemValue="#{scienceField}"/>
+                                                    <p:column>
+                                                        <h:outputText value="#{s.name}"/>
+                                                    </p:column>
+                                                </p:selectOneListbox>
+                                            </div>
+                                            <div class="card-body">
+                                                <h:commandButton id="add-science-field" value="#{labels.add}"
+                                                                 action="#{newScientificForumBacking.addScienceField()}"/>
+                                                <h:message for="science-field-slct"/>
+                                            </div>
+                                        </h:form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <h:form id="create-forum-form">
+                        <div class="form-group" style="margin-top: 1rem">
+                            <label for="forum-name-itxt" class="form-label">#{labels.newForumName}</label>
+                            <h:inputText id="forum-name-itxt"
+                                         value="#{newScientificForumBacking.newScientificForum.name}"
+                                         a:placeholder="#{labels.newForumNamePlaceHolder}"
+                                         styleClass="form-control" required="true"
+                                         requiredMessage="#{message.forumName}"
+                                         maxlength="#{Const.FORUM_NAME_MAX}"/>
+                            <h:message for="forum-name-itxt"/>
+                        </div>
+
+                        <div class="form-group" style="margin-top: 1rem">
+                            <label for="forum-name-itxt" class="form-label">#{labels.newForumDeadline}</label>
+                            <h:inputText id="dealine-itxt"
+                                         value="#{newScientificForumBacking.newScientificForum.deadline}"
+                                         a:placeholder="#{labels.date}"
+                                         styleClass="form-control">
+                                <f:convertDateTime type="localDateTime"/>
+                            </h:inputText>
+                        </div>
+
+                        <div class="form-group" style="margin-top: 1rem">
+                            <label for="url-itxt" class="form-label">#{labels.newForumURL}</label>
+                            <h:inputText id="url-itxt"
+                                         value="#{newScientificForumBacking.newScientificForum.url}"
+                                         styleClass="form-control"
+                                         a:placeholder="#{labels.newForumURLPlaceHolder}"
+                                         maxlength="#{Const.FORUM_URL_MAX}"/>
+                            <h:message for="url-itxt"/>
+                        </div>
+
+                        <div class="form-group" style="margin-top: 1rem">
+                            <label for="description-itxt" class="form-label">#{labels.newForumDescription}</label>
+                            <h:inputTextarea id="description-itxt"
+                                             value="#{newScientificForumBacking.newScientificForum.description}"
+                                             a:placeholder="#{labels.newForumDescriptionPlaceHolder}"
+                                             styleClass="form-control" required="true"
+                                             requiredMessage="#{message.description}"
+                                             maxlength="#{Const.FORUM_DESCRIPTION_MAX}"/>
+                            <h:message for="description-itxt"/>
+                        </div>
+
+                        <div class="form-group" style="margin-top: 1rem">
+                            <label for="review-manual-itxt" class="form-label">#{labels.newForumReviewManual}</label>
+                            <h:inputTextarea id="review-manual-itxt"
+                                             value="#{newScientificForumBacking.newScientificForum.reviewManual}"
+                                             a:placeholder="#{labels.newForumReviewManualPlaceHolder}"
+                                             styleClass="form-control"
+                                             required="true"
+                                             requiredMessage="#{message.manual}"
+                                             maxlength="#{Const.FORUM_MANUAL_MAX}"/>
+                            <h:message for="review-manual-itxt"/>
+                        </div>
+
+                        <div class="form-group" style="text-align: right">
+                            <hr/>
+                            <h:commandButton id="save-btn" value="#{labels.newForumCreate}"
+                                             action="#{newScientificForumBacking.create()}"
+                                             title="#{help.newForumCreate}"
+                                             style="margin: 3px; min-width: 6rem"
+                                             styleClass="btn btn-sm btn-primary"
+                                             type="submit"/>
+                        </div>
+                    </h:form>
+
+                    <div class="form-group" style="text-align: right">
+                        <h:form>
+                            <h:commandButton id="abort-btn" value="#{labels.newForumAbort}"
+                                             action="#{newScientificForumBacking.abort()}"
+                                             title="#{help.newForumAbort}"
+                                             style="margin: 3px; min-width: 6rem"
+                                             styleClass="btn btn-sm btn-secondary"
+                                             type="submit"/>
+                        </h:form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+</ui:composition>

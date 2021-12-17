@@ -4,6 +4,7 @@ import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
 import de.lases.persistence.internal.ConfigReader;
 import de.lases.persistence.util.DatasourceUtil;
+import de.lases.persistence.util.TransientSQLExceptionChecker;
 import jakarta.enterprise.inject.spi.CDI;
 
 import java.sql.*;
@@ -19,6 +20,7 @@ import java.util.logging.Logger;
  *
  * @author Johann Schicho
  * @author Johannes Garstenauer
+ * @author Thomas Kirz
  */
 public class UserRepository {
 
@@ -133,6 +135,9 @@ public class UserRepository {
         } catch (SQLException ex) {
             throw new DatasourceQueryFailedException(ex.getMessage());
         }
+
+        setVerifiedStatus(result, transaction);
+
         return result;
     }
 
@@ -219,10 +224,10 @@ public class UserRepository {
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      * @return The user object with his id.
+     * @author Thomas Kirz
      */
     public static User add(User user, Transaction transaction)
             throws DataNotWrittenException {
-        // TODO: Ist noch nicht getestet, habe das nur schnell gebraucht.
         Connection conn = transaction.getConnection();
 
         if (user.getEmailAddress() == null || user.getFirstName() == null || user.getLastName() == null) {
@@ -267,29 +272,37 @@ public class UserRepository {
             user.setId(resultSet.getInt(1));
         } catch (SQLException ex) {
             DatasourceUtil.logSQLException(ex, logger);
-            transaction.abort();
-            throw new DatasourceQueryFailedException("A datasource exception"
-                    + "occurred", ex);
+            if (TransientSQLExceptionChecker.isTransient(ex.getSQLState())) {
+                throw new DataNotWrittenException("User could not be added", ex);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("A datasource exception occurred", ex);
+            }
         }
         return user;
-        // TODO: her auch Exceptins noch besser unterscheiden
     }
 
     /**
      * Changes the given user in the repository. All fields that are not
-     * required will be deleted if left empty.
+     * required will be deleted if left empty. Exceptions to this are the avatar and the unhashed password, which
+     * are ignored. Left empty means having the value null in this context. This means that primitive types will always
+     * be written through and cannot be deleted.
      *
      * @param user        A user dto with all required fields. Required are:
      *                    <ul>
-     *                    <li> id </li>
+     *                    <li> id to identify the user (cannot be changed) </li>
      *                    <li> a hashed password and a password salt </li>
      *                    <li> the first name </li>
      *                    <li> the last name </li>
      *                    <li> the email address </li>
+     *                    <li>
+     *                        all primitive types of the user except the number of submissions, which will be
+     *                        ignored
+     *                    </li>
      *                    </ul>
      * @param transaction The transaction to use.
      * @throws NotFoundException              If there is no user with the
-     *                                        provided id or email.
+     *                                        provided id.
      * @throws DataNotWrittenException        If writing the data to the repository
      *                                        fails.
      * @throws KeyExistsException             If the new email address of the user
@@ -298,30 +311,106 @@ public class UserRepository {
      *                                        is null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     *
+     * @author Sebastian Vogt
      */
     public static void change(User user, Transaction transaction)
             throws NotFoundException, DataNotWrittenException,
             KeyExistsException {
+        if (user.getId() == null || user.getPasswordHashed() == null || user.getPasswordSalt() == null
+                || user.getFirstName() == null || user.getLastName() == null || user.getEmailAddress() == null) {
+            transaction.abort();
+            throw new InvalidFieldsException("One of the required fields of the user was null!");
+        }
+
+        Connection conn = transaction.getConnection();
+
+        String sql = """
+                UPDATE "user"
+                SET email_address = ?, is_administrator = ?, firstname = ?, lastname = ?, title = ?, employer = ?,
+                birthdate = ?, is_registered = ?, password_hash = ?, password_salt = ?
+                WHERE id = ?
+                """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, user.getEmailAddress());
+            stmt.setBoolean(2, user.isAdmin());
+            stmt.setString(3, user.getFirstName());
+            stmt.setString(4, user.getLastName());
+            stmt.setString(5, user.getTitle());
+            stmt.setString(6, user.getEmployer());
+            stmt.setDate(7, user.getDateOfBirth() == null ? null : Date.valueOf(user.getDateOfBirth()));
+            stmt.setBoolean(8, user.isRegistered());
+            stmt.setString(9, user.getPasswordHashed());
+            stmt.setString(10, user.getPasswordSalt());
+            stmt.setInt(11, user.getId());
+            int rowCount = stmt.executeUpdate();
+
+            if (rowCount == 0) {
+                throw new NotFoundException("The user to change was not found");
+            }
+        } catch (SQLException e) {
+            DatasourceUtil.logSQLException(e, logger);
+
+            // duplicate key value
+            if (e.getSQLState().equals("23505")) {
+                throw new KeyExistsException("The email address already exists");
+            } else if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                throw new DataNotWrittenException("The user could not be changed", e);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("The user could not be changed", e);
+            }
+        }
     }
 
     /**
-     * Takes a user dto that is filled with a valid id or email address and
+     * Takes a user dto that is filled with a valid id and
      * removes this user from the repository.
      *
-     * @param user        The user forum to remove. Must be filled
-     *                    with a valid id or email.
+     * @param user        The user to remove. Must be filled
+     *                    with a valid id.
      * @param transaction The transaction to use.
      * @throws NotFoundException              The specified user forum was not found in
      *                                        the repository.
      * @throws DataNotWrittenException        If writing the data to the repository
      *                                        fails.
-     * @throws InvalidFieldsException         If both id and email are provided, but
-     *                                        they belong to two different users.
+     * @throws InvalidFieldsException         If the user id is null
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     *
+     * @author Sebastian Vogt
      */
     public static void remove(User user, Transaction transaction)
             throws NotFoundException, DataNotWrittenException {
+        if (user.getId() == null) {
+            throw new InvalidFieldsException("The user id is null");
+        }
+
+        Connection conn = transaction.getConnection();
+
+        String sql = """
+                DELETE FROM "user"
+                WHERE id = ?
+                """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, user.getId());
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new NotFoundException("The user to delete was not found.");
+            }
+        } catch (SQLException e) {
+            DatasourceUtil.logSQLException(e, logger);
+
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                throw new DataNotWrittenException("User was not deleted", e);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("User was not deleted", e);
+            }
+        }
+
     }
 
     /**
@@ -341,24 +430,202 @@ public class UserRepository {
      */
     public static Verification getVerification(User user, Transaction transaction)
             throws NotFoundException {
-        return null;
+        if (user.getId() == null && user.getEmailAddress() == null) {
+            logger.severe("User dto is not filled with an id or email address.");
+            throw new IllegalArgumentException("User dto is not filled with an id or email address.");
+        }
+
+        Connection conn = transaction.getConnection();
+        String sql = """
+                SELECT v.* FROM verification v, "user" u
+                WHERE v.id = ?
+                OR (v.id = u.id AND u.email_address = ?);
+                """;
+
+        Verification result;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, user.getId());
+            stmt.setString(2, user.getEmailAddress());
+            ResultSet rs = stmt.executeQuery();
+
+            // Attempt to create a verification dto from the result set.
+            if (rs.next()) {
+                result = createVerificationFromResultSet(rs);
+                logger.finer("Found verification dto for user");
+            } else {
+                logger.warning("No verification dto for specified user found");
+                throw new NotFoundException("No verification dto for specified user found");
+            }
+        } catch (SQLException e) {
+            DatasourceUtil.logSQLException(e, logger);
+            transaction.abort();
+            throw new DatasourceQueryFailedException("Failed to retrieve verification from database.", e);
+        }
+
+        return result;
     }
 
     /**
-     * Takes a verification dto that is filled with a valid userId and adds the
-     * verification to the user.
+     * Takes a verification dto that is filled with a validation random returns the
+     * filled verification dto.
+     *
+     * @param verification A {@code Verification} dto that must be filled
+     *                     with a validation random.
+     * @param transaction  The transaction to use.
+     * @return A fully filled {@code Verification} dto if a verification with the
+     * provided validation random exists, otherwise null.
+     * @throws DatasourceQueryFailedException If the datasource cannot be
+     *                                        queried.
+     * @author Thomas Kirz
+     */
+    public static Verification getVerification(Verification verification, Transaction transaction)
+            throws NotFoundException {
+        if (verification.getValidationRandom() == null) {
+            logger.severe("Verification dto is not filled with a validation random.");
+            throw new IllegalArgumentException("Verification dto is not filled with a validation random.");
+        }
+
+        Connection conn = transaction.getConnection();
+        String sql = "SELECT * FROM verification WHERE validation_random = ?";
+
+        Verification result;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, verification.getValidationRandom());
+            ResultSet rs = stmt.executeQuery();
+
+            // Attempt to create a verification dto from the result set.
+            if (rs.next()) {
+                result = createVerificationFromResultSet(rs);
+                logger.finer("Found verification dto with validation random "
+                        + verification.getValidationRandom());
+            } else {
+                logger.warning("No verification dto with validation random " + verification.getValidationRandom()
+                        + " found.");
+                throw new NotFoundException("No verification dto with the specified validation random found.");
+            }
+        } catch (SQLException e) {
+            DatasourceUtil.logSQLException(e, logger);
+            transaction.abort();
+            throw new DatasourceQueryFailedException("Failed to retrieve Verification from database.", e);
+        }
+
+        return result;
+    }
+
+    private static Verification createVerificationFromResultSet(ResultSet rs) throws SQLException {
+        Verification verification = new Verification();
+
+        verification.setUserId(rs.getInt("id"));
+        verification.setValidationRandom(rs.getString("validation_random"));
+        verification.setVerified(rs.getBoolean("is_verified"));
+        Timestamp timestamp = rs.getTimestamp("timestamp_validation_started");
+        verification.setTimestampValidationStarted(timestamp == null ? null : timestamp.toLocalDateTime());
+        verification.setNonVerifiedEmailAddress(rs.getString("unvalidated_email_address"));
+
+        return verification;
+    }
+
+    /**
+     * Takes a filled verification dto and adds it to the database.
      *
      * @param verification A fully filled Verification dto.
      * @param transaction  The transaction to use.
      * @throws NotFoundException              If there is no user with the
      *                                        provided userId.
+     * @throws DataNotWrittenException        If the verification could not be added but has
+     *                                        high probability of succeeding after retrying.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     * @author Thomas Kirz
      */
-    public static void setVerification(Verification verification,
+    public static void addVerification(Verification verification,
                                        Transaction transaction)
-            throws NotFoundException {
-        // TODO: Implement this method
+            throws NotFoundException, DataNotWrittenException {
+        User user = new User();
+        user.setId(verification.getUserId());
+        try {
+            get(user, transaction);
+        } catch (NotFoundException e) {
+            logger.severe("User belonging to verification dto was not found.");
+            throw new NotFoundException("User belonging to verification dto was not found.");
+        }
+
+        // insert new verification
+        Connection conn = transaction.getConnection();
+        String sql = """
+                INSERT INTO verification (id, validation_random, is_verified, timestamp_validation_started,
+                unvalidated_email_address)
+                VALUES (?, ?, ?, ?, ?);
+                """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setInt(1, verification.getUserId());
+                stmt.setString(2, verification.getValidationRandom());
+                stmt.setBoolean(3, verification.isVerified());
+                stmt.setTimestamp(4, Timestamp.valueOf(verification.getTimestampValidationStarted()));
+                stmt.setString(5, verification.getNonVerifiedEmailAddress());
+                stmt.executeUpdate();
+        } catch (SQLException e) {
+            DatasourceUtil.logSQLException(e, logger);
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                transaction.abort();
+                throw new DataNotWrittenException("Failed to add verification to database.", e);
+            } else {
+                throw new DatasourceQueryFailedException("Failed to add verification to database.", e);
+            }
+        }
+    }
+
+    /**
+     * Takes a filled verification dto and replaces the user's verification with this one.
+     *
+     * @param verification A fully filled Verification dto.
+     * @param transaction  The transaction to use.
+     * @throws NotFoundException              If the verification could not be found in the database.
+     * @throws DataNotWrittenException        If the verification could not be added but has
+     *                                        high probability of succeeding after retrying.
+     * @throws DatasourceQueryFailedException If the datasource cannot be
+     *                                        queried.
+     * @author Thomas Kirz
+     */
+    public static void changeVerification(Verification verification,
+                                       Transaction transaction)
+            throws NotFoundException, DataNotWrittenException {
+        User user = new User();
+        user.setId(verification.getUserId());
+        try {
+            getVerification(user, transaction);
+        } catch (NotFoundException e) {
+            logger.severe("Verification does not exist.");
+            throw new NotFoundException("Verification does not exist.");
+        }
+
+        // update existing verification
+        Connection conn = transaction.getConnection();
+        String sql = """
+                UPDATE verification
+                SET validation_random = ?, is_verified = ?, timestamp_validation_started = ?,
+                unvalidated_email_address = ?
+                WHERE id = ?;
+                """;
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, verification.getValidationRandom());
+            stmt.setBoolean(2, verification.isVerified());
+            stmt.setTimestamp(3, Timestamp.valueOf(verification.getTimestampValidationStarted()));
+            stmt.setString(4, verification.getNonVerifiedEmailAddress());
+            stmt.setInt(5, verification.getUserId());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            DatasourceUtil.logSQLException(e, logger);
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                transaction.abort();
+                throw new DataNotWrittenException("Failed to add verification to database.", e);
+            } else {
+                throw new DatasourceQueryFailedException("Failed to add verification to database.", e);
+            }
+        }
     }
 
     /**
@@ -551,6 +818,7 @@ public class UserRepository {
                             user.setDateOfBirth(birthdate.toLocalDate());
                         }
                         user.setEmployer(rs.getString("employer"));
+                        setVerifiedStatus(user, transaction);
 
                         userList.add(user);
                     }
@@ -582,6 +850,7 @@ public class UserRepository {
                             user.setDateOfBirth(birthdate.toLocalDate());
                         }
                         user.setEmployer(rs.getString("employer"));
+                        setVerifiedStatus(user, transaction);
 
                         userList.add(user);
                     }
@@ -661,7 +930,7 @@ public class UserRepository {
      */
     public static List<User> getList(Transaction transaction,
                                      ScientificForum scientificForum)
-            throws DataNotCompleteException, NotFoundException, InvalidQueryParamsException {
+            throws DataNotCompleteException,  NotFoundException, InvalidQueryParamsException {
         if (transaction == null || scientificForum == null) {
             throw new InvalidQueryParamsException("Parameter was null");
         }
@@ -703,6 +972,7 @@ public class UserRepository {
                     user.setDateOfBirth(birthdate.toLocalDate());
                 }
                 user.setEmployer(rs.getString("employer"));
+                setVerifiedStatus(user, transaction);
 
                 userList.add(user);
             }
@@ -716,45 +986,101 @@ public class UserRepository {
     /**
      * Adds the specified science field to the specified scientific user.
      *
-     * @param user         A user dto with a valid id or email.
+     * @param user         A user dto with a valid id.
      * @param scienceField A science field dto with a valid id.
      * @param transaction  The transaction to use.
      * @throws NotFoundException              If there is no user with the
-     *                                        provided id or email or there is no science
-     *                                        field with the provided id.
+     *                                        provided id or there is no science
+     *                                        field with the provided name.
      * @throws DataNotWrittenException        If writing the data to the repository
      *                                        fails.
-     * @throws InvalidFieldsException         If both id and email are provided, but
-     *                                        they belong to two different users.
+     * @throws InvalidFieldsException         If the use id is null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     *
+     * @author Sebastian Vogt
      */
     public static void addScienceField(User user, ScienceField scienceField,
                                        Transaction transaction)
             throws NotFoundException, DataNotWrittenException {
+        Connection conn = transaction.getConnection();
+
+        if (user.getId() == null || scienceField.getName() == null) {
+            throw new InvalidFieldsException("The user id or science field name was null");
+        }
+
+        String sql = """
+                INSERT INTO interests
+                VALUES (?, ?)
+                """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, user.getId());
+            stmt.setString(2, scienceField.getName());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            DatasourceUtil.logSQLException(e, logger);
+
+            // 23503: Foreign key constraint violated
+            if (e.getSQLState().equals("23503")) {
+                throw new NotFoundException("Either the specified user or science field do not exist");
+            } if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                throw new DataNotWrittenException("Science field could not be added", e);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("Science field could not be added", e);
+            }
+        }
+
     }
 
     /**
      * Removes the specified science field from the specified user.
      *
-     * @param user         A user dto with a valid id or email.
-     * @param scienceField A science field dto with a valid id that belongs to
+     * @param user         A user dto with a valid id.
+     * @param scienceField A science field dto with a valid name that belongs to
      *                     the specified user.
      * @param transaction  The transaction to use.
-     * @throws NotFoundException              If there is no user with the
-     *                                        provided id or email or there is no science
-     *                                        field with the provided id or the science field
-     *                                        does not belong to the specified user.
+     * @throws NotFoundException              If this science field never belonged to this user.
      * @throws DataNotWrittenException        If writing the data to the repository
      *                                        fails.
-     * @throws InvalidFieldsException         If both id and email are provided, but
-     *                                        they belong to two different users.
+     * @throws InvalidFieldsException         If the user id or science field name are null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     *
+     * @author Sebastian Vogt
      */
     public static void removeScienceField(User user, ScienceField scienceField,
                                           Transaction transaction)
             throws NotFoundException, DataNotWrittenException {
+        if (user.getId() == null || scienceField.getName() == null) {
+            throw new InvalidFieldsException("The user id or science field name was null");
+        }
+
+        Connection conn = transaction.getConnection();
+
+        String sql = """
+                DELETE FROM interests
+                WHERE user_id = ? AND science_field_name = ?
+                """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, user.getId());
+            stmt.setString(2, scienceField.getName());
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows == 0) {
+                throw new NotFoundException("Either the user or science field could not be found");
+            }
+        } catch (SQLException e) {
+            DatasourceUtil.logSQLException(e, logger);
+
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                throw new DataNotWrittenException("The science field could not be removed from the user");
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("The science field could not be removed from the user");
+            }
+        }
     }
 
     /**
@@ -786,26 +1112,64 @@ public class UserRepository {
             ResultSet resultSet = stmt.executeQuery();
             return resultSet.next();
         } catch (SQLException e) {
-            // TODO: hier eventuell unter Bedingungen eine checked Exception werfen
-            transaction.abort();
             DatasourceUtil.logSQLException(e, logger);
+            transaction.abort();
             throw new DatasourceQueryFailedException("the datasource could not be queried", e);
         }
     }
 
     /**
-     * Get the avatar image file for the avatar of the specified user.
+     * Get the avatar image file for the avatar of the specified user. Is null if the user has no avatar.
      *
      * @param user        A user dto with a valid id.
      * @param transaction The transaction to use.
      * @return A file containing the logo.
      * @throws NotFoundException              If there is no user with the specified id.
+     * @throws InvalidFieldsException If the user id is null.
+     * @throws DataNotCompleteException If the data cannot be fetched due to a transient fault.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     *
+     * @author Sebastian Vogt
      */
     public static FileDTO getAvatar(User user, Transaction transaction)
-            throws NotFoundException {
-        return null;
+            throws NotFoundException, DataNotCompleteException {
+
+        if (user.getId() == null) {
+            throw new InvalidFieldsException("The user id must not be null!");
+        }
+
+        Connection connection = transaction.getConnection();
+
+        String query = """
+                SELECT avatar_thumbnail
+                FROM "user"
+                WHERE id = ?
+                """;
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, user.getId());
+            ResultSet resultSet = stmt.executeQuery();
+            if (resultSet.next()) {
+                byte[] avatar = resultSet.getBytes(1);
+                resultSet.close();
+                FileDTO avatarFile = new FileDTO();
+                avatarFile.setFile(avatar);
+                return avatarFile;
+            } else {
+                throw new NotFoundException("There is no user with the given id!");
+            }
+        } catch (SQLException e) {
+            DatasourceUtil.logSQLException(e, logger);
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                throw new DataNotCompleteException("Avatar could not be fetched", e);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("Avatar could not be fetched", e);
+            }
+        }
+
+
     }
 
     /**
@@ -815,15 +1179,58 @@ public class UserRepository {
      * @param avatar      A file dto filled with an image file. If the dto or the
      *                    image itself are null, the current avatar will be deleted.
      * @param transaction The transaction to use.
+     * @throws InvalidFieldsException         If the specified user.
      * @throws NotFoundException              If there is no user with the specified id.
      * @throws DataNotWrittenException        If writing the data to the repository
      *                                        fails.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     *
+     * @author Sebastian Vogt
      */
     public static void setAvatar(User user, FileDTO avatar,
                                  Transaction transaction)
             throws DataNotWrittenException, NotFoundException {
+        if (user.getId() == null) {
+            throw new InvalidFieldsException("The user id must not be null!");
+        }
+
+        Connection connection = transaction.getConnection();
+
+        String query = """
+                UPDATE "user"
+                SET avatar_thumbnail = ?
+                WHERE id = ?
+                """;
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setBytes(1, avatar == null ? null : avatar.getFile());
+            stmt.setInt(2, user.getId());
+            int rowCount = stmt.executeUpdate();
+            if (rowCount == 0) {
+                throw new NotFoundException("The user could not be found!");
+            }
+        } catch (SQLException e) {
+            // TODO: was, wenn es den user nicht gibt?
+            DatasourceUtil.logSQLException(e, logger);
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                throw new DataNotWrittenException("The avatar could not be written!", e);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("The avatar could not be written!", e);
+            }
+        }
+    }
+
+    private static void setVerifiedStatus(User user, Transaction transaction) {
+        Verification verification;
+        try {
+            verification = getVerification(user, transaction);
+        } catch (NotFoundException e) {
+            verification = null;
+            logger.fine("No verification found for user: " + user.getEmailAddress());
+        }
+        user.setVerified(verification != null && verification.isVerified());
     }
 
 }

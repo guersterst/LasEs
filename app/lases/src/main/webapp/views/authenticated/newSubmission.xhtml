@@ -2,8 +2,7 @@
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 
     <!--Title of a Submission as Title of the page.-->
@@ -53,9 +52,9 @@
                                         <h:outputLabel for="editor-slctom" value="#{labels.editor}"/><br/>
                                         <h:selectOneMenu id="editor-slctom" styleClass="btn btn-secondary dropdown-toggle"
                                                          value="#{newSubmissionBacking.newSubmission.editorId}">
-                                            <f:selectItems value="#{newSubmissionBacking.editors}" var="editor"
-                                                           itemLabel="#{editor.firstName.concat(' ').concat(editor.lastName)}"
-                                                           itemValue="#{editor.id}"/>
+                                            <f:selectItems value="#{newSubmissionBacking.editors}" var="item"
+                                                           itemLabel="#{item.firstName.concat(' ').concat(item.lastName)}"
+                                                           itemValue="#{item.id}"/>
                                         </h:selectOneMenu>
                                         <h:message for="editor-slctom"/>
                                     </div>

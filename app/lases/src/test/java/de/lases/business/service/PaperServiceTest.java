@@ -2,17 +2,21 @@ package de.lases.business.service;
 
 import de.lases.global.transport.FileDTO;
 import de.lases.global.transport.Paper;
+import de.lases.persistence.internal.ConfigReader;
 import de.lases.persistence.repository.ConnectionPool;
 import de.lases.persistence.repository.PaperRepository;
 import de.lases.persistence.repository.Transaction;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.context.SessionScoped;
+import org.jboss.weld.junit5.WeldInitiator;
+import org.jboss.weld.junit5.WeldJunit5Extension;
+import org.jboss.weld.junit5.WeldSetup;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.InputStream;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,8 +24,46 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mockStatic;
 
+/**
+ * @author Johannes Garstenauer
+ */
 @ExtendWith(MockitoExtension.class)
+@ExtendWith(WeldJunit5Extension.class)
 public class PaperServiceTest {
+
+    @WeldSetup
+    public WeldInitiator weld = WeldInitiator.from(ConnectionPool.class, ConfigReader.class, ConfigReader.class)
+            .activate(RequestScoped.class, SessionScoped.class).build();
+
+    /*
+     * Unfortunately we have to do this before every single test, since @BeforeAll methods are static and static
+     * methods don't work with our weld plugin.
+     */
+
+    @BeforeEach
+    void startConnectionPool() {
+        FileDTO file = new FileDTO();
+
+        Class clazz = PaperServiceTest.class;
+        InputStream inputStream = clazz.getResourceAsStream("/config.properties");
+
+        file.setInputStream(inputStream);
+
+        weld.select(ConfigReader.class).get().setProperties(file);
+        ConnectionPool.init();
+
+        // Reset the dto's value's after each test.
+        paper = new Paper();
+        paper.setSubmissionId(EXAMPLE_SUBMISSION_ID);
+        paper.setVersionNumber(EXAMPLE_VERSION_NUMBER);
+        fileDTO = new FileDTO();
+        fileDTO.setFile(EXAMPLE_PDF);
+    }
+
+    @AfterEach
+    void shutDownConnectionPool() {
+        ConnectionPool.shutDown();
+    }
 
     // The required repository.
     private static MockedStatic<PaperRepository> paperRepoMocked;
@@ -47,24 +89,6 @@ public class PaperServiceTest {
         // Mock get to return a paper or file if the ids are correct.
         paperRepoMocked.when(() -> PaperRepository.get(eq(paper), any(Transaction.class))).thenReturn(paper);
         paperRepoMocked.when(() -> PaperRepository.getPDF(eq(paper), any(Transaction.class))).thenReturn(fileDTO);
-
-        ConnectionPool.init();
-    }
-
-    @AfterAll
-    static void shutDown() {
-        ConnectionPool.shutDown();
-    }
-
-    @BeforeEach
-    void resetDTOS() {
-
-        // Reset the dto's value's after each test.
-        paper = new Paper();
-        paper.setSubmissionId(EXAMPLE_SUBMISSION_ID);
-        paper.setVersionNumber(EXAMPLE_VERSION_NUMBER);
-        fileDTO = new FileDTO();
-        fileDTO.setFile(EXAMPLE_PDF);
     }
 
     @AfterAll
@@ -72,38 +96,6 @@ public class PaperServiceTest {
 
         // Close the mocks
         paperRepoMocked.close();
-    }
-
-    @Test
-    void testGet() {
-        Paper paper = new Paper();
-        paper = new Paper();
-        paper.setSubmissionId(5);
-        paper.setUploadTime(LocalDateTime.now());
-        paper.setVersionNumber(3);
-        paper.setVisible(false);
-
-        FileDTO pdf = new FileDTO();
-        pdf.setFile(new byte[]{1, 2, 3, 4});
-
-        paperService.add(fileDTO, paper);
-
-        Paper gotten = paperService.get(paper);
-
-        assertEquals(paper, gotten);
-    }
-
-    @Test
-    void testAdd() {
-        paperService.add(fileDTO, paper);
-
-        Paper gotten = paperService.get(paper);
-        FileDTO gottenFile = paperService.getFile(paper);
-        assertAll(
-                () -> assertEquals(EXAMPLE_SUBMISSION_ID, gotten.getSubmissionId()),
-                () -> assertEquals(EXAMPLE_VERSION_NUMBER, gotten.getVersionNumber()),
-                () -> assertEquals(EXAMPLE_PDF, gottenFile.getFile())
-        );
     }
 
     @Test

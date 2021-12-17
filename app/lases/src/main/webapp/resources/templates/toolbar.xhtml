@@ -16,7 +16,7 @@ xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
                              title="#{help.addReviewerEmail}"
                              required="true" requiredMessage="#{message.requiredEmail}"
                              styleClass="form-control" >
-                    <f:validator validatorId="emailAddressLayout"/>
+                    <f:validator validatorId="emailAddressLayoutValidator"/>
                 </h:inputText>
                 <h:message for="add-reviewer-itxt"/>
             </div>
@@ -84,9 +84,9 @@ xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
                     <h:selectOneMenu id="select-editor-slctom"
                                      value="#{toolbarBacking.currentEditor.id}" title="#{help.chooseEditor}"
                                      styleClass="form-select">
-                        <f:selectItems value="#{toolbarBacking.editors}" var="editor"
-                                       itemValue="#{editor.id}"
-                                       itemLabel="#{toolbarBacking.getTitle(editor).concat(' ').concat(editor.firstName.concat(' ').concat(editor.lastName))}"/>
+                        <f:selectItems value="#{toolbarBacking.editors}" var="item"
+                                       itemValue="#{item.id}"
+                                       itemLabel="#{toolbarBacking.getTitle(item).concat(' ').concat(item.firstName.concat(' ').concat(item.lastName))}"/>
                     </h:selectOneMenu>
                 </div>
             </div>

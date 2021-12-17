@@ -62,7 +62,7 @@ public class SubmissionService implements Serializable {
             result = SubmissionRepository.get(submission, t);
             t.commit();
             logger.finer("Submission with id " + submission.getId() + " retrieved.");
-        } catch (NotFoundException e) {
+        } catch (NotFoundException | DataNotCompleteException e) {
             logger.severe("Submission not found.");
             uiMessageEvent.fire(new UIMessage(
                     resourceBundle.getString("error.requestedSubmissionDoesNotExist"),
@@ -465,7 +465,7 @@ public class SubmissionService implements Serializable {
         try {
             submission = SubmissionRepository.get(submission, t);
             logger.finer("Submission with id " + submission.getId() + " retrieved.");
-        } catch (NotFoundException e) {
+        } catch (NotFoundException | DataNotCompleteException e) {
             logger.severe("Submission with id " + submission.getId() + " not found.");
             uiMessageEvent.fire(new UIMessage(
                     resourceBundle.getString("error.loadingSubmissionFailed"),
@@ -626,7 +626,8 @@ public class SubmissionService implements Serializable {
         try {
             count = SubmissionRepository.countSubmissions(user, privilege, t, resultParams);
             t.commit();
-        } catch (NotFoundException e) {
+        } catch (NotFoundException | DataNotCompleteException e) {
+
             logger.severe("User to count submissions for not found.");
             uiMessageEvent.fire(new UIMessage(
                     resourceBundle.getString("error.findingSubmissionListFailed"),

@@ -208,7 +208,6 @@ public class SubmissionBacking implements Serializable {
     }
 
 
-
     /**
      * Checks if the view param is an integer and throws an exception if it is
      * not
@@ -216,8 +215,7 @@ public class SubmissionBacking implements Serializable {
      * @throws IllegalUserFlowException If there is no integer provided as view
      *                                  param
      */
-    public void preRenderViewListener() {
-    }
+    public void preRenderViewListener(ComponentSystemEvent event) {}
 
     /**
      * Set the state of the submission, which can be SUBMITTED,
@@ -296,7 +294,7 @@ public class SubmissionBacking implements Serializable {
         HttpServletResponse response = (HttpServletResponse) facesContext.getExternalContext().getResponse();
         response.setContentType(submission.getTitle() + "/pdf");
         response.setContentLength(pdf.length);
-        response.setHeader("Content-disposition","attachment;filename="+ submission.getTitle() + ".pdf");
+        response.setHeader("Content-disposition", "attachment;filename=" + submission.getTitle() + ".pdf");
 
         try {
             ServletOutputStream outputStream = response.getOutputStream();
@@ -444,7 +442,7 @@ public class SubmissionBacking implements Serializable {
             revision.setSubmissionId(submission.getId());
             revision.setUploadTime(LocalDateTime.now());
 
-            paperService.add(file,revision);
+            paperService.add(file, revision);
 
             Submission newSubmission = submission.clone();
             newSubmission.setState(SubmissionState.SUBMITTED);
@@ -578,7 +576,15 @@ public class SubmissionBacking implements Serializable {
      * @return true if the viewer is the submitter of this submission.
      */
     public boolean isViewerSubmitter() {
-        return submission.getAuthorId() == sessionInformation.getUser().getId();
+        if (submission.getAuthorId() == sessionInformation.getUser().getId()) {
+            return true;
+        }
+        for (User user :  coAuthors) {
+            if (sessionInformation.getUser().getId().equals(user.getId())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean isAdmin() {
@@ -667,5 +673,4 @@ public class SubmissionBacking implements Serializable {
             return false;
         }
     }
-
 }

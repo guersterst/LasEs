@@ -54,6 +54,9 @@ class SubmissionServiceTestNoMock {
     }
 
 
+    /**
+     * @author Sebastian Vogt
+     */
     @Test
     void testAddBasic() throws SQLException {
         Submission submission = new Submission();
@@ -88,9 +91,13 @@ class SubmissionServiceTestNoMock {
         }
 
         assertEquals(1, j - i);
-        transaction.commit();
+        submissionService.remove(submission);
+        transaction.abort();
     }
 
+    /**
+     * @author Sebastian Vogt
+     */
     @Test
     void testAddWithExistentCoAuthors() throws SQLException {
         Transaction transaction = new Transaction();
@@ -131,6 +138,7 @@ class SubmissionServiceTestNoMock {
             }
 
             assertEquals(1, j - i);
+            submissionService.remove(submission);
         } catch (Exception e) {
             throw e;
         } finally {
@@ -138,6 +146,9 @@ class SubmissionServiceTestNoMock {
         }
     }
 
+    /**
+     * @author Sebastian Vogt
+     */
     @Test
     void testAddWithNonExistentCoAuthors() throws SQLException {
         Transaction transaction = new Transaction();
@@ -179,12 +190,14 @@ class SubmissionServiceTestNoMock {
             }
 
             assertEquals(1, j - i);
+            submissionService.remove(submission);
         } finally {
             transaction.abort();
         }
     }
 
     @Test
+    @Disabled
     void testAddReviewer() throws SQLException {
         User user = new User();
         user.setId(1);

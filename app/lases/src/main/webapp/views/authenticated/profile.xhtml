@@ -1,6 +1,295 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition template="/resources/templates/main.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+
+    <ui:define name="title">#{labels.profile}</ui:define>
+
+    <ui:define name="content">
+
+        <f:metadata>
+            <f:importConstants type="de.lases.control.internal.Constants" var="Const"/>
+            <f:viewAction action="#{profileBacking.onLoad()}"/>
+            <f:event id="pre-render-evnt" type="preRenderView" listener="#{profileBacking.preRenderViewListener}"/>
+            <f:viewParam value="#{profileBacking.user.id}" name="id"/>
+        </f:metadata>
+
+        <h:head>
+            <h:outputStylesheet name="design/css/profile.css"/>
+        </h:head>
+
+        <div class="container">
+            <h1>#{labels['profile']}</h1>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card" id="old-avatar-card">
+                        <div class="card-header">
+                            #{labels.currentAvatar}
+                        </div>
+                        <div class="card-body">
+                            <h:graphicImage id="profile-image" value="#{'/image?id='.concat(profileBacking.user.id)}"
+                                            alt="#{labels.noAvatar}"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card" id="new-avatar-card">
+                        <div class="card-header">
+                            #{labels.editAvatar}
+                        </div>
+                        <div class="card-body">
+                            <h:form id="new-avatar-form" enctype="multipart/form-data">
+
+                                <div class="form-group">
+                                    <h:inputFile id="new-avatar-ifile" value="#{profileBacking.uploadedAvatar}"
+                                                 required="true" requiredMessage="#{message.inputFile}"
+                                                 validator="avatarValidator"
+                                                 disabled="#{not profileBacking.hasViewerEditRights()}"
+                                                 class="form-control"/>
+                                    <h:message for="new-avatar-ifile"/>
+                                </div>
+
+                                <hr/>
+
+                                <div class="form-group">
+                                    <h:commandButton styleClass="btn btn-primary" id="submit-avatar-cbtn" value="#{labels.save}"
+                                                     action="#{profileBacking.uploadAvatar}"
+                                                     disabled="#{not profileBacking.hasViewerEditRights()}"
+                                                     type="submit"/>
+                                </div>
+                                <hr/>
+                            </h:form>
+                            <h:form id="delete-avatar-form" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <h:commandButton styleClass="btn btn-secondary" id="delete-avatar-cbtn" value="#{labels.delete}"
+                                                     action="#{profileBacking.deleteAvatar}"
+                                                     disabled="#{not profileBacking.hasViewerEditRights()}"
+                                                     type="submit"/>
+                                </div>
+                            </h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr/>
+
+            <div class="row">
+                <div class="col-md-8">
+
+                    <div class="card" id="profile-card">
+                        <div class="card-header">
+                            #{labels.editProfile}
+                        </div>
+                        <div class="card-body">
+                            <h:form id="edit-profile-form">
+
+                                <div class="form-group">
+                                    <h:outputLabel for="title-itxt" value="#{labels.titleInput}" styleClass="form-label"/>
+                                    <h:inputText id="title-itxt" value="#{profileBacking.user.title}" readonly="#{!profileBacking.hasViewerEditRights()}" maxlength="#{Const.TITLE_MAX}"
+                                                styleClass="form-control"/>
+                                    <h:message for="title-itxt"/>
+                                </div>
+                                <hr/>
+
+                                <div class="form-group">
+                                    <h:outputLabel for="firstname-itxt" value="#{labels.firstName}" styleClass="form-label"/>
+                                    <h:inputText id="firstname-itxt" value="#{profileBacking.user.firstName}" readonly="#{!profileBacking.hasViewerEditRights()}" required="true" requiredMessage="#{message.firstNameRequired}" maxlength="#{Const.FIRST_NAME_MAX}"
+                                                    styleClass="form-control"/>
+                                    <h:message for="firstname-itxt"/>
+                                </div>
+                                <hr/>
+
+                                <div class="form-group">
+                                    <h:outputLabel for="lastname-itxt" value="#{labels.lastName}" styleClass="form-label"/>
+                                    <h:inputText id="lastname-itxt" value="#{profileBacking.user.lastName}" readonly="#{!profileBacking.hasViewerEditRights()}" required="true" requiredMessage="#{message.lastNameRequired}" maxlength="#{Const.LAST_NAME_MAX}"
+                                                    styleClass="form-control"/>
+                                    <h:message for="lastname-itxt"/>
+                                </div>
+                                <hr/>
+
+                                <div class="form-group">
+                                    <h:outputLabel for="password-iscrt" value="#{labels.password}" styleClass="form-label"/>
+                                    <h:inputSecret id="password-iscrt" value="#{profileBacking.user.passwordNotHashed}" readonly="#{!profileBacking.hasViewerEditRights()}" validator="passwordValidator" required="true" requiredMessage="#{message.passwordNeeded}"
+                                                    styleClass="form-control"/>
+                                    <h:message for="password-iscrt"/>
+                                </div>
+                                <hr/>
+
+                                <div class="form-group">
+                                    <h:outputLabel for="email-itxt" value="#{labels.email}" styleClass="form-label"/>
+                                    <h:inputText id="email-itxt" value="#{profileBacking.user.emailAddress}" readonly="#{!profileBacking.hasViewerEditRights()}" validator="emailAddressLayoutValidator" required="true" requiredMessage="#{message.emailRequired}"
+                                                 maxlength="#{Const.EMAIL_MAX}" styleClass="form-control">
+<!--                                        <f:attribute name="id" value="#{profileBacking.user.id}"/>-->
+                                    </h:inputText>
+                                    <h:message for="email-itxt"/>
+                                </div>
+                                <hr/>
+
+                                <div class="form-group">
+                                    <h:outputLabel for="employer-itxt" value="#{labels.employer}" styleClass="form-label"/>
+                                    <h:inputText id="employer-itxt" value="#{profileBacking.user.employer}" readonly="#{!profileBacking.hasViewerEditRights()}" styleClass="form-control"/>
+                                    <h:message for="employer-itxt"/>
+                                </div>
+                                <hr/>
+
+                                <div class="form-group">
+                                    <h:outputLabel for="date-of-birth-itxt" value="#{labels.birthDay}" styleClass="form-label"/>
+                                    <h:inputText id="date-of-birth-itxt" value="#{profileBacking.user.dateOfBirth}" a:type="date" readonly="#{!profileBacking.hasViewerEditRights()}" styleClass="form-control" converterMessage="#{message.wrongDate}">
+                                            <f:convertDateTime type="localDate" pattern="yyyy-MM-dd"/>
+                                    </h:inputText>
+                                    <h:message for="date-of-birth-itxt"/>
+                                </div>
+                                <hr/>
+
+                                <div class="form-group">
+                                    <h:outputLabel for="submission-number-otxt" value="#{labels.numberOfSubmissions}" styleClass="form-label"/><br/>
+                                    <h:outputText id="submission-number-otxt" value="#{profileBacking.user.numberOfSubmissions}" styleClass="form-text"/>
+                                </div>
+                                <hr/>
+
+                                <div class="form-group">
+                                    <h:commandButton id="save-cbtn" value="#{labels.save}" action="#{profileBacking.submitChanges()}" readonly="#{!profileBacking.hasViewerEditRights()}" styleClass="btn btn-primary" disabled="#{!profileBacking.hasViewerEditRights()}"/>
+                                </div>
+
+                            </h:form>
+
+                            <hr/>
+                            <!-- delete Profile -->
+                            <h:form id="delete-profile-form">
+                                <p:commandButton id="delete-cbtn" value="#{labels.delete}"
+                                                 onclick="PF('delte-dlg').show()"
+                                                 readonly="#{!profileBacking.hasViewerEditRights()}"
+                                                 type="button"
+                                                 styleClass="btn btn-danger"
+                                                 disabled="#{!profileBacking.hasViewerEditRights()}"/>
+
+                                <p:confirmDialog id="delte-dlg" widgetVar="delte-dlg" header="#{labels.delete}">
+
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <h:outputLabel for="delete-really-cbtn" value="#{labels.deleteReally}" styleClass="form-label"/> <br/>
+                                            <h:commandButton id="delete-really-cbtn" value="#{labels.delete}" action="#{profileBacking.deleteProfile()}" styleClass="btn-danger btn"/>
+                                        </div>
+                                    </div>
+
+                                </p:confirmDialog>
+                            </h:form>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-4">
+
+                    <h:panelGroup rendered="#{sessionInformation.user.admin}">
+                        <h:panelGroup layout="block" styleClass="card" id="admin-card">
+                            <div class="card-header">
+                                #{labels.editAdmin}
+                            </div>
+                            <div class="card-body">
+                                <h:form id="edit-admin-form">
+                                    <h:panelGroup layout="block" styleClass="form-group form-check">
+                                        <h:selectBooleanCheckbox styleClass="form-check-input" id="is-admin-cbx" value="#{profileBacking.userForAdminSettings.admin}"/><h:outputLabel for="is-admin-cbx" styleClass="form-check-label" value="#{labels.adminRights}"/><br/>
+                                        <h:message for="password-admin-iscrt"/><br/>
+                                        <p:commandButton id="is-admin-cbtn" styleClass="btn-secondary btn" type="button" value="#{labels.save}" onclick="PF('dlg').show()" />
+                                        <p:confirmDialog id="dlg" widgetVar="dlg" header="#{message.passwordNeeded}">
+
+                                            <div class="form-group">
+                                                <h:outputLabel for="password-admin-iscrt" value="#{message.passwordNeeded}" styleClass="form-label"/>
+                                                <h:inputSecret id="password-admin-iscrt" value="#{profileBacking.adminPassword.passwordNotHashed}" required="true" requiredMessage="#{message.passwordNeeded}" styleClass="form-control"/>
+                                                <h:commandButton id="admin-save-cbtn" value="#{labels.save}" action="#{profileBacking.submitAdminChanges()}" styleClass="btn-primary btn">
+                                                    <f:ajax execute="edit-admin-form" render="edit-admin-form" />
+                                                </h:commandButton>
+                                            </div>
+
+                                        </p:confirmDialog>
+
+                                    </h:panelGroup>
+                                </h:form>
+                            </div>
+
+                        </h:panelGroup>
+                        <hr/>
+
+                    </h:panelGroup>
+
+                    <!-- Science Fields -->
+                    <div class="card" id="addScienceFields">
+                        <div class="card-header">
+                            #{labels.editScienceFields}
+                        </div>
+                        <div class="card-body">
+                            <!-- add sciencefield -->
+                            <h:form id="fields-add-frm">
+                                <div class="form-group">
+                                    <p:selectOneMenu id="advanced"
+                                                     value="#{profileBacking.selectedScienceField}"
+                                                     panelStyle="width:180px"
+                                                     effect="fade"
+                                                     var="s"
+                                                     filter="true"
+                                                     filterMatchMode="startsWith">
+                                        <f:selectItems
+                                                value="#{profileBacking.scienceFields}"
+                                                var="scienceField"
+                                                itemLabel="#{scienceField.name}"
+                                                itemValue="#{scienceField}"/>
+                                        <p:column>
+                                            <f:facet name="header">
+                                                <h:outputText value="Name"/>
+                                            </f:facet>
+                                            <h:outputText value="#{s.name}"/>
+                                        </p:column>
+                                    </p:selectOneMenu>
+
+                                    <div class="form-group">
+                                        <h:commandButton id="apply-field-add-cbtn"
+                                                         value="#{labels.add}"
+                                                         styleClass="btn btn-primary"
+                                                         action="#{profileBacking.addScienceField()}"
+                                                         disabled="#{!profileBacking.hasViewerEditRights()}">
+                                            <f:ajax execute="fields-add-frm"
+                                                    render="fields-add-frm"/>
+                                        </h:commandButton>
+                                    </div>
+                                </div>
+
+                                <hr/>
+
+                                <h:dataTable id="science-field-list"
+                                             value="#{profileBacking.usersScienceFields}"
+                                             var="currField">
+                                    <h:column>
+                                        <f:facet name="header">#{labels.addedScienceFields}</f:facet>
+                                        #{currField.name}
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header"/>
+                                        <h:commandButton id="delete-field-cbtn"
+                                                         value="#{labels.delete}"
+                                                         styleClass="btn-secondary btn"
+                                                         type="submit"
+                                                         action="#{profileBacking.deleteScienceField(currField)}"
+                                                         disabled="#{!profileBacking.hasViewerEditRights()}">
+                                            <f:ajax execute="fields-add-frm"
+                                                    render="fields-add-frm"/>
+                                        </h:commandButton>
+                                    </h:column>
+                                </h:dataTable>
+
+                            </h:form>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </ui:define>
 
 </ui:composition>

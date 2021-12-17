@@ -9,7 +9,6 @@ import jakarta.faces.context.FacesContext;
 import jakarta.faces.validator.FacesValidator;
 import jakarta.faces.validator.Validator;
 import jakarta.faces.validator.ValidatorException;
-import jakarta.inject.Inject;
 
 import java.util.PropertyResourceBundle;
 import java.util.logging.Logger;
@@ -18,11 +17,8 @@ import java.util.logging.Logger;
  * Validator for email addresses that checks if a given email address is part
  * of the datasource.
  */
-@FacesValidator("emailAddressExits")
+@FacesValidator
 public class EmailAddressExistsValidator implements Validator<String> {
-
-    @Inject
-    private UserService userService;
 
     private final Logger l = Logger.getLogger(EmailAddressUnoccupiedValidator.class.getName());
 
@@ -39,6 +35,7 @@ public class EmailAddressExistsValidator implements Validator<String> {
                          String address) throws ValidatorException {
         User user = new User();
         user.setEmailAddress(address);
+        UserService userService = CDI.current().select(UserService.class).get();
         if (!userService.emailExists(user)) {
             PropertyResourceBundle bundle = CDI.current().select(PropertyResourceBundle.class).get();
             l.finer("Validation failed: " + address + " does not exist.");

@@ -1,16 +1,23 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.FileDTO;
+import de.lases.global.transport.Paper;
 import de.lases.global.transport.Review;
+import de.lases.persistence.internal.ConfigReader;
+import de.lases.persistence.repository.ConnectionPool;
 import de.lases.persistence.repository.ReviewRepository;
 import de.lases.persistence.repository.Transaction;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.context.SessionScoped;
+import org.jboss.weld.junit5.WeldInitiator;
+import org.jboss.weld.junit5.WeldJunit5Extension;
+import org.jboss.weld.junit5.WeldSetup;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.io.InputStream;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,8 +25,39 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mockStatic;
 
+/**
+ * @author Johannes Garstenauer
+ */
 @ExtendWith(MockitoExtension.class)
+@ExtendWith(WeldJunit5Extension.class)
 public class ReviewServiceTest {
+
+    @WeldSetup
+    public WeldInitiator weld = WeldInitiator.from(ConnectionPool.class, ConfigReader.class, ConfigReader.class)
+            .activate(RequestScoped.class, SessionScoped.class).build();
+
+    /*
+     * Unfortunately we have to do this before every single test, since @BeforeAll methods are static and static
+     * methods don't work with our weld plugin.
+     */
+
+    @BeforeEach
+    void startConnectionPool() {
+        FileDTO file = new FileDTO();
+
+        Class clazz = PaperServiceTest.class;
+        InputStream inputStream = clazz.getResourceAsStream("/config.properties");
+
+        file.setInputStream(inputStream);
+
+        weld.select(ConfigReader.class).get().setProperties(file);
+        ConnectionPool.init();
+    }
+
+    @AfterEach
+    void shutDownConnectionPool() {
+        ConnectionPool.shutDown();
+    }
 
     // The required repository.
     private static MockedStatic<ReviewRepository> reviewRepoMocked;
@@ -33,7 +71,7 @@ public class ReviewServiceTest {
     private static final Integer EXAMPLE_SUBMISSION_ID = 1;
     private static final Integer EXAMPLE_REVIEWER_ID = 10;
     private static final Integer EXAMPLE_PAPER_VERSION = 100;
-    private static final byte[] EXAMPLE_PDF = new byte[]{};
+    private static final byte[] EXAMPLE_PDF = new byte[]{1, 2, 3, 4};
     private static final String EXAMPLE_OLD_COMMENT = "Very good!";
     private static final String EXAMPLE_NEW_COMMENT = "MY EYES ARE BLEEDING";
 
@@ -45,6 +83,7 @@ public class ReviewServiceTest {
 
         // Mock get to return a review if the ids are correct.
         reviewRepoMocked.when(() -> ReviewRepository.get(eq(review), any(Transaction.class))).thenReturn(review);
+        reviewRepoMocked.when(() -> ReviewRepository.getPDF(eq(review), any(Transaction.class))).thenReturn(pdf);
     }
 
     @BeforeEach
@@ -65,38 +104,6 @@ public class ReviewServiceTest {
 
         // Close the mocks
         reviewRepoMocked.close();
-    }
-
-    @Test
-    void testGet() {
-        reviewService.add(review, pdf);
-
-        Review gotten = reviewService.get(review);
-        assertAll(
-                () -> assertEquals(EXAMPLE_PAPER_VERSION, gotten.getPaperVersion()),
-                () -> assertEquals(EXAMPLE_REVIEWER_ID, gotten.getReviewerId()),
-                () -> assertEquals(EXAMPLE_SUBMISSION_ID, gotten.getSubmissionId())
-        );
-    }
-
-    @Test
-    void testAdd() {
-        reviewService.add(review, pdf);
-
-        Review gotten = reviewService.get(review);
-        assertAll(
-                () -> assertEquals(EXAMPLE_PAPER_VERSION, gotten.getPaperVersion()),
-                () -> assertEquals(EXAMPLE_REVIEWER_ID, gotten.getReviewerId()),
-                () -> assertEquals(EXAMPLE_SUBMISSION_ID, gotten.getSubmissionId())
-        );
-    }
-
-    @Test
-    void testGetFile() {
-        reviewService.add(review, pdf);
-
-        FileDTO gotten = reviewService.getFile(review);
-        assertEquals(EXAMPLE_PDF, gotten.getFile());
     }
 
     @Test

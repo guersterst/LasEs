@@ -1,13 +1,14 @@
 package de.lases.persistence.repository;
 
-import de.lases.control.internal.LifeTimeListener;
 import de.lases.global.transport.FileDTO;
 import de.lases.global.transport.ResultListParameters;
 import de.lases.global.transport.ScienceField;
 import de.lases.global.transport.ScientificForum;
-import de.lases.persistence.exception.*;
+import de.lases.persistence.exception.DataNotCompleteException;
+import de.lases.persistence.exception.DataNotWrittenException;
+import de.lases.persistence.exception.KeyExistsException;
+import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.internal.ConfigReader;
-import de.lases.persistence.util.DatasourceUtil;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.context.SessionScoped;
 import org.jboss.weld.junit5.WeldInitiator;
@@ -15,7 +16,6 @@ import org.jboss.weld.junit5.WeldJunit5Extension;
 import org.jboss.weld.junit5.WeldSetup;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.InputStream;
 import java.sql.Connection;
@@ -24,6 +24,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+/**
+ * @author Sebastian Vogt
+ */
 @ExtendWith(WeldJunit5Extension.class)
 class ScienceFieldRepositoryTest {
 
@@ -64,6 +69,9 @@ class ScienceFieldRepositoryTest {
     }
 
 
+    /**
+     * @author Sebastian Vogt
+     */
     @Test
     void testAdd() throws DataNotWrittenException, KeyExistsException, SQLException {
         Transaction transaction = new Transaction();
@@ -103,9 +111,15 @@ class ScienceFieldRepositoryTest {
         transaction.abort();
     }
 
+    /**
+     * @author Sebastian Vogt
+     */
     @Test
     void testAddKeyExistsException() throws DataNotWrittenException, KeyExistsException {
         Transaction transaction = new Transaction();
+
+        // if it is in the database, remove it
+        ScienceFieldRepository.remove(scienceField, transaction);
 
         ScienceFieldRepository.add(scienceField, transaction);
 
@@ -113,6 +127,9 @@ class ScienceFieldRepositoryTest {
         transaction.abort();
     }
 
+    /**
+     * @author Sebastian Vogt
+     */
     @Test
     void testAddRemove() throws DataNotWrittenException, KeyExistsException, SQLException, NotFoundException {
         Transaction transaction = new Transaction();
@@ -153,8 +170,10 @@ class ScienceFieldRepositoryTest {
         transaction.abort();
     }
 
+    @Disabled
     @Test
-    void testGetListForum() throws SQLException, DataNotCompleteException, NotFoundException {
+    void testGetListForum() throws SQLException, DataNotCompleteException, NotFoundException, DataNotWrittenException,
+            KeyExistsException {
         Transaction transaction = new Transaction();
 
         ScientificForum scientificForum = new ScientificForum();
@@ -163,6 +182,10 @@ class ScienceFieldRepositoryTest {
         List<ScienceField> scienceFieldList = ScienceFieldRepository.getList(scientificForum, transaction,
                 new ResultListParameters());
 
+        PreparedStatement stmt = transaction.getConnection().prepareStatement("""
+                                                TRUNCATE science_field CASCADE
+                                                """);
+        stmt.executeUpdate();
 
         ScienceField s1 = new ScienceField();
         ScienceField s2 = new ScienceField();
@@ -172,6 +195,16 @@ class ScienceFieldRepositoryTest {
         s2.setName("Computer Science");
         s3.setName("Philosophy");
 
+        if (!ScienceFieldRepository.isScienceField(s1, transaction)) {
+            ScienceFieldRepository.add(s1, transaction);
+        }
+        if (!ScienceFieldRepository.isScienceField(s2, transaction)) {
+            ScienceFieldRepository.add(s2, transaction);
+        }
+        if (!ScienceFieldRepository.isScienceField(s3, transaction)) {
+            ScienceFieldRepository.add(s3, transaction);
+        }
+
         List<ScienceField> expected = List.of(s1, s2, s3);
 
         assertTrue(expected.containsAll(scienceFieldList) && scienceFieldList.containsAll(expected));
@@ -179,6 +212,7 @@ class ScienceFieldRepositoryTest {
         transaction.abort();
     }
 
+    @Disabled
     @Test
     void testGetListForumFilter() throws SQLException, DataNotCompleteException, NotFoundException {
         Transaction transaction = new Transaction();
@@ -203,6 +237,9 @@ class ScienceFieldRepositoryTest {
         transaction.abort();
     }
 
+    /**
+     * @author Sebastian Vogt
+     */
     @Test
     void testExists() throws DataNotWrittenException, KeyExistsException {
         Transaction transaction = new Transaction();
@@ -214,9 +251,14 @@ class ScienceFieldRepositoryTest {
         transaction.abort();
     }
 
+    /**
+     * @author Sebastian Vogt
+     */
     @Test
     void testNotExists() throws DataNotWrittenException, KeyExistsException {
         Transaction transaction = new Transaction();
+
+        ScienceFieldRepository.remove(scienceField, transaction);
 
         assertFalse(ScienceFieldRepository.isScienceField(scienceField, transaction));
 

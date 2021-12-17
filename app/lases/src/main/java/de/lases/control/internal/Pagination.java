@@ -5,6 +5,7 @@ import de.lases.global.transport.SortOrder;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Abstract class which implements a list pagination.
@@ -19,6 +20,7 @@ public abstract class Pagination<T> {
      */
     private List<T> entries = new LinkedList<>();
 
+    Logger l = Logger.getLogger(Pagination.class.getName());
     /**
      * Meta-information about this pagination.
      * Includes information about the filtering and sorting.

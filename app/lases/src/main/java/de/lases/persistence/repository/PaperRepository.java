@@ -120,7 +120,6 @@ public class PaperRepository {
         Integer id = null;
 
         try (PreparedStatement stmt = conn.prepareStatement(sqlMaxVersion)) {
-
             stmt.setInt(1, paper.getSubmissionId());
             ResultSet resultSet = stmt.executeQuery();
             if (resultSet.next()) {
@@ -361,6 +360,14 @@ public class PaperRepository {
             for (User reviewer : reviewers) {
                 if (reviewer.getId().equals(user.getId())) {
                     privilege = Privilege.REVIEWER;
+                }
+            }
+
+            List<User> coAuthors = UserRepository.getList(transaction, submission, Privilege.AUTHOR);
+
+            for (User u : coAuthors) {
+                if (u.getId().equals(user.getId())) {
+                    privilege = Privilege.AUTHOR;
                 }
             }
         }
