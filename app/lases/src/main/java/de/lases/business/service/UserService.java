@@ -101,13 +101,19 @@ public class UserService implements Serializable {
         }
 
         try {
-            User oldUser = UserRepository.get(newUser, transaction);
-            User newUserOldEmail = oldUser.clone();
-            newUserOldEmail.setEmailAddress(oldUser.getEmailAddress());
 
-            UserRepository.change(newUserOldEmail, transaction);
+            /*
+             * we need the new user without email address to get the old user, since if the email address changed
+             * to an already existing one, we'd run into an exception in UserRepository.get()
+             */
 
-            if (newUserOldEmail.getEmailAddress().equals(newUser.getEmailAddress())) {
+            User newUserWithoutEmail = newUser.clone();
+            newUserWithoutEmail.setEmailAddress("");
+            User oldUser = UserRepository.get(newUserWithoutEmail, transaction);
+
+            UserRepository.change(newUser, transaction);
+
+            if (newUser.getEmailAddress().equals(oldUser.getEmailAddress())) {
                 uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataSaved"),
                         MessageCategory.INFO));
                 transaction.commit();
