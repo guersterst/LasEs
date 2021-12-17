@@ -119,7 +119,31 @@ public class ScientificForumService implements Serializable {
      * @param scienceFields The scientific fields, which this forum is specialized in.
      * @param editors       The editors of this forum.
      */
-    public void add(ScientificForum forum, List<ScienceField> scienceFields, List<User> editors) {
+    public ScientificForum add(ScientificForum forum, List<ScienceField> scienceFields, List<User> editors) {
+        Transaction transaction = new Transaction();
+        try {
+            // overwriting the parameter here to have the ID.
+            forum = ScientificForumRepository.add(forum, transaction);
+
+            for (User editor : editors) {
+                ScientificForumRepository.addEditor(forum, editor, transaction);
+            }
+            for (ScienceField scienceField : scienceFields) {
+                ScientificForumRepository.addScienceField(forum, scienceField, transaction);
+            }
+            transaction.commit();
+            return forum;
+
+        } catch (DataNotWrittenException | NotFoundException e) {
+            transaction.abort();
+            l.severe("Failed trying to create forum: " + forum + e.getMessage());
+            uiMessageEvent.fire(new UIMessage("Error occured when trying to create forum.", MessageCategory.ERROR));
+        } catch (KeyExistsException e) {
+            transaction.abort();
+            l.severe("Tried to create forum with already in-use name: " + forum.getName() + e.getMessage());
+            uiMessageEvent.fire(new UIMessage("Forum name is already in use.", MessageCategory.ERROR));
+        }
+        return null;
     }
 
     /**
@@ -177,7 +201,7 @@ public class ScientificForumService implements Serializable {
                     return;
                 }
             }
-        } catch (DataNotCompleteException |NotFoundException e) {
+        } catch (DataNotCompleteException | NotFoundException e) {
             l.warning("Could not query whether this editor is a duplicate.");
         }
 
@@ -282,11 +306,11 @@ public class ScientificForumService implements Serializable {
     /**
      * Removes an area of expertise from a scientific forum.
      *
-     * @param scienceField    A {@link ScienceField} containing a valid id, which is removed
-     *                        from the forum.
-     * @param forum A {@link ScientificForum} from which the area of expertise e.g.
-     *                        {@code ScienceField} is being removed from. Should contain
-     *                        a valid id.
+     * @param scienceField A {@link ScienceField} containing a valid id, which is removed
+     *                     from the forum.
+     * @param forum        A {@link ScientificForum} from which the area of expertise e.g.
+     *                     {@code ScienceField} is being removed from. Should contain
+     *                     a valid id.
      */
     public void removeScienceField(ScienceField scienceField, ScientificForum forum) {
         if (forum.getId() == null || scienceField.getName() == null) {
@@ -348,7 +372,7 @@ public class ScientificForumService implements Serializable {
      * Determines whether a {@link ScientificForum} already exists.
      *
      * @param forum A {@code ScientificForum} that must be filled
-     *                        with a valid id or a name.
+     *              with a valid id or a name.
      * @return {@code true} if this {@link ScientificForum} exists and {@code false} otherwise.
      */
     public static boolean exists(ScientificForum forum) {
@@ -391,7 +415,7 @@ public class ScientificForumService implements Serializable {
             int paginationLength = Integer.parseInt(configReader.getProperty("MAX_PAGINATION_LIST_LENGTH"));
 
             // Calculate number of pages.
-            pages =  (int) Math.ceil((double) items / paginationLength);
+            pages = (int) Math.ceil((double) items / paginationLength);
         } catch (DataNotCompleteException | NotFoundException e) {
             l.severe(e.getMessage());
         } finally {
