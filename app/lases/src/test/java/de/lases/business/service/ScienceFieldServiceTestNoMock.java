@@ -14,10 +14,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.InputStream;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(WeldJunit5Extension.class)
 public class ScienceFieldServiceTestNoMock {
-    private static final String NAME_MATH_SF = "Math";
+    private static final String NAME_TEST_SF = "Math";
 
     @WeldSetup
     public WeldInitiator weld = WeldInitiator.from(ConnectionPool.class, ConfigReader.class, ConfigReader.class)
@@ -45,26 +46,41 @@ public class ScienceFieldServiceTestNoMock {
         ConnectionPool.shutDown();
     }
 
-    @Test
-    void testAddScienceField() {
-        ScienceFieldService scienceFieldService = new ScienceFieldService();
-        ScienceField mathField = new ScienceField();
-        mathField.setName(NAME_MATH_SF);
-        scienceFieldService.add(mathField);
-
-        //assertTrue(scienceFieldService.exists(mathField));
-        //scienceFieldService.remove(mathField);
-    }
-
+    /**
+     * @author Stefanie Guerster
+     */
     @Test
     void testRemoveScienceField() {
         ScienceFieldService scienceFieldService = new ScienceFieldService();
         ScienceField mathField = new ScienceField();
-        mathField.setName(NAME_MATH_SF);
-        scienceFieldService.add(mathField);
+        mathField.setName(NAME_TEST_SF);
 
+        // remove it if it exists, do nothing if it doesn't exist
+        scienceFieldService.remove(mathField);
+
+        scienceFieldService.add(mathField);
         scienceFieldService.remove(mathField);
 
         assertFalse(scienceFieldService.exists(mathField));
     }
+
+    /**
+     * @author Stefanie Guerster
+     */
+    @Test
+    void testAddScienceField() {
+        ScienceFieldService scienceFieldService = new ScienceFieldService();
+        ScienceField mathField = new ScienceField();
+        mathField.setName(NAME_TEST_SF);
+
+        // remove it if it exists, do nothing if it doesn't exist
+        scienceFieldService.remove(mathField);
+
+        scienceFieldService.add(mathField);
+
+        assertTrue(scienceFieldService.exists(mathField));
+
+        scienceFieldService.remove(mathField);
+    }
+
 }
