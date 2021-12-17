@@ -54,6 +54,9 @@ class SubmissionServiceTestNoMock {
     }
 
 
+    /**
+     * @author Sebastian Vogt
+     */
     @Test
     void testAddBasic() throws SQLException {
         Submission submission = new Submission();
@@ -91,6 +94,9 @@ class SubmissionServiceTestNoMock {
         transaction.abort();
     }
 
+    /**
+     * @author Sebastian Vogt
+     */
     @Test
     void testAddWithExistentCoAuthors() throws SQLException {
         Transaction transaction = new Transaction();
@@ -138,6 +144,9 @@ class SubmissionServiceTestNoMock {
         }
     }
 
+    /**
+     * @author Sebastian Vogt
+     */
     @Test
     void testAddWithNonExistentCoAuthors() throws SQLException {
         Transaction transaction = new Transaction();
