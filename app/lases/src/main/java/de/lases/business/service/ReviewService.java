@@ -125,13 +125,12 @@ public class ReviewService implements Serializable {
                                 ResultListParameters resultListParameters) {
         Transaction transaction = new Transaction();
         try {
-            return ReviewRepository.getList(submission, user, transaction, resultListParameters);
-        } catch (DataNotCompleteException e) {
-            e.printStackTrace();
-        } catch (NotFoundException e) {
-            e.printStackTrace();
-        } finally {
+            List<Review> reviewsList = ReviewRepository.getList(submission, user, transaction, resultListParameters);
             transaction.commit();
+            return reviewsList;
+        } catch (DataNotCompleteException | NotFoundException e) {
+            uiMessageEvent.fire(new UIMessage("Loading Reviews failed.", MessageCategory.ERROR));
+            transaction.abort();
         }
         return new ArrayList<>();
     }
@@ -145,7 +144,7 @@ public class ReviewService implements Serializable {
             ConfigReader configReader = CDI.current().select(ConfigReader.class).get();
             int paginationLength = Integer.parseInt(configReader.getProperty("MAX_PAGINATION_LIST_LENGTH"));
             // Calculate number of pages.
-            pages =  (int) Math.ceil((double) items / paginationLength);
+            pages = (int) Math.ceil((double) items / paginationLength);
         } catch (DataNotCompleteException | NotFoundException e) {
             e.printStackTrace();
         } finally {
@@ -171,7 +170,7 @@ public class ReviewService implements Serializable {
             try {
                 file = ReviewRepository.getPDF(review, transaction);
                 transaction.commit();
-            }  catch (NotFoundException exception) {
+            } catch (NotFoundException exception) {
                 uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewNotFound"), MessageCategory.ERROR));
                 logger.fine("Error while loading a file of a review with the submission id: " + review.getSubmissionId()
                         + " and version number: " + review.getPaperVersion() + "and reviewer id: " + review.getReviewerId());
