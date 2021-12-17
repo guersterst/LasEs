@@ -17,6 +17,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * @author Johann Schicho
+ */
 @ExtendWith(WeldJunit5Extension.class)
 public class UserRepositoryGetListNoMocksTest {
 
