@@ -187,8 +187,12 @@ public class ReviewedByRepository {
                 reviewed.setReviewerId(resultSet.getInt("reviewer_id"));
                 reviewed.setHasAccepted(AcceptanceStatus.valueOf(resultSet.getString("has_accepted")));
                 reviewed.setSubmissionId(resultSet.getInt("submission_id"));
-                reviewed.setTimestampDeadline(resultSet.getTimestamp("timestamp_deadline").toLocalDateTime());
-
+                Timestamp timestamp = resultSet.getTimestamp("timestamp_deadline");
+                if (timestamp != null) {
+                    reviewed.setTimestampDeadline(timestamp.toLocalDateTime());
+                }else {
+                    reviewed.setTimestampDeadline(null);
+                }
                 reviewedByList.add(reviewed);
             }
         } catch (SQLException exception) {

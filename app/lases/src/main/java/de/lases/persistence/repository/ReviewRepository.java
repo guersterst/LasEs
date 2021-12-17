@@ -22,8 +22,6 @@ public class ReviewRepository {
 
     private static final Logger logger = Logger.getLogger(SubmissionRepository.class.getName());
 
-    private static final List<String> filterColumnNames = List.of("version", "lastname", "timestamp_upload", "is_visible", "is_recommended", "comment");
-
     /**
      * Takes a review dto that is filled out with a valid reviewerId, paperId
      * and submissionId and returns a fully filled review dto.
@@ -186,9 +184,8 @@ public class ReviewRepository {
         List<Review> reviewList = new ArrayList<>();
 
         Privilege privilege = getPrivilegeForReviews(transaction, user, submission);
-        ;
 
-        try (PreparedStatement ps = conn.prepareStatement(getStatementReviewList(resultListParameters, user, privilege, false))) {
+        try (PreparedStatement ps = conn.prepareStatement(getStatementReviewList(resultListParameters, submission, user, privilege, false))) {
             int i = 1;
             if (isFilled(resultListParameters.getFilterColumns().get("version"))) {
                 ps.setString(i, "%" + resultListParameters.getFilterColumns().get("version") + "%");
@@ -253,7 +250,7 @@ public class ReviewRepository {
 
         Privilege privilege = getPrivilegeForReviews(transaction, user, submission);
 
-        try (PreparedStatement ps = conn.prepareStatement(getStatementReviewList(resultListParameters, user, privilege, true))) {
+        try (PreparedStatement ps = conn.prepareStatement(getStatementReviewList(resultListParameters, submission, user, privilege, true))) {
 
             int i = 1;
             if (isFilled(resultListParameters.getFilterColumns().get("version"))) {
@@ -302,7 +299,7 @@ public class ReviewRepository {
         return null;
     }
 
-    private static String getStatementReviewList(ResultListParameters resultListParameters, User user, Privilege privilege, boolean doCount) {
+    private static String getStatementReviewList(ResultListParameters resultListParameters, Submission submission, User user, Privilege privilege, boolean doCount) {
         StringBuilder sb = new StringBuilder();
 
         if (doCount) {
@@ -314,7 +311,7 @@ public class ReviewRepository {
         sb.append("""
                 FROM submission s, paper p, review r, "user" u
                 WHERE s.id = p.submission_id AND p.version = r.version AND r.reviewer_id = u.id
-                """).append("\n");
+                """).append(" AND s.id=" + submission.getId()).append("\n");
 
         if (privilege == Privilege.REVIEWER) {
             sb.append(" AND r.reviewer_id = " + user.getId() + "\n");
