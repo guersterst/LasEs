@@ -13,6 +13,7 @@ import org.jboss.weld.junit5.WeldJunit5Extension;
 import org.jboss.weld.junit5.WeldSetup;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -87,16 +88,20 @@ public class ScientificForumRepositoryNoMocksTest {
 
     @Test
     void testAddAndRemove() throws DataNotWrittenException, KeyExistsException, NotFoundException {
-        ScientificForum forum = new ScientificForum();
-        forum.setName("TEMP FORUM");
-        forum.setDescription("THIS FORUM IS TEMPORARY AND SHOULD NOT BE SEEN IN THE DB");
-        forum.setReviewManual("revmnl");
         Transaction t = new Transaction();
-        ScientificForumRepository.add(forum , t);
-        assertTrue(ScientificForumRepository.exists(forum, t));
-        forum = ScientificForumRepository.get(forum, t);
-        ScientificForumRepository.remove(forum, t);
-        assertFalse(ScientificForumRepository.exists(forum, t));
-        t.commit();
+        try {
+            ScientificForum forum = new ScientificForum();
+            forum.setName("TEMP FORUM");
+            forum.setDescription("THIS FORUM IS TEMPORARY AND SHOULD NOT BE SEEN IN THE DB");
+            forum.setReviewManual("revmnl");
+            forum = ScientificForumRepository.add(forum, t);
+            assertTrue(ScientificForumRepository.exists(forum, t));
+            ScientificForumRepository.remove(forum, t);
+            assertFalse(ScientificForumRepository.exists(forum, t));
+        } finally {
+            t.commit();
+        }
+
     }
+
 }
