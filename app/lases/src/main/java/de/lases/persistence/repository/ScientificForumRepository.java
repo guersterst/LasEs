@@ -428,7 +428,7 @@ public class ScientificForumRepository {
 
             l.severe("Must have a editor and forum id to update relationship.");
             throw new InvalidFieldsException();
-        } else if (!exists(scientificForum, transaction) || !userExists(editor, transaction)) {
+        } else if (!exists(scientificForum, transaction)) {
 
             l.severe("Forum (" + scientificForum.getId() + ") and user (" + editor.getId() + ") must exist"
                     + "in order to update their relationship.");
@@ -475,7 +475,7 @@ public class ScientificForumRepository {
 
             l.severe("Must contain a sciencefield name and forum id to add as a topic.");
             throw new InvalidFieldsException();
-        } else if (!exists(scientificForum, transaction) ||  !scienceFieldExists(scienceField, transaction)) {
+        } else if (!exists(scientificForum, transaction) || !ScienceFieldRepository.isScienceField(scienceField, transaction)) {
 
             l.severe("Forum (" + scientificForum.getId() + ") and sciencefield (" + scienceField.getName() + ") must exist"
                     + "in order to update their relationship.");
@@ -523,7 +523,7 @@ public class ScientificForumRepository {
 
             l.severe("Must contain an editor id and forum id to remove an editor.");
             throw new InvalidFieldsException();
-        } else if (!exists(scientificForum, transaction) || !userExists(editor, transaction)) {
+        } else if (!exists(scientificForum, transaction)) {
 
             l.severe("Forum (" + scientificForum.getId() + ") and editor ("
                     + scientificForum.getId() + ") must exist in order to be put in a relationship.");
@@ -573,7 +573,8 @@ public class ScientificForumRepository {
 
             l.severe("Must contain a forum and editor id in order to remove an editor.");
             throw new InvalidFieldsException();
-        } else if (!exists(scientificForum, transaction) ||  !scienceFieldExists(scienceField, transaction)) {
+        } else if (!exists(scientificForum, transaction)
+                ||  !ScienceFieldRepository.isScienceField(scienceField, transaction)) {
 
             l.severe("Forum (" + scientificForum.getId() + ") and editor ("
                     + scientificForum.getId() + ") must exist in order to be cease their relationship.");
@@ -597,46 +598,6 @@ public class ScientificForumRepository {
             l.severe("Forum (" + scientificForum.getId() + ") and editor ("
                     + scientificForum.getId() + ") relationship could not be dissolved.");
             throw new DataNotWrittenException(ex.getMessage(), ex);
-        }
-    }
-
-    // TODO move to UserRepo
-    private static boolean userExists(User user, Transaction transaction) {
-        if (user.getId() == null ) {
-            throw new InvalidFieldsException();
-        }
-
-        String sql = """
-                SELECT id 
-                FROM "user" 
-                WHERE id=?
-                """;
-
-        try (PreparedStatement preparedStatement = transaction.getConnection().prepareStatement(sql)) {
-            preparedStatement.setInt(1, user.getId());
-            return preparedStatement.executeQuery().next();
-        } catch (SQLException e) {
-            throw new DatasourceQueryFailedException(e.getMessage());
-        }
-    }
-
-    // TODO move to ScienceFieldRepo
-    private static boolean scienceFieldExists(ScienceField scienceField, Transaction transaction) {
-        if (scienceField.getName() == null ) {
-            throw new InvalidFieldsException();
-        }
-
-        String sql = """
-                SELECT name 
-                FROM science_field 
-                WHERE name=?
-                """;
-
-        try (PreparedStatement preparedStatement = transaction.getConnection().prepareStatement(sql)) {
-            preparedStatement.setString(1, scienceField.getName());
-            return preparedStatement.executeQuery().next();
-        } catch (SQLException e) {
-            throw new DatasourceQueryFailedException(e.getMessage(), e);
         }
     }
 }
