@@ -96,6 +96,9 @@ class UserRepositoryTest {
         }
     }
 
+    /**
+     * @author Sebastian Vogt
+     */
     @Test
     void testSetAvatarUserDoesNotExist() {
         User user = new User();
