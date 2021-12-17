@@ -81,7 +81,8 @@
                                                              title="#{help.forumName}"
                                                              required="true"
                                                              requiredMessage="#{message.requiredForForum}"
-                                                             styleClass="h4">
+                                                             styleClass="h4"
+                                                             size="37">
                                                     <f:validator validatorId="forumNameExistsValidator"/>
                                                 </h:inputText>
                                             </div>
@@ -92,7 +93,9 @@
                                                               value="#{scientificForumBacking.forum.name}"
                                                               rendered="#{!scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
                                                               tite="#{help.forumName}"
-                                                              styleClass="h4"/>
+                                                              styleClass="h4">
+                                                    <br/>
+                                                </h:outputText>
                                             </div>
                                             <div class="body">
 
@@ -105,9 +108,9 @@
                                                             rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
                                                             required="true"
                                                             requiredMessage="#{message.requiredForForum}"
-                                                            styleClass="h4"
                                                             tite="#{help.forumDesc}"
-                                                            rows="5"/>
+                                                            rows="10"
+                                                            cols="60"/>
                                                 </div>
 
                                                 <!-- alternative desc output for non editors -->
@@ -120,17 +123,21 @@
 
                                                 <hr/>
                                                 <!-- url -->
-                                                <div class="form-group">
+                                                <div class="form-group my-2">
+                                                    <h:outputText id="url-otxt"
+                                                                  value="#{labels.website}"
+                                                                  style="margin: 3px"
+                                                                  styleClass="text-muted"
+                                                                  rendered="#{scientificForumBacking.forum.url != null}"/>
                                                     <h:inputText id="change-url-itxt"
                                                                  value="#{scientificForumBacking.forum.url}"
                                                                  rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
                                                                  required="true"
+                                                                 size="60"
                                                                  requiredMessage="#{message.requiredForForum}"
                                                                  title="#{labels.forumURL}"/>
-                                                </div>
 
-                                                <!-- alternative url output for non editors -->
-                                                <div class="form-group">
+                                                    <!-- alternative url output for non editors -->
                                                     <h:outputLink value="#{scientificForumBacking.forum.url}"
                                                                   rendered="#{!scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
                                                                   title="#{help.forumURL}">
@@ -143,11 +150,14 @@
                                             <h:outputText id="deadline-submission-otxt"
                                                           value="#{labels.submissionDeadline}"
                                                           style="margin: 3px"
+                                                          styleClass="text-muted"
                                                           rendered="#{scientificForumBacking.forum.deadline != null}"/>
                                             <h:outputText id="date-review-deadline-otxt"
                                                           value="#{scientificForumBacking.forum.deadline}"
                                                           style="margin: 3px"
-                                                          title="#{help.forumDeadLine}">
+                                                          title="#{help.forumDeadLine}"
+                                                          rendered="#{(scientificForumBacking.forum.deadline != null)
+                                                          and (!scientificForumBacking.loggedInUserIsEditorOrAdmin())}">
                                                 <f:convertDateTime type="localDateTime"/>
                                             </h:outputText>
 
@@ -168,8 +178,8 @@
                                             <h:outputText id="reviewManual-otxt"
                                                           value="#{labels.reviewManual}"
                                                           style="margin: 3px"
+                                                          styleClass="text-muted"
                                                           rendered="#{scientificForumBacking.forum.reviewManual != null}"/>
-
                                             <h:commandButton id="review-manual-cbtn"
                                                              styleClass="btn btn-secondary"
                                                              value="#{labels.displayReviewManual}"
@@ -182,7 +192,25 @@
                                                       widgetVar="revMnDlg">
                                                 <div class="text-center">
                                                     <h:outputText id="review-manual-otxt"
-                                                                  value="#{scientificForumBacking.forum.reviewManual}"/>
+                                                                  value="#{scientificForumBacking.forum.reviewManual}"
+                                                                  rendered="#{!scientificForumBacking.loggedInUserIsEditorOrAdmin()}"/>
+                                                    <h:inputTextarea
+                                                            id="review-manual-itxt"
+                                                            value="#{scientificForumBacking.forum.reviewManual}"
+                                                            readonly="#{!scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
+                                                            rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
+                                                            required="true"
+                                                            requiredMessage="#{message.requiredForForum}"
+                                                            rows="10"
+                                                            cols="20"/>
+                                                </div>
+                                                <br/>
+                                                <div class="text-center">
+                                                    <h:commandButton styleClass="btn btn-primary"
+                                                                     id="save-review-manual-cbtn"
+                                                                     value="#{labels.save}"
+                                                                     rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
+                                                                     type="submit"/>
                                                 </div>
                                             </p:dialog>
 
@@ -242,13 +270,17 @@
                                                         #{editor.title}
                                                         #{editor.firstName}
                                                         #{editor.lastName}
+                                                    </h:column>
+                                                    <h:column>
+                                                        <f:facet name="header"/>
                                                         <h:commandButton id="delete-editor-cbtn"
                                                                          value="#{labels.deleteX}"
                                                                          styleClass="btn-secondary btn mx-2"
                                                                          type="submit"
                                                                          action="#{scientificForumBacking.removeEditor(editor)}"
                                                                          rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}">
-                                                            <f:ajax execute="editor-list-frm" render="editor-list-frm"/>
+                                                            <f:ajax execute="editor-list-frm"
+                                                                    render="editor-list-frm"/>
                                                         </h:commandButton>
                                                     </h:column>
                                                 </h:dataTable>

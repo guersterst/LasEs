@@ -227,6 +227,11 @@ public class ScientificForumBacking implements Serializable {
         forum = forumService.get(forum);
         editors = userService.getList(forum);
 
+        if (forum.getDeadline() != null) {
+            forumDeadLineInput = LocalDate.of(forum.getDeadline().getYear(), forum.getDeadline().getMonth(),
+                    forum.getDeadline().getDayOfMonth());
+        }
+
         allScienceFields = scienceFieldService.getList(new ResultListParameters());
         currentScieneFields = scienceFieldService.getList(forum, new ResultListParameters());
         allScienceFields.removeAll(currentScieneFields);
@@ -253,6 +258,7 @@ public class ScientificForumBacking implements Serializable {
      */
     public String deleteForum() {
         forumService.remove(forum);
+        //TODO
         //NavigationHandler navigationHandler = FacesContext.getCurrentInstance().getApplication().getNavigationHandler();
         //navigationHandler.handleNavigation();
         return "/views/authenticated/homepage.xhtml?faces-redirect=true";
@@ -308,7 +314,6 @@ public class ScientificForumBacking implements Serializable {
     public void submitChanges() {
         forumService.change(forum);
     }
-
 
     public Tab getTab() {
         return tab;
