@@ -108,6 +108,7 @@ xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
                                for="revision-deadline-itxt" styleClass="input-group"/>
                 <h:inputText id="revision-deadline-itxt" value="#{toolbarBacking.submission.deadlineRevision}"
                              title="#{help.addRevisionDeadline}">
+                    <f:validator validatorId="dateTimeInFuture"/>
                     <f:convertDateTime type="localDateTime"/>
                 </h:inputText>
                 <h:message for="revision-deadline-itxt" id="revision-requiered-msg"/>

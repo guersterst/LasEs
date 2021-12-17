@@ -160,22 +160,28 @@ public class ToolbarBacking implements Serializable {
 
         if (newReviewer != null) {
             logger.finest("Reviewer is an existing person.");
-        }
-
-        ReviewedBy reviewedBy = reviewedByInput.clone();
-        reviewedBy.setReviewerId(newReviewer.getId());
-        reviewedBy.setSubmissionId(submission.getId());
-        reviewedBy.setHasAccepted(AcceptanceStatus.NO_DECISION);
-
-        if (reviewer.containsKey(newReviewer)) {
-            submissionService.changeReviewedBy(reviewedBy);
-
-            reviewer.remove(newReviewer);
         } else {
-            submissionService.addReviewer(newReviewer, reviewedBy);
+            return;
         }
 
-        reviewer.put(newReviewer, reviewedBy);
+        if (submission.getAuthorId() != newReviewer.getId() || newReviewer.isAdmin()) {
+            ReviewedBy reviewedBy = reviewedByInput.clone();
+            reviewedBy.setReviewerId(newReviewer.getId());
+            reviewedBy.setSubmissionId(submission.getId());
+            reviewedBy.setHasAccepted(AcceptanceStatus.NO_DECISION);
+
+            if (reviewer.containsKey(newReviewer)) {
+                submissionService.changeReviewedBy(reviewedBy);
+
+                reviewer.remove(newReviewer);
+            } else {
+                submissionService.addReviewer(newReviewer, reviewedBy);
+            }
+
+            reviewer.put(newReviewer, reviewedBy);
+        } else {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("alreadyAuthor"), MessageCategory.WARNING));
+        }
 
     }
 
