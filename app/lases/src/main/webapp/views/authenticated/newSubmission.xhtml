@@ -52,9 +52,9 @@
                                         <h:outputLabel for="editor-slctom" value="#{labels.editor}"/><br/>
                                         <h:selectOneMenu id="editor-slctom" styleClass="btn btn-secondary dropdown-toggle"
                                                          value="#{newSubmissionBacking.newSubmission.editorId}">
-                                            <f:selectItems value="#{newSubmissionBacking.editors}" var="editor"
-                                                           itemLabel="#{editor.firstName.concat(' ').concat(editor.lastName)}"
-                                                           itemValue="#{editor.id}"/>
+                                            <f:selectItems value="#{newSubmissionBacking.editors}" var="item"
+                                                           itemLabel="#{item.firstName.concat(' ').concat(item.lastName)}"
+                                                           itemValue="#{item.id}"/>
                                         </h:selectOneMenu>
                                         <h:message for="editor-slctom"/>
                                     </div>

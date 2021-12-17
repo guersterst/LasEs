@@ -4,6 +4,7 @@ import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
 import de.lases.persistence.internal.ConfigReader;
 import de.lases.persistence.util.DatasourceUtil;
+import de.lases.persistence.util.TransientSQLExceptionChecker;
 import jakarta.enterprise.inject.spi.CDI;
 import org.postgresql.util.PSQLException;
 
@@ -154,9 +155,48 @@ public class ScientificForumRepository {
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
-    public static void add(ScientificForum scientificForum,
-                           Transaction transaction)
+    public static ScientificForum add(ScientificForum scientificForum,
+                                      Transaction transaction)
             throws DataNotWrittenException, KeyExistsException {
+        Connection conn = transaction.getConnection();
+        String sql = "INSERT INTO scientific_forum(name, description, url, review_manual, timestamp_deadline) " +
+                "VALUES (?, ?, ?, ?, ?)";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, scientificForum.getName());
+            ps.setString(2, scientificForum.getDescription());
+            ps.setString(3, scientificForum.getUrl());
+            ps.setString(4, scientificForum.getReviewManual());
+            if (scientificForum.getDeadline() != null) {
+                ps.setTimestamp(5, Timestamp.valueOf(scientificForum.getDeadline()));
+            } else {
+                ps.setTimestamp(5, null);
+            }
+
+            ps.executeUpdate();
+
+            // Return new ID.
+            try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    ScientificForum sf =  new ScientificForum();
+                    sf.setId(generatedKeys.getInt(1));
+                    return sf;
+                }
+                else {
+                    throw new SQLException("Creating forum failed, no ID obtained.");
+                }
+            }
+
+        } catch (SQLException e) {
+            if (e.getSQLState().equals("23505")) {
+                throw new KeyExistsException();
+            } else if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                throw new DataNotWrittenException();
+            } else {
+                transaction.abort();
+                throw new DataNotWrittenException();
+            }
+        }
     }
 
     /**
