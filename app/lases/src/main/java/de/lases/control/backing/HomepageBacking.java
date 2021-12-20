@@ -190,6 +190,26 @@ public class HomepageBacking implements SubmissionPaginationBacking {
         return submissionPagination;
     }
 
+    /**
+     * Get the options of the DateSelect enum as an array.
+     *
+     * @return Array of DateSelect.
+     */
+    @Override
+    public DateSelect[] getDateSelects() {
+        return DateSelect.values();
+    }
+
+    /**
+     * Get the options of the SubmissionState enum as an array.
+     *
+     * @return Array of SubmissionState.
+     */
+    @Override
+    public SubmissionState[] getSubmissionStates() {
+        return SubmissionState.values();
+    }
+
     @Override
     public String getForumName(Submission sub) {
         ScientificForum forum = new ScientificForum();

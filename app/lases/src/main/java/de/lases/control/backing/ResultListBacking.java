@@ -11,13 +11,14 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import java.io.Serial;
+import java.io.Serializable;
 
 /**
  * Backing bean for the result list.
  */
 @ViewScoped
 @Named
-public class ResultListBacking implements SubmissionPaginationBacking {
+public class ResultListBacking implements Serializable {
 
     @Serial
     private static final long serialVersionUID = -111481772034202599L;
@@ -96,22 +97,8 @@ public class ResultListBacking implements SubmissionPaginationBacking {
      *
      * @return The pagination for the submission submitted by the user.
      */
-    @Override
     public Pagination<Submission> getSubmissionPagination() {
         return submissionPagination;
-    }
-
-    /**
-     * Get the name of the scientific forum the provided submission was submitted into.
-     *
-     * @param sub The submission to which the forum name should be found.
-     * @return The name of the scientific forum the given submission was submitted into.
-     */
-    @Override
-    public String getForumName(Submission sub) {
-        ScientificForum forum = new ScientificForum();
-        forum.setId(sub.getScientificForumId());
-        return scientificForumService.get(forum).getName();
     }
 
     /**
