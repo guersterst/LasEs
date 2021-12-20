@@ -28,12 +28,13 @@
 
         <div class="row">
             <div class="col-md-3">
-                <h:panelGroup rendered="#{submissionBacking.admin || submissionBacking.loggedInUserIsEditor()}" style="background: lightblue">
+                <h:panelGroup id="toolbar"
+                              rendered="#{submissionBacking.admin || submissionBacking.loggedInUserIsEditor()}">
                     <ui:include src="/resources/templates/toolbar.xhtml"/>
                 </h:panelGroup>
             </div>
-            <div class="col-md-7">
-                <div class="container-fluid">
+            <div class="col-md-9">
+                <div class="container">
                     <div class="container" id="container-submission">
                         <div class="card" id="toolbox">
                             <div class="card-header">
@@ -173,7 +174,7 @@
                             </div>
                         </div>
                         <div id="paper-pagination">
-                            <div class="card">
+                            <div class="card" style="padding: 10px 10px 10px 10px">
                                 <h:form>
                                     <div class="btn-group">
                                         <h:selectOneMenu id="release-revision-slctom" styleClass="btn btn-secondary"
@@ -223,7 +224,8 @@
                                             <h:commandButton id="release-revision-cbtn" styleClass="btn btn-primary"
                                                              value="#{var.visible == true? labels.released : labels.notReleased}"
                                                              action="#{submissionBacking.releaseRevision(var)}"
-                                                             title="#{help.releaseBtn}" disabled="#{ (submissionBacking.viewerSubmitter and !submissionBacking.admin) || var.visible == true}"/>
+                                                             title="#{help.releaseBtn}"
+                                                             disabled="#{ (submissionBacking.viewerSubmitter and !submissionBacking.admin) || var.visible == true}"/>
                                         </h:column>
 
                                         <!--Download-->
@@ -250,7 +252,8 @@
                                     <div class="btn-group-justified">
                                         <h:panelGroup id="request-box" layout="block"
                                                       rendered="#{submissionBacking.loggedInUserHasPendingReviewRequest()}">
-                                            <h:outputText id="review-request-otxt" value="#{labels.reviewRequest}" style="margin: 3px"/>
+                                            <h:outputText id="review-request-otxt" value="#{labels.reviewRequest}"
+                                                          style="margin: 3px"/>
                                             <h:commandButton id="review-accept-cbtn" value="#{labels.acceptReviewReq}"
                                                              action="#{submissionBacking.acceptReviewing(sessionInformation.user)}"
                                                              style="margin: 3px"/>
@@ -258,8 +261,11 @@
                                                              action="#{submissionBacking.declineReviewing(sessionInformation.user)}"
                                                              style="margin: 3px"/>
                                         </h:panelGroup>
-                                        <h:outputText id="deadline-review-otxt" value="#{labels.reviewDeadline}" style="margin: 3px"/>
-                                        <h:outputText id="date-review-deadline-otxt" value="#{submissionBacking.getDeadlineForReviewer(sessionInformation.user)}" style="margin: 3px">
+                                        <h:outputText id="deadline-review-otxt" value="#{labels.reviewDeadline}"
+                                                      style="margin: 3px"/>
+                                        <h:outputText id="date-review-deadline-otxt"
+                                                      value="#{submissionBacking.getDeadlineForReviewer(sessionInformation.user)}"
+                                                      style="margin: 3px">
                                             <f:convertDateTime type="localDateTime"/>
                                         </h:outputText>
                                         <h:commandButton id="new-review-cbtn"
@@ -273,111 +279,133 @@
                         </div>
 
                         <div id="review-pagination" style="margin-top: 1cm;">
-                            <h2>#{labels.reviews}</h2>
                             <div class="card">
-                                <h:form>
-                                    <div class="btn-group">
-                                        <h:selectOneMenu id="released-review-slctom" styleClass="btn-secondary"
-                                                         value="#{submissionBacking.reviewPagination.resultListParameters.visibleFilter}"
-                                                         title="#{help.filterRelease}">
-                                            <f:selectItems value="#{submissionBacking.visibility}" var="visible" itemValue="#{visible}" itemLabel="#{labels['visibility.' += visible]}"/>
-                                        </h:selectOneMenu>
+                                <div class="card-header">
+                                    <h:outputText id="review-lbl" value="#{labels.reviews}" styleClass="h2"/>
+                                </div>
+                                <div class="card-body" style="padding: 10px 10px 10px 10px">
+                                    <h:form>
+                                        <div class="btn-group">
+                                            <h:selectOneMenu id="released-review-slctom" styleClass="btn-secondary"
+                                                             value="#{submissionBacking.reviewPagination.resultListParameters.visibleFilter}"
+                                                             title="#{help.filterRelease}">
+                                                <f:selectItems value="#{submissionBacking.visibility}" var="visible"
+                                                               itemValue="#{visible}"
+                                                               itemLabel="#{labels['visibility.' += visible]}"/>
+                                            </h:selectOneMenu>
 
-                                        <h:outputLabel for="recommended-review-slctom" value="#{''.concat(labels.recommended).concat(': ')}"/>
+                                            <h:outputLabel for="recommended-review-slctom"
+                                                           value="#{''.concat(labels.recommended).concat(': ')}"/>
 
-                                        <h:selectOneMenu id="recommended-review-slctom" styleClass="btn-secondary"
-                                                         value="#{submissionBacking.reviewPagination.resultListParameters.recommendedFilter}"
-                                                         title="#{help.filterRecom}">
-                                            <f:selectItems value="#{submissionBacking.recommendation}" var="recommended" itemValue="#{recommended}" itemLabel="#{labels['recommendation.' += recommended]}"/>
-                                        </h:selectOneMenu>
+                                            <h:selectOneMenu id="recommended-review-slctom" styleClass="btn-secondary"
+                                                             value="#{submissionBacking.reviewPagination.resultListParameters.recommendedFilter}"
+                                                             title="#{help.filterRecom}">
+                                                <f:selectItems value="#{submissionBacking.recommendation}"
+                                                               var="recommended" itemValue="#{recommended}"
+                                                               itemLabel="#{labels['recommendation.' += recommended]}"/>
+                                            </h:selectOneMenu>
 
-                                    </div>
-                                    <pg:pagination id="review-pg" paginator="#{submissionBacking.reviewPagination}">
+                                        </div>
+                                        <pg:pagination id="review-pg" paginator="#{submissionBacking.reviewPagination}">
 
-                                        <!--Version number-->
-                                        <h:column>
-                                            <f:facet name="header">
-                                                <ssc:sortsearchcolumn id="version-ssc" columnIdentifier="version"
-                                                                      paginator="#{submissionBacking.reviewPagination}"
-                                                                      columnNamei18n="#{labels.versionCol}"/>
-                                            </f:facet>
-                                            <h:outputText id="version-review-otxt" value="#{var.paperVersion}"/>
-                                        </h:column>
+                                            <!--Version number-->
+                                            <h:column>
+                                                <f:facet name="header">
+                                                    <ssc:sortsearchcolumn id="version-ssc" columnIdentifier="version"
+                                                                          paginator="#{submissionBacking.reviewPagination}"
+                                                                          columnNamei18n="#{labels.versionCol}"/>
+                                                </f:facet>
+                                                <h:outputText id="version-review-otxt" value="#{var.paperVersion}"/>
+                                            </h:column>
 
-                                        <!-- Reviewer Lastname -->
-                                        <h:column>
-                                            <f:facet name="header">
-                                                <ssc:sortsearchcolumn id="reviewer-ssc" columnIdentifier="lastname"
-                                                                      paginator="#{submissionBacking.reviewPagination}"
-                                                                      columnNamei18n="#{labels.reviewer}"/>
-                                            </f:facet>
-                                            <h:link value="#{submissionBacking.getReviewerForReview(var).lastName}"
-                                                    outcome="#{'/views/authenticated/profile.xhtml?id='.concat(submissionBacking.getReviewerForReview(var).id)}"/>
-                                        </h:column>
+                                            <!-- Reviewer Lastname -->
+                                            <h:column>
+                                                <f:facet name="header">
+                                                    <ssc:sortsearchcolumn id="reviewer-ssc" columnIdentifier="lastname"
+                                                                          paginator="#{submissionBacking.reviewPagination}"
+                                                                          columnNamei18n="#{labels.reviewer}"/>
+                                                </f:facet>
+                                                <h:link value="#{submissionBacking.getReviewerForReview(var).lastName}"
+                                                        outcome="#{'/views/authenticated/profile.xhtml?id='.concat(submissionBacking.getReviewerForReview(var).id)}"/>
+                                            </h:column>
 
-                                        <!--Upload Timestamp-->
-                                        <h:column>
-                                            <f:facet name="header">
-                                                <div class="input-group">
-                                                    <h:commandLink id="date-review-col" value="#{labels.uploadCol}" action="#{submissionBacking.reviewPagination.sortBy('timestamp_upload')}" styleClass="input-group-text"/>
+                                            <!--Upload Timestamp-->
+                                            <h:column>
+                                                <f:facet name="header">
+                                                    <div class="input-group">
+                                                        <h:commandLink id="date-review-col" value="#{labels.uploadCol}"
+                                                                       action="#{submissionBacking.reviewPagination.sortBy('timestamp_upload')}"
+                                                                       styleClass="input-group-text"/>
+                                                    </div>
+                                                </f:facet>
+                                                <h:outputText id="date-review-otxt" value="#{var.uploadTime}">
+                                                    <f:convertDateTime type="localDateTime"/>
+                                                </h:outputText>
+                                            </h:column>
+
+                                            <!--Visible state-->
+                                            <h:column
+                                                    rendered="#{submissionBacking.loggedInUserIsEditor() || submissionBacking.loggedInUserIsReviewer()}">
+                                                <f:facet name="header">
+                                                    <div class="input-group">
+                                                        <h:commandLink id="visible-state-review-col"
+                                                                       value="#{labels.stateCol}"
+                                                                       action="#{submissionBacking.reviewPagination.sortBy('is_visible')}"
+                                                                       styleClass="input-group-text"/>
+                                                    </div>
+                                                </f:facet>
+                                                <h:commandButton id="set-visible-cbtn" styleClass="btn btn-primary"
+                                                                 value="#{var.visible ? labels.released : labels.notReleased}"
+                                                                 action="#{submissionBacking.releaseReview(var)}"
+                                                                 title="#{help.releaseBtn}"
+                                                                 disabled="#{!submissionBacking.loggedInUserIsEditor()}"/>
+                                            </h:column>
+
+                                            <!--recommended checkbox-->
+                                            <h:column
+                                                    rendered="#{submissionBacking.loggedInUserIsEditor() || submissionBacking.loggedInUserIsReviewer()}">
+                                                <f:facet name="header">
+                                                    <div class="input-group">
+                                                        <h:commandLink id="recommended-state-review-col"
+                                                                       value="#{labels.recommended}"
+                                                                       action="#{submissionBacking.reviewPagination.sortBy('is_recommended')}"
+                                                                       styleClass="input-group-text"/>
+                                                    </div>
+                                                </f:facet>
+                                                <div class="checkbox">
+                                                    <h:selectBooleanCheckbox id="cbx-is-recommended"
+                                                                             styleClass="recomm-cbx"
+                                                                             value="#{var.acceptPaper}" disabled="true"
+                                                                             style="width: 1.5rem; height: 1.5rem;"/>
                                                 </div>
-                                            </f:facet>
-                                            <h:outputText id="date-review-otxt" value="#{var.uploadTime}">
-                                                <f:convertDateTime type="localDateTime"/>
-                                            </h:outputText>
-                                        </h:column>
+                                            </h:column>
 
-                                        <!--Visible state-->
-                                        <h:column
-                                                rendered="#{submissionBacking.loggedInUserIsEditor() || submissionBacking.loggedInUserIsReviewer()}">
-                                            <f:facet name="header">
-                                                <div class="input-group">
-                                                    <h:commandLink id="visible-state-review-col"
-                                                                   value="#{labels.stateCol}"
-                                                                   action="#{submissionBacking.reviewPagination.sortBy('is_visible')}"
-                                                                   styleClass="input-group-text"/>
-                                                </div>
-                                            </f:facet>
-                                            <h:commandButton id="set-visible-cbtn" styleClass="btn btn-primary"
-                                                             value="#{var.visible ? labels.released : labels.notReleased}"
-                                                             action="#{submissionBacking.releaseReview(var)}"
-                                                             title="#{help.releaseBtn}"
-                                                             disabled="#{!submissionBacking.loggedInUserIsEditor()}"/>
-                                        </h:column>
+                                            <!--comment-->
+                                            <h:column>
+                                                <f:facet name="header">
+                                                    <ssc:sortsearchcolumn id="comment-ssc" columnIdentifier="comment"
+                                                                          paginator="#{submissionBacking.reviewPagination}"
+                                                                          columnNamei18n="#{labels.comment}"/>
+                                                </f:facet>
+                                                <h:outputText id="comment-review-otxt" value="#{var.comment}"/>
+                                            </h:column>
 
-                                        <!--recommended checkbox-->
-                                        <h:column rendered="#{submissionBacking.loggedInUserIsEditor() || submissionBacking.loggedInUserIsReviewer()}">
-                                            <f:facet name="header">
-                                                <div class="input-group">
-                                                    <h:commandLink id="recommended-state-review-col" value="#{labels.recommended}" action="#{submissionBacking.reviewPagination.sortBy('is_recommended')}" styleClass="input-group-text"/>
-                                                </div>
-                                            </f:facet>
-                                            <div class="checkbox">
-                                                <h:selectBooleanCheckbox id="cbx-is-recommended" styleClass="recomm-cbx" value="#{var.acceptPaper}" disabled="true" style="width: 1.5rem; height: 1.5rem;"/>
-                                            </div>
-                                        </h:column>
-
-                                        <!--comment-->
-                                        <h:column>
-                                            <f:facet name="header">
-                                                <ssc:sortsearchcolumn id="comment-ssc" columnIdentifier="comment"
-                                                                      paginator="#{submissionBacking.reviewPagination}"
-                                                                      columnNamei18n="#{labels.comment}"/>
-                                            </f:facet>
-                                            <h:outputText id="comment-review-otxt" value="#{var.comment}"/>
-                                        </h:column>
-
-                                        <!--Download-->
-                                        <h:column>
-                                            <f:facet name="header">
-                                                <div class="input-group">
-                                                    <h:outputText id="download-review-col" value="#{labels.downloadCol}" styleClass="input-group-text"/>
-                                                </div>
-                                            </f:facet>
-                                            <h:commandButton id="download-review-btn" styleClass="btn btn-primary" value="#{labels.downloadCol}" action="#{submissionBacking.downloadReview(var)}"/>
-                                        </h:column>
-                                    </pg:pagination>
-                                </h:form>
+                                            <!--Download-->
+                                            <h:column>
+                                                <f:facet name="header">
+                                                    <div class="input-group">
+                                                        <h:outputText id="download-review-col"
+                                                                      value="#{labels.downloadCol}"
+                                                                      styleClass="input-group-text"/>
+                                                    </div>
+                                                </f:facet>
+                                                <h:commandButton id="download-review-btn" styleClass="btn btn-primary"
+                                                                 value="#{labels.downloadCol}"
+                                                                 action="#{submissionBacking.downloadReview(var)}"/>
+                                            </h:column>
+                                        </pg:pagination>
+                                    </h:form>
+                                </div>
                             </div>
                         </div>
                     </div>
