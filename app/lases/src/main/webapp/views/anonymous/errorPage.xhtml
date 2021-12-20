@@ -1,7 +1,8 @@
 <ui:composition template="/resources/templates/main.xhtml"
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
 
 
     <ui:define name="title"><h:outputText value="#{labels['errorPage.title']}"/></ui:define>
@@ -15,9 +16,8 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <h:outputLink value="#" styleClass="btn btn-primary"
-                            rendered="#{errorPageBacking.developmentMode}" data-bs-toggle="collapse"
-                            data-bs-target="#collapseStackTrace">
+                    <h:outputLink value="#collapseStackTrace" styleClass="btn btn-primary"
+                            rendered="#{errorPageBacking.developmentMode}" role="button" a:data-bs-toggle="collapse">
                         #{labels['errorPage.toggleStackTrace']}
                     </h:outputLink>
                     <div class="collapse" id="collapseStackTrace">
