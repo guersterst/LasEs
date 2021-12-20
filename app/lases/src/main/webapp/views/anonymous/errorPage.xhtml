@@ -11,13 +11,15 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <h:outputText id="error-message-otxt" value="#{errorPageBacking.errorMessage.message}"/>
+                    <h:outputText id="error-message-otxt" value="#{errorPageBacking.errorMessage.message}"
+                                  styleClass="h2"/>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
                     <h:outputLink value="#collapseStackTrace" styleClass="btn btn-primary"
-                            rendered="#{errorPageBacking.developmentMode}" role="button" a:data-bs-toggle="collapse">
+                                  rendered="#{errorPageBacking.developmentMode}" role="button"
+                                  a:data-bs-toggle="collapse">
                         #{labels['errorPage.toggleStackTrace']}
                     </h:outputLink>
                     <div class="collapse" id="collapseStackTrace">
