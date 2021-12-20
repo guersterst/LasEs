@@ -2,7 +2,6 @@ package de.lases.control.backing;
 
 import de.lases.business.internal.ConfigPropagator;
 import de.lases.global.transport.ErrorMessage;
-import de.lases.global.transport.UIMessage;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -21,10 +20,23 @@ public class ErrorPageBacking {
     private ErrorMessage errorMessage;
 
     /**
-     * Initialize the error message dto.
+     * Check if the error message is initialized.
      */
     @PostConstruct
-    public void init() {
+    public void init() throws IllegalAccessException {
+        ////////////////// TODO: Remove this when the exception handler is ready //////////////////
+        Exception e;
+        try {
+            throw new IllegalAccessException("ErrorPageBacking.init() test");
+        } catch (IllegalAccessException ex) {
+            e = ex;
+        }
+        errorMessage = new ErrorMessage(e.getMessage(), e.getStackTrace().toString());
+        //////////////////////////// TODO: END ////////////////////////////////////////////////////
+
+        if (errorMessage == null) {
+            throw new IllegalAccessException("ErrorPageBacking must be initialized with an error message.");
+        }
     }
 
     /**
@@ -55,6 +67,6 @@ public class ErrorPageBacking {
      * @return Is the app in development mode?
      */
     public boolean isDevelopmentMode() {
-        return true;
+        return configPropagator.getProperty("DEBUG_AND_TEST_MODE").equals("true");
     }
 }
