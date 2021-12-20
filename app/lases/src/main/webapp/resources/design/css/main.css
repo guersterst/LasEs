@@ -3,3 +3,7 @@
     padding-top: 100px;
     padding-bottom: 100px;
 }
+
+.card, #navigation {
+    box-shadow: 7px 5px 5px #9b9898;
+}

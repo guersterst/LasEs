@@ -11,8 +11,9 @@
 
     <ui:define name="content">
         <div class="p-5 text-center bg-light">
-            <h1 id="welcome-heading-otxt" class="mb-3">#{welcomeBacking.systemSettings.headlineWelcomePage}</h1>
-            <h4 id="welcome-otxt" class="mb-3">#{welcomeBacking.systemSettings.messageWelcomePage}</h4>
+            <h:outputText id="welcome-heading-otxt" value="#{welcomeBacking.systemSettings.headlineWelcomePage}" styleClass="mb-3 h1"/>
+            <br/>
+            <h:outputText id="welcome-otxt" value="#{welcomeBacking.systemSettings.messageWelcomePage}" escape="false" styleClass="mb-3"/>
         </div>
 
         <div class="col d-flex justify-content-center">
@@ -36,7 +37,7 @@
                         <div class="form-group">
                             <br/>
                             <h:commandButton id="login-cbtn" value="#{labels.login}" action="#{welcomeBacking.login()}"
-                                             title="#{labels.login}"/>
+                                             title="#{labels.login}" styleClass="btn btn-primary"/>
                         </div>
                     </h:form>
                 </div>
@@ -45,7 +46,7 @@
                     <h:form>
                         <h:commandButton id="register-cbtn" value="#{labels.register}"
                                          action="#{welcomeBacking.goToRegister()}"
-                                         title="#{help.goToRegister}"/>
+                                         title="#{help.goToRegister}" styleClass="btn btn-primary"/>
                     </h:form>
                 </div>
             </div>
