@@ -4,8 +4,11 @@ import de.lases.business.internal.ConfigPropagator;
 import de.lases.global.transport.ErrorMessage;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+
+import java.util.PropertyResourceBundle;
 
 /**
  * Backing bean for the error page.
@@ -15,7 +18,13 @@ import jakarta.inject.Named;
 public class ErrorPageBacking {
 
     @Inject
+    private FacesContext facesContext;
+
+    @Inject
     private ConfigPropagator configPropagator;
+
+    @Inject
+    private PropertyResourceBundle bundle;
 
     private ErrorMessage errorMessage;
 
@@ -23,19 +32,17 @@ public class ErrorPageBacking {
      * Check if the error message is initialized.
      */
     @PostConstruct
-    public void init() throws IllegalAccessException {
-        ////////////////// TODO: Remove this when the exception handler is ready //////////////////
-        Exception e;
-        try {
-            throw new IllegalAccessException("ErrorPageBacking.init() test");
-        } catch (IllegalAccessException ex) {
-            e = ex;
-        }
-        errorMessage = new ErrorMessage(e.getMessage(), e.getStackTrace().toString());
-        //////////////////////////// TODO: END ////////////////////////////////////////////////////
-
+    public void init() {
+        int errorStatusCode = (Integer) facesContext.getExternalContext().getRequestMap()
+                .get("jakarta.servlet.error.status_code");
+        String requestErrorMessage = (String) facesContext.getExternalContext().getRequestMap()
+                .get("jakarta.servlet.error.message");
         if (errorMessage == null) {
-            throw new IllegalAccessException("ErrorPageBacking must be initialized with an error message.");
+            if (errorStatusCode == 404) {
+                errorMessage = new ErrorMessage(bundle.getString("error.404"), requestErrorMessage);
+            } else if (errorStatusCode == 500) {
+                errorMessage = new ErrorMessage(bundle.getString("error.500"), requestErrorMessage);
+            }
         }
     }
 
