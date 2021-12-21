@@ -50,9 +50,12 @@ public class DatasourceUtil {
                 """;
 
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
+            l.info("Cleaning up verifications.");
             statement.executeUpdate();
+            transaction.commit();
         } catch (SQLException e) {
             logSQLException(e, l);
+            transaction.abort();
             throw new DatasourceQueryFailedException("Could not clean up verifications.", e);
         }
     }
