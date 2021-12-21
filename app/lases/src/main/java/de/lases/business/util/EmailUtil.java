@@ -49,6 +49,8 @@ public class EmailUtil {
             delimiter = "&";
         }
         if (body != null) {
+            // mailto links use \r\n as line endings
+            body = body.replaceAll("([^\\r])\\n", "$1\r\n");
             mailto += delimiter + "body=" + URLEncoder.encode(body, StandardCharsets.UTF_8);
             delimiter = "&";
         }
