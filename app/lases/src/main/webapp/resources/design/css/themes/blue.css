@@ -83,9 +83,9 @@ Navigation
 Setting for buttons.
  */
 .btn-primary {
-    background-color: #6783f5;
+    background-color: #84b8fc;
     text-decoration-color: white;
-    border-color: #6783f5;
+    border-color: #84b8fc;
 }
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active{
@@ -105,8 +105,8 @@ Buttons for pagination.
  */
 .page-link {
     background-color: white;
-    color: lightblue;
-    border-color: lightblue;
+    color: #84b8fc;
+    border-color: #84b8fc;
 }
 
 .active, .page-link:hover {
@@ -172,7 +172,7 @@ Profile styling
 }
 
 #toolbar > .card-body {
-    background-color: #94c4fa;
+    background-color: #c7ddf5;
 }
 
 

@@ -171,4 +171,8 @@ Profile styling
     color: white;
 }
 
+#toolbar > .card-body {
+    background-color: #f5d2c7;
+}
+
 
