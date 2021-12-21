@@ -34,5 +34,11 @@ public interface SubmissionPaginationBacking extends Serializable {
         return SubmissionState.values();
     }
 
+    /**
+     * Get the name of the forum the provided submission is part of.
+     *
+     * @param sub The submission to which the forum name should be received.
+     * @return The name of the scientific forum the given submission was submitted into.
+     */
     String getForumName(Submission sub);
 }

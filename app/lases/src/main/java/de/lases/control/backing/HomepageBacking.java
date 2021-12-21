@@ -24,8 +24,6 @@ public class HomepageBacking implements SubmissionPaginationBacking {
     @Serial
     private static final long serialVersionUID = -3666609342938323378L;
 
-
-
     private enum Tab {
         OWN_SUBMISSIONS, SUBMISSIONS_TO_EDIT, SUBMISSIONS_TO_REVIEW;
     }
@@ -190,6 +188,12 @@ public class HomepageBacking implements SubmissionPaginationBacking {
         return submissionPagination;
     }
 
+    /**
+     * Get the name of the forum the provided submission is part of.
+     *
+     * @param sub The submission to which the forum name should be received.
+     * @return The name of the scientific forum the given submission was submitted into.
+     */
     @Override
     public String getForumName(Submission sub) {
         ScientificForum forum = new ScientificForum();
