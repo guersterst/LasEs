@@ -21,14 +21,18 @@ public interface SubmissionPaginationBacking extends Serializable {
      *
      * @return Array of DateSelect.
      */
-    DateSelect[] getDateSelects();
+    default DateSelect[] getDateSelects() {
+        return DateSelect.values();
+    }
 
     /**
      * Get the options of the SubmissionState enum as an array.
      *
      * @return Array of SubmissionState.
      */
-    SubmissionState[] getSubmissionStates();
+    default SubmissionState[] getSubmissionStates() {
+        return SubmissionState.values();
+    }
 
     /**
      * Get the name of the forum the provided submission is part of.
