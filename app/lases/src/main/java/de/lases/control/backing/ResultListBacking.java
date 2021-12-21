@@ -12,6 +12,8 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import java.io.Serial;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Backing bean for the result list.
@@ -56,6 +58,8 @@ public class ResultListBacking implements SubmissionPaginationBacking {
 
     private User user;
 
+    private String searchWord;
+
     /**
      * Initialize the dtos and load data from the datasource where possible.
      * Create objects for:
@@ -98,6 +102,9 @@ public class ResultListBacking implements SubmissionPaginationBacking {
     @PostConstruct
     public void init() {
         user = sessionInformation.getUser();
+    }
+
+    public void onLoad() {
         showOwnSubmissionsTab();
     }
 
@@ -119,6 +126,7 @@ public class ResultListBacking implements SubmissionPaginationBacking {
                         getResultListParameters()) / itemsPerPage);
             }
         };
+        submissionPagination.getResultListParameters().setGlobalSearchWord(searchWord);
         tab = Tab.OWN_SUBMISSIONS;
         submissionPagination.loadData();
     }
@@ -142,6 +150,7 @@ public class ResultListBacking implements SubmissionPaginationBacking {
                         getResultListParameters()) / itemsPerPage);
             }
         };
+        submissionPagination.getResultListParameters().setGlobalSearchWord(searchWord);
         tab = Tab.SUBMISSIONS_TO_EDIT;
         submissionPagination.loadData();
     }
@@ -165,6 +174,7 @@ public class ResultListBacking implements SubmissionPaginationBacking {
                         getResultListParameters()) / itemsPerPage);
             }
         };
+        submissionPagination.getResultListParameters().setGlobalSearchWord(searchWord);
         tab = Tab.SUBMISSIONS_TO_REVIEW;
         submissionPagination.loadData();
     }
@@ -218,26 +228,6 @@ public class ResultListBacking implements SubmissionPaginationBacking {
     }
 
     /**
-     * Get the options of the DateSelect enum as an array.
-     *
-     * @return Array of DateSelect.
-     */
-    @Override
-    public DateSelect[] getDateSelects() {
-        return DateSelect.values();
-    }
-
-    /**
-     * Get the options of the SubmissionState enum as an array.
-     *
-     * @return Array of SubmissionState.
-     */
-    @Override
-    public SubmissionState[] getSubmissionStates() {
-        return SubmissionState.values();
-    }
-
-    /**
      * Get the name of the forum the provided submission is part of.
      *
      * @param sub The submission to which the forum name should be received.
@@ -268,6 +258,16 @@ public class ResultListBacking implements SubmissionPaginationBacking {
      * @param searchWord The search word.
      */
     public void setSearchWord(String searchWord) {
-        submissionPagination.getResultListParameters().setGlobalSearchWord(searchWord);
+        this.searchWord = searchWord;
     }
+
+    /**
+     * Get the global search word to search for.
+     *
+     * @returns The search word.
+     */
+    public String getSearchWord() {
+        return searchWord;
+    }
+
 }

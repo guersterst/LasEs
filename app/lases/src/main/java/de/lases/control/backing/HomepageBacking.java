@@ -24,8 +24,6 @@ public class HomepageBacking implements SubmissionPaginationBacking {
     @Serial
     private static final long serialVersionUID = -3666609342938323378L;
 
-
-
     private enum Tab {
         OWN_SUBMISSIONS, SUBMISSIONS_TO_EDIT, SUBMISSIONS_TO_REVIEW;
     }

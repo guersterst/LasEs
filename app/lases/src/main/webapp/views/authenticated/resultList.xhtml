@@ -12,7 +12,9 @@
 <ui:define name="content">
 
     <f:metadata>
-        <f:viewAction action="#{resultListBacking.submissionPagination.loadData}"/>
+        <f:viewAction action="#{resultListBacking.onLoad()}"/>
+        <f:viewParam value="#{resultListBacking.searchWord}"
+                     name="search-word"/>
     </f:metadata>
 
     <div class="container">
