@@ -1,3 +1,178 @@
+/*
+Main css.
+ */
 #page {
-    background: lightcyan;
+    background: rgba(206, 245, 244, 0.65);
 }
+
+/*
+Css for footer.
+ */
+#footer {
+    background-color: #418ef3;
+    color: white;
+}
+
+/*
+Navigation
+ */
+.navbar {
+    background-color: #418ef3;
+}
+.navbar .navbar-brand {
+    color: #ecf0f1;
+}
+.navbar .navbar-brand:hover,
+.navbar .navbar-brand:focus {
+    color: #bbddff;
+}
+.navbar .navbar-text {
+    color: #ecf0f1;
+}
+.navbar .navbar-text a {
+    color: lightblue;
+}
+.navbar .navbar-text a:hover,
+.navbar .navbar-text a:focus {
+    color: lightblue;
+}
+.navbar .navbar-nav .nav-link {
+    color: white;
+    border-radius: .25rem;
+    margin: 0 0.25em;
+}
+.navbar .navbar-nav .nav-link:not(.disabled):hover,
+.navbar .navbar-nav .nav-link:not(.disabled):focus {
+    color: lightblue;
+}
+.navbar .navbar-nav .nav-item.active .nav-link,
+.navbar .navbar-nav .nav-item.active .nav-link:hover,
+.navbar .navbar-nav .nav-item.active .nav-link:focus,
+.navbar .navbar-nav .nav-item.show .nav-link,
+.navbar .navbar-nav .nav-item.show .nav-link:hover,
+.navbar .navbar-nav .nav-item.show .nav-link:focus {
+    color: lightblue;
+    background-color: #2b82c0;
+}
+.navbar .navbar-collapse,
+.navbar .navbar-form {
+    border-color: white;
+}
+.navbar .navbar-link {
+    color: white;
+}
+.navbar .navbar-link:hover {
+    color: lightblue;
+}
+
+.navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item {
+    color: #ecf0f1;
+}
+.navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item:hover,
+.navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item:focus {
+    color: lightblue;
+}
+.navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item.active {
+    color: lightblue;
+    background-color: #418ef3;
+}
+
+
+
+/*
+Setting for buttons.
+ */
+.btn-primary {
+    background-color: #6783f5;
+    text-decoration-color: white;
+    border-color: #6783f5;
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active{
+    background-color: #94c4fa;
+    color: white;
+    border-color: #94c4fa;
+}
+
+.btn-primary:disabled {
+    background-color: #94c4fa;
+    color: white;
+    border-color: #94c4fa;
+}
+
+/*
+Buttons for pagination.
+ */
+.page-link {
+    background-color: white;
+    color: lightblue;
+    border-color: lightblue;
+}
+
+.active, .page-link:hover {
+    background-color: #94c4fa;
+    color: white;
+    border-color: #94c4fa;
+}
+
+/*
+Tabs for homepage.
+ */
+#tabs {
+    background-color: #94c4fa;
+}
+
+#tabs> .nav-item {
+    text-decoration: none;
+    color: white;
+}
+
+#tabs> .nav-item:active {
+    text-decoration: none;
+    color: black;
+}
+
+/*
+Style all links
+ */
+a {
+    color: #418ef3;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #94c4fa;
+    text-decoration: none;
+}
+
+#impressum-lnk {
+    color: white;
+}
+
+#impressum-lnk:hover {
+    color: #94c4fa;
+}
+
+.nav-item > a {
+    color: white;
+    border-color: white;
+}
+
+.nav-item > a:hover {
+    color: white;
+    border-color: white;
+}
+
+/*
+Profile styling
+ */
+.card-header {
+    background-color: #94c4fa;
+    color: white;
+}
+
+#toolbar > .card-body {
+    background-color: #94c4fa;
+}
+
+

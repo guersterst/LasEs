@@ -4,11 +4,10 @@
         xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <footer class="bg-light text-center fixed-bottom">
         <div class="text-center p-3" id="footer">
-            <h:link
+            <h:link id="impressum-lnk"
                     value="#{labels.imprint}"
                     outcome="/views/anonymous/imprint"
-                    title="#{help.imprint}"
-                    styleClass="text-dark"/>
+                    title="#{help.imprint}"/>
             <h:outputText
                     value="#{labels.languageForward += labels.language}"
                     styleClass="mx-5"/>

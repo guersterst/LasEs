@@ -11,6 +11,6 @@ Pagination
     margin: 10px 10px 10px 10px;
 }
 
-.card, #navigation {
+.card, #navigation, #toolbar > .card {
     box-shadow: 7px 5px 5px #9b9898;
 }

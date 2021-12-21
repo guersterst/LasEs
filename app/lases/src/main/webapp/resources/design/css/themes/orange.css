@@ -101,6 +101,21 @@ Setting for buttons.
 }
 
 /*
+Buttons for pagination.
+ */
+.page-link {
+    background-color: white;
+    color: lightsalmon;
+    border-color: lightsalmon;
+}
+
+.active, .page-link:hover {
+    background-color: #fab194;
+    color: white;
+    border-color: #fab194;
+}
+
+/*
 Tabs for homepage.
  */
 #tabs {
@@ -116,3 +131,44 @@ Tabs for homepage.
     text-decoration: none;
     color: black;
 }
+
+/*
+Style all links
+ */
+a {
+    color: #f37041;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #fab194;
+    text-decoration: none;
+}
+
+#impressum-lnk {
+    color: white;
+}
+
+#impressum-lnk:hover {
+    color: #fab194;
+}
+
+.nav-item > a {
+    color: white;
+    border-color: white;
+}
+
+.nav-item > a:hover {
+    color: white;
+    border-color: white;
+}
+
+/*
+Profile styling
+ */
+.card-header {
+    background-color: #fab194;
+    color: white;
+}
+
+
