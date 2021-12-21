@@ -19,7 +19,7 @@ import java.io.Serializable;
  */
 @ViewScoped
 @Named
-public class HomepageBacking implements Serializable {
+public class HomepageBacking implements SubmissionPaginationBacking {
 
     @Serial
     private static final long serialVersionUID = -3666609342938323378L;
@@ -185,28 +185,12 @@ public class HomepageBacking implements Serializable {
      *
      * @return The pagination for the submissions submitted by the user.
      */
+    @Override
     public Pagination<Submission> getSubmissionPagination() {
         return submissionPagination;
     }
 
-    /**
-     * Get the options of the DateSelect enum as an array.
-     *
-     * @return Array of DateSelect.
-     */
-    public DateSelect[] getDateSelects() {
-        return DateSelect.values();
-    }
-
-    /**
-     * Get the options of the SubmissionState enum as an array.
-     *
-     * @return Array of SubmissionState.
-     */
-    public SubmissionState[] getSubmissionStates() {
-        return SubmissionState.values();
-    }
-
+    @Override
     public String getForumName(Submission sub) {
         ScientificForum forum = new ScientificForum();
         forum.setId(sub.getScientificForumId());

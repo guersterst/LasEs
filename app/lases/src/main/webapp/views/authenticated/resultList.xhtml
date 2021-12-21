@@ -1,0 +1,23 @@
+<ui:composition template="/resources/templates/main.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<!-- Page title -->
+<ui:define name="title">#{labels['homePage.title']}</ui:define>
+
+<!-- Content of homepage.xhtml -->
+<ui:define name="content">
+
+    <f:metadata>
+        <f:viewAction action="#{homepageBacking.submissionPagination.loadData}"/>
+    </f:metadata>
+
+    <div class="container">
+        <ui:insert name="submission-lists">
+            <ui:include src="homepage.xhtml"/>
+        </ui:insert>
+    </div>
+</ui:define>
+
+</ui:composition>
