@@ -1,21 +1,16 @@
 package de.lases.business.service;
 
-import de.lases.business.util.AvatarUtil;
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.DataNotWrittenException;
 import de.lases.persistence.exception.InvalidFieldsException;
 import de.lases.persistence.exception.NotFoundException;
-import de.lases.global.transport.ConnectionState;
-import de.lases.global.transport.FileDTO;
-import de.lases.global.transport.SystemSettings;
 import de.lases.persistence.repository.SystemSettingsRepository;
 import de.lases.persistence.repository.Transaction;
+import de.lases.persistence.util.DatasourceUtil;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
-import jakarta.enterprise.inject.spi.CDI;
 import jakarta.inject.Inject;
 
-import java.io.IOException;
 import java.util.PropertyResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -78,13 +73,14 @@ public class CustomizationService {
      * Initiates the creation of the datasource's schema.
      */
     public void createDataSourceSchema() {
+        DatasourceUtil.createDatasource();
     }
 
     /**
      * @return The current state of the database connection.
      */
     public ConnectionState getConnectionState() {
-        return null;
+        return DatasourceUtil.testDatasourceConnection();
     }
 
     /**

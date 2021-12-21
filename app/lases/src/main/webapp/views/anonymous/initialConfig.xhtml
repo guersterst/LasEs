@@ -1,0 +1,40 @@
+<ui:composition template="/resources/templates/main.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <ui:define name="title">#{labels.configuration}</ui:define>
+
+    <ui:define name="content">
+        <div class="container">
+            <div class="card">
+                <div class="card-body">
+                    <h:form>
+                        <div class="form-group">
+                            <h:outputLabel value="Connection State Information: " for="connection-bool-otxt"
+                                           styleClass="form-label"/>
+                            <h:outputText id="connection-bool-otxt"
+                                          value="#{'Connection successful: '.concat(initialConfigBacking.connectionState.successfullyConnected)}"
+                                          styleClass="form-control"/>
+                            <h:outputText id="connection-state-otxt"
+                                          value="#{'Connection State: '.concat(initialConfigBacking.connectionState.errorMessage)}"
+                                          styleClass="form-control"/>
+                        </div>
+                        <br/>
+                        <div class="form-group">
+                            <h:outputLabel for="create-btn" value="Create datasource and start application:"
+                                           styleClass="form-label"/>
+                            <div class="btn-group">
+                                <h:commandButton value="Create Datasource"
+                                                 action="#{initialConfigBacking.createDatasource()}"
+                                                 id="create-btn" styleClass="btn btn-primary"
+                                                 disabled="#{!initialConfigBacking.connectionState.successfullyConnected}"/>
+                            </div>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>

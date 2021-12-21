@@ -73,25 +73,41 @@ public class DatasourceUtil {
      * @return the connection state of the datasource.
      */
     public static ConnectionState testDatasourceConnection() {
-        return null;
+        Transaction transaction = new Transaction();
+        Connection conn = transaction.getConnection();
+
+        ConnectionState connectionState = new ConnectionState();
+        connectionState.setSuccessfullyConnected(false);
+        connectionState.setErrorMessage("Connected");
+
+        try {
+            connectionState.setSuccessfullyConnected(conn.isValid(10));
+        } catch (SQLException e) {
+            connectionState.setErrorMessage(e.getMessage());
+            logSQLException(e, l);
+        } finally {
+            transaction.abort();
+        }
+
+        return connectionState;
     }
 
     /**
      * Log the contents of an SQL exception.
      *
      * @param sqlException An sql exception.
-     * @param logger The logger to user.
+     * @param logger       The logger to user.
      */
     public static void logSQLException(SQLException sqlException,
                                        Logger logger) {
         logger.log(Level.SEVERE,
                 """
-                SQLException with the following attributes:
-                - Class: %s
-                - Message: %s
-                - SQLState: %s
-                - Vendor error code: %s
-                """.formatted(sqlException.getClass(),
+                        SQLException with the following attributes:
+                        - Class: %s
+                        - Message: %s
+                        - SQLState: %s
+                        - Vendor error code: %s
+                        """.formatted(sqlException.getClass(),
                         sqlException.getMessage(), sqlException.getSQLState(),
                         sqlException.getErrorCode())
         );

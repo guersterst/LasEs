@@ -1,6 +1,7 @@
 package de.lases.control.backing;
 
 import de.lases.business.service.CustomizationService;
+import de.lases.global.transport.ConnectionState;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -16,13 +17,14 @@ public class InitialConfigBacking {
     @Inject
     private CustomizationService customizationService;
 
-    private String datasourceConnectionState;
+    private ConnectionState connectionState;
 
     /**
      * Load the state of the database connection into this bean.
      */
     @PostConstruct
     public void init() {
+        connectionState = customizationService.getConnectionState();
     }
 
     /**
@@ -31,16 +33,11 @@ public class InitialConfigBacking {
      * @return Show the welcome page.
      */
     public String createDatasource() {
-        return null;
+        customizationService.createDataSourceSchema();
+        return "/views/anonymous/welcome.xhtml?faces-redirect=true";
     }
 
-    /**
-     * Get information about the connection state of the datasource and an
-     * error description if it is not connected.
-     *
-     * @return Information about the connection state of the datasource.
-     */
-    public String getDatasourceConnectionState() {
-        return datasourceConnectionState;
+    public ConnectionState getConnectionState() {
+        return connectionState;
     }
 }
