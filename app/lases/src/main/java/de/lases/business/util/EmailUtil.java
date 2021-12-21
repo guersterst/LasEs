@@ -1,10 +1,13 @@
 package de.lases.business.util;
 
 
-import de.lases.global.transport.*;
-import de.lases.persistence.exception.*;
+import de.lases.global.transport.UIMessage;
+import de.lases.persistence.exception.EmailTransmissionFailedException;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
+
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Provides functionality for sending emails.
@@ -39,7 +42,20 @@ public class EmailUtil {
      * @return A link leading to a mailto e-mail.
      */
     public static String generateMailToLink(String[] recipients, String[] cc, String subject, String body) {
-        return null;
+        String mailto= "mailto:" + String.join(",", recipients);
+        String delimiter = "?";
+        if (subject != null) {
+            mailto += delimiter + "subject=" + URLEncoder.encode(subject, StandardCharsets.UTF_8);
+            delimiter = "&";
+        }
+        if (body != null) {
+            mailto += delimiter + "body=" + URLEncoder.encode(body, StandardCharsets.UTF_8);
+            delimiter = "&";
+        }
+        if (cc != null) {
+            mailto += delimiter + "cc=" + String.join(",", cc);
+        }
+        return mailto;
     }
 
     /**
