@@ -3,7 +3,8 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:st="http://xmlns.jcp.org/jsf/composite/templates/composites/submissionTable">
+                xmlns:st="http://xmlns.jcp.org/jsf/composite/templates/composites/submissionTable"
+                xmlns:sft="http://xmlns.jcp.org/jsf/composite/templates/composites/scientificForumTable">
 
 <!-- Page title -->
 <ui:define name="title">#{labels['homePage.title']}</ui:define>
@@ -56,6 +57,16 @@
                 <st:submissiontable backing="#{resultListBacking}"/>
             </div>
         </div>
+
+        <div class="card">
+            <div class="card-header">
+                Lorem Ipsum
+            </div>
+            <div class="card-body">
+                <sft:scientificForumTable backing="#{resultListBacking}"/>
+            </div>
+        </div>
+
     </div>
 </ui:define>
 

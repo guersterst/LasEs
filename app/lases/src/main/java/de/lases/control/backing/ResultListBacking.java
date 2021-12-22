@@ -12,15 +12,13 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import java.io.Serial;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Backing bean for the result list.
  */
 @ViewScoped
 @Named
-public class ResultListBacking implements SubmissionPaginationBacking {
+public class ResultListBacking implements SubmissionPaginationBacking, ScientificForumPaginationBacking  {
 
 
     private enum Tab {
@@ -45,10 +43,6 @@ public class ResultListBacking implements SubmissionPaginationBacking {
     private ConfigPropagator configPropagator;
 
     private Pagination<Submission> submissionPagination;
-
-    private Pagination<Submission> reviewedPagination;
-
-    private Pagination<Submission> editedPagination;
 
     private Pagination<User> userPagination;
 
@@ -106,6 +100,25 @@ public class ResultListBacking implements SubmissionPaginationBacking {
 
     public void onLoad() {
         showOwnSubmissionsTab();
+        initScientificForumPagination();
+    }
+
+    private void initScientificForumPagination() {
+        scientificForumPagination = new Pagination<>("name") {
+
+            @Override
+            public void loadData() {
+                setEntries(scientificForumService.getList(getResultListParameters()));
+            }
+
+            @Override
+            protected Integer calculateNumberPages() {
+                return scientificForumService.getListCountPages(scientificForumPagination.getResultListParameters());
+            }
+        };
+        scientificForumPagination.applyFilters();
+        scientificForumPagination.getResultListParameters().setGlobalSearchWord(searchWord);
+        scientificForumPagination.loadData();
     }
 
     /**
@@ -180,26 +193,6 @@ public class ResultListBacking implements SubmissionPaginationBacking {
     }
 
     /**
-     * Get the pagination for the search results with submissions reviewed by
-     * the user.
-     *
-     * @return The pagination for the submission reviewed by the user.
-     */
-    public Pagination<Submission> getReviewedPagination() {
-        return reviewedPagination;
-    }
-
-    /**
-     * Get the pagination for the search results with submissions edited by
-     * the user.
-     *
-     * @return The pagination for the submission edited by the user.
-     */
-    public Pagination<Submission> getEditedPagination() {
-        return editedPagination;
-    }
-
-    /**
      * Get the pagination for the search results with users.
      *
      * @return The pagination for users.
@@ -213,6 +206,7 @@ public class ResultListBacking implements SubmissionPaginationBacking {
      *
      * @return The pagination for scientific forums.
      */
+    @Override
     public Pagination<ScientificForum> getScientificForumPagination() {
         return scientificForumPagination;
     }
@@ -225,6 +219,16 @@ public class ResultListBacking implements SubmissionPaginationBacking {
     @Override
     public Pagination<Submission> getSubmissionPagination() {
         return submissionPagination;
+    }
+
+    /**
+     * Get the options of the DateSelect enum as an array.
+     *
+     * @return Array of DateSelect.
+     */
+    @Override
+    public DateSelect[] getDateSelects() {
+        return SubmissionPaginationBacking.super.getDateSelects();
     }
 
     /**
