@@ -70,6 +70,23 @@ public class RegistrationService {
 
         Transaction t = new Transaction();
 
+        user = register(user, t);
+
+        if (initiateVerificationProcess(user, t)) {
+            String msg = message.getString("registrationSuccessful");
+            uiMessageEvent.fire(new UIMessage(msg, MessageCategory.INFO));
+
+            l.info("User " + user.getEmailAddress() + " registered.");
+            t.commit();
+        } else {
+            uiMessageEvent.fire(new UIMessage(message.getString("registrationFailed"), MessageCategory.ERROR));
+            t.abort();
+        }
+
+        return user;
+    }
+
+    private User register(User user, Transaction t) {
         user.setRegistered(true);
         hashPassword(user);
 
@@ -118,17 +135,6 @@ public class RegistrationService {
             }
         }
 
-        if (initiateVerificationProcess(user, t)) {
-            String msg = message.getString("registrationSuccessful");
-            uiMessageEvent.fire(new UIMessage(msg, MessageCategory.INFO));
-
-            l.info("User " + user.getEmailAddress() + " registered.");
-            t.commit();
-        } else {
-            uiMessageEvent.fire(new UIMessage(message.getString("registrationFailed"), MessageCategory.ERROR));
-            t.abort();
-        }
-
         return user;
     }
 
@@ -140,7 +146,7 @@ public class RegistrationService {
      * @param user The user to be verified filled with id and email address.
      * @return If the verification process was successfully initiated.
      */
-    public boolean initiateVerificationProcess(User user, Transaction t) {
+    private boolean initiateVerificationProcess(User user, Transaction t) {
 
         Verification verification = new Verification();
         verification.setVerified(false);
@@ -196,7 +202,41 @@ public class RegistrationService {
      * @return The user with all their data, if successful, and {@code null} otherwise.
      */
     public User registerByAdmin(User user) {
-        return null;
+        if (!userSufficientlyFilled(user)) {
+            l.severe("User-DTO not sufficiently filled.");
+            throw new IllegalArgumentException("User-DTO not sufficiently filled.");
+        }
+
+        Transaction t = new Transaction();
+        user = register(user, t);
+
+        if (user == null) {
+            t.abort();
+            uiMessageEvent.fire(new UIMessage(message.getString("registrationFailed"), MessageCategory.ERROR));
+            return null;
+        }
+
+        Verification verification = new Verification();
+        verification.setVerified(true);
+        verification.setUserId(user.getId());
+        try {
+            UserRepository.addVerification(verification, t);
+        } catch (NotFoundException e) {
+            l.severe("Verification for user " + user.getId() + " could not be created as user was not found."
+                    + e.getMessage());
+            uiMessageEvent.fire(new UIMessage(message.getString("registrationFailed"), MessageCategory.ERROR));
+            t.abort();
+            return null;
+        } catch (DataNotWrittenException e) {
+            l.severe("Verification for user " + user.getId() + " could not be written to the database.");
+            uiMessageEvent.fire(new UIMessage(message.getString("registrationFailed"), MessageCategory.ERROR));
+            t.abort();
+            return null;
+        }
+
+        uiMessageEvent.fire(new UIMessage(message.getString("registrationSuccessful"), MessageCategory.INFO));
+        t.commit();
+        return user;
     }
 
     private boolean userSufficientlyFilled(User user) {

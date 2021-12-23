@@ -564,7 +564,9 @@ public class UserRepository {
                 stmt.setInt(1, verification.getUserId());
                 stmt.setString(2, verification.getValidationRandom());
                 stmt.setBoolean(3, verification.isVerified());
-                stmt.setTimestamp(4, Timestamp.valueOf(verification.getTimestampValidationStarted()));
+                Timestamp timestamp = verification.getTimestampValidationStarted() == null ?
+                        null : Timestamp.valueOf(verification.getTimestampValidationStarted());
+                stmt.setTimestamp(4, timestamp);
                 stmt.setString(5, verification.getNonVerifiedEmailAddress());
                 stmt.executeUpdate();
         } catch (SQLException e) {

@@ -1,10 +1,144 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition template="/resources/templates/main.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
+>
+    <f:metadata>
+        <f:importConstants type="de.lases.control.internal.Constants" var="Const"/>
+    </f:metadata>
+    <ui:define name="title">#{labels['newUser.title']}</ui:define>
 
     <ui:define name="content">
-        newUser
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    <div class="col-md-6">
+                        <h:outputText value="#{labels['newUser.header']}"/>
+                    </div>
+                </div>
+                <h:form id="register-frm" styleClass="card-body">
+                    <!-- Password -->
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <h:outputText value="#{labels['password']}"/>
+                            </span>
+                                </div>
+                                <h:inputSecret id="password-iscrt"
+                                               value="#{newUserBacking.newUser.passwordNotHashed}"
+                                               title="#{help.password}" required="true"
+                                               requiredMessage="#{message.passwordNeeded}" styleClass="form-control">
+                                    <f:validator for="password-iscrt" validatorId="passwordValidator"/>
+                                </h:inputSecret>
+                            </div>
+                        </div>
+                        <div class="col-4"><h:message for="password-iscrt"/></div>
+                    </div>
+                    <!-- Title -->
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <h:outputText value="#{labels['titleInput']}"/>
+                            </span>
+                                </div>
+                                <h:inputText id="title-itxt" value="#{newUserBacking.newUser.title}"
+                                             maxlength="#{Const.TITLE_MAX}" styleClass="form-control"/>
+                            </div>
+                        </div>
+                        <div class="col-4"><h:message for="title-itxt"/></div>
+                    </div>
+                    <!-- First name -->
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <h:outputText value="#{labels['firstName']}"/>
+                            </span>
+                                </div>
+                                <h:inputText id="first-name-itxt" value="#{newUserBacking.newUser.firstName}"
+                                             title="#{help.firstName}" required="true"
+                                             requiredMessage="#{message.firstNameRequired}"
+                                             maxlength="#{Const.FIRST_NAME_MAX}"
+                                             styleClass="form-control"/>
+                            </div>
+                        </div>
+                        <div class="col-4"><h:message for="first-name-itxt"/></div>
+                    </div>
+                    <!-- Last Name -->
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <h:outputText value="#{labels['lastName']}"/>
+                            </span>
+                                </div>
+                                <h:inputText id="last-name-itxt" value="#{newUserBacking.newUser.lastName}"
+                                             title="#{help.lastName}" required="true"
+                                             requiredMessage="#{message.lastNameRequired}"
+                                             maxlength="#{Const.LAST_NAME_MAX}"
+                                             styleClass="form-control"/>
+                            </div>
+                        </div>
+                        <div class="col-4"><h:message for="last-name-itxt"/></div>
+                    </div>
+                    <!-- Email -->
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <h:outputText value="#{labels['email']}"/>
+                            </span>
+                                </div>
+                                <h:inputText id="email-itxt" value="#{newUserBacking.newUser.emailAddress}"
+                                             title="#{help.email}" required="true"
+                                             requiredMessage="#{message.emailRequired}" maxlength="#{Const.EMAIL_MAX}"
+                                             styleClass="form-control">
+                                    <f:validator for="email-itxt" validatorId="emailAddressUnoccupiedValidator"/>
+                                    <f:validator for="email-itxt" validatorId="emailAddressLayoutValidator"/>
+                                </h:inputText>
+                            </div>
+                        </div>
+                        <div class="col-4"><h:message for="email-itxt"/></div>
+                    </div>
+                    <!-- Admin checkbox -->
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <h:outputText value="#{labels['newUser.grantAdminRights']}"/>
+                            </span>
+                                </div>
+                                <h:selectBooleanCheckbox id="is-admin-cbx" value="#{newUserBacking.newUser.admin}"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- Add user button -->
+                        <div class="col-2">
+                            <h:commandButton id="save-btn" value="#{labels['newUser.addUser']}"
+                                             action="#{newUserBacking.saveUser()}"
+                                             styleClass="form-control"/>
+                        </div>
+                        <!-- Abort link -->
+                        <div class="col-2">
+                            <h:link id="abort-lnk" value="#{labels.welcomeLink}"
+                                    outcome="/views/editor/userList" title="#{help.welcomePage}"
+                                    styleClass="btn btn-secondary"/>
+                        </div>
+                    </div>
+                </h:form>
+            </div>
+        </div>
     </ui:define>
 
 </ui:composition>
