@@ -10,40 +10,44 @@
     <h:outputScript name="design/bootstrap/js/bootstrap.bundle.min.js"/>
 </h:head>
 <h:body>
-    <div id="page">
-        <div id="content">
-            <h:messages globalOnly="true"/>
-            <div class="container">
-                <div class="card">
-                    <div class="card-body">
-                        <h:form>
-                            <div class="form-group">
-                                <h:outputLabel value="Connection State Information: " for="connection-bool-otxt"
-                                               styleClass="form-label"/>
-                                <h:outputText id="connection-bool-otxt"
-                                              value="#{'Connection successful: '.concat(initialConfigBacking.connectionState.successfullyConnected)}"
-                                              styleClass="form-control"/>
-                                <h:outputText id="connection-state-otxt"
-                                              value="#{'Connection State: '.concat(initialConfigBacking.connectionState.errorMessage)}"
-                                              styleClass="form-control"/>
-                            </div>
-                            <br/>
-                            <div class="form-group">
-                                <h:outputLabel for="create-btn" value="Create datasource and start application:"
-                                               styleClass="form-label"/>
-                                <div class="btn-group">
-                                    <h:commandButton value="Create Datasource"
-                                                     action="#{initialConfigBacking.createDatasource()}"
-                                                     id="create-btn" styleClass="btn btn-primary"
-                                                     disabled="#{!initialConfigBacking.connectionState.successfullyConnected}"/>
+    <h:panelGroup layout="block"
+                  id="keep-from-renderning"
+                  rendered="#{!initialConfigBacking.connectionState.datasourceSchemaCreated}">
+        <div id="page">
+            <div id="content">
+                <h:messages globalOnly="true"/>
+                <div class="container">
+                    <div class="card">
+                        <div class="card-body">
+                            <h:form>
+                                <div class="form-group">
+                                    <h:outputLabel value="Connection State Information: " for="connection-bool-otxt"
+                                                   styleClass="form-label"/>
+                                    <h:outputText id="connection-bool-otxt"
+                                                  value="#{'Connection successful: '.concat(initialConfigBacking.connectionState.successfullyConnected)}"
+                                                  styleClass="form-control"/>
+                                    <h:outputText id="connection-state-otxt"
+                                                  value="#{'Connection State: '.concat(initialConfigBacking.connectionState.errorMessage)}"
+                                                  styleClass="form-control"/>
                                 </div>
-                            </div>
-                        </h:form>
+                                <br/>
+                                <div class="form-group">
+                                    <h:outputLabel for="create-btn" value="Create datasource and start application:"
+                                                   styleClass="form-label"/>
+                                    <div class="btn-group">
+                                        <h:commandButton value="Create Datasource"
+                                                         action="#{initialConfigBacking.createDatasource()}"
+                                                         id="create-btn" styleClass="btn btn-primary"
+                                                         disabled="#{!initialConfigBacking.connectionState.successfullyConnected}"/>
+                                    </div>
+                                </div>
+                            </h:form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </h:panelGroup>
 </h:body>
 </html>
 
