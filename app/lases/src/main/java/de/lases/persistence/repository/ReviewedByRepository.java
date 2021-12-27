@@ -201,9 +201,8 @@ public class ReviewedByRepository {
                 logger.severe("Submission not found while get a list of reviewed_by DTO's.");
                 throw new NotFoundException();
             } else {
-                resultSet.previous();
 
-                while (resultSet.next()) {
+                do {
                     ReviewedBy reviewed = new ReviewedBy();
 
                     reviewed.setReviewerId(resultSet.getInt("reviewer_id"));
@@ -217,7 +216,7 @@ public class ReviewedByRepository {
                     }
 
                     reviewedByList.add(reviewed);
-                }
+                } while (resultSet.next());
             }
         } catch (SQLException exception) {
             transaction.abort();

@@ -348,8 +348,7 @@ public class PaperRepository {
                 logger.severe("Submission not found with id: " + submission.getId() + " or user not found with id: " +user.getId());
                 throw new NotFoundException();
             } else {
-                resultSet.previous();
-                while (resultSet.next()) {
+                do {
                     Paper paper = new Paper();
                     paper.setVisible(resultSet.getBoolean("is_visible"));
                     paper.setVersionNumber(resultSet.getInt("version"));
@@ -357,14 +356,14 @@ public class PaperRepository {
                     paper.setSubmissionId(resultSet.getInt("submission_id"));
 
                     paperList.add(paper);
-                }
+                } while (resultSet.next());
             }
 
         } catch (SQLException e) {
             DatasourceUtil.logSQLException(e, logger);
 
             if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
-                throw new DataNotCompleteException("the list of papers of a submssion could not be retrieved.", e);
+                throw new DataNotCompleteException("the list of papers of a submission could not be retrieved.", e);
             } else {
                 transaction.abort();
                 throw new DatasourceQueryFailedException("A datasource exception occurred while loading all papers of a submission.", e);
