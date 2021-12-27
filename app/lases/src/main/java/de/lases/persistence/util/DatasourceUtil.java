@@ -3,11 +3,13 @@ package de.lases.persistence.util;
 import de.lases.global.transport.ConnectionState;
 import de.lases.persistence.exception.DatasourceNotFoundException;
 import de.lases.persistence.exception.DatasourceQueryFailedException;
+import de.lases.persistence.repository.ReviewRepository;
 import de.lases.persistence.repository.Transaction;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -81,17 +83,41 @@ public class DatasourceUtil {
 
         ConnectionState connectionState = new ConnectionState();
         connectionState.setSuccessfullyConnected(false);
+        connectionState.setDatasourceSchemaCreated(false);
         connectionState.setErrorMessage("Connected");
 
+        // Check if the connection works.
         try {
             connectionState.setSuccessfullyConnected(conn.isValid(10));
         } catch (SQLException e) {
             connectionState.setErrorMessage(e.getMessage());
             logSQLException(e, l);
-        } finally {
+
+            // fail
             transaction.abort();
+            return connectionState;
         }
 
+        // Check if the datasource has been created.
+        try {
+            // If review exists, so does submission, paper and user.
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM review");
+            ps.executeQuery();
+
+            // system is essential.
+            ps = conn.prepareStatement("SELECT * FROM system");
+            ps.executeQuery();
+        } catch (SQLException e) {
+            connectionState.setErrorMessage(e.getMessage());
+            logSQLException(e, l);
+
+            // fail
+            transaction.abort();
+            return connectionState;
+        }
+
+        connectionState.setDatasourceSchemaCreated(true);
+        transaction.abort();
         return connectionState;
     }
 

@@ -23,8 +23,11 @@ public class InitialConfigBacking {
      * Load the state of the database connection into this bean.
      */
     @PostConstruct
-    public void init() {
+    public void init() throws IllegalAccessException {
         connectionState = customizationService.getConnectionState();
+        if (connectionState.isDatasourceSchemaCreated()) {
+            throw new IllegalAccessException();
+        }
     }
 
     /**
