@@ -605,7 +605,7 @@ public class PaperRepository {
                 return file;
 
             } else {
-                logger.warning("Loading paper with the submission id: " + paper.getSubmissionId()
+                logger.severe("Loading paper with the submission id: " + paper.getSubmissionId()
                         + " and version number: " + paper.getVersionNumber());
                 throw new NotFoundException();
             }
@@ -663,24 +663,6 @@ public class PaperRepository {
             logger.severe("Finding newest paper: " + e.getMessage());
             throw new DatasourceQueryFailedException(e.getMessage());
         }
-    }
-
-
-    private static ResultSet findPaper(Paper paper, Connection connection) throws SQLException {
-
-        PreparedStatement find = connection.prepareStatement(
-                """
-                        SELECT *
-                        FROM paper
-                        WHERE version = ? AND submission_id = ?
-                        """
-        );
-        find.setInt(1, paper.getVersionNumber());
-        find.setInt(2, paper.getSubmissionId());
-
-        ResultSet rs = find.executeQuery();
-        find.close();
-        return rs;
     }
 
 }
