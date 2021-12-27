@@ -3,6 +3,7 @@ package de.lases.persistence.repository;
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
 import de.lases.persistence.util.DatasourceUtil;
+import de.lases.persistence.util.TransientSQLExceptionChecker;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -152,9 +153,12 @@ public class ScienceFieldRepository {
         } catch (SQLException e) {
             DatasourceUtil.logSQLException(e, logger);
 
-            // TODO: DataNotCompleteException wann?
-            transaction.abort();
-            throw new DatasourceQueryFailedException("Science field could not be added", e);
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                throw new DataNotCompleteException("Science fields could not be received", e);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("Science fields could not be received", e);
+            }
         }
     }
 
@@ -212,9 +216,12 @@ public class ScienceFieldRepository {
         } catch (SQLException e) {
             DatasourceUtil.logSQLException(e, logger);
 
-            // TODO: DataNotCompleteException wann?
-            transaction.abort();
-            throw new DatasourceQueryFailedException("Science field could not be added", e);
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                throw new DataNotCompleteException("Science fields could not be received", e);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("Science fields could not be received", e);
+            }
         }
     }
 
@@ -262,9 +269,12 @@ public class ScienceFieldRepository {
         } catch (SQLException e) {
             DatasourceUtil.logSQLException(e, logger);
 
-            // TODO: DataNotCompleteException wann?
-            transaction.abort();
-            throw new DatasourceQueryFailedException("Science field could not be added", e);
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                throw new DataNotCompleteException("Science fields could not be received", e);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("Science fields could not be received", e);
+            }
         }
     }
 
