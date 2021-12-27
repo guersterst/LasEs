@@ -19,6 +19,8 @@ import java.sql.*;
 import java.util.logging.Logger;
 
 /**
+ * @author Stefanie Gürster
+ *
  * Offers get/change operations on the relationship between reviewer and
  * submission.
  */

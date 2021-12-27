@@ -276,9 +276,6 @@ public class SubmissionService implements Serializable {
         } catch (NotFoundException e) {
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotFound"), MessageCategory.WARNING));
             transaction.abort();
-        } catch (KeyAlreadyExistsException e) {
-            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("alreadyExistsReviewer"), MessageCategory.WARNING));
-            transaction.abort();
         }
 
         //TODO:Need to send E-Mail when adding the user as reviewer is successful

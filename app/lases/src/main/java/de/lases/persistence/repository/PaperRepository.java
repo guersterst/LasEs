@@ -276,7 +276,7 @@ public class PaperRepository {
         } catch (SQLException exception) {
             DatasourceUtil.logSQLException(exception, logger);
 
-            if (!(exception instanceof PSQLException)) {
+            if (TransientSQLExceptionChecker.isTransient(exception.getSQLState())) {
                 throw new DataNotWrittenException("Remove a paper with the submission id: " + paper.getSubmissionId() + " was not successful.");
             } else {
                 transaction.abort();
