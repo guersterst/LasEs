@@ -276,4 +276,19 @@ class PaperRepositoryTest {
         transaction.abort();
     }
 
+    @Test
+    void testGetListNotFound() {
+        Transaction transaction = new Transaction();
+        Submission submission = new Submission();
+        submission.setId(9990000);
+
+        User user = new User();
+        user.setId(99999999);
+
+        ResultListParameters resultListParameters = new ResultListParameters();
+
+        assertThrows(NotFoundException.class, () -> {PaperRepository.getList(submission, transaction,user,resultListParameters);});
+        transaction.abort();
+    }
+
 }
