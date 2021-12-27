@@ -80,7 +80,7 @@ public class CustomizationService {
             DatasourceUtil.createDatasource();
         } catch (IOException e) {
             logger.severe("Could not read SQL CREATE_ALL file. " + e.getMessage());
-            uiMessageEvent.fire(new UIMessage(e.getMessage(), MessageCategory.FATAL));
+            uiMessageEvent.fire(new UIMessage("Could not read SQL CREATE_ALL file. " + e.getMessage(), MessageCategory.FATAL));
             return false;
         }
         return true;
