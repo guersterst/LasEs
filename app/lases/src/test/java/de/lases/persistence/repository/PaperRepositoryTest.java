@@ -224,6 +224,17 @@ class PaperRepositoryTest {
     }
 
     @Test
+    void testRemoveNotFound() {
+        Transaction transaction = new Transaction();
+        Paper paper = new Paper();
+        paper.setSubmissionId(900000);
+        paper.setVersionNumber(9000000);
+
+        assertThrows(NotFoundException.class, () -> PaperRepository.remove(paper, transaction));
+        transaction.abort();
+    }
+
+    @Test
     void testFileSize() throws SQLException, NotFoundException, DataNotWrittenException {
         Transaction transaction = new Transaction();
         PaperRepository.add(paperNonExistent,pdf,transaction);
