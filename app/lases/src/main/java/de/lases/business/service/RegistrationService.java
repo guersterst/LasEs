@@ -162,7 +162,7 @@ public class RegistrationService {
                 + generateValidationUrl(verification);
 
         try {
-            EmailUtil.sendEmail(configPropagator.getProperty("MAIL_ADDRESS_FROM"), new String[]{user.getEmailAddress()},
+            EmailUtil.sendEmail(new String[]{user.getEmailAddress()},
                     null, message.getString("email.verification.subject"), emailBody);
         } catch (EmailTransmissionFailedException e) {
             return false;

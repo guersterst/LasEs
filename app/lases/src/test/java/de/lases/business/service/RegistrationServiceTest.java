@@ -157,8 +157,7 @@ class RegistrationServiceTest {
         UserRepository.remove(user, t);
         t.commit();
 
-        mockedEmailUtil.verify(() -> EmailUtil.sendEmail(
-                anyString(), any(String[].class), any(), any(), anyString()));
+        mockedEmailUtil.verify(() -> EmailUtil.sendEmail(any(String[].class), any(), any(), anyString()));
         assertAll(
                 () -> assertEquals(EXAMPLE_EMAIL_ADDRESS, registeredUser.getEmailAddress()),
                 () -> assertEquals(EXAMPLE_HASH, registeredUser.getPasswordHashed())
