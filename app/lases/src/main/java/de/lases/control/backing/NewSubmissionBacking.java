@@ -151,7 +151,7 @@ public class NewSubmissionBacking implements Serializable {
         newSubmission = submissionService.add(newSubmission, coAuthors);
 
         if (newSubmission == null) {
-            logger.log(Level.SEVERE, "the submission was not successfully added.");
+            logger.log(Level.WARNING, "the submission was not successfully added.");
             return null;
         } else {
             Paper paper = new Paper();
@@ -162,9 +162,8 @@ public class NewSubmissionBacking implements Serializable {
             FileDTO file = new FileDTO();
             file.setFile(uploadedPDF.getInputStream().readAllBytes());
             paperService.add(file, paper);
+            return "submission?faces-redirect=true&id=" + newSubmission.getId();
         }
-        // TODO: hier die submission Seite returnen!
-        return "submission?faces-redirect=true&id=" + newSubmission.getId();
     }
 
     /**
