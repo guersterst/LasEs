@@ -12,6 +12,7 @@ import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
 import de.lases.persistence.internal.ConfigReader;
 import de.lases.persistence.util.DatasourceUtil;
+import de.lases.persistence.util.TransientSQLExceptionChecker;
 import jakarta.enterprise.inject.spi.CDI;
 import org.postgresql.util.PSQLException;
 
@@ -34,6 +35,7 @@ public class PaperRepository {
      * @param paper       A paper dto that must be filled with a valid id.
      * @param transaction The transaction to use.
      * @return A fully filled paper dto.
+     * @throws InvalidFieldsException         If the paper DTO is not fully filled.
      * @throws NotFoundException              If there is no paper with the provided id and
      *                                        submission id.
      * @throws DatasourceQueryFailedException If the datasource cannot be
@@ -80,6 +82,7 @@ public class PaperRepository {
 
         } catch (SQLException exception) {
             DatasourceUtil.logSQLException(exception, logger);
+            transaction.abort();
             throw new DatasourceQueryFailedException("A data source exception occurred.", exception);
         }
     }
@@ -179,13 +182,6 @@ public class PaperRepository {
 
         Connection connection = transaction.getConnection();
 
-        try {
-            findPaper(paper, connection);
-
-        } catch (SQLException exception) {
-            logger.warning("Searching paper failed. Tried to change paper");
-            throw new NotFoundException();
-        }
         String sql = "UPDATE paper SET is_visible = ? WHERE version = ? AND submission_id = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -193,12 +189,22 @@ public class PaperRepository {
             statement.setInt(2, paper.getVersionNumber());
             statement.setInt(3, paper.getSubmissionId());
 
-            statement.executeUpdate();
+            if (statement.executeUpdate() == 0) {
+                logger.severe("The paper could not be changed because it doesn't exist.");
+                throw new NotFoundException("Paper not found during change.");
+            } else {
+                logger.finest("Paper that had to be changed is an existing paper.");
+            }
 
         } catch (SQLException exception) {
-            transaction.abort();
             DatasourceUtil.logSQLException(exception, logger);
-            throw new DatasourceQueryFailedException("A datasource exception occurred while changing paper data.", exception);
+
+            if (TransientSQLExceptionChecker.isTransient(exception.getSQLState())) {
+                throw new DataNotWrittenException("The paper is not changed. ", exception);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("A datasource exception occurred while changing paper data.", exception);
+            }
         }
 
         if (paper.isVisible()) {
@@ -207,11 +213,19 @@ public class PaperRepository {
             try (PreparedStatement statement = connection.prepareStatement(sqlDeadline)){
                 statement.setInt(1, paper.getSubmissionId());
 
-                statement.executeUpdate();
+                if (statement.executeUpdate() == 0) {
+                    logger.severe("The deadline could not be set to null because the submission doesn't exist.");
+                    throw new NotFoundException("Submission not found during setting the deadline.");
+                }
             } catch (SQLException exception) {
-                transaction.abort();
                 DatasourceUtil.logSQLException(exception, logger);
-                throw new DatasourceQueryFailedException("A datasource exception occurred while changing reviewed_by data.", exception);
+
+                if (!(exception instanceof PSQLException)) {
+                    throw new DataNotWrittenException("The paper is not changed. ", exception);
+                } else {
+                    transaction.abort();
+                    throw new DatasourceQueryFailedException("A datasource exception occurred while changing reviewed_by data.", exception);
+                }
             }
         }
     }

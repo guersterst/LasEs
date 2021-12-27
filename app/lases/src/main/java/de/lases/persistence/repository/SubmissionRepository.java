@@ -556,7 +556,7 @@ public class SubmissionRepository {
      * @param submission  A scientific forum dto with a valid id.
      * @param user        A user dto with a valid id.
      * @param transaction The transaction to use.
-     * @throws NotFoundException              If there is no scientific forum with the
+     * @throws NotFoundException              If there is no submission with the
      *                                        provided id or there is no user with the
      *                                        provided id.
      * @throws DataNotWrittenException        If writing the data to the repository
