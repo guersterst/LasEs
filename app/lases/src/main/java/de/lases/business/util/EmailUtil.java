@@ -1,22 +1,18 @@
 package de.lases.business.util;
 
 
-import de.lases.global.transport.UIMessage;
 import de.lases.persistence.exception.EmailTransmissionFailedException;
-import jakarta.enterprise.event.Event;
-import jakarta.inject.Inject;
+import de.lases.persistence.util.EmailSender;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 /**
  * Provides functionality for sending emails.
+ *
+ * @author Thomas Kirz
  */
 public class EmailUtil {
-
-    @Inject
-    private Event<UIMessage> uiMessageEvent;
-
 
     /**
      * Sends an email to a given recipient.
@@ -30,6 +26,7 @@ public class EmailUtil {
      */
     public static void sendEmail(String sender, String[] recipients, String[] cc, String subject, String body)
             throws EmailTransmissionFailedException {
+        EmailSender.sendEmail(sender, recipients, cc, subject, body);
     }
 
     /**
@@ -49,6 +46,8 @@ public class EmailUtil {
             delimiter = "&";
         }
         if (body != null) {
+            // mailto links use \r\n as line endings
+            body = body.replaceAll("([^\\r])\\n", "$1\r\n");
             mailto += delimiter + "body=" + URLEncoder.encode(body, StandardCharsets.UTF_8);
             delimiter = "&";
         }
