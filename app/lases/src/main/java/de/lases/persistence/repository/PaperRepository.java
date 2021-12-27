@@ -508,8 +508,12 @@ public class PaperRepository {
      *                              parameters from the pagination like
      *                              filtering, sorting or number of elements.
      * @return The number of papers the user is author, editor or reviewer of.
-     * @throws NotFoundException         If there is no user or submission with the provided id.
-     * @throws DataNotCompleteException  If the list is truncated.
+     * @throws NotFoundException           If there is no user or submission with the provided id.
+     * @throws DataNotCompleteException    If the list is truncated.
+     * @throws InvalidQueryParamsException If the resultListParameters contain
+     *                                     an erroneous option.
+     * @throws InvalidFieldsException      If the submission or user DTO is not fully filled with
+     *                                     the required data.
      */
     public static int countPaper(User user, Submission submission, Transaction transaction,
                                  ResultListParameters resultListParameters) throws NotFoundException, DataNotCompleteException {
@@ -523,7 +527,7 @@ public class PaperRepository {
             transaction.abort();
             logger.warning("Counting the amount of papers with the submission id: " + submission.getId()
                     + " and a user, who requests it, with the id: " + user.getId());
-            throw new NotFoundException();
+            throw new InvalidFieldsException();
         }
 
         Connection connection = transaction.getConnection();
@@ -538,13 +542,22 @@ public class PaperRepository {
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             ResultSet resultSet = handleStatement(statement, submission, user, privilege, resultListParameters);
 
-            while (resultSet.next()) {
-                count++;
+            if (!resultSet.next()) {
+                logger.severe("Submission or user was not found. Count was not successful.");
+                throw new NotFoundException();
+            } else {
+                resultSet.previous();
+                while (resultSet.next()) {
+                    count++;
+                }
             }
 
         } catch (SQLException e) {
-            transaction.abort();
             DatasourceUtil.logSQLException(e, logger);
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                throw new DataNotCompleteException("Count the items of the paper pagination failed.", e);
+            }
+            transaction.abort();
             throw new DatasourceQueryFailedException("A datasource exception occurred while loading all papers of a submission.", e);
         }
 
