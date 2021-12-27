@@ -158,3 +158,16 @@ on u.id = s.author_id
 left join co_authored ca
 on (u.id = ca.user_id and ca.submission_id = s.id)
 group by u.id;
+
+-- create basic admin user, to allow login.
+
+INSERT INTO "user"(id, email_address, is_administrator, firstname, lastname, is_registered, password_hash, password_salt)
+VALUES (-1, 'admin@example.com', TRUE, '', '', TRUE, hash, salt);
+
+INSERT INTO verification(id, is_verified)
+VALUES (-1, TRUE);
+
+-- create system settings.
+
+INSERT INTO system
+VALUES (0, 'LasEs', 'Welcome to LasEs', 'World Class Review Managment System', 'orange', '', NULL);

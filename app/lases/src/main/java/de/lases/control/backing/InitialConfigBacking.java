@@ -37,6 +37,10 @@ public class InitialConfigBacking {
         return "/views/anonymous/welcome.xhtml?faces-redirect=true";
     }
 
+    /**
+     * Information about the current Datasource Connection.
+     * @return {@link ConnectionState}
+     */
     public ConnectionState getConnectionState() {
         return connectionState;
     }
