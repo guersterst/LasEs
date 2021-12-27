@@ -1,8 +1,10 @@
 package de.lases.business.util;
 
 
+import de.lases.business.internal.ConfigPropagator;
 import de.lases.persistence.exception.EmailTransmissionFailedException;
 import de.lases.persistence.util.EmailSender;
+import jakarta.enterprise.inject.spi.CDI;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -17,16 +19,16 @@ public class EmailUtil {
     /**
      * Sends an email to a given recipient.
      *
-     * @param sender     The senders email address.
      * @param recipients The recipients email addresses.
      * @param cc         The recipients in carbon-copy.
      * @param subject    The subject of the email.
      * @param body       The body of the email.
      * @throws EmailTransmissionFailedException Thrown when an issue with the transmission of the email has occurred.
      */
-    public static void sendEmail(String sender, String[] recipients, String[] cc, String subject, String body)
+    public static void sendEmail(String[] recipients, String[] cc, String subject, String body)
             throws EmailTransmissionFailedException {
-        EmailSender.sendEmail(sender, recipients, cc, subject, body);
+        ConfigPropagator config = CDI.current().select(ConfigPropagator.class).get();
+        EmailSender.sendEmail(config.getProperty("MAIL_ADDRESS_FROM"), recipients, cc, subject, body);
     }
 
     /**
