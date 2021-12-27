@@ -15,6 +15,8 @@ import java.util.logging.Logger;
 /**
  * Offers get/add/remove operations on a science field and the
  * possibility to get lists of science fields.
+ *
+ * @author Sebastian Vogt
  */
 public class ScienceFieldRepository {
 
