@@ -57,7 +57,6 @@ public class CustomizationService {
             logger.finest("Changed system settings");
         }  catch (DataNotWrittenException exception) {
 
-            logger.log(Level.WARNING, exception.getMessage());
             uiMessageEvent.fire(new UIMessage(props.getString("dataNotWritten"), MessageCategory.ERROR));
 
             transaction.abort();
