@@ -63,8 +63,7 @@ public class SystemSettingsRepository {
             DatasourceUtil.logSQLException(exception, logger);
 
             if (TransientSQLExceptionChecker.isTransient(exception.getSQLState())) {
-                logger.severe("Data not written while updating system settings.");
-                throw new DataNotWrittenException();
+                throw new DataNotWrittenException("Data not written while updating system settings.");
             }
             transaction.abort();
             throw new DatasourceQueryFailedException("A datasource exception occurred while changing the system settings.");
