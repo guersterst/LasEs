@@ -3,16 +3,15 @@ package de.lases.persistence.util;
 import de.lases.global.transport.ConnectionState;
 import de.lases.persistence.exception.DatasourceNotFoundException;
 import de.lases.persistence.exception.DatasourceQueryFailedException;
-import de.lases.persistence.repository.ReviewRepository;
 import de.lases.persistence.repository.Transaction;
+import jakarta.faces.context.FacesContext;
+import jakarta.servlet.ServletContext;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -72,8 +71,9 @@ public class DatasourceUtil {
      *                                     reached.
      */
     public static void createDatasource() throws IOException {
-        Path pathToSQL = Path.of("resources/sql/CREATE_ALL.sql");
-        String sql = Files.readString(pathToSQL);
+        ServletContext sctx = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        String sql = new String(sctx.getResourceAsStream("/WEB-INF/config/sql/CREATE_ALL.sql").readAllBytes(),
+                StandardCharsets.UTF_8);
         Transaction transaction = new Transaction();
         Connection conn = transaction.getConnection();
 
@@ -124,7 +124,7 @@ public class DatasourceUtil {
             ps.executeQuery();
             ps.close();
         } catch (SQLException e) {
-            connectionState.setErrorMessage(e.getMessage());
+            connectionState.setErrorMessage("DB schema has not been created yet.");
             logSQLException(e, l);
 
             // fail
