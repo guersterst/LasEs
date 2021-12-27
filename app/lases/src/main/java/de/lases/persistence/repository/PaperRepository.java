@@ -259,27 +259,29 @@ public class PaperRepository {
 
         Connection connection = transaction.getConnection();
 
-        try {
-            ResultSet resultSet = findPaper(paper, connection);
-
-        } catch (SQLException exception) {
-            logger.warning("Removing paper with the submission id: " + paper.getSubmissionId()
-                    + " and version number: " + paper.getVersionNumber());
-            throw new NotFoundException();
-        }
-
         String sql = "DELETE FROM paper WHERE version = ? AND submission_id = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, paper.getVersionNumber());
             statement.setInt(2, paper.getSubmissionId());
 
-            statement.executeUpdate();
+            if (statement.executeUpdate() == 0) {
+                logger.severe("Removing paper with the submission id: " + paper.getSubmissionId()
+                        + " and version number: " + paper.getVersionNumber());
+                throw new NotFoundException();
+            } else {
+                logger.finest("Found paper that had to be removed.");
+            }
 
         } catch (SQLException exception) {
-            transaction.abort();
             DatasourceUtil.logSQLException(exception, logger);
-            throw new DatasourceQueryFailedException("A datasource exception occurred while removing a paper.", exception);
+
+            if (!(exception instanceof PSQLException)) {
+                throw new DataNotWrittenException("Remove a paper with the submission id: " + paper.getSubmissionId() + " was not successful.");
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("A datasource exception occurred while removing a paper.", exception);
+            }
         }
 
     }
