@@ -4,6 +4,7 @@ import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
 import de.lases.persistence.internal.ConfigReader;
 import de.lases.persistence.util.DatasourceUtil;
+import de.lases.persistence.util.TransientSQLExceptionChecker;
 import jakarta.enterprise.inject.spi.CDI;
 
 import java.sql.Connection;
@@ -60,6 +61,8 @@ public class ReviewRepository {
                 throw new NotFoundException();
             }
         } catch (SQLException e) {
+            DatasourceUtil.logSQLException(e, logger);
+            transaction.abort();
             throw new DatasourceQueryFailedException(e.getMessage());
         }
     }
@@ -97,8 +100,13 @@ public class ReviewRepository {
 
             ps.executeUpdate();
         } catch (SQLException e) {
-            logger.info(e.getMessage());
-            throw new DatasourceQueryFailedException(e.getMessage());
+            DatasourceUtil.logSQLException(e, logger);
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                throw new DataNotWrittenException("Failed to add review to database.", e);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("Failed to query database.", e);
+            }
         }
     }
 
@@ -118,6 +126,9 @@ public class ReviewRepository {
      */
     public static void change(Review review, Transaction transaction)
             throws NotFoundException, DataNotWrittenException {
+        if (review == null) {
+            throw new InvalidFieldsException();
+        }
         Connection conn = transaction.getConnection();
         try (PreparedStatement ps = conn.prepareStatement("UPDATE review SET is_visible = ? AND is_recommended = ?" +
                 " AND comment = ? WHERE submission_id = ? AND version = ? AND reviewer_id = ?"
@@ -132,8 +143,13 @@ public class ReviewRepository {
 
             ps.executeUpdate();
         } catch (SQLException e) {
-            logger.severe("Review Change failed. " + e.getMessage());
-            throw new DatasourceQueryFailedException(e.getMessage());
+            DatasourceUtil.logSQLException(e, logger);
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                throw new DataNotWrittenException("Failed to change review in database.", e);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("Failed to query database.", e);
+            }
         }
     }
 
@@ -217,8 +233,13 @@ public class ReviewRepository {
                 reviewList.add(review);
             }
         } catch (SQLException e) {
-            logger.severe(e.getMessage());
-            throw new DatasourceQueryFailedException(e.getMessage(), e);
+            DatasourceUtil.logSQLException(e, logger);
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                throw new DataNotCompleteException("List of reviews could not be loaded.", e);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("Failed to query database.", e);
+            }
         }
         return reviewList;
     }
@@ -410,9 +431,10 @@ public class ReviewRepository {
                 throw new NotFoundException();
             }
 
-        } catch (SQLException exception) {
-            DatasourceUtil.logSQLException(exception, logger);
-            throw new DatasourceQueryFailedException("A datasource exception occurred while loading a file.", exception);
+        } catch (SQLException e) {
+            DatasourceUtil.logSQLException(e, logger);
+            transaction.abort();
+            throw new DatasourceQueryFailedException("Failed to query database.", e);
         }
     }
 }
