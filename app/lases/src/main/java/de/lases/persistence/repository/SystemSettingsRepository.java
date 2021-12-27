@@ -4,6 +4,7 @@ import de.lases.global.transport.FileDTO;
 import de.lases.global.transport.SystemSettings;
 import de.lases.persistence.exception.*;
 import de.lases.persistence.util.DatasourceUtil;
+import de.lases.persistence.util.TransientSQLExceptionChecker;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -59,8 +60,13 @@ public class SystemSettingsRepository {
 
             statement.executeUpdate();
         } catch (SQLException exception) {
-            transaction.abort();
             DatasourceUtil.logSQLException(exception, logger);
+
+            if (TransientSQLExceptionChecker.isTransient(exception.getSQLState())) {
+                logger.severe("Data not written while updating system settings.");
+                throw new DataNotWrittenException();
+            }
+            transaction.abort();
             throw new DatasourceQueryFailedException("A datasource exception occurred while changing the system settings.");
         }
     }
