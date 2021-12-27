@@ -36,8 +36,11 @@ public class InitialConfigBacking {
      * @return Show the welcome page.
      */
     public String createDatasource() {
-        customizationService.createDataSourceSchema();
-        return "/views/anonymous/welcome.xhtml?faces-redirect=true";
+        if (customizationService.createDataSourceSchema()) {
+            return "/views/anonymous/welcome.xhtml?faces-redirect=true";
+        } else {
+            return null;
+        }
     }
 
     /**

@@ -6,6 +6,9 @@ import de.lases.persistence.exception.DatasourceQueryFailedException;
 import de.lases.persistence.repository.ReviewRepository;
 import de.lases.persistence.repository.Transaction;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -68,8 +71,19 @@ public class DatasourceUtil {
      * @throws DatasourceNotFoundException If the datasource cannot be
      *                                     reached.
      */
-    public static void createDatasource() {
+    public static void createDatasource() throws IOException {
+        Path pathToSQL = Path.of("resources/sql/CREATE_ALL.sql");
+        String sql = Files.readString(pathToSQL);
+        Transaction transaction = new Transaction();
+        Connection conn = transaction.getConnection();
 
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.executeUpdate();
+            transaction.commit();
+        } catch (SQLException e) {
+            logSQLException(e, l);
+            throw new DatasourceNotFoundException(e.getMessage());
+        }
     }
 
     /**
@@ -103,10 +117,12 @@ public class DatasourceUtil {
             // If review exists, so does submission, paper and user.
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM review");
             ps.executeQuery();
+            ps.close();
 
             // system is essential.
             ps = conn.prepareStatement("SELECT * FROM system");
             ps.executeQuery();
+            ps.close();
         } catch (SQLException e) {
             connectionState.setErrorMessage(e.getMessage());
             logSQLException(e, l);

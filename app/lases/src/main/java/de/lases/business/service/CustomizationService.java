@@ -11,6 +11,7 @@ import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 
+import java.io.IOException;
 import java.util.PropertyResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -71,9 +72,18 @@ public class CustomizationService {
 
     /**
      * Initiates the creation of the datasource's schema.
+     *
+     * @return True if the creation succeeded.
      */
-    public void createDataSourceSchema() {
-        DatasourceUtil.createDatasource();
+    public boolean createDataSourceSchema() {
+        try {
+            DatasourceUtil.createDatasource();
+        } catch (IOException e) {
+            logger.severe("Could not read SQL CREATE_ALL file. " + e.getMessage());
+            uiMessageEvent.fire(new UIMessage(e.getMessage(), MessageCategory.FATAL));
+            return false;
+        }
+        return true;
     }
 
     /**
