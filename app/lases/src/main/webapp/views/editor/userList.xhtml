@@ -1,0 +1,21 @@
+<ui:composition template="/resources/templates/main.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:ut="http://xmlns.jcp.org/jsf/composite/templates/composites/usertable">
+
+    <!-- page title -->
+    <ui:define name="title">#{labels['forumListTitle']}</ui:define>
+
+    <!-- content of userList.xhtml -->
+    <ui:define name="content">
+        <div id="forum-list-pagination" class="col-md-10">
+            <div class="container mt-5">
+                <div class="card">
+                    <div class="card-body">
+                        <ut:usertable backing="#{userListBacking}"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>
