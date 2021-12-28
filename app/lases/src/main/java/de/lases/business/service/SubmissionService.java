@@ -25,7 +25,9 @@ import java.util.logging.Logger;
  * Provides functionality regarding the management and handling of submissions.
  * In case of an unexpected state, a {@link UIMessage} event will be fired.
  *
- * @author Thomas Kirz, Stefanie Gürster, Sebastian Vogt
+ * @author Thomas Kirz
+ * @author Stefanie Gürster
+ * @author Sebastian Vogt
  */
 @Dependent
 public class SubmissionService implements Serializable {
@@ -97,7 +99,7 @@ public class SubmissionService implements Serializable {
         Transaction transaction = new Transaction();
 
         try {
-            submission = SubmissionRepository.add(submission, transaction);
+            SubmissionRepository.add(submission, transaction);
         } catch (DataNotWrittenException e) {
             uiMessageEvent.fire(new UIMessage(
                     resourceBundle.getString("dataNotWritten"),

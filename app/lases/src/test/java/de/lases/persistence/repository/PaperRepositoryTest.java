@@ -22,7 +22,8 @@ import java.time.LocalTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * @author Stefanie Gürster, Sebastian Vogt
+ * @author Stefanie Gürster
+ * @author Sebastian Vogt
  */
 class PaperRepositoryTest {
 

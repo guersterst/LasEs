@@ -7,7 +7,6 @@ import de.lases.persistence.exception.InvalidFieldsException;
 import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.internal.ConfigReader;
 import de.lases.persistence.repository.PaperRepository;
-import de.lases.persistence.repository.SubmissionRepository;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
@@ -22,10 +21,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @author Stefanie Gürster, Sebastian Vogt
  * <p>
  * Provides functionality for handling papers in {@link Submission}s.
  * In case of an unexpected state, a {@link UIMessage} event will be fired.
+ *
+ * @author Stefanie Gürster
+ * @author Sebastian Vogt
  */
 @Dependent
 public class PaperService implements Serializable {
@@ -89,6 +90,8 @@ public class PaperService implements Serializable {
      * @param file  The {@link FileDTO} to be added with the paper,
      *              containing a {@code byte[]} with the pdf.
      * @param paper The filled {@link Paper} to be added.
+     *
+     * @author Sebastian Vogt
      */
     public void add(FileDTO file, Paper paper) {
         Transaction transaction = new Transaction();

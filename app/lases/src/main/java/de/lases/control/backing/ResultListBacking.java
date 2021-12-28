@@ -3,7 +3,6 @@ package de.lases.control.backing;
 import de.lases.business.internal.ConfigPropagator;
 import de.lases.business.service.ScientificForumService;
 import de.lases.business.service.SubmissionService;
-import de.lases.business.service.UserService;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
@@ -12,11 +11,11 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import java.io.Serial;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Backing bean for the result list.
+ *
+ * @author Sebastian Vogt
  */
 @ViewScoped
 @Named
@@ -39,20 +38,9 @@ public class ResultListBacking implements SubmissionPaginationBacking {
     private ScientificForumService scientificForumService;
 
     @Inject
-    private UserService userService;
-
-    @Inject
     private ConfigPropagator configPropagator;
 
     private Pagination<Submission> submissionPagination;
-
-    private Pagination<Submission> reviewedPagination;
-
-    private Pagination<Submission> editedPagination;
-
-    private Pagination<User> userPagination;
-
-    private Pagination<ScientificForum> scientificForumPagination;
 
     private Tab tab;
 
@@ -180,44 +168,6 @@ public class ResultListBacking implements SubmissionPaginationBacking {
     }
 
     /**
-     * Get the pagination for the search results with submissions reviewed by
-     * the user.
-     *
-     * @return The pagination for the submission reviewed by the user.
-     */
-    public Pagination<Submission> getReviewedPagination() {
-        return reviewedPagination;
-    }
-
-    /**
-     * Get the pagination for the search results with submissions edited by
-     * the user.
-     *
-     * @return The pagination for the submission edited by the user.
-     */
-    public Pagination<Submission> getEditedPagination() {
-        return editedPagination;
-    }
-
-    /**
-     * Get the pagination for the search results with users.
-     *
-     * @return The pagination for users.
-     */
-    public Pagination<User> getUserPagination() {
-        return userPagination;
-    }
-
-    /**
-     * Get the pagination for the search results with scientific forums.
-     *
-     * @return The pagination for scientific forums.
-     */
-    public Pagination<ScientificForum> getScientificForumPagination() {
-        return scientificForumPagination;
-    }
-
-    /**
      * Get the pagination for the submissions submitted by the user.
      *
      * @return The pagination for the submissions submitted by the user.
@@ -264,7 +214,7 @@ public class ResultListBacking implements SubmissionPaginationBacking {
     /**
      * Get the global search word to search for.
      *
-     * @returns The search word.
+     * @return The search word.
      */
     public String getSearchWord() {
         return searchWord;

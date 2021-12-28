@@ -1,14 +1,11 @@
 package de.lases.control.backing;
 
 import de.lases.business.service.PaperService;
-import de.lases.business.service.ScientificForumService;
 import de.lases.business.service.SubmissionService;
 import de.lases.business.service.UserService;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -25,6 +22,8 @@ import java.util.logging.Logger;
 
 /**
  * Backing bean for the new submission page.
+ *
+ * @author Sebastian Vogt
  */
 @ViewScoped
 @Named
@@ -43,9 +42,6 @@ public class NewSubmissionBacking implements Serializable {
 
     @Inject
     private PaperService paperService;
-
-    @Inject
-    private ScientificForumService scientificForumService;
 
     @Inject
     private UserService userService;

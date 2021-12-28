@@ -13,6 +13,9 @@ import java.util.logging.Logger;
 
 /**
  * Offers methods for managing the datasource.
+ *
+ * @author Thomas Kirz
+ * @author Sebastian Vogt
  */
 public class DatasourceUtil {
 
@@ -23,6 +26,8 @@ public class DatasourceUtil {
      * address they will not be deleted) from the datasource that need to verify
      * their email address but did not do so within 1 hour.
      * Users that are (co-)authors of submissions are not deleted.
+     *
+     * @author Thomas Kirz
      */
     public static void cleanUpVerifications() {
         Transaction transaction = new Transaction();
@@ -84,6 +89,8 @@ public class DatasourceUtil {
      *
      * @param sqlException An sql exception.
      * @param logger The logger to user.
+     *
+     * @author Sebastian Vogt
      */
     public static void logSQLException(SQLException sqlException,
                                        Logger logger) {

@@ -13,7 +13,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -21,6 +20,7 @@ import java.util.logging.Logger;
  * possibility to get lists of submissions.
  *
  * @author Thomas Kirz
+ * @author Sebastian Vogt
  */
 public class SubmissionRepository {
 
@@ -129,7 +129,6 @@ public class SubmissionRepository {
      *                                        submission is null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
-     * @return The submission that was added, but filled with its id.
      *
      * @author Sebastian Vogt
      */
@@ -141,7 +140,7 @@ public class SubmissionRepository {
         }
 
         Connection conn = transaction.getConnection();
-        Integer id = null;
+        int id;
         String sql = """
                 SELECT max(id) FROM submission
                 """;
@@ -563,6 +562,8 @@ public class SubmissionRepository {
      *                                        fails.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     *
+     * @author Sebastian Vogt
      */
     public static void addCoAuthor(Submission submission, User user,
                                    Transaction transaction)
