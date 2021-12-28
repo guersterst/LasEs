@@ -24,6 +24,7 @@ public class ImprintBacking {
      */
     @PostConstruct
     public void init() {
+        systemSettings = customizationService.get();
     }
 
     /**
