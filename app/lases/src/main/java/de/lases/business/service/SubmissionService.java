@@ -141,6 +141,9 @@ public class SubmissionService implements Serializable {
         }
     }
 
+    /**
+     * @author Sebastian Vogt
+     */
     private boolean sendEmailsForAddSubmission(Submission submission, Transaction transaction, List<User> coAuthors) {
         User editor = new User();
         editor.setId(submission.getEditorId());
@@ -161,12 +164,14 @@ public class SubmissionService implements Serializable {
         String emailEditor = editor.getEmailAddress();
 
         try {
-            EmailUtil.sendEmail(new String[]{emailEditor},
-                    null, "New Submission", "New Submission, jaja");
-            EmailUtil.sendEmail(emailsCoAuthors.toArray(new String[0]), null, "New Submission",
-                    "New Submission, jaja");
+            EmailUtil.sendEmail(new String[]{emailEditor}, null,
+                    resourceBundle.getString("email.assignedEditor.subject"),
+                    resourceBundle.getString("email.assignedEditor.body") + submission.getTitle());
+            EmailUtil.sendEmail(emailsCoAuthors.toArray(new String[0]), null,
+                    resourceBundle.getString("email.assignedCoAuthor.subject"),
+                    resourceBundle.getString("email.assignedCoAuthor.body") + submission.getTitle());
         } catch (EmailTransmissionFailedException e) {
-            uiMessageEvent.fire(new UIMessage("Hello", MessageCategory.ERROR));
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("emailNotSent"), MessageCategory.ERROR));
             return false;
         }
         return true;
