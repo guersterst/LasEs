@@ -186,11 +186,10 @@ public class ScientificForumRepository {
             // Return new ID.
             try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    ScientificForum sf =  new ScientificForum();
+                    ScientificForum sf = new ScientificForum();
                     sf.setId(generatedKeys.getInt(1));
                     return sf;
-                }
-                else {
+                } else {
                     throw new SQLException("Creating forum failed, no ID obtained.");
                 }
             }
@@ -272,11 +271,11 @@ public class ScientificForumRepository {
      * @param scientificForum The scientific forum to remove. Must be filled
      *                        with a valid id.
      * @param transaction     The transaction to use.
-     * @throws NotFoundException              The specified scientific forum was not found in
-     *                                        the repository.
-     * @throws DataNotWrittenException        If writing the data to the repository
-     *                                        fails
-     * @throws InvalidFieldsException         If no id is provided.
+     * @throws NotFoundException       The specified scientific forum was not found in
+     *                                 the repository.
+     * @throws DataNotWrittenException If writing the data to the repository
+     *                                 fails
+     * @throws InvalidFieldsException  If no id is provided.
      */
     public static void remove(ScientificForum scientificForum,
                               Transaction transaction)
@@ -326,7 +325,7 @@ public class ScientificForumRepository {
     public static List<ScientificForum> getList(Transaction transaction,
                                                 ResultListParameters
                                                         resultListParameters) {
-            if (transaction == null) {
+        if (transaction == null) {
             l.severe("Passed transaction is null.");
             throw new IllegalArgumentException("Transaction must not be null.");
         }
@@ -340,10 +339,21 @@ public class ScientificForumRepository {
         List<ScientificForum> scientificForums = new ArrayList<>();
 
         try (PreparedStatement ps = conn.prepareStatement(getStatementForumList(resultListParameters, false))) {
+            int i = 1;
             if (isFilled(resultListParameters.getFilterColumns().get("name"))) {
-                ps.setString(1, "%" + resultListParameters.getFilterColumns().get("name") + "%");
+                ps.setString(i, "%" + resultListParameters.getFilterColumns().get("name") + "%");
+                i++;
 
             }
+
+            // Global Search Word
+            ps.setString(i, "%"
+                    + Objects.requireNonNullElse(resultListParameters.getGlobalSearchWord(), "") + "%");
+
+            i++;
+            ps.setString(i, "%"
+                    + Objects.requireNonNullElse(resultListParameters.getGlobalSearchWord(), "") + "%");
+
 
             resultSet = ps.executeQuery();
 
@@ -369,27 +379,53 @@ public class ScientificForumRepository {
 
         sb.append("""
                 FROM scientific_forum f
-                WHERE
                 """).append("\n");
+        if (!doCount) {
+            sb.append("WHERE").append("\n");
+        }
 
+        boolean hasPriorCond = false;
         if (isFilled(params.getFilterColumns().get("name"))) {
-            sb.append("f.name ILIKE ?\n AND");
+            sb.append("f.name ILIKE ?\n");
+            hasPriorCond = true;
         }
 
         // Filter according to date select parameter
         if (params.getDateSelect() == DateSelect.FUTURE) {
-            sb.append(" (timestamp_deadline::date >= CURRENT_DATE)\n");
+            if (hasPriorCond) {
+                sb.append("AND");
+            }
+            sb.append(" (f.timestamp_deadline::date >= CURRENT_DATE)\n");
+            hasPriorCond = true;
         } else if (params.getDateSelect() == DateSelect.PAST) {
-            sb.append(" (timestamp_deadline::date <= CURRENT_DATE)\n");
+            if (hasPriorCond) {
+                sb.append("AND");
+            }
+            sb.append(" (f.timestamp_deadline::date <= CURRENT_DATE)\n");
+            hasPriorCond = true;
         }
 
-        if (!sb.toString().contains("ILIKE") && !sb.toString().contains("CURRENT")) {
+        if (!hasPriorCond && "".equals(params.getGlobalSearchWord())) {
             StringBuilder newSb = new StringBuilder();
             newSb.append(sb.toString().replace("WHERE", ""));
             sb = newSb;
         }
 
+
+        // Sort according to sort column parameters
         if (!doCount) {
+
+            // Filter according to global search word.
+            if (!"".equals(params.getGlobalSearchWord())) {
+                if (hasPriorCond) {
+                    sb.append("AND");
+                }
+                sb.append(" (");
+                sb.append(" f.name ILIKE ?\n");
+                sb.append(" OR f.description ILIKE ?\n");
+                sb.append(")\n");
+            }
+
             if (isFilled(params.getSortColumn())) {
                 if (params.getSortColumn().equals("name")) {
                     sb.append("ORDER BY f.name");
@@ -426,6 +462,8 @@ public class ScientificForumRepository {
         Connection connection = transaction.getConnection();
         ResultSet resultSet;
 
+        //todo is dateselect missing here? -> counts only those not filtered by word but counts those filtered out by
+        // dateselect? problemo?
         try (PreparedStatement ps = connection.prepareStatement(getStatementForumList(resultListParameters, true))) {
             if (isFilled(resultListParameters.getFilterColumns().get("name"))) {
                 ps.setString(1, "%" + resultListParameters.getFilterColumns().get("name") + "%");
@@ -450,12 +488,12 @@ public class ScientificForumRepository {
      * @param scientificForum A scientific forum dto with a valid id.
      * @param editor          A user dto with a valid id.
      * @param transaction     The transaction to use.
-     * @throws NotFoundException              If there is no scientific forum with the
-     *                                        provided id or there is no user with the
-     *                                        provided id.
-     * @throws DataNotWrittenException        If writing the data to the repository
-     *                                        fails.
-     * @throws InvalidFieldsException         If no editor and forum ids are provided.
+     * @throws NotFoundException       If there is no scientific forum with the
+     *                                 provided id or there is no user with the
+     *                                 provided id.
+     * @throws DataNotWrittenException If writing the data to the repository
+     *                                 fails.
+     * @throws InvalidFieldsException  If no editor and forum ids are provided.
      */
     public static void addEditor(ScientificForum scientificForum, User editor,
                                  Transaction transaction)
@@ -496,12 +534,12 @@ public class ScientificForumRepository {
      * @param scientificForum A scientific forum dto with a valid id.
      * @param scienceField    A science field dto with a valid id.
      * @param transaction     The transaction to use.
-     * @throws NotFoundException              If there is no scientific forum with the
-     *                                        provided id or there is no science field with
-     *                                        the provided id.
-     * @throws DataNotWrittenException        If writing the data to the repository
-     *                                        fails.
-     * @throws InvalidFieldsException         If no science field name and forum id are provided.
+     * @throws NotFoundException       If there is no scientific forum with the
+     *                                 provided id or there is no science field with
+     *                                 the provided id.
+     * @throws DataNotWrittenException If writing the data to the repository
+     *                                 fails.
+     * @throws InvalidFieldsException  If no science field name and forum id are provided.
      */
     public static void addScienceField(ScientificForum scientificForum,
                                        ScienceField scienceField,
@@ -545,13 +583,13 @@ public class ScientificForumRepository {
      * @param editor          A user dto with a valid id, which is an editor in the
      *                        aforementioned forum.
      * @param transaction     The transaction to use.
-     * @throws NotFoundException              If there is no scientific forum with the
-     *                                        provided id or there is no user with the
-     *                                        provided id or the provided user is not
-     *                                        an editor for the provided forum.
-     * @throws DataNotWrittenException        If writing the data to the repository
-     *                                        fails.
-     * @throws InvalidFieldsException         If no editor id and forum id are provided.
+     * @throws NotFoundException       If there is no scientific forum with the
+     *                                 provided id or there is no user with the
+     *                                 provided id or the provided user is not
+     *                                 an editor for the provided forum.
+     * @throws DataNotWrittenException If writing the data to the repository
+     *                                 fails.
+     * @throws InvalidFieldsException  If no editor id and forum id are provided.
      */
     public static void removeEditor(ScientificForum scientificForum,
                                     User editor, Transaction transaction)
@@ -594,13 +632,13 @@ public class ScientificForumRepository {
      * @param scienceField    A science field dto with a valid id that belongs to
      *                        the aforementioned forum.
      * @param transaction     The transaction to use.
-     * @throws NotFoundException              If there is no scientific forum with the
-     *                                        provided id or there is no science field with
-     *                                        the provided id or the provided science field
-     *                                        is not part of the provided field.
-     * @throws DataNotWrittenException        If writing the data to the repository
-     *                                        fails.
-     * @throws InvalidFieldsException         If no editor id and forum id are provided.
+     * @throws NotFoundException       If there is no scientific forum with the
+     *                                 provided id or there is no science field with
+     *                                 the provided id or the provided science field
+     *                                 is not part of the provided field.
+     * @throws DataNotWrittenException If writing the data to the repository
+     *                                 fails.
+     * @throws InvalidFieldsException  If no editor id and forum id are provided.
      */
     public static void removeScienceField(ScientificForum scientificForum,
                                           ScienceField scienceField,
