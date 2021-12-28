@@ -392,9 +392,9 @@ public class ScientificForumRepository {
         if (!doCount) {
             if (isFilled(params.getSortColumn())) {
                 if (params.getSortColumn().equals("name")) {
-                    sb.append("ORDER BY f.name");
+                    sb.append(" ORDER BY f.name");
                 } else {
-                    sb.append("ORDER BY f.").append(params.getSortColumn());
+                    sb.append(" ORDER BY f.").append(params.getSortColumn());
                 }
                 sb.append(" ")
                         .append(params.getSortOrder() == SortOrder.ASCENDING ? "ASC" : "DESC")
