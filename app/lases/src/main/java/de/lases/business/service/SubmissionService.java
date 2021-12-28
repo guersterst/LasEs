@@ -106,6 +106,8 @@ public class SubmissionService implements Serializable {
             transaction.abort();
             return null;
         }
+
+        List<User> coAuthorsFilled = new ArrayList<>();
         for (User user: coAuthors) {
             try {
                 User userWithId;
@@ -117,6 +119,7 @@ public class SubmissionService implements Serializable {
                 }
                 assert userWithId.getId() != null;
                 SubmissionRepository.addCoAuthor(submission, userWithId, transaction);
+                coAuthorsFilled.add(userWithId);
             } catch (DataNotWrittenException e) {
                 uiMessageEvent.fire(new UIMessage(
                         resourceBundle.getString("dataNotWritten"),
@@ -132,7 +135,7 @@ public class SubmissionService implements Serializable {
             }
         }
 
-        if (sendEmailsForAddSubmission(submission, transaction, coAuthors)) {
+        if (sendEmailsForAddSubmission(submission, transaction, coAuthorsFilled)) {
             transaction.commit();
             return submission;
         } else {
@@ -159,7 +162,13 @@ public class SubmissionService implements Serializable {
         assert editor != null;
         assert editor.getEmailAddress() != null;
 
-        List<String> emailsCoAuthors = coAuthors.stream().map(User::getEmailAddress).toList();
+        List<String> emailsCoAuthorsRegistered = coAuthors.stream().filter(User::isRegistered)
+                .map(User::getEmailAddress).toList();
+        List<String> emailsCoAuthorsNotRegistered = coAuthors.stream().filter(user -> !user.isRegistered())
+                .map(User::getEmailAddress).toList();
+
+        logger.log(Level.INFO, emailsCoAuthorsNotRegistered.toString());
+        logger.log(Level.INFO, emailsCoAuthorsRegistered.toString());
 
         String emailEditor = editor.getEmailAddress();
 
@@ -167,9 +176,18 @@ public class SubmissionService implements Serializable {
             EmailUtil.sendEmail(new String[]{emailEditor}, null,
                     resourceBundle.getString("email.assignedEditor.subject"),
                     resourceBundle.getString("email.assignedEditor.body") + submission.getTitle());
-            EmailUtil.sendEmail(emailsCoAuthors.toArray(new String[0]), null,
-                    resourceBundle.getString("email.assignedCoAuthor.subject"),
-                    resourceBundle.getString("email.assignedCoAuthor.body") + submission.getTitle());
+            if (!emailsCoAuthorsRegistered.isEmpty()) {
+                EmailUtil.sendEmail(emailsCoAuthorsRegistered.toArray(new String[0]), null,
+                        resourceBundle.getString("email.assignedCoAuthor.subject"),
+                        resourceBundle.getString("email.assignedCoAuthor.body") + submission.getTitle()
+                                + "DU BSIT SCHON REIGSTRIERT");
+            }
+            if (!emailsCoAuthorsNotRegistered.isEmpty()) {
+                EmailUtil.sendEmail(emailsCoAuthorsNotRegistered.toArray(new String[0]), null,
+                        resourceBundle.getString("email.assignedCoAuthor.subject"),
+                        resourceBundle.getString("email.assignedCoAuthor.body") + submission.getTitle()
+                                + "DU BSIT NO NED REIGSTRIERT");
+            }
         } catch (EmailTransmissionFailedException e) {
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("emailNotSent"), MessageCategory.ERROR));
             return false;
