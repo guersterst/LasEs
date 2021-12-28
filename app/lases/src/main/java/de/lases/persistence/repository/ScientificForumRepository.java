@@ -462,8 +462,6 @@ public class ScientificForumRepository {
         Connection connection = transaction.getConnection();
         ResultSet resultSet;
 
-        //todo is dateselect missing here? -> counts only those not filtered by word but counts those filtered out by
-        // dateselect? problemo?
         try (PreparedStatement ps = connection.prepareStatement(getStatementForumList(resultListParameters, true))) {
             if (isFilled(resultListParameters.getFilterColumns().get("name"))) {
                 ps.setString(1, "%" + resultListParameters.getFilterColumns().get("name") + "%");
