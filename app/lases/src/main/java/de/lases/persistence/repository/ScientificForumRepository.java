@@ -393,13 +393,13 @@ public class ScientificForumRepository {
         // Filter according to date select parameter
         if (params.getDateSelect() == DateSelect.FUTURE) {
             if (hasPriorCond) {
-                sb.append("AND");
+                sb.append(" AND");
             }
             sb.append(" (f.timestamp_deadline::date >= CURRENT_DATE)\n");
             hasPriorCond = true;
         } else if (params.getDateSelect() == DateSelect.PAST) {
             if (hasPriorCond) {
-                sb.append("AND");
+                sb.append(" AND");
             }
             sb.append(" (f.timestamp_deadline::date <= CURRENT_DATE)\n");
             hasPriorCond = true;
@@ -407,7 +407,7 @@ public class ScientificForumRepository {
 
         if (!hasPriorCond && "".equals(params.getGlobalSearchWord())) {
             StringBuilder newSb = new StringBuilder();
-            newSb.append(sb.toString().replace("WHERE", ""));
+            newSb.append(sb.toString().replace(" WHERE", ""));
             sb = newSb;
         }
 
@@ -418,7 +418,7 @@ public class ScientificForumRepository {
             // Filter according to global search word.
             if (!"".equals(params.getGlobalSearchWord())) {
                 if (hasPriorCond) {
-                    sb.append("AND");
+                    sb.append(" AND");
                 }
                 sb.append(" (");
                 sb.append(" f.name ILIKE ?\n");
@@ -428,9 +428,9 @@ public class ScientificForumRepository {
 
             if (isFilled(params.getSortColumn())) {
                 if (params.getSortColumn().equals("name")) {
-                    sb.append("ORDER BY f.name");
+                    sb.append(" ORDER BY f.name");
                 } else {
-                    sb.append("ORDER BY f.").append(params.getSortColumn());
+                    sb.append(" ORDER BY f.").append(params.getSortColumn());
                 }
                 sb.append(" ")
                         .append(params.getSortOrder() == SortOrder.ASCENDING ? "ASC" : "DESC")
