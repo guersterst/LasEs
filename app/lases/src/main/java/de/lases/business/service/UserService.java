@@ -163,7 +163,7 @@ public class UserService implements Serializable {
                 + generateValidationUrl(verification);
 
         try {
-            EmailUtil.sendEmail(configPropagator.getProperty("MAIL_ADDRESS_FROM"), new String[]{user.getEmailAddress()},
+            EmailUtil.sendEmail(new String[]{user.getEmailAddress()},
                     null, propertyResourceBundle.getString("email.verification.subject"), emailBody);
         } catch (EmailTransmissionFailedException e) {
             return false;

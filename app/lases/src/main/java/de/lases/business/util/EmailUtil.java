@@ -1,35 +1,34 @@
 package de.lases.business.util;
 
 
-import de.lases.global.transport.UIMessage;
+import de.lases.business.internal.ConfigPropagator;
 import de.lases.persistence.exception.EmailTransmissionFailedException;
-import jakarta.enterprise.event.Event;
-import jakarta.inject.Inject;
+import de.lases.persistence.util.EmailSender;
+import jakarta.enterprise.inject.spi.CDI;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 /**
  * Provides functionality for sending emails.
+ *
+ * @author Thomas Kirz
  */
 public class EmailUtil {
-
-    @Inject
-    private Event<UIMessage> uiMessageEvent;
-
 
     /**
      * Sends an email to a given recipient.
      *
-     * @param sender     The senders email address.
      * @param recipients The recipients email addresses.
      * @param cc         The recipients in carbon-copy.
      * @param subject    The subject of the email.
      * @param body       The body of the email.
      * @throws EmailTransmissionFailedException Thrown when an issue with the transmission of the email has occurred.
      */
-    public static void sendEmail(String sender, String[] recipients, String[] cc, String subject, String body)
+    public static void sendEmail(String[] recipients, String[] cc, String subject, String body)
             throws EmailTransmissionFailedException {
+        ConfigPropagator config = CDI.current().select(ConfigPropagator.class).get();
+        EmailSender.sendEmail(config.getProperty("MAIL_ADDRESS_FROM"), recipients, cc, subject, body);
     }
 
     /**
@@ -49,6 +48,8 @@ public class EmailUtil {
             delimiter = "&";
         }
         if (body != null) {
+            // mailto links use \r\n as line endings
+            body = body.replaceAll("([^\\r])\\n", "$1\r\n");
             mailto += delimiter + "body=" + URLEncoder.encode(body, StandardCharsets.UTF_8);
             delimiter = "&";
         }
