@@ -1,18 +1,14 @@
 package de.lases.business.service;
 
-import de.lases.business.util.AvatarUtil;
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.DataNotWrittenException;
 import de.lases.persistence.exception.InvalidFieldsException;
 import de.lases.persistence.exception.NotFoundException;
-import de.lases.global.transport.ConnectionState;
-import de.lases.global.transport.FileDTO;
-import de.lases.global.transport.SystemSettings;
 import de.lases.persistence.repository.SystemSettingsRepository;
 import de.lases.persistence.repository.Transaction;
+import de.lases.persistence.util.DatasourceUtil;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
-import jakarta.enterprise.inject.spi.CDI;
 import jakarta.inject.Inject;
 
 import java.io.IOException;
@@ -57,7 +53,6 @@ public class CustomizationService {
             logger.finest("Changed system settings");
         }  catch (DataNotWrittenException exception) {
 
-            logger.log(Level.WARNING, exception.getMessage());
             uiMessageEvent.fire(new UIMessage(props.getString("dataNotWritten"), MessageCategory.ERROR));
 
             transaction.abort();
@@ -76,15 +71,25 @@ public class CustomizationService {
 
     /**
      * Initiates the creation of the datasource's schema.
+     *
+     * @return True if the creation succeeded.
      */
-    public void createDataSourceSchema() {
+    public boolean createDataSourceSchema() {
+        try {
+            DatasourceUtil.createDatasource();
+        } catch (IOException e) {
+            logger.severe("Could not read SQL CREATE_ALL file. " + e.getMessage());
+            uiMessageEvent.fire(new UIMessage("Could not read SQL CREATE_ALL file. " + e.getMessage(), MessageCategory.FATAL));
+            return false;
+        }
+        return true;
     }
 
     /**
      * @return The current state of the database connection.
      */
     public ConnectionState getConnectionState() {
-        return null;
+        return DatasourceUtil.testDatasourceConnection();
     }
 
     /**

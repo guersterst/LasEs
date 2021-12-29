@@ -9,6 +9,7 @@ import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
 import de.lases.persistence.internal.ConfigReader;
 import de.lases.persistence.util.DatasourceUtil;
+import de.lases.persistence.util.TransientSQLExceptionChecker;
 import jakarta.enterprise.inject.spi.CDI;
 
 /**
@@ -32,6 +33,7 @@ public class PaperRepository {
      * @param paper       A paper dto that must be filled with a valid id.
      * @param transaction The transaction to use.
      * @return A fully filled paper dto.
+     * @throws InvalidFieldsException         If the paper DTO is not fully filled.
      * @throws NotFoundException              If there is no paper with the provided id and
      *                                        submission id.
      * @throws DatasourceQueryFailedException If the datasource cannot be
@@ -78,6 +80,7 @@ public class PaperRepository {
 
         } catch (SQLException exception) {
             DatasourceUtil.logSQLException(exception, logger);
+            transaction.abort();
             throw new DatasourceQueryFailedException("A data source exception occurred.", exception);
         }
     }
@@ -179,13 +182,6 @@ public class PaperRepository {
 
         Connection connection = transaction.getConnection();
 
-        try {
-            findPaper(paper, connection);
-
-        } catch (SQLException exception) {
-            logger.warning("Searching paper failed. Tried to change paper");
-            throw new NotFoundException();
-        }
         String sql = "UPDATE paper SET is_visible = ? WHERE version = ? AND submission_id = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -193,12 +189,22 @@ public class PaperRepository {
             statement.setInt(2, paper.getVersionNumber());
             statement.setInt(3, paper.getSubmissionId());
 
-            statement.executeUpdate();
+            if (statement.executeUpdate() == 0) {
+                logger.severe("The paper could not be changed because it doesn't exist.");
+                throw new NotFoundException("Paper not found during change.");
+            } else {
+                logger.finest("Paper that had to be changed is an existing paper.");
+            }
 
         } catch (SQLException exception) {
-            transaction.abort();
             DatasourceUtil.logSQLException(exception, logger);
-            throw new DatasourceQueryFailedException("A datasource exception occurred while changing paper data.", exception);
+
+            if (TransientSQLExceptionChecker.isTransient(exception.getSQLState())) {
+                throw new DataNotWrittenException("The paper is not changed. ", exception);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("A datasource exception occurred while changing paper data.", exception);
+            }
         }
 
         if (paper.isVisible()) {
@@ -207,11 +213,19 @@ public class PaperRepository {
             try (PreparedStatement statement = connection.prepareStatement(sqlDeadline)){
                 statement.setInt(1, paper.getSubmissionId());
 
-                statement.executeUpdate();
+                if (statement.executeUpdate() == 0) {
+                    logger.severe("The deadline could not be set to null because the submission doesn't exist.");
+                    throw new NotFoundException("Submission not found during setting the deadline.");
+                }
             } catch (SQLException exception) {
-                transaction.abort();
                 DatasourceUtil.logSQLException(exception, logger);
-                throw new DatasourceQueryFailedException("A datasource exception occurred while changing reviewed_by data.", exception);
+
+                if (TransientSQLExceptionChecker.isTransient(exception.getSQLState())) {
+                    throw new DataNotWrittenException("The paper is not changed. ", exception);
+                } else {
+                    transaction.abort();
+                    throw new DatasourceQueryFailedException("A datasource exception occurred while changing reviewed_by data.", exception);
+                }
             }
         }
     }
@@ -245,27 +259,29 @@ public class PaperRepository {
 
         Connection connection = transaction.getConnection();
 
-        try {
-            ResultSet resultSet = findPaper(paper, connection);
-
-        } catch (SQLException exception) {
-            logger.warning("Removing paper with the submission id: " + paper.getSubmissionId()
-                    + " and version number: " + paper.getVersionNumber());
-            throw new NotFoundException();
-        }
-
         String sql = "DELETE FROM paper WHERE version = ? AND submission_id = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, paper.getVersionNumber());
             statement.setInt(2, paper.getSubmissionId());
 
-            statement.executeUpdate();
+            if (statement.executeUpdate() == 0) {
+                logger.severe("Removing paper with the submission id: " + paper.getSubmissionId()
+                        + " and version number: " + paper.getVersionNumber());
+                throw new NotFoundException();
+            } else {
+                logger.finest("Found paper that had to be removed.");
+            }
 
         } catch (SQLException exception) {
-            transaction.abort();
             DatasourceUtil.logSQLException(exception, logger);
-            throw new DatasourceQueryFailedException("A datasource exception occurred while removing a paper.", exception);
+
+            if (TransientSQLExceptionChecker.isTransient(exception.getSQLState())) {
+                throw new DataNotWrittenException("Remove a paper with the submission id: " + paper.getSubmissionId() + " was not successful.");
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("A datasource exception occurred while removing a paper.", exception);
+            }
         }
 
     }
@@ -291,6 +307,8 @@ public class PaperRepository {
      *                                        queried.
      * @throws InvalidQueryParamsException    If the resultListParameters contain
      *                                        an erroneous option.
+     * @throws InvalidFieldsException         If the submission or user DTO is not fully filled with
+     *                                        the required data.
      */
     public static List<Paper> getList(Submission submission, Transaction transaction, User user, ResultListParameters resultListParameters) throws DataNotCompleteException, NotFoundException {
         if (transaction == null || resultListParameters == null) {
@@ -301,9 +319,9 @@ public class PaperRepository {
 
         if (submission.getId() == null || user.getId() == null) {
             transaction.abort();
-            logger.warning("Loading a list of paper with the submission id: " + submission.getId()
+            logger.severe("Loading a list of paper with the submission id: " + submission.getId()
                     + " and a user, who requests it, with the id: " + user.getId());
-            throw new NotFoundException();
+            throw new InvalidFieldsException();
         }
 
         List<Paper> paperList = new LinkedList<>();
@@ -326,21 +344,30 @@ public class PaperRepository {
 
             resultSet = handleStatement(statement,submission, user, privilege, resultListParameters);
 
-            while (resultSet.next()) {
-                Paper paper = new Paper();
-                paper.setVisible(resultSet.getBoolean("is_visible"));
-                paper.setVersionNumber(resultSet.getInt("version"));
-                paper.setUploadTime(resultSet.getTimestamp("timestamp_upload").toLocalDateTime());
-                paper.setSubmissionId(resultSet.getInt("submission_id"));
+            if (!resultSet.next()) {
+                logger.severe("Submission not found with id: " + submission.getId() + " or user not found with id: " +user.getId());
+                throw new NotFoundException();
+            } else {
+                do {
+                    Paper paper = new Paper();
+                    paper.setVisible(resultSet.getBoolean("is_visible"));
+                    paper.setVersionNumber(resultSet.getInt("version"));
+                    paper.setUploadTime(resultSet.getTimestamp("timestamp_upload").toLocalDateTime());
+                    paper.setSubmissionId(resultSet.getInt("submission_id"));
 
-                paperList.add(paper);
+                    paperList.add(paper);
+                } while (resultSet.next());
             }
 
         } catch (SQLException e) {
-            transaction.abort();
             DatasourceUtil.logSQLException(e, logger);
-            throw new DatasourceQueryFailedException("A datasource exception occurred while loading all papers of a submission.", e);
 
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                throw new DataNotCompleteException("the list of papers of a submission could not be retrieved.", e);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("A datasource exception occurred while loading all papers of a submission.", e);
+            }
         }
 
         return paperList;
@@ -480,8 +507,12 @@ public class PaperRepository {
      *                              parameters from the pagination like
      *                              filtering, sorting or number of elements.
      * @return The number of papers the user is author, editor or reviewer of.
-     * @throws NotFoundException         If there is no user or submission with the provided id.
-     * @throws DataNotCompleteException  If the list is truncated.
+     * @throws NotFoundException           If there is no user or submission with the provided id.
+     * @throws DataNotCompleteException    If the list is truncated.
+     * @throws InvalidQueryParamsException If the resultListParameters contain
+     *                                     an erroneous option.
+     * @throws InvalidFieldsException      If the submission or user DTO is not fully filled with
+     *                                     the required data.
      */
     public static int countPaper(User user, Submission submission, Transaction transaction,
                                  ResultListParameters resultListParameters) throws NotFoundException, DataNotCompleteException {
@@ -495,7 +526,7 @@ public class PaperRepository {
             transaction.abort();
             logger.warning("Counting the amount of papers with the submission id: " + submission.getId()
                     + " and a user, who requests it, with the id: " + user.getId());
-            throw new NotFoundException();
+            throw new InvalidFieldsException();
         }
 
         Connection connection = transaction.getConnection();
@@ -510,13 +541,22 @@ public class PaperRepository {
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             ResultSet resultSet = handleStatement(statement, submission, user, privilege, resultListParameters);
 
-            while (resultSet.next()) {
-                count++;
+            if (!resultSet.next()) {
+                logger.severe("Submission or user was not found. Count was not successful.");
+                throw new NotFoundException();
+            } else {
+                resultSet.previous();
+                while (resultSet.next()) {
+                    count++;
+                }
             }
 
         } catch (SQLException e) {
-            transaction.abort();
             DatasourceUtil.logSQLException(e, logger);
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                throw new DataNotCompleteException("Count the items of the paper pagination failed.", e);
+            }
+            transaction.abort();
             throw new DatasourceQueryFailedException("A datasource exception occurred while loading all papers of a submission.", e);
         }
 
@@ -564,7 +604,7 @@ public class PaperRepository {
                 return file;
 
             } else {
-                logger.warning("Loading paper with the submission id: " + paper.getSubmissionId()
+                logger.severe("Loading paper with the submission id: " + paper.getSubmissionId()
                         + " and version number: " + paper.getVersionNumber());
                 throw new NotFoundException();
             }
@@ -622,24 +662,6 @@ public class PaperRepository {
             logger.severe("Finding newest paper: " + e.getMessage());
             throw new DatasourceQueryFailedException(e.getMessage());
         }
-    }
-
-
-    private static ResultSet findPaper(Paper paper, Connection connection) throws SQLException {
-
-        PreparedStatement find = connection.prepareStatement(
-                """
-                        SELECT *
-                        FROM paper
-                        WHERE version = ? AND submission_id = ?
-                        """
-        );
-        find.setInt(1, paper.getVersionNumber());
-        find.setInt(2, paper.getSubmissionId());
-
-        ResultSet rs = find.executeQuery();
-        find.close();
-        return rs;
     }
 
 }

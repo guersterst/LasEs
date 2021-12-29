@@ -221,15 +221,11 @@ public class SubmissionService implements Serializable {
             } catch (DataNotWrittenException e) {
 
                 uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotWritten"), MessageCategory.WARNING));
-                logger.log(Level.WARNING, e.getMessage());
-
                 transaction.abort();
 
             } catch (NotFoundException e) {
 
                 uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotFound"), MessageCategory.ERROR));
-                logger.fine("Error while removing a submssion with the id: " + submission.getId());
-
                 transaction.abort();
 
             }
@@ -280,17 +276,11 @@ public class SubmissionService implements Serializable {
                 SubmissionRepository.change(newSubmission, transaction);
                 transaction.commit();
             } catch (DataNotWrittenException e) {
-
-                logger.log(Level.WARNING, e.getMessage());
                 uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotWritten"),MessageCategory.ERROR));
-
                 transaction.abort();
 
             } catch (NotFoundException e) {
-
-                logger.fine("Error while changing a submission with the submission id: " +newSubmission.getId());
                 uiMessageEvent.fire(new UIMessage(resourceBundle.getString("submissionNotFound"), MessageCategory.ERROR));
-
                 transaction.abort();
             }
         }
@@ -321,18 +311,10 @@ public class SubmissionService implements Serializable {
         } catch (DataNotWrittenException e) {
 
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotWritten"), MessageCategory.WARNING));
-            logger.log(Level.WARNING, e.getMessage());
-
             transaction.abort();
 
         } catch (NotFoundException e) {
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotFound"), MessageCategory.WARNING));
-            logger.log(Level.WARNING, e.getMessage());
-
-            transaction.abort();
-        } catch (KeyAlreadyExistsException e) {
-            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("alreadyExistsReviewer"), MessageCategory.WARNING));
-            logger.log(Level.WARNING, e.getMessage());
             transaction.abort();
         }
 
@@ -384,8 +366,6 @@ public class SubmissionService implements Serializable {
         } catch (NotFoundException e) {
 
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotFound"), MessageCategory.ERROR));
-            logger.severe("A Relation between this submission and users is not existing.");
-
             transaction.abort();
 
         }
@@ -441,14 +421,10 @@ public class SubmissionService implements Serializable {
         } catch (DataNotWrittenException e) {
 
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotWritten"), MessageCategory.WARNING));
-            logger.log(Level.WARNING, e.getMessage());
-
             transaction.abort();
         } catch (NotFoundException e) {
 
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotFound"), MessageCategory.ERROR));
-            logger.severe("A Relation between this submission and users is not existing.");
-
             transaction.abort();
         }
     }
@@ -493,7 +469,6 @@ public class SubmissionService implements Serializable {
             user = UserRepository.get(user, t);
             logger.finer("User with id " + user.getId() + " retrieved.");
         } catch (NotFoundException e) {
-            logger.severe("User with id " + user.getId() + " not found.");
             uiMessageEvent.fire(new UIMessage(
                     resourceBundle.getString("error.loadingSubmissionFailed"),
                     MessageCategory.ERROR));
@@ -592,12 +567,10 @@ public class SubmissionService implements Serializable {
             t.commit();
             logger.finer("List of submissions retrieved.");
         } catch (DataNotCompleteException e) {
-            logger.warning("Data not complete: " + e.getMessage());
             uiMessageEvent.fire(new UIMessage(
                     resourceBundle.getString("warning.dataNotComplete"),
                     MessageCategory.WARNING));
         } catch (NotFoundException e) {
-            logger.severe("User or ScientificForum to get submissions for not found.");
             uiMessageEvent.fire(new UIMessage(
                     resourceBundle.getString("error.findingSubmissionListFailed"),
                     MessageCategory.ERROR));
