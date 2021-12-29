@@ -15,10 +15,12 @@
 <composite:implementation>
     <h:form>
 
-        <!-- Filter controls: deadline -->
+        <!-- Filter controls: role select -->
+        <!-- todo -->
+        <!--
         <div class="btn-group">
-            <h:selectOneMenu id="date-slctom"
-                             value="#{cc.attrs.backing.scientificForumPagination.resultListParameters.dateSelect}"
+            <h:selectOneMenu id="role-slctom"
+                             value="#{cc.attrs.backing.userPagination.resultListParameters.dateSelect}"
                              title="#{help.dateSelectForum}"
                              styleClass="btn btn-secondary">
                 <f:selectItems value="#{cc.attrs.backing.getDateSelects()}"
@@ -28,44 +30,77 @@
             </h:selectOneMenu>
         </div>
 
-        <pg:pagination paginator="#{cc.attrs.backing.scientificForumPagination}">
+        -->
+
+        <!-- Pagination -->
+        <pg:pagination paginator="#{cc.attrs.backing.userPagination}">
+
+            <!-- title -->
             <h:column>
                 <f:facet name="header">
-                    <col:sortsearchcolumn id="name-ssc"
-                                          paginator="#{cc.attrs.backing.scientificForumPagination}"
-                                          columnIdentifier="name"
-                                          columnNamei18n="#{labels.name}"/>
+                    <col:sortsearchcolumn id="title-name-ssc"
+                                          paginator="#{cc.attrs.backing.userPagination}"
+                                          columnIdentifier="title"
+                                          columnNamei18n="#{labels.titleInput}"/>
                 </f:facet>
-                <h:link value="#{var.name}"
-                        outcome="/views/authenticated/scientificForum"
+                <h:outputText id="title-otxt" value="#{var.title}"/>
+            </h:column>
+
+            <!-- firstname -->
+            <!-- todo identifier maybe camelCase -->
+            <h:column>
+                <f:facet name="header">
+                    <col:sortsearchcolumn id="first-name-ssc"
+                                          paginator="#{cc.attrs.backing.userPagination}"
+                                          columnIdentifier="firstname"
+                                          columnNamei18n="#{labels.firstName}"/>
+                </f:facet>
+                <h:outputText id="first-name-otxt" value="#{var.firstName}"/>
+            </h:column>
+
+            <!-- lastname -->
+            <h:column>
+                <f:facet name="header">
+                    <col:sortsearchcolumn id="last-name-ssc"
+                                          paginator="#{cc.attrs.backing.userPagination}"
+                                          columnIdentifier="lastname"
+                                          columnNamei18n="#{labels.lastName}"/>
+                </f:facet>
+                <h:link value="#{var.lastName}"
+                        outcome="/views/authenticated/profile"
                         includeViewParams="true">
                     <f:param name="id" value="#{var.id}"/>
                 </h:link>
             </h:column>
 
+            <!-- employer -->
             <h:column>
                 <f:facet name="header">
                     <div class="input-group">
-                        <h:outputText value="#{labels.deadline}"
+                        <h:outputText value="#{labels.employer}"
                                       styleClass="input-group-text"/>
                     </div>
                 </f:facet>
-                <h:outputText value="#{var.deadline}">
-                    <f:convertDateTime type="localDate"/>
-                </h:outputText>
+                <h:outputText id="employer-otxt" value="#{var.employer}"/>
             </h:column>
 
+            <!-- fields -->
+            <!-- todo -->
+
+            <!-- birthdate -->
             <h:column>
                 <f:facet name="header">
                     <div class="input-group">
-                        <h:outputText value="#{labels.description}"
+                        <h:outputText value="#{labels.birthDay}"
                                       styleClass="input-group-text"/>
                     </div>
                 </f:facet>
-                <h:outputText id="description-otxt" value="#{var.description}"/>
+                <h:outputText id="birthday-otxt"
+                              value="#{var.dateOfBirth}">
+                    <f:convertDateTime type="localDate"/>
+                </h:outputText>
             </h:column>
         </pg:pagination>
     </h:form>
 </composite:implementation>
-
 </html>
