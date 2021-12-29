@@ -58,6 +58,7 @@ public class ReviewRepository {
                 retReview.setComment(rs.getString("comment"));
                 return retReview;
             } else {
+                logger.warning("The review was not found." + review);
                 throw new NotFoundException();
             }
         } catch (SQLException e) {
@@ -127,7 +128,8 @@ public class ReviewRepository {
     public static void change(Review review, Transaction transaction)
             throws NotFoundException, DataNotWrittenException {
         if (review == null) {
-            throw new InvalidFieldsException();
+            transaction.abort();
+            throw new InvalidFieldsException("review is null.");
         }
         Connection conn = transaction.getConnection();
         try (PreparedStatement ps = conn.prepareStatement("UPDATE review SET is_visible = ? AND is_recommended = ?" +
@@ -400,7 +402,7 @@ public class ReviewRepository {
      *                                        queried.
      */
     public static FileDTO getPDF(Review review, Transaction transaction)
-            throws NotFoundException {
+            throws NotFoundException, DataNotCompleteException {
         if (review == null) {
             logger.severe("Invalid review dto id when tried to get file.");
             throw new InvalidFieldsException("The review dto must not be null.");
@@ -433,8 +435,12 @@ public class ReviewRepository {
 
         } catch (SQLException e) {
             DatasourceUtil.logSQLException(e, logger);
-            transaction.abort();
-            throw new DatasourceQueryFailedException("Failed to query database.", e);
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                throw new DataNotCompleteException("The PDF could not be loaded.", e);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("Failed to query database.", e);
+            }
         }
     }
 }

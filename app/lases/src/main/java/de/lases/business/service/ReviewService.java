@@ -172,13 +172,14 @@ public class ReviewService implements Serializable {
                 transaction.commit();
             } catch (NotFoundException exception) {
                 uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewNotFound"), MessageCategory.ERROR));
-                logger.fine("Error while loading a file of a review with the submission id: " + review.getSubmissionId()
-                        + " and version number: " + review.getPaperVersion() + "and reviewer id: " + review.getReviewerId());
+                transaction.abort();
+            } catch (DataNotCompleteException e) {
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewNotLoaded"), MessageCategory.WARNING));
                 transaction.abort();
             }
 
-            if (file.getFile() == null) {
-                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewNotFound"), MessageCategory.INFO));
+            if (file == null || file.getFile() == null) {
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewNotExist"), MessageCategory.INFO));
                 logger.info("No file gotten for review: " + review);
             }
 
