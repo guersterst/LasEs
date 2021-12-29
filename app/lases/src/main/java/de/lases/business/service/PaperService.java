@@ -80,12 +80,8 @@ public class PaperService implements Serializable {
     }
 
     /**
-     * Adds a {@link Paper} to a submission.
-     * <p>
-     * Whether this is a submission-pdf or a revision-pdf is determined internally.
-     * If this is a revision the editor will be informed by mail about this,
+     * Adds a {@link Paper} to a submission. The editor will be informed by mail about this,
      * using the {@link de.lases.business.util.EmailUtil}-utility.
-     * </p>
      *
      * @param file  The {@link FileDTO} to be added with the paper,
      *              containing a {@code byte[]} with the pdf.
