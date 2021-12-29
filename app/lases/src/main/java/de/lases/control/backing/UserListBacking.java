@@ -1,6 +1,7 @@
 package de.lases.control.backing;
 
 import de.lases.business.service.UserService;
+import de.lases.business.util.EmailUtil;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
@@ -10,6 +11,8 @@ import jakarta.inject.Named;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -80,6 +83,10 @@ public class UserListBacking implements Serializable, UserPaginationBacking {
      */
     public SessionInformation getSessionInformation() {
         return sessionInformation;
+    }
+
+    public String generateMailTo(String recipient) {
+        return EmailUtil.generateMailToLink(new String[]{recipient}, null, null, null);
     }
 
 }

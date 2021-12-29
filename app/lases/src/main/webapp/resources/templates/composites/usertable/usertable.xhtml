@@ -47,26 +47,15 @@
             </h:column>
 
             <!-- firstname -->
-            <!-- todo identifier maybe camelCase -->
-            <h:column>
-                <f:facet name="header">
-                    <div class="input-group">
-                        <h:outputText value="#{labels.firstName}"
-                                      styleClass="input-group-text"/>
-                    </div>
-                </f:facet>
-                <h:outputText id="first-name-otxt" value="#{var.firstName}"/>
-            </h:column>
-
             <!-- lastname -->
             <h:column>
                 <f:facet name="header">
                     <col:sortsearchcolumn id="last-name-ssc"
                                           paginator="#{cc.attrs.backing.userPagination}"
                                           columnIdentifier="lastname"
-                                          columnNamei18n="#{labels.lastName}"/>
+                                          columnNamei18n="#{labels.name}"/>
                 </f:facet>
-                <h:link value="#{var.lastName}"
+                <h:link value="#{var.firstName += ' ' += var.lastName}"
                         outcome="/views/authenticated/profile"
                         includeViewParams="true">
                     <f:param name="id" value="#{var.id}"/>
@@ -99,6 +88,21 @@
                               value="#{var.dateOfBirth}">
                     <f:convertDateTime type="localDate"/>
                 </h:outputText>
+            </h:column>
+
+            <!-- email -->
+            <h:column>
+                <f:facet name="header">
+                    <col:sortsearchcolumn id="email-ssc"
+                                          paginator="#{cc.attrs.backing.userPagination}"
+                                          columnIdentifier="email_address"
+                                          columnNamei18n="#{labels.email}"/>
+                </f:facet>
+                <!-- todo -->
+                <h:outputLink value="#{var.emailAddress}"
+                              title="#{help.mailTo}"
+                              outcome="#{userListBacking.generateMailTo(var.emailAddress)}">
+                </h:outputLink>
             </h:column>
         </pg:pagination>
     </h:form>
