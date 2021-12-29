@@ -91,7 +91,7 @@ public class SubmissionService implements Serializable {
      *
      * @author Sebastian Vogt
      */
-    public Submission add(Submission submission, List<User> coAuthors) {
+    public Submission add(Submission submission, List<User> coAuthors, Paper paper, FileDTO file) {
         if (!coAuthors.stream().allMatch((user) -> user.getEmailAddress() != null)) {
             throw new IllegalArgumentException("The co author's email address must not be null");
         }
@@ -100,6 +100,8 @@ public class SubmissionService implements Serializable {
 
         try {
             SubmissionRepository.add(submission, transaction);
+            paper.setSubmissionId(submission.getId());
+            PaperRepository.add(paper, file, transaction);
         } catch (DataNotWrittenException e) {
             uiMessageEvent.fire(new UIMessage(
                     resourceBundle.getString("dataNotWritten"),
