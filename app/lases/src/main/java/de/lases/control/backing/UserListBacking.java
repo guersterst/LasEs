@@ -17,7 +17,7 @@ import java.util.List;
  */
 @ViewScoped
 @Named
-public class UserListBacking implements Serializable {
+public class UserListBacking implements Serializable, UserPaginationBacking {
 
     @Serial
     private static final long serialVersionUID = -1656064422555982220L;
@@ -29,6 +29,25 @@ public class UserListBacking implements Serializable {
     private UserService userService;
 
     private Pagination<User> userPagination;
+
+    private void initPagination() {
+        userPagination = new Pagination<>("lastname") {
+
+            @Override
+            public void loadData() {
+                setEntries(userService.getList(getResultListParameters()));
+            }
+
+            @Override
+            protected Integer calculateNumberPages() {
+                //TODO
+                //return scientificForumService.getListCountPages(scientificForumPagination.getResultListParameters());
+                return 1;
+            }
+        };
+        userPagination.applyFilters();
+        userPagination.loadData();
+    }
 
     /**
      * Initialize the user pagination and load the first page from the
@@ -42,6 +61,7 @@ public class UserListBacking implements Serializable {
      */
     @PostConstruct
     public void init() {
+        initPagination();
     }
 
     /**
