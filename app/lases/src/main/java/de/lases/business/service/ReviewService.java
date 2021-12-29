@@ -73,12 +73,10 @@ public class ReviewService implements Serializable {
             ReviewRepository.change(newReview, transaction);
             transaction.commit();
         } catch (DataNotWrittenException e) {
-            logger.severe("Cannot change revision: " + newReview + e.getMessage());
-            uiMessageEvent.fire(new UIMessage("Could not update the state of this review.", MessageCategory.FATAL));
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewCouldNotUpdate"), MessageCategory.ERROR));
             transaction.abort();
         } catch (NotFoundException e) {
-            logger.info("Did not find: " + newReview + e.getMessage());
-            uiMessageEvent.fire(new UIMessage("This review does not exist.", MessageCategory.ERROR));
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewNotExist"), MessageCategory.INFO));
             transaction.abort();
         }
     }
@@ -103,10 +101,10 @@ public class ReviewService implements Serializable {
             ReviewRepository.add(review, file, transaction);
             transaction.commit();
         } catch (DataNotWrittenException e) {
-            uiMessageEvent.fire(new UIMessage("Upload of review failed.", MessageCategory.ERROR));
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewCouldNotUpload"), MessageCategory.ERROR));
             transaction.abort();
         } catch (NotFoundException e) {
-            uiMessageEvent.fire(new UIMessage("This submission does not have a paper to review.", MessageCategory.ERROR));
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewCannotUpload"), MessageCategory.ERROR));
             transaction.abort();
         }
     }
@@ -129,7 +127,7 @@ public class ReviewService implements Serializable {
             transaction.commit();
             return reviewsList;
         } catch (DataNotCompleteException | NotFoundException e) {
-            uiMessageEvent.fire(new UIMessage("Loading Reviews failed.", MessageCategory.ERROR));
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewCouldNotGetList"), MessageCategory.ERROR));
             transaction.abort();
         }
         return new ArrayList<>();
@@ -180,7 +178,6 @@ public class ReviewService implements Serializable {
 
             if (file == null || file.getFile() == null) {
                 uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewNotExist"), MessageCategory.INFO));
-                logger.info("No file gotten for review: " + review);
             }
 
             return file;
