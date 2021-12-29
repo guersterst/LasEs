@@ -38,10 +38,10 @@
             <!-- title -->
             <h:column>
                 <f:facet name="header">
-                    <col:sortsearchcolumn id="title-name-ssc"
-                                          paginator="#{cc.attrs.backing.userPagination}"
-                                          columnIdentifier="title"
-                                          columnNamei18n="#{labels.titleInput}"/>
+                    <div class="input-group">
+                        <h:outputText value="#{labels.titleInput}"
+                                      styleClass="input-group-text"/>
+                    </div>
                 </f:facet>
                 <h:outputText id="title-otxt" value="#{var.title}"/>
             </h:column>
@@ -50,10 +50,10 @@
             <!-- todo identifier maybe camelCase -->
             <h:column>
                 <f:facet name="header">
-                    <col:sortsearchcolumn id="first-name-ssc"
-                                          paginator="#{cc.attrs.backing.userPagination}"
-                                          columnIdentifier="firstname"
-                                          columnNamei18n="#{labels.firstName}"/>
+                    <div class="input-group">
+                        <h:outputText value="#{labels.firstName}"
+                                      styleClass="input-group-text"/>
+                    </div>
                 </f:facet>
                 <h:outputText id="first-name-otxt" value="#{var.firstName}"/>
             </h:column>
@@ -76,10 +76,10 @@
             <!-- employer -->
             <h:column>
                 <f:facet name="header">
-                    <div class="input-group">
-                        <h:outputText value="#{labels.employer}"
-                                      styleClass="input-group-text"/>
-                    </div>
+                    <col:sortsearchcolumn id="employer-ssc"
+                                          paginator="#{cc.attrs.backing.userPagination}"
+                                          columnIdentifier="employer"
+                                          columnNamei18n="#{labels.employer}"/>
                 </f:facet>
                 <h:outputText id="employer-otxt" value="#{var.employer}"/>
             </h:column>
