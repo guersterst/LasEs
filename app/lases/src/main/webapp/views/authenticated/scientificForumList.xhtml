@@ -1,10 +1,7 @@
 <ui:composition template="/resources/templates/main.xhtml"
                 xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:pg="http://xmlns.jcp.org/jsf/composite/templates/composites/pagination"
-                xmlns:col="http://xmlns.jcp.org/jsf/composite/templates/composites/sortsearchcolumn"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
+                xmlns:sft="http://xmlns.jcp.org/jsf/composite/templates/composites/scientificForumTable">
 
     <!-- page title -->
     <ui:define name="title">#{labels['forumListTitle']}</ui:define>
@@ -15,59 +12,7 @@
             <div class="container mt-5">
                 <div class="card">
                     <div class="card-body">
-                        <h:form>
-
-                            <!-- Filter controls: deadline -->
-                            <div class="btn-group">
-                                <h:selectOneMenu id="date-slctom"
-                                                 value="#{scientificForumListBacking.scientificForumPagination.resultListParameters.dateSelect}"
-                                                 title="#{help.dateSelectForum}"
-                                                 styleClass="btn btn-secondary">
-                                    <f:selectItems value="#{scientificForumListBacking.dateSelects}"
-                                                   var="select"
-                                                   itemLabel="#{labels['dateSelect.' += select]}"
-                                                   itemValue="#{select}"/>
-                                </h:selectOneMenu>
-                            </div>
-
-                            <pg:pagination paginator="#{scientificForumListBacking.scientificForumPagination}">
-                                <h:column>
-                                    <f:facet name="header">
-                                        <col:sortsearchcolumn id="name-ssc"
-                                                              paginator="#{scientificForumListBacking.scientificForumPagination}"
-                                                              columnIdentifier="name"
-                                                              columnNamei18n="#{labels.name}"/>
-                                    </f:facet>
-                                    <h:link value="#{var.name}"
-                                            outcome="/views/authenticated/scientificForum"
-                                            includeViewParams="true">
-                                        <f:param name="id" value="#{var.id}"/>
-                                    </h:link>
-                                </h:column>
-
-                                <h:column>
-                                    <f:facet name="header">
-                                        <div class="input-group">
-                                            <h:outputText value="#{labels.deadline}"
-                                                          styleClass="input-group-text"/>
-                                        </div>
-                                    </f:facet>
-                                    <h:outputText value="#{var.deadline}">
-                                        <f:convertDateTime type="localDate"/>
-                                    </h:outputText>
-                                </h:column>
-
-                                <h:column>
-                                    <f:facet name="header">
-                                        <div class="input-group">
-                                            <h:outputText value="#{labels.description}"
-                                                          styleClass="input-group-text"/>
-                                        </div>
-                                    </f:facet>
-                                    <h:outputText id="description-otxt" value="#{var.description}"/>
-                                </h:column>
-                            </pg:pagination>
-                        </h:form>
+                        <sft:scientificForumTable backing="#{scientificForumListBacking}"/>
                     </div>
                 </div>
             </div>
