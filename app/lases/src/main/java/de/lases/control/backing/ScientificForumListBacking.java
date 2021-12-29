@@ -18,7 +18,7 @@ import java.io.Serializable;
  */
 @ViewScoped
 @Named
-public class ScientificForumListBacking implements Serializable {
+public class ScientificForumListBacking implements Serializable, ScientificForumPaginationBacking {
 
     @Serial
     private static final long serialVersionUID = 288940091897301232L;
@@ -61,6 +61,7 @@ public class ScientificForumListBacking implements Serializable {
      *
      * @return The pagination for scientific forums.
      */
+    @Override
     public Pagination<ScientificForum> getScientificForumPagination() {
         return scientificForumPagination;
     }
@@ -74,12 +75,4 @@ public class ScientificForumListBacking implements Serializable {
         return sessionInformation;
     }
 
-    /**
-     * Return an array of all values the DateSelect enum can have.
-     *
-     * @return ALl options of DateSelect.
-     */
-    public DateSelect[] getDateSelects() {
-        return DateSelect.values();
-    }
 }

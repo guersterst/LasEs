@@ -25,7 +25,7 @@ xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
                 <h:inputText id="add-deadline-reviewer-itxt"
                              value="#{toolbarBacking.reviewedByInput.timestampDeadline}"
                              title="#{help.addReviewerDeadline}"
-                             styleClass="form-control">
+                             styleClass="form-control" required="true" requiredMessage="#{message.missingDeadline}">
                     <f:convertDateTime type="localDateTime"/>
                     <f:validator validatorId="dateTimeInFuture"/>
                 </h:inputText>
