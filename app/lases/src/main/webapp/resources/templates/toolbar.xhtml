@@ -25,8 +25,8 @@ xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
                 <h:inputText id="add-deadline-reviewer-itxt"
                              value="#{toolbarBacking.reviewedByInput.timestampDeadline}"
                              title="#{help.addReviewerDeadline}"
-                             styleClass="form-control" required="true" requiredMessage="#{message.missingDeadline}">
-                    <f:convertDateTime type="localDateTime"/>
+                             styleClass="form-control" required="true" requiredMessage="#{message.missingDeadline}" a:type="dateTime-local">
+                    <f:convertDateTime type="localDateTime" pattern="yyyy-MM-ddThh:mm"/>
                     <f:validator validatorId="dateTimeInFuture"/>
                 </h:inputText>
                 <h:message for="add-deadline-reviewer-itxt"/>
@@ -107,7 +107,7 @@ xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
                 <h:outputLabel id="revision-deadline-lbl" value="#{labels.deadline}"
                                for="revision-deadline-itxt" styleClass="input-group"/>
                 <h:inputText id="revision-deadline-itxt" value="#{toolbarBacking.submission.deadlineRevision}"
-                             title="#{help.addRevisionDeadline}">
+                             title="#{help.addRevisionDeadline}" a:type="datetime-local">
                     <f:validator validatorId="dateTimeInFuture"/>
                     <f:convertDateTime type="localDateTime"/>
                 </h:inputText>
