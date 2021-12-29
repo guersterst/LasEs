@@ -736,7 +736,7 @@ public class UserRepository {
 
         // Set limit and offset
         ConfigReader configReader = CDI.current().select(ConfigReader.class).get();
-        int paginationLength = Integer.parseInt(configReader.getProperty("MAX_PAGINATION_LENGTH"));
+        int paginationLength = Integer.parseInt(configReader.getProperty("MAX_PAGINATION_LIST_LENGTH"));
         sb.append("LIMIT ").append(paginationLength)
                 .append(" OFFSET ").append(paginationLength * (params.getPageNo() - 1));
 
