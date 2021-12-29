@@ -12,6 +12,7 @@ import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
 import de.lases.persistence.internal.ConfigReader;
 import de.lases.persistence.util.DatasourceUtil;
+import de.lases.persistence.util.TransientSQLExceptionChecker;
 import jakarta.enterprise.inject.spi.CDI;
 import org.postgresql.util.PSQLException;
 
@@ -129,9 +130,14 @@ public class PaperRepository {
             }
         } catch (SQLException ex) {
             DatasourceUtil.logSQLException(ex, logger);
-            transaction.abort();
-            throw new DatasourceQueryFailedException("A datasource exception"
-                    + "occurred", ex);
+
+            if (TransientSQLExceptionChecker.isTransient(ex.getSQLState())) {
+                throw new DataNotWrittenException("The paper could not be added", ex);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("A datasource exception"
+                        + "occurred", ex);
+            }
         }
 
         String sqlInsert = "INSERT INTO paper VALUES (?, ?, ?, ?, ?)";
