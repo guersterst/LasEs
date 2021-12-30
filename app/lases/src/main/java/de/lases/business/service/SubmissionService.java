@@ -322,27 +322,27 @@ public class SubmissionService implements Serializable {
         }
 
         //TODO:Need to send E-Mail when adding the user as reviewer is successful
+        Submission submission = new Submission();
+        submission.setId(reviewedBy.getSubmissionId());
 
-        if (sendEmailForReviewer(reviewer, reviewedBy, transaction)) {
+        submission = get(submission);
+
+        assert submission != null : "Submission is null";
+
+        String subject = resourceBundle.getString("email.assignedReviewer.subject");
+        String body = resourceBundle.getString("email.assignedReviewer.body") + "\n"
+                + submission.getTitle() + "\n" + configPropagator.getProperty("BASE_URL")
+                + "/views/authenticated/submission.xhtml?id=" + submission.getId();
+
+        if (sendEmailForReviewer(reviewer, subject, null, body)) {
             transaction.commit();
         } else {
             transaction.abort();
         }
     }
 
-    private boolean sendEmailForReviewer(User reviewer, ReviewedBy reviewedBy, Transaction transaction) {
-        Submission submission = new Submission();
-        submission.setId(reviewedBy.getSubmissionId());
+    private boolean sendEmailForReviewer(User reviewer, String subject, String[] cc, String body) {
 
-        try {
-            submission = SubmissionRepository.get(submission, transaction);
-        } catch (NotFoundException | DataNotCompleteException exception) {
-            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotWritten"), MessageCategory.ERROR));
-            logger.log(Level.WARNING, "Submission was not found when adding a reviewer to a submission");
-            return false;
-        }
-
-        assert submission != null;
         assert reviewer != null;
         assert reviewer.getEmailAddress() != null;
 
@@ -351,9 +351,7 @@ public class SubmissionService implements Serializable {
         logger.log(Level.INFO, emailReviewer);
 
         try {
-            EmailUtil.sendEmail(new String[] {emailReviewer}, null,
-                    resourceBundle.getString("email.assignedReviewer.subject"),
-                    resourceBundle.getString("email.assignedReviewer.body") + "\n " + submission.getTitle() + " " + configPropagator.getProperty("BASE_URL") + "/views/authenticated/submission.xhtml?id=" + submission.getId());
+            EmailUtil.sendEmail(new String[] {emailReviewer}, cc, subject, body);
         } catch (EmailTransmissionFailedException e) {
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("emailNotSent"), MessageCategory.ERROR));
             return false;
@@ -458,7 +456,6 @@ public class SubmissionService implements Serializable {
 
         try {
             ReviewedByRepository.removeReviewer(submission, reviewer, transaction);
-            transaction.commit();
         } catch (DataNotWrittenException e) {
 
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotWritten"), MessageCategory.WARNING));
@@ -466,6 +463,18 @@ public class SubmissionService implements Serializable {
         } catch (NotFoundException e) {
 
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotFound"), MessageCategory.ERROR));
+            transaction.abort();
+        }
+
+        String subject = resourceBundle.getString("email.removeReviewer.subject");
+
+        StringBuilder body = new StringBuilder(resourceBundle.getString("email.removeReviewer.body"));
+        body.append(" ");
+        body.append(submission.getTitle());
+
+        if (sendEmailForReviewer(reviewer, subject, null, body.toString())) {
+            transaction.commit();
+        } else {
             transaction.abort();
         }
     }
