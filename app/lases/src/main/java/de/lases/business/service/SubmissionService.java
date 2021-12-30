@@ -324,6 +324,7 @@ public class SubmissionService implements Serializable {
                 }
             }
 
+            // Inform submitter a co-authors about a changed submission state.
             if (newSubmission.getState() == SubmissionState.ACCEPTED || newSubmission.getState() == SubmissionState.REJECTED) {
                 String subject = "";
                 String body = "";
@@ -344,6 +345,16 @@ public class SubmissionService implements Serializable {
                             + configPropagator.getProperty("BASE_URL") + "/views/authenticated/submission.xhtml?id=" + newSubmission.getId();
 
                 }
+                informAboutState(transaction, newSubmission, subject, body);
+            }
+
+            if (newSubmission.getState() == SubmissionState.REVISION_REQUIRED) {
+
+                String subject = resourceBundle.getString("email.requireRevision.subject");
+                String body = resourceBundle.getString("email.requireRevision.body")
+                        + "\n" + newSubmission.getTitle() + "\n"
+                        + configPropagator.getProperty("BASE_URL") + "/views/authenticated/submission.xhtml?id=" + newSubmission.getId();
+
                 informAboutState(transaction, newSubmission, subject, body);
             }
         }
