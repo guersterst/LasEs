@@ -1,5 +1,6 @@
 package de.lases.business.service;
 
+import de.lases.business.internal.ConfigPropagator;
 import de.lases.business.util.EmailUtil;
 import de.lases.global.transport.*;
 
@@ -45,6 +46,9 @@ public class SubmissionService implements Serializable {
 
     @Inject
     private UserService userService;
+
+    @Inject
+    private ConfigPropagator configPropagator;
 
 
     /**
@@ -307,7 +311,6 @@ public class SubmissionService implements Serializable {
 
         try {
             SubmissionRepository.addReviewer(reviewedBy,transaction);
-            transaction.commit();
         } catch (DataNotWrittenException e) {
 
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotWritten"), MessageCategory.WARNING));
@@ -319,6 +322,44 @@ public class SubmissionService implements Serializable {
         }
 
         //TODO:Need to send E-Mail when adding the user as reviewer is successful
+
+        if (sendEmailForReviewer(reviewer, reviewedBy, transaction)) {
+            transaction.commit();
+        } else {
+            transaction.abort();
+        }
+    }
+
+    private boolean sendEmailForReviewer(User reviewer, ReviewedBy reviewedBy, Transaction transaction) {
+        Submission submission = new Submission();
+        submission.setId(reviewedBy.getSubmissionId());
+
+        try {
+            submission = SubmissionRepository.get(submission, transaction);
+        } catch (NotFoundException | DataNotCompleteException exception) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotWritten"), MessageCategory.ERROR));
+            logger.log(Level.WARNING, "Submission was not found when adding a reviewer to a submission");
+            return false;
+        }
+
+        assert submission != null;
+        assert reviewer != null;
+        assert reviewer.getEmailAddress() != null;
+
+        String emailReviewer = reviewer.getEmailAddress();
+
+        logger.log(Level.INFO, emailReviewer);
+
+        try {
+            EmailUtil.sendEmail(new String[] {emailReviewer}, null,
+                    resourceBundle.getString("email.assignedReviewer.subject"),
+                    resourceBundle.getString("email.assignedReviewer.body") + "\n " + submission.getTitle() + " " + configPropagator.getProperty("BASE_URL") + "/views/authenticated/submission.xhtml?id=" + submission.getId());
+        } catch (EmailTransmissionFailedException e) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("emailNotSent"), MessageCategory.ERROR));
+            return false;
+        }
+
+        return true;
     }
 
 
