@@ -376,7 +376,7 @@ public class SubmissionService implements Serializable {
         return coAuthors;
     }
 
-    private void informAboutState(Transaction transaction, Submission submission, String subject, String body) {
+    public void informAboutState(Transaction transaction, Submission submission, String subject, String body) {
         List<User> coAuthors = getCoAuthors(transaction, submission);
 
         if (coAuthors == null) {
