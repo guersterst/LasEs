@@ -41,7 +41,7 @@ public class ConnectionPool {
     private static final Logger logger = Logger.getLogger(Transaction.class.getName());
 
     private List<Connection> freeConnections;
-    private List<Connection> usedConnections = new ArrayList<>();
+    private final List<Connection> usedConnections = new ArrayList<>();
 
     private boolean initialized;
 

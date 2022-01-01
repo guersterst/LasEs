@@ -1,5 +1,6 @@
 package de.lases.business.service;
 
+import de.lases.business.util.EmailUtil;
 import de.lases.global.transport.*;
 
 import de.lases.persistence.exception.*;
@@ -24,7 +25,9 @@ import java.util.logging.Logger;
  * Provides functionality regarding the management and handling of submissions.
  * In case of an unexpected state, a {@link UIMessage} event will be fired.
  *
- * @author Thomas Kirz, Stefanie Gürster
+ * @author Thomas Kirz
+ * @author Stefanie Gürster
+ * @author Sebastian Vogt
  */
 @Dependent
 public class SubmissionService implements Serializable {
@@ -85,37 +88,18 @@ public class SubmissionService implements Serializable {
      *                   Must contain a valid forum's id, authorId, editorId, state and title.
      * @param coAuthors  The desired co-athors as proper {@link User}-DTOs with an email-address.
      * @return The submission that was added, but filled with its id.
+     *
+     * @author Sebastian Vogt
      */
     public Submission add(Submission submission, List<User> coAuthors) {
+        if (!coAuthors.stream().allMatch((user) -> user.getEmailAddress() != null)) {
+            throw new IllegalArgumentException("The co author's email address must not be null");
+        }
+
         Transaction transaction = new Transaction();
 
-        User editor = new User();
-        editor.setId(submission.getEditorId());
         try {
-            editor = UserRepository.get(editor, transaction);
-        } catch (NotFoundException ex) {
-            uiMessageEvent.fire(new UIMessage(resourceBundle.getString(
-                    "dataNotWritten"), MessageCategory.ERROR));
-            logger.log(Level.WARNING, "Editor was not found when adding a submission.");
-            transaction.abort();
-            return null;
-        }
-        // TODO: Das einkommentieren, wenn es die get Methode im user repo gibt!
-        logger.log(Level.SEVERE, "UNCOMMENT THIS");
-        // assert editor != null;
-        // assert editor.getEmailAddress() != null;
-
-        if (!coAuthors.stream().allMatch((user) -> user.getEmailAddress() != null)) {
-            throw new InvalidFieldsException("There where co-authors without an email address!");
-        }
-
-        List<String> coAuthorEmails = coAuthors.stream().map(User::getEmailAddress).toList();
-
-        // TODO: Das auch einkommentieren!
-        // sendEmailsForAddSubmission(editor.getEmailAddress(), coAuthorEmails);
-
-        try {
-            submission = SubmissionRepository.add(submission, transaction);
+            SubmissionRepository.add(submission, transaction);
         } catch (DataNotWrittenException e) {
             uiMessageEvent.fire(new UIMessage(
                     resourceBundle.getString("dataNotWritten"),
@@ -124,6 +108,8 @@ public class SubmissionService implements Serializable {
             transaction.abort();
             return null;
         }
+
+        List<User> coAuthorsFilled = new ArrayList<>();
         for (User user: coAuthors) {
             try {
                 User userWithId;
@@ -135,6 +121,7 @@ public class SubmissionService implements Serializable {
                 }
                 assert userWithId.getId() != null;
                 SubmissionRepository.addCoAuthor(submission, userWithId, transaction);
+                coAuthorsFilled.add(userWithId);
             } catch (DataNotWrittenException e) {
                 uiMessageEvent.fire(new UIMessage(
                         resourceBundle.getString("dataNotWritten"),
@@ -149,12 +136,65 @@ public class SubmissionService implements Serializable {
                         + " makes sure that every co author exists.");
             }
         }
-        transaction.commit();
-        return submission;
+
+        if (sendEmailsForAddSubmission(submission, transaction, coAuthorsFilled)) {
+            transaction.commit();
+            return submission;
+        } else {
+            transaction.abort();
+            return null;
+        }
     }
 
-    private void sendEmailsForAddSubmission(String emailEditor, List<String> emailsCoAuthors) {
-        logger.log(Level.SEVERE, "PLEASE IMPLEMENT ME! (sending emails)");
+    /**
+     * @author Sebastian Vogt
+     */
+    private boolean sendEmailsForAddSubmission(Submission submission, Transaction transaction, List<User> coAuthors) {
+        User editor = new User();
+        editor.setId(submission.getEditorId());
+        try {
+            editor = UserRepository.get(editor, transaction);
+        } catch (NotFoundException ex) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString(
+                    "dataNotWritten"), MessageCategory.ERROR));
+            logger.log(Level.WARNING, "Editor was not found when adding a submission.");
+            return false;
+        }
+
+        assert editor != null;
+        assert editor.getEmailAddress() != null;
+
+        List<String> emailsCoAuthorsRegistered = coAuthors.stream().filter(User::isRegistered)
+                .map(User::getEmailAddress).toList();
+        List<String> emailsCoAuthorsNotRegistered = coAuthors.stream().filter(user -> !user.isRegistered())
+                .map(User::getEmailAddress).toList();
+
+        logger.log(Level.INFO, emailsCoAuthorsNotRegistered.toString());
+        logger.log(Level.INFO, emailsCoAuthorsRegistered.toString());
+
+        String emailEditor = editor.getEmailAddress();
+
+        try {
+            EmailUtil.sendEmail(new String[]{emailEditor}, null,
+                    resourceBundle.getString("email.assignedEditor.subject"),
+                    resourceBundle.getString("email.assignedEditor.body") + submission.getTitle());
+            if (!emailsCoAuthorsRegistered.isEmpty()) {
+                EmailUtil.sendEmail(emailsCoAuthorsRegistered.toArray(new String[0]), null,
+                        resourceBundle.getString("email.assignedCoAuthor.subject"),
+                        resourceBundle.getString("email.assignedCoAuthor.body") + submission.getTitle()
+                                + "DU BSIT SCHON REIGSTRIERT");
+            }
+            if (!emailsCoAuthorsNotRegistered.isEmpty()) {
+                EmailUtil.sendEmail(emailsCoAuthorsNotRegistered.toArray(new String[0]), null,
+                        resourceBundle.getString("email.assignedCoAuthor.subject"),
+                        resourceBundle.getString("email.assignedCoAuthor.body") + submission.getTitle()
+                                + "DU BSIT NO NED REIGSTRIERT");
+            }
+        } catch (EmailTransmissionFailedException e) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("emailNotSent"), MessageCategory.ERROR));
+            return false;
+        }
+        return true;
     }
 
     /**

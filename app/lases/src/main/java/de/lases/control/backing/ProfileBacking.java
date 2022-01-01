@@ -1,15 +1,12 @@
 package de.lases.control.backing;
 
-import de.lases.business.internal.ConfigPropagator;
 import de.lases.business.service.ScienceFieldService;
-import de.lases.business.service.SubmissionService;
 import de.lases.business.service.UserService;
 import de.lases.control.exception.IllegalUserFlowException;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
 import de.lases.control.exception.IllegalAccessException;
 import jakarta.annotation.PostConstruct;
-import jakarta.faces.event.ComponentSystemEvent;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -18,7 +15,6 @@ import jakarta.servlet.http.Part;
 import java.io.IOException;
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -43,12 +39,6 @@ public class ProfileBacking implements Serializable {
 
     @Inject
     private ScienceFieldService scienceFieldService;
-
-    @Inject
-    private SubmissionService submissionService;
-
-    @Inject
-    private ConfigPropagator configPropagator;
 
     private Part uploadedAvatar;
 

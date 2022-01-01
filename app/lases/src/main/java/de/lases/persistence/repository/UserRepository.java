@@ -21,6 +21,7 @@ import java.util.logging.Logger;
  * @author Johann Schicho
  * @author Johannes Garstenauer
  * @author Thomas Kirz
+ * @author Sebastian Vogt
  */
 public class UserRepository {
 
