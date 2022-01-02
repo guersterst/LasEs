@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class EmailUtilTest {
 
     private static final String emailSubjectCCnoBody = "mailto:info@example.com?subject=important&cc=cc@example.com";
-    private static final String emailSubjectCCBody =  "mailto:info@example.com?subject=important&body=Important%20Mail%0D%0ARegards&cc=cc@example.com";
+    private static final String emailSubjectCCBody =  "mailto:info@example.com?subject=important&body=Important+Mail%0D%0ARegards&cc=cc@example.com";
     private static final String emailOnlyAddress = "mailto:info@example.com";
     private static final String emailMultipleRecipients = "mailto:info@example.com,service@example.com";
 

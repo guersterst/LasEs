@@ -32,6 +32,7 @@ public class Lifetime {
     public static void startup(InputStream loggerConfigStream) {
         initializeLogger(loggerConfigStream);
         initializeDBPool();
+        initializePeriodicWorker();
     }
 
     /**
@@ -46,6 +47,7 @@ public class Lifetime {
      * </ul>
      */
     public static void shutdown() {
+        PeriodicWorker.stop();
         ConnectionPool.shutDown();
     }
 
@@ -63,5 +65,7 @@ public class Lifetime {
         ConnectionPool.init();
     }
 
-
+    private static void initializePeriodicWorker() {
+        PeriodicWorker.init();
+    }
 }

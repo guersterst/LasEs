@@ -57,8 +57,7 @@ public class NavigationBacking {
         if (searchWord == null) {
             searchWord = "";
         }
-        resultListBacking.setSearchWord(searchWord);
-        return "/views/authenticated/resultList.xhtml?faces-redirect=true";
+        return "/views/authenticated/resultList.xhtml?faces-redirect=true&search-word=" + searchWord;
     }
 
     /**

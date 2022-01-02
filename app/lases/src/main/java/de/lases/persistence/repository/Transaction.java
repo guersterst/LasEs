@@ -1,12 +1,10 @@
 package de.lases.persistence.repository;
 
 import de.lases.persistence.exception.DatasourceQueryFailedException;
-import de.lases.persistence.exception.DepletedResourceException;
 import de.lases.persistence.util.DatasourceUtil;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -15,15 +13,17 @@ import java.util.logging.Logger;
 
 /**
  * Transactions for repository operations.
+ *
+ * @author Sebastian Vogt
  */
 public class Transaction {
 
-    private Connection connection;
+    private final Connection connection;
 
     private static final Logger logger
             = Logger.getLogger(Transaction.class.getName());
 
-    private ScheduledExecutorService executor;
+    private final ScheduledExecutorService executor;
 
     /**
      * Is the transaction already aborted or commited?
@@ -61,9 +61,7 @@ public class Transaction {
             connection.rollback();
         } catch (SQLException e) {
             try {
-                if (connection != null) {
-                    connection.close();
-                }
+                connection.close();
             } catch (SQLException ex) {
                 DatasourceUtil.logSQLException(ex, logger);
             }
@@ -90,13 +88,11 @@ public class Transaction {
         try {
             connection.commit();
         } catch (SQLException e) {
-            if (connection != null) {
-                try {
-                    connection.rollback();
-                    connection.close();
-                } catch (SQLException ex) {
-                    DatasourceUtil.logSQLException(ex, logger);
-                }
+            try {
+                connection.rollback();
+                connection.close();
+            } catch (SQLException ex) {
+                DatasourceUtil.logSQLException(ex, logger);
             }
             DatasourceUtil.logSQLException(e, logger);
             throw new DatasourceQueryFailedException("Commit failed");
