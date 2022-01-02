@@ -15,7 +15,7 @@ Pagination
     margin: 10px 10px 10px 10px;
 }
 
-.card, #navigation, #toolbar > .card {
+.card, #navigation, #toolbar > .card, .info, .warning, .error {
     box-shadow: 7px 5px 5px #9b9898;
 }
 
@@ -42,4 +42,34 @@ Pagination
 .REVISION_REQUIRED {
     color: #f8e77e;
     border-color: #f8e77e;
+}
+/*
+Global messages.
+ */
+.error, .warning, .info {
+    height: 30px;
+    margin-left: 400px;
+    margin-right: 400px;
+    list-style: none;
+    font-size: larger;
+    border: thin solid;
+    border-radius: 5px;
+}
+
+.error {
+    border-color: red;
+    background-color: rgba(255,0,0,0.3);
+    color: red;
+}
+
+.warning {
+    border-color: orange;
+    background-color: rgba(255,165,0,0.3);
+    color: orange;
+}
+
+.info {
+    border-color: green;
+    background-color: rgba(0,128,0,0.3);
+    color: green;
 }

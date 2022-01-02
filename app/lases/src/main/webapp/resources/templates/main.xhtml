@@ -38,7 +38,8 @@
 
         <!--Includes content for default-->
         <div id="content">
-            <h:messages globalOnly="true"/>
+            <h:messages globalOnly="true" styleClass="text-center"
+                        errorClass="error" infoClass="info" warnClass="warning"/>
             <ui:insert name="content">
                 <ui:include src="content.xhtml"></ui:include>
             </ui:insert>

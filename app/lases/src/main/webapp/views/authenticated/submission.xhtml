@@ -227,7 +227,8 @@
                                                              value="#{var.visible == true? labels.released : labels.notReleased}"
                                                              action="#{submissionBacking.releaseRevision(var)}"
                                                              title="#{help.releaseBtn}"
-                                                             disabled="#{ (submissionBacking.viewerSubmitter and !submissionBacking.admin) || var.visible == true}"/>
+                                                             disabled="#{ (submissionBacking.viewerSubmitter and !submissionBacking.admin)
+                                                             || var.visible == true || toolbarBacking.accepted || toolbarBacking.rejected}"/>
                                         </h:column>
 
                                         <!--Download-->
@@ -360,7 +361,8 @@
                                                                  value="#{var.visible ? labels.released : labels.notReleased}"
                                                                  action="#{submissionBacking.releaseReview(var)}"
                                                                  title="#{help.releaseBtn}"
-                                                                 disabled="#{!submissionBacking.loggedInUserIsEditor()}"/>
+                                                                 disabled="#{!submissionBacking.loggedInUserIsEditor()
+                                                                 || toolbarBacking.accepted || toolbarBacking.rejected}"/>
                                             </h:column>
 
                                             <!--recommended checkbox-->
