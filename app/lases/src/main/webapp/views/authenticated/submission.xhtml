@@ -41,43 +41,61 @@
 
                                 <div class="row">
                                     <div class="col">
-                                        <!---->
-                                        <h:commandButton styleClass="btn btn-secondary" id="delete-sub-cbtn"
-                                                         title="#{help.deleteSubmission}"
-                                                         value="#{labels.deleteButton}" onclick="PF('dlg').show()"
-                                                         rendered="#{submissionBacking.isViewerSubmitter() || submissionBacking.admin}"/>
-                                        <p:dialog id="delete-sub-dlg" widgetVar="dlg">
-                                            <div class="text-center">
-                                                <h:outputText id="delete-warning-otxt"
-                                                              value="#{message.deleteWarningOtxt}"/>
-                                            </div>
-                                            <br/>
-                                            <div class="text-center">
-                                                <h:form>
-                                                    <h:commandButton styleClass="btn btn-primary" id="agree-delete-cbtn"
-                                                                     value="#{labels.agreeButton}"
-                                                                     action="#{submissionBacking.deleteSubmission()}"/>
-                                                </h:form>
-                                            </div>
-                                        </p:dialog>
+                                        <div class="btn-group">
+                                            <h:commandButton styleClass="btn btn-secondary" id="delete-sub-cbtn"
+                                                             title="#{help.deleteSubmission}"
+                                                             value="#{labels.deleteButton}" onclick="PF('dlg').show()"
+                                                             rendered="#{submissionBacking.isViewerSubmitter() || submissionBacking.admin}"/>
+                                            <p:dialog id="delete-sub-dlg" widgetVar="dlg">
+                                                <div class="text-center">
+                                                    <h:outputText id="delete-warning-otxt"
+                                                                  value="#{message.deleteWarningOtxt}"/>
+                                                </div>
+                                                <br/>
+                                                <div class="text-center">
+                                                    <h:form>
+                                                        <h:commandButton styleClass="btn btn-primary" id="agree-delete-cbtn"
+                                                                         value="#{labels.agreeButton}"
+                                                                         action="#{submissionBacking.deleteSubmission()}"/>
+                                                    </h:form>
+                                                </div>
+                                            </p:dialog>
+                                        </div>
+                                        <div class="btn-group">
+                                            <!--Current state of a Submission-->
+                                            <h:form id="submission-state-frm">
+                                                <div class="input-group">
+                                                    <h:outputText id="submission-state-otxt"
+                                                                  value="#{labels['stateSelect.' += submissionBacking.submission.state]}"
+                                                                  styleClass="btn #{submissionBacking.submission.state}"/>
+                                                    <h:outputText id="submission-revision-deadline"
+                                                                  value="#{submissionBacking.submission.deadlineRevision}"
+                                                                  rendered="#{submissionBacking.submission.deadlineRevision != null}"
+                                                                  styleClass="form-control">
+                                                        <f:convertDateTime type="localDateTime"/>
+                                                    </h:outputText>
+                                                </div>
+                                            </h:form>
+                                        </div>
                                     </div>
                                     <div class="col">
                                         <!--Upload a revision.-->
                                         <h:form id="upload-file-frm" enctype="multipart/form-data"
                                                 rendered="#{submissionBacking.submission.revisionRequired}">
-                                            <div class="form-group">
+                                            <div class="btn-group">
                                                 <!---->
                                                 <h:inputFile id="upload-revision-ifile"
                                                              value="#{submissionBacking.uploadedRevisionPDF}"
                                                              required="true"
                                                              requiredMessage="#{message.inputFile}"
-                                                             rendered="#{submissionBacking.isViewerSubmitter()}">
+                                                             rendered="#{submissionBacking.isViewerSubmitter()}"
+                                                             styleClass="form-control">
                                                     <f:validator validatorId="pdfValidator"/>
                                                 </h:inputFile>
                                                 <br/>
                                                 <h:message for="upload-revision-ifile"/>
                                             </div>
-                                            <div class="form-group">
+                                            <div class="btn-group">
                                                 <!---->
                                                 <h:commandButton id="upload-clnk" styleClass="btn btn-primary"
                                                                  value="#{labels.uploadSubButton}"
@@ -88,22 +106,6 @@
                                             </div>
                                         </h:form>
 
-                                        <!--Current state of a Submission-->
-                                        <h:form id="submission-state-frm">
-                                            <div class="form-group align-items-end">
-                                                <div class="input-group-sm">
-                                                    <h:outputText id="submission-state-otxt"
-                                                                  value="#{submissionBacking.submission.state}"
-                                                                  styleClass="h6 input-group-text"/>
-                                                    <h:outputText id="submission-revision-deadline"
-                                                                  value="#{submissionBacking.submission.deadlineRevision}"
-                                                                  rendered="#{submissionBacking.submission.deadlineRevision != null}"
-                                                                  styleClass="input-group-text">
-                                                        <f:convertDateTime type="localDateTime"/>
-                                                    </h:outputText>
-                                                </div>
-                                            </div>
-                                        </h:form>
                                     </div>
                                 </div>
                             </div>
@@ -256,10 +258,10 @@
                                                           style="margin: 3px"/>
                                             <h:commandButton id="review-accept-cbtn" value="#{labels.acceptReviewReq}"
                                                              action="#{submissionBacking.acceptReviewing(sessionInformation.user)}"
-                                                             style="margin: 3px"/>
+                                                             style="margin: 3px" styleClass="btn btn-primary"/>
                                             <h:commandButton id="review-decline-cbtn" value="#{labels.declineReviewReq}"
                                                              action="#{submissionBacking.declineReviewing(sessionInformation.user)}"
-                                                             style="margin: 3px"/>
+                                                             style="margin: 3px" styleClass="btn btn-primary"/>
                                         </h:panelGroup>
                                         <h:outputText id="deadline-review-otxt" value="#{labels.reviewDeadline}"
                                                       style="margin: 3px"/>
@@ -271,7 +273,7 @@
                                         <h:commandButton id="new-review-cbtn"
                                                          value="#{labels.uploadReview}"
                                                          action="#{submissionBacking.uploadReview()}"
-                                                         style="margin: 3px"
+                                                         style="margin: 3px" styleClass="btn btn-primary"
                                                          disabled="#{submissionBacking.disableReviewUploadButton()}"/>
                                     </div>
                                 </h:form>
