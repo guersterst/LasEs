@@ -15,7 +15,8 @@
                                   styleClass="h2"/>
                 </div>
             </div>
-            <div class="row">
+
+            <div class="row mt-2">
                 <div class="col-md-12">
                     <h:outputLink value="#collapseStackTrace" styleClass="btn btn-primary"
                                   rendered="#{errorPageBacking.developmentMode}" role="button"
@@ -25,7 +26,7 @@
                     <div class="collapse" id="collapseStackTrace">
                         <div class="card card-body">
                             <h:outputText id="stack-trace-otxt" value="#{errorPageBacking.errorMessage.stackTrace}"
-                                          rendered="#{errorPageBacking.developmentMode}"/>
+                                          rendered="#{errorPageBacking.developmentMode}" styleClass="font-monospace"/>
                         </div>
                     </div>
                 </div>
