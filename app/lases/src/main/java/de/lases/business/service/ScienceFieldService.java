@@ -19,6 +19,8 @@ import java.util.logging.Logger;
 /**
  * Provides functionality for handling the scientific fields ({@link ScienceField}s), that the application has.
  * In case of an unexpected state, a {@link UIMessage} event will be fired.
+ *
+ * @author Sebastian Vogt
  */
 @Dependent
 public class    ScienceFieldService implements Serializable {

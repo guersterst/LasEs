@@ -3,9 +3,6 @@ package de.lases.persistence.repository;
 import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
-import java.util.PropertyResourceBundle;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.lases.global.transport.*;
@@ -14,13 +11,14 @@ import de.lases.persistence.internal.ConfigReader;
 import de.lases.persistence.util.DatasourceUtil;
 import de.lases.persistence.util.TransientSQLExceptionChecker;
 import jakarta.enterprise.inject.spi.CDI;
-import org.postgresql.util.PSQLException;
 
 /**
- * @author Stefanie Guerster, Sebastian Vogt
  * <p>
  * Offers get/add/change/remove operations on a paper and the possibility to
  * get lists of papers.
+ *
+ * @author Stefanie Guerster
+ * @author Sebastian Vogt
  */
 public class PaperRepository {
 
@@ -100,6 +98,8 @@ public class PaperRepository {
      *                                        null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     *
+     * @author Sebastian Vogt
      */
     public static void add(Paper paper, FileDTO pdf, Transaction transaction) throws DataNotWrittenException {
         Connection conn = transaction.getConnection();
@@ -120,7 +120,7 @@ public class PaperRepository {
             throw new InvalidFieldsException("The submission id must not be null!");
         }
 
-        Integer id = null;
+        int id;
 
         try (PreparedStatement stmt = conn.prepareStatement(sqlMaxVersion)) {
             stmt.setInt(1, paper.getSubmissionId());

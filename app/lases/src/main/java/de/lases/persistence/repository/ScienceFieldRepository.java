@@ -14,6 +14,8 @@ import java.util.logging.Logger;
 /**
  * Offers get/add/remove operations on a science field and the
  * possibility to get lists of science fields.
+ *
+ * @author Sebastian Vogt
  */
 public class ScienceFieldRepository {
 
@@ -160,10 +162,10 @@ public class ScienceFieldRepository {
             DatasourceUtil.logSQLException(e, logger);
 
             if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
-                throw new DataNotCompleteException("Science field list could not be retrieved", e);
+                throw new DataNotCompleteException("Science fields could not be received", e);
             } else {
                 transaction.abort();
-                throw new DatasourceQueryFailedException("Science field list could not be retrieved", e);
+                throw new DatasourceQueryFailedException("Science fields could not be received", e);
             }
         }
     }
@@ -223,10 +225,10 @@ public class ScienceFieldRepository {
             DatasourceUtil.logSQLException(e, logger);
 
             if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
-                throw new DataNotCompleteException("Science field list could not be retrieved", e);
+                throw new DataNotCompleteException("Science fields could not be received", e);
             } else {
                 transaction.abort();
-                throw new DatasourceQueryFailedException("Science field list could not be retrieved", e);
+                throw new DatasourceQueryFailedException("Science fields could not be received", e);
             }
         }
     }
@@ -276,10 +278,10 @@ public class ScienceFieldRepository {
             DatasourceUtil.logSQLException(e, logger);
 
             if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
-                throw new DataNotCompleteException("Science field list could not be retrieved", e);
+                throw new DataNotCompleteException("Science fields could not be received", e);
             } else {
                 transaction.abort();
-                throw new DatasourceQueryFailedException("Science field list could not be retrieved", e);
+                throw new DatasourceQueryFailedException("Science fields could not be received", e);
             }
         }
     }

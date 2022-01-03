@@ -21,6 +21,7 @@ import java.util.logging.Logger;
  * @author Johann Schicho
  * @author Johannes Garstenauer
  * @author Thomas Kirz
+ * @author Sebastian Vogt
  */
 public class UserRepository {
 
@@ -570,9 +571,9 @@ public class UserRepository {
         } catch (SQLException e) {
             DatasourceUtil.logSQLException(e, logger);
             if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
-                transaction.abort();
                 throw new DataNotWrittenException("Failed to add verification to database.", e);
             } else {
+                transaction.abort();
                 throw new DatasourceQueryFailedException("Failed to add verification to database.", e);
             }
         }
@@ -620,9 +621,9 @@ public class UserRepository {
         } catch (SQLException e) {
             DatasourceUtil.logSQLException(e, logger);
             if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
-                transaction.abort();
                 throw new DataNotWrittenException("Failed to add verification to database.", e);
             } else {
+                transaction.abort();
                 throw new DatasourceQueryFailedException("Failed to add verification to database.", e);
             }
         }
@@ -698,7 +699,13 @@ public class UserRepository {
                 userList.add(user);
             }
         } catch (SQLException e) {
-            throw new DatasourceQueryFailedException();
+            DatasourceUtil.logSQLException(e, logger);
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                throw new DataNotCompleteException("List could not be loaded.");
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("Could not query DB", e);
+            }
         }
         return userList;
     }
@@ -781,19 +788,6 @@ public class UserRepository {
 
         List<User> userList = new LinkedList<>();
 
-        try {
-            PreparedStatement exists = conn.prepareStatement(
-                    "SELECT * FROM submission WHERE id = ?"
-            );
-            exists.setInt(1, submissionId);
-            ResultSet rsExists = exists.executeQuery();
-            if (!rsExists.next()) {
-                throw new NotFoundException("No Submission with ID: " + submissionId);
-            }
-        } catch (SQLException e) {
-            throw new DatasourceQueryFailedException();
-        }
-
         switch (privilege) {
             case AUTHOR -> {
                 try {
@@ -856,7 +850,13 @@ public class UserRepository {
                     }
                     return userList;
                 } catch (SQLException e) {
-                    throw new DatasourceQueryFailedException();
+                    DatasourceUtil.logSQLException(e, logger);
+                    if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                        throw new DataNotCompleteException("user list could not be loaded.");
+                    } else {
+                        transaction.abort();
+                        throw new DatasourceQueryFailedException("Could not query DB", e);
+                    }
                 }
             }
             default -> {
@@ -909,7 +909,9 @@ public class UserRepository {
             }
             return privileges;
         } catch (SQLException e) {
-            throw new DatasourceQueryFailedException();
+            DatasourceUtil.logSQLException(e, logger);
+            transaction.abort();
+            throw new DatasourceQueryFailedException("Could not query DB", e);
         }
     }
 
@@ -978,8 +980,13 @@ public class UserRepository {
             }
             return userList;
         } catch (SQLException e) {
-            logger.severe("Data Query failed: " + e.getMessage() + e.getSQLState());
-            throw new DatasourceQueryFailedException();
+            DatasourceUtil.logSQLException(e, logger);
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                throw new DataNotCompleteException("List could not be loaded.");
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("Could not query DB", e);
+            }
         }
     }
 

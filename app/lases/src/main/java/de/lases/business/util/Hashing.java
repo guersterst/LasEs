@@ -10,6 +10,8 @@ import java.util.Base64;
 
 /**
  * Provides functionality for the hashing of passwords.
+ *
+ * @author Sebastian Vogt
  */
 public class Hashing {
 
