@@ -5,6 +5,7 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:pg="http://xmlns.jcp.org/jsf/composite/templates/composites/pagination"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
                 xmlns:ssc="http://xmlns.jcp.org/jsf/composite/templates/composites/sortsearchcolumn">
 
     <!--Title of a Submission as Title of the page.-->
@@ -27,13 +28,13 @@
         </f:metadata>
 
         <div class="row">
-            <div class="col-md-3" id="wrap-toolbar">
+            <div class="col-md-4" id="wrap-toolbar" style="min-width: min-content">
                 <h:panelGroup id="toolbar"
                               rendered="#{submissionBacking.admin || submissionBacking.loggedInUserIsEditor()}">
                     <ui:include src="/resources/templates/toolbar.xhtml"/>
                 </h:panelGroup>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-8">
                 <div class="container">
                     <div class="container" id="container-submission">
                         <div class="card" id="toolbox">
@@ -54,7 +55,8 @@
                                                 <br/>
                                                 <div class="text-center">
                                                     <h:form>
-                                                        <h:commandButton styleClass="btn btn-primary" id="agree-delete-cbtn"
+                                                        <h:commandButton styleClass="btn btn-primary"
+                                                                         id="agree-delete-cbtn"
                                                                          value="#{labels.agreeButton}"
                                                                          action="#{submissionBacking.deleteSubmission()}"/>
                                                     </h:form>

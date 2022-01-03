@@ -12,6 +12,7 @@
     <title>
         <ui:insert name="title">LasEs</ui:insert>
     </title>
+
     <h:outputScript name="design/bootstrap/js/bootstrap.bundle.min.js"/>
     <h:outputStylesheet name="design/bootstrap/css/bootstrap.min.css"/>
     <h:outputStylesheet name="design/css/main.css"/>
@@ -38,8 +39,10 @@
 
         <!--Includes content for default-->
         <div id="content">
-            <h:messages globalOnly="true" styleClass="text-center"
-                        errorClass="error" infoClass="info" warnClass="warning"/>
+            <div class="top">
+                <h:messages globalOnly="true" styleClass="text-center alert"
+                            errorClass="alert-danger error" infoClass="alert-info info" warnClass="warning alert-warning"/>
+            </div>
             <ui:insert name="content">
                 <ui:include src="content.xhtml"></ui:include>
             </ui:insert>
