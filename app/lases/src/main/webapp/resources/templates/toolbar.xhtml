@@ -2,7 +2,7 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
-xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
 
 
     <div class="card-header">
@@ -20,7 +20,7 @@ xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
                     <h:inputText id="add-reviewer-itxt" value="#{toolbarBacking.reviewerInput.emailAddress}"
                                  title="#{help.addReviewerEmail}"
                                  required="true" requiredMessage="#{message.requiredEmail}"
-                                 styleClass="form-control" >
+                                 styleClass="form-control">
                         <f:validator validatorId="emailAddressLayoutValidator"/>
                     </h:inputText>
                     <h:message for="add-reviewer-itxt"/>
@@ -29,7 +29,8 @@ xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
             <br/>
             <div class="form-group">
                 <div class="input-group">
-                    <h:outputLabel for="add-deadline-reviewer-itxt" value="#{labels.deadline}" styleClass="input-group-text"/>
+                    <h:outputLabel for="add-deadline-reviewer-itxt" value="#{labels.deadline}"
+                                   styleClass="input-group-text"/>
                     <h:inputText id="add-deadline-reviewer-itxt"
                                  value="#{toolbarBacking.reviewedByInput.timestampDeadline}"
                                  title="#{help.addReviewerDeadline}"
@@ -51,42 +52,60 @@ xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
             </div>
         </h:form>
         <h:form>
-        <div id="list">
-            <div class="row">
-                <div class="col">
-                    <h:dataTable value="#{toolbarBacking.reviewer}" var="user" styleClass="table table-striped">
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText id="header-name" value="#{labels.name}"/>
-                            </f:facet>
-                            <h:outputText id="reviewer-name-otxt" value="#{user.firstName.concat(' ').concat(user.lastName).concat(': ')}"/>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText id="header-email" value="#{labels.emailInput}"/>
-                            </f:facet>
-                            <h:commandLink id="mail-cmdlnk" value="#{user.emailAddress}" outcome="#{'mailto:'.concat(coAuthor.emailAddress)}"
-                                    includeViewParams="true" title="#{help.mailTo}"/>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText id="header-deadline" value="#{labels.deadline}"/>
-                            </f:facet>
-                            <h:outputText value="#{toolbarBacking.reviewerDeadline.get(toolbarBacking.reviewer.indexOf(user)).timestampDeadline}">
-                                <f:convertDateTime type="localDateTime"/>
-                            </h:outputText>
-                        </h:column>
-                        <h:column>
-                            <h:commandButton value="#{labels.deleteButton}"
-                                             action="#{toolbarBacking.removeReviewer(user)}"
-                                             styleClass="btn btn-secondary btn-sm"
-                                             disabled="#{toolbarBacking.accepted || toolbarBacking.rejected}"/>
-
-                        </h:column>
-                    </h:dataTable>
+            <div id="list">
+                <div class="row">
+                    <div class="col">
+                        <h:dataTable value="#{toolbarBacking.reviewer}" var="user" styleClass="table table-striped">
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText id="header-name" value="#{labels.name}"/>
+                                </f:facet>
+                                <h:link id="reviewer-name-lnk"
+                                        value="#{user.firstName.concat(' ').concat(user.lastName).concat(': ')}"
+                                        outcome="/views/authenticated/profile"
+                                        includeViewParams="true" title="#{help.directToProfile}">
+                                    <f:param value="#{user.id}" name="id"/>
+                                </h:link>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText id="header-email" value="#{labels.emailInput}"/>
+                                </f:facet>
+                                <h:commandLink id="mail-cmdlnk" value="#{user.emailAddress}"
+                                               outcome="#{'mailto:'.concat(coAuthor.emailAddress)}"
+                                               includeViewParams="true" title="#{help.mailTo}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText id="header-deadline" value="#{labels.deadline}"/>
+                                </f:facet>
+                                <h:outputText
+                                        value="#{toolbarBacking.reviewerDeadline.get(toolbarBacking.reviewer.indexOf(user)).timestampDeadline}">
+                                    <f:convertDateTime type="localDateTime"/>
+                                </h:outputText>
+                            </h:column>
+                            <h:column>
+                                <div class="form-group">
+                                    <h:commandButton value="#{labels.deleteButton}"
+                                                     action="#{toolbarBacking.removeReviewer(user)}"
+                                                     styleClass="btn btn-secondary btn-sm"
+                                                     disabled="#{toolbarBacking.accepted || toolbarBacking.rejected}"
+                                                     title="#{help.deleteReviewer}"/>
+                                </div>
+                            </h:column>
+                            <h:column>
+                                <div class="form-group">
+                                    <h:commandButton value="#{labels.changeButton}"
+                                                     action="#{toolbarBacking.changeReviewing(user)}"
+                                                     styleClass="btn btn-secondary btn-sm"
+                                                     disabled="#{toolbarBacking.accepted || toolbarBacking.rejected}"
+                                                     title="#{help.changeReviewing}"/>
+                                </div>
+                            </h:column>
+                        </h:dataTable>
+                    </div>
                 </div>
             </div>
-        </div>
         </h:form>
         <hr/>
         <div class="card-header">
@@ -97,7 +116,8 @@ xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
             <div class="form-group">
                 <div class="form-group">
                     <div class="input-group">
-                        <h:outputLabel id="current-editor-lbl" value="#{labels.selectEditor}" for="show-editor-itxt" styleClass="input-group-text"/>
+                        <h:outputLabel id="current-editor-lbl" value="#{labels.selectEditor}" for="show-editor-itxt"
+                                       styleClass="input-group-text"/>
                         <h:outputText id="show-editor-itxt"
                                       value="#{toolbarBacking.getTitle(toolbarBacking.currentEditor).concat(' ')
                                       .concat(toolbarBacking.currentEditor.firstName.concat(' ')
@@ -106,7 +126,8 @@ xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
                     <br/>
                 </div>
                 <div class="input-group">
-                    <h:outputLabel id="editor-lbl" value="#{labels.editor}" for="select-editor-slctom" styleClass="input-group-text"/>
+                    <h:outputLabel id="editor-lbl" value="#{labels.editor}" for="select-editor-slctom"
+                                   styleClass="input-group-text"/>
                     <h:selectOneMenu id="select-editor-slctom"
                                      value="#{toolbarBacking.currentEditor.id}" title="#{help.chooseEditor}"
                                      styleClass="form-select">
@@ -146,7 +167,8 @@ xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
             </div>
             <br/>
             <div class="form-group btn-group">
-                <h:commandButton id="revision-required-cbtn" value="#{labels.revisionBtn}" action="#{toolbarBacking.requireRevision}"
+                <h:commandButton id="revision-required-cbtn" value="#{labels.revisionBtn}"
+                                 action="#{toolbarBacking.requireRevision}"
                                  title="#{help.revisionRequired}" styleClass="btn btn-primary"
                                  disabled="#{toolbarBacking.accepted || toolbarBacking.rejected}"/>
             </div>

@@ -6,20 +6,16 @@ import de.lases.control.exception.IllegalUserFlowException;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
-import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.event.Event;
-import jakarta.faces.application.FacesMessage;
-import jakarta.faces.context.FacesContext;
-import jakarta.faces.event.ComponentSystemEvent;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.logging.Logger;
+
 
 /**
  * Backing bean for the toolbar view. This view belongs to the submission page.
@@ -401,6 +397,11 @@ public class ToolbarBacking implements Serializable {
      */
     public boolean loggedInUserIsReviewer() {
         return false;
+    }
+
+    public void changeReviewing(User user) {
+        reviewerInput = user;
+        reviewedByInput.setTimestampDeadline(reviewer.get(user).getTimestampDeadline());
     }
 
 }
