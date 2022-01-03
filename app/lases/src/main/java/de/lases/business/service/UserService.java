@@ -37,7 +37,7 @@ public class UserService implements Serializable {
     @Inject
     private Event<UIMessage> uiMessageEvent;
 
-    private static final Logger l = Logger.getLogger(UserService.class.getName());
+    private static final Logger logger = Logger.getLogger(UserService.class.getName());
 
     @Inject
     private PropertyResourceBundle propertyResourceBundle;
@@ -55,7 +55,7 @@ public class UserService implements Serializable {
         if (user.getId() == null && user.getEmailAddress() == null) {
 
             // Throw an exception when neither an id nor a valid email address exist.
-            l.severe("The id and email are missing. Therefor no user object can be queried.");
+            logger.severe("The id and email are missing. Therefor no user object can be queried.");
             throw new InvalidFieldsException();
         } else {
 
@@ -64,11 +64,11 @@ public class UserService implements Serializable {
             try {
                 result = UserRepository.get(user, transaction);
                 transaction.commit();
-                l.finest("Successfully fetched a user with the id: " + user.getId());
+                logger.finest("Successfully fetched a user with the id: " + user.getId());
             } catch (NotFoundException ex) {
                 uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataNotFound"),
                         MessageCategory.ERROR));
-                l.warning(ex.getMessage());
+                logger.warning(ex.getMessage());
                 transaction.abort();
             }
             return result;
@@ -152,7 +152,7 @@ public class UserService implements Serializable {
 
         try {
             UserRepository.changeVerification(verification, t);
-            l.fine("Verification for user " + user.getId() + " created.");
+            logger.fine("Verification for user " + user.getId() + " created.");
         } catch (NotFoundException | DataNotWrittenException e) {
             return false;
         }
@@ -344,13 +344,13 @@ public class UserService implements Serializable {
         List<User> userList = new ArrayList<>();
 
         try {
-            l.finest("Getting user list with result list parameters.");
+            logger.finest("Getting user list with result list parameters.");
             userList = UserRepository.getList(transaction, resultListParams);
         } catch (DataNotCompleteException e) {
-            l.info(e.getMessage());
+            logger.info(e.getMessage());
             uiMessageEvent.fire(new UIMessage("Could not fetch data.", MessageCategory.WARNING));
         } catch (InvalidQueryParamsException e) {
-            l.severe(e.getMessage());
+            logger.severe(e.getMessage());
             uiMessageEvent.fire(new UIMessage("Missing request parameters.", MessageCategory.FATAL));
         } finally {
             transaction.commit();
@@ -375,13 +375,13 @@ public class UserService implements Serializable {
         List<User> userList = new ArrayList<>();
 
         try {
-            l.finest("Getting user list for submission with privilege.");
+            logger.finest("Getting user list for submission with privilege.");
             userList = UserRepository.getList(transaction, submission, privilege);
         } catch (NotFoundException e) {
-            l.info(e.getMessage());
+            logger.info(e.getMessage());
             uiMessageEvent.fire(new UIMessage("This submission does not exist.", MessageCategory.ERROR));
         } catch (DataNotCompleteException e) {
-            l.info(e.getMessage());
+            logger.info(e.getMessage());
             uiMessageEvent.fire(new UIMessage("Could not fetch data.", MessageCategory.WARNING));
         } finally {
             transaction.commit();
@@ -401,13 +401,13 @@ public class UserService implements Serializable {
         List<User> userList = new ArrayList<>();
 
         try {
-            l.finest("Getting user list of editors of forum.");
+            logger.finest("Getting user list of editors of forum.");
             userList = UserRepository.getList(transaction, scientificForum);
         } catch (DataNotCompleteException e) {
-            l.info(e.getMessage());
+            logger.info(e.getMessage());
             uiMessageEvent.fire(new UIMessage("Could not fetch data.", MessageCategory.WARNING));
         } catch (NotFoundException e) {
-            l.info(e.getMessage());
+            logger.info(e.getMessage());
             uiMessageEvent.fire(new UIMessage("This forum does not exist.", MessageCategory.ERROR));
         } finally {
             transaction.commit();
@@ -448,7 +448,7 @@ public class UserService implements Serializable {
             storedVerification = UserRepository.getVerification(verification, transaction);
         } catch (NotFoundException e) {
             transaction.abort();
-            l.warning("Could not find verification.");
+            logger.warning("Could not find verification.");
             uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("verification.failure"),
                     MessageCategory.ERROR));
             return verification;
@@ -456,7 +456,7 @@ public class UserService implements Serializable {
 
         if (storedVerification.isVerified()) {
             transaction.abort();
-            l.warning("User already verified");
+            logger.warning("User already verified");
             uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("verification.alreadyVerified"),
                     MessageCategory.ERROR));
             return verification;
@@ -467,15 +467,15 @@ public class UserService implements Serializable {
             storedVerification.setValidationRandom(null);
             try {
                 UserRepository.changeVerification(storedVerification, transaction);
-                l.info("Successfully verified user with id " + storedVerification.getUserId());
+                logger.info("Successfully verified user with id " + storedVerification.getUserId());
             } catch (NotFoundException e) {
                 transaction.abort();
-                l.severe("Could not update verification as the user does not exist.");
+                logger.severe("Could not update verification as the user does not exist.");
                 uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("verification.failure"),
                         MessageCategory.ERROR));
             } catch (DataNotWrittenException e) {
                 transaction.abort();
-                l.severe("Verification could not be updated in data source.");
+                logger.severe("Verification could not be updated in data source.");
                 uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("verification.failure"),
                         MessageCategory.ERROR));
             }

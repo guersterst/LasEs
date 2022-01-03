@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 @FacesValidator
 public class EmailAddressUnoccupiedValidator implements Validator<String> {
 
-    private final Logger l = Logger.getLogger(EmailAddressUnoccupiedValidator.class.getName());
+    private final Logger logger = Logger.getLogger(EmailAddressUnoccupiedValidator.class.getName());
 
     /**
      * Validates an email address as specified in the class description.
@@ -39,7 +39,7 @@ public class EmailAddressUnoccupiedValidator implements Validator<String> {
         UserService userService = CDI.current().select(UserService.class).get();
         if (userService.emailExists(user) && userService.get(user).isRegistered()) {
             PropertyResourceBundle bundle = CDI.current().select(PropertyResourceBundle.class).get();
-            l.finer("Validation failed: " + address + " is already in use.");
+            logger.finer("Validation failed: " + address + " is already in use.");
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, bundle.getString("emailInUse"),
                     null);
             throw new ValidatorException(message);

@@ -31,7 +31,7 @@ import java.util.logging.Logger;
 @FacesValidator
 public class PasswordValidator implements Validator<String> {
 
-    private final Logger l = Logger.getLogger(PasswordValidator.class.getName());
+    private final Logger logger = Logger.getLogger(PasswordValidator.class.getName());
 
     /**
      * Validates passwords as specified in the class description.
@@ -65,7 +65,7 @@ public class PasswordValidator implements Validator<String> {
         // Throw exception if password is not valid
         if (!valid) {
             PropertyResourceBundle bundle = CDI.current().select(PropertyResourceBundle.class).get();
-            l.finer("Validation failed: " + password + " is an invalid password");
+            logger.finer("Validation failed: " + password + " is an invalid password");
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     bundle.getString("invalidPassword"), null);
             throw new ValidatorException(message);

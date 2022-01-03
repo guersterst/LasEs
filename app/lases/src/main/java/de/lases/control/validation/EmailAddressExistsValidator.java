@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 @FacesValidator
 public class EmailAddressExistsValidator implements Validator<String> {
 
-    private final Logger l = Logger.getLogger(EmailAddressUnoccupiedValidator.class.getName());
+    private final Logger logger = Logger.getLogger(EmailAddressUnoccupiedValidator.class.getName());
 
     /**
      * Validates an email address as specified in the class description.
@@ -38,7 +38,7 @@ public class EmailAddressExistsValidator implements Validator<String> {
         UserService userService = CDI.current().select(UserService.class).get();
         if (!userService.emailExists(user)) {
             PropertyResourceBundle bundle = CDI.current().select(PropertyResourceBundle.class).get();
-            l.finer("Validation failed: " + address + " does not exist.");
+            logger.finer("Validation failed: " + address + " does not exist.");
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, bundle.getString("emailNotExists"),
                     null);
             throw new ValidatorException(message);

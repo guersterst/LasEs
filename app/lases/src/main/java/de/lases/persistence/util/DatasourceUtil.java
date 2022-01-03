@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  */
 public class DatasourceUtil {
 
-    private static final Logger l = Logger.getLogger(DatasourceUtil.class.getName());
+    private static final Logger logger = Logger.getLogger(DatasourceUtil.class.getName());
 
     /**
      * Deletes all users/verifications (if the user already has a valid email
@@ -50,11 +50,11 @@ public class DatasourceUtil {
                 """;
 
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
-            l.info("Cleaning up verifications.");
+            logger.info("Cleaning up verifications.");
             statement.executeUpdate();
             transaction.commit();
         } catch (SQLException e) {
-            logSQLException(e, l);
+            logSQLException(e, logger);
             transaction.abort();
             throw new DatasourceQueryFailedException("Could not clean up verifications.", e);
         }

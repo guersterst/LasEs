@@ -26,7 +26,7 @@ public class EmailAddressLayoutValidator implements Validator<String> {
     private static final String EMAIL_REGEX =
             "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
 
-    private final Logger l = Logger.getLogger(EmailAddressLayoutValidator.class.getName());
+    private final Logger logger = Logger.getLogger(EmailAddressLayoutValidator.class.getName());
 
     private final PropertyResourceBundle bundle = CDI.current().select(PropertyResourceBundle.class).get();
 
@@ -42,7 +42,7 @@ public class EmailAddressLayoutValidator implements Validator<String> {
     public void validate(FacesContext facesContext, UIComponent uiComponent,
                          String address) throws ValidatorException {
         if (address == null || !address.matches(EMAIL_REGEX)) {
-            l.finer("Validation failed: Email address " + address + " is invalid");
+            logger.finer("Validation failed: Email address " + address + " is invalid");
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, bundle.getString("emailInvalid"),
                     null);
             throw new ValidatorException(message);

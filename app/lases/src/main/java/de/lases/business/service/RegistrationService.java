@@ -35,7 +35,7 @@ import java.util.logging.Logger;
 @Dependent
 public class RegistrationService {
 
-    private final Logger l = Logger.getLogger(RegistrationService.class.getName());
+    private final Logger logger = Logger.getLogger(RegistrationService.class.getName());
 
     @Inject
     private ConfigPropagator configPropagator;
@@ -64,7 +64,7 @@ public class RegistrationService {
      */
     public User selfRegister(User user) {
         if (!userSufficientlyFilled(user)) {
-            l.severe("User-DTO not sufficiently filled.");
+            logger.severe("User-DTO not sufficiently filled.");
             throw new IllegalArgumentException("User-DTO not sufficiently filled.");
         }
 
@@ -79,12 +79,12 @@ public class RegistrationService {
             try {
                 oldUser = UserRepository.get(user, t);
             } catch (NotFoundException e) {
-                l.severe("User with email " + user.getEmailAddress() + " should exist but was not found.");
+                logger.severe("User with email " + user.getEmailAddress() + " should exist but was not found.");
                 t.abort();
                 return user;
             }
             if (oldUser.isRegistered()) {
-                l.fine("User with email address " + user.getEmailAddress() + " is already registered.");
+                logger.fine("User with email address " + user.getEmailAddress() + " is already registered.");
                 uiMessageEvent.fire(new UIMessage(message.getString("emailInUse"),
                         MessageCategory.ERROR));
                 t.abort();
@@ -94,16 +94,16 @@ public class RegistrationService {
             try {
                 UserRepository.change(user, t);
             } catch (DataNotWrittenException e) {
-                l.severe("User with email " + user.getEmailAddress() + " could not be updated: "
+                logger.severe("User with email " + user.getEmailAddress() + " could not be updated: "
                         + e.getMessage());
                 t.abort();
                 return null;
             } catch (NotFoundException e) {
-                l.severe("User with email " + user.getEmailAddress() + " should exist but was not found.");
+                logger.severe("User with email " + user.getEmailAddress() + " should exist but was not found.");
                 t.abort();
                 return null;
             } catch (KeyExistsException e) {
-                l.severe("User with combination of email " + user.getEmailAddress() + " and id " + user.getId()
+                logger.severe("User with combination of email " + user.getEmailAddress() + " and id " + user.getId()
                         + " could not be updated: " + e.getMessage());
                 t.abort();
                 return null;
@@ -122,7 +122,7 @@ public class RegistrationService {
             String msg = message.getString("registrationSuccessful");
             uiMessageEvent.fire(new UIMessage(msg, MessageCategory.INFO));
 
-            l.info("User " + user.getEmailAddress() + " registered.");
+            logger.info("User " + user.getEmailAddress() + " registered.");
             t.commit();
         } else {
             uiMessageEvent.fire(new UIMessage(message.getString("registrationFailed"), MessageCategory.ERROR));
@@ -151,7 +151,7 @@ public class RegistrationService {
 
         try {
             UserRepository.addVerification(verification, t);
-            l.fine("Verification for user " + user.getId() + " created.");
+            logger.fine("Verification for user " + user.getId() + " created.");
         } catch (NotFoundException | DataNotWrittenException e) {
             return false;
         }
