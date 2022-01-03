@@ -50,6 +50,9 @@ public class UserService implements Serializable {
     @Inject
     private ConfigPropagator configPropagator;
 
+    @Inject
+    private FacesContext facesContext;
+
     /**
      * Gets a {@code User}.
      *
@@ -185,8 +188,8 @@ public class UserService implements Serializable {
     }
 
     private String generateValidationUrl(Verification verification) {
-        String base = configPropagator.getProperty("BASE_URL") + "/views/anonymous/verification.xhtml";
-        return FacesContext.getCurrentInstance().getExternalContext().encodeBookmarkableURL(base,
+        String base = EmailUtil.generateLinkForEmail(facesContext, "views/anonymous/verification.xhtml");
+        return facesContext.getExternalContext().encodeBookmarkableURL(base,
                 Map.of("validationRandom", List.of(verification.getValidationRandom())));
     }
 
