@@ -110,7 +110,7 @@ public class RegistrationService {
             }
         } else {
             try {
-                user = UserRepository.add(user, t);
+                UserRepository.add(user, t);
             } catch (DataNotWrittenException e) {
                 uiMessageEvent.fire(new UIMessage(message.getString("registrationFailed"), MessageCategory.ERROR));
                 t.abort();

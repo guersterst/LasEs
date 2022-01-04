@@ -216,6 +216,7 @@ public class UserRepository {
      *                    password salt are not required.
      *                    (The id must not be specified, as the repository will
      *                    create the id)
+     *                    The user's id will be set to the newly assigned id.
      * @param transaction The transaction to use.
      * @throws DataNotWrittenException        If writing the data to the repository
      *                                        fails.
@@ -223,7 +224,7 @@ public class UserRepository {
      *                                        scientific forum is null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
-     * @return The user object with his id.
+     * @return The user object with its id.
      * @author Thomas Kirz
      */
     public static User add(User user, Transaction transaction)
