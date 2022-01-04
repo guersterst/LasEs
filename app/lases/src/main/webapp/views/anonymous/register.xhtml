@@ -11,119 +11,101 @@
 
     <ui:define name="content">
         <div class="container">
-            <div class="card">
-                <div class="card-header">
-                    <div class="col-md-6">
-                        <h:outputText value="#{labels['register']}"/>
-                    </div>
-                </div>
-                <h:form id="register-frm" styleClass="card-body">
-                    <!-- Title -->
-                    <div class="row">
-                        <div class="col-8">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                <h:outputText value="#{labels['titleInput']}"/>
-                            </span>
-                                </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h:outputText value="#{labels['register']}"/>
+                        </div>
+                        <h:form id="register-frm" styleClass="card-body">
+
+                            <!-- Title -->
+                            <div class="form-group">
+                                <h:outputLabel for="title-itxt" value="#{labels['titleInput']}"
+                                               styleClass="form-label"/>
                                 <h:inputText id="title-itxt" value="#{registrationBacking.newUser.title}"
                                              maxlength="#{Const.TITLE_MAX}" styleClass="form-control"/>
                             </div>
-                        </div>
-                        <div class="col-4"><h:message for="title-itxt"/></div>
-                    </div>
-                    <!-- First name -->
-                    <div class="row">
-                        <div class="col-8">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                <h:outputText value="#{labels['firstName']}"/>
-                            </span>
-                                </div>
-                                <h:inputText id="first-name-itxt" value="#{registrationBacking.newUser.firstName}"
+                            <h:message for="title-itxt"/>
+                            <hr/>
+
+                            <!-- First name -->
+                            <div class="form-group">
+                                <h:outputLabel for="first-name-itxt" value="#{labels['firstName']}"
+                                               styleClass="form-label"/>
+                                <h:inputText id="first-name-itxt"
+                                             value="#{registrationBacking.newUser.firstName}"
                                              title="#{help.firstName}" required="true"
                                              requiredMessage="#{message.firstNameRequired}"
                                              maxlength="#{Const.FIRST_NAME_MAX}"
                                              styleClass="form-control"/>
                             </div>
-                        </div>
-                        <div class="col-4"><h:message for="first-name-itxt"/></div>
-                    </div>
-                    <!-- Last Name -->
-                    <div class="row">
-                        <div class="col-8">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                <h:outputText value="#{labels['lastName']}"/>
-                            </span>
-                                </div>
+                            <h:message for="first-name-itxt"/>
+                            <hr/>
+
+                            <!-- Last Name -->
+                            <div class="form-group">
+                                <h:outputLabel for="last-name-itxt" value="#{labels['lastName']}"
+                                               styleClass="form-label"/>
                                 <h:inputText id="last-name-itxt" value="#{registrationBacking.newUser.lastName}"
                                              title="#{help.lastName}" required="true"
                                              requiredMessage="#{message.lastNameRequired}"
                                              maxlength="#{Const.LAST_NAME_MAX}"
                                              styleClass="form-control"/>
                             </div>
-                        </div>
-                        <div class="col-4"><h:message for="last-name-itxt"/></div>
-                    </div>
-                    <!-- Email -->
-                    <div class="row">
-                        <div class="col-8">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                <h:outputText value="#{labels['email']}"/>
-                            </span>
-                                </div>
+                            <h:message for="last-name-itxt"/>
+                            <hr/>
+
+                            <!-- Email -->
+                            <div class="form-group">
+                                <h:outputLabel for="email-itxt" value="#{labels['email']}"
+                                               styleClass="form-label"/>
                                 <h:inputText id="email-itxt" value="#{registrationBacking.newUser.emailAddress}"
                                              title="#{help.email}" required="true"
-                                             requiredMessage="#{message.emailRequired}" maxlength="#{Const.EMAIL_MAX}"
+                                             requiredMessage="#{message.emailRequired}"
+                                             maxlength="#{Const.EMAIL_MAX}"
                                              styleClass="form-control">
-                                    <f:validator for="email-itxt" validatorId="emailAddressUnoccupiedValidator"/>
+                                    <f:validator for="email-itxt"
+                                                 validatorId="emailAddressUnoccupiedValidator"/>
                                     <f:validator for="email-itxt" validatorId="emailAddressLayoutValidator"/>
                                 </h:inputText>
                             </div>
-                        </div>
-                        <div class="col-4"><h:message for="email-itxt"/></div>
-                    </div>
-                    <!-- Password -->
-                    <div class="row">
-                        <div class="col-8">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                <h:outputText value="#{labels['password']}"/>
-                            </span>
-                                </div>
+                            <h:message for="email-itxt"/>
+                            <hr/>
+
+                            <!-- Password -->
+                            <div class="form-group">
+                                <h:outputLabel for="password-iscrt" value="#{labels['password']}" styleClass="form-label"/>
                                 <h:inputSecret id="password-iscrt"
                                                value="#{registrationBacking.newUser.passwordNotHashed}"
                                                title="#{help.password}" required="true"
-                                               requiredMessage="#{message.passwordNeeded}" styleClass="form-control">
+                                               requiredMessage="#{message.passwordNeeded}"
+                                               styleClass="form-control">
                                     <f:validator for="password-iscrt" validatorId="passwordValidator"/>
                                 </h:inputSecret>
                             </div>
-                        </div>
-                        <div class="col-4"><h:message for="password-iscrt"/></div>
-                    </div>
+                            <h:message for="password-iscrt"/>
+                            <hr/>
 
-                    <div class="row">
-                        <!-- Register button -->
-                        <div class="col-2">
-                            <h:commandButton id="register-cbtn" value="#{labels.register}"
-                                             action="#{registrationBacking.register}"
-                                             styleClass="form-control"/>
-                        </div>
-                        <!-- Login link -->
-                        <div class="col-2">
-                            <h:link id="welcomepage-lnk" value="#{labels.welcomeLink}"
-                                    outcome="/views/anonymous/welcome" title="#{help.welcomePage}"
-                                    styleClass="btn btn-secondary"/>
-                        </div>
+                            <!-- Register button -->
+                            <div class="form-group">
+                                <h:commandButton id="register-cbtn" value="#{labels.register}"
+                                                 action="#{registrationBacking.register}"
+                                                 styleClass="btn btn-primary"/>
+                            </div>
+                            <hr/>
+                            <!-- Login link -->
+                            <div class="form-group">
+                                <h:link id="welcomepage-lnk" value="#{labels.welcomeLink}"
+                                        outcome="/views/anonymous/welcome" title="#{help.welcomePage}"
+                                        styleClass="btn btn-secondary"/>
+                            </div>
+
+                        </h:form>
                     </div>
-                </h:form>
+                </div>
             </div>
         </div>
     </ui:define>
