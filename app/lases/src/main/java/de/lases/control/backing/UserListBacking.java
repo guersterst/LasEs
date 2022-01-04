@@ -1,10 +1,11 @@
 package de.lases.control.backing;
 
-import de.lases.business.service.ScientificForumService;
 import de.lases.business.service.UserService;
 import de.lases.business.util.EmailUtil;
-import de.lases.control.internal.*;
-import de.lases.global.transport.*;
+import de.lases.control.internal.Pagination;
+import de.lases.control.internal.SessionInformation;
+import de.lases.global.transport.Privilege;
+import de.lases.global.transport.User;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -12,9 +13,7 @@ import jakarta.inject.Named;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Backing bean for the user list page.
@@ -35,7 +34,6 @@ public class UserListBacking implements Serializable, UserPaginationBacking {
     private Pagination<User> userPagination;
 
     private void initPagination() {
-        //todo works?
         userPagination = new Pagination<>("lastname") {
 
             @Override
@@ -89,4 +87,7 @@ public class UserListBacking implements Serializable, UserPaginationBacking {
         return EmailUtil.generateMailToLink(new String[]{recipient}, null, null, null);
     }
 
+    public String[] getPrivileges() {
+        return new String[]{"none", "editor", "admin", "reviewer"};
+    }
 }

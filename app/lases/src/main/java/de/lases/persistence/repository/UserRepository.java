@@ -664,8 +664,8 @@ public class UserRepository {
 
             // Filtering
             for (String userListColumnName : userListColumnNames) {
-                if (resultListParameters.getFilterColumns().get(userListColumnName) != null && !resultListParameters.getFilterColumns().get(userListColumnName).equals("")) {
-                    String value = resultListParameters.getFilterColumns().get(userListColumnName);
+                String value = resultListParameters.getFilterColumns().get(userListColumnName);
+                if (value != null && !value.equals("") && !value.equals("none")) {
                     ps.setString(i[0], Objects.requireNonNullElse("%" + value + "%", "%"));
                     i[0]++;
                 }
@@ -724,7 +724,8 @@ public class UserRepository {
         // Filter according to filter columns parameter.
         userListColumnNames.stream()
                 .filter(columnName -> params.getFilterColumns().get(columnName) != null
-                        && !params.getFilterColumns().get(columnName).equals(""))
+                        && !params.getFilterColumns().get(columnName).equals("")
+                        && !params.getFilterColumns().get(columnName).equals("none"))
                 .forEach(column -> sb.append(" AND ").append(column).append(" ILIKE ?\n"));
 
         // Filter according to global search word.
@@ -1269,8 +1270,8 @@ public class UserRepository {
 
             // Filtering
             for (String userColumnName : userListColumnNames) {
-                if (resultListParameters.getFilterColumns().get(userColumnName) != null && !resultListParameters.getFilterColumns().get(userColumnName).equals("")) {
-                    String value = resultListParameters.getFilterColumns().get(userColumnName);
+                String value = resultListParameters.getFilterColumns().get(userColumnName);
+                if (value != null && !value.equals("") && !value.equals("none")) {
                     ps.setString(i, Objects.requireNonNullElse("%" + value + "%", "%"));
                     i++;
                 }
