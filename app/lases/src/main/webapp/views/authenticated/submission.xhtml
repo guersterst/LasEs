@@ -69,7 +69,7 @@
                                                 <div class="input-group">
                                                     <h:outputText id="submission-state-otxt"
                                                                   value="#{labels['stateSelect.' += submissionBacking.submission.state]}"
-                                                                  styleClass="btn #{submissionBacking.submission.state}"/>
+                                                                  styleClass="form-control #{submissionBacking.submission.state}"/>
                                                     <h:outputText id="submission-revision-deadline"
                                                                   value="#{submissionBacking.submission.deadlineRevision}"
                                                                   rendered="#{submissionBacking.submission.deadlineRevision != null}"

@@ -128,8 +128,7 @@ Tabs for homepage.
     color: white;
 }
 
-#tabs> .nav-link:active {
-    text-decoration: none;
+#tabs > .nav-item > .reiter {
     background-color: #f163f1;
     color: black;
 }
@@ -157,12 +156,12 @@ a:hover {
 
 .nav-item > a {
     color: white;
-    border-color: white;
+    border-color: purple;
 }
 
 .nav-item > a:hover {
     color: white;
-    border-color: white;
+    border-color: #f163f1;
 }
 
 /*
@@ -195,6 +194,35 @@ input:placeholder-shown {
 
 .input-group-text {
     background-color: #9a9898;
+}
+
+
+/*
+Submission state
+ */
+.ACCEPTED ,.REJECTED, .REVISION_REQUIRED, .SUBMITTED {
+    color: white;
+    font-weight: bold;
+}
+
+.SUBMITTED {
+    background-color: #595952;
+    border-color: #595952;
+}
+
+.ACCEPTED {
+    background-color: #038d03;
+    border-color: #038d03;
+}
+
+.REJECTED {
+    background-color: #9a0404;
+    border-color: #9a0404;
+}
+
+.REVISION_REQUIRED {
+    background-color: #a18d03;
+    border-color: #a18d03;
 }
 
 
