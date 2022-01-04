@@ -85,17 +85,17 @@
                                         <h:form id="upload-file-frm" enctype="multipart/form-data"
                                                 rendered="#{submissionBacking.submission.revisionRequired}">
                                             <div class="btn-group">
-                                                <!---->
-                                                <h:inputFile id="upload-revision-ifile"
-                                                             value="#{submissionBacking.uploadedRevisionPDF}"
-                                                             required="true"
-                                                             requiredMessage="#{message.inputFile}"
-                                                             rendered="#{submissionBacking.isViewerSubmitter()}"
-                                                             styleClass="form-control">
-                                                    <f:validator validatorId="pdfValidator"/>
-                                                </h:inputFile>
-                                                <br/>
-                                                <h:message for="upload-revision-ifile"/>
+                                                <div class="form-group">
+                                                    <h:inputFile id="upload-revision-ifile"
+                                                                 value="#{submissionBacking.uploadedRevisionPDF}"
+                                                                 required="true"
+                                                                 requiredMessage="#{message.inputFile}"
+                                                                 rendered="#{submissionBacking.isViewerSubmitter()}"
+                                                                 styleClass="form-control">
+                                                        <f:validator validatorId="pdfValidator"/>
+                                                    </h:inputFile>
+                                                    <h:message for="upload-revision-ifile"/>
+                                                </div>
                                             </div>
                                             <div class="btn-group">
                                                 <!---->
@@ -291,7 +291,7 @@
                                 <div class="card-body" style="padding: 10px 10px 10px 10px">
                                     <h:form>
                                         <div class="btn-group">
-                                            <h:selectOneMenu id="released-review-slctom" styleClass="btn-secondary"
+                                            <h:selectOneMenu id="released-review-slctom" styleClass="btn btn-secondary"
                                                              value="#{submissionBacking.reviewPagination.resultListParameters.visibleFilter}"
                                                              title="#{help.filterRelease}">
                                                 <f:selectItems value="#{submissionBacking.visibility}" var="visible"
@@ -302,7 +302,7 @@
                                             <h:outputLabel for="recommended-review-slctom"
                                                            value="#{''.concat(labels.recommended).concat(': ')}"/>
 
-                                            <h:selectOneMenu id="recommended-review-slctom" styleClass="btn-secondary"
+                                            <h:selectOneMenu id="recommended-review-slctom" styleClass="btn btn-secondary"
                                                              value="#{submissionBacking.reviewPagination.resultListParameters.recommendedFilter}"
                                                              title="#{help.filterRecom}">
                                                 <f:selectItems value="#{submissionBacking.recommendation}"

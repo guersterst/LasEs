@@ -33,11 +33,11 @@
                                     <h:form id="upload-logo" enctype="multipart/form-data">
                                         <div class="form-group">
                                             <h:outputLabel id="logo-upload-lbl" value="#{labels.uploadLogo}"
-                                                           styleClass="input-group" for="change-logo-ifile"/>
+                                                           styleClass="input-group-text" for="change-logo-ifile"/>
                                             <h:inputFile id="change-logo-ifile"
                                                          value="#{administrationBacking.uploadedLogo}"
                                                          title="#{help.chooseNewLogo}" required="true"
-                                                         requiredMessage="#{message.inputFile}"/>
+                                                         requiredMessage="#{message.inputFile}" styleClass="form-control"/>
                                         </div>
                                         <h:message for="change-logo-ifile"/>
                                         <br/>

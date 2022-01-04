@@ -130,7 +130,7 @@
                                    styleClass="input-group-text"/>
                     <h:selectOneMenu id="select-editor-slctom"
                                      value="#{toolbarBacking.currentEditor.id}" title="#{help.chooseEditor}"
-                                     styleClass="form-select">
+                                     styleClass="form-select btn btn-secondary">
                         <f:selectItems value="#{toolbarBacking.editors}" var="item"
                                        itemValue="#{item.id}"
                                        itemLabel="#{toolbarBacking.getTitle(item).concat(' ').concat(item.firstName.concat(' ').concat(item.lastName))}"/>

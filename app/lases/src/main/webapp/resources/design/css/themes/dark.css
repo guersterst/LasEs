@@ -1,0 +1,200 @@
+/*
+Main css.
+ */
+#page {
+    background: rgba(121, 116, 114, 0.65);
+    border-color: black;
+}
+
+/*
+Css for footer.
+ */
+#footer {
+    background-color: #625d5a;
+    color: #f163f1;
+}
+
+/*
+Navigation
+ */
+.navbar {
+    background-color: #625d5a;
+}
+.navbar .navbar-brand {
+    color: purple;
+}
+.navbar .navbar-brand:hover,
+.navbar .navbar-brand:focus {
+    color: white;
+}
+.navbar .navbar-text {
+    color: purple;
+}
+.navbar .navbar-text a {
+    color: #f163f1;
+}
+.navbar .navbar-text a:hover,
+.navbar .navbar-text a:focus {
+    color: purple;
+}
+.navbar .navbar-nav .nav-link {
+    color: #f163f1;
+    border-radius: .25rem;
+    margin: 0 0.25em;
+}
+.navbar .navbar-nav .nav-link:not(.disabled):hover,
+.navbar .navbar-nav .nav-link:not(.disabled):focus {
+    color: #f163f1;
+}
+.navbar .navbar-nav .nav-item.active .nav-link,
+.navbar .navbar-nav .nav-item.active .nav-link:hover,
+.navbar .navbar-nav .nav-item.active .nav-link:focus,
+.navbar .navbar-nav .nav-item.show .nav-link,
+.navbar .navbar-nav .nav-item.show .nav-link:hover,
+.navbar .navbar-nav .nav-item.show .nav-link:focus {
+    color: #f163f1;
+    background-color: #44403e;
+}
+.navbar .navbar-collapse,
+.navbar .navbar-form {
+    border-color: #ecf0f1;
+}
+.navbar .navbar-link {
+    color: purple;
+}
+.navbar .navbar-link:hover {
+    color: #f163f1;
+}
+
+.navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item {
+    color: #f163f1;
+}
+.navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item:hover,
+.navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item:focus {
+    color: #f163f1;
+}
+.navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item.active {
+    color: #f163f1;
+    background-color: purple;
+}
+
+
+
+/*
+Setting for buttons.
+ */
+.btn-primary {
+    background-color: black;
+    text-decoration-color: white;
+    border-color: black;
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active{
+    background-color: #f163f1;
+    color: white;
+    border-color: #f163f1;
+}
+
+.btn-primary:disabled {
+    background-color: #f163f1;
+    color: white;
+    border-color: #f163f1;
+}
+
+/*
+Buttons for pagination.
+ */
+.page-link {
+    background-color: #b6b2b1;
+    color: purple;
+    border-color: purple;
+}
+
+.active, .page-link:hover {
+    background-color: purple;
+    color: white;
+    border-color: purple;
+}
+
+/*
+Tabs for homepage.
+ */
+#tabs {
+    background-color: purple;
+}
+
+#tabs> .nav-item {
+    text-decoration: none;
+    color: white;
+}
+
+#tabs> .nav-link:active {
+    text-decoration: none;
+    background-color: #f163f1;
+    color: black;
+}
+
+/*
+Style all links
+ */
+a {
+    color: purple;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #f163f1;
+    text-decoration: none;
+}
+
+#impressum-lnk {
+    color: white;
+}
+
+#impressum-lnk:hover {
+    color: #f163f1;
+}
+
+.nav-item > a {
+    color: white;
+    border-color: white;
+}
+
+.nav-item > a:hover {
+    color: white;
+    border-color: white;
+}
+
+/*
+Profile styling
+ */
+.card-body, .card {
+    background-color: #b6b2b1;
+}
+
+.card-header {
+    background-color: purple;
+    color: white;
+}
+
+#toolbar > .card-body {
+    background-color: #b78eb7;
+}
+
+#is-admin-cbx {
+    background-color: #f163f1;
+}
+
+.form-control:valid, .form-control, input{
+    background-color: #c9c6c6;
+}
+
+input:placeholder-shown {
+    color: purple;
+}
+
+.input-group-text {
+    background-color: #9a9898;
+}
+
+
