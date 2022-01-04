@@ -12,6 +12,7 @@ import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.repository.*;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
+import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 
 import java.io.Serial;
@@ -47,7 +48,7 @@ public class SubmissionService implements Serializable {
     private UserService userService;
 
     @Inject
-    private ConfigPropagator configPropagator;
+    private FacesContext facesContext;
 
 
     /**
@@ -290,6 +291,8 @@ public class SubmissionService implements Serializable {
                 transaction.abort();
             }
 
+            String url = EmailUtil.generateSubmissionURL(newSubmission, facesContext);
+
             // Inform the old editor and the new editor about this change.
             if (oldSubmission != null && (oldSubmission.getEditorId() != newSubmission.getEditorId())) {
 
@@ -310,8 +313,7 @@ public class SubmissionService implements Serializable {
                 String subjectNewEditor = resourceBundle.getString("email.assignedEditor.subject");
                 String bodyNewEditor = resourceBundle.getString("email.assignedEditor.body")
                         + "\n" + newSubmission.getTitle() + "\n"
-                        + configPropagator.getProperty("BASE_URL") + "/views/authenticated/submission.xhtml?id="
-                        + newSubmission.getId();
+                        + url;
 
                 String subjectOldEditor = resourceBundle.getString("email.removeEditor.subject");
                 String bodyOldEditor = resourceBundle.getString("email.removeEditor.body")
@@ -333,7 +335,7 @@ public class SubmissionService implements Serializable {
                     subject = resourceBundle.getString("email.submissionAccepted.subject");
                     body = resourceBundle.getString("email.submissionAccepted.body")
                             + "\n" + newSubmission.getTitle() + "\n"
-                            + configPropagator.getProperty("BASE_URL") + "/views/authenticated/submission.xhtml?id=" + newSubmission.getId();
+                            + url;
 
                 }
 
@@ -342,7 +344,7 @@ public class SubmissionService implements Serializable {
                     subject = resourceBundle.getString("email.submissionRejected.subject");
                     body = resourceBundle.getString("email.submissionRejected.body")
                             + "\n" + newSubmission.getTitle() + "\n"
-                            + configPropagator.getProperty("BASE_URL") + "/views/authenticated/submission.xhtml?id=" + newSubmission.getId();
+                            + url;
 
                 }
                 informAboutState(transaction, newSubmission, subject, body);
@@ -353,7 +355,7 @@ public class SubmissionService implements Serializable {
                 String subject = resourceBundle.getString("email.requireRevision.subject");
                 String body = resourceBundle.getString("email.requireRevision.body")
                         + "\n" + newSubmission.getTitle() + "\n"
-                        + configPropagator.getProperty("BASE_URL") + "/views/authenticated/submission.xhtml?id=" + newSubmission.getId();
+                        + url;
 
                 informAboutState(transaction, newSubmission, subject, body);
             }
@@ -426,7 +428,6 @@ public class SubmissionService implements Serializable {
             transaction.abort();
         }
 
-        //TODO:Need to send E-Mail when adding the user as reviewer is successful
         Submission submission = new Submission();
         submission.setId(reviewedBy.getSubmissionId());
 
@@ -436,8 +437,7 @@ public class SubmissionService implements Serializable {
 
         String subject = resourceBundle.getString("email.assignedReviewer.subject");
         String body = resourceBundle.getString("email.assignedReviewer.body") + "\n"
-                + submission.getTitle() + "\n" + configPropagator.getProperty("BASE_URL")
-                + "/views/authenticated/submission.xhtml?id=" + submission.getId();
+                + submission.getTitle() + "\n" + EmailUtil.generateSubmissionURL(submission, facesContext);
 
         if (sendEmail(reviewer, subject, null, body)) {
             transaction.commit();

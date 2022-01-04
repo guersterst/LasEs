@@ -71,9 +71,9 @@
                                 <f:facet name="header">
                                     <h:outputText id="header-email" value="#{labels.emailInput}"/>
                                 </f:facet>
-                                <h:commandLink id="mail-cmdlnk" value="#{user.emailAddress}"
-                                               outcome="#{'mailto:'.concat(coAuthor.emailAddress)}"
-                                               includeViewParams="true" title="#{help.mailTo}"/>
+                                <h:outputLink id="mail-lnk" value="#{toolbarBacking.sendMailTo(user)}" title="#{help.mailTo}">
+                                    #{user.emailAddress}
+                                </h:outputLink>
                             </h:column>
                             <h:column>
                                 <f:facet name="header">

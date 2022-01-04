@@ -2,6 +2,7 @@ package de.lases.control.backing;
 
 import de.lases.business.service.SubmissionService;
 import de.lases.business.service.UserService;
+import de.lases.business.util.EmailUtil;
 import de.lases.control.exception.IllegalUserFlowException;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
@@ -402,6 +403,17 @@ public class ToolbarBacking implements Serializable {
     public void changeReviewing(User user) {
         reviewerInput = user;
         reviewedByInput.setTimestampDeadline(reviewer.get(user).getTimestampDeadline());
+    }
+
+    /**
+     * Generates a mail to link.
+     *
+     * @param user the recipient.
+     * @return a mail to link.
+     */
+    public String sendMailTo(User user) {
+        String[] email = {user.getEmailAddress()};
+         return EmailUtil.generateMailToLink(email, null, null, null);
     }
 
 }
