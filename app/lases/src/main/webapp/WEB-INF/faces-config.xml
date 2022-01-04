@@ -31,4 +31,10 @@
         </phase-listener>
     </lifecycle>
 
+    <factory>
+        <exception-handler-factory>
+            de.lases.control.internal.UncheckedExceptionHandlerFactory
+        </exception-handler-factory>
+    </factory>
+
 </faces-config>
