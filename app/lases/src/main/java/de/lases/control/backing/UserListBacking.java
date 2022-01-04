@@ -1,5 +1,6 @@
 package de.lases.control.backing;
 
+import de.lases.business.service.ScientificForumService;
 import de.lases.business.service.UserService;
 import de.lases.business.util.EmailUtil;
 import de.lases.control.internal.*;
@@ -34,6 +35,7 @@ public class UserListBacking implements Serializable, UserPaginationBacking {
     private Pagination<User> userPagination;
 
     private void initPagination() {
+        //todo works?
         userPagination = new Pagination<>("lastname") {
 
             @Override
@@ -43,9 +45,7 @@ public class UserListBacking implements Serializable, UserPaginationBacking {
 
             @Override
             protected Integer calculateNumberPages() {
-                //TODO
-                //return scientificForumService.getListCountPages(scientificForumPagination.getResultListParameters());
-                return 1;
+                return userService.getListCountPages(userPagination.getResultListParameters());
             }
         };
         userPagination.applyFilters();
