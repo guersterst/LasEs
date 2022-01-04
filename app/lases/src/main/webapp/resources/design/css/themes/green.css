@@ -1,0 +1,182 @@
+/*
+Main css.
+ */
+#page {
+    background: rgba(226, 245, 206, 0.65);
+}
+
+/*
+Css for footer.
+ */
+#footer {
+    background-color: #4dc70f;
+    color: white;
+}
+
+/*
+Navigation
+ */
+.navbar {
+    background-color: #4dc70f;
+}
+.navbar .navbar-brand {
+    color: #ecf0f1;
+}
+.navbar .navbar-brand:hover,
+.navbar .navbar-brand:focus {
+    color: #deffbb;
+}
+.navbar .navbar-text {
+    color: #ecf0f1;
+}
+.navbar .navbar-text a {
+    color: lightgreen;
+}
+.navbar .navbar-text a:hover,
+.navbar .navbar-text a:focus {
+    color: lightgreen;
+}
+.navbar .navbar-nav .nav-link {
+    color: white;
+    border-radius: .25rem;
+    margin: 0 0.25em;
+}
+.navbar .navbar-nav .nav-link:not(.disabled):hover,
+.navbar .navbar-nav .nav-link:not(.disabled):focus {
+    color: lightgreen;
+}
+.navbar .navbar-nav .nav-item.active .nav-link,
+.navbar .navbar-nav .nav-item.active .nav-link:hover,
+.navbar .navbar-nav .nav-item.active .nav-link:focus,
+.navbar .navbar-nav .nav-item.show .nav-link,
+.navbar .navbar-nav .nav-item.show .nav-link:hover,
+.navbar .navbar-nav .nav-item.show .nav-link:focus {
+    color: lightgreen;
+    background-color: #73c02b;
+}
+.navbar .navbar-collapse,
+.navbar .navbar-form {
+    border-color: white;
+}
+.navbar .navbar-link {
+    color: white;
+}
+.navbar .navbar-link:hover {
+    color: lightgreen;
+}
+
+.navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item {
+    color: #ecf0f1;
+}
+.navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item:hover,
+.navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item:focus {
+    color: lightgreen;
+}
+.navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item.active {
+    color: lightgreen;
+    background-color: #4dc70f;
+}
+
+
+
+/*
+Setting for buttons.
+ */
+.btn-primary {
+    background-color: #52e052;
+    text-decoration-color: white;
+    border-color: #52e052;
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active{
+    background-color: #c2fa94;
+    color: white;
+    border-color: #c2fa94;
+}
+
+.btn-primary:disabled {
+    background-color: #c2fa94;
+    color: white;
+    border-color: #c2fa94;
+}
+
+/*
+Buttons for pagination.
+ */
+.page-link {
+    background-color: white;
+    color: #52e052;
+    border-color: #52e052;
+}
+
+.active, .page-link:hover {
+    background-color: #52e052;
+    color: white;
+    border-color: #52e052;
+}
+
+/*
+Tabs for homepage.
+ */
+#tabs {
+    background-color: #52e052;
+}
+
+#tabs> .nav-item {
+    text-decoration: none;
+    color: white;
+}
+
+#tabs> .nav-item:active {
+    text-decoration: none;
+    color: black;
+}
+
+/*
+Style all links
+ */
+a {
+    color: #4dc70f;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #c2fa94;
+    text-decoration: none;
+}
+
+#impressum-lnk {
+    color: white;
+}
+
+#impressum-lnk:hover {
+    color: #c2fa94;
+}
+
+.nav-item > a {
+    color: white;
+    border-color: white;
+}
+
+.nav-item > a:hover {
+    color: white;
+    border-color: white;
+}
+
+/*
+Profile styling
+ */
+.card-header {
+    background-color: #52e052;
+    color: white;
+}
+
+#toolbar > .card-body {
+    background-color: #ddf5c7;
+}
+
+#is-admin-cbx {
+    background-color: #52e052;
+}
+
+
