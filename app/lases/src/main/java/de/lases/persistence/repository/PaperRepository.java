@@ -132,9 +132,14 @@ public class PaperRepository {
             }
         } catch (SQLException ex) {
             DatasourceUtil.logSQLException(ex, logger);
-            transaction.abort();
-            throw new DatasourceQueryFailedException("A datasource exception"
-                    + "occurred", ex);
+
+            if (TransientSQLExceptionChecker.isTransient(ex.getSQLState())) {
+                throw new DataNotWrittenException("The paper could not be added", ex);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("A datasource exception"
+                        + "occurred", ex);
+            }
         }
 
         String sqlInsert = "INSERT INTO paper VALUES (?, ?, ?, ?, ?)";

@@ -17,9 +17,10 @@
 
         <div class="col d-flex justify-content-center">
             <div class="card" id="new-forum-box" style="max-width: 80rem; min-width: 55rem">
+                <div class="card-header">
+                    <h:outputText id="header-new-forum" value="#{labels.newForumTitle}" styleClass="h2"/>
+                </div>
                 <div id="new-forum-card-body" class="card-body">
-                    <h2>#{labels.newForumTitle}</h2>
-                    <hr/>
                     <h:form id="add-editors-form">
                         <div class="form-group" style="margin-top: 1rem">
                             <label for="email-editor-itxt" class="form-label">#{labels.newForumEditorAdd}</label>
@@ -34,7 +35,7 @@
 
                                 <h:commandButton id="add-editor-btn" type="submit" value="#{labels.add}"
                                                  action="#{newScientificForumBacking.addEditor()}"
-                                                 title="#{help.addEditor}"/>
+                                                 title="#{help.addEditor}" styleClass="btn btn-secondary"/>
                             </h:panelGrid>
                             <h:message for="email-editor-itxt"/>
                         </div>
@@ -77,7 +78,7 @@
                                     </f:facet>
                                     <h:commandButton id="delete-editor-btn" value="#{labels.delete}"
                                                      action="#{newScientificForumBacking.removeEditor(item)}"
-                                                     styleClass="btn btn-sm btn-outline-dark"/>
+                                                     styleClass="btn btn-sm btn-outline-secondary"/>
                                 </h:column>
                             </h:dataTable>
                             <h:outputText value="#{message.newForumEditorsNotice}"
@@ -100,7 +101,7 @@
                                              requiredMessage="#{message.newScienceField}"
                                              maxlength="#{Const.SCIENCE_FIELD_MAX}"/>
                                 <h:commandButton id="add-science-field-btn" value="#{labels.newForumCreate}"
-                                                 action="#{newScientificForumBacking.createNewScienceField}"/>
+                                                 action="#{newScientificForumBacking.createNewScienceField}" styleClass="btn btn-secondary"/>
                             </h:panelGrid>
                             <h:message for="new-science-field-itxt"/>
                         </div>
@@ -138,7 +139,7 @@
                                                     <h:commandButton id="remove-science-field-btn"
                                                                      value="#{labels.delete}"
                                                                      action="#{newScientificForumBacking.removeSelectedScienceField(itemField)}"
-                                                                     styleClass="btn btn-sm btn-outline-dark"/>
+                                                                     styleClass="btn btn-sm btn-outline-secondary"/>
                                                 </h:column>
                                             </h:dataTable>
                                         </h:form>
@@ -165,7 +166,8 @@
                                             </div>
                                             <div class="card-body">
                                                 <h:commandButton id="add-science-field" value="#{labels.add}"
-                                                                 action="#{newScientificForumBacking.addScienceField()}"/>
+                                                                 action="#{newScientificForumBacking.addScienceField()}"
+                                                                 styleClass="btn btn-secondary"/>
                                                 <h:message for="science-field-slct"/>
                                             </div>
                                         </h:form>

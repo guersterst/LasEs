@@ -57,6 +57,8 @@ public class ScienceFieldRepository {
             // duplicate key value
             if (e.getSQLState().equals("23505")) {
                 throw new KeyExistsException("This science field already exists.", e);
+            } if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                throw new DataNotWrittenException("Science field could not be added", e);
             } else {
                 transaction.abort();
                 throw new DatasourceQueryFailedException("Science field could not be added", e);
@@ -95,8 +97,13 @@ public class ScienceFieldRepository {
             stmt.executeUpdate();
         } catch (SQLException e) {
             DatasourceUtil.logSQLException(e, logger);
-            transaction.abort();
-            throw new DatasourceQueryFailedException("Science field could not be removed", e);
+
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                throw new DataNotWrittenException("Science field could not be removed", e);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("Science field could not be removed", e);
+            }
         }
 
     }
@@ -311,7 +318,7 @@ public class ScienceFieldRepository {
         } catch (SQLException e) {
             DatasourceUtil.logSQLException(e, logger);
             transaction.abort();
-            throw new DatasourceQueryFailedException("Science field could not be added", e);
+            throw new DatasourceQueryFailedException("science field status could not be retrieved", e);
         }
     }
 

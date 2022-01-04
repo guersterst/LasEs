@@ -14,7 +14,7 @@
         <h:commandButton value="Apply Filters" action="#{cc.attrs.paginator.applyFilters}"
                          styleClass="btn btn-primary"/>
     </div>
-    <h:dataTable value="#{cc.attrs.paginator.entries}" var="var">
+    <h:dataTable id="pagination" value="#{cc.attrs.paginator.entries}" var="var" styleClass="table table-striped">
         <composite:insertChildren/>
     </h:dataTable>
     <h:outputText value="No entries." rendered="#{cc.attrs.paginator.entries.isEmpty()}"/>

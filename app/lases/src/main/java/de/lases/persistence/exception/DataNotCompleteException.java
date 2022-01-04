@@ -4,8 +4,7 @@ import java.io.Serial;
 
 /**
  * Is thrown when the reading of data yields an incomplete result but a retry
- * has a high probability of succeeding, for example when a DataTruncation
- * warning occurs.
+ * has a high probability of succeeding.
  */
 public class DataNotCompleteException extends Exception {
 

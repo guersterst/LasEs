@@ -19,7 +19,7 @@ import java.io.Serial;
  */
 @ViewScoped
 @Named
-public class ResultListBacking implements SubmissionPaginationBacking {
+public class ResultListBacking implements SubmissionPaginationBacking, ScientificForumPaginationBacking  {
 
 
     private enum Tab {
@@ -41,6 +41,8 @@ public class ResultListBacking implements SubmissionPaginationBacking {
     private ConfigPropagator configPropagator;
 
     private Pagination<Submission> submissionPagination;
+
+    private Pagination<ScientificForum> scientificForumPagination;
 
     private Tab tab;
 
@@ -94,6 +96,25 @@ public class ResultListBacking implements SubmissionPaginationBacking {
 
     public void onLoad() {
         showOwnSubmissionsTab();
+        initScientificForumPagination();
+    }
+
+    private void initScientificForumPagination() {
+        scientificForumPagination = new Pagination<>("name") {
+
+            @Override
+            public void loadData() {
+                setEntries(scientificForumService.getList(getResultListParameters()));
+            }
+
+            @Override
+            protected Integer calculateNumberPages() {
+                return scientificForumService.getListCountPages(scientificForumPagination.getResultListParameters());
+            }
+        };
+        scientificForumPagination.applyFilters();
+        scientificForumPagination.getResultListParameters().setGlobalSearchWord(searchWord);
+        scientificForumPagination.loadData();
     }
 
     /**
@@ -168,6 +189,16 @@ public class ResultListBacking implements SubmissionPaginationBacking {
     }
 
     /**
+     * Get the pagination for the search results with scientific forums.
+     *
+     * @return The pagination for scientific forums.
+     */
+    @Override
+    public Pagination<ScientificForum> getScientificForumPagination() {
+        return scientificForumPagination;
+    }
+
+    /**
      * Get the pagination for the submissions submitted by the user.
      *
      * @return The pagination for the submissions submitted by the user.
@@ -175,6 +206,16 @@ public class ResultListBacking implements SubmissionPaginationBacking {
     @Override
     public Pagination<Submission> getSubmissionPagination() {
         return submissionPagination;
+    }
+
+    /**
+     * Get the options of the DateSelect enum as an array.
+     *
+     * @return Array of DateSelect.
+     */
+    @Override
+    public DateSelect[] getDateSelects() {
+        return SubmissionPaginationBacking.super.getDateSelects();
     }
 
     /**

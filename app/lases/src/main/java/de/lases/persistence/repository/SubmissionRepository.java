@@ -590,7 +590,7 @@ public class SubmissionRepository {
             // 23503: Foreign key constraint violated
             if (ex.getSQLState().equals("23503")) {
                 throw new NotFoundException("Either the specified user or submission does not exist");
-            } else if (!(ex instanceof PSQLException)) {
+            } else if (TransientSQLExceptionChecker.isTransient(ex.getSQLState())) {
                 throw new DataNotWrittenException("The co-author was not added", ex);
             } else {
                 transaction.abort();

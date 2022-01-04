@@ -8,6 +8,8 @@ import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.PropertyResourceBundle;
 
 /**
@@ -37,11 +39,20 @@ public class ErrorPageBacking {
                 .get("jakarta.servlet.error.status_code");
         String requestErrorMessage = (String) facesContext.getExternalContext().getRequestMap()
                 .get("jakarta.servlet.error.message");
+        Exception requestException = (Exception) facesContext.getExternalContext().getRequestMap()
+                .get("jakarta.servlet.error.exception");
+
         if (errorMessage == null) {
             if (errorStatusCode == 404) {
                 errorMessage = new ErrorMessage(bundle.getString("error.404"), requestErrorMessage);
             } else if (errorStatusCode == 500) {
-                errorMessage = new ErrorMessage(bundle.getString("error.500"), requestErrorMessage);
+                String developerMessage = requestErrorMessage;
+                if (requestException != null) {
+                    StringWriter sw = new StringWriter();
+                    requestException.printStackTrace(new PrintWriter(sw, true));
+                    developerMessage = sw.toString();
+                }
+                errorMessage = new ErrorMessage(bundle.getString("error.500"), developerMessage);
             }
         }
     }
