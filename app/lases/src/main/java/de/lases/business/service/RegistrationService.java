@@ -81,14 +81,14 @@ public class RegistrationService {
             } catch (NotFoundException e) {
                 logger.severe("User with email " + user.getEmailAddress() + " should exist but was not found.");
                 t.abort();
-                return user;
+                return null;
             }
             if (oldUser.isRegistered()) {
                 logger.fine("User with email address " + user.getEmailAddress() + " is already registered.");
                 uiMessageEvent.fire(new UIMessage(message.getString("emailInUse"),
                         MessageCategory.ERROR));
                 t.abort();
-                return user;
+                return null;
             }
             user.setId(oldUser.getId());
             try {
