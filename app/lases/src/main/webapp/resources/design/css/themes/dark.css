@@ -2,7 +2,7 @@
 Main css.
  */
 #page {
-    background: rgba(121, 116, 114, 0.65);
+    background: rgba(131, 126, 124, 0.98);
     border-color: black;
 }
 
@@ -11,7 +11,7 @@ Css for footer.
  */
 #footer {
     background-color: #625d5a;
-    color: #f163f1;
+    color: #424af6;
 }
 
 /*
@@ -21,30 +21,30 @@ Navigation
     background-color: #625d5a;
 }
 .navbar .navbar-brand {
-    color: purple;
+    color: #030877;
 }
 .navbar .navbar-brand:hover,
 .navbar .navbar-brand:focus {
     color: white;
 }
 .navbar .navbar-text {
-    color: purple;
+    color: #070e9f;
 }
 .navbar .navbar-text a {
-    color: #f163f1;
+    color: #424af6;
 }
 .navbar .navbar-text a:hover,
 .navbar .navbar-text a:focus {
-    color: purple;
+    color: #0c15be;
 }
 .navbar .navbar-nav .nav-link {
-    color: #f163f1;
+    color: #424af6;
     border-radius: .25rem;
     margin: 0 0.25em;
 }
 .navbar .navbar-nav .nav-link:not(.disabled):hover,
 .navbar .navbar-nav .nav-link:not(.disabled):focus {
-    color: #f163f1;
+    color: #424af6;
 }
 .navbar .navbar-nav .nav-item.active .nav-link,
 .navbar .navbar-nav .nav-item.active .nav-link:hover,
@@ -52,7 +52,7 @@ Navigation
 .navbar .navbar-nav .nav-item.show .nav-link,
 .navbar .navbar-nav .nav-item.show .nav-link:hover,
 .navbar .navbar-nav .nav-item.show .nav-link:focus {
-    color: #f163f1;
+    color: #424af6;
     background-color: #44403e;
 }
 .navbar .navbar-collapse,
@@ -60,22 +60,22 @@ Navigation
     border-color: #ecf0f1;
 }
 .navbar .navbar-link {
-    color: purple;
+    color: #424af6;
 }
 .navbar .navbar-link:hover {
-    color: #f163f1;
+    color: #0a11af;
 }
 
 .navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item {
-    color: #f163f1;
+    color: #424af6;
 }
 .navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item:hover,
 .navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item:focus {
-    color: #f163f1;
+    color: #424af6;
 }
 .navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item.active {
-    color: #f163f1;
-    background-color: purple;
+    color: #424af6;
+    background-color: #070e9f;
 }
 
 
@@ -90,15 +90,15 @@ Setting for buttons.
 }
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active{
-    background-color: #f163f1;
+    background-color: #424af6;
     color: white;
-    border-color: #f163f1;
+    border-color: #424af6;
 }
 
 .btn-primary:disabled {
-    background-color: #f163f1;
+    background-color: #747477;
     color: white;
-    border-color: #f163f1;
+    border-color: #747477;
 }
 
 /*
@@ -106,21 +106,21 @@ Buttons for pagination.
  */
 .page-link {
     background-color: #b6b2b1;
-    color: purple;
-    border-color: purple;
+    color: #070e9f;
+    border-color: #070e9f;
 }
 
 .active, .page-link:hover {
-    background-color: purple;
+    background-color: #070e9f;
     color: white;
-    border-color: purple;
+    border-color: #070e9f;
 }
 
 /*
 Tabs for homepage.
  */
 #tabs {
-    background-color: purple;
+    background-color: #030877;
 }
 
 #tabs> .nav-item {
@@ -129,7 +129,7 @@ Tabs for homepage.
 }
 
 #tabs > .nav-item > .reiter {
-    background-color: #f163f1;
+    background-color: #424af6;
     color: black;
 }
 
@@ -137,51 +137,51 @@ Tabs for homepage.
 Style all links
  */
 a {
-    color: purple;
+    color: #070e9f;
     text-decoration: none;
 }
 
 a:hover {
-    color: #f163f1;
+    color: #424af6;
     text-decoration: none;
 }
 
 #impressum-lnk {
-    color: white;
+    color: #424af6;
 }
 
 #impressum-lnk:hover {
-    color: #f163f1;
+    color: #070e9f;
 }
 
 .nav-item > a {
     color: white;
-    border-color: purple;
+    border-color: #070e9f;
 }
 
 .nav-item > a:hover {
     color: white;
-    border-color: #f163f1;
+    border-color: #424af6;
 }
 
 /*
 Profile styling
  */
 .card-body, .card {
-    background-color: #b6b2b1;
+    background-color: #a29e9c;
 }
 
 .card-header {
-    background-color: purple;
+    background-color: #030877;
     color: white;
 }
 
 #toolbar > .card-body {
-    background-color: #b78eb7;
+    background-color: #a29e9c;
 }
 
 #is-admin-cbx {
-    background-color: #f163f1;
+    background-color: #424af6;
 }
 
 .form-control:valid, .form-control, input{
@@ -189,11 +189,11 @@ Profile styling
 }
 
 input:placeholder-shown {
-    color: purple;
+    color: #070e9f;
 }
 
 .input-group-text {
-    background-color: #9a9898;
+    background-color: #9d9592;
 }
 
 
@@ -223,6 +223,22 @@ Submission state
 .REVISION_REQUIRED {
     background-color: #a18d03;
     border-color: #a18d03;
+}
+
+.alert-danger {
+    background-color: #cc0707;
+}
+
+.alert-info {
+    background-color: #424af6;
+}
+
+.alert-warning {
+    background-color: #c0a906;
+}
+
+.alert-danger, .alert-info, .alert-warning {
+    color: white;
 }
 
 
