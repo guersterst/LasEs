@@ -32,10 +32,10 @@
                                 <div class="row">
 
                                     <!-- delete forum -->
-                                    <div class="col">
+                                    <div class="col-md-6">
                                         <h:form>
                                             <h:commandButton styleClass="btn btn-secondary"
-                                                             id="delete-sub-cbtn"
+                                                             id="delete-forum-cbtn"
                                                              title="#{help.deleteForum}"
                                                              value="#{labels.deleteButtonForum}"
                                                              onclick="PF('dlg').show()"
@@ -57,10 +57,25 @@
                                         </h:form>
                                     </div>
 
+                                    <!-- new submission -->
+                                    <div class="col-md-2">
+                                        <h:form>
+                                            <h:button
+                                                    title="#{help.createNewSubmission}"
+                                                    value="#{labels.createNewSubmission}"
+                                                    outcome="#{'/views/authenticated/newSubmission?forumId='
+                                                        .concat(scientificForumBacking.forum.id)}"
+                                                    rendered="#{scientificForumBacking.sessionInformation.user.admin}"
+                                                    styleClass="btn btn-secondary"/>
+                                        </h:form>
+                                    </div>
+
                                     <!-- all messages produced from the following sections -->
-                                    <div class="col ml-5">
+                                    <!--
+                                    <div class="col-md-8">
                                         <h:messages/>
                                     </div>
+                                    -->
                                 </div>
                             </div>
 
@@ -147,25 +162,26 @@
                                             </div>
 
                                             <!-- deadline -->
-                                            <h:outputText id="deadline-submission-otxt"
-                                                          value="#{labels.submissionDeadline}"
-                                                          style="margin: 3px"
-                                                          styleClass="text-muted"
-                                                          rendered="#{scientificForumBacking.forum.deadline != null}"/>
-                                            <h:outputText id="date-review-deadline-otxt"
-                                                          value="#{scientificForumBacking.forum.deadline}"
-                                                          style="margin: 3px"
-                                                          title="#{help.forumDeadLine}"
-                                                          rendered="#{(scientificForumBacking.forum.deadline != null)
-                                                          and (!scientificForumBacking.loggedInUserIsEditorOrAdmin())}">
-                                                <f:convertDateTime type="localDateTime"/>
-                                            </h:outputText>
-
-                                            <!-- change deadline -->
                                             <div class="form-group">
+                                                <h:outputText id="deadline-submission-otxt"
+                                                              value="#{labels.submissionDeadline}"
+                                                              style="margin: 3px"
+                                                              styleClass="text-muted"
+                                                              rendered="#{scientificForumBacking.forum.deadline != null}"/>
+                                                <h:outputText id="date-review-deadline-otxt"
+                                                              value="#{scientificForumBacking.forum.deadline}"
+                                                              style="margin: 3px"
+                                                              title="#{help.forumDeadLine}"
+                                                              rendered="#{(scientificForumBacking.forum.deadline != null)
+                                                          and (!scientificForumBacking.loggedInUserIsEditorOrAdmin())}">
+                                                    <f:convertDateTime type="localDateTime"/>
+                                                </h:outputText>
+
+                                                <!-- change deadline -->
                                                 <h:inputText id="change-deadline-itxt"
                                                              value="#{scientificForumBacking.forumDeadLineInput}"
-                                                             rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
+                                                             rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()
+                                                             and scientificForumBacking.forum.deadline != null}"
                                                              title="#{help.forumDeadLine}"
                                                              a:type="date"
                                                              converterMessage="#{message.wrongDate}">
