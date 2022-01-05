@@ -198,8 +198,8 @@ public class ReviewedByRepository {
             }
 
             if (!resultSet.next()) {
-                logger.severe("Submission not found while get a list of reviewed_by DTO's.");
-                throw new NotFoundException();
+                logger.info("No reviewedBy found for this submission." + submission);
+                return reviewedByList;
             } else {
 
                 do {
