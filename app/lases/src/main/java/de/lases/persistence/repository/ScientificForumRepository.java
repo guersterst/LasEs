@@ -6,15 +6,8 @@ import de.lases.persistence.internal.ConfigReader;
 import de.lases.persistence.util.DatasourceUtil;
 import de.lases.persistence.util.TransientSQLExceptionChecker;
 import jakarta.enterprise.inject.spi.CDI;
-import org.postgresql.util.PSQLException;
-import de.lases.persistence.internal.ConfigReader;
-import de.lases.persistence.util.DatasourceUtil;
-import jakarta.enterprise.inject.spi.CDI;
-import org.postgresql.util.PSQLException;
 
 import java.sql.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -29,7 +22,7 @@ import java.util.logging.Logger;
  */
 public class ScientificForumRepository {
 
-    private static final Logger l = Logger.getLogger(ScientificForumRepository.class.getName());
+    private static final Logger logger = Logger.getLogger(ScientificForumRepository.class.getName());
 
     /**
      * Takes a scientific forum dto that is filled with a valid id or a valid
@@ -50,7 +43,7 @@ public class ScientificForumRepository {
                                       Transaction transaction)
             throws NotFoundException {
         if (scientificForum.getId() == null) {
-            l.severe("The passed ScientificForum-DTO does not contain an id.");
+            logger.severe("The passed ScientificForum-DTO does not contain an id.");
             throw new IllegalArgumentException("ScientificForum id must not be null.");
         }
 
@@ -67,9 +60,9 @@ public class ScientificForumRepository {
             // Attempt to create a scientific forum from the result set.
             if (resultSet.next()) {
                 result = createScientificForumFromResultSet(resultSet);
-                l.finer("Retrieved scientific forum with id " + scientificForum.getId());
+                logger.finer("Retrieved scientific forum with id " + scientificForum.getId());
             } else {
-                l.warning("No scientific forum with id " + scientificForum.getId() + " found in database.");
+                logger.warning("No scientific forum with id " + scientificForum.getId() + " found in database.");
                 throw new NotFoundException("No scientific forum with id " + scientificForum.getId());
             }
         } catch (SQLException e) {
@@ -109,7 +102,7 @@ public class ScientificForumRepository {
     public static boolean exists(ScientificForum scientificForum,
                                  Transaction transaction) {
         if (scientificForum.getId() == null && scientificForum.getName() == null) {
-            l.severe("To query the scientific forum's existence an id or a name must exist.");
+            logger.severe("To query the scientific forum's existence an id or a name must exist.");
             throw new InvalidFieldsException();
         }
 
@@ -138,10 +131,12 @@ public class ScientificForumRepository {
                 preparedStatement.setString(1, scientificForum.getName());
             }
 
-            ResultSet resultSet = preparedStatement.executeQuery();
-            return resultSet.next();
-        } catch (SQLException e) {
-            throw new DatasourceQueryFailedException(e.getMessage(), e);
+            return preparedStatement.executeQuery().next();
+
+        } catch (SQLException ex) {
+            DatasourceUtil.logSQLException(ex, logger);
+            throw new DatasourceQueryFailedException("A datasource exception"
+                    + "occurred", ex);
         }
     }
 
@@ -227,11 +222,11 @@ public class ScientificForumRepository {
             KeyExistsException {
         if (scientificForum.getId() == null && scientificForum.getName() == null) {
 
-            l.severe("The name or id must not be changed to null.");
+            logger.severe("The name or id must not be changed to null.");
             throw new InvalidFieldsException();
         } else if (!exists(scientificForum, transaction)) {
 
-            l.severe("There is no forum with that id: " + scientificForum.getId());
+            logger.severe("There is no forum with that id: " + scientificForum.getId());
             throw new NotFoundException();
         }
 
@@ -241,7 +236,6 @@ public class ScientificForumRepository {
                 WHERE id = ?
                 """;
 
-        ScientificForum result;
         try (PreparedStatement preparedStatement = transaction.getConnection().prepareStatement(sql)) {
             preparedStatement.setString(1, scientificForum.getName());
             preparedStatement.setString(2, scientificForum.getDescription());
@@ -256,11 +250,17 @@ public class ScientificForumRepository {
             }
 
             preparedStatement.executeUpdate();
-            l.finest("Successfully changed the forum: " + scientificForum.getId() + ".");
-        } catch (SQLException exception) {
+            logger.finest("Successfully changed the forum: " + scientificForum.getId() + ".");
+        } catch (SQLException ex) {
+            DatasourceUtil.logSQLException(ex, logger);
 
-            l.severe("The data could not be changed for forum: " + scientificForum.getId());
-            throw new DataNotWrittenException(exception.getMessage(), exception);
+            if (TransientSQLExceptionChecker.isTransient(ex.getSQLState())) {
+                throw new DataNotWrittenException("The forum could not be changed", ex);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("A datasource exception"
+                        + "occurred", ex);
+            }
         }
     }
 
@@ -282,12 +282,12 @@ public class ScientificForumRepository {
             throws NotFoundException, DataNotWrittenException {
         if (scientificForum.getId() == null) {
 
-            l.severe("Forum must contain an id to be removed.");
+            logger.severe("Forum must contain an id to be removed.");
             throw new InvalidFieldsException();
         } else if (!exists(scientificForum, transaction)) {
 
-            l.severe("Forum should exist in order to be removed.");
-            throw new NotFoundException();
+            logger.severe("Forum must exist in order to be removed.");
+            throw new InvalidFieldsException();
         }
 
         String sql = """
@@ -299,11 +299,18 @@ public class ScientificForumRepository {
         try (PreparedStatement preparedStatement = transaction.getConnection().prepareStatement(sql)) {
             preparedStatement.setInt(1, scientificForum.getId());
             preparedStatement.executeUpdate();
-            l.finest("Successfully removed forum: " + scientificForum.getId());
+            logger.finest("Successfully removed forum: " + scientificForum.getId());
         } catch (SQLException ex) {
 
-            l.severe("Could not remove forum: " + scientificForum.getId());
-            throw new DataNotWrittenException(ex.getMessage(), ex);
+            DatasourceUtil.logSQLException(ex, logger);
+
+            if (TransientSQLExceptionChecker.isTransient(ex.getSQLState())) {
+                throw new DataNotWrittenException("The forum could not be removed", ex);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("A datasource exception"
+                        + "occurred", ex);
+            }
         }
     }
 
@@ -326,11 +333,11 @@ public class ScientificForumRepository {
                                                 ResultListParameters
                                                         resultListParameters) {
         if (transaction == null) {
-            l.severe("Passed transaction is null.");
+            logger.severe("Passed transaction is null.");
             throw new IllegalArgumentException("Transaction must not be null.");
         }
         if (resultListParameters == null) {
-            l.severe("Passed result-list parameters is null.");
+            logger.severe("Passed result-list parameters is null.");
             throw new IllegalArgumentException("ResultListParameters must not be null.");
         }
 
@@ -362,7 +369,7 @@ public class ScientificForumRepository {
                 scientificForums.add(forum);
             }
         } catch (SQLException e) {
-            l.severe(e.getMessage());
+            logger.severe(e.getMessage());
             throw new DatasourceQueryFailedException(e.getMessage(), e);
         }
         return scientificForums;
@@ -451,11 +458,11 @@ public class ScientificForumRepository {
     public static int getCountItemsList(Transaction transaction, ResultListParameters resultListParameters)
             throws DataNotCompleteException, NotFoundException {
         if (transaction == null) {
-            l.severe("Passed transaction is null.");
+            logger.severe("Passed transaction is null.");
             throw new IllegalArgumentException("Transaction can not be null.");
         }
         if (resultListParameters == null) {
-            l.severe("Passed result-list parameters is null.");
+            logger.severe("Passed result-list parameters is null.");
             throw new IllegalArgumentException("ResultListParameters must not be null.");
         }
 
@@ -473,7 +480,7 @@ public class ScientificForumRepository {
             }
 
         } catch (SQLException e) {
-            l.severe(e.getMessage());
+            logger.severe(e.getMessage());
             throw new DatasourceQueryFailedException(e.getMessage(), e);
         }
 
@@ -498,13 +505,13 @@ public class ScientificForumRepository {
             throws NotFoundException, DataNotWrittenException {
         if (editor.getId() == null || scientificForum.getId() == null) {
 
-            l.severe("Must have a editor and forum id to update relationship.");
+            logger.severe("Must have a editor and forum id to update relationship.");
             throw new InvalidFieldsException();
         } else if (!exists(scientificForum, transaction)) {
 
-            l.severe("Forum (" + scientificForum.getId() + ") and user (" + editor.getId() + ") must exist"
+            logger.severe("Forum (" + scientificForum.getId() + ") and user (" + editor.getId() + ") must exist"
                     + "in order to update their relationship.");
-            throw new NotFoundException();
+            throw new InvalidFieldsException();
         }
 
         String sql = """
@@ -516,13 +523,19 @@ public class ScientificForumRepository {
             preparedStatement.setInt(1, editor.getId());
             preparedStatement.setInt(2, scientificForum.getId());
             preparedStatement.executeUpdate();
-            l.finest("Forum (" + scientificForum.getId() + ") and user (" + editor.getId() + ") are now"
+            logger.finest("Forum (" + scientificForum.getId() + ") and user (" + editor.getId() + ") are now"
                     + "in an editorial relationship.");
         } catch (SQLException ex) {
 
-            l.severe("Forum (" + scientificForum.getId() + ") and user (" + editor.getId() + ") could not"
-                    + "be updated into an editorial relationship.");
-            throw new DataNotWrittenException(ex.getMessage(), ex);
+            DatasourceUtil.logSQLException(ex, logger);
+
+            if (TransientSQLExceptionChecker.isTransient(ex.getSQLState())) {
+                throw new DataNotWrittenException("The editor could not be added", ex);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("A datasource exception"
+                        + "occurred", ex);
+            }
         }
     }
 
@@ -545,14 +558,14 @@ public class ScientificForumRepository {
             throws NotFoundException, DataNotWrittenException {
         if (scientificForum.getId() == null || scienceField.getName() == null) {
 
-            l.severe("Must contain a sciencefield name and forum id to add as a topic.");
+            logger.severe("Must contain a sciencefield name and forum id to add as a topic.");
             throw new InvalidFieldsException();
         } else if (!exists(scientificForum, transaction)
                 || !ScienceFieldRepository.isScienceField(scienceField, transaction)) {
 
-            l.severe("Forum (" + scientificForum.getId() + ") and sciencefield (" + scienceField.getName() + ") must exist"
+            logger.severe("Forum (" + scientificForum.getId() + ") and sciencefield (" + scienceField.getName() + ") must exist"
                     + "in order to update their relationship.");
-            throw new NotFoundException();
+            throw new InvalidFieldsException();
         }
 
         String sql = """
@@ -564,13 +577,18 @@ public class ScientificForumRepository {
             preparedStatement.setString(1, scienceField.getName());
             preparedStatement.setInt(2, scientificForum.getId());
             preparedStatement.executeUpdate();
-            l.finest("Forum (" + scientificForum.getId() + ") and sciencefield (" + scienceField.getName() + ") "
+            logger.finest("Forum (" + scientificForum.getId() + ") and sciencefield (" + scienceField.getName() + ") "
                     + "were put in a relationship.");
         } catch (SQLException ex) {
+            DatasourceUtil.logSQLException(ex, logger);
 
-            l.severe("Forum (" + scientificForum.getId() + ") and sciencefield (" + scienceField.getName() + ") "
-                    + "could not be put in a relationship.");
-            throw new DataNotWrittenException(ex.getMessage(), ex);
+            if (TransientSQLExceptionChecker.isTransient(ex.getSQLState())) {
+                throw new DataNotWrittenException("The field could not be added to the forum.", ex);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("A datasource exception"
+                        + "occurred", ex);
+            }
         }
     }
 
@@ -594,13 +612,13 @@ public class ScientificForumRepository {
             throws NotFoundException, DataNotWrittenException {
         if (editor.getId() == null || scientificForum.getId() == null) {
 
-            l.severe("Must contain an editor id and forum id to remove an editor.");
+            logger.severe("Must contain an editor id and forum id to remove an editor.");
             throw new InvalidFieldsException();
         } else if (!exists(scientificForum, transaction)) {
 
-            l.severe("Forum (" + scientificForum.getId() + ") and editor ("
+            logger.severe("Forum (" + scientificForum.getId() + ") and editor ("
                     + scientificForum.getId() + ") must exist in order to be put in a relationship.");
-            throw new NotFoundException();
+            throw new InvalidFieldsException();
         }
 
         String sql = """
@@ -613,13 +631,19 @@ public class ScientificForumRepository {
             preparedStatement.setInt(1, editor.getId());
             preparedStatement.setInt(2, scientificForum.getId());
             preparedStatement.executeUpdate();
-            l.finest("Forum (" + scientificForum.getId() + ") and editor ("
+            logger.finest("Forum (" + scientificForum.getId() + ") and editor ("
                     + scientificForum.getId() + ") relationship was dissolved.");
         } catch (SQLException ex) {
 
-            l.severe("Forum (" + scientificForum.getId() + ") and editor ("
-                    + scientificForum.getId() + ") relationship could not be dissolved.");
-            throw new DataNotWrittenException(ex.getMessage(), ex);
+            DatasourceUtil.logSQLException(ex, logger);
+
+            if (TransientSQLExceptionChecker.isTransient(ex.getSQLState())) {
+                throw new DataNotWrittenException("The editor could not be removed", ex);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("A datasource exception"
+                        + "occurred", ex);
+            }
         }
     }
 
@@ -644,14 +668,14 @@ public class ScientificForumRepository {
             throws NotFoundException, DataNotWrittenException {
         if (scientificForum.getId() == null || scienceField.getName() == null) {
 
-            l.severe("Must contain a forum and editor id in order to remove an editor.");
+            logger.severe("Must contain a forum and editor id in order to remove an editor.");
             throw new InvalidFieldsException();
         } else if (!exists(scientificForum, transaction)
                 || !ScienceFieldRepository.isScienceField(scienceField, transaction)) {
 
-            l.severe("Forum (" + scientificForum.getId() + ") and editor ("
+            logger.severe("Forum (" + scientificForum.getId() + ") and editor ("
                     + scientificForum.getId() + ") must exist in order to be cease their relationship.");
-            throw new NotFoundException();
+            throw new InvalidFieldsException();
         }
 
         String sql = """
@@ -664,13 +688,18 @@ public class ScientificForumRepository {
             preparedStatement.setInt(1, scientificForum.getId());
             preparedStatement.setString(2, scienceField.getName());
             preparedStatement.executeUpdate();
-            l.finest("Forum (" + scientificForum.getId() + ") and editor ("
+            logger.finest("Forum (" + scientificForum.getId() + ") and editor ("
                     + scientificForum.getId() + ") relationship was dissolved.");
         } catch (SQLException ex) {
+            DatasourceUtil.logSQLException(ex, logger);
 
-            l.severe("Forum (" + scientificForum.getId() + ") and editor ("
-                    + scientificForum.getId() + ") relationship could not be dissolved.");
-            throw new DataNotWrittenException(ex.getMessage(), ex);
+            if (TransientSQLExceptionChecker.isTransient(ex.getSQLState())) {
+                throw new DataNotWrittenException("The field could not be removed from the forum", ex);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("A datasource exception"
+                        + "occurred", ex);
+            }
         }
     }
 }
