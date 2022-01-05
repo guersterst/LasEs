@@ -7,12 +7,16 @@ import de.lases.control.internal.*;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.event.Event;
+import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -399,9 +403,37 @@ public class ToolbarBacking implements Serializable {
         return false;
     }
 
+    /**
+     * Fill form in order to change a reviewedBy DTO.
+     *
+     * @param user The reviewer to change.
+     */
     public void changeReviewing(User user) {
         reviewerInput = user;
         reviewedByInput.setTimestampDeadline(reviewer.get(user).getTimestampDeadline());
+    }
+
+    /**
+     * Generates a placeholder with the current datetime and local.
+     *
+     * @return current datetime with a local pattern.
+     */
+    public String generateDatePlaceholder() {
+        Locale locale = FacesContext.getCurrentInstance().getExternalContext().getRequestLocale();
+        String languageTag = locale.toLanguageTag();
+
+        SimpleDateFormat simpleDateFormat;
+        LocalDateTime today = LocalDateTime.now();
+        if (languageTag.equals("de")) {
+            simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy, hh:mm:ss", locale);
+            return today.format(DateTimeFormatter.ofPattern(simpleDateFormat.toPattern()));
+        } else {
+            simpleDateFormat = new SimpleDateFormat("MMM d,yyyy, hh:mm:ss", locale);
+            String date = today.format(DateTimeFormatter.ofPattern(simpleDateFormat.toPattern()));
+            StringBuilder formatDate = new StringBuilder(date);
+            formatDate.deleteCharAt(3);
+            return formatDate.toString();
+        }
     }
 
 }
