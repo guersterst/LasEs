@@ -1,11 +1,9 @@
 package de.lases.control.internal;
 
-import de.lases.control.backing.ErrorPageBacking;
 import de.lases.control.exception.IllegalAccessException;
 import de.lases.control.exception.IllegalUserFlowException;
 import de.lases.global.transport.ErrorMessage;
 import jakarta.el.ELException;
-import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.spi.CDI;
 import jakarta.faces.FacesException;
 import jakarta.faces.application.NavigationHandler;
@@ -14,7 +12,6 @@ import jakarta.faces.context.ExceptionHandlerWrapper;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.event.ExceptionQueuedEvent;
 import jakarta.faces.event.ExceptionQueuedEventContext;
-import jakarta.inject.Inject;
 import org.jboss.weld.exceptions.WeldException;
 
 import java.util.Arrays;
@@ -30,8 +27,6 @@ public class UncheckedExceptionHandler extends ExceptionHandlerWrapper {
     private final PropertyResourceBundle bundle;
 
     private final static Logger logger = Logger.getLogger(UncheckedExceptionHandler.class.getName());
-
-    private ErrorMessage errorMessage;
 
     /**
      * Constructs an {@link UncheckedExceptionHandler}.
@@ -76,12 +71,9 @@ public class UncheckedExceptionHandler extends ExceptionHandlerWrapper {
                 throwable = throwable.getCause();
             }
 
-
+            ErrorMessage errorMessage;
             if (throwable instanceof IllegalUserFlowException
             || throwable instanceof IllegalAccessException) {
-
-                //todo throwable getMessage is null
-                //todo unwrap further s. debugger
 
                 // Handle 404 exceptions.
                 errorMessage = new ErrorMessage(bundle.getString("error.404"),
