@@ -1,20 +1,37 @@
 package de.lases.control.internal;
 
+import de.lases.control.backing.ErrorPageBacking;
+import de.lases.control.exception.IllegalAccessException;
+import de.lases.control.exception.IllegalUserFlowException;
+import de.lases.global.transport.ErrorMessage;
 import jakarta.el.ELException;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.spi.CDI;
 import jakarta.faces.FacesException;
-import jakarta.faces.application.FacesMessage;
 import jakarta.faces.application.NavigationHandler;
 import jakarta.faces.context.ExceptionHandler;
 import jakarta.faces.context.ExceptionHandlerWrapper;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.event.ExceptionQueuedEvent;
 import jakarta.faces.event.ExceptionQueuedEventContext;
+import jakarta.inject.Inject;
+import org.jboss.weld.exceptions.WeldException;
+
+import java.util.Arrays;
+import java.util.PropertyResourceBundle;
+import java.util.logging.Logger;
 
 /**
  * Handles all unchecked exceptions, which arrive in the {@code FacesServlet},
  * redirecting the user to an error-page.
  */
 public class UncheckedExceptionHandler extends ExceptionHandlerWrapper {
+
+    private final PropertyResourceBundle bundle;
+
+    private final static Logger logger = Logger.getLogger(UncheckedExceptionHandler.class.getName());
+
+    private ErrorMessage errorMessage;
 
     /**
      * Constructs an {@link UncheckedExceptionHandler}.
@@ -24,6 +41,7 @@ public class UncheckedExceptionHandler extends ExceptionHandlerWrapper {
      */
     public UncheckedExceptionHandler(ExceptionHandler wrapped) {
         super(wrapped);
+        bundle = CDI.current().select(PropertyResourceBundle.class).get();
     }
 
     /**
@@ -38,7 +56,8 @@ public class UncheckedExceptionHandler extends ExceptionHandlerWrapper {
      */
     @Override
     public void handle() {
-        /*
+
+        // Fetch context and navigation handler.
         FacesContext facesContext = FacesContext.getCurrentInstance();
         NavigationHandler navigationHandler
                 = facesContext.getApplication().getNavigationHandler();
@@ -47,23 +66,39 @@ public class UncheckedExceptionHandler extends ExceptionHandlerWrapper {
             ExceptionQueuedEventContext context =
                     (ExceptionQueuedEventContext) event.getSource();
 
-            Throwable t = context.getException();
+            Throwable throwable = context.getException();
 
-            while ((t instanceof FacesException || t instanceof ELException)
-                    && t.getCause() != null) {
-                t = t.getCause();
+            // Unwrap JSF and dependency specific exceptions.
+            while ((throwable instanceof FacesException
+                    || throwable instanceof ELException
+                    || throwable instanceof WeldException)
+                    && throwable.getCause() != null) {
+                throwable = throwable.getCause();
             }
-            if (t instanceof ArithmeticException) {
-                FacesMessage errorMessage = new FacesMessage("Arithmetic Exception");
-                errorMessage.setSeverity(FacesMessage.SEVERITY_FATAL);
-                FacesContext.getCurrentInstance().addMessage(null, errorMessage);
-            } else if (t instanceof ArrayIndexOutOfBoundsException) {
-                navigationHandler.handleNavigation(facesContext, null,
-                        "/jsfconfig/caught-array-index-out-of-bound-exception" +
-                                "?faces-redirect=true");
+
+
+            if (throwable instanceof IllegalUserFlowException
+            || throwable instanceof IllegalAccessException) {
+
+                //todo throwable getMessage is null
+                //todo unwrap further s. debugger
+
+                // Handle 404 exceptions.
+                errorMessage = new ErrorMessage(bundle.getString("error.404"),
+                        throwable.getMessage() + "\n" +
+                                Arrays.toString(throwable.getStackTrace()));
+            } else {
+
+                // Handle 500 exceptions.
+                errorMessage = new ErrorMessage(bundle.getString("error.500"),
+                        throwable.getMessage() + "\n" +
+                                Arrays.toString(throwable.getStackTrace()));
             }
+
+            facesContext.getExternalContext().getSessionMap().put("internal_error_message", errorMessage);
+            navigationHandler.handleNavigation(facesContext, null,
+                    "/views/anonymous/errorPage?faces-redirect=true");
+            logger.severe("Handled an exception: \n" + throwable + "\n" + throwable.getMessage());
         }
-
-         */
     }
 }

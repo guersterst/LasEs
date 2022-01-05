@@ -35,6 +35,12 @@ public class ErrorPageBacking {
      */
     @PostConstruct
     public void init() {
+
+        errorMessage = (ErrorMessage) facesContext.getExternalContext().getSessionMap().get("internal_error_message");
+        facesContext.getExternalContext().getSessionMap().remove("internal_error_message");
+
+        if (errorMessage == null) {
+
         int errorStatusCode = (Integer) facesContext.getExternalContext().getRequestMap()
                 .get("jakarta.servlet.error.status_code");
         String requestErrorMessage = (String) facesContext.getExternalContext().getRequestMap()
@@ -42,7 +48,6 @@ public class ErrorPageBacking {
         Exception requestException = (Exception) facesContext.getExternalContext().getRequestMap()
                 .get("jakarta.servlet.error.exception");
 
-        if (errorMessage == null) {
             if (errorStatusCode == 404) {
                 errorMessage = new ErrorMessage(bundle.getString("error.404"), requestErrorMessage);
             } else if (errorStatusCode == 500) {
