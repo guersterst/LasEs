@@ -2,48 +2,49 @@
 Main css.
  */
 #page {
-    background: rgba(245, 216, 206, 0.65);
+    background: rgba(121, 116, 114, 0.65);
+    border-color: black;
 }
 
 /*
 Css for footer.
  */
 #footer {
-    background-color: #f37041;
-    color: white;
+    background-color: #625d5a;
+    color: #f163f1;
 }
 
 /*
 Navigation
  */
 .navbar {
-    background-color: #f37041;
+    background-color: #625d5a;
 }
 .navbar .navbar-brand {
-    color: #ecf0f1;
+    color: purple;
 }
 .navbar .navbar-brand:hover,
 .navbar .navbar-brand:focus {
-    color: #ffbbbc;
+    color: white;
 }
 .navbar .navbar-text {
-    color: #ecf0f1;
+    color: purple;
 }
 .navbar .navbar-text a {
-    color: lightsalmon;
+    color: #f163f1;
 }
 .navbar .navbar-text a:hover,
 .navbar .navbar-text a:focus {
-    color: lightsalmon;
+    color: purple;
 }
 .navbar .navbar-nav .nav-link {
-    color: #ecf0f1;
+    color: #f163f1;
     border-radius: .25rem;
     margin: 0 0.25em;
 }
 .navbar .navbar-nav .nav-link:not(.disabled):hover,
 .navbar .navbar-nav .nav-link:not(.disabled):focus {
-    color: lightsalmon;
+    color: #f163f1;
 }
 .navbar .navbar-nav .nav-item.active .nav-link,
 .navbar .navbar-nav .nav-item.active .nav-link:hover,
@@ -51,30 +52,30 @@ Navigation
 .navbar .navbar-nav .nav-item.show .nav-link,
 .navbar .navbar-nav .nav-item.show .nav-link:hover,
 .navbar .navbar-nav .nav-item.show .nav-link:focus {
-    color: lightsalmon;
-    background-color: #c0392b;
+    color: #f163f1;
+    background-color: #44403e;
 }
 .navbar .navbar-collapse,
 .navbar .navbar-form {
     border-color: #ecf0f1;
 }
 .navbar .navbar-link {
-    color: #ecf0f1;
+    color: purple;
 }
 .navbar .navbar-link:hover {
-    color: lightsalmon;
+    color: #f163f1;
 }
 
 .navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item {
-    color: #ecf0f1;
+    color: #f163f1;
 }
 .navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item:hover,
 .navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item:focus {
-    color: lightsalmon;
+    color: #f163f1;
 }
 .navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item.active {
-    color: lightsalmon;
-    background-color: #f37041;
+    color: #f163f1;
+    background-color: purple;
 }
 
 
@@ -83,43 +84,43 @@ Navigation
 Setting for buttons.
  */
 .btn-primary {
-    background-color: lightsalmon;
+    background-color: black;
     text-decoration-color: white;
-    border-color: lightsalmon;
+    border-color: black;
 }
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active{
-    background-color: #fab194;
+    background-color: #f163f1;
     color: white;
-    border-color: #fab194;
+    border-color: #f163f1;
 }
 
 .btn-primary:disabled {
-    background-color: #fab194;
+    background-color: #f163f1;
     color: white;
-    border-color: #fab194;
+    border-color: #f163f1;
 }
 
 /*
 Buttons for pagination.
  */
 .page-link {
-    background-color: white;
-    color: lightsalmon;
-    border-color: lightsalmon;
+    background-color: #b6b2b1;
+    color: purple;
+    border-color: purple;
 }
 
 .active, .page-link:hover {
-    background-color: #fab194;
+    background-color: purple;
     color: white;
-    border-color: #fab194;
+    border-color: purple;
 }
 
 /*
 Tabs for homepage.
  */
 #tabs {
-    background-color: #fab194;
+    background-color: purple;
 }
 
 #tabs> .nav-item {
@@ -127,8 +128,8 @@ Tabs for homepage.
     color: white;
 }
 
-#tabs> .nav-item:active {
-    text-decoration: none;
+#tabs > .nav-item > .reiter {
+    background-color: #f163f1;
     color: black;
 }
 
@@ -136,12 +137,12 @@ Tabs for homepage.
 Style all links
  */
 a {
-    color: #f37041;
+    color: purple;
     text-decoration: none;
 }
 
 a:hover {
-    color: #fab194;
+    color: #f163f1;
     text-decoration: none;
 }
 
@@ -150,33 +151,78 @@ a:hover {
 }
 
 #impressum-lnk:hover {
-    color: #fab194;
+    color: #f163f1;
 }
 
 .nav-item > a {
     color: white;
-    border-color: white;
+    border-color: purple;
 }
 
 .nav-item > a:hover {
     color: white;
-    border-color: white;
+    border-color: #f163f1;
 }
 
 /*
 Profile styling
  */
+.card-body, .card {
+    background-color: #b6b2b1;
+}
+
 .card-header {
-    background-color: #fab194;
+    background-color: purple;
     color: white;
 }
 
 #toolbar > .card-body {
-    background-color: #f5d2c7;
+    background-color: #b78eb7;
 }
 
 #is-admin-cbx {
-    background-color: #fab194;
+    background-color: #f163f1;
+}
+
+.form-control:valid, .form-control, input{
+    background-color: #c9c6c6;
+}
+
+input:placeholder-shown {
+    color: purple;
+}
+
+.input-group-text {
+    background-color: #9a9898;
+}
+
+
+/*
+Submission state
+ */
+.ACCEPTED ,.REJECTED, .REVISION_REQUIRED, .SUBMITTED {
+    color: white;
+    font-weight: bold;
+}
+
+.SUBMITTED {
+    background-color: #595952;
+    border-color: #595952;
+}
+
+.ACCEPTED {
+    background-color: #038d03;
+    border-color: #038d03;
+}
+
+.REJECTED {
+    background-color: #9a0404;
+    border-color: #9a0404;
+}
+
+.REVISION_REQUIRED {
+    background-color: #a18d03;
+    border-color: #a18d03;
 }
 
 

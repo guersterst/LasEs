@@ -202,7 +202,7 @@ public class HomepageBacking implements SubmissionPaginationBacking {
     }
 
     public String getOwnCssClassSuffix() {
-        return tab == Tab.OWN_SUBMISSIONS ? " active" : "";
+        return tab == Tab.OWN_SUBMISSIONS ? " active reiter" : "";
     }
 
     public String getReviewCssClassSuffix() {
@@ -210,7 +210,7 @@ public class HomepageBacking implements SubmissionPaginationBacking {
     }
 
     public String getEditCssClassSuffix() {
-        return tab == Tab.SUBMISSIONS_TO_EDIT ? " active" : "";
+        return tab == Tab.SUBMISSIONS_TO_EDIT ? " active reiter" : "";
     }
 
 }
