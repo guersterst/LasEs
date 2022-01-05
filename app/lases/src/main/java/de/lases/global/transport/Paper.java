@@ -1,9 +1,12 @@
 package de.lases.global.transport;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * Represents a paper.
+ *
+ * @author Sebastian Vogt
  */
 public class Paper implements Cloneable {
 
@@ -75,13 +78,12 @@ public class Paper implements Cloneable {
     @Override
     public Paper clone() {
         try {
-            Paper clone = (Paper) super.clone();
 
             /*
              * Nothing to do here, since all references of Paper are
              * immutable.
              */
-            return clone;
+            return (Paper) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }
@@ -98,11 +100,10 @@ public class Paper implements Cloneable {
         if (object == this) {
             return true;
         }
-        if (!(object instanceof Paper)) {
+        if (!(object instanceof Paper paper)) {
             return false;
         }
-        Paper paper = (Paper) object;
-        return paper.versionNumber == this.versionNumber
-                && paper.getSubmissionId() == this.getSubmissionId();
+        return Objects.equals(paper.versionNumber, this.versionNumber)
+                && Objects.equals(paper.getSubmissionId(), this.getSubmissionId());
     }
 }

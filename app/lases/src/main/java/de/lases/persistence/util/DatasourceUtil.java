@@ -4,7 +4,11 @@ import de.lases.global.transport.ConnectionState;
 import de.lases.persistence.exception.DatasourceNotFoundException;
 import de.lases.persistence.exception.DatasourceQueryFailedException;
 import de.lases.persistence.repository.Transaction;
+import jakarta.faces.context.FacesContext;
+import jakarta.servlet.ServletContext;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -13,6 +17,9 @@ import java.util.logging.Logger;
 
 /**
  * Offers methods for managing the datasource.
+ *
+ * @author Thomas Kirz
+ * @author Sebastian Vogt
  */
 public class DatasourceUtil {
 
@@ -23,6 +30,8 @@ public class DatasourceUtil {
      * address they will not be deleted) from the datasource that need to verify
      * their email address but did not do so within 1 hour.
      * Users that are (co-)authors of submissions are not deleted.
+     *
+     * @author Thomas Kirz
      */
     public static void cleanUpVerifications() {
         Transaction transaction = new Transaction();
@@ -66,8 +75,20 @@ public class DatasourceUtil {
      * @throws DatasourceNotFoundException If the datasource cannot be
      *                                     reached.
      */
-    public static void createDatasource() {
+    public static void createDatasource() throws IOException {
+        ServletContext sctx = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        String sql = new String(sctx.getResourceAsStream("/WEB-INF/config/sql/CREATE_ALL.sql").readAllBytes(),
+                StandardCharsets.UTF_8);
+        Transaction transaction = new Transaction();
+        Connection conn = transaction.getConnection();
 
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.executeUpdate();
+            transaction.commit();
+        } catch (SQLException e) {
+            logSQLException(e, l);
+            throw new DatasourceNotFoundException(e.getMessage());
+        }
     }
 
     /**
@@ -76,7 +97,49 @@ public class DatasourceUtil {
      * @return the connection state of the datasource.
      */
     public static ConnectionState testDatasourceConnection() {
-        return null;
+        Transaction transaction = new Transaction();
+        Connection conn = transaction.getConnection();
+
+        ConnectionState connectionState = new ConnectionState();
+        connectionState.setSuccessfullyConnected(false);
+        connectionState.setDatasourceSchemaCreated(false);
+        connectionState.setErrorMessage("Connected");
+
+        // Check if the connection works.
+        try {
+            connectionState.setSuccessfullyConnected(conn.isValid(10));
+        } catch (SQLException e) {
+            connectionState.setErrorMessage(e.getMessage());
+            logSQLException(e, l);
+
+            // fail
+            transaction.abort();
+            return connectionState;
+        }
+
+        // Check if the datasource has been created.
+        try {
+            // If review exists, so does submission, paper and user.
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM review");
+            ps.executeQuery();
+            ps.close();
+
+            // system is essential.
+            ps = conn.prepareStatement("SELECT * FROM system");
+            ps.executeQuery();
+            ps.close();
+        } catch (SQLException e) {
+            connectionState.setErrorMessage("DB schema has not been created yet.");
+            logSQLException(e, l);
+
+            // fail
+            transaction.abort();
+            return connectionState;
+        }
+
+        connectionState.setDatasourceSchemaCreated(true);
+        transaction.abort();
+        return connectionState;
     }
 
     /**
@@ -84,17 +147,19 @@ public class DatasourceUtil {
      *
      * @param sqlException An sql exception.
      * @param logger The logger to user.
+     *
+     * @author Sebastian Vogt
      */
     public static void logSQLException(SQLException sqlException,
                                        Logger logger) {
         logger.log(Level.SEVERE,
                 """
-                SQLException with the following attributes:
-                - Class: %s
-                - Message: %s
-                - SQLState: %s
-                - Vendor error code: %s
-                """.formatted(sqlException.getClass(),
+                        SQLException with the following attributes:
+                        - Class: %s
+                        - Message: %s
+                        - SQLState: %s
+                        - Vendor error code: %s
+                        """.formatted(sqlException.getClass(),
                         sqlException.getMessage(), sqlException.getSQLState(),
                         sqlException.getErrorCode())
         );

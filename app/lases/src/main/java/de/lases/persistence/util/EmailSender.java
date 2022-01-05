@@ -78,6 +78,7 @@ public class EmailSender {
         } catch (MailConnectException | SendFailedException e) {
             // Possibly temporary error, throw checked exception
             logger.severe("Sending email failed (recoverable): " + e.getMessage());
+            logger.info("Recipient addresses where: " + String.join(",", recipients));
             throw new EmailTransmissionFailedException("Sending email failed", e);
         } catch (MessagingException e) {
             // Non-recoverable error, throw unchecked exception

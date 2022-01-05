@@ -1,19 +1,24 @@
 package de.lases.persistence.repository;
 
-import de.lases.global.transport.FileDTO;
-import de.lases.global.transport.Paper;
-import de.lases.global.transport.Submission;
-import de.lases.global.transport.User;
+import de.lases.global.transport.*;
 import de.lases.persistence.exception.DataNotWrittenException;
 import de.lases.persistence.exception.InvalidFieldsException;
 import de.lases.persistence.exception.NotFoundException;
+import de.lases.persistence.internal.ConfigReader;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.context.SessionScoped;
+import org.jboss.weld.junit5.WeldInitiator;
+import org.jboss.weld.junit5.WeldJunit5Extension;
+import org.jboss.weld.junit5.WeldSetup;
 import org.junit.jupiter.api.*;
 import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.exception.InvalidFieldsException;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
+import java.io.InputStream;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,8 +27,10 @@ import java.time.LocalTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * @author Stefanie Gürster, Sebastian Vogt
+ * @author Stefanie Gürster
+ * @author Sebastian Vogt
  */
+@ExtendWith(WeldJunit5Extension.class)
 class PaperRepositoryTest {
 
     /**
@@ -49,16 +56,33 @@ class PaperRepositoryTest {
         pdf.setFile(new byte[]{1, 2, 3, 4});
 
         paperNonExistent = paper.clone();
+        paperNonExistent.setSubmissionId(5);
         paperNonExistent.setVersionNumber(3);
     }
 
-    @BeforeAll
-    static void initConnectionPool() {
+    @WeldSetup
+    public WeldInitiator weld = WeldInitiator.from(ConnectionPool.class, ConfigReader.class, ConfigReader.class)
+            .activate(RequestScoped.class, SessionScoped.class).build();
+
+    /*
+     * Unfortunately we have to do this before every single test, since @BeforeAll methods are static and static
+     * methods don't work with our weld plugin.
+     */
+    @BeforeEach
+    void startConnectionPool() {
+        FileDTO file = new FileDTO();
+
+        Class clazz = PaperRepositoryTest.class;
+        InputStream inputStream = clazz.getResourceAsStream("/config.properties");
+
+        file.setInputStream(inputStream);
+
+        weld.select(ConfigReader.class).get().setProperties(file);
         ConnectionPool.init();
     }
 
-    @AfterAll
-    static void shutdownConnectionPool() {
+    @AfterEach
+    void shutDownConnectionPool() {
         ConnectionPool.shutDown();
     }
 
@@ -113,6 +137,17 @@ class PaperRepositoryTest {
         PaperRepository.change(changed, transaction);
 
         assertEquals(changed, paperNonExistent);
+        transaction.abort();
+    }
+
+    @Test
+    void testChangeNotFoundPaper() throws DataNotWrittenException, NotFoundException {
+        Transaction transaction = new Transaction();
+        Paper notFoundPaper = new Paper();
+        notFoundPaper.setSubmissionId(10000000);
+        notFoundPaper.setVersionNumber(1000);
+
+        assertThrows(NotFoundException.class, () -> {PaperRepository.change(notFoundPaper, transaction);});
         transaction.abort();
     }
 
@@ -190,6 +225,17 @@ class PaperRepositoryTest {
     }
 
     @Test
+    void testRemoveNotFound() {
+        Transaction transaction = new Transaction();
+        Paper paper = new Paper();
+        paper.setSubmissionId(900000);
+        paper.setVersionNumber(9000000);
+
+        assertThrows(NotFoundException.class, () -> PaperRepository.remove(paper, transaction));
+        transaction.abort();
+    }
+
+    @Test
     void testFileSize() throws SQLException, NotFoundException, DataNotWrittenException {
         Transaction transaction = new Transaction();
         PaperRepository.add(paperNonExistent,pdf,transaction);
@@ -228,6 +274,21 @@ class PaperRepositoryTest {
                 () -> assertEquals(newestPaper.getVersionNumber(), newestPaper.getVersionNumber()),
                 () -> assertEquals(newestPaper.getUploadTime(), getNewestPaper.getUploadTime())
         );
+        transaction.abort();
+    }
+
+    @Test
+    void testGetListNotFound() {
+        Transaction transaction = new Transaction();
+        Submission submission = new Submission();
+        submission.setId(9990000);
+
+        User user = new User();
+        user.setId(99999999);
+
+        ResultListParameters resultListParameters = new ResultListParameters();
+
+        assertThrows(NotFoundException.class, () -> {PaperRepository.getList(submission, transaction,user,resultListParameters);});
         transaction.abort();
     }
 

@@ -7,7 +7,6 @@ import de.lases.persistence.exception.InvalidFieldsException;
 import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.internal.ConfigReader;
 import de.lases.persistence.repository.PaperRepository;
-import de.lases.persistence.repository.SubmissionRepository;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
@@ -22,10 +21,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @author Stefanie Gürster, Sebastian Vogt
  * <p>
  * Provides functionality for handling papers in {@link Submission}s.
  * In case of an unexpected state, a {@link UIMessage} event will be fired.
+ *
+ * @author Stefanie Gürster
+ * @author Sebastian Vogt
  */
 @Dependent
 public class PaperService implements Serializable {
@@ -51,7 +52,7 @@ public class PaperService implements Serializable {
         if (paper.getSubmissionId() == null && paper.getVersionNumber() == null) {
 
             logger.severe("The id of the paper is not valid. Therefore no paper object can be queried.");
-            throw new IllegalArgumentException(resourceBundle.getString("idMissing"));
+            throw new InvalidFieldsException(resourceBundle.getString("idMissing"));
 
         } else {
 
@@ -67,9 +68,6 @@ public class PaperService implements Serializable {
 
                 String message = resourceBundle.getString("paperNotFound");
                 uiMessageEvent.fire(new UIMessage(message, MessageCategory.ERROR));
-
-                logger.fine("Error while loading a paper with the submission id: " + paper.getSubmissionId()
-                        + " and version number: " + paper.getVersionNumber());
 
                 transaction.abort();
 
@@ -89,6 +87,8 @@ public class PaperService implements Serializable {
      * @param file  The {@link FileDTO} to be added with the paper,
      *              containing a {@code byte[]} with the pdf.
      * @param paper The filled {@link Paper} to be added.
+     *
+     * @author Sebastian Vogt
      */
     public void add(FileDTO file, Paper paper) {
         Transaction transaction = new Transaction();
@@ -216,15 +216,11 @@ public class PaperService implements Serializable {
             } catch (DataNotWrittenException exception) {
 
                 uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotWritten"), MessageCategory.ERROR));
-                logger.log(Level.WARNING, exception.getMessage());
-
                 transaction.abort();
+
             } catch (NotFoundException exception) {
 
                 uiMessageEvent.fire(new UIMessage(resourceBundle.getString("paperNotFound"), MessageCategory.ERROR));
-                logger.fine("Error while removing a paper with the submission id: " + paper.getSubmissionId()
-                        + " and version number: " + paper.getVersionNumber());
-
                 transaction.abort();
 
             }
@@ -256,9 +252,6 @@ public class PaperService implements Serializable {
             }  catch (NotFoundException exception) {
 
                 uiMessageEvent.fire(new UIMessage(resourceBundle.getString("paperNotFound"), MessageCategory.ERROR));
-                logger.fine("Error while loading a file of a paper with the submission id: " + paper.getSubmissionId()
-                        + " and version number: " + paper.getVersionNumber());
-
                 transaction.abort();
 
             }
@@ -289,17 +282,12 @@ public class PaperService implements Serializable {
             paperList = PaperRepository.getList(submission, transaction, user, resultListParameters);
             transaction.commit();
         } catch (DataNotCompleteException e) {
-            transaction.abort();
-            logger.fine("Error while loading a list of a paper with the submission id: " + submission.getId()
-                    + " and a user with the id: " + user.getId());
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotComplete"), MessageCategory.WARNING));
 
             transaction.abort();
 
         } catch (NotFoundException e) {
-            transaction.abort();
-            logger.fine("Error while loading a list of a paper with the submission id: " + submission.getId()
-                    + " and a user with the id: " + user.getId());
+
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotFound"), MessageCategory.WARNING));
 
             transaction.abort();
@@ -352,13 +340,11 @@ public class PaperService implements Serializable {
             pages = (int) Math.ceil((double) items / maxLengthOfPagination);
 
         } catch (DataNotCompleteException e) {
-            logger.severe("Data is not complete.");
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("notComplete"), MessageCategory.ERROR));
 
             transaction.abort();
 
         } catch (NotFoundException e) {
-            logger.severe("Submission or user not found.");
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("getPaperListFailed"), MessageCategory.ERROR));
 
             transaction.abort();

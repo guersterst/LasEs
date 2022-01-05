@@ -5,6 +5,7 @@ import de.lases.business.internal.ConfigPropagator;
 import de.lases.persistence.exception.EmailTransmissionFailedException;
 import de.lases.persistence.util.EmailSender;
 import jakarta.enterprise.inject.spi.CDI;
+import jakarta.faces.context.FacesContext;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -41,7 +42,7 @@ public class EmailUtil {
      * @return A link leading to a mailto e-mail.
      */
     public static String generateMailToLink(String[] recipients, String[] cc, String subject, String body) {
-        String mailto= "mailto:" + String.join(",", recipients);
+        String mailto = "mailto:" + String.join(",", recipients);
         String delimiter = "?";
         if (subject != null) {
             mailto += delimiter + "subject=" + URLEncoder.encode(subject, StandardCharsets.UTF_8);
@@ -60,13 +61,26 @@ public class EmailUtil {
     }
 
     /**
-     * Determines whether an e-mail address has already been registered in the application.
+     * Generates a URL for a lases page that can be shared via email.
      *
-     * @param address The address to be checked.
-     * @return {@code true} if the email is already in use, {@code false} otherwise.
+     * @param context The current faces context.
+     * @param outcome The escaped path that the URL should point to, for example "views/authenticated/submission?id=3".
+     * @return The URL that can be shared via email including scheme, host, port (if not standard), the context path and
+     * the outcome.
      */
-    public static boolean isEmailUsed(String address) {
-        return false;
+    public static String generateLinkForEmail(FacesContext context, String outcome) {
+        // remove leading slash
+        outcome = outcome.replaceAll("^/", "");
+
+        String protocol = context.getExternalContext().getRequestScheme();
+        String host = context.getExternalContext().getRequestServerName();
+        String contextPath = context.getExternalContext().getRequestContextPath();
+        int port = context.getExternalContext().getRequestServerPort();
+        if (port != 80 && port != 443) {
+            host += ":" + port;
+        }
+
+        return protocol + "://" + host + contextPath + "/" + outcome;
     }
 
 }
