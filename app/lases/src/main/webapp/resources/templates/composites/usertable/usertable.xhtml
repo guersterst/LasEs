@@ -8,7 +8,7 @@
       xmlns:col="http://xmlns.jcp.org/jsf/composite/templates/composites/sortsearchcolumn">
 
 <composite:interface>
-    <composite:attribute name="backing" type="de.lases.control.backing.UserListBacking" required="true"/>
+    <composite:attribute name="backing" type="de.lases.control.backing.UserPaginationBacking" required="true"/>
 </composite:interface>
 
 
@@ -98,7 +98,7 @@
                 <!-- todo -->
                 <h:outputLink value="#{var.emailAddress}"
                               title="#{help.mailTo}"
-                              outcome="#{userListBacking.generateMailTo(var.emailAddress)}">
+                              outcome="#{cc.attrs.backing.generateMailTo(var.emailAddress)}">
                 </h:outputLink>
             </h:column>
         </pg:pagination>

@@ -83,11 +83,4 @@ public class UserListBacking implements Serializable, UserPaginationBacking {
         return sessionInformation;
     }
 
-    public String generateMailTo(String recipient) {
-        return EmailUtil.generateMailToLink(new String[]{recipient}, null, null, null);
-    }
-
-    public String[] getPrivileges() {
-        return new String[]{"none", "editor", "admin", "reviewer"};
-    }
 }
