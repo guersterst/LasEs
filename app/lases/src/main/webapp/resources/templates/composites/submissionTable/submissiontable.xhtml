@@ -19,7 +19,7 @@
             <!-- Date filtering -->
             <h:selectOneMenu id="date-slctom"
                              value="#{cc.attrs.backing.submissionPagination.resultListParameters.dateSelect}"
-                             title="#{help.dateSelect}" styleClass="btn btn-secondary">
+                             title="#{help.dateSelectSubList}" styleClass="btn btn-secondary">
                 <f:selectItems value="#{cc.attrs.backing.getDateSelects()}" var="select"
                                itemLabel="#{labels['dateSelect.' += select]}"
                                itemValue="#{select}"/>
@@ -27,7 +27,7 @@
             <!-- Submission state filtering -->
             <h:selectOneMenu id="state-slctom"
                              value="#{cc.attrs.backing.submissionPagination.resultListParameters.submissionState}"
-                             title="#{help.stateSubSelect}" styleClass="btn btn-secondary">
+                             title="#{help.stateSelectSubList}" styleClass="btn btn-secondary">
                 <f:selectItem itemValue="#{null}" itemLabel="#{labels['stateSelect.ALL']}"/>
                 <f:selectItems value="#{cc.attrs.backing.getSubmissionStates()}" var="select"
                                itemLabel="#{labels['stateSelect.' += select]}"
