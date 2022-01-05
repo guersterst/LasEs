@@ -184,7 +184,7 @@
                                         <h:selectOneMenu id="release-revision-slctom" styleClass="btn btn-secondary"
                                                          value="#{submissionBacking.paperPagination.resultListParameters.visibleFilter}"
                                                          title="#{help.filterRelease}"
-                                                         disabled="#{submissionBacking.loggedInUserIsReviewer()}">
+                                                         disabled="#{submissionBacking.loggedInUserIsReviewer() and not (submissionBacking.admin || submissionBacking.viewerSubmitter)}">
                                             <f:selectItems value="#{submissionBacking.visibility}" var="visible"
                                                            itemValue="#{visible}"
                                                            itemLabel="#{labels['visibility.' += visible]}"/>
