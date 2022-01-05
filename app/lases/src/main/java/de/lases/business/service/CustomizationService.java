@@ -102,7 +102,7 @@ public class CustomizationService {
     public void setLogo(FileDTO logo) {
         if  (logo == null || logo.getFile() == null) {
             logger.severe("The FileDTO or the image wrapped in it are null.");
-            throw new InvalidFieldsException();
+            throw new InvalidFieldsException(props.getString("idMissing"));
         }
 
         Transaction transaction = new Transaction();
@@ -125,11 +125,12 @@ public class CustomizationService {
         FileDTO logo = null;
         try {
             logo = SystemSettingsRepository.getLogo(transaction);
-        } catch (NotFoundException e) {
+            transaction.commit();
+        } catch (NotFoundException | DataNotWrittenException e) {
             transaction.abort();
+            uiMessageEvent.fire(new UIMessage(props.getString("dataNotFound"), MessageCategory.ERROR));
             throw new IllegalStateException("No logo could be fetched.");
         }
-        transaction.commit();
         return logo;
     }
 }
