@@ -514,7 +514,7 @@ public class UserService implements Serializable {
             // Calculate number of pages.
             pages = (int) Math.ceil((double) items / paginationLength);
         } catch (DataNotCompleteException | NotFoundException e) {
-            l.severe(e.getMessage());
+            uiMessageEvent.fire(new UIMessage("Could not compute the amount of users", MessageCategory.WARNING));
         } finally {
             transaction.commit();
         }
