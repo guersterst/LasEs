@@ -455,8 +455,9 @@
                                         <h:column>
                                             <f:facet name="header">
                                                 <div class="input-group">
-                                                    <h:outputText value="#{labels.date}"
-                                                                  styleClass="input-group-text"/>
+                                                    <h:commandLink value="#{labels['homePage.submissionDate']}"
+                                                                   action="#{scientificForumBacking.submissionPagination.sortBy('timestamp_submission')}"
+                                                                   styleClass="input-group-text"/>
                                                 </div>
                                             </f:facet>
                                             <h:outputText value="#{var.submissionTime}">
@@ -467,8 +468,9 @@
                                         <h:column>
                                             <f:facet name="header">
                                                 <div class="input-group">
-                                                    <h:outputText value="#{labels.deadline}"
-                                                                  styleClass="input-group-text"/>
+                                                    <h:commandLink value="#{labels.deadline}"
+                                                                   action="#{scientificForumBacking.submissionPagination.sortBy('timestamp_deadline_revision')}"
+                                                                   styleClass="input-group-text"/>
                                                 </div>
                                             </f:facet>
                                             <h:outputText value="#{var.deadlineRevision}">
@@ -479,11 +481,14 @@
                                         <h:column>
                                             <f:facet name="header">
                                                 <div class="input-group">
-                                                    <h:outputText value="#{labels.stateSub}"
-                                                                  styleClass="input-group-text"/>
+                                                    <h:commandLink value="#{labels.stateSub}"
+                                                                   action="#{scientificForumBacking.submissionPagination.sortBy('state')}"
+                                                                   styleClass="input-group-text"/>
                                                 </div>
                                             </f:facet>
-                                            <h:outputText id="state-otxt" value="#{var.state}"/>
+                                            <h:outputText id="state-otxt"
+                                                          value="#{labels['stateSelect.' += var.state]}"
+                                                          styleClass="form-control text-center #{var.state}"/>
                                         </h:column>
                                     </pg:pagination>
                                 </h:form>
