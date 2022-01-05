@@ -112,7 +112,6 @@ public class CustomizationService {
             logger.finest("Successfully set the logo of the application.");
         } catch (DataNotWrittenException ex) {
             transaction.abort();
-            logger.severe("A DataNotWrittenException occurred when attempting to set the logo.");
             uiMessageEvent.fire(new UIMessage(props.getString("dataNotWritten"), MessageCategory.ERROR));
         }
     }
@@ -122,7 +121,7 @@ public class CustomizationService {
      */
     public FileDTO getLogo() {
         Transaction transaction = new Transaction();
-        FileDTO logo = null;
+        FileDTO logo;
         try {
             logo = SystemSettingsRepository.getLogo(transaction);
             transaction.commit();
