@@ -165,7 +165,8 @@
                                                               value="#{labels.submissionDeadline}"
                                                               style="margin: 3px"
                                                               styleClass="text-muted"
-                                                              rendered="#{scientificForumBacking.forum.deadline != null}"/>
+                                                              rendered="#{scientificForumBacking.forum.deadline != null
+                                                              and (!scientificForumBacking.loggedInUserIsEditorOrAdmin())}"/>
                                                 <h:outputText id="date-review-deadline-otxt"
                                                               value="#{scientificForumBacking.forum.deadline}"
                                                               style="margin: 3px"
@@ -177,10 +178,14 @@
                                                 </h:outputText>
 
                                                 <!-- change deadline -->
+                                                <h:outputText id="deadline-submission-change-otxt"
+                                                              value="#{labels.submissionDeadline}"
+                                                              style="margin: 3px"
+                                                              styleClass="text-muted"
+                                                              rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}"/>
                                                 <h:inputText id="change-deadline-itxt"
                                                              value="#{scientificForumBacking.forumDeadLineInput}"
-                                                             rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()
-                                                             and scientificForumBacking.forum.deadline != null}"
+                                                             rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
                                                              title="#{help.forumDeadLine}"
                                                              a:type="date"
                                                              converterMessage="#{message.wrongDate}"
