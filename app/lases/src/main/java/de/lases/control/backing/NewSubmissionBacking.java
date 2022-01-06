@@ -1,6 +1,5 @@
 package de.lases.control.backing;
 
-import de.lases.business.service.PaperService;
 import de.lases.business.service.ScientificForumService;
 import de.lases.business.service.SubmissionService;
 import de.lases.business.service.UserService;
@@ -8,6 +7,7 @@ import de.lases.control.exception.IllegalUserFlowException;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.event.Event;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -19,6 +19,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PropertyResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,13 +44,16 @@ public class NewSubmissionBacking implements Serializable {
     private SubmissionService submissionService;
 
     @Inject
-    private PaperService paperService;
-
-    @Inject
     private UserService userService;
 
     @Inject
     private ScientificForumService forumService;
+
+    @Inject
+    private Event<UIMessage> uiMessageEvent;
+
+    @Inject
+    private transient PropertyResourceBundle messageBundle;
 
     private Submission newSubmission;
 
@@ -140,11 +144,7 @@ public class NewSubmissionBacking implements Serializable {
      * @param user The co-author to delete.
      */
     public void deleteCoAuthor(User user) {
-        for (int i = 0; i < coAuthors.size(); i++) {
-            if (coAuthors.get(i).getEmailAddress().equals(user.getEmailAddress())) {
-                coAuthors.remove(i);
-            }
-        }
+        coAuthors.removeIf(current -> current.getEmailAddress().equals(user.getEmailAddress()));
     }
 
     /**
@@ -152,7 +152,7 @@ public class NewSubmissionBacking implements Serializable {
      *
      * @return The page of the entered submission.
      */
-    public String submit() throws IOException {
+    public String submit() {
         newSubmission.setSubmissionTime(LocalDateTime.now());
         newSubmission.setState(SubmissionState.SUBMITTED);
         newSubmission.setAuthorId(sessionInformation.getUser().getId());
@@ -161,8 +161,17 @@ public class NewSubmissionBacking implements Serializable {
         paper.setVisible(true);
         paper.setUploadTime(LocalDateTime.now());
         FileDTO file = new FileDTO();
-        file.setFile(uploadedPDF.getInputStream().readAllBytes());
-        newSubmission = submissionService.add(newSubmission, coAuthors, paper, file);
+
+        try {
+            file.setFile(uploadedPDF.getInputStream().readAllBytes());
+            newSubmission = submissionService.add(newSubmission, coAuthors, paper, file);
+        } catch (IOException e) {
+            initNewSubmission();
+
+            uiMessageEvent.fire(new UIMessage(messageBundle.getString("failedUpload"), MessageCategory.ERROR));
+            logger.log(Level.WARNING, "the submission was not successfully added.");
+            return null;
+        }
 
         if (newSubmission == null) {
             initNewSubmission();
