@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+<h:head>
+    <title>LasEs - Initial Config</title>
+    <h:outputStylesheet name="design/bootstrap/css/bootstrap.min.css"/>
+    <h:outputScript name="design/bootstrap/js/bootstrap.bundle.min.js"/>
+</h:head>
+<h:body>
+    <h:panelGroup layout="block"
+                  id="keep-from-renderning"
+                  rendered="#{!initialConfigBacking.connectionState.datasourceSchemaCreated}">
+        <div id="page">
+            <div id="content">
+                <h:messages globalOnly="true"/>
+                <div class="container">
+                    <div class="card">
+                        <div class="card-body">
+                            <h:form>
+                                <div class="form-group">
+                                    <h:outputLabel value="Connection State Information: " for="connection-bool-otxt"
+                                                   styleClass="form-label"/>
+                                    <h:outputText id="connection-bool-otxt"
+                                                  value="#{'Connection successful: '.concat(initialConfigBacking.connectionState.successfullyConnected)}"
+                                                  styleClass="form-control"/>
+                                    <h:outputText id="connection-state-otxt"
+                                                  value="#{'Connection State: '.concat(initialConfigBacking.connectionState.errorMessage)}"
+                                                  styleClass="form-control"/>
+                                </div>
+                                <br/>
+                                <div class="form-group">
+                                    <h:outputLabel for="create-btn" value="Create datasource and start application:"
+                                                   styleClass="form-label"/>
+                                    <div class="btn-group">
+                                        <h:commandButton value="Create Datasource"
+                                                         action="#{initialConfigBacking.createDatasource()}"
+                                                         id="create-btn" styleClass="btn btn-primary"
+                                                         disabled="#{!initialConfigBacking.connectionState.successfullyConnected}"/>
+                                    </div>
+                                </div>
+                            </h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </h:panelGroup>
+</h:body>
+</html>
+
+

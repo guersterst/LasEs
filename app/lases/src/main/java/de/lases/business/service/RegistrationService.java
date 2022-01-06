@@ -46,6 +46,9 @@ public class RegistrationService {
     @Inject
     private Event<UIMessage> uiMessageEvent;
 
+    @Inject
+    private FacesContext facesContext;
+
     /**
      * Registers and creates a regular user in the database.
      * <p>
@@ -168,7 +171,7 @@ public class RegistrationService {
                 + generateValidationUrl(verification);
 
         try {
-            EmailUtil.sendEmail(configPropagator.getProperty("MAIL_ADDRESS_FROM"), new String[]{user.getEmailAddress()},
+            EmailUtil.sendEmail(new String[]{user.getEmailAddress()},
                     null, message.getString("email.verification.subject"), emailBody);
         } catch (EmailTransmissionFailedException e) {
             return false;
@@ -183,8 +186,8 @@ public class RegistrationService {
     }
 
     private String generateValidationUrl(Verification verification) {
-        String base = configPropagator.getProperty("BASE_URL") + "/views/anonymous/verification.xhtml";
-        return FacesContext.getCurrentInstance().getExternalContext().encodeBookmarkableURL(base,
+        String base = EmailUtil.generateLinkForEmail(facesContext, "views/anonymous/verification.xhtml");
+        return facesContext.getExternalContext().encodeBookmarkableURL(base,
                 Map.of("validationRandom", List.of(verification.getValidationRandom())));
     }
 

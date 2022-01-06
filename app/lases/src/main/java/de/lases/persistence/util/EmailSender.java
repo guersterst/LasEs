@@ -22,7 +22,7 @@ public class EmailSender {
 
     private static final Logger logger = Logger.getLogger(EmailSender.class.getName());
 
-    /**
+        /**
      * Send an email.
      *
      * @param sender     The sender email address.
@@ -65,7 +65,9 @@ public class EmailSender {
         try {
             message.setFrom(new InternetAddress(sender));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(String.join(",", recipients)));
-            message.setRecipients(Message.RecipientType.CC, InternetAddress.parse(String.join(",", cc)));
+            if (cc != null) {
+                message.setRecipients(Message.RecipientType.CC, InternetAddress.parse(String.join(",", cc)));
+            }
             message.setSubject(subject);
             message.setText(body);
 
@@ -76,6 +78,7 @@ public class EmailSender {
         } catch (MailConnectException | SendFailedException e) {
             // Possibly temporary error, throw checked exception
             logger.severe("Sending email failed (recoverable): " + e.getMessage());
+            logger.info("Recipient addresses where: " + String.join(",", recipients));
             throw new EmailTransmissionFailedException("Sending email failed", e);
         } catch (MessagingException e) {
             // Non-recoverable error, throw unchecked exception

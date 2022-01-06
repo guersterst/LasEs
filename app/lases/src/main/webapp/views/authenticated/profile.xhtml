@@ -21,7 +21,7 @@
             <h:outputStylesheet name="design/css/profile.css"/>
         </h:head>
 
-        <div class="container">
+        <div class="container" id="profile-container">
             <h1>#{labels['profile']}</h1>
 
             <div class="row">
@@ -161,11 +161,11 @@
                             <hr/>
                             <!-- delete Profile -->
                             <h:form id="delete-profile-form">
-                                <p:commandButton id="delete-cbtn" value="#{labels.delete}"
+                                <h:commandButton id="delete-cbtn" value="#{labels.delete}"
                                                  onclick="PF('delte-dlg').show()"
                                                  readonly="#{!profileBacking.hasViewerEditRights()}"
                                                  type="button"
-                                                 styleClass="btn btn-danger"
+                                                 styleClass="btn btn-secondary"
                                                  disabled="#{!profileBacking.hasViewerEditRights()}"/>
 
                                 <p:confirmDialog id="delte-dlg" widgetVar="delte-dlg" header="#{labels.delete}">
@@ -196,7 +196,7 @@
                                     <h:panelGroup layout="block" styleClass="form-group form-check">
                                         <h:selectBooleanCheckbox styleClass="form-check-input" id="is-admin-cbx" value="#{profileBacking.userForAdminSettings.admin}"/><h:outputLabel for="is-admin-cbx" styleClass="form-check-label" value="#{labels.adminRights}"/><br/>
                                         <h:message for="password-admin-iscrt"/><br/>
-                                        <p:commandButton id="is-admin-cbtn" styleClass="btn-secondary btn" type="button" value="#{labels.save}" onclick="PF('dlg').show()" />
+                                        <h:commandButton id="is-admin-cbtn" styleClass="btn btn-secondary" type="button" value="#{labels.save}" onclick="PF('dlg').show()" />
                                         <p:confirmDialog id="dlg" widgetVar="dlg" header="#{message.passwordNeeded}">
 
                                             <div class="form-group">

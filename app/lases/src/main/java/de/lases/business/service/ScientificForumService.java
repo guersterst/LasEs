@@ -90,20 +90,13 @@ public class ScientificForumService implements Serializable {
 
             ScientificForumRepository.change(newForum, transaction);
             l.finest("Successfully changed the forum: " + newForum.getId() + ".");
-        } catch (InvalidFieldsException | NotFoundException e) {
-
-            l.severe(e.getMessage() + "caused the change operation to fail for: " + newForum.getId());
+            transaction.commit();
+        } catch (NotFoundException e) {
             uiMessageEvent.fire(new UIMessage(message.getString("dataNotFound"), MessageCategory.ERROR));
         } catch (DataNotWrittenException e) {
-
-            l.severe("A database error occurred and the operation could not be performed.");
             uiMessageEvent.fire(new UIMessage(message.getString("dataNotWritten"), MessageCategory.ERROR));
         } catch (KeyExistsException e) {
-
-            l.warning("It was attempted to create a forum with an existing name: " + newForum.getName());
             uiMessageEvent.fire(new UIMessage(message.getString("nameTaken"), MessageCategory.ERROR));
-        } finally {
-            transaction.commit();
         }
     }
 
@@ -163,16 +156,11 @@ public class ScientificForumService implements Serializable {
 
             ScientificForumRepository.remove(forum, transaction);
             l.finest("Successfully removed the forum: " + forum.getId() + ".");
+            transaction.commit();
         } catch (NotFoundException e) {
-
-            l.severe(e.getMessage() + "caused the removal operation to fail for: " + forum.getId());
             uiMessageEvent.fire(new UIMessage(message.getString("dataNotFound"), MessageCategory.ERROR));
         } catch (DataNotWrittenException e) {
-
-            l.severe("A database error occurred and the operation could not be performed.");
             uiMessageEvent.fire(new UIMessage(message.getString("dataNotWritten"), MessageCategory.ERROR));
-        } finally {
-            transaction.commit();
         }
     }
 
@@ -201,25 +189,17 @@ public class ScientificForumService implements Serializable {
                     return;
                 }
             }
-        } catch (DataNotCompleteException | NotFoundException e) {
-            l.warning("Could not query whether this editor is a duplicate.");
-        }
-
-        try {
 
             ScientificForumRepository.addEditor(forum, editor, transaction);
             l.finest("Successfully added the forum: " + forum.getId() + " to the editor: "
                     + editor.getId());
-        } catch (NotFoundException e) {
-
-            l.severe(e.getMessage() + "\n Caused the operation to fail for: " + forum.getId());
-            uiMessageEvent.fire(new UIMessage(message.getString("dataNotFound"), MessageCategory.ERROR));
-        } catch (DataNotWrittenException e) {
-
-            l.severe("A database error occurred and the operation could not be performed.");
-            uiMessageEvent.fire(new UIMessage(message.getString("dataNotWritten"), MessageCategory.ERROR));
-        } finally {
             transaction.commit();
+        } catch (DataNotCompleteException ex) {
+            uiMessageEvent.fire(new UIMessage(message.getString("dataNotComplete"), MessageCategory.ERROR));
+        } catch (NotFoundException ex) {
+            uiMessageEvent.fire(new UIMessage(message.getString("dataNotFound"), MessageCategory.ERROR));
+        } catch (DataNotWrittenException ex) {
+            uiMessageEvent.fire(new UIMessage(message.getString("dataNotWritten"), MessageCategory.ERROR));
         }
     }
 
@@ -243,16 +223,11 @@ public class ScientificForumService implements Serializable {
             ScientificForumRepository.removeEditor(forum, editor, transaction);
             l.finest("Successfully removed the editor: " + editor.getId() + " from the forum: "
                     + forum.getId());
+            transaction.commit();
         } catch (NotFoundException e) {
-
-            l.severe(e.getMessage() + "\n Caused the operation to fail for: " + forum.getId());
             uiMessageEvent.fire(new UIMessage(message.getString("dataNotFound"), MessageCategory.ERROR));
         } catch (DataNotWrittenException e) {
-
-            l.severe("A database error occurred and the operation could not be performed.");
             uiMessageEvent.fire(new UIMessage(message.getString("dataNotWritten"), MessageCategory.ERROR));
-        } finally {
-            transaction.commit();
         }
     }
 
@@ -282,24 +257,17 @@ public class ScientificForumService implements Serializable {
                     uiMessageEvent.fire(new UIMessage("scienceFieldAlreadyExistsInForum", MessageCategory.INFO));
                 }
             }
-        } catch (DataNotCompleteException e) {
-            l.warning("Could not query whether this field is a duplicate: " + scienceField.getName());
-        }
-        try {
 
             ScientificForumRepository.addScienceField(forum, scienceField, transaction);
             l.finest("Successfully added the forum: " + forum.getId() + " to the topic: "
                     + scienceField.getName());
-        } catch (NotFoundException e) {
-
-            l.severe(e.getMessage() + " \n Caused the operation to fail for: " + forum.getId());
-            uiMessageEvent.fire(new UIMessage(message.getString("dataNotFound"), MessageCategory.ERROR));
-        } catch (DataNotWrittenException e) {
-
-            l.severe("A database error occurred and the operation could not be performed.");
-            uiMessageEvent.fire(new UIMessage(message.getString("dataNotWritten"), MessageCategory.ERROR));
-        } finally {
             transaction.commit();
+        } catch (DataNotCompleteException e) {
+            uiMessageEvent.fire(new UIMessage("dataNotComplete", MessageCategory.INFO));
+        } catch (DataNotWrittenException e) {
+            uiMessageEvent.fire(new UIMessage(message.getString("dataNotWritten"), MessageCategory.ERROR));
+        } catch (NotFoundException e) {
+            uiMessageEvent.fire(new UIMessage(message.getString("dataNotFound"), MessageCategory.ERROR));
         }
     }
 
@@ -325,16 +293,11 @@ public class ScientificForumService implements Serializable {
             ScientificForumRepository.removeScienceField(forum, scienceField, transaction);
             l.finest("Successfully removed the topic: " + scienceField.getName() + " from the forum: "
                     + forum.getId());
+            transaction.commit();
         } catch (NotFoundException e) {
-
-            l.severe(e.getMessage() + "\n Caused the operation to fail for: " + forum.getId());
             uiMessageEvent.fire(new UIMessage(message.getString("dataNotFound"), MessageCategory.ERROR));
         } catch (DataNotWrittenException e) {
-
-            l.severe("A database error occurred and the operation could not be performed.");
             uiMessageEvent.fire(new UIMessage(message.getString("dataNotWritten"), MessageCategory.ERROR));
-        } finally {
-            transaction.commit();
         }
     }
 

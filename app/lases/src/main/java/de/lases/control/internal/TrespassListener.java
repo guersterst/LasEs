@@ -28,7 +28,7 @@ public class TrespassListener implements PhaseListener {
     private static final long serialVersionUID = -1137139795334466811L;
 
     private PropertyResourceBundle propertyResourceBundle =
-            (PropertyResourceBundle) ResourceBundle.getBundle("resource_bundles/message");
+            (PropertyResourceBundle) ResourceBundle.getBundle("de/lases/resource_bundles/message");
 
     private final Logger logger = Logger.getLogger(TrespassListener.class.getName());
 
@@ -77,7 +77,7 @@ public class TrespassListener implements PhaseListener {
 
         // Load localised messages to avoid CDI.
         propertyResourceBundle = (PropertyResourceBundle)
-                ResourceBundle.getBundle("resource_bundles/message", viewRoot.getLocale());
+                ResourceBundle.getBundle("de/lases/resource_bundles/message", viewRoot.getLocale());
 
         String viewId = viewRoot.getViewId();
         if (viewId.contains("/anonymous/")) {

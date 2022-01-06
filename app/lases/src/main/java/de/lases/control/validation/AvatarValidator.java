@@ -1,7 +1,6 @@
 package de.lases.control.validation;
 
 import de.lases.business.internal.ConfigPropagator;
-import de.lases.global.transport.FileDTO;
 import jakarta.enterprise.inject.spi.CDI;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.component.UIComponent;
@@ -9,11 +8,9 @@ import jakarta.faces.context.FacesContext;
 import jakarta.faces.validator.FacesValidator;
 import jakarta.faces.validator.Validator;
 import jakarta.faces.validator.ValidatorException;
-import jakarta.inject.Inject;
 import jakarta.servlet.http.Part;
 
 import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.PropertyResourceBundle;

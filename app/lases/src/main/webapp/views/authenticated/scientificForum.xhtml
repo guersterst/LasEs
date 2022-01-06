@@ -23,7 +23,7 @@
         <div class="container-fluid">
 
             <div class="row">
-                <div class="col-md-10">
+                <div class="col-md-12">
                     <div class="container" id="container-forum">
                         <div class="card" id="toolbox">
 
@@ -32,10 +32,10 @@
                                 <div class="row">
 
                                     <!-- delete forum -->
-                                    <div class="col">
+                                    <div class="col-md-6">
                                         <h:form>
-                                            <h:commandButton styleClass="btn btn-primary"
-                                                             id="delete-sub-cbtn"
+                                            <h:commandButton styleClass="btn btn-secondary"
+                                                             id="delete-forum-cbtn"
                                                              title="#{help.deleteForum}"
                                                              value="#{labels.deleteButtonForum}"
                                                              onclick="PF('dlg').show()"
@@ -57,9 +57,17 @@
                                         </h:form>
                                     </div>
 
-                                    <!-- all messages produced from the following sections -->
-                                    <div class="col ml-5">
-                                        <h:messages/>
+                                    <!-- new submission -->
+                                    <div class="col-md-2">
+                                        <h:form>
+                                            <h:button
+                                                    title="#{help.createNewSubmission}"
+                                                    value="#{labels.createNewSubmission}"
+                                                    outcome="#{'/views/authenticated/newSubmission?forumId='
+                                                        .concat(scientificForumBacking.forum.id)}"
+                                                    rendered="#{scientificForumBacking.sessionInformation.user.admin}"
+                                                    styleClass="btn btn-secondary"/>
+                                        </h:form>
                                     </div>
                                 </div>
                             </div>
@@ -81,10 +89,11 @@
                                                              title="#{help.forumName}"
                                                              required="true"
                                                              requiredMessage="#{message.requiredForForum}"
-                                                             styleClass="h4"
+                                                             styleClass="h4 form-control"
                                                              size="37">
                                                     <f:validator validatorId="forumNameExistsValidator"/>
                                                 </h:inputText>
+                                                <h:message for="forum-name-itxt"/>
                                             </div>
 
                                             <!-- alternative name output for non editors -->
@@ -93,7 +102,7 @@
                                                               value="#{scientificForumBacking.forum.name}"
                                                               rendered="#{!scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
                                                               tite="#{help.forumName}"
-                                                              styleClass="h4">
+                                                              styleClass="h4 form-control">
                                                     <br/>
                                                 </h:outputText>
                                             </div>
@@ -109,8 +118,8 @@
                                                             required="true"
                                                             requiredMessage="#{message.requiredForForum}"
                                                             tite="#{help.forumDesc}"
-                                                            rows="10"
-                                                            cols="60"/>
+                                                            styleClass="form-control"
+                                                            rows="9"/>
                                                 </div>
 
                                                 <!-- alternative desc output for non editors -->
@@ -118,10 +127,12 @@
                                                     <h:outputText id="description-otxt"
                                                                   value="#{scientificForumBacking.forum.description}"
                                                                   rendered="#{!scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
-                                                                  tite="#{help.forumDesc}"/>
+                                                                  tite="#{help.forumDesc}"
+                                                                  styleClass="form-control"/>
                                                 </div>
 
                                                 <hr/>
+
                                                 <!-- url -->
                                                 <div class="form-group my-2">
                                                     <h:outputText id="url-otxt"
@@ -135,40 +146,50 @@
                                                                  required="true"
                                                                  size="60"
                                                                  requiredMessage="#{message.requiredForForum}"
-                                                                 title="#{help.forumURL}"/>
+                                                                 title="#{help.forumURL}"
+                                                                 styleClass="form-control"/>
 
                                                     <!-- alternative url output for non editors -->
                                                     <h:outputLink value="#{scientificForumBacking.forum.url}"
                                                                   rendered="#{!scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
-                                                                  title="#{help.forumURL}">
+                                                                  title="#{help.forumURL}"
+                                                                  styleClass="form-control">
                                                         <h:outputText value="#{scientificForumBacking.forum.url}"/>
                                                     </h:outputLink>
                                                 </div>
                                             </div>
 
                                             <!-- deadline -->
-                                            <h:outputText id="deadline-submission-otxt"
-                                                          value="#{labels.submissionDeadline}"
-                                                          style="margin: 3px"
-                                                          styleClass="text-muted"
-                                                          rendered="#{scientificForumBacking.forum.deadline != null}"/>
-                                            <h:outputText id="date-review-deadline-otxt"
-                                                          value="#{scientificForumBacking.forum.deadline}"
-                                                          style="margin: 3px"
-                                                          title="#{help.forumDeadLine}"
-                                                          rendered="#{(scientificForumBacking.forum.deadline != null)
-                                                          and (!scientificForumBacking.loggedInUserIsEditorOrAdmin())}">
-                                                <f:convertDateTime type="localDateTime"/>
-                                            </h:outputText>
-
-                                            <!-- change deadline -->
                                             <div class="form-group">
+                                                <h:outputText id="deadline-submission-otxt"
+                                                              value="#{labels.submissionDeadline}"
+                                                              style="margin: 3px"
+                                                              styleClass="text-muted"
+                                                              rendered="#{scientificForumBacking.forum.deadline != null
+                                                              and (!scientificForumBacking.loggedInUserIsEditorOrAdmin())}"/>
+                                                <h:outputText id="date-review-deadline-otxt"
+                                                              value="#{scientificForumBacking.forum.deadline}"
+                                                              style="margin: 3px"
+                                                              title="#{help.forumDeadLine}"
+                                                              rendered="#{(scientificForumBacking.forum.deadline != null)
+                                                              and (!scientificForumBacking.loggedInUserIsEditorOrAdmin())}"
+                                                              styleClass="form-control">
+                                                    <f:convertDateTime type="localDateTime"/>
+                                                </h:outputText>
+
+                                                <!-- change deadline -->
+                                                <h:outputText id="deadline-submission-change-otxt"
+                                                              value="#{labels.submissionDeadline}"
+                                                              style="margin: 3px"
+                                                              styleClass="text-muted"
+                                                              rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}"/>
                                                 <h:inputText id="change-deadline-itxt"
                                                              value="#{scientificForumBacking.forumDeadLineInput}"
                                                              rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
                                                              title="#{help.forumDeadLine}"
                                                              a:type="date"
-                                                             converterMessage="#{message.wrongDate}">
+                                                             converterMessage="#{message.wrongDate}"
+                                                             styleClass="form-control">
                                                     <f:convertDateTime type="localDate" pattern="yyyy-MM-dd"/>
                                                 </h:inputText>
                                             </div>
@@ -193,7 +214,8 @@
                                                 <div class="text-center">
                                                     <h:outputText id="review-manual-otxt"
                                                                   value="#{scientificForumBacking.forum.reviewManual}"
-                                                                  rendered="#{!scientificForumBacking.loggedInUserIsEditorOrAdmin()}"/>
+                                                                  rendered="#{!scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
+                                                                  styleClass="form-control"/>
                                                     <h:inputTextarea
                                                             id="review-manual-itxt"
                                                             value="#{scientificForumBacking.forum.reviewManual}"
@@ -202,7 +224,8 @@
                                                             required="true"
                                                             requiredMessage="#{message.requiredForForum}"
                                                             rows="10"
-                                                            cols="20"/>
+                                                            cols="20"
+                                                            styleClass="form-control"/>
                                                 </div>
                                                 <br/>
                                                 <div class="text-center">
@@ -247,6 +270,7 @@
                                                                  rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}">
                                                         <f:validator validatorId="emailAddressExistsValidator"/>
                                                     </h:inputText>
+                                                    <h:message for="editor-email-itxt"/>
                                                 </div>
                                                 <div class="form-group">
                                                     <h:commandButton id="add-editor-cbtn"
@@ -305,12 +329,14 @@
                                                                      var="s"
                                                                      filter="true"
                                                                      filterMatchMode="startsWith"
-                                                                     rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}">
+                                                                     rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
+                                                                     styleClass="form-control">
                                                         <f:selectItems
                                                                 value="#{scientificForumBacking.allScienceFields}"
                                                                 var="scienceField"
                                                                 itemLabel="#{scienceField.name}"
-                                                                itemValue="#{scienceField}"/>
+                                                                itemValue="#{scienceField}"
+                                                                styleClass="form-control"/>
                                                         <p:column>
                                                             <f:facet name="header">
                                                                 <h:outputText value="Name"/>
@@ -363,12 +389,12 @@
                 </div>
 
                 <!-- submission pagination -->
-                <div id="submission-pagination" class="col-md-10">
+                <div id="submission-pagination" class="col-md-12">
                     <div class="container mt-5">
                         <div class="card">
                             <div class="card-head">
                                 <!-- Tabs for the different views -->
-                                <h:form>
+                                <h:form id="tabs">
                                     <ul class="nav nav-tabs justify-content-center">
                                         <li class="nav-item">
                                             <h:commandLink value="#{labels['ownSubmissions']}"
@@ -434,8 +460,9 @@
                                         <h:column>
                                             <f:facet name="header">
                                                 <div class="input-group">
-                                                    <h:outputText value="#{labels.date}"
-                                                                  styleClass="input-group-text"/>
+                                                    <h:commandLink value="#{labels['homePage.submissionDate']}"
+                                                                   action="#{scientificForumBacking.submissionPagination.sortBy('timestamp_submission')}"
+                                                                   styleClass="input-group-text"/>
                                                 </div>
                                             </f:facet>
                                             <h:outputText value="#{var.submissionTime}">
@@ -446,8 +473,9 @@
                                         <h:column>
                                             <f:facet name="header">
                                                 <div class="input-group">
-                                                    <h:outputText value="#{labels.deadline}"
-                                                                  styleClass="input-group-text"/>
+                                                    <h:commandLink value="#{labels.deadline}"
+                                                                   action="#{scientificForumBacking.submissionPagination.sortBy('timestamp_deadline_revision')}"
+                                                                   styleClass="input-group-text"/>
                                                 </div>
                                             </f:facet>
                                             <h:outputText value="#{var.deadlineRevision}">
@@ -458,11 +486,14 @@
                                         <h:column>
                                             <f:facet name="header">
                                                 <div class="input-group">
-                                                    <h:outputText value="#{labels.stateSub}"
-                                                                  styleClass="input-group-text"/>
+                                                    <h:commandLink value="#{labels.stateSub}"
+                                                                   action="#{scientificForumBacking.submissionPagination.sortBy('state')}"
+                                                                   styleClass="input-group-text"/>
                                                 </div>
                                             </f:facet>
-                                            <h:outputText id="state-otxt" value="#{var.state}"/>
+                                            <h:outputText id="state-otxt"
+                                                          value="#{labels['stateSelect.' += var.state]}"
+                                                          styleClass="form-control text-center #{var.state}"/>
                                         </h:column>
                                     </pg:pagination>
                                 </h:form>

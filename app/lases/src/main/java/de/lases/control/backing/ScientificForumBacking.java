@@ -1,14 +1,15 @@
 package de.lases.control.backing;
 
 import de.lases.business.internal.ConfigPropagator;
-import de.lases.business.service.*;
+import de.lases.business.service.ScienceFieldService;
+import de.lases.business.service.ScientificForumService;
+import de.lases.business.service.SubmissionService;
+import de.lases.business.service.UserService;
 import de.lases.control.exception.IllegalUserFlowException;
-import de.lases.control.internal.*;
+import de.lases.control.internal.Pagination;
+import de.lases.control.internal.SessionInformation;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
-import jakarta.faces.application.NavigationHandler;
-import jakarta.faces.context.FacesContext;
-import jakarta.faces.event.ComponentSystemEvent;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -20,7 +21,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * Backing bean for the scientific forum page.

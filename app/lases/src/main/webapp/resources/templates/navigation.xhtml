@@ -4,7 +4,7 @@
         xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
         xmlns:a="http://xmlns.jcp.org/jsf/passthrough" xmlns:H="http://java.sun.com/jsf/html">
     <!-- navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="navigation">
 
         <!--- image -->
         <h:link
@@ -58,7 +58,7 @@
 
         <!-- logout -->
         <h:form styleClass="form-inline mx-3">
-            <h:commandButton
+            <h:commandButton id="logout-cbtn"
                     value="#{labels.logout}"
                     action="#{navigationBacking.logout}"
                     title="#{help.logout}"
@@ -67,5 +67,6 @@
                     type="submit"/>
         </h:form>
     </nav>
+
 </ui:composition>
 

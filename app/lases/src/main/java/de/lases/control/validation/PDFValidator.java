@@ -17,6 +17,8 @@ import java.util.PropertyResourceBundle;
 /**
  * Validator for pdf files. Validates that a pdf does not overstep the maximum
  * file size for an uploaded pdf as specified in the configuration.
+ *
+ * @author Sebastian Vogt
  */
 @FacesValidator("pdfValidator")
 public class PDFValidator implements Validator<Part> {
@@ -27,7 +29,6 @@ public class PDFValidator implements Validator<Part> {
             = CDI.current().select(PropertyResourceBundle.class).get();
 
     private static final int CONVERT_LENGTH = 1024;
-    private int fileLength;
     private final int fileMax = Integer.parseInt(configPropagator.getProperty("MAX_PDF_FILE_SIZE_MB"));
 
     /**
@@ -50,7 +51,7 @@ public class PDFValidator implements Validator<Part> {
             throw new ValidatorException(facesMessage);
         }
 
-        fileLength = fileDTO.getFile().length;
+        int fileLength = fileDTO.getFile().length;
 
         double fileSizeMB = (((double) fileLength / CONVERT_LENGTH) / CONVERT_LENGTH);
 
