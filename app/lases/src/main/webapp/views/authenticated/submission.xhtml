@@ -28,12 +28,13 @@
         </f:metadata>
 
         <div class="row">
-            <div class="col-md-4" id="wrap-toolbar" style="min-width: min-content">
-                <h:panelGroup id="toolbar"
-                              rendered="#{submissionBacking.admin || submissionBacking.loggedInUserIsEditor()}">
-                    <ui:include src="/resources/templates/toolbar.xhtml"/>
-                </h:panelGroup>
-            </div>
+            <h:panelGrid id="toolbar-grid" rendered="#{submissionBacking.admin || submissionBacking.loggedInUserIsEditor()}">
+                <div class="col-md-4" id="wrap-toolbar" style="min-width: min-content">
+                    <h:panelGroup id="toolbar">
+                        <ui:include src="/resources/templates/toolbar.xhtml"/>
+                    </h:panelGroup>
+                </div>
+            </h:panelGrid>
             <div class="col-md-8">
                 <div class="container">
                     <div class="container" id="container-submission">
