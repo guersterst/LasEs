@@ -11,7 +11,7 @@ Css for footer.
  */
 #footer {
     background-color: #625d5a;
-    color: #424af6;
+    color: white;
 }
 
 /*
@@ -31,14 +31,14 @@ Navigation
     color: #070e9f;
 }
 .navbar .navbar-text a {
-    color: #424af6;
+    color: white;
 }
 .navbar .navbar-text a:hover,
 .navbar .navbar-text a:focus {
     color: #0c15be;
 }
 .navbar .navbar-nav .nav-link {
-    color: #424af6;
+    color: white;
     border-radius: .25rem;
     margin: 0 0.25em;
 }
@@ -60,7 +60,7 @@ Navigation
     border-color: #ecf0f1;
 }
 .navbar .navbar-link {
-    color: #424af6;
+    color: white;
 }
 .navbar .navbar-link:hover {
     color: #0a11af;
@@ -147,11 +147,11 @@ a:hover {
 }
 
 #impressum-lnk {
-    color: #424af6;
+    color: white;
 }
 
 #impressum-lnk:hover {
-    color: #070e9f;
+    color: #454dee;
 }
 
 .nav-item > a {
