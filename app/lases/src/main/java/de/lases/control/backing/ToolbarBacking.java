@@ -250,8 +250,6 @@ public class ToolbarBacking implements Serializable {
         submission.setState(SubmissionState.ACCEPTED);
 
         submissionService.change(submission);
-
-        uiMessageEvent.fire(new UIMessage(resourceBundle.getString("acceptedSubmission"), MessageCategory.INFO));
     }
 
     public boolean isAccepted() {
@@ -265,8 +263,6 @@ public class ToolbarBacking implements Serializable {
         submission.setState(SubmissionState.REJECTED);
 
         submissionService.change(submission);
-
-        uiMessageEvent.fire(new UIMessage(resourceBundle.getString("rejectedSubmission"), MessageCategory.INFO));
     }
 
     public boolean isRejected() {

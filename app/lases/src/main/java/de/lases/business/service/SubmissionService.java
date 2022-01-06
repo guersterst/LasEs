@@ -349,10 +349,8 @@ public class SubmissionService implements Serializable {
                 } else {
                     transaction.abort();
                 }
-            }
-
-            // Inform submitter a co-authors about a changed submission state.
-            if (newSubmission.getState() == SubmissionState.ACCEPTED || newSubmission.getState() == SubmissionState.REJECTED) {
+            } else if (newSubmission.getState() == SubmissionState.ACCEPTED || newSubmission.getState() == SubmissionState.REJECTED) {
+                // Inform submitter a co-authors about a changed submission state.
                 String subject = "";
                 String body = "";
                 if (newSubmission.getState() == SubmissionState.ACCEPTED) {
@@ -373,9 +371,7 @@ public class SubmissionService implements Serializable {
 
                 }
                 informAboutState(transaction, newSubmission, subject, body);
-            }
-
-            if (newSubmission.getState() == SubmissionState.REVISION_REQUIRED) {
+            } else if (newSubmission.getState() == SubmissionState.REVISION_REQUIRED) {
 
                 String subject = resourceBundle.getString("email.requireRevision.subject");
                 String body = resourceBundle.getString("email.requireRevision.body")
@@ -417,6 +413,7 @@ public class SubmissionService implements Serializable {
 
 
         if (sendMultipleEmails(submitter, coAuthors, subject, body)) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("changeData"), MessageCategory.INFO));
             transaction.commit();
         } else {
             transaction.abort();
@@ -483,7 +480,7 @@ public class SubmissionService implements Serializable {
         try {
             EmailUtil.sendEmail(new String[]{emailAddress}, cc, subject, body);
         } catch (EmailTransmissionFailedException e) {
-            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("emailNotSent") + " " + String.join(", "), MessageCategory.ERROR));
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("emailNotSent") + " " + String.join(", ", e.getInvalidAddresses()), MessageCategory.ERROR));
             return false;
         }
 
