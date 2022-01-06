@@ -266,7 +266,6 @@ public class SubmissionService implements Serializable {
      *                      </ul>
      */
     public void change(Submission newSubmission) {
-        // TODO: Send a Email in some cases.
 
         if (newSubmission.getId() == null) {
 
@@ -356,6 +355,9 @@ public class SubmissionService implements Serializable {
                         + url;
 
                 informAboutState(transaction, newSubmission, subject, body);
+            } else if (newSubmission.getState() == SubmissionState.SUBMITTED) {
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("newPaper"), MessageCategory.INFO));
+                transaction.commit();
             }
         }
 

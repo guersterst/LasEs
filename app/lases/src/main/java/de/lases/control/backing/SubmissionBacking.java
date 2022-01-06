@@ -411,15 +411,17 @@ public class SubmissionBacking implements Serializable {
      * @param paper The revision (which is a {@code paper}) to release
      */
     public void releaseRevision(Paper paper) {
-       if (loggedInUserIsEditor()) {
-           if (submission.getState() != SubmissionState.REJECTED) {
+       if (loggedInUserIsEditor() || isAdmin()) {
+           if (submission.getState() == SubmissionState.REJECTED) {
+               uiMessageEvent.fire(new UIMessage(resourceBundle.getString("rejected"), MessageCategory.WARNING));
+           } else if (submission.getState() == SubmissionState.ACCEPTED ){
+               uiMessageEvent.fire(new UIMessage(resourceBundle.getString("accepted"), MessageCategory.WARNING));
+           } else {
                paper.setVisible(true);
                paperService.change(paper);
-           } else {
-               uiMessageEvent.fire(new UIMessage(resourceBundle.getString("rejected"), MessageCategory.WARNING));
            }
        } else {
-           uiMessageEvent.fire(new UIMessage(resourceBundle.getString("releaseRevision"), MessageCategory.WARNING));
+           uiMessageEvent.fire(new UIMessage(resourceBundle.getString("noPermission"), MessageCategory.WARNING));
        }
        toolbarBacking.onLoad(submission);
     }
@@ -517,7 +519,7 @@ public class SubmissionBacking implements Serializable {
     public void setUploadedRevisionPDF(Part uploadedRevisionPDF) {
         this.uploadedRevisionPDF = uploadedRevisionPDF;
     }
-    
+
 
     /**
      * Get the submission this page belongs to.

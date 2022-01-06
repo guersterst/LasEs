@@ -167,7 +167,7 @@ public class PaperService implements Serializable {
             try {
 
                 PaperRepository.change(paper, transaction);
-                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reminder"), MessageCategory.WARNING));
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reminder"), MessageCategory.INFO));
                 transaction.commit();
 
             } catch (DataNotWrittenException exception) {
