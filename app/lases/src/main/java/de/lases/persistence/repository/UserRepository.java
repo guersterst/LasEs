@@ -574,8 +574,10 @@ public class UserRepository {
         } catch (SQLException e) {
             DatasourceUtil.logSQLException(e, logger);
             if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                logger.severe("Failed to add verification to database.");
                 throw new DataNotWrittenException("Failed to add verification to database.", e);
             } else {
+                logger.severe("Failed to add verification to database.");
                 transaction.abort();
                 throw new DatasourceQueryFailedException("Failed to add verification to database.", e);
             }

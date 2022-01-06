@@ -224,14 +224,7 @@ public class RegistrationService {
         verification.setUserId(user.getId());
         try {
             UserRepository.addVerification(verification, t);
-        } catch (NotFoundException e) {
-            l.severe("Verification for user " + user.getId() + " could not be created as user was not found."
-                    + e.getMessage());
-            uiMessageEvent.fire(new UIMessage(message.getString("registrationFailed"), MessageCategory.ERROR));
-            t.abort();
-            return null;
-        } catch (DataNotWrittenException e) {
-            l.severe("Verification for user " + user.getId() + " could not be written to the database.");
+        } catch (NotFoundException | DataNotWrittenException e) {
             uiMessageEvent.fire(new UIMessage(message.getString("registrationFailed"), MessageCategory.ERROR));
             t.abort();
             return null;
