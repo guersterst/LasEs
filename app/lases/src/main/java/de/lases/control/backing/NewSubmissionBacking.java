@@ -53,7 +53,7 @@ public class NewSubmissionBacking implements Serializable {
     private Event<UIMessage> uiMessageEvent;
 
     @Inject
-    private PropertyResourceBundle messageBundle;
+    private transient PropertyResourceBundle messageBundle;
 
     private Submission newSubmission;
 
@@ -144,11 +144,7 @@ public class NewSubmissionBacking implements Serializable {
      * @param user The co-author to delete.
      */
     public void deleteCoAuthor(User user) {
-        for (int i = 0; i < coAuthors.size(); i++) {
-            if (coAuthors.get(i).getEmailAddress().equals(user.getEmailAddress())) {
-                coAuthors.remove(i);
-            }
-        }
+        coAuthors.removeIf(current -> current.getEmailAddress().equals(user.getEmailAddress()));
     }
 
     /**

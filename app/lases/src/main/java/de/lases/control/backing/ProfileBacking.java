@@ -46,7 +46,7 @@ public class ProfileBacking implements Serializable {
     private Event<UIMessage> uiMessageEvent;
 
     @Inject
-    private PropertyResourceBundle messageBundle;
+    private transient PropertyResourceBundle messageBundle;
 
     private Part uploadedAvatar;
 
