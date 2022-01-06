@@ -220,8 +220,9 @@ public class UserRepository {
      *                    password salt are not required.
      *                    (The id must not be specified, as the repository will
      *                    create the id)
+     *                    The user's id will be set to the newly assigned id.
      * @param transaction The transaction to use.
-     * @return The user object with his id.
+     * @return The user object with its id.
      * @throws DataNotWrittenException        If writing the data to the repository
      *                                        fails.
      * @throws InvalidFieldsException         If one of the required fields of the

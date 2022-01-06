@@ -1,9 +1,7 @@
 package de.lases.control.backing;
 
-import de.lases.business.internal.ConfigPropagator;
 import de.lases.business.service.RegistrationService;
-import de.lases.control.internal.*;
-import de.lases.global.transport.*;
+import de.lases.global.transport.User;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -18,12 +16,6 @@ public class RegistrationBacking {
 
     @Inject
     private RegistrationService registrationService;
-
-    @Inject
-    private SessionInformation sessionInformation;
-
-    @Inject
-    private ConfigPropagator configPropagator;
 
     private User newUser;
 

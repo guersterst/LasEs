@@ -29,8 +29,6 @@ public class LifetimeListener implements ServletContextListener {
     private final static String LOGGER_CONFIG_PATH =
             "/WEB-INF/config/logger.properties";
 
-    private final Logger l = Logger.getLogger(LifetimeListener.class.getName());
-
     /**
      * On shutdown we make sure all used resources are closed gracefully.
      * <p>
@@ -70,7 +68,9 @@ public class LifetimeListener implements ServletContextListener {
     public void contextInitialized(final ServletContextEvent sce) {
         ServletContext sctx = sce.getServletContext();
         initializeAppConfig(sctx);
-        Lifetime.startup(sctx.getResourceAsStream(LOGGER_CONFIG_PATH));
+        FileDTO loggerConfigFile = new FileDTO();
+        loggerConfigFile.setInputStream(sctx.getResourceAsStream(LOGGER_CONFIG_PATH));
+        Lifetime.startup(loggerConfigFile);
     }
 
     private void initializeAppConfig(ServletContext sctx) {
