@@ -220,6 +220,7 @@ public class SubmissionService implements Serializable {
 
             try {
                 SubmissionRepository.remove(submission, transaction);
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("deleteSubmission"), MessageCategory.INFO));
                 transaction.commit();
             } catch (DataNotWrittenException e) {
 
@@ -265,7 +266,6 @@ public class SubmissionService implements Serializable {
      *                      </ul>
      */
     public void change(Submission newSubmission) {
-        // TODO: Send a Email in some cases.
 
         if (newSubmission.getId() == null) {
 
@@ -324,10 +324,9 @@ public class SubmissionService implements Serializable {
                 } else {
                     transaction.abort();
                 }
-            }
+            } else if (newSubmission.getState() == SubmissionState.ACCEPTED || newSubmission.getState() == SubmissionState.REJECTED) {
 
-            // Inform submitter a co-authors about a changed submission state.
-            if (newSubmission.getState() == SubmissionState.ACCEPTED || newSubmission.getState() == SubmissionState.REJECTED) {
+                // Inform submitter a co-authors about a changed submission state.
                 String subject = "";
                 String body = "";
                 if (newSubmission.getState() == SubmissionState.ACCEPTED) {
@@ -348,9 +347,7 @@ public class SubmissionService implements Serializable {
 
                 }
                 informAboutState(transaction, newSubmission, subject, body);
-            }
-
-            if (newSubmission.getState() == SubmissionState.REVISION_REQUIRED) {
+            } else if (newSubmission.getState() == SubmissionState.REVISION_REQUIRED) {
 
                 String subject = resourceBundle.getString("email.requireRevision.subject");
                 String body = resourceBundle.getString("email.requireRevision.body")
@@ -358,6 +355,9 @@ public class SubmissionService implements Serializable {
                         + url;
 
                 informAboutState(transaction, newSubmission, subject, body);
+            } else if (newSubmission.getState() == SubmissionState.SUBMITTED) {
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("newPaper"), MessageCategory.INFO));
+                transaction.commit();
             }
         }
 
@@ -544,6 +544,7 @@ public class SubmissionService implements Serializable {
         Transaction transaction = new Transaction();
         try {
             ReviewedByRepository.change(reviewedBy, transaction);
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("changeData"), MessageCategory.INFO));
             transaction.commit();
         } catch (NotFoundException e) {
             transaction.abort();

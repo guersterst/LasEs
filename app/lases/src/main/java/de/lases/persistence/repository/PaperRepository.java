@@ -213,23 +213,41 @@ public class PaperRepository {
         }
 
         if (paper.isVisible()) {
-            String sqlDeadline = "UPDATE reviewed_by SET timestamp_deadline = NULL WHERE submission_id = ?";
+            String countReviewedBy = "SELECT COUNT(*) FROM reviewed_by WHERE submission_id = ?";
+            int count = 0;
 
-            try (PreparedStatement statement = connection.prepareStatement(sqlDeadline)){
+            try (PreparedStatement statement = connection.prepareStatement(countReviewedBy)){
                 statement.setInt(1, paper.getSubmissionId());
 
-                if (statement.executeUpdate() == 0) {
-                    logger.severe("The deadline could not be set to null because the submission doesn't exist.");
-                    throw new NotFoundException("Submission not found during setting the deadline.");
-                }
-            } catch (SQLException exception) {
-                DatasourceUtil.logSQLException(exception, logger);
+                ResultSet resultSet = statement.executeQuery();
 
-                if (TransientSQLExceptionChecker.isTransient(exception.getSQLState())) {
-                    throw new DataNotWrittenException("The paper is not changed. ", exception);
-                } else {
-                    transaction.abort();
-                    throw new DatasourceQueryFailedException("A datasource exception occurred while changing reviewed_by data.", exception);
+                if (resultSet.next()) {
+                    count = resultSet.getInt(1);
+                }
+            } catch (SQLException e) {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("A datasource exception occurred while counting reviewed_by.", e);
+            }
+
+            if (count != 0) {
+                String sqlDeadline = "UPDATE reviewed_by SET timestamp_deadline = NULL WHERE submission_id = ?";
+
+                try (PreparedStatement statement = connection.prepareStatement(sqlDeadline)){
+                    statement.setInt(1, paper.getSubmissionId());
+
+                    if (statement.executeUpdate() == 0) {
+                        logger.severe("The deadline could not be set to null because the submission doesn't exist.");
+                        throw new NotFoundException("Submission not found during setting the deadline.");
+                    }
+                } catch (SQLException exception) {
+                    DatasourceUtil.logSQLException(exception, logger);
+
+                    if (TransientSQLExceptionChecker.isTransient(exception.getSQLState())) {
+                        throw new DataNotWrittenException("The paper is not changed. ", exception);
+                    } else {
+                        transaction.abort();
+                        throw new DatasourceQueryFailedException("A datasource exception occurred while changing reviewed_by data.", exception);
+                    }
                 }
             }
         }
