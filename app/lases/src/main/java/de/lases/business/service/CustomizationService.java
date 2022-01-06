@@ -32,6 +32,9 @@ public class CustomizationService {
     @Inject
     private PropertyResourceBundle props;
 
+    @Inject
+    private PropertyResourceBundle resourceBundle;
+
     /**
      * Sets the application's settings, that determine its look and feel.
      *
@@ -49,8 +52,10 @@ public class CustomizationService {
 
         try {
             SystemSettingsRepository.updateSettings(systemSettings, transaction);
-            transaction.commit();
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("successSystemsetting"),MessageCategory.INFO));
             logger.finest("Changed system settings");
+
+            transaction.commit();
         }  catch (DataNotWrittenException exception) {
 
             uiMessageEvent.fire(new UIMessage(props.getString("dataNotWritten"), MessageCategory.ERROR));
@@ -108,8 +113,11 @@ public class CustomizationService {
         Transaction transaction = new Transaction();
         try {
             SystemSettingsRepository.setLogo(logo, transaction);
-            transaction.commit();
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("successSystemsetting"),MessageCategory.INFO));
             logger.finest("Successfully set the logo of the application.");
+
+            transaction.commit();
+
         } catch (DataNotWrittenException ex) {
             transaction.abort();
             uiMessageEvent.fire(new UIMessage(props.getString("dataNotWritten"), MessageCategory.ERROR));

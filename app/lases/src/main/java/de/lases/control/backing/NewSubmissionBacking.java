@@ -158,7 +158,7 @@ public class NewSubmissionBacking implements Serializable {
         newSubmission.setAuthorId(sessionInformation.getUser().getId());
 
         Paper paper = new Paper();
-        paper.setVisible(false);
+        paper.setVisible(true);
         paper.setUploadTime(LocalDateTime.now());
         FileDTO file = new FileDTO();
         file.setFile(uploadedPDF.getInputStream().readAllBytes());
