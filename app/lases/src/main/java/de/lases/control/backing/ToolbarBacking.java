@@ -258,11 +258,13 @@ public class ToolbarBacking implements Serializable {
      * Accept the submission belonging to this page.
      */
     public void acceptSubmission() {
-        submission.setState(SubmissionState.ACCEPTED);
+        Submission newSubmission = submission.clone();
+        newSubmission.setState(SubmissionState.ACCEPTED);
 
-        submissionService.change(submission);
+        if (submissionService.change(newSubmission)) {
+            submission.setState(SubmissionState.ACCEPTED);
+        }
 
-        uiMessageEvent.fire(new UIMessage(resourceBundle.getString("acceptedSubmission"), MessageCategory.INFO));
     }
 
     public boolean isAccepted() {
@@ -273,11 +275,12 @@ public class ToolbarBacking implements Serializable {
      * Reject the submission belonging to this page.
      */
     public void rejectSubmission() {
-        submission.setState(SubmissionState.REJECTED);
+        Submission newSubmission = submission.clone();
+        newSubmission.setState(SubmissionState.REJECTED);
 
-        submissionService.change(submission);
-
-        uiMessageEvent.fire(new UIMessage(resourceBundle.getString("rejectedSubmission"), MessageCategory.INFO));
+        if (submissionService.change(newSubmission)) {
+            submission.setState(SubmissionState.REJECTED);
+        }
     }
 
     public boolean isRejected() {

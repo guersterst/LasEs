@@ -149,7 +149,12 @@ public class AdministrationBacking {
         return PATH_TO_STYLE_DIRECTORY.concat(systemSettings.getStyle() + ".css");
     }
 
-    public String[] getStyles() throws IOException {
+    /**
+     * Get all styles.
+     *
+     * @return all available styles.
+     */
+    public String[] getStyles() {
         return configPropagator.getProperty("STYLE").split("#");
     }
 }
