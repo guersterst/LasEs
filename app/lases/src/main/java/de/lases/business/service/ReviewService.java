@@ -78,6 +78,7 @@ public class ReviewService implements Serializable {
         Transaction transaction = new Transaction();
         try {
             ReviewRepository.change(newReview, transaction);
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("changeData"), MessageCategory.INFO));
         } catch (DataNotWrittenException e) {
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewCouldNotUpdate"), MessageCategory.ERROR));
             transaction.abort();
@@ -106,6 +107,8 @@ public class ReviewService implements Serializable {
                     + configPropagator.getProperty("BASE_URL") + "/views/authenticated/submission.xhtml?id=" + submission.getId();
 
             SubmissionService submissionService = new SubmissionService();
+
+            // Transaction will be released here.
             submissionService.informAboutState(transaction, submission, subject, body);
         }
     }

@@ -415,7 +415,6 @@ public class SubmissionBacking implements Serializable {
            if (submission.getState() != SubmissionState.REJECTED) {
                paper.setVisible(true);
                paperService.change(paper);
-               uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reminder"), MessageCategory.WARNING));
            } else {
                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("rejected"), MessageCategory.WARNING));
            }
@@ -518,20 +517,7 @@ public class SubmissionBacking implements Serializable {
     public void setUploadedRevisionPDF(Part uploadedRevisionPDF) {
         this.uploadedRevisionPDF = uploadedRevisionPDF;
     }
-
-    /**
-     * Apply changes for the submission state.
-     */
-    /*
-    public void applyState(Submission submission) {
-
-        if (submission.getState() != SubmissionState.REVISION_REQUIRED) {
-            submission.setDeadlineRevision(null);
-        }
-        submissionService.change(submission);
-    }
-
-     */
+    
 
     /**
      * Get the submission this page belongs to.

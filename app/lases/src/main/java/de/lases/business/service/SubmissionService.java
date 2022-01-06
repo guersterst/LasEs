@@ -220,6 +220,7 @@ public class SubmissionService implements Serializable {
 
             try {
                 SubmissionRepository.remove(submission, transaction);
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("deleteSubmission"), MessageCategory.WARNING));
                 transaction.commit();
             } catch (DataNotWrittenException e) {
 
@@ -541,6 +542,7 @@ public class SubmissionService implements Serializable {
         Transaction transaction = new Transaction();
         try {
             ReviewedByRepository.change(reviewedBy, transaction);
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("changeData"), MessageCategory.INFO));
             transaction.commit();
         } catch (NotFoundException e) {
             transaction.abort();
