@@ -550,11 +550,11 @@ public class SubmissionService implements Serializable {
         } catch (NotFoundException e) {
             transaction.abort();
             logger.info("Could not update ReviewedBy: " + reviewedBy + e.getMessage());
-            uiMessageEvent.fire(new UIMessage("Review Request does not exist.", MessageCategory.ERROR));
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewRequestDoesNotExist"), MessageCategory.ERROR));
         } catch (DataNotWrittenException e) {
             transaction.abort();
             logger.info("Could not update ReviewedBy: " + reviewedBy + e.getMessage());
-            uiMessageEvent.fire(new UIMessage("Could not update status.", MessageCategory.ERROR));
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewReviewedByCouldNotUpdate"), MessageCategory.ERROR));
         }
     }
 
