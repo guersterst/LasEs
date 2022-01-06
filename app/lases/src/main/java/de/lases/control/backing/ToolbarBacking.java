@@ -428,7 +428,7 @@ public class ToolbarBacking implements Serializable {
             simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy, hh:mm:ss", locale);
             return today.format(DateTimeFormatter.ofPattern(simpleDateFormat.toPattern()));
         } else {
-            simpleDateFormat = new SimpleDateFormat("MMM d,yyyy, hh:mm:ss", locale);
+            simpleDateFormat = new SimpleDateFormat("MMM d, yyyy, hh:mm:ss", locale);
             String date = today.format(DateTimeFormatter.ofPattern(simpleDateFormat.toPattern()));
             StringBuilder formatDate = new StringBuilder(date);
             formatDate.deleteCharAt(3);
