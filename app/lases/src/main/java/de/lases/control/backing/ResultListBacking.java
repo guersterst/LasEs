@@ -3,6 +3,7 @@ package de.lases.control.backing;
 import de.lases.business.internal.ConfigPropagator;
 import de.lases.business.service.ScientificForumService;
 import de.lases.business.service.SubmissionService;
+import de.lases.business.service.UserService;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
@@ -19,8 +20,8 @@ import java.io.Serial;
  */
 @ViewScoped
 @Named
-public class ResultListBacking implements SubmissionPaginationBacking, ScientificForumPaginationBacking  {
-
+public class ResultListBacking implements SubmissionPaginationBacking, ScientificForumPaginationBacking,
+        UserPaginationBacking {
 
     private enum Tab {
         OWN_SUBMISSIONS, SUBMISSIONS_TO_EDIT, SUBMISSIONS_TO_REVIEW
@@ -39,6 +40,11 @@ public class ResultListBacking implements SubmissionPaginationBacking, Scientifi
 
     @Inject
     private ConfigPropagator configPropagator;
+
+    @Inject
+    private UserService userService;
+
+    private Pagination<User> userPagination;
 
     private Pagination<Submission> submissionPagination;
 
@@ -97,6 +103,7 @@ public class ResultListBacking implements SubmissionPaginationBacking, Scientifi
     public void onLoad() {
         showOwnSubmissionsTab();
         initScientificForumPagination();
+        initUserPagination();
     }
 
     private void initScientificForumPagination() {
@@ -115,6 +122,24 @@ public class ResultListBacking implements SubmissionPaginationBacking, Scientifi
         scientificForumPagination.applyFilters();
         scientificForumPagination.getResultListParameters().setGlobalSearchWord(searchWord);
         scientificForumPagination.loadData();
+    }
+
+    private void initUserPagination() {
+        userPagination = new Pagination<>("lastname") {
+
+            @Override
+            public void loadData() {
+                setEntries(userService.getList(getResultListParameters()));
+            }
+
+            @Override
+            protected Integer calculateNumberPages() {
+                return userService.getListCountPages(userPagination.getResultListParameters());
+            }
+        };
+        userPagination.applyFilters();
+        userPagination.getResultListParameters().setGlobalSearchWord(searchWord);
+        userPagination.loadData();
     }
 
     /**
@@ -259,6 +284,11 @@ public class ResultListBacking implements SubmissionPaginationBacking, Scientifi
      */
     public String getSearchWord() {
         return searchWord;
+    }
+
+    @Override
+    public Pagination<User> getUserPagination() {
+        return userPagination;
     }
 
 }

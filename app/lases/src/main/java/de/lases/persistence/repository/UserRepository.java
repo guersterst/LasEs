@@ -567,14 +567,18 @@ public class UserRepository {
             stmt.setInt(1, verification.getUserId());
             stmt.setString(2, verification.getValidationRandom());
             stmt.setBoolean(3, verification.isVerified());
-            stmt.setTimestamp(4, Timestamp.valueOf(verification.getTimestampValidationStarted()));
+            Timestamp timestamp = verification.getTimestampValidationStarted() == null ?
+                    null : Timestamp.valueOf(verification.getTimestampValidationStarted());
+            stmt.setTimestamp(4, timestamp);
             stmt.setString(5, verification.getNonVerifiedEmailAddress());
             stmt.executeUpdate();
         } catch (SQLException e) {
             DatasourceUtil.logSQLException(e, logger);
             if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                logger.severe("Failed to add verification to database.");
                 throw new DataNotWrittenException("Failed to add verification to database.", e);
             } else {
+                logger.severe("Failed to add verification to database.");
                 transaction.abort();
                 throw new DatasourceQueryFailedException("Failed to add verification to database.", e);
             }
@@ -657,7 +661,8 @@ public class UserRepository {
         List<User> userList = new LinkedList<>();
 
         try {
-            PreparedStatement ps = conn.prepareStatement(generateResultListParametersUserListSQL(resultListParameters));
+            PreparedStatement ps = conn.prepareStatement(generateResultListParametersUserListSQL(resultListParameters,
+                    false));
 
             // Set values here for protection against sql injections.
             // See comments in generateResultListParametersUserListSQL()
@@ -665,12 +670,13 @@ public class UserRepository {
 
             // Filtering
             for (String userListColumnName : userListColumnNames) {
-                if (resultListParameters.getFilterColumns().get(userListColumnName) != null) {
-                    String value = resultListParameters.getFilterColumns().get(userListColumnName);
+                String value = resultListParameters.getFilterColumns().get(userListColumnName);
+                if (value != null && !value.equals("") && !value.equals("none")) {
                     ps.setString(i[0], Objects.requireNonNullElse("%" + value + "%", "%"));
                     i[0]++;
                 }
             }
+
             // Global Search Word
             for (String ignored : userListColumnNames) {
                 ps.setString(i[0], "%"
@@ -712,14 +718,20 @@ public class UserRepository {
         return userList;
     }
 
-    private static String generateResultListParametersUserListSQL(ResultListParameters params) {
+    private static String generateResultListParametersUserListSQL(ResultListParameters params, boolean doCount) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("SELECT * FROM user_data WHERE TRUE");
+        if (doCount) {
+            sb.append("SELECT COUNT (DISTINCT lastname) FROM user_data WHERE TRUE");
+        } else {
+            sb.append("SELECT * FROM user_data WHERE TRUE");
+        }
 
         // Filter according to filter columns parameter.
         userListColumnNames.stream()
-                .filter(columnName -> params.getFilterColumns().get(columnName) != null)
+                .filter(columnName -> params.getFilterColumns().get(columnName) != null
+                        && !params.getFilterColumns().get(columnName).equals("")
+                        && !params.getFilterColumns().get(columnName).equals("none"))
                 .forEach(column -> sb.append(" AND ").append(column).append(" ILIKE ?\n"));
 
         // Filter according to global search word.
@@ -735,7 +747,7 @@ public class UserRepository {
         }
 
         // Sort according to sort column parameter
-        if (!"".equals(params.getSortColumn()) && userListColumnNames.contains(params.getSortColumn())) {
+        if (!"".equals(params.getSortColumn()) && userListColumnNames.contains(params.getSortColumn()) && !doCount) {
             sb.append("ORDER BY ")
                     .append(params.getSortColumn())
                     .append(" ")
@@ -744,11 +756,12 @@ public class UserRepository {
         }
 
         // Set limit and offset
-        ConfigReader configReader = CDI.current().select(ConfigReader.class).get();
-        int paginationLength = Integer.parseInt(configReader.getProperty("MAX_PAGINATION_LENGTH"));
-        sb.append("LIMIT ").append(paginationLength)
-                .append(" OFFSET ").append(paginationLength * (params.getPageNo() - 1));
-
+        if (!doCount) {
+            ConfigReader configReader = CDI.current().select(ConfigReader.class).get();
+            int paginationLength = Integer.parseInt(configReader.getProperty("MAX_PAGINATION_LIST_LENGTH"));
+            sb.append("LIMIT ").append(paginationLength)
+                    .append(" OFFSET ").append(paginationLength * (params.getPageNo() - 1));
+        }
         // Add semicolon to end of query
         sb.append(";");
 
@@ -1239,4 +1252,54 @@ public class UserRepository {
         user.setVerified(verification != null && verification.isVerified());
     }
 
+    public static int getCountItemsList(Transaction transaction, ResultListParameters resultListParameters)
+            throws DataNotCompleteException, NotFoundException {
+
+        if (transaction == null) {
+            logger.severe("Passed transaction is invalid.");
+            throw new IllegalArgumentException("Transaction can not be null.");
+        }
+        if (resultListParameters == null) {
+            logger.severe("Passed result-list parameters are null.");
+            throw new IllegalArgumentException("ResultListParameters must not be null.");
+        }
+
+        Connection connection = transaction.getConnection();
+
+        try (PreparedStatement ps = connection.prepareStatement(generateResultListParametersUserListSQL(resultListParameters, true))) {
+
+            // Set values here for protection against sql injections.
+            int i = 1;
+
+            // Filtering
+            for (String userColumnName : userListColumnNames) {
+                String value = resultListParameters.getFilterColumns().get(userColumnName);
+                if (value != null && !value.equals("") && !value.equals("none")) {
+                    ps.setString(i, Objects.requireNonNullElse("%" + value + "%", "%"));
+                    i++;
+                }
+            }
+
+            // Global Search Word
+            for (String ignored : userListColumnNames) {
+                ps.setString(i, "%"
+                        + Objects.requireNonNullElse(resultListParameters.getGlobalSearchWord(), "") + "%");
+                i++;
+            }
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("count");
+            } else {
+                logger.severe("Could not compute the amount of users.");
+                throw new NotFoundException();
+            }
+
+        } catch (SQLException e) {
+            transaction.abort();
+            DatasourceUtil.logSQLException(e, logger);
+            throw new DatasourceQueryFailedException(e.getMessage(), e);
+        }
+    }
 }

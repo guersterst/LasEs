@@ -6,10 +6,13 @@ import de.lases.business.util.EmailUtil;
 import de.lases.business.util.Hashing;
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
+import de.lases.persistence.internal.ConfigReader;
+import de.lases.persistence.repository.ScientificForumRepository;
 import de.lases.persistence.repository.Transaction;
 import de.lases.persistence.repository.UserRepository;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
+import jakarta.enterprise.inject.spi.CDI;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 
@@ -496,5 +499,24 @@ public class UserService implements Serializable {
         uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("verification.success"),
                 MessageCategory.INFO));
         return storedVerification;
+    }
+
+    public int getListCountPages(ResultListParameters resultListParameters) {
+        Transaction transaction = new Transaction();
+        int items = 0;
+        int pages = 0;
+        try {
+            items = UserRepository.getCountItemsList(transaction, resultListParameters);
+            ConfigReader configReader = CDI.current().select(ConfigReader.class).get();
+            int paginationLength = Integer.parseInt(configReader.getProperty("MAX_PAGINATION_LIST_LENGTH"));
+
+            // Calculate number of pages.
+            pages = (int) Math.ceil((double) items / paginationLength);
+        } catch (DataNotCompleteException | NotFoundException e) {
+            uiMessageEvent.fire(new UIMessage("Could not compute the amount of users", MessageCategory.WARNING));
+        } finally {
+            transaction.commit();
+        }
+        return pages;
     }
 }

@@ -1,9 +1,8 @@
 package de.lases.control.backing;
 
 import de.lases.business.service.RegistrationService;
-import de.lases.control.exception.IllegalAccessException;
 import de.lases.control.internal.SessionInformation;
-import de.lases.global.transport.*;
+import de.lases.global.transport.User;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -29,16 +28,7 @@ public class NewUserBacking {
      */
     @PostConstruct
     public void init() {
-
-    }
-
-    /**
-     * Abort the creation of a new user and return to the user list.
-     *
-     * @return Go to the user list.
-     */
-    public String abort() {
-        return null;
+        newUser = new User();
     }
 
     /**
@@ -47,7 +37,11 @@ public class NewUserBacking {
      * @return Go to the user list.
      */
     public String saveUser() {
-        return null;
+        if (registrationService.registerByAdmin(newUser) != null) {
+            return "/views/editor/userList";
+        } else {
+            return null;
+        }
     }
 
     /**

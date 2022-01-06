@@ -164,10 +164,12 @@
                                                                var="coAuthor">
                                                         <h:outputText id="co-author-otxt"
                                                                       value="#{coAuthor.firstName.concat(' ').concat(coAuthor.lastName).concat(' ')}"/>
-                                                        <h:commandLink id="email-lnk" value="#{coAuthor.emailAddress}"
-                                                                       outcome="#{'mailto:'.concat(coAuthor.emailAddress)}"
-                                                                       includeViewParams="true" title="#{help.mailTo}"
-                                                                       disabled="#{not submissionBacking.loggedInUserIsEditor()}"/>
+                                                        <h:outputLink id="emial-olnk"
+                                                                      value="#{submissionBacking.sendMailTo(coAuthor)}"
+                                                                      title="#{help.mailTo}"
+                                                                      disabled="#{not (submissionBacking.loggedInUserIsEditor() || submissionBacking.admin)}">
+                                                            #{coAuthor.emailAddress}
+                                                        </h:outputLink>
                                                         <br/>
                                                     </ui:repeat>
                                                 </div>
@@ -181,14 +183,19 @@
                             <div class="card" style="padding: 10px 10px 10px 10px">
                                 <h:form>
                                     <div class="btn-group">
-                                        <h:selectOneMenu id="release-revision-slctom" styleClass="btn btn-secondary"
-                                                         value="#{submissionBacking.paperPagination.resultListParameters.visibleFilter}"
-                                                         title="#{help.filterRelease}"
-                                                         disabled="#{submissionBacking.loggedInUserIsReviewer() and not (submissionBacking.admin || submissionBacking.viewerSubmitter)}">
-                                            <f:selectItems value="#{submissionBacking.visibility}" var="visible"
-                                                           itemValue="#{visible}"
-                                                           itemLabel="#{labels['visibility.' += visible]}"/>
-                                        </h:selectOneMenu>
+                                        <div class="input-group">
+                                            <h:outputLabel for="recommended-review-slctom"
+                                                           value="#{labels.reviewPgState}"
+                                                           styleClass="input-group-text"/>
+                                            <h:selectOneMenu id="release-revision-slctom" styleClass="form-select btn btn-secondary"
+                                                             value="#{submissionBacking.paperPagination.resultListParameters.visibleFilter}"
+                                                             title="#{help.filterRelease}"
+                                                             disabled="#{submissionBacking.loggedInUserIsReviewer() and not (submissionBacking.admin || submissionBacking.viewerSubmitter)}">
+                                                <f:selectItems value="#{submissionBacking.visibility}" var="visible"
+                                                               itemValue="#{visible}"
+                                                               itemLabel="#{labels['visibility.' += visible]}"/>
+                                            </h:selectOneMenu>
+                                        </div>
                                     </div>
                                     <pg:pagination paginator="#{submissionBacking.paperPagination}">
 
@@ -291,33 +298,37 @@
                                 <div class="card-body" style="padding: 10px 10px 10px 10px">
                                     <h:form>
                                         <div class="btn-group">
-                                            <h:outputLabel for="recommended-review-slctom"
-                                                           value="#{''.concat(labels.reviewPgState).concat(': ')}"
-                                                           styleClass="m-1"/>
+                                            <div class="input-group">
+                                                <h:outputLabel for="recommended-review-slctom"
+                                                               value="#{labels.reviewPgState}"
+                                                               styleClass="input-group-text"/>
 
-                                            <h:selectOneMenu id="released-review-slctom"
-                                                             styleClass="btn btn-secondary"
-                                                             value="#{submissionBacking.reviewPagination.resultListParameters.visibleFilter}"
-                                                             title="#{help.filterRelease}">
-                                                <f:selectItems value="#{submissionBacking.visibility}" var="visible"
-                                                               itemValue="#{visible}"
-                                                               itemLabel="#{labels['visibility.' += visible]}"/>
-                                            </h:selectOneMenu>
+                                                <h:selectOneMenu id="released-review-slctom"
+                                                                 styleClass="form-select btn btn-secondary"
+                                                                 value="#{submissionBacking.reviewPagination.resultListParameters.visibleFilter}"
+                                                                 title="#{help.filterRelease}">
+                                                    <f:selectItems value="#{submissionBacking.visibility}" var="visible"
+                                                                   itemValue="#{visible}"
+                                                                   itemLabel="#{labels['visibility.' += visible]}"/>
+                                                </h:selectOneMenu>
+                                            </div>
                                         </div>
 
                                         <div class="btn-group">
-                                            <h:outputLabel for="recommended-review-slctom"
-                                                           value="#{''.concat(labels.recommended).concat(': ')}"
-                                                           styleClass="m-1"/>
+                                            <div class="input-group">
+                                                <h:outputLabel for="recommended-review-slctom"
+                                                               value="#{labels.recommended}"
+                                                               styleClass="input-group-text"/>
 
-                                            <h:selectOneMenu id="recommended-review-slctom"
-                                                             styleClass="btn btn-secondary"
-                                                             value="#{submissionBacking.reviewPagination.resultListParameters.recommendedFilter}"
-                                                             title="#{help.filterRecom}">
-                                                <f:selectItems value="#{submissionBacking.recommendation}"
-                                                               var="recommended" itemValue="#{recommended}"
-                                                               itemLabel="#{labels['recommendation.' += recommended]}"/>
-                                            </h:selectOneMenu>
+                                                <h:selectOneMenu id="recommended-review-slctom"
+                                                                 styleClass="form-select btn btn-secondary"
+                                                                 value="#{submissionBacking.reviewPagination.resultListParameters.recommendedFilter}"
+                                                                 title="#{help.filterRecom}">
+                                                    <f:selectItems value="#{submissionBacking.recommendation}"
+                                                                   var="recommended" itemValue="#{recommended}"
+                                                                   itemLabel="#{labels['recommendation.' += recommended]}"/>
+                                                </h:selectOneMenu>
+                                            </div>
                                         </div>
 
                                         <pg:pagination id="review-pg" paginator="#{submissionBacking.reviewPagination}">

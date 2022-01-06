@@ -7,7 +7,6 @@ import de.lases.business.service.UserService;
 import de.lases.control.exception.IllegalUserFlowException;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
-import de.lases.persistence.repository.ScientificForumRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -168,7 +167,7 @@ public class NewSubmissionBacking implements Serializable {
             Paper paper = new Paper();
             logger.log(Level.INFO, "Adding paper to the submission with id: " + newSubmission.getId());
             paper.setSubmissionId(newSubmission.getId());
-            paper.setVisible(false);
+            paper.setVisible(true);
             paper.setUploadTime(LocalDateTime.now());
             FileDTO file = new FileDTO();
             file.setFile(uploadedPDF.getInputStream().readAllBytes());

@@ -1,6 +1,5 @@
 package de.lases.persistence.util;
 
-import com.sun.mail.util.MailConnectException;
 import de.lases.persistence.exception.EmailServiceFailedException;
 import de.lases.persistence.exception.EmailTransmissionFailedException;
 import de.lases.persistence.internal.ConfigReader;
@@ -10,6 +9,7 @@ import jakarta.mail.internet.AddressException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 
+import java.util.Arrays;
 import java.util.Properties;
 import java.util.logging.Logger;
 
@@ -75,11 +75,12 @@ public class EmailSender {
         } catch (AddressException e) {
             logger.severe("Invalid email address");
             throw new IllegalArgumentException("Invalid email address", e);
-        } catch (MailConnectException | SendFailedException e) {
-            // Possibly temporary error, throw checked exception
+        } catch (SendFailedException e) {
+            // Could not send the email to one or more recipients
             logger.severe("Sending email failed (recoverable): " + e.getMessage());
-            logger.info("Recipient addresses where: " + String.join(",", recipients));
-            throw new EmailTransmissionFailedException("Sending email failed", e);
+            String[] invalidAddresses = Arrays.stream(e.getInvalidAddresses()).map(Address::toString)
+                    .toArray(String[]::new);
+            throw new EmailTransmissionFailedException("Sending email failed", e, invalidAddresses);
         } catch (MessagingException e) {
             // Non-recoverable error, throw unchecked exception
             logger.severe("Sending email failed: " + e.getMessage());

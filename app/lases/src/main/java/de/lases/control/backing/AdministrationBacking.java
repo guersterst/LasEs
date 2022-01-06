@@ -77,8 +77,7 @@ public class AdministrationBacking {
      */
     public String save() {
         customizationService.change(systemSettings);
-        uiMessageEvent.fire(new UIMessage(resourceBundle.getString("successSystemsetting"),MessageCategory.INFO));
-        return "administration?faces-redirect=true";
+        return "administration";
     }
 
     /**
@@ -135,8 +134,6 @@ public class AdministrationBacking {
             FileDTO logo = new FileDTO();
             logo.setFile(uploadedLogo.getInputStream().readAllBytes());
             customizationService.setLogo(logo);
-
-            logger.finest("Upload of a new logo was successful.");
         } catch (IOException exception) {
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("uploadImage"), MessageCategory.WARNING));
             logger.severe("Upload a logo went wrong.");
@@ -153,60 +150,6 @@ public class AdministrationBacking {
     }
 
     public String[] getStyles() throws IOException {
-        String[] stylsheets = configPropagator.getProperty("STYLE").split("#");
-
-        /*
-        List<File> files = new ArrayList<>();
-
-        try {
-            files = getAllStyleSheets();
-
-            for (int i = 0; i < files.size(); i++) {
-                String name = filenames.get(i).substring(0, filenames.get(i).lastIndexOf(".css"));
-                filenames.add(name);
-            }
-
-        } catch (URISyntaxException | IOException e) {
-            logger.log(Level.WARNING, e.getMessage());
-        }
-         */
-
-
-
-        /*
-
-        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("/resources/" +  PATH_TO_STYLE_DIRECTORY);
-             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))){
-
-            String resource;
-
-            while ((resource = bufferedReader.readLine()) != null) {
-                filenames.add(resource);
-            }
-
-        } catch (IOException exception) {
-            logger.severe("While reading the directory of stylesheets an exception occurred.");
-        }
-
-         */
-
-        /*
-        if (!filenames.isEmpty()) {
-            List<String> result = new ArrayList<>();
-
-            for (int i = 0; i < filenames.size(); i++) {
-                String name = filenames.get(i).replace(".css", "");
-                result.add(name);
-            }
-
-            return result;
-        }
-         */
-
-        /*
-        IOUtils.readLines(getClass().getClassLoader().getResourceAsStream("resources/" + PATH_TO_STYLE_DIRECTORY));
-         */
-
-        return stylsheets;
+        return configPropagator.getProperty("STYLE").split("#");
     }
 }

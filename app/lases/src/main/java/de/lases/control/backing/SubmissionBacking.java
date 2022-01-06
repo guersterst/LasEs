@@ -1,6 +1,7 @@
 package de.lases.control.backing;
 
 import de.lases.business.service.*;
+import de.lases.business.util.EmailUtil;
 import de.lases.control.exception.IllegalAccessException;
 import de.lases.control.exception.IllegalUserFlowException;
 import de.lases.control.internal.*;
@@ -236,7 +237,11 @@ public class SubmissionBacking implements Serializable {
      * @throws IllegalUserFlowException If there is no integer provided as view
      *                                  param
      */
-    public void preRenderViewListener(ComponentSystemEvent event) {}
+    public void preRenderViewListener(ComponentSystemEvent event) {
+        if (submission.getId() == null) {
+            throw new IllegalUserFlowException("Submission page called without an id.");
+        }
+    }
 
     /**
      * Set the state of the submission, which can be SUBMITTED,
@@ -406,16 +411,17 @@ public class SubmissionBacking implements Serializable {
      * @param paper The revision (which is a {@code paper}) to release
      */
     public void releaseRevision(Paper paper) {
-       if (loggedInUserIsEditor()) {
-           if (submission.getState() != SubmissionState.REJECTED) {
+       if (loggedInUserIsEditor() || isAdmin()) {
+           if (submission.getState() == SubmissionState.REJECTED) {
+               uiMessageEvent.fire(new UIMessage(resourceBundle.getString("rejected"), MessageCategory.WARNING));
+           } else if (submission.getState() == SubmissionState.ACCEPTED ){
+               uiMessageEvent.fire(new UIMessage(resourceBundle.getString("accepted"), MessageCategory.WARNING));
+           } else {
                paper.setVisible(true);
                paperService.change(paper);
-               uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reminder"), MessageCategory.WARNING));
-           } else {
-               uiMessageEvent.fire(new UIMessage(resourceBundle.getString("rejected"), MessageCategory.WARNING));
            }
        } else {
-           uiMessageEvent.fire(new UIMessage(resourceBundle.getString("releaseRevision"), MessageCategory.WARNING));
+           uiMessageEvent.fire(new UIMessage(resourceBundle.getString("noPermission"), MessageCategory.WARNING));
        }
        toolbarBacking.onLoad(submission);
     }
@@ -514,19 +520,6 @@ public class SubmissionBacking implements Serializable {
         this.uploadedRevisionPDF = uploadedRevisionPDF;
     }
 
-    /**
-     * Apply changes for the submission state.
-     */
-    /*
-    public void applyState(Submission submission) {
-
-        if (submission.getState() != SubmissionState.REVISION_REQUIRED) {
-            submission.setDeadlineRevision(null);
-        }
-        submissionService.change(submission);
-    }
-
-     */
 
     /**
      * Get the submission this page belongs to.
@@ -704,5 +697,16 @@ public class SubmissionBacking implements Serializable {
      */
     public String getStyleStatus() {
         return styleSubmissionState(submission.getState());
+    }
+
+    /**
+     * Generates a mail to link.
+     *
+     * @param user the recipient.
+     * @return a mail to link.
+     */
+    public String sendMailTo(User user) {
+        String[] email = {user.getEmailAddress()};
+        return EmailUtil.generateMailToLink(email, null, null, null);
     }
 }

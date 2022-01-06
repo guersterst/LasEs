@@ -1,15 +1,18 @@
 package de.lases.business.service;
 
+import de.lases.business.util.EmailUtil;
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.DataNotCompleteException;
 import de.lases.persistence.exception.DataNotWrittenException;
 import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.internal.ConfigReader;
 import de.lases.persistence.repository.ReviewRepository;
+import de.lases.persistence.repository.SubmissionRepository;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.enterprise.inject.spi.CDI;
+import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 
 import java.io.Serial;
@@ -20,6 +23,8 @@ import java.util.PropertyResourceBundle;
 import java.util.logging.Logger;
 
 /**
+ * @author Stefanie Gürster
+ *
  * Provides functionality for dealing with reviews of submission papers.
  * In case of an unexpected state, a {@link UIMessage} event will be fired.
  */
@@ -34,6 +39,9 @@ public class ReviewService implements Serializable {
 
     @Inject
     private transient PropertyResourceBundle resourceBundle;
+
+    @Inject
+    private FacesContext facesContext;
 
     private static final Logger logger = Logger.getLogger(PaperService.class.getName());
 
@@ -71,13 +79,38 @@ public class ReviewService implements Serializable {
         Transaction transaction = new Transaction();
         try {
             ReviewRepository.change(newReview, transaction);
-            transaction.commit();
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("changeData"), MessageCategory.INFO));
         } catch (DataNotWrittenException e) {
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewCouldNotUpdate"), MessageCategory.ERROR));
             transaction.abort();
         } catch (NotFoundException e) {
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewNotExist"), MessageCategory.INFO));
             transaction.abort();
+        }
+
+        if (newReview.isVisible()) {
+            Submission submission = new Submission();
+            submission.setId(newReview.getSubmissionId());
+
+            try {
+                submission = SubmissionRepository.get(submission, transaction);
+            } catch (DataNotCompleteException e) {
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("notComplete"), MessageCategory.ERROR));
+                transaction.abort();
+            } catch (NotFoundException e) {
+                uiMessageEvent.fire(new UIMessage("submissionNotFound", MessageCategory.ERROR));
+                transaction.abort();
+            }
+
+            String subject = resourceBundle.getString("email.releaseReview.subject");
+            String body = resourceBundle.getString("email.releaseReview.body")
+                    + "\n" + submission.getTitle() + "\n"
+                    + EmailUtil.generateSubmissionURL(submission, facesContext);
+
+            SubmissionService submissionService = new SubmissionService();
+
+            // Transaction will be released here.
+            submissionService.informAboutState(transaction, submission, subject, body);
         }
     }
 
