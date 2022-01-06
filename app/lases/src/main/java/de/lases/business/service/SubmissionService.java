@@ -318,7 +318,7 @@ public class SubmissionService implements Serializable {
             String url = EmailUtil.generateSubmissionURL(newSubmission, facesContext);
 
             // Inform the old editor and the new editor about this change.
-            if (oldSubmission != null && (oldSubmission.getEditorId() != newSubmission.getEditorId())) {
+            if (oldSubmission != null && (!oldSubmission.getEditorId().equals(newSubmission.getEditorId()))) {
 
                 User newEditor = new User();
                 newEditor.setId(newSubmission.getEditorId());
@@ -415,12 +415,10 @@ public class SubmissionService implements Serializable {
         coAuthors.remove(0);
 
 
-        if (sendMultipleEmails(submitter, coAuthors, subject, body)) {
-            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("changeData"), MessageCategory.INFO));
-            transaction.commit();
-        } else {
-            transaction.abort();
-        }
+        sendMultipleEmails(submitter, coAuthors, subject, body);
+        uiMessageEvent.fire(new UIMessage(resourceBundle.getString("changeData"), MessageCategory.INFO));
+        transaction.commit();
+
     }
 
     /**

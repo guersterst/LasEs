@@ -263,7 +263,7 @@ public class ToolbarBacking implements Serializable {
 
         submissionService.change(newSubmission);
 
-        submission = newSubmission;
+        submission = newSubmission.clone();
     }
 
     public boolean isAccepted() {
@@ -279,7 +279,7 @@ public class ToolbarBacking implements Serializable {
 
         submissionService.change(newSubmission);
 
-        submission = newSubmission;
+        submission.setState(SubmissionState.REJECTED);
     }
 
     public boolean isRejected() {
