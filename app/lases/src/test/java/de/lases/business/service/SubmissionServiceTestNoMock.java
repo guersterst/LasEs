@@ -31,6 +31,19 @@ class SubmissionServiceTestNoMock {
     public WeldInitiator weld = WeldInitiator.from(ConnectionPool.class, ConfigReader.class, ConfigReader.class)
             .activate(RequestScoped.class, SessionScoped.class).build();
 
+    private static Paper paper;
+
+    private static FileDTO fileDTO;
+
+    @BeforeAll
+    static void initPaper() {
+        paper = new Paper();
+        paper.setVisible(false);
+        paper.setUploadTime(LocalDateTime.now());
+        fileDTO = new FileDTO();
+        fileDTO.setFile(new byte[]{});
+    }
+
     /*
      * Unfortunately we have to do this before every single test, since @BeforeAll methods are static and static
      * methods don't work with our weld plugin.
@@ -82,7 +95,7 @@ class SubmissionServiceTestNoMock {
         }
         conn.commit();
 
-        submissionService.add(submission, new ArrayList<>());
+        submissionService.add(submission, new ArrayList<>(), paper, fileDTO);
 
         ResultSet resultSet2 = stmt.executeQuery();
         int j = 0;
@@ -129,7 +142,7 @@ class SubmissionServiceTestNoMock {
             }
             conn.commit();
 
-            submissionService.add(submission, List.of(user));
+            submissionService.add(submission, List.of(user), paper, fileDTO);
 
             ResultSet resultSet2 = stmt.executeQuery();
             int j = 0;
@@ -181,7 +194,7 @@ class SubmissionServiceTestNoMock {
             }
             conn.commit();
 
-            submissionService.add(submission, List.of(user));
+            submissionService.add(submission, List.of(user), paper, fileDTO);
 
             ResultSet resultSet2 = stmt.executeQuery();
             int j = 0;
