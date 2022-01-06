@@ -640,6 +640,8 @@ public class PaperRepository {
     }
 
     /**
+     * Returns the latest visible paper of a submission.
+     *
      * Takes a submission dto that is filled out with a valid id
      * and returns a fully filled paper dto for the newest paper in that
      * submission.
@@ -663,7 +665,7 @@ public class PaperRepository {
         }
 
         Connection connection = transaction.getConnection();
-        String sql = "SELECT p.* FROM submission s, paper p WHERE s.id = p.submission_id AND s.id = ? ORDER BY p.timestamp_upload DESC";
+        String sql = "SELECT p.* FROM submission s, paper p WHERE s.id = p.submission_id AND s.id = ? AND p.is_visible = TRUE ORDER BY p.timestamp_upload DESC";
         Paper paper = new Paper();
 
         try (PreparedStatement find = connection.prepareStatement(sql)) {

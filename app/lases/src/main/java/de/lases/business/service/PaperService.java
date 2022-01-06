@@ -309,13 +309,10 @@ public class PaperService implements Serializable {
     }
 
     /**
-     * Returns the latest paper of a submission.
+     * Returns the latest visible paper of a submission.
      *
      * <p>
      * If there are no revisions for this submission the original {@link Paper} is the latest.
-     * The paper returned is determined by the highest privilege, which that
-     * user possesses on that submission. Meaning he might not have view access
-     * on unreleased papers
      * </p>
      *
      * @param submission A {@link Submission}-DTO containing a valid id.
