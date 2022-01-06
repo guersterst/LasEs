@@ -46,8 +46,9 @@
             <h:column>
                 <f:facet name="header">
                     <div class="input-group">
-                        <h:outputText value="#{labels.deadline}"
-                                      styleClass="input-group-text"/>
+                        <h:commandLink value="#{labels.deadline}"
+                                       action="#{cc.attrs.backing.scientificForumPagination.sortBy('timestamp_deadline')}"
+                                       styleClass="input-group-text"/>
                     </div>
                 </f:facet>
                 <h:outputText value="#{var.deadline}">
