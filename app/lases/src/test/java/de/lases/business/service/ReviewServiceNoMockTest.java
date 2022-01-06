@@ -62,7 +62,7 @@ class ReviewServiceNoMockTest {
         submission.setSubmissionTime(LocalDateTime.now());
 
         SubmissionService submissionService = new SubmissionService();
-        return submissionService.add(submission, new ArrayList<>());
+        return submissionService.add(submission, new ArrayList<>(), new Paper(), new FileDTO());
     }
 
     private void deleteTestSubmission(Submission submission) {
