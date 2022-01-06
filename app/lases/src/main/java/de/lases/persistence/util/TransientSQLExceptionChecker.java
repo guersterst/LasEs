@@ -7,7 +7,7 @@ import java.util.List;
  */
 public class TransientSQLExceptionChecker {
 
-    private static List<String> transientCodes = List.of(
+    private static final List<String> transientCodes = List.of(
             // insufficient_resources
             "53000",
             // out_of_memory

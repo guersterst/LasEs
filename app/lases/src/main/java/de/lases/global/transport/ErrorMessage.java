@@ -1,8 +1,14 @@
 package de.lases.global.transport;
 
-public class ErrorMessage extends UIMessage {
+import java.io.Serial;
+import java.io.Serializable;
 
-    private String stackTrace;
+public class ErrorMessage extends UIMessage implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 12348923964729384L;
+
+    private final String stackTrace;
 
     /**
      * Construct a UIMessage with a message text and a stack trace.
