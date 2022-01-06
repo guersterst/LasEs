@@ -3,7 +3,6 @@ package de.lases.control.internal;
 import jakarta.enterprise.inject.Produces;
 import jakarta.faces.context.FacesContext;
 
-import java.io.Serializable;
 import java.util.PropertyResourceBundle;
 
 /**
