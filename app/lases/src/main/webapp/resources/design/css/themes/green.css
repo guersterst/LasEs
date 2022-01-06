@@ -2,14 +2,14 @@
 Main css.
  */
 #page {
-    background: rgba(245, 216, 206, 0.65);
+    background: rgba(226, 245, 206, 0.65);
 }
 
 /*
 Css for footer.
  */
 #footer {
-    background-color: #f37041;
+    background-color: #4dc70f;
     color: white;
 }
 
@@ -17,33 +17,33 @@ Css for footer.
 Navigation
  */
 .navbar {
-    background-color: #f37041;
+    background-color: #4dc70f;
 }
 .navbar .navbar-brand {
     color: #ecf0f1;
 }
 .navbar .navbar-brand:hover,
 .navbar .navbar-brand:focus {
-    color: #ffbbbc;
+    color: #deffbb;
 }
 .navbar .navbar-text {
     color: #ecf0f1;
 }
 .navbar .navbar-text a {
-    color: lightsalmon;
+    color: lightgreen;
 }
 .navbar .navbar-text a:hover,
 .navbar .navbar-text a:focus {
-    color: lightsalmon;
+    color: lightgreen;
 }
 .navbar .navbar-nav .nav-link {
-    color: #ecf0f1;
+    color: white;
     border-radius: .25rem;
     margin: 0 0.25em;
 }
 .navbar .navbar-nav .nav-link:not(.disabled):hover,
 .navbar .navbar-nav .nav-link:not(.disabled):focus {
-    color: lightsalmon;
+    color: lightgreen;
 }
 .navbar .navbar-nav .nav-item.active .nav-link,
 .navbar .navbar-nav .nav-item.active .nav-link:hover,
@@ -51,18 +51,18 @@ Navigation
 .navbar .navbar-nav .nav-item.show .nav-link,
 .navbar .navbar-nav .nav-item.show .nav-link:hover,
 .navbar .navbar-nav .nav-item.show .nav-link:focus {
-    color: lightsalmon;
-    background-color: #c0392b;
+    color: lightgreen;
+    background-color: #73c02b;
 }
 .navbar .navbar-collapse,
 .navbar .navbar-form {
-    border-color: #ecf0f1;
+    border-color: white;
 }
 .navbar .navbar-link {
-    color: #ecf0f1;
+    color: white;
 }
 .navbar .navbar-link:hover {
-    color: lightsalmon;
+    color: lightgreen;
 }
 
 .navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item {
@@ -70,11 +70,11 @@ Navigation
 }
 .navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item:hover,
 .navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item:focus {
-    color: lightsalmon;
+    color: lightgreen;
 }
 .navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item.active {
-    color: lightsalmon;
-    background-color: #f37041;
+    color: lightgreen;
+    background-color: #4dc70f;
 }
 
 
@@ -83,21 +83,21 @@ Navigation
 Setting for buttons.
  */
 .btn-primary {
-    background-color: lightsalmon;
+    background-color: #52e052;
     text-decoration-color: white;
-    border-color: lightsalmon;
+    border-color: #52e052;
 }
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active{
-    background-color: #fab194;
+    background-color: #c2fa94;
     color: white;
-    border-color: #fab194;
+    border-color: #c2fa94;
 }
 
 .btn-primary:disabled {
-    background-color: #fab194;
+    background-color: #c2fa94;
     color: white;
-    border-color: #fab194;
+    border-color: #c2fa94;
 }
 
 /*
@@ -105,21 +105,21 @@ Buttons for pagination.
  */
 .page-link {
     background-color: white;
-    color: lightsalmon;
-    border-color: lightsalmon;
+    color: #52e052;
+    border-color: #52e052;
 }
 
 .active, .page-link:hover {
-    background-color: #fab194;
+    background-color: #52e052;
     color: white;
-    border-color: #fab194;
+    border-color: #52e052;
 }
 
 /*
 Tabs for homepage.
  */
 #tabs {
-    background-color: #fab194;
+    background-color: #52e052;
 }
 
 #tabs> .nav-item {
@@ -136,12 +136,12 @@ Tabs for homepage.
 Style all links
  */
 a {
-    color: #f37041;
+    color: #4dc70f;
     text-decoration: none;
 }
 
 a:hover {
-    color: #fab194;
+    color: #c2fa94;
     text-decoration: none;
 }
 
@@ -150,7 +150,7 @@ a:hover {
 }
 
 #impressum-lnk:hover {
-    color: #fab194;
+    color: #c2fa94;
 }
 
 .nav-item > a {
@@ -167,16 +167,16 @@ a:hover {
 Profile styling
  */
 .card-header {
-    background-color: #fab194;
+    background-color: #52e052;
     color: white;
 }
 
 #toolbar > .card-body {
-    background-color: #f5d2c7;
+    background-color: #ddf5c7;
 }
 
 #is-admin-cbx {
-    background-color: #fab194;
+    background-color: #52e052;
 }
 
 

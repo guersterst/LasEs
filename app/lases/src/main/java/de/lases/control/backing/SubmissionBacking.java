@@ -85,6 +85,14 @@ public class SubmissionBacking implements Serializable {
 
     private Paper newestPaper;
 
+    private static final String PATH_TO_STYLE_DIRECTORY = "design/css/";
+    private static final String STYLE_RED = "red";
+    private static final String STYLE_GREEN = "green";
+    private static final String STYLE_YELLOW = "yellow";
+    private static final String STYLE_DEFAULT = "default";
+
+    private String styleStatus;
+
     /**
      * Initialize the dtos.
      * Create the objects for:
@@ -184,6 +192,9 @@ public class SubmissionBacking implements Serializable {
         submission = submissionService.get(submission);
 
         if (submissionService.canView(submission, sessionInformation.getUser())) {
+            //Style text field of the submission state.
+            styleSubmissionState(submission.getState());
+
             author.setId(submission.getAuthorId());
             author = userService.get(author);
 
@@ -205,6 +216,16 @@ public class SubmissionBacking implements Serializable {
             logger.severe("Access denied to submission: " + submission.getId() + " for user with id: " + sessionInformation.getUser().getId());
             throw new IllegalAccessException("Access denied to this submission because user is not allowed to access it.");
         }
+    }
+
+    public String styleSubmissionState(SubmissionState state) {
+        switch (state) {
+            case ACCEPTED -> styleStatus = PATH_TO_STYLE_DIRECTORY + STYLE_GREEN;
+            case SUBMITTED -> styleStatus = PATH_TO_STYLE_DIRECTORY + STYLE_DEFAULT;
+            case REJECTED -> styleStatus = PATH_TO_STYLE_DIRECTORY + STYLE_RED;
+            case REVISION_REQUIRED -> styleStatus = PATH_TO_STYLE_DIRECTORY + STYLE_YELLOW;
+        }
+        return styleStatus;
     }
 
 
@@ -672,5 +693,16 @@ public class SubmissionBacking implements Serializable {
         } else {
             return false;
         }
+    }
+
+
+    /**
+     * Get the style of the state input text field.
+     *
+     * @return red if the submission is rejected, green if accepted,
+     * yellow if a submission requires a revision and black as default.
+     */
+    public String getStyleStatus() {
+        return styleSubmissionState(submission.getState());
     }
 }

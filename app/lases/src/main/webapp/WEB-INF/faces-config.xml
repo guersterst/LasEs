@@ -12,15 +12,15 @@
             <supported-locale>de</supported-locale>
         </locale-config>
         <resource-bundle>
-            <base-name>resource_bundles.labels</base-name>
+            <base-name>de.lases.resource_bundles.labels</base-name>
             <var>labels</var>
         </resource-bundle>
         <resource-bundle>
-            <base-name>resource_bundles.help</base-name>
+            <base-name>de.lases.resource_bundles.help</base-name>
             <var>help</var>
         </resource-bundle>
         <resource-bundle>
-            <base-name>resource_bundles.message</base-name>
+            <base-name>de.lases.resource_bundles.message</base-name>
             <var>message</var>
         </resource-bundle>
     </application>

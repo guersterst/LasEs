@@ -134,7 +134,10 @@ public class UserRepository {
                 throw new NotFoundException(msg);
             }
         } catch (SQLException ex) {
-            throw new DatasourceQueryFailedException(ex.getMessage());
+            transaction.abort();
+            DatasourceUtil.logSQLException(ex, logger);
+            throw new DatasourceQueryFailedException("A datasource exception"
+                    + "occurred", ex);
         }
 
         setVerifiedStatus(result, transaction);
@@ -145,12 +148,12 @@ public class UserRepository {
     /**
      * Create a {@link User} from the given results of the SQL queries.
      *
-     * @param userResult The result of the query for the user entity.
+     * @param userResult                The result of the query for the user entity.
      * @param submissionAndEditorResult The result of the query for the number of submissions and
      *                                  whether the user is an editor.
      * @return The fully-filled {@code User}
      * @throws SQLException If the ResultSet columns are invalid or  if a database access error occurs or
-     * if this method is called on a closed ResultSet.
+     *                      if this method is called on a closed ResultSet.
      */
     private static User createUserFromResultSet(ResultSet userResult, ResultSet submissionAndEditorResult)
             throws SQLException {
@@ -218,13 +221,13 @@ public class UserRepository {
      *                    (The id must not be specified, as the repository will
      *                    create the id)
      * @param transaction The transaction to use.
+     * @return The user object with his id.
      * @throws DataNotWrittenException        If writing the data to the repository
      *                                        fails.
      * @throws InvalidFieldsException         If one of the required fields of the
      *                                        scientific forum is null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
-     * @return The user object with his id.
      * @author Thomas Kirz
      */
     public static User add(User user, Transaction transaction)
@@ -312,7 +315,6 @@ public class UserRepository {
      *                                        is null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
-     *
      * @author Sebastian Vogt
      */
     public static void change(User user, Transaction transaction)
@@ -379,7 +381,6 @@ public class UserRepository {
      * @throws InvalidFieldsException         If the user id is null
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
-     *
      * @author Sebastian Vogt
      */
     public static void remove(User user, Transaction transaction)
@@ -562,12 +563,12 @@ public class UserRepository {
                 """;
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setInt(1, verification.getUserId());
-                stmt.setString(2, verification.getValidationRandom());
-                stmt.setBoolean(3, verification.isVerified());
-                stmt.setTimestamp(4, Timestamp.valueOf(verification.getTimestampValidationStarted()));
-                stmt.setString(5, verification.getNonVerifiedEmailAddress());
-                stmt.executeUpdate();
+            stmt.setInt(1, verification.getUserId());
+            stmt.setString(2, verification.getValidationRandom());
+            stmt.setBoolean(3, verification.isVerified());
+            stmt.setTimestamp(4, Timestamp.valueOf(verification.getTimestampValidationStarted()));
+            stmt.setString(5, verification.getNonVerifiedEmailAddress());
+            stmt.executeUpdate();
         } catch (SQLException e) {
             DatasourceUtil.logSQLException(e, logger);
             if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
@@ -592,7 +593,7 @@ public class UserRepository {
      * @author Thomas Kirz
      */
     public static void changeVerification(Verification verification,
-                                       Transaction transaction)
+                                          Transaction transaction)
             throws NotFoundException, DataNotWrittenException {
         User user = new User();
         user.setId(verification.getUserId());
@@ -798,79 +799,79 @@ public class UserRepository {
         List<User> userList = new LinkedList<>();
 
         switch (privilege) {
-            case AUTHOR -> {
-                try {
-                    PreparedStatement ps = conn.prepareStatement(
-                            "SELECT DISTINCT u.* FROM \"user\" u, submission s, co_authored c " +
-                                    "WHERE ((u.id = s.author_id) OR (u.id = c.user_id AND  c.submission_id = s.id)) " +
-                                    "AND s.id = ?"
-                    );
-                    ps.setInt(1, submissionId);
-                    ResultSet rs = ps.executeQuery();
+        case AUTHOR -> {
+            try {
+                PreparedStatement ps = conn.prepareStatement(
+                        "SELECT DISTINCT u.* FROM \"user\" u, submission s, co_authored c " +
+                                "WHERE ((u.id = s.author_id) OR (u.id = c.user_id AND  c.submission_id = s.id)) " +
+                                "AND s.id = ?"
+                );
+                ps.setInt(1, submissionId);
+                ResultSet rs = ps.executeQuery();
 
-                    while (rs.next()) {
-                        User user = new User();
-                        user.setId(rs.getInt("id"));
-                        user.setPrivileges(getUserPrivileges(user, transaction));
-                        user.setTitle(rs.getString("title"));
-                        user.setFirstName(rs.getString("firstname"));
-                        user.setLastName(rs.getString("lastname"));
-                        user.setEmailAddress(rs.getString("email_address"));
-                        java.sql.Date birthdate = rs.getDate("birthdate");
-                        if (birthdate != null) {
-                            user.setDateOfBirth(birthdate.toLocalDate());
-                        }
-                        user.setEmployer(rs.getString("employer"));
-                        setVerifiedStatus(user, transaction);
-
-                        userList.add(user);
+                while (rs.next()) {
+                    User user = new User();
+                    user.setId(rs.getInt("id"));
+                    user.setPrivileges(getUserPrivileges(user, transaction));
+                    user.setTitle(rs.getString("title"));
+                    user.setFirstName(rs.getString("firstname"));
+                    user.setLastName(rs.getString("lastname"));
+                    user.setEmailAddress(rs.getString("email_address"));
+                    java.sql.Date birthdate = rs.getDate("birthdate");
+                    if (birthdate != null) {
+                        user.setDateOfBirth(birthdate.toLocalDate());
                     }
-                    return userList;
-                } catch (SQLException e) {
-                    throw new DatasourceQueryFailedException();
+                    user.setEmployer(rs.getString("employer"));
+                    setVerifiedStatus(user, transaction);
+
+                    userList.add(user);
                 }
-            }
-            case REVIEWER -> {
-                try {
-                    PreparedStatement ps = conn.prepareStatement(
-                            "SELECT u.* FROM \"user\" u, submission s, reviewed_by rb " +
-                                    "WHERE u.id = rb.reviewer_id AND rb.submission_id = s.id " +
-                                    "AND submission_id = ?"
-                    );
-                    ps.setInt(1, submissionId);
-                    ResultSet rs = ps.executeQuery();
-
-                    while (rs.next()) {
-                        User user = new User();
-                        user.setId(rs.getInt("id"));
-                        user.setPrivileges(getUserPrivileges(user, transaction));
-                        user.setTitle(rs.getString("title"));
-                        user.setFirstName(rs.getString("firstname"));
-                        user.setLastName(rs.getString("lastname"));
-                        user.setEmailAddress(rs.getString("email_address"));
-                        java.sql.Date birthdate = rs.getDate("birthdate");
-                        if (birthdate != null) {
-                            user.setDateOfBirth(birthdate.toLocalDate());
-                        }
-                        user.setEmployer(rs.getString("employer"));
-                        setVerifiedStatus(user, transaction);
-
-                        userList.add(user);
-                    }
-                    return userList;
-                } catch (SQLException e) {
-                    DatasourceUtil.logSQLException(e, logger);
-                    if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
-                        throw new DataNotCompleteException("user list could not be loaded.");
-                    } else {
-                        transaction.abort();
-                        throw new DatasourceQueryFailedException("Could not query DB", e);
-                    }
-                }
-            }
-            default -> {
                 return userList;
+            } catch (SQLException e) {
+                throw new DatasourceQueryFailedException();
             }
+        }
+        case REVIEWER -> {
+            try {
+                PreparedStatement ps = conn.prepareStatement(
+                        "SELECT u.* FROM \"user\" u, submission s, reviewed_by rb " +
+                                "WHERE u.id = rb.reviewer_id AND rb.submission_id = s.id " +
+                                "AND submission_id = ?"
+                );
+                ps.setInt(1, submissionId);
+                ResultSet rs = ps.executeQuery();
+
+                while (rs.next()) {
+                    User user = new User();
+                    user.setId(rs.getInt("id"));
+                    user.setPrivileges(getUserPrivileges(user, transaction));
+                    user.setTitle(rs.getString("title"));
+                    user.setFirstName(rs.getString("firstname"));
+                    user.setLastName(rs.getString("lastname"));
+                    user.setEmailAddress(rs.getString("email_address"));
+                    java.sql.Date birthdate = rs.getDate("birthdate");
+                    if (birthdate != null) {
+                        user.setDateOfBirth(birthdate.toLocalDate());
+                    }
+                    user.setEmployer(rs.getString("employer"));
+                    setVerifiedStatus(user, transaction);
+
+                    userList.add(user);
+                }
+                return userList;
+            } catch (SQLException e) {
+                DatasourceUtil.logSQLException(e, logger);
+                if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                    throw new DataNotCompleteException("user list could not be loaded.");
+                } else {
+                    transaction.abort();
+                    throw new DatasourceQueryFailedException("Could not query DB", e);
+                }
+            }
+        }
+        default -> {
+            return userList;
+        }
         }
     }
 
@@ -941,7 +942,7 @@ public class UserRepository {
      */
     public static List<User> getList(Transaction transaction,
                                      ScientificForum scientificForum)
-            throws DataNotCompleteException,  NotFoundException, InvalidQueryParamsException {
+            throws DataNotCompleteException, NotFoundException, InvalidQueryParamsException {
         if (transaction == null || scientificForum == null) {
             throw new InvalidQueryParamsException("Parameter was null");
         }
@@ -1013,7 +1014,6 @@ public class UserRepository {
      * @throws InvalidFieldsException         If the use id is null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
-     *
      * @author Sebastian Vogt
      */
     public static void addScienceField(User user, ScienceField scienceField,
@@ -1040,7 +1040,8 @@ public class UserRepository {
             // 23503: Foreign key constraint violated
             if (e.getSQLState().equals("23503")) {
                 throw new NotFoundException("Either the specified user or science field do not exist");
-            } if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+            }
+            if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
                 throw new DataNotWrittenException("Science field could not be added", e);
             } else {
                 transaction.abort();
@@ -1063,7 +1064,6 @@ public class UserRepository {
      * @throws InvalidFieldsException         If the user id or science field name are null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
-     *
      * @author Sebastian Vogt
      */
     public static void removeScienceField(User user, ScienceField scienceField,
@@ -1112,7 +1112,7 @@ public class UserRepository {
      *                                        queried.
      */
     public static boolean emailExists(User user, Transaction transaction) {
-        if (user.getEmailAddress() ==  null) {
+        if (user.getEmailAddress() == null) {
             transaction.abort();
             throw new InvalidFieldsException("the email address was null");
         }
@@ -1141,11 +1141,10 @@ public class UserRepository {
      * @param transaction The transaction to use.
      * @return A file containing the logo.
      * @throws NotFoundException              If there is no user with the specified id.
-     * @throws InvalidFieldsException If the user id is null.
-     * @throws DataNotCompleteException If the data cannot be fetched due to a transient fault.
+     * @throws InvalidFieldsException         If the user id is null.
+     * @throws DataNotCompleteException       If the data cannot be fetched due to a transient fault.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
-     *
      * @author Sebastian Vogt
      */
     public static FileDTO getAvatar(User user, Transaction transaction)
@@ -1201,7 +1200,6 @@ public class UserRepository {
      *                                        fails.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
-     *
      * @author Sebastian Vogt
      */
     public static void setAvatar(User user, FileDTO avatar,

@@ -1,5 +1,56 @@
+body {
+    height: 100%;
+}
+.container {
+    min-width: min-content;
+}
+
 
 #content {
     padding-top: 100px;
     padding-bottom: 100px;
+}
+
+/*
+Pagination
+ */
+#pagination {
+    margin: 10px 10px 10px 10px;
+}
+
+.card, #navigation, #toolbar > .card, .info, .warning, .error {
+    box-shadow: 7px 5px 5px #9b9898;
+}
+
+.ACCEPTED ,.REJECTED, .REVISION_REQUIRED, .SUBMITTED {
+    background-color: white;
+    font-weight: bold;
+}
+
+.SUBMITTED {
+    color: #bbbbac;
+    border-color: #bbbbac;
+}
+
+.ACCEPTED {
+    color: #6fc46f;
+    border-color: #6fc46f;
+}
+
+.REJECTED {
+    color: #fa5454;
+    border-color: #fa5454;
+}
+
+.REVISION_REQUIRED {
+    color: #f8e77e;
+    border-color: #f8e77e;
+}
+/*
+Global messages.
+ */
+.error, .warning, .info {
+    height: 30px;
+    list-style: none;
+    font-size: larger;
 }

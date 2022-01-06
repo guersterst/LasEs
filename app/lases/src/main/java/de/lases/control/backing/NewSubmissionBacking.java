@@ -1,10 +1,13 @@
 package de.lases.control.backing;
 
 import de.lases.business.service.PaperService;
+import de.lases.business.service.ScientificForumService;
 import de.lases.business.service.SubmissionService;
 import de.lases.business.service.UserService;
+import de.lases.control.exception.IllegalUserFlowException;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
+import de.lases.persistence.repository.ScientificForumRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -45,6 +48,9 @@ public class NewSubmissionBacking implements Serializable {
 
     @Inject
     private UserService userService;
+
+    @Inject
+    private ScientificForumService forumService;
 
     private Submission newSubmission;
 
@@ -90,19 +96,20 @@ public class NewSubmissionBacking implements Serializable {
     public void init() {
         coAuthorInput = new User();
         coAuthors = new ArrayList<>();
-        if (forumInput != null) {
-            editors = userService.getList(forumInput);
-        } else {
-            forumInput = new ScientificForum();
-            editors = new ArrayList<>();
+        forumInput = new ScientificForum();
+        newSubmission = new Submission();
+    }
+
+    public void onLoad() {
+
+        if (forumInput.getId() == null || !ScientificForumService.exists(forumInput)) {
+            throw new IllegalUserFlowException("The URL parameters are invalid. Possible cause: the forum from the "
+                    + "redirect was performed is not valid");
         }
 
-        // TODO: Wenn das Scientific forume existiert muss das hier vorausgefuellt sein und eine illegal user flow
-        // exception kommen falls nicht!
-        forumInput.setName("Mathematik Konferenz 2022");
-        forumInput.setId(1);
+        forumInput = forumService.get(forumInput);
         editors = userService.getList(forumInput);
-        initNewSubmission();
+        newSubmission.setScientificForumId(forumInput.getId());
     }
 
     /**
@@ -117,7 +124,7 @@ public class NewSubmissionBacking implements Serializable {
      * Add the entered co-author to the list of co-authors.
      */
     public void submitCoAuthor() {
-        for (User coAuthor: coAuthors) {
+        for (User coAuthor : coAuthors) {
             if (coAuthor.getEmailAddress().equals(coAuthorInput.getEmailAddress())) {
                 coAuthor.setTitle(coAuthorInput.getTitle());
                 coAuthor.setFirstName(coAuthorInput.getFirstName());
@@ -261,5 +268,4 @@ public class NewSubmissionBacking implements Serializable {
     public List<User> getEditors() {
         return editors;
     }
-
 }
