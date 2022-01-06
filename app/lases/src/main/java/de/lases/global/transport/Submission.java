@@ -89,7 +89,7 @@ public class Submission implements Cloneable {
      *
      * @param editorId Id of the editor.
      */
-    public void setEditorId(int editorId) {
+    public void setEditorId(Integer editorId) {
         this.editorId = editorId;
     }
 
