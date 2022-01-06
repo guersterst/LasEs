@@ -13,7 +13,6 @@ import jakarta.faces.validator.ValidatorException;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Objects;
 import java.util.PropertyResourceBundle;
 import java.util.logging.Logger;
 
@@ -28,7 +27,7 @@ public class ForumNameExistsValidator implements Validator<String>, Serializable
     @Serial
     private static final long serialVersionUID = -729646507861287388L;
 
-    private final Logger l = Logger.getLogger(EmailAddressUnoccupiedValidator.class.getName());
+    private final Logger logger = Logger.getLogger(EmailAddressUnoccupiedValidator.class.getName());
 
     /**
      * Validates whether a forum name exists and does not belong to the current forum.
@@ -44,7 +43,7 @@ public class ForumNameExistsValidator implements Validator<String>, Serializable
         ScientificForum currentForum = scientificForumBacking.getForum();
         if (ScientificForumService.exists(nameForum) && !currentForum.getName().equals(nameForum.getName())) {
             PropertyResourceBundle bundle = CDI.current().select(PropertyResourceBundle.class).get();
-            l.finer("Validation failed: " + value + " forum name does already exist.");
+            logger.finer("Validation failed: " + value + " forum name does already exist.");
             FacesMessage message
                     = new FacesMessage(FacesMessage.SEVERITY_ERROR, bundle.getString("forumNameTaken"), null);
             throw new ValidatorException(message);

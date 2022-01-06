@@ -11,11 +11,9 @@ import jakarta.inject.Inject;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.PropertyResourceBundle;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
 
 /**
@@ -31,7 +29,7 @@ public class ScientificForumService implements Serializable {
     @Serial
     private static final long serialVersionUID = 5459943608069682810L;
 
-    private static final Logger l = Logger.getLogger(SubmissionService.class.getName());
+    private static final Logger logger = Logger.getLogger(SubmissionService.class.getName());
 
     @Inject
     private Event<UIMessage> uiMessageEvent;
@@ -47,7 +45,7 @@ public class ScientificForumService implements Serializable {
      */
     public ScientificForum get(ScientificForum forum) {
         if (forum.getId() == null) {
-            l.severe("ScientificForum id must not be null.");
+            logger.severe("ScientificForum id must not be null.");
             throw new IllegalArgumentException("ScientificForum id must not be null.");
         }
 
@@ -57,9 +55,9 @@ public class ScientificForumService implements Serializable {
         try {
             result = ScientificForumRepository.get(forum, t);
             t.commit();
-            l.finer("ScientificForum with id " + forum.getId() + " retrieved.");
+            logger.finer("ScientificForum with id " + forum.getId() + " retrieved.");
         } catch (NotFoundException e) {
-            l.severe("ScientificForum not found");
+            logger.severe("ScientificForum not found");
             uiMessageEvent.fire(new UIMessage(
                     message.getString("error.requestedScientificForumDoesNotExist"),
                     MessageCategory.ERROR));
@@ -81,7 +79,7 @@ public class ScientificForumService implements Serializable {
     public void change(ScientificForum newForum) {
         if (newForum.getId() == null || newForum.getName() == null) {
 
-            l.severe("Must contain a name and forum id to change.");
+            logger.severe("Must contain a name and forum id to change.");
             throw new InvalidFieldsException();
         }
 
@@ -89,7 +87,7 @@ public class ScientificForumService implements Serializable {
         try {
 
             ScientificForumRepository.change(newForum, transaction);
-            l.finest("Successfully changed the forum: " + newForum.getId() + ".");
+            logger.finest("Successfully changed the forum: " + newForum.getId() + ".");
             transaction.commit();
         } catch (NotFoundException e) {
             uiMessageEvent.fire(new UIMessage(message.getString("dataNotFound"), MessageCategory.ERROR));
@@ -129,11 +127,11 @@ public class ScientificForumService implements Serializable {
 
         } catch (DataNotWrittenException | NotFoundException e) {
             transaction.abort();
-            l.severe("Failed trying to create forum: " + forum + e.getMessage());
+            logger.severe("Failed trying to create forum: " + forum + e.getMessage());
             uiMessageEvent.fire(new UIMessage("Error occured when trying to create forum.", MessageCategory.ERROR));
         } catch (KeyExistsException e) {
             transaction.abort();
-            l.severe("Tried to create forum with already in-use name: " + forum.getName() + e.getMessage());
+            logger.severe("Tried to create forum with already in-use name: " + forum.getName() + e.getMessage());
             uiMessageEvent.fire(new UIMessage("Forum name is already in use.", MessageCategory.ERROR));
         }
         return null;
@@ -147,7 +145,7 @@ public class ScientificForumService implements Serializable {
     public void remove(ScientificForum forum) {
         if (forum.getId() == null) {
 
-            l.severe("Must contain a forum id to remove");
+            logger.severe("Must contain a forum id to remove");
             throw new InvalidFieldsException();
         }
 
@@ -155,7 +153,7 @@ public class ScientificForumService implements Serializable {
         try {
 
             ScientificForumRepository.remove(forum, transaction);
-            l.finest("Successfully removed the forum: " + forum.getId() + ".");
+            logger.finest("Successfully removed the forum: " + forum.getId() + ".");
             transaction.commit();
         } catch (NotFoundException e) {
             uiMessageEvent.fire(new UIMessage(message.getString("dataNotFound"), MessageCategory.ERROR));
@@ -174,7 +172,7 @@ public class ScientificForumService implements Serializable {
     public void addEditor(User editor, ScientificForum forum) {
         if (forum.getId() == null || editor.getId() == null) {
 
-            l.severe("Must contain a forum id and editor id to add in a relationship");
+            logger.severe("Must contain a forum id and editor id to add in a relationship");
             throw new InvalidFieldsException();
         }
 
@@ -184,14 +182,14 @@ public class ScientificForumService implements Serializable {
             List<User> editors = UserRepository.getList(transaction, forum);
             for (User oldEditor : editors) {
                 if (oldEditor.equals(editor)) {
-                    l.warning("Cannot add an editor, that already exists.");
+                    logger.warning("Cannot add an editor, that already exists.");
                     uiMessageEvent.fire(new UIMessage(message.getString("editorAlreadyExistsInForum"), MessageCategory.INFO));
                     return;
                 }
             }
 
             ScientificForumRepository.addEditor(forum, editor, transaction);
-            l.finest("Successfully added the forum: " + forum.getId() + " to the editor: "
+            logger.finest("Successfully added the forum: " + forum.getId() + " to the editor: "
                     + editor.getId());
             transaction.commit();
         } catch (DataNotCompleteException ex) {
@@ -213,7 +211,7 @@ public class ScientificForumService implements Serializable {
     public void removeEditor(User editor, ScientificForum forum) {
         if (forum.getId() == null || editor.getId() == null) {
 
-            l.severe("Must contain a forum id and editor id to remove their relationship");
+            logger.severe("Must contain a forum id and editor id to remove their relationship");
             throw new InvalidFieldsException();
         }
 
@@ -221,7 +219,7 @@ public class ScientificForumService implements Serializable {
         try {
 
             ScientificForumRepository.removeEditor(forum, editor, transaction);
-            l.finest("Successfully removed the editor: " + editor.getId() + " from the forum: "
+            logger.finest("Successfully removed the editor: " + editor.getId() + " from the forum: "
                     + forum.getId());
             transaction.commit();
         } catch (NotFoundException e) {
@@ -241,7 +239,7 @@ public class ScientificForumService implements Serializable {
     public void addScienceField(ScienceField scienceField, ScientificForum forum) {
         if (forum.getId() == null || scienceField.getName() == null) {
 
-            l.severe("Must contain a forum id and sciencefield name to enter in a relationship");
+            logger.severe("Must contain a forum id and sciencefield name to enter in a relationship");
             throw new InvalidFieldsException();
         }
 
@@ -253,13 +251,13 @@ public class ScientificForumService implements Serializable {
                     .getList(forum, transaction, new ResultListParameters());
             for (ScienceField oldField : oldScienceFields) {
                 if (oldField.equals(scienceField)) {
-                    l.warning("Cannot add a field, that already exists in this forum.");
+                    logger.warning("Cannot add a field, that already exists in this forum.");
                     uiMessageEvent.fire(new UIMessage("scienceFieldAlreadyExistsInForum", MessageCategory.INFO));
                 }
             }
 
             ScientificForumRepository.addScienceField(forum, scienceField, transaction);
-            l.finest("Successfully added the forum: " + forum.getId() + " to the topic: "
+            logger.finest("Successfully added the forum: " + forum.getId() + " to the topic: "
                     + scienceField.getName());
             transaction.commit();
         } catch (DataNotCompleteException e) {
@@ -283,7 +281,7 @@ public class ScientificForumService implements Serializable {
     public void removeScienceField(ScienceField scienceField, ScientificForum forum) {
         if (forum.getId() == null || scienceField.getName() == null) {
 
-            l.severe("Must contain a forum id and sciencefield name to dissolve a relationship");
+            logger.severe("Must contain a forum id and sciencefield name to dissolve a relationship");
             throw new InvalidFieldsException();
         }
 
@@ -291,7 +289,7 @@ public class ScientificForumService implements Serializable {
         try {
 
             ScientificForumRepository.removeScienceField(forum, scienceField, transaction);
-            l.finest("Successfully removed the topic: " + scienceField.getName() + " from the forum: "
+            logger.finest("Successfully removed the topic: " + scienceField.getName() + " from the forum: "
                     + forum.getId());
             transaction.commit();
         } catch (NotFoundException e) {
@@ -311,7 +309,7 @@ public class ScientificForumService implements Serializable {
     public List<User> getEditors(ScientificForum forum) {
         if (forum.getId() == null) {
 
-            l.severe("Must contain a forum id to find out editors.");
+            logger.severe("Must contain a forum id to find out editors.");
             throw new InvalidFieldsException();
         }
 
@@ -321,7 +319,7 @@ public class ScientificForumService implements Serializable {
             editors = UserRepository.getList(transaction, forum);
         } catch (NotFoundException | DataNotCompleteException e) {
 
-            l.severe(e.getMessage() + "\n Caused the operation to fail for: " + forum.getId());
+            logger.severe(e.getMessage() + "\n Caused the operation to fail for: " + forum.getId());
             uiMessageEvent.fire(new UIMessage(message.getString("dataNotFound"), MessageCategory.ERROR));
         } finally {
             transaction.commit();
@@ -341,7 +339,7 @@ public class ScientificForumService implements Serializable {
     public static boolean exists(ScientificForum forum) {
         if (forum.getId() == null && forum.getName() == null) {
 
-            l.severe("Must contain a forum id or name to find out whether it exists.");
+            logger.severe("Must contain a forum id or name to find out whether it exists.");
             throw new InvalidFieldsException();
         }
 
@@ -380,7 +378,7 @@ public class ScientificForumService implements Serializable {
             // Calculate number of pages.
             pages = (int) Math.ceil((double) items / paginationLength);
         } catch (DataNotCompleteException | NotFoundException e) {
-            l.severe(e.getMessage());
+            logger.severe(e.getMessage());
         } finally {
             transaction.commit();
         }

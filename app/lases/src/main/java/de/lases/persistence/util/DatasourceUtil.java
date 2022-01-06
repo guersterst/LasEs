@@ -23,7 +23,7 @@ import java.util.logging.Logger;
  */
 public class DatasourceUtil {
 
-    private static final Logger l = Logger.getLogger(DatasourceUtil.class.getName());
+    private static final Logger logger = Logger.getLogger(DatasourceUtil.class.getName());
 
     /**
      * Deletes all users/verifications (if the user already has a valid email
@@ -59,11 +59,11 @@ public class DatasourceUtil {
                 """;
 
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
-            l.info("Cleaning up verifications.");
+            logger.info("Cleaning up verifications.");
             statement.executeUpdate();
             transaction.commit();
         } catch (SQLException e) {
-            logSQLException(e, l);
+            logSQLException(e, logger);
             transaction.abort();
             throw new DatasourceQueryFailedException("Could not clean up verifications.", e);
         }
@@ -86,7 +86,7 @@ public class DatasourceUtil {
             ps.executeUpdate();
             transaction.commit();
         } catch (SQLException e) {
-            logSQLException(e, l);
+            logSQLException(e, logger);
             throw new DatasourceNotFoundException(e.getMessage());
         }
     }
@@ -110,7 +110,7 @@ public class DatasourceUtil {
             connectionState.setSuccessfullyConnected(conn.isValid(10));
         } catch (SQLException e) {
             connectionState.setErrorMessage(e.getMessage());
-            logSQLException(e, l);
+            logSQLException(e, logger);
 
             // fail
             transaction.abort();
@@ -130,7 +130,7 @@ public class DatasourceUtil {
             ps.close();
         } catch (SQLException e) {
             connectionState.setErrorMessage("DB schema has not been created yet.");
-            logSQLException(e, l);
+            logSQLException(e, logger);
 
             // fail
             transaction.abort();

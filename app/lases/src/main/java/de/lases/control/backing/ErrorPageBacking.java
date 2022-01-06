@@ -8,8 +8,6 @@ import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.PropertyResourceBundle;
 
 /**
@@ -35,24 +33,28 @@ public class ErrorPageBacking {
      */
     @PostConstruct
     public void init() {
-        int errorStatusCode = (Integer) facesContext.getExternalContext().getRequestMap()
-                .get("jakarta.servlet.error.status_code");
-        String requestErrorMessage = (String) facesContext.getExternalContext().getRequestMap()
-                .get("jakarta.servlet.error.message");
-        Exception requestException = (Exception) facesContext.getExternalContext().getRequestMap()
-                .get("jakarta.servlet.error.exception");
+        Object sessionObject = facesContext.getExternalContext().getSessionMap().get("internal_error_message");
+        if (sessionObject instanceof ErrorMessage) {
+            errorMessage = (ErrorMessage) sessionObject;
+            facesContext.getExternalContext().getSessionMap().remove("internal_error_message");
+        } else {
+            int errorStatusCode = -1;
+            if (facesContext.getExternalContext().getRequestMap()
+                    .get("jakarta.servlet.error.status_code") instanceof Integer) {
+                errorStatusCode = (Integer) facesContext.getExternalContext().getRequestMap()
+                        .get("jakarta.servlet.error.status_code");
+            }
+            String requestErrorMessage = "";
+            if (facesContext.getExternalContext().getRequestMap()
+                    .get("jakarta.servlet.error.message") instanceof String) {
+                requestErrorMessage = (String) facesContext.getExternalContext().getRequestMap()
+                        .get("jakarta.servlet.error.message");
+            }
 
-        if (errorMessage == null) {
             if (errorStatusCode == 404) {
                 errorMessage = new ErrorMessage(bundle.getString("error.404"), requestErrorMessage);
-            } else if (errorStatusCode == 500) {
-                String developerMessage = requestErrorMessage;
-                if (requestException != null) {
-                    StringWriter sw = new StringWriter();
-                    requestException.printStackTrace(new PrintWriter(sw, true));
-                    developerMessage = sw.toString();
-                }
-                errorMessage = new ErrorMessage(bundle.getString("error.500"), developerMessage);
+            } else {
+                errorMessage = new ErrorMessage(bundle.getString("error.unknown"), requestErrorMessage);
             }
         }
     }

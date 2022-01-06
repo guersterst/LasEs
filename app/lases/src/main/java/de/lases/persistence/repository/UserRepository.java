@@ -220,8 +220,9 @@ public class UserRepository {
      *                    password salt are not required.
      *                    (The id must not be specified, as the repository will
      *                    create the id)
+     *                    The user's id will be set to the newly assigned id.
      * @param transaction The transaction to use.
-     * @return The user object with his id.
+     * @return The user object with its id.
      * @throws DataNotWrittenException        If writing the data to the repository
      *                                        fails.
      * @throws InvalidFieldsException         If one of the required fields of the
@@ -566,14 +567,18 @@ public class UserRepository {
             stmt.setInt(1, verification.getUserId());
             stmt.setString(2, verification.getValidationRandom());
             stmt.setBoolean(3, verification.isVerified());
-            stmt.setTimestamp(4, Timestamp.valueOf(verification.getTimestampValidationStarted()));
+            Timestamp timestamp = verification.getTimestampValidationStarted() == null ?
+                    null : Timestamp.valueOf(verification.getTimestampValidationStarted());
+            stmt.setTimestamp(4, timestamp);
             stmt.setString(5, verification.getNonVerifiedEmailAddress());
             stmt.executeUpdate();
         } catch (SQLException e) {
             DatasourceUtil.logSQLException(e, logger);
             if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
+                logger.severe("Failed to add verification to database.");
                 throw new DataNotWrittenException("Failed to add verification to database.", e);
             } else {
+                logger.severe("Failed to add verification to database.");
                 transaction.abort();
                 throw new DatasourceQueryFailedException("Failed to add verification to database.", e);
             }
