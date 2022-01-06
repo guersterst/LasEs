@@ -288,14 +288,14 @@ public class SubmissionService implements Serializable {
      *                          Deadline of a revision.
      *                      </li>
      *                      </ul>
+     * @return false if an error occurred.
      */
-    public void change(Submission newSubmission) {
+    public boolean change(Submission newSubmission) {
 
         if (newSubmission.getId() == null) {
 
             logger.severe("The id of the submission is not valid. Therefore no submission can be changed. ");
             throw new InvalidFieldsException(resourceBundle.getString("idMissing"));
-
         } else {
             Transaction transaction = new Transaction();
             Submission oldSubmission = null;
@@ -306,13 +306,16 @@ public class SubmissionService implements Serializable {
             } catch (DataNotWrittenException e) {
                 uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotWritten"), MessageCategory.ERROR));
                 transaction.abort();
+                return false;
 
             } catch (NotFoundException e) {
                 uiMessageEvent.fire(new UIMessage(resourceBundle.getString("submissionNotFound"), MessageCategory.ERROR));
                 transaction.abort();
+                return false;
             } catch (DataNotCompleteException e) {
                 uiMessageEvent.fire(new UIMessage(resourceBundle.getString("notComplete"), MessageCategory.ERROR));
                 transaction.abort();
+                return false;
             }
 
             String url = EmailUtil.generateSubmissionURL(newSubmission, facesContext);
@@ -332,6 +335,7 @@ public class SubmissionService implements Serializable {
                 } catch (NotFoundException e) {
                     uiMessageEvent.fire(new UIMessage(resourceBundle.getString("userNotFound"), MessageCategory.ERROR));
                     transaction.abort();
+                    return false;
                 }
 
                 String subjectNewEditor = resourceBundle.getString("email.assignedEditor.subject");
@@ -345,8 +349,10 @@ public class SubmissionService implements Serializable {
 
                 if (sendEmail(newEditor, subjectNewEditor, null, bodyNewEditor) && sendEmail(oldEditor, subjectOldEditor, null, bodyOldEditor)) {
                     transaction.commit();
+                    return true;
                 } else {
                     transaction.abort();
+                    return false;
                 }
             } else if (newSubmission.getState() == SubmissionState.ACCEPTED || newSubmission.getState() == SubmissionState.REJECTED) {
 
@@ -370,7 +376,7 @@ public class SubmissionService implements Serializable {
                             + url;
 
                 }
-                informAboutState(transaction, newSubmission, subject, body);
+                return informAboutState(transaction, newSubmission, subject, body);
             } else if (newSubmission.getState() == SubmissionState.REVISION_REQUIRED) {
 
                 String subject = resourceBundle.getString("email.requireRevision.subject");
@@ -378,12 +384,14 @@ public class SubmissionService implements Serializable {
                         + "\n" + newSubmission.getTitle() + "\n"
                         + url;
 
-                informAboutState(transaction, newSubmission, subject, body);
+                return informAboutState(transaction, newSubmission, subject, body);
             } else if (newSubmission.getState() == SubmissionState.SUBMITTED) {
                 uiMessageEvent.fire(new UIMessage(resourceBundle.getString("newPaper"), MessageCategory.INFO));
                 transaction.commit();
+                return true;
             }
         }
+        return false;
 
     }
 
@@ -402,12 +410,12 @@ public class SubmissionService implements Serializable {
         return coAuthors;
     }
 
-    public void informAboutState(Transaction transaction, Submission submission, String subject, String body) {
+    public boolean informAboutState(Transaction transaction, Submission submission, String subject, String body) {
         List<User> coAuthors = getCoAuthors(transaction, submission);
 
         if (coAuthors == null) {
             transaction.abort();
-            return;
+            return false;
         }
 
         // Fill user DTO for submitter.
@@ -418,6 +426,7 @@ public class SubmissionService implements Serializable {
         sendMultipleEmails(submitter, coAuthors, subject, body);
         uiMessageEvent.fire(new UIMessage(resourceBundle.getString("changeData"), MessageCategory.INFO));
         transaction.commit();
+        return true;
 
     }
 
