@@ -259,7 +259,7 @@ public class SubmissionService implements Serializable {
                     transaction.abort();
                 }
             } else {
-                transaction.abort();
+                transaction.commit();
             }
         }
 
