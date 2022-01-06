@@ -351,14 +351,18 @@ public class SubmissionBacking implements Serializable {
      */
     public boolean disableReviewUploadButton() {
         boolean disable = true;
-        if (sessionInformation.getUser().isAdmin() || loggedInUserIsReviewer()) {
-            Review reviewAlreadyWritten = new Review();
-            reviewAlreadyWritten.setSubmissionId(submission.getId());
-            reviewAlreadyWritten.setReviewerId(sessionInformation.getUser().getId());
-            reviewAlreadyWritten.setPaperVersion(newestPaper.getVersionNumber());
-            // Only render if no review has been written yet.
-            if (reviewService.get(reviewAlreadyWritten) == null && newestPaper.isVisible()) {
-                disable = false;
+
+        // Cases for both admin and reviewer.
+        if (!loggedInUserHasPendingReviewRequest()) {
+            if (sessionInformation.getUser().isAdmin() || loggedInUserIsReviewer()) {
+                Review reviewAlreadyWritten = new Review();
+                reviewAlreadyWritten.setSubmissionId(submission.getId());
+                reviewAlreadyWritten.setReviewerId(sessionInformation.getUser().getId());
+                reviewAlreadyWritten.setPaperVersion(newestPaper.getVersionNumber());
+                // Only render if no review has been written yet.
+                if (reviewService.get(reviewAlreadyWritten) == null && newestPaper.isVisible()) {
+                    disable = false;
+                }
             }
         }
         return disable;
