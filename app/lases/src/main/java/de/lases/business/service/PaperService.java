@@ -1,16 +1,17 @@
 package de.lases.business.service;
 
+import de.lases.business.util.EmailUtil;
 import de.lases.global.transport.*;
-import de.lases.persistence.exception.DataNotCompleteException;
-import de.lases.persistence.exception.DataNotWrittenException;
-import de.lases.persistence.exception.InvalidFieldsException;
-import de.lases.persistence.exception.NotFoundException;
+import de.lases.persistence.exception.*;
 import de.lases.persistence.internal.ConfigReader;
 import de.lases.persistence.repository.PaperRepository;
+import de.lases.persistence.repository.SubmissionRepository;
 import de.lases.persistence.repository.Transaction;
+import de.lases.persistence.repository.UserRepository;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.enterprise.inject.spi.CDI;
+import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 
 import java.io.Serializable;
@@ -36,6 +37,9 @@ public class PaperService implements Serializable {
 
     @Inject
     private transient PropertyResourceBundle resourceBundle;
+
+    @Inject
+    private FacesContext facesContext;
 
     private static final Logger logger = Logger.getLogger(PaperService.class.getName());
 
@@ -77,12 +81,8 @@ public class PaperService implements Serializable {
     }
 
     /**
-     * Adds a {@link Paper} to a submission.
-     * <p>
-     * Whether this is a submission-pdf or a revision-pdf is determined internally.
-     * If this is a revision the editor will be informed by mail about this,
+     * Adds a {@link Paper} to a submission. The editor will be informed by mail about this,
      * using the {@link de.lases.business.util.EmailUtil}-utility.
-     * </p>
      *
      * @param file  The {@link FileDTO} to be added with the paper,
      *              containing a {@code byte[]} with the pdf.
@@ -92,46 +92,6 @@ public class PaperService implements Serializable {
      */
     public void add(FileDTO file, Paper paper) {
         Transaction transaction = new Transaction();
-
-        // Create the submission dto for checking if the added paper is the
-        // first one added to the submission.
-        Submission submission = new Submission();
-        submission.setId(paper.getSubmissionId());
-
-        // Create an admin to get full access to the list of added papers
-        User user = new User();
-        user.setAdmin(true);
-
-        List<Paper> paperList;
-
-        // TODO: Das email zeug wieder einkommentieren
-        logger.log(Level.SEVERE, "einkommentieren");
-//        try {
-//            // TODO: De Methode geht ned, do muss ich mir eine eigene schreiben!
-//            paperList = PaperRepository.getList(submission, transaction,
-//                    user, new ResultListParameters());
-//        } catch (DataNotCompleteException e) {
-//            uiMessageEvent.fire(new UIMessage(resourceBundle.getString(
-//                    "dataNotWritten"), MessageCategory.ERROR));
-//            logger.log(Level.WARNING, e.getMessage());
-//            transaction.abort();
-//            return;
-//        } catch (NotFoundException e) {
-//            transaction.abort();
-//            throw new InvalidFieldsException("the submission specified in the"
-//                    + "paper DTO was not found", e);
-//        }
-//
-//        // TODO: Sobald die richtige Methode implementiert ist hier ein assert anstatt ein if einbauen!
-//        if (paperList == null) {
-//            logger.log(Level.SEVERE, "paperList is still null, probably because the paperGetList method is not" +
-//                    "implemented yet!");
-//        } else {
-//            if (!paperList.isEmpty()) {
-//                logger.log(Level.INFO, "Sending email to an editor.");
-//                // TODO: Email senden oder a ned in develop mode.
-//            }
-//        }
 
         try {
             PaperRepository.add(paper, file, transaction);
@@ -143,7 +103,59 @@ public class PaperService implements Serializable {
             transaction.abort();
             return;
         }
-        transaction.commit();
+
+        if (sendEmailsForPaper(paper, transaction)) {
+            transaction.commit();
+        } else {
+            transaction.abort();
+        }
+    }
+
+    /**
+     * @author Sebastian Vogt
+     */
+    private boolean sendEmailsForPaper(Paper paper, Transaction transaction) {
+        Submission submission = new Submission();
+        submission.setId(paper.getSubmissionId());
+
+        try {
+            submission = SubmissionRepository.get(submission, transaction);
+        } catch (NotFoundException | DataNotCompleteException e) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString(
+                    "dataNotWritten"), MessageCategory.ERROR));
+            logger.log(Level.WARNING, "Submission was not found or could not be loaded " +
+                    "when adding a paper.");
+            return false;
+        }
+
+        User editor = new User();
+        editor.setId(submission.getEditorId());
+
+        try {
+            editor = UserRepository.get(editor, transaction);
+        } catch (NotFoundException ex) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString(
+                    "dataNotWritten"), MessageCategory.ERROR));
+            logger.log(Level.WARNING, "Editor was not found when adding a paper.");
+            return false;
+        }
+
+        assert editor != null;
+        assert editor.getEmailAddress() != null;
+
+        String emailEditor = editor.getEmailAddress();
+
+        try {
+            EmailUtil.sendEmail(new String[]{emailEditor}, null,
+                    resourceBundle.getString("email.editorRevision.subject"),
+                    resourceBundle.getString("email.editorRevision.body") + "\n" + submission.getTitle()
+                            + "\n" + EmailUtil.generateSubmissionURL(submission, facesContext));
+        } catch (EmailTransmissionFailedException e) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("emailNotSent") + " "
+                    + String.join(", ", e.getInvalidAddresses()), MessageCategory.ERROR));
+            return false;
+        }
+        return true;
     }
 
     /**
