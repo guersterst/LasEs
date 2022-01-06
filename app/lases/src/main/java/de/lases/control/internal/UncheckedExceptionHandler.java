@@ -87,6 +87,7 @@ public class UncheckedExceptionHandler extends ExceptionHandlerWrapper {
                                 Arrays.toString(throwable.getStackTrace()));
             }
 
+            throwable.printStackTrace();
             facesContext.getExternalContext().getSessionMap().put("internal_error_message", errorMessage);
             navigationHandler.handleNavigation(facesContext, null,
                     "/views/anonymous/errorPage?faces-redirect=true");

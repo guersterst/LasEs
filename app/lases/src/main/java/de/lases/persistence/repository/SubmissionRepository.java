@@ -6,7 +6,6 @@ import de.lases.persistence.internal.ConfigReader;
 import de.lases.persistence.util.DatasourceUtil;
 import de.lases.persistence.util.TransientSQLExceptionChecker;
 import jakarta.enterprise.inject.spi.CDI;
-import org.postgresql.util.PSQLException;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
 import java.sql.*;
@@ -134,7 +133,6 @@ public class SubmissionRepository {
      */
     public static Submission add(Submission submission, Transaction transaction)
             throws DataNotWrittenException {
-        // TODO: die ids auch noch checken, falls die mitlerweile auch Integer sind
         if (submission.getTitle() == null || submission.getState() == null || submission.getSubmissionTime() == null) {
             throw new InvalidFieldsException("At least one of the required fields of the submission was null");
         }
@@ -533,7 +531,7 @@ public class SubmissionRepository {
                 throw new DatasourceQueryFailedException("The list of submissions could not be retrieved.", e);
             }
         }
-        return null;
+        return result;
     }
 
     /**
@@ -850,7 +848,7 @@ public class SubmissionRepository {
                 stmt.setString(qParamCounter++, "%" + params.getFilterColumns().get(column) + "%");
             }
         }
-        for (String column : filterColumnNames) {
+        for (int i = 0; i< filterColumnNames.size(); i++) {
             stmt.setString(qParamCounter++,
                     "%" + Objects.requireNonNullElse(params.getGlobalSearchWord(), "") + "%");
         }
