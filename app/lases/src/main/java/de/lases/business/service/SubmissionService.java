@@ -290,7 +290,6 @@ public class SubmissionService implements Serializable {
      *                      </ul>
      */
     public void change(Submission newSubmission) {
-        // TODO: Send a Email in some cases.
 
         if (newSubmission.getId() == null) {
 
@@ -350,6 +349,7 @@ public class SubmissionService implements Serializable {
                     transaction.abort();
                 }
             } else if (newSubmission.getState() == SubmissionState.ACCEPTED || newSubmission.getState() == SubmissionState.REJECTED) {
+
                 // Inform submitter a co-authors about a changed submission state.
                 String subject = "";
                 String body = "";
@@ -379,6 +379,9 @@ public class SubmissionService implements Serializable {
                         + url;
 
                 informAboutState(transaction, newSubmission, subject, body);
+            } else if (newSubmission.getState() == SubmissionState.SUBMITTED) {
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("newPaper"), MessageCategory.INFO));
+                transaction.commit();
             }
         }
 
@@ -566,6 +569,7 @@ public class SubmissionService implements Serializable {
         Transaction transaction = new Transaction();
         try {
             ReviewedByRepository.change(reviewedBy, transaction);
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("changeData"), MessageCategory.INFO));
             transaction.commit();
         } catch (NotFoundException e) {
             transaction.abort();
