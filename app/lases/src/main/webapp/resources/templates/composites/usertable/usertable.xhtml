@@ -70,9 +70,6 @@
                 <h:outputText id="employer-otxt" value="#{var.employer}"/>
             </h:column>
 
-            <!-- fields -->
-            <!-- todo -->
-
             <!-- birthdate -->
             <h:column>
                 <f:facet name="header">
@@ -95,11 +92,18 @@
                                           columnIdentifier="email_address"
                                           columnNamei18n="#{labels.email}"/>
                 </f:facet>
-                <!-- todo -->
+                <h:outputLink id="emial-olnk"
+                              value="#{cc.attrs.backing.generateMailTo(var.emailAddress)}"
+                              title="#{help.mailTo}">
+                    #{var.emailAddress}
+                </h:outputLink>
+
+                <!--
                 <h:outputLink value="#{var.emailAddress}"
                               title="#{help.mailTo}"
-                              outcome="#{cc.attrs.backing.generateMailTo(var.emailAddress)}">
-                </h:outputLink>
+                              outcome="#{cc.attrs.backing.generateMailTo(var.emailAddress)}"/>
+                <h:outputText value="#{cc.attrs.backing.generateMailTo(var.emailAddress)}"/>
+                -->
             </h:column>
         </pg:pagination>
     </h:form>
