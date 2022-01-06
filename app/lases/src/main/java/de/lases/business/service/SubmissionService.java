@@ -220,7 +220,6 @@ public class SubmissionService implements Serializable {
 
             try {
                 SubmissionRepository.remove(submission, transaction);
-                transaction.commit();
             } catch (DataNotWrittenException e) {
 
                 uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotWritten"), MessageCategory.WARNING));
@@ -231,6 +230,31 @@ public class SubmissionService implements Serializable {
                 uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotFound"), MessageCategory.ERROR));
                 transaction.abort();
 
+            }
+
+
+            if (submission.getEditorId() != null) {
+                User editor = new User();
+                editor.setId(submission.getEditorId());
+
+                try {
+                    editor = UserRepository.get(editor, transaction);
+                } catch (NotFoundException e) {
+                    uiMessageEvent.fire(new UIMessage(resourceBundle.getString("userNotFound"), MessageCategory.ERROR));
+                    transaction.abort();
+                }
+
+                String subject = resourceBundle.getString("email.removeSubmission.subject");
+                String body = resourceBundle.getString("email.removeSubmission.body")
+                        .concat("\n").concat(submission.getTitle());
+
+                if (sendEmail(editor, subject, null, body)) {
+                    transaction.commit();
+                } else {
+                    transaction.abort();
+                }
+            } else {
+                transaction.abort();
             }
         }
 

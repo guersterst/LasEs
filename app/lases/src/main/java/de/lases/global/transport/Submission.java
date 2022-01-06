@@ -15,7 +15,7 @@ public class Submission implements Cloneable {
 
     private int authorId;
 
-    private int editorId;
+    private Integer editorId;
 
     private String title;
 
@@ -80,7 +80,7 @@ public class Submission implements Cloneable {
         this.authorId = authorId;
     }
 
-    public int getEditorId() {
+    public Integer getEditorId() {
         return editorId;
     }
 
