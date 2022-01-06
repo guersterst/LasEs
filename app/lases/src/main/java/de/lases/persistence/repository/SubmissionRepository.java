@@ -134,7 +134,6 @@ public class SubmissionRepository {
      */
     public static Submission add(Submission submission, Transaction transaction)
             throws DataNotWrittenException {
-        // TODO: die ids auch noch checken, falls die mitlerweile auch Integer sind
         if (submission.getTitle() == null || submission.getState() == null || submission.getSubmissionTime() == null) {
             throw new InvalidFieldsException("At least one of the required fields of the submission was null");
         }
