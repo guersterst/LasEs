@@ -178,23 +178,24 @@ public class SubmissionService implements Serializable {
         String emailEditor = editor.getEmailAddress();
 
         try {
-            EmailUtil.sendEmail(new String[]{emailEditor}, null,
-                    resourceBundle.getString("email.assignedEditor.subject"),
-                    resourceBundle.getString("email.assignedEditor.body") + submission.getTitle());
-            if (!emailsCoAuthorsRegistered.isEmpty()) {
-                EmailUtil.sendEmail(emailsCoAuthorsRegistered.toArray(new String[0]), null,
-                        resourceBundle.getString("email.assignedCoAuthor.subject"),
-                        resourceBundle.getString("email.assignedCoAuthor.body") + submission.getTitle()
-                                + "DU BSIT SCHON REIGSTRIERT");
-            }
             if (!emailsCoAuthorsNotRegistered.isEmpty()) {
                 EmailUtil.sendEmail(emailsCoAuthorsNotRegistered.toArray(new String[0]), null,
                         resourceBundle.getString("email.assignedCoAuthor.subject"),
                         resourceBundle.getString("email.assignedCoAuthor.body") + submission.getTitle()
                                 + "DU BSIT NO NED REIGSTRIERT");
             }
+            if (!emailsCoAuthorsRegistered.isEmpty()) {
+                EmailUtil.sendEmail(emailsCoAuthorsRegistered.toArray(new String[0]), null,
+                        resourceBundle.getString("email.assignedCoAuthor.subject"),
+                        resourceBundle.getString("email.assignedCoAuthor.body") + submission.getTitle()
+                                + "DU BSIT SCHON REIGSTRIERT");
+            }
+            EmailUtil.sendEmail(new String[]{emailEditor}, null,
+                    resourceBundle.getString("email.assignedEditor.subject"),
+                    resourceBundle.getString("email.assignedEditor.body") + submission.getTitle());
         } catch (EmailTransmissionFailedException e) {
-            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("emailNotSent"), MessageCategory.ERROR));
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("emailNotSent") + " "
+                    + String.join(", ", e.getInvalidAddresses()), MessageCategory.ERROR));
             return false;
         }
         return true;
