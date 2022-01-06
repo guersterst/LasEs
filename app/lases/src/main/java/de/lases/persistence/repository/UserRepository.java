@@ -1251,12 +1251,13 @@ public class UserRepository {
 
     public static int getCountItemsList(Transaction transaction, ResultListParameters resultListParameters)
             throws DataNotCompleteException, NotFoundException {
+
         if (transaction == null) {
-            logger.severe("Passed transaction is null.");
+            logger.severe("Passed transaction is invalid.");
             throw new IllegalArgumentException("Transaction can not be null.");
         }
         if (resultListParameters == null) {
-            logger.severe("Passed result-list parameters is null.");
+            logger.severe("Passed result-list parameters are null.");
             throw new IllegalArgumentException("ResultListParameters must not be null.");
         }
 
@@ -1265,7 +1266,6 @@ public class UserRepository {
         try (PreparedStatement ps = connection.prepareStatement(generateResultListParametersUserListSQL(resultListParameters, true))) {
 
             // Set values here for protection against sql injections.
-            // See comments in generateResultListParametersUserListSQL()
             int i = 1;
 
             // Filtering
@@ -1288,13 +1288,15 @@ public class UserRepository {
 
             if (rs.next()) {
                 return rs.getInt("count");
+            } else {
+                logger.severe("Could not compute the amount of users.");
+                throw new NotFoundException();
             }
 
         } catch (SQLException e) {
-            logger.severe(e.getMessage());
+            transaction.abort();
+            DatasourceUtil.logSQLException(e, logger);
             throw new DatasourceQueryFailedException(e.getMessage(), e);
         }
-
-        return -1;
     }
 }
