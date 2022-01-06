@@ -220,7 +220,7 @@ public class SubmissionService implements Serializable {
 
             try {
                 SubmissionRepository.remove(submission, transaction);
-                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("deleteSubmission"), MessageCategory.WARNING));
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("deleteSubmission"), MessageCategory.INFO));
                 transaction.commit();
             } catch (DataNotWrittenException e) {
 
