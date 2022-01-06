@@ -86,7 +86,7 @@ public class DatasourceUtil {
             ps.executeUpdate();
             transaction.commit();
         } catch (SQLException e) {
-            logSQLException(e, l);
+            logSQLException(e, logger);
             throw new DatasourceNotFoundException(e.getMessage());
         }
     }
@@ -110,7 +110,7 @@ public class DatasourceUtil {
             connectionState.setSuccessfullyConnected(conn.isValid(10));
         } catch (SQLException e) {
             connectionState.setErrorMessage(e.getMessage());
-            logSQLException(e, l);
+            logSQLException(e, logger);
 
             // fail
             transaction.abort();
@@ -130,7 +130,7 @@ public class DatasourceUtil {
             ps.close();
         } catch (SQLException e) {
             connectionState.setErrorMessage("DB schema has not been created yet.");
-            logSQLException(e, l);
+            logSQLException(e, logger);
 
             // fail
             transaction.abort();
