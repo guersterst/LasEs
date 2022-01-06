@@ -8,6 +8,7 @@ import de.lases.control.exception.IllegalUserFlowException;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.event.Event;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -19,6 +20,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PropertyResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -50,6 +52,12 @@ public class NewSubmissionBacking implements Serializable {
 
     @Inject
     private ScientificForumService forumService;
+
+    @Inject
+    private Event<UIMessage> uiMessageEvent;
+
+    @Inject
+    private PropertyResourceBundle messageBundle;
 
     private Submission newSubmission;
 
@@ -152,7 +160,7 @@ public class NewSubmissionBacking implements Serializable {
      *
      * @return The page of the entered submission.
      */
-    public String submit() throws IOException {
+    public String submit() {
         newSubmission.setSubmissionTime(LocalDateTime.now());
         newSubmission.setState(SubmissionState.SUBMITTED);
         newSubmission.setAuthorId(sessionInformation.getUser().getId());
@@ -161,8 +169,17 @@ public class NewSubmissionBacking implements Serializable {
         paper.setVisible(true);
         paper.setUploadTime(LocalDateTime.now());
         FileDTO file = new FileDTO();
-        file.setFile(uploadedPDF.getInputStream().readAllBytes());
-        newSubmission = submissionService.add(newSubmission, coAuthors, paper, file);
+
+        try {
+            file.setFile(uploadedPDF.getInputStream().readAllBytes());
+            newSubmission = submissionService.add(newSubmission, coAuthors, paper, file);
+        } catch (IOException e) {
+            initNewSubmission();
+
+            uiMessageEvent.fire(new UIMessage(messageBundle.getString("failedUpload"), MessageCategory.ERROR));
+            logger.log(Level.WARNING, "the submission was not successfully added.");
+            return null;
+        }
 
         if (newSubmission == null) {
             initNewSubmission();
