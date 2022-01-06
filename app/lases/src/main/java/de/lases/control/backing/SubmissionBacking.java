@@ -1,6 +1,7 @@
 package de.lases.control.backing;
 
 import de.lases.business.service.*;
+import de.lases.business.util.EmailUtil;
 import de.lases.control.exception.IllegalAccessException;
 import de.lases.control.exception.IllegalUserFlowException;
 import de.lases.control.internal.*;
@@ -704,5 +705,16 @@ public class SubmissionBacking implements Serializable {
      */
     public String getStyleStatus() {
         return styleSubmissionState(submission.getState());
+    }
+
+    /**
+     * Generates a mail to link.
+     *
+     * @param user the recipient.
+     * @return a mail to link.
+     */
+    public String sendMailTo(User user) {
+        String[] email = {user.getEmailAddress()};
+        return EmailUtil.generateMailToLink(email, null, null, null);
     }
 }

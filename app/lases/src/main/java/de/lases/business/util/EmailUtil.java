@@ -2,6 +2,7 @@ package de.lases.business.util;
 
 
 import de.lases.business.internal.ConfigPropagator;
+import de.lases.global.transport.Submission;
 import de.lases.persistence.exception.EmailTransmissionFailedException;
 import de.lases.persistence.util.EmailSender;
 import jakarta.enterprise.inject.spi.CDI;
@@ -9,6 +10,8 @@ import jakarta.faces.context.FacesContext;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Provides functionality for sending emails.
@@ -81,6 +84,11 @@ public class EmailUtil {
         }
 
         return protocol + "://" + host + contextPath + "/" + outcome;
+    }
+
+    public static String generateSubmissionURL(Submission submission, FacesContext facesContext) {
+        String base = generateLinkForEmail(facesContext, "views/authenticated/submission.xhtml");
+        return facesContext.getExternalContext().encodeBookmarkableURL(base, Map.of("id", List.of(submission.getId().toString())));
     }
 
 }

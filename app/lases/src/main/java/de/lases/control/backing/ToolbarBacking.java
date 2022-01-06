@@ -2,6 +2,7 @@ package de.lases.control.backing;
 
 import de.lases.business.service.SubmissionService;
 import de.lases.business.service.UserService;
+import de.lases.business.util.EmailUtil;
 import de.lases.control.exception.IllegalUserFlowException;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
@@ -113,7 +114,6 @@ public class ToolbarBacking implements Serializable {
      * view params by the {@code SubmissionBacking}. This method is <b>not</b>
      * called by a view action but rather by the onLoad method in the
      * {@code SubmissionBacking}.
-     *
      */
     public void onLoad(Submission sub) {
         submission = sub;
@@ -189,6 +189,7 @@ public class ToolbarBacking implements Serializable {
     /**
      * Checks if the view param is an integer and throws an exception if it is
      * not
+     *
      * @throws IllegalUserFlowException If there is no integer provided as view
      *                                  param
      */
@@ -256,6 +257,7 @@ public class ToolbarBacking implements Serializable {
     public boolean isAccepted() {
         return submission.getState() == SubmissionState.ACCEPTED;
     }
+
     /**
      * Reject the submission belonging to this page.
      */
@@ -434,6 +436,17 @@ public class ToolbarBacking implements Serializable {
             formatDate.deleteCharAt(3);
             return formatDate.toString();
         }
+    }
+
+    /**
+     * Generates a mail to link.
+     *
+     * @param user the recipient.
+     * @return a mail to link.
+     */
+    public String sendMailTo(User user) {
+        String[] email = {user.getEmailAddress()};
+        return EmailUtil.generateMailToLink(email, null, null, null);
     }
 
 }
