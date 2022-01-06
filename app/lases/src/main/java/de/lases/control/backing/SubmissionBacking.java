@@ -237,7 +237,11 @@ public class SubmissionBacking implements Serializable {
      * @throws IllegalUserFlowException If there is no integer provided as view
      *                                  param
      */
-    public void preRenderViewListener(ComponentSystemEvent event) {}
+    public void preRenderViewListener(ComponentSystemEvent event) {
+        if (submission.getId() == null) {
+            throw new IllegalUserFlowException("Submission page called without an id.");
+        }
+    }
 
     /**
      * Set the state of the submission, which can be SUBMITTED,

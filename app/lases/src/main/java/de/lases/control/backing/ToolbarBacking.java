@@ -9,6 +9,7 @@ import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.event.Event;
 import jakarta.faces.context.FacesContext;
+import jakarta.faces.event.ComponentSystemEvent;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -148,6 +149,19 @@ public class ToolbarBacking implements Serializable {
                 reviewer.put(user, null);
             }
             hasNoDeadline = true;
+        }
+    }
+
+    /**
+     * Checks if the view param is an integer and throws an exception if it is
+     * not
+     *
+     * @throws IllegalUserFlowException If there is no integer provided as view
+     *                                  param
+     */
+    public void preRenderViewListener(ComponentSystemEvent event) {
+        if (submission.getId() == null) {
+            throw new IllegalUserFlowException("Submission page called without an id.");
         }
     }
 
