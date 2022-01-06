@@ -102,7 +102,7 @@ CREATE TABLE reviewed_by(
 
 CREATE TABLE paper (
 	version INTEGER NOT NULL,
-	submission_id SERIAL NOT NULL,
+	submission_id INTEGER NOT NULL,
 	timestamp_upload TIMESTAMP NOT NULL DEFAULT NOW(),
 	is_visible BOOLEAN NOT NULL,
 	pdf_file BYTEA NOT NULL,

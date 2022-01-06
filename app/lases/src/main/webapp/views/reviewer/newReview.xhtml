@@ -17,9 +17,10 @@
 
         <div class="col d-flex justify-content-center">
             <div class="card" id="review-upload-box" style="width: 50rem;">
+                <div id="review-box-header" class="card-header">
+                    <h:outputText value="#{labels.uploadReview}" styleClass="h2"/>
+                </div>
                 <div id="upload-box-body" class="card-body">
-                    <h2>#{labels.uploadReview}</h2>
-                    <hr/>
                     <h:form id="upload-review-form" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="comment-itxt-area">#{labels.reviewComment}</label>
@@ -31,7 +32,9 @@
                             <label for="recommend-cbx">#{labels.reviewRecommendation}</label>
                             <h:selectBooleanCheckbox id="recommend-cbx" value="#{newReviewBacking.review.acceptPaper}" style="margin-left: 1rem"/>
                         </div>
+                        <hr/>
                         <div class="form-group">
+                            <label for="pdf-upload-ifile">#{labels.reviewFileUpload}</label>
                             <h:inputFile id="pdf-upload-ifile" value="#{newReviewBacking.uploadedPDF}"
                                          required="false"
                                          validator="pdfValidator"
@@ -42,6 +45,7 @@
                             <hr/>
                             <h:commandButton id="upload-cbtn" value="#{labels.uploadReview}"
                                              action="#{newReviewBacking.addReview()}"
+                                             styleClass="btn btn-primary"
                                              title="#{help.uploadDesc}"/>
                         </div>
                     </h:form>
