@@ -1,6 +1,6 @@
 package de.lases.business.service;
 
-import de.lases.business.internal.ConfigPropagator;
+import de.lases.business.util.EmailUtil;
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.DataNotCompleteException;
 import de.lases.persistence.exception.DataNotWrittenException;
@@ -12,6 +12,7 @@ import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.enterprise.inject.spi.CDI;
+import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 
 import java.io.Serial;
@@ -40,7 +41,7 @@ public class ReviewService implements Serializable {
     private transient PropertyResourceBundle resourceBundle;
 
     @Inject
-    private ConfigPropagator configPropagator;
+    private FacesContext facesContext;
 
     private static final Logger logger = Logger.getLogger(PaperService.class.getName());
 
@@ -104,7 +105,7 @@ public class ReviewService implements Serializable {
             String subject = resourceBundle.getString("email.releaseReview.subject");
             String body = resourceBundle.getString("email.releaseReview.body")
                     + "\n" + submission.getTitle() + "\n"
-                    + configPropagator.getProperty("BASE_URL") + "/views/authenticated/submission.xhtml?id=" + submission.getId();
+                    + EmailUtil.generateSubmissionURL(submission, facesContext);
 
             SubmissionService submissionService = new SubmissionService();
 

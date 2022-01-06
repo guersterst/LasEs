@@ -188,7 +188,6 @@ public class ToolbarBacking implements Serializable {
             // In case the user is already reviewer you only change the deadline.
             if (reviewer.containsKey(newReviewer)) {
                 submissionService.changeReviewedBy(reviewedBy);
-                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("changedReviewerDeadline"), MessageCategory.INFO));
                 reviewer.remove(newReviewer);
             } else {
                 submissionService.addReviewer(newReviewer, reviewedBy);
