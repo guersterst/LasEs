@@ -46,6 +46,9 @@ public class RegistrationService {
     @Inject
     private Event<UIMessage> uiMessageEvent;
 
+    @Inject
+    private FacesContext facesContext;
+
     /**
      * Registers and creates a regular user in the database.
      * <p>
@@ -140,7 +143,7 @@ public class RegistrationService {
      * @param user The user to be verified filled with id and email address.
      * @return If the verification process was successfully initiated.
      */
-    public boolean initiateVerificationProcess(User user, Transaction t) {
+    private boolean initiateVerificationProcess(User user, Transaction t) {
 
         Verification verification = new Verification();
         verification.setVerified(false);
@@ -177,8 +180,8 @@ public class RegistrationService {
     }
 
     private String generateValidationUrl(Verification verification) {
-        String base = configPropagator.getProperty("BASE_URL") + "/views/anonymous/verification.xhtml";
-        return FacesContext.getCurrentInstance().getExternalContext().encodeBookmarkableURL(base,
+        String base = EmailUtil.generateLinkForEmail(facesContext, "views/anonymous/verification.xhtml");
+        return facesContext.getExternalContext().encodeBookmarkableURL(base,
                 Map.of("validationRandom", List.of(verification.getValidationRandom())));
     }
 

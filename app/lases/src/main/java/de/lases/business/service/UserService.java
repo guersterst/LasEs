@@ -27,6 +27,11 @@ import java.util.logging.Logger;
 /**
  * Provides all functionality for creating, manipulating or receiving information about users in the application.
  * In case of an unexpected state, a {@link UIMessage} event will be fired.
+ *
+ * @author Sebastian Vogt
+ * @author Thomas Kirz
+ * @author Johannes Garstenauer
+ * @author Johann Schicho
  */
 @Dependent
 public class UserService implements Serializable {
@@ -44,6 +49,9 @@ public class UserService implements Serializable {
 
     @Inject
     private ConfigPropagator configPropagator;
+
+    @Inject
+    private FacesContext facesContext;
 
     /**
      * Gets a {@code User}.
@@ -68,7 +76,6 @@ public class UserService implements Serializable {
             } catch (NotFoundException ex) {
                 uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataNotFound"),
                         MessageCategory.ERROR));
-                logger.warning(ex.getMessage());
                 transaction.abort();
             }
             return result;
@@ -90,6 +97,8 @@ public class UserService implements Serializable {
      *                         and will not be deleted if empty.
      *                   When the email address is changed the verification process is initiated
      *                   using the {@code EmailUtil} utility.
+     *
+     * @author Sebastian Vogt
      */
     public void change(User newUser) {
         Transaction transaction = new Transaction();
@@ -178,8 +187,8 @@ public class UserService implements Serializable {
     }
 
     private String generateValidationUrl(Verification verification) {
-        String base = configPropagator.getProperty("BASE_URL") + "/views/anonymous/verification.xhtml";
-        return FacesContext.getCurrentInstance().getExternalContext().encodeBookmarkableURL(base,
+        String base = EmailUtil.generateLinkForEmail(facesContext, "views/anonymous/verification.xhtml");
+        return facesContext.getExternalContext().encodeBookmarkableURL(base,
                 Map.of("validationRandom", List.of(verification.getValidationRandom())));
     }
 
@@ -187,6 +196,8 @@ public class UserService implements Serializable {
      * Deletes a {@code User} from the application's data.
      *
      * @param user A {@link User}-DTO containing a valid id.
+     *
+     * @author Sebastian Vogt
      */
     public void remove(User user) {
         Transaction transaction = new Transaction();

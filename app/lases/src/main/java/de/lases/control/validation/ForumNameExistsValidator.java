@@ -16,6 +16,11 @@ import java.io.Serializable;
 import java.util.PropertyResourceBundle;
 import java.util.logging.Logger;
 
+/**
+ * Validates whether a forum name exists and does not belong to the current forum.
+ *
+ * @author Johannes Garstenauer
+ */
 @FacesValidator
 public class ForumNameExistsValidator implements Validator<String>, Serializable {
 

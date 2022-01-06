@@ -13,7 +13,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -21,6 +20,7 @@ import java.util.logging.Logger;
  * possibility to get lists of submissions.
  *
  * @author Thomas Kirz
+ * @author Sebastian Vogt
  */
 public class SubmissionRepository {
 
@@ -129,7 +129,6 @@ public class SubmissionRepository {
      *                                        submission is null.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
-     * @return The submission that was added, but filled with its id.
      *
      * @author Sebastian Vogt
      */
@@ -141,7 +140,7 @@ public class SubmissionRepository {
         }
 
         Connection conn = transaction.getConnection();
-        Integer id = null;
+        int id;
         String sql = """
                 SELECT max(id) FROM submission
                 """;
@@ -226,13 +225,6 @@ public class SubmissionRepository {
 
         Connection connection = transaction.getConnection();
 
-        try {
-            findSubmission(submission, connection);
-        } catch (SQLException exception) {
-            logger.fine("Searching for a submission failed. Tried to change the submission.");
-            throw new NotFoundException("Submission id doesn't exist.");
-        }
-
         // Only the following data can be changed.
         String sql = """
                 UPDATE submission
@@ -250,12 +242,20 @@ public class SubmissionRepository {
             statement.setInt(4, submission.getEditorId());
             statement.setInt(5, submission.getId());
 
-            statement.executeUpdate();
+            if (statement.executeUpdate() == 0) {
+                logger.severe("Searching for a submission failed. Tried to change the submission.");
+                throw new NotFoundException("Submission id doesn't exist.");
+            }
 
         } catch (SQLException exception) {
             DatasourceUtil.logSQLException(exception, logger);
-            transaction.abort();
-            throw new DatasourceQueryFailedException("A datasource exception occurred while changing a submission's data.", exception);
+
+            if (TransientSQLExceptionChecker.isTransient(exception.getSQLState())) {
+                throw new DataNotWrittenException("Changing submission wasn't successful.", exception);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("A datasource exception occurred while changing a submission's data.", exception);
+            }
         }
 
     }
@@ -284,15 +284,6 @@ public class SubmissionRepository {
 
         Connection connection = transaction.getConnection();
 
-        try {
-            ResultSet find = findSubmission(submission, connection);
-
-
-        } catch (SQLException exception) {
-            logger.fine("Removing submission with the submission id: " + submission.getId());
-            throw new NotFoundException();
-        }
-
         String sql = """
                 DELETE FROM submission
                 WHERE id = ?
@@ -300,12 +291,20 @@ public class SubmissionRepository {
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, submission.getId());
 
-            statement.executeUpdate();
+            if (statement.executeUpdate() == 0) {
+                logger.severe("Removing submission with the submission id: " + submission.getId());
+                throw new NotFoundException();
+            }
 
         } catch (SQLException exception) {
             DatasourceUtil.logSQLException(exception, logger);
-            transaction.abort();
-            throw new DatasourceQueryFailedException("A datasource exception occurred while removing a submission.", exception);
+
+            if (TransientSQLExceptionChecker.isTransient(exception.getSQLState())) {
+                throw new DataNotWrittenException("Removing submission wasn't successful.", exception);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("A datasource exception occurred while removing a submission.", exception);
+            }
         }
     }
 
@@ -556,13 +555,15 @@ public class SubmissionRepository {
      * @param submission  A scientific forum dto with a valid id.
      * @param user        A user dto with a valid id.
      * @param transaction The transaction to use.
-     * @throws NotFoundException              If there is no scientific forum with the
+     * @throws NotFoundException              If there is no submission with the
      *                                        provided id or there is no user with the
      *                                        provided id.
      * @throws DataNotWrittenException        If writing the data to the repository
      *                                        fails.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     *
+     * @author Sebastian Vogt
      */
     public static void addCoAuthor(Submission submission, User user,
                                    Transaction transaction)
@@ -589,7 +590,7 @@ public class SubmissionRepository {
             // 23503: Foreign key constraint violated
             if (ex.getSQLState().equals("23503")) {
                 throw new NotFoundException("Either the specified user or submission does not exist");
-            } else if (!(ex instanceof PSQLException)) {
+            } else if (TransientSQLExceptionChecker.isTransient(ex.getSQLState())) {
                 throw new DataNotWrittenException("The co-author was not added", ex);
             } else {
                 transaction.abort();
@@ -611,10 +612,11 @@ public class SubmissionRepository {
      *                                        fails.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     * @throws KeyAlreadyExistsException      If a user already reviews this submission.
      */
     public static void addReviewer(ReviewedBy reviewedBy,
                                    Transaction transaction)
-            throws NotFoundException, DataNotWrittenException, KeyAlreadyExistsException {
+            throws NotFoundException, DataNotWrittenException {
         if (reviewedBy.getSubmissionId() == null) {
             transaction.abort();
             logger.severe("Passed submission DTO is not sufficiently filled.");
@@ -627,27 +629,7 @@ public class SubmissionRepository {
         }
 
         Connection connection = transaction.getConnection();
-        String findSubmission = "SELECT s.id FROM submission s WHERE s.id = ?";
 
-        try (PreparedStatement statement = connection.prepareStatement(findSubmission)) {
-
-            statement.setInt(1, reviewedBy.getSubmissionId());
-
-        } catch (SQLException exception) {
-            transaction.abort();
-            logger.warning("Searching for a submission with the id: " + reviewedBy.getSubmissionId());
-            throw new NotFoundException(exception.getMessage());
-        }
-        String findUser = "SELECT * FROM \"user\" u WHERE u.id = ?";
-
-        try (PreparedStatement statement = connection.prepareStatement(findUser)) {
-            statement.setInt(1, reviewedBy.getReviewerId());
-            statement.executeQuery();
-        } catch (SQLException exception) {
-            transaction.abort();
-            logger.warning("Searching for an user with the id: " + reviewedBy.getReviewerId());
-            throw new NotFoundException(exception.getMessage());
-        }
 
         String sql = "INSERT INTO reviewed_by VALUES (?, ?, CAST (? as review_task_state), ?)";
 
@@ -657,13 +639,18 @@ public class SubmissionRepository {
             statement.setString(3, reviewedBy.getHasAccepted().name());
             statement.setTimestamp(4, Timestamp.valueOf(reviewedBy.getTimestampDeadline()));
 
-            statement.executeUpdate();
+            if (statement.executeUpdate() == 0) {
+                logger.warning("Searching for an user with the id: " + reviewedBy.getReviewerId());
+                throw new NotFoundException();
+            }
 
         } catch (SQLException exception) {
-            transaction.abort();
             DatasourceUtil.logSQLException(exception, logger);
             if (exception.getSQLState().equals("23505")) {
+                transaction.abort();
                 throw new KeyAlreadyExistsException("Reviewer does already review this submission.");
+            } else if (TransientSQLExceptionChecker.isTransient(exception.getSQLState())) {
+                throw new DataNotWrittenException("Data not written while adding a reviewer.", exception);
             } else {
                 transaction.abort();
                 throw new DatasourceQueryFailedException("A datasource exception occurred while adding a new reviewer.");
@@ -888,19 +875,4 @@ public class SubmissionRepository {
     private static boolean isFilled(String s) {
         return s != null && !s.isEmpty();
     }
-
-    private static ResultSet findSubmission(Submission submission, Connection connection) throws SQLException {
-        PreparedStatement find = connection.prepareStatement(
-                """
-                        SELECT *
-                        FROM submission
-                        WHERE id = ?
-                        """
-        );
-        find.setInt(1, submission.getId());
-
-        return find.executeQuery();
-
-    }
-
 }

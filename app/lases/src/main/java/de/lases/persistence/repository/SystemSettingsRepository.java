@@ -4,6 +4,7 @@ import de.lases.global.transport.FileDTO;
 import de.lases.global.transport.SystemSettings;
 import de.lases.persistence.exception.*;
 import de.lases.persistence.util.DatasourceUtil;
+import de.lases.persistence.util.TransientSQLExceptionChecker;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -59,8 +60,12 @@ public class SystemSettingsRepository {
 
             statement.executeUpdate();
         } catch (SQLException exception) {
-            transaction.abort();
             DatasourceUtil.logSQLException(exception, logger);
+
+            if (TransientSQLExceptionChecker.isTransient(exception.getSQLState())) {
+                throw new DataNotWrittenException("Data not written while updating system settings.");
+            }
+            transaction.abort();
             throw new DatasourceQueryFailedException("A datasource exception occurred while changing the system settings.");
         }
     }
@@ -103,7 +108,7 @@ public class SystemSettingsRepository {
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
-    public static FileDTO getLogo(Transaction transaction) throws NotFoundException {
+    public static FileDTO getLogo(Transaction transaction) throws NotFoundException, DataNotWrittenException {
 
         String sql = """
                 SELECT logo_image
@@ -123,15 +128,22 @@ public class SystemSettingsRepository {
                 logo.setFile(logoBytes);
             } else {
                 logger.severe("The logo could not be found in the query results.");
-                throw new NotFoundException();
+                throw new NotFoundException("The logo could not be found in the query results.");
             }
 
             if (logoResult.next()) {
                 throw new IllegalStateException("There must not be two 'system' entries in the database.");
             }
         } catch (SQLException ex) {
-            logger.severe("Could not fetch the logo from the database.");
-            throw new DatasourceQueryFailedException();
+            if (TransientSQLExceptionChecker.isTransient(ex.getSQLState())) {
+                logger.warning("The logo could not be fetched.");
+                throw new DataNotWrittenException("The logo could not be fetched.", ex);
+            } else {
+                DatasourceUtil.logSQLException(ex, logger);
+                transaction.abort();
+                throw new DatasourceQueryFailedException("A datasource exception"
+                        + "occurred", ex);
+            }
         }
         return logo;
     }
@@ -166,9 +178,16 @@ public class SystemSettingsRepository {
             PreparedStatement setLogoStatement = conn.prepareStatement(sql);
             setLogoStatement.setBytes(1, logo.getFile());
             setLogoStatement.executeUpdate();
-        } catch (SQLException e) {
-            logger.severe("The logo could not be updated into the database.");
-            throw new DataNotWrittenException();
+        } catch (SQLException ex) {
+            if (TransientSQLExceptionChecker.isTransient(ex.getSQLState())) {
+                logger.warning("The logo could not be updated into the database.");
+                throw new DataNotWrittenException("The logo could not be uploaded", ex);
+            } else {
+                transaction.abort();
+                DatasourceUtil.logSQLException(ex, logger);
+                throw new DatasourceQueryFailedException("A datasource exception"
+                        + "occurred", ex);
+            }
         }
     }
 

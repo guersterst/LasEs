@@ -27,7 +27,7 @@ public class PeriodicWorker {
      */
     public static void init() {
         logger.info("Initialising Periodic Worker with Clean Up Task.");
-        timer.schedule(cleanUpTask, 1000, TWELVE_HOURS_MS);
+        timer.schedule(cleanUpTask, TWELVE_HOURS_MS, TWELVE_HOURS_MS);
     }
 
     /**
