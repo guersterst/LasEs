@@ -12,7 +12,6 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import java.io.Serial;
-import java.io.Serializable;
 
 /**
  * Backing bean for the homepage.
@@ -25,7 +24,7 @@ public class HomepageBacking implements SubmissionPaginationBacking {
     private static final long serialVersionUID = -3666609342938323378L;
 
     private enum Tab {
-        OWN_SUBMISSIONS, SUBMISSIONS_TO_EDIT, SUBMISSIONS_TO_REVIEW;
+        OWN_SUBMISSIONS, SUBMISSIONS_TO_EDIT, SUBMISSIONS_TO_REVIEW
     }
     @Inject
     private SubmissionService submissionService;
@@ -44,10 +43,6 @@ public class HomepageBacking implements SubmissionPaginationBacking {
     private Pagination<Submission> submissionPagination;
 
     private User user;
-
-    private DateSelect submissionDateSelect;
-
-    private DateSelect deadlineDateSelect;
 
     /**
      * Initialize the dtos and load data from the datasource where possible.

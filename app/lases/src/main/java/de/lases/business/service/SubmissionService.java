@@ -1,6 +1,5 @@
 package de.lases.business.service;
 
-import de.lases.business.internal.ConfigPropagator;
 import de.lases.business.util.EmailUtil;
 import de.lases.global.transport.*;
 
