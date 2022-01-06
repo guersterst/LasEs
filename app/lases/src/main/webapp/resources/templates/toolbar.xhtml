@@ -34,7 +34,9 @@
                     <h:inputText id="add-deadline-reviewer-itxt"
                                  value="#{toolbarBacking.reviewedByInput.timestampDeadline}"
                                  title="#{help.addReviewerDeadline}"
-                                 styleClass="form-control" required="true" requiredMessage="#{message.missingDeadline}">
+                                 styleClass="form-control" required="true" requiredMessage="#{message.missingDeadline}"
+                                 a:placeholder="#{toolbarBacking.generateDatePlaceholder()}"
+                                 converterMessage="#{message.convertDateTime}">
                         <f:convertDateTime type="localDateTime"/>
                         <f:validator validatorId="dateTimeInFuture"/>
                     </h:inputText>
@@ -71,9 +73,10 @@
                                 <f:facet name="header">
                                     <h:outputText id="header-email" value="#{labels.emailInput}"/>
                                 </f:facet>
-                                <h:commandLink id="mail-cmdlnk" value="#{user.emailAddress}"
-                                               outcome="#{'mailto:'.concat(coAuthor.emailAddress)}"
-                                               includeViewParams="true" title="#{help.mailTo}"/>
+                                <h:outputLink id="mail-lnk" value="#{toolbarBacking.sendMailTo(user)}"
+                                              title="#{help.mailTo}">
+                                    #{user.emailAddress}
+                                </h:outputLink>
                             </h:column>
                             <h:column>
                                 <f:facet name="header">
@@ -158,7 +161,9 @@
                     <h:outputLabel id="revision-deadline-lbl" value="#{labels.deadline}"
                                    for="revision-deadline-itxt" styleClass="input-group-text"/>
                     <h:inputText id="revision-deadline-itxt" value="#{toolbarBacking.submission.deadlineRevision}"
-                                 title="#{help.addRevisionDeadline}" styleClass="form-control">
+                                 title="#{help.addRevisionDeadline}" styleClass="form-control"
+                                 a:placeholder="#{toolbarBacking.generateDatePlaceholder()}"
+                                 converterMessage="#{message.convertDateTime}">
                         <f:validator validatorId="dateTimeInFuture"/>
                         <f:convertDateTime type="localDateTime"/>
                     </h:inputText>

@@ -51,16 +51,7 @@ public class ScientificForumRepositoryNoMocksTest {
     }
 
     @Test
-    void testGetId() throws NotFoundException {
-        ScientificForum forum = new ScientificForum();
-        forum.setId(9);
-        Transaction t = new Transaction();
-        assertEquals("TEST FORUM", ScientificForumRepository.get(forum, t).getName());
-        t.commit();
-    }
-
-    @Test
-    void testGetNotFound() throws NotFoundException {
+    void testGetNotFound() {
         ScientificForum forum = new ScientificForum();
         forum.setId(-17);
         Transaction t = new Transaction();
@@ -69,7 +60,7 @@ public class ScientificForumRepositoryNoMocksTest {
     }
 
     @Test
-    void testExistsId() throws NotFoundException {
+    void testExistsId() {
         ScientificForum forum = new ScientificForum();
         forum.setId(-17);
         Transaction t = new Transaction();
