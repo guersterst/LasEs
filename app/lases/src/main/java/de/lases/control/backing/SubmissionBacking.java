@@ -258,7 +258,7 @@ public class SubmissionBacking implements Serializable {
      * @param review The review to download.
      * @throws IOException If the download fails.
      */
-    public void downloadReview(Review review) throws IOException {
+    public void downloadReview(Review review) {
         FileDTO file = reviewService.getFile(review);
         byte[] pdf = file.getFile();
 

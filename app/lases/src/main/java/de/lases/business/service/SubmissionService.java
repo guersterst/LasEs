@@ -446,7 +446,7 @@ public class SubmissionService implements Serializable {
      * @param reviewedBy Information about the review-request relationship.
      */
     public void addReviewer(User reviewer, ReviewedBy reviewedBy) {
-        if (reviewer.getId() == null || reviewer.getId().equals(reviewedBy.getReviewerId())) {
+        if (reviewer.getId() == null || !reviewer.getId().equals(reviewedBy.getReviewerId())) {
             logger.severe("The id in the reviewed_by DTO and the id in the user DTO does not match or at least one of them are null");
             throw new InvalidFieldsException("The id's need to be equal and must not be null.");
         }
