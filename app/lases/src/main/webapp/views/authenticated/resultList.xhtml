@@ -70,16 +70,18 @@
             </div>
         </div>
 
-        <hr/>
-
-        <div class="card">
-            <div class="card-header">
-                #{labels.userList}
+        <h:panelGroup rendered="#{navigationBacking.sessionInformation.user.privileges.contains(Privilege.EDITOR)
+                        || navigationBacking.sessionInformation.user.isAdmin()}">
+            <hr/>
+            <div class="card">
+                <div class="card-header">
+                    #{labels.userList}
+                </div>
+                <div class="card-body">
+                    <ut:usertable backing="#{resultListBacking}"/>
+                </div>
             </div>
-            <div class="card-body">
-                <ut:usertable backing="#{resultListBacking}"/>
-            </div>
-        </div>
+        </h:panelGroup>
 
     </div>
 </ui:define>
