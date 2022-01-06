@@ -153,9 +153,15 @@ public class PaperRepository {
             stmt.executeUpdate();
         } catch (SQLException ex) {
             DatasourceUtil.logSQLException(ex, logger);
-            transaction.abort();
-            throw new DatasourceQueryFailedException("A datasource exception"
-                    + "occurred", ex);
+
+            // transient exception or duplicate key value
+            if (TransientSQLExceptionChecker.isTransient(ex.getSQLState()) || ex.getSQLState().equals("23505")) {
+                throw new DataNotWrittenException("The paper could not be added", ex);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("A datasource exception"
+                        + "occurred", ex);
+            }
         }
     }
 

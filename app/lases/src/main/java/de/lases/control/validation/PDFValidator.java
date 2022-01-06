@@ -60,6 +60,10 @@ public class PDFValidator implements Validator<Part> {
             FacesMessage facesMessage = new FacesMessage(message + " " + fileMax + "MB");
             facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
             throw new ValidatorException(facesMessage);
+        } else if (!part.getSubmittedFileName().endsWith(".pdf")) {
+            FacesMessage facesMessage = new FacesMessage(messageResourceBundle.getString("validatePDFType"));
+            facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+            throw new ValidatorException(facesMessage);
         }
 
     }
