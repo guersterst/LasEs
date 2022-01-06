@@ -709,11 +709,4 @@ public class SubmissionBacking implements Serializable {
         String[] email = {user.getEmailAddress()};
         return EmailUtil.generateMailToLink(email, null, null, null);
     }
-
-    public String getCenterContent(){
-        if (!isAdmin() || !loggedInUserIsEditor()) {
-            return "col-md-12";
-        }
-        return "col-md-8";
-    }
 }

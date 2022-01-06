@@ -27,10 +27,10 @@
             <f:viewAction action="#{submissionBacking.onLoad()}"/>
         </f:metadata>
 
-        <div class="row">
-            <h:panelGrid id="toolbar-grid" rendered="#{submissionBacking.admin || submissionBacking.loggedInUserIsEditor()}">
+        <div class="row justify-content-center">
+            <h:panelGrid id="toolbar-grid" rendered="#{submissionBacking.admin || submissionBacking.loggedInUserIsEditor()}" styleClass="col-md-4">
                 <div class="col-md-4" id="wrap-toolbar" style="min-width: min-content">
-                    <h:panelGroup id="toolbar">
+                    <h:panelGroup id="toolbar" layout="block">
                         <ui:include src="/resources/templates/toolbar.xhtml"/>
                     </h:panelGroup>
                 </div>
