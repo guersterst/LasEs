@@ -258,9 +258,12 @@ public class ToolbarBacking implements Serializable {
      * Accept the submission belonging to this page.
      */
     public void acceptSubmission() {
-        submission.setState(SubmissionState.ACCEPTED);
+        Submission newSubmission = submission.clone();
+        newSubmission.setState(SubmissionState.ACCEPTED);
 
-        submissionService.change(submission);
+        submissionService.change(newSubmission);
+
+        submission = newSubmission;
     }
 
     public boolean isAccepted() {
@@ -271,9 +274,12 @@ public class ToolbarBacking implements Serializable {
      * Reject the submission belonging to this page.
      */
     public void rejectSubmission() {
-        submission.setState(SubmissionState.REJECTED);
+        Submission newSubmission = submission.clone();
+        newSubmission.setState(SubmissionState.REJECTED);
 
-        submissionService.change(submission);
+        submissionService.change(newSubmission);
+
+        submission = newSubmission;
     }
 
     public boolean isRejected() {

@@ -501,7 +501,7 @@ public class SubmissionService implements Serializable {
         try {
             EmailUtil.sendEmail(new String[]{userEmail}, emailAddressList.toArray(new String[0]), subject, body);
         } catch (EmailTransmissionFailedException e) {
-            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("emailNotSent"), MessageCategory.ERROR));
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("emailNotSent") + " " + String.join(", ", e.getInvalidAddresses()), MessageCategory.ERROR));
             return false;
         }
 
