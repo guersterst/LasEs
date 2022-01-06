@@ -36,10 +36,12 @@ public class ErrorPageBacking {
     @PostConstruct
     public void init() {
 
-        errorMessage = (ErrorMessage) facesContext.getExternalContext().getSessionMap().get("internal_error_message");
-        facesContext.getExternalContext().getSessionMap().remove("internal_error_message");
 
-        if (errorMessage == null) {
+        Object sessionObject = facesContext.getExternalContext().getSessionMap().get("internal_error_message");
+        if (sessionObject != null) {
+            errorMessage = (ErrorMessage) sessionObject;
+            facesContext.getExternalContext().getSessionMap().remove("internal_error_message");
+        } else if (errorMessage == null) {
 
         int errorStatusCode = (Integer) facesContext.getExternalContext().getRequestMap()
                 .get("jakarta.servlet.error.status_code");
