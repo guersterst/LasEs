@@ -34,7 +34,7 @@
                     <h:inputText id="add-deadline-reviewer-itxt"
                                  value="#{toolbarBacking.reviewedByInput.timestampDeadline}"
                                  title="#{help.addReviewerDeadline}"
-                                 styleClass="form-control" required="true" requiredMessage="#{message.missingDeadline}">
+                                 styleClass="form-control" required="true" requiredMessage="#{message.missingDeadline}" a:placeholder="#{toolbarBacking.generateDatePlaceholder()}">
                         <f:convertDateTime type="localDateTime"/>
                         <f:validator validatorId="dateTimeInFuture"/>
                     </h:inputText>
@@ -158,7 +158,7 @@
                     <h:outputLabel id="revision-deadline-lbl" value="#{labels.deadline}"
                                    for="revision-deadline-itxt" styleClass="input-group-text"/>
                     <h:inputText id="revision-deadline-itxt" value="#{toolbarBacking.submission.deadlineRevision}"
-                                 title="#{help.addRevisionDeadline}" styleClass="form-control">
+                                 title="#{help.addRevisionDeadline}" styleClass="form-control" a:placeholder="#{toolbarBacking.generateDatePlaceholder()}">
                         <f:validator validatorId="dateTimeInFuture"/>
                         <f:convertDateTime type="localDateTime"/>
                     </h:inputText>
