@@ -35,7 +35,7 @@ public class ScientificForumService implements Serializable {
     private Event<UIMessage> uiMessageEvent;
 
     @Inject
-    private PropertyResourceBundle message;
+    private PropertyResourceBundle bundle;
 
     /**
      * Gets a scientific forum.
@@ -59,7 +59,7 @@ public class ScientificForumService implements Serializable {
         } catch (NotFoundException e) {
             logger.severe("ScientificForum not found");
             uiMessageEvent.fire(new UIMessage(
-                    message.getString("error.requestedScientificForumDoesNotExist"),
+                    bundle.getString("error.requestedScientificForumDoesNotExist"),
                     MessageCategory.ERROR));
             t.abort();
         }
@@ -87,14 +87,15 @@ public class ScientificForumService implements Serializable {
         try {
 
             ScientificForumRepository.change(newForum, transaction);
+            uiMessageEvent.fire(new UIMessage(bundle.getString("dataSaved"), MessageCategory.INFO));
             logger.finest("Successfully changed the forum: " + newForum.getId() + ".");
             transaction.commit();
         } catch (NotFoundException e) {
-            uiMessageEvent.fire(new UIMessage(message.getString("dataNotFound"), MessageCategory.ERROR));
+            uiMessageEvent.fire(new UIMessage(bundle.getString("dataNotFound"), MessageCategory.ERROR));
         } catch (DataNotWrittenException e) {
-            uiMessageEvent.fire(new UIMessage(message.getString("dataNotWritten"), MessageCategory.ERROR));
+            uiMessageEvent.fire(new UIMessage(bundle.getString("dataNotWritten"), MessageCategory.ERROR));
         } catch (KeyExistsException e) {
-            uiMessageEvent.fire(new UIMessage(message.getString("nameTaken"), MessageCategory.ERROR));
+            uiMessageEvent.fire(new UIMessage(bundle.getString("nameTaken"), MessageCategory.ERROR));
         }
     }
 
@@ -156,9 +157,9 @@ public class ScientificForumService implements Serializable {
             logger.finest("Successfully removed the forum: " + forum.getId() + ".");
             transaction.commit();
         } catch (NotFoundException e) {
-            uiMessageEvent.fire(new UIMessage(message.getString("dataNotFound"), MessageCategory.ERROR));
+            uiMessageEvent.fire(new UIMessage(bundle.getString("dataNotFound"), MessageCategory.ERROR));
         } catch (DataNotWrittenException e) {
-            uiMessageEvent.fire(new UIMessage(message.getString("dataNotWritten"), MessageCategory.ERROR));
+            uiMessageEvent.fire(new UIMessage(bundle.getString("dataNotWritten"), MessageCategory.ERROR));
         }
     }
 
@@ -183,7 +184,7 @@ public class ScientificForumService implements Serializable {
             for (User oldEditor : editors) {
                 if (oldEditor.equals(editor)) {
                     logger.warning("Cannot add an editor, that already exists.");
-                    uiMessageEvent.fire(new UIMessage(message.getString("editorAlreadyExistsInForum"), MessageCategory.INFO));
+                    uiMessageEvent.fire(new UIMessage(bundle.getString("editorAlreadyExistsInForum"), MessageCategory.INFO));
                     return;
                 }
             }
@@ -193,11 +194,11 @@ public class ScientificForumService implements Serializable {
                     + editor.getId());
             transaction.commit();
         } catch (DataNotCompleteException ex) {
-            uiMessageEvent.fire(new UIMessage(message.getString("dataNotComplete"), MessageCategory.ERROR));
+            uiMessageEvent.fire(new UIMessage(bundle.getString("dataNotComplete"), MessageCategory.ERROR));
         } catch (NotFoundException ex) {
-            uiMessageEvent.fire(new UIMessage(message.getString("dataNotFound"), MessageCategory.ERROR));
+            uiMessageEvent.fire(new UIMessage(bundle.getString("dataNotFound"), MessageCategory.ERROR));
         } catch (DataNotWrittenException ex) {
-            uiMessageEvent.fire(new UIMessage(message.getString("dataNotWritten"), MessageCategory.ERROR));
+            uiMessageEvent.fire(new UIMessage(bundle.getString("dataNotWritten"), MessageCategory.ERROR));
         }
     }
 
@@ -223,9 +224,9 @@ public class ScientificForumService implements Serializable {
                     + forum.getId());
             transaction.commit();
         } catch (NotFoundException e) {
-            uiMessageEvent.fire(new UIMessage(message.getString("dataNotFound"), MessageCategory.ERROR));
+            uiMessageEvent.fire(new UIMessage(bundle.getString("dataNotFound"), MessageCategory.ERROR));
         } catch (DataNotWrittenException e) {
-            uiMessageEvent.fire(new UIMessage(message.getString("dataNotWritten"), MessageCategory.ERROR));
+            uiMessageEvent.fire(new UIMessage(bundle.getString("dataNotWritten"), MessageCategory.ERROR));
         }
     }
 
@@ -263,9 +264,9 @@ public class ScientificForumService implements Serializable {
         } catch (DataNotCompleteException e) {
             uiMessageEvent.fire(new UIMessage("dataNotComplete", MessageCategory.INFO));
         } catch (DataNotWrittenException e) {
-            uiMessageEvent.fire(new UIMessage(message.getString("dataNotWritten"), MessageCategory.ERROR));
+            uiMessageEvent.fire(new UIMessage(bundle.getString("dataNotWritten"), MessageCategory.ERROR));
         } catch (NotFoundException e) {
-            uiMessageEvent.fire(new UIMessage(message.getString("dataNotFound"), MessageCategory.ERROR));
+            uiMessageEvent.fire(new UIMessage(bundle.getString("dataNotFound"), MessageCategory.ERROR));
         }
     }
 
@@ -293,9 +294,9 @@ public class ScientificForumService implements Serializable {
                     + forum.getId());
             transaction.commit();
         } catch (NotFoundException e) {
-            uiMessageEvent.fire(new UIMessage(message.getString("dataNotFound"), MessageCategory.ERROR));
+            uiMessageEvent.fire(new UIMessage(bundle.getString("dataNotFound"), MessageCategory.ERROR));
         } catch (DataNotWrittenException e) {
-            uiMessageEvent.fire(new UIMessage(message.getString("dataNotWritten"), MessageCategory.ERROR));
+            uiMessageEvent.fire(new UIMessage(bundle.getString("dataNotWritten"), MessageCategory.ERROR));
         }
     }
 
@@ -320,7 +321,7 @@ public class ScientificForumService implements Serializable {
         } catch (NotFoundException | DataNotCompleteException e) {
 
             logger.severe(e.getMessage() + "\n Caused the operation to fail for: " + forum.getId());
-            uiMessageEvent.fire(new UIMessage(message.getString("dataNotFound"), MessageCategory.ERROR));
+            uiMessageEvent.fire(new UIMessage(bundle.getString("dataNotFound"), MessageCategory.ERROR));
         } finally {
             transaction.commit();
         }
