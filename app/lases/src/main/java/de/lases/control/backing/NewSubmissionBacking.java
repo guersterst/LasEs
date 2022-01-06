@@ -156,7 +156,13 @@ public class NewSubmissionBacking implements Serializable {
         newSubmission.setSubmissionTime(LocalDateTime.now());
         newSubmission.setState(SubmissionState.SUBMITTED);
         newSubmission.setAuthorId(sessionInformation.getUser().getId());
-        newSubmission = submissionService.add(newSubmission, coAuthors);
+
+        Paper paper = new Paper();
+        paper.setVisible(false);
+        paper.setUploadTime(LocalDateTime.now());
+        FileDTO file = new FileDTO();
+        file.setFile(uploadedPDF.getInputStream().readAllBytes());
+        newSubmission = submissionService.add(newSubmission, coAuthors, paper, file);
 
         if (newSubmission == null) {
             initNewSubmission();
@@ -164,14 +170,6 @@ public class NewSubmissionBacking implements Serializable {
             logger.log(Level.WARNING, "the submission was not successfully added.");
             return null;
         } else {
-            Paper paper = new Paper();
-            logger.log(Level.INFO, "Adding paper to the submission with id: " + newSubmission.getId());
-            paper.setSubmissionId(newSubmission.getId());
-            paper.setVisible(true);
-            paper.setUploadTime(LocalDateTime.now());
-            FileDTO file = new FileDTO();
-            file.setFile(uploadedPDF.getInputStream().readAllBytes());
-            paperService.add(file, paper);
             return "submission?faces-redirect=true&id=" + newSubmission.getId();
         }
     }
