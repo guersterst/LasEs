@@ -1,16 +1,17 @@
 package de.lases.business.service;
 
+import de.lases.business.util.EmailUtil;
 import de.lases.global.transport.*;
-import de.lases.persistence.exception.DataNotCompleteException;
-import de.lases.persistence.exception.DataNotWrittenException;
-import de.lases.persistence.exception.InvalidFieldsException;
-import de.lases.persistence.exception.NotFoundException;
+import de.lases.persistence.exception.*;
 import de.lases.persistence.internal.ConfigReader;
 import de.lases.persistence.repository.PaperRepository;
+import de.lases.persistence.repository.SubmissionRepository;
 import de.lases.persistence.repository.Transaction;
+import de.lases.persistence.repository.UserRepository;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.enterprise.inject.spi.CDI;
+import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 
 import java.io.Serializable;
@@ -36,6 +37,9 @@ public class PaperService implements Serializable {
 
     @Inject
     private transient PropertyResourceBundle resourceBundle;
+
+    @Inject
+    private FacesContext facesContext;
 
     private static final Logger logger = Logger.getLogger(PaperService.class.getName());
 
@@ -99,7 +103,59 @@ public class PaperService implements Serializable {
             transaction.abort();
             return;
         }
-        transaction.commit();
+
+        if (sendEmailsForPaper(paper, transaction)) {
+            transaction.commit();
+        } else {
+            transaction.abort();
+        }
+    }
+
+    /**
+     * @author Sebastian Vogt
+     */
+    private boolean sendEmailsForPaper(Paper paper, Transaction transaction) {
+        Submission submission = new Submission();
+        submission.setId(paper.getSubmissionId());
+
+        try {
+            submission = SubmissionRepository.get(submission, transaction);
+        } catch (NotFoundException | DataNotCompleteException e) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString(
+                    "dataNotWritten"), MessageCategory.ERROR));
+            logger.log(Level.WARNING, "Submission was not found or could not be loaded " +
+                    "when adding a paper.");
+            return false;
+        }
+
+        User editor = new User();
+        editor.setId(submission.getEditorId());
+
+        try {
+            editor = UserRepository.get(editor, transaction);
+        } catch (NotFoundException ex) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString(
+                    "dataNotWritten"), MessageCategory.ERROR));
+            logger.log(Level.WARNING, "Editor was not found when adding a paper.");
+            return false;
+        }
+
+        assert editor != null;
+        assert editor.getEmailAddress() != null;
+
+        String emailEditor = editor.getEmailAddress();
+
+        try {
+            EmailUtil.sendEmail(new String[]{emailEditor}, null,
+                    resourceBundle.getString("email.editorRevision.subject"),
+                    resourceBundle.getString("email.editorRevision.body") + "\n" + submission.getTitle()
+                            + "\n" + EmailUtil.generateSubmissionURL(submission, facesContext));
+        } catch (EmailTransmissionFailedException e) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("emailNotSent") + " "
+                    + String.join(", ", e.getInvalidAddresses()), MessageCategory.ERROR));
+            return false;
+        }
+        return true;
     }
 
     /**
