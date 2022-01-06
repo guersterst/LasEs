@@ -433,7 +433,7 @@ public class SubmissionService implements Serializable {
      * @param reviewedBy Information about the review-request relationship.
      */
     public void addReviewer(User reviewer, ReviewedBy reviewedBy) {
-        if (reviewer.getId() != reviewedBy.getReviewerId() || reviewer.getId() == null) {
+        if (reviewer.getId() == null || reviewer.getId().equals(reviewedBy.getReviewerId())) {
             logger.severe("The id in the reviewed_by DTO and the id in the user DTO does not match or at least one of them are null");
             throw new InvalidFieldsException("The id's need to be equal and must not be null.");
         }
@@ -482,7 +482,7 @@ public class SubmissionService implements Serializable {
         try {
             EmailUtil.sendEmail(new String[]{emailAddress}, cc, subject, body);
         } catch (EmailTransmissionFailedException e) {
-            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("emailNotSent"), MessageCategory.ERROR));
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("emailNotSent") + " " + String.join(", "), MessageCategory.ERROR));
             return false;
         }
 
