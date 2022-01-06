@@ -1,6 +1,5 @@
 package de.lases.control.backing;
 
-import de.lases.business.service.PaperService;
 import de.lases.business.service.ScientificForumService;
 import de.lases.business.service.SubmissionService;
 import de.lases.business.service.UserService;
@@ -43,9 +42,6 @@ public class NewSubmissionBacking implements Serializable {
 
     @Inject
     private SubmissionService submissionService;
-
-    @Inject
-    private PaperService paperService;
 
     @Inject
     private UserService userService;

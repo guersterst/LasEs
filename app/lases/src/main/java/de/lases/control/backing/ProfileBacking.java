@@ -7,6 +7,7 @@ import de.lases.control.internal.*;
 import de.lases.global.transport.*;
 import de.lases.control.exception.IllegalAccessException;
 import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.event.Event;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -18,6 +19,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.PropertyResourceBundle;
 
 /**
  * Backing bean for the profile page.
@@ -39,6 +41,12 @@ public class ProfileBacking implements Serializable {
 
     @Inject
     private ScienceFieldService scienceFieldService;
+
+    @Inject
+    private Event<UIMessage> uiMessageEvent;
+
+    @Inject
+    private PropertyResourceBundle messageBundle;
 
     private Part uploadedAvatar;
 
@@ -149,11 +157,14 @@ public class ProfileBacking implements Serializable {
     /**
      * Set a new avatar for the user.
      */
-    public void uploadAvatar() throws IOException {
-        // TODO: Hier IO Exception nach aussen?
+    public void uploadAvatar() {
         FileDTO avatar = new FileDTO();
-        avatar.setFile(uploadedAvatar.getInputStream().readAllBytes());
-        userService.setAvatar(avatar, user);
+        try {
+            avatar.setFile(uploadedAvatar.getInputStream().readAllBytes());
+            userService.setAvatar(avatar, user);
+        } catch (IOException e) {
+            uiMessageEvent.fire(new UIMessage(messageBundle.getString("failedUpload"), MessageCategory.ERROR));
+        }
     }
 
     /**
