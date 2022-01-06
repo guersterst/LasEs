@@ -324,10 +324,9 @@ public class SubmissionService implements Serializable {
                 } else {
                     transaction.abort();
                 }
-            }
+            } else if (newSubmission.getState() == SubmissionState.ACCEPTED || newSubmission.getState() == SubmissionState.REJECTED) {
 
-            // Inform submitter a co-authors about a changed submission state.
-            if (newSubmission.getState() == SubmissionState.ACCEPTED || newSubmission.getState() == SubmissionState.REJECTED) {
+                // Inform submitter a co-authors about a changed submission state.
                 String subject = "";
                 String body = "";
                 if (newSubmission.getState() == SubmissionState.ACCEPTED) {
@@ -348,9 +347,7 @@ public class SubmissionService implements Serializable {
 
                 }
                 informAboutState(transaction, newSubmission, subject, body);
-            }
-
-            if (newSubmission.getState() == SubmissionState.REVISION_REQUIRED) {
+            } else if (newSubmission.getState() == SubmissionState.REVISION_REQUIRED) {
 
                 String subject = resourceBundle.getString("email.requireRevision.subject");
                 String body = resourceBundle.getString("email.requireRevision.body")

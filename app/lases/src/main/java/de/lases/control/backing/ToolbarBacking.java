@@ -171,29 +171,22 @@ public class ToolbarBacking implements Serializable {
             reviewedBy.setSubmissionId(submission.getId());
             reviewedBy.setHasAccepted(AcceptanceStatus.NO_DECISION);
 
+            // In case the user is already reviewer you only change the deadline.
             if (reviewer.containsKey(newReviewer)) {
                 submissionService.changeReviewedBy(reviewedBy);
-
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("changedReviewerDeadline"), MessageCategory.INFO));
                 reviewer.remove(newReviewer);
             } else {
                 submissionService.addReviewer(newReviewer, reviewedBy);
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("addReviewerToSub"), MessageCategory.INFO));
             }
 
             reviewer.put(newReviewer, reviewedBy);
         } else {
+            // In case of a user is already author he could not be reviewer except he is an admin.
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("alreadyAuthor"), MessageCategory.WARNING));
         }
 
-    }
-
-    /**
-     * Checks if the view param is an integer and throws an exception if it is
-     * not
-     *
-     * @throws IllegalUserFlowException If there is no integer provided as view
-     *                                  param
-     */
-    public void preRenderViewListener() {
     }
 
     /**
@@ -203,6 +196,7 @@ public class ToolbarBacking implements Serializable {
      */
     public void removeReviewer(User user) {
         submissionService.removeReviewer(submission, user);
+        uiMessageEvent.fire(new UIMessage(user.getEmailAddress() + " " + resourceBundle.getString("removeReviewer"), MessageCategory.INFO));
         loadReviewerList();
     }
 
@@ -219,6 +213,8 @@ public class ToolbarBacking implements Serializable {
                 currentEditor = user;
             }
         }
+
+        uiMessageEvent.fire(new UIMessage(resourceBundle.getString("changeData"), MessageCategory.INFO));
     }
 
     /**
@@ -239,8 +235,10 @@ public class ToolbarBacking implements Serializable {
         if (!submission.isRevisionRequired()) {
             submission.setRevisionRequired(true);
             submission.setState(SubmissionState.REVISION_REQUIRED);
-            submissionService.change(submission);
         }
+        submissionService.change(submission);
+
+        uiMessageEvent.fire(new UIMessage(resourceBundle.getString("newRevision"), MessageCategory.INFO));
     }
 
     /**
