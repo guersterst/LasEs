@@ -181,18 +181,21 @@ public class SubmissionService implements Serializable {
             if (!emailsCoAuthorsNotRegistered.isEmpty()) {
                 EmailUtil.sendEmail(emailsCoAuthorsNotRegistered.toArray(new String[0]), null,
                         resourceBundle.getString("email.assignedCoAuthor.subject"),
-                        resourceBundle.getString("email.assignedCoAuthor.body") + submission.getTitle()
-                                + "DU BSIT NO NED REIGSTRIERT");
+                        resourceBundle.getString("email.assignedCoAuthor.body") + "\n"
+                                +  submission.getTitle() + "\n" + EmailUtil.generateLinkForEmail(facesContext,
+                                "views/anonymous/register.xhtml"));
             }
             if (!emailsCoAuthorsRegistered.isEmpty()) {
                 EmailUtil.sendEmail(emailsCoAuthorsRegistered.toArray(new String[0]), null,
                         resourceBundle.getString("email.assignedCoAuthor.subject"),
-                        resourceBundle.getString("email.assignedCoAuthor.body") + submission.getTitle()
-                                + "DU BSIT SCHON REIGSTRIERT");
+                        resourceBundle.getString("email.assignedCoAuthor.body") + "\n"
+                                + submission.getTitle() + "\n" + EmailUtil.generateSubmissionURL(submission,
+                                facesContext));
             }
             EmailUtil.sendEmail(new String[]{emailEditor}, null,
                     resourceBundle.getString("email.assignedEditor.subject"),
-                    resourceBundle.getString("email.assignedEditor.body") + submission.getTitle());
+                    resourceBundle.getString("email.assignedEditor.body") + "\n" + submission.getTitle()
+                                + "\n" + EmailUtil.generateSubmissionURL(submission, facesContext));
         } catch (EmailTransmissionFailedException e) {
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("emailNotSent") + " "
                     + String.join(", ", e.getInvalidAddresses()), MessageCategory.ERROR));
