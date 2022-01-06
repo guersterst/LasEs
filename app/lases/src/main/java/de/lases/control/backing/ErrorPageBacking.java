@@ -35,12 +35,24 @@ public class ErrorPageBacking {
      */
     @PostConstruct
     public void init() {
-        int errorStatusCode = (Integer) facesContext.getExternalContext().getRequestMap()
-                .get("jakarta.servlet.error.status_code");
-        String requestErrorMessage = (String) facesContext.getExternalContext().getRequestMap()
-                .get("jakarta.servlet.error.message");
-        Exception requestException = (Exception) facesContext.getExternalContext().getRequestMap()
-                .get("jakarta.servlet.error.exception");
+        int errorStatusCode = -1;
+        if (facesContext.getExternalContext().getRequestMap()
+                .get("jakarta.servlet.error.status_code") instanceof Integer) {
+            errorStatusCode = (Integer) facesContext.getExternalContext().getRequestMap()
+                    .get("jakarta.servlet.error.status_code");
+        }
+        String requestErrorMessage = "";
+        if (facesContext.getExternalContext().getRequestMap()
+                .get("jakarta.servlet.error.message") instanceof String) {
+            requestErrorMessage = (String) facesContext.getExternalContext().getRequestMap()
+                    .get("jakarta.servlet.error.message");
+        }
+        Exception requestException = null;
+        if (facesContext.getExternalContext().getRequestMap()
+                .get("jakarta.servlet.error.exception") instanceof Exception) {
+            requestException = (Exception) facesContext.getExternalContext().getRequestMap()
+                    .get("jakarta.servlet.error.exception");
+        }
 
         if (errorMessage == null) {
             if (errorStatusCode == 404) {
