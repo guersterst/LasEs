@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Backing bean for the scientific forum page.
@@ -236,7 +237,7 @@ public class ScientificForumBacking implements Serializable {
      *                                  param
      */
     public void preRenderViewListener() {
-        if(forum.getId() == null) {
+        if (forum.getId() == null) {
             throw new IllegalUserFlowException("The view parameter was not transmitted correctly (must not be null).");
         }
     }
@@ -276,7 +277,6 @@ public class ScientificForumBacking implements Serializable {
 
     /**
      * Remove a specific user form the list of editors.
-     *
      */
     public void removeEditor(User editor) {
         forumService.removeEditor(editor, forum);
@@ -319,7 +319,7 @@ public class ScientificForumBacking implements Serializable {
     }
 
     public User getNewEditorInput() {
-            return newEditorInput;
+        return newEditorInput;
     }
 
     public void setNewEditorInput(User newEditorInput) {
@@ -384,8 +384,10 @@ public class ScientificForumBacking implements Serializable {
     }
 
     public void setForumDeadLineInput(LocalDate forumDeadLineInput) {
-        this.forumDeadLineInput = forumDeadLineInput;
-        forum.setDeadline(LocalDateTime.of(forumDeadLineInput, LocalTime.MIDNIGHT));
+        if (forumDeadLineInput != null) {
+            this.forumDeadLineInput = forumDeadLineInput;
+            forum.setDeadline(LocalDateTime.of(forumDeadLineInput, LocalTime.MIDNIGHT));
+        }
     }
 
     /**
