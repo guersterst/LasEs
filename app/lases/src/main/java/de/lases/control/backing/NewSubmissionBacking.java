@@ -7,7 +7,6 @@ import de.lases.business.service.UserService;
 import de.lases.control.exception.IllegalUserFlowException;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
-import de.lases.persistence.repository.ScientificForumRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
