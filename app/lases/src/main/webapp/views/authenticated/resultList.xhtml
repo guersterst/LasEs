@@ -70,8 +70,8 @@
             </div>
         </div>
 
-        <h:panelGroup rendered="#{navigationBacking.sessionInformation.user.privileges.contains(Privilege.EDITOR)
-                        || navigationBacking.sessionInformation.user.isAdmin()}">
+        <h:panelGroup rendered="#{navigationBacking.sessionInformation.user.isEditor()
+                        || navigationBacking.sessionInformation.user.isAdmin()}" layout="block">
             <hr/>
             <div class="card">
                 <div class="card-header">

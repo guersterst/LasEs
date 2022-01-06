@@ -53,6 +53,15 @@ public class User implements Cloneable {
     }
 
     /**
+     * Return if the user is an editor.
+     *
+     * @return Is the user an editor.
+     */
+    public Boolean isEditor() {
+        return privileges.contains(Privilege.EDITOR);
+    }
+
+    /**
      * Set the flag whether this user is an admin.
      * This does not change the {@link User#privileges}.
      *
