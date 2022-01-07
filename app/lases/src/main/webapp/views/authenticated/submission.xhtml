@@ -385,7 +385,8 @@
                                                                  action="#{submissionBacking.releaseReview(var)}"
                                                                  title="#{help.releaseBtn}"
                                                                  disabled="#{!submissionBacking.loggedInUserIsEditor()
-                                                                 || toolbarBacking.accepted || toolbarBacking.rejected}"/>
+                                                                 || toolbarBacking.accepted || toolbarBacking.rejected
+                                                                 || var.visible}"/>
                                             </h:column>
 
                                             <!--recommended checkbox-->
