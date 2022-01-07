@@ -250,8 +250,6 @@ public class ToolbarBacking implements Serializable {
             submission.setState(SubmissionState.REVISION_REQUIRED);
         }
         submissionService.change(submission);
-
-        uiMessageEvent.fire(new UIMessage(resourceBundle.getString("newRevision"), MessageCategory.INFO));
     }
 
     /**
