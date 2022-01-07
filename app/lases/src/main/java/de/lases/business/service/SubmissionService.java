@@ -515,9 +515,7 @@ public class SubmissionService implements Serializable {
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("emailNotSent") + " " + String.join(", ", e.getInvalidAddresses()), MessageCategory.ERROR));
             return false;
         }
-
         return true;
-
     }
 
 

@@ -4,11 +4,13 @@ import de.lases.business.util.EmailUtil;
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.DataNotCompleteException;
 import de.lases.persistence.exception.DataNotWrittenException;
+import de.lases.persistence.exception.EmailTransmissionFailedException;
 import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.internal.ConfigReader;
 import de.lases.persistence.repository.ReviewRepository;
 import de.lases.persistence.repository.SubmissionRepository;
 import de.lases.persistence.repository.Transaction;
+import de.lases.persistence.repository.UserRepository;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.enterprise.inject.spi.CDI;
@@ -79,16 +81,22 @@ public class ReviewService implements Serializable {
         Transaction transaction = new Transaction();
         try {
             ReviewRepository.change(newReview, transaction);
+            transaction.commit();
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("changeData"), MessageCategory.INFO));
         } catch (DataNotWrittenException e) {
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewCouldNotUpdate"), MessageCategory.ERROR));
             transaction.abort();
+            return;
         } catch (NotFoundException e) {
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewNotExist"), MessageCategory.INFO));
             transaction.abort();
+            return;
         }
 
+        // Email notification to author and co-authors about new review.
         if (newReview.isVisible()) {
+            transaction = new Transaction();
+
             Submission submission = new Submission();
             submission.setId(newReview.getSubmissionId());
 
@@ -97,9 +105,11 @@ public class ReviewService implements Serializable {
             } catch (DataNotCompleteException e) {
                 uiMessageEvent.fire(new UIMessage(resourceBundle.getString("notComplete"), MessageCategory.ERROR));
                 transaction.abort();
+                return;
             } catch (NotFoundException e) {
                 uiMessageEvent.fire(new UIMessage("submissionNotFound", MessageCategory.ERROR));
                 transaction.abort();
+                return;
             }
 
             String subject = resourceBundle.getString("email.releaseReview.subject");
@@ -107,10 +117,17 @@ public class ReviewService implements Serializable {
                     + "\n" + submission.getTitle() + "\n"
                     + EmailUtil.generateSubmissionURL(submission, facesContext);
 
-            SubmissionService submissionService = new SubmissionService();
-
-            // Transaction will be released here.
-            submissionService.informAboutState(transaction, submission, subject, body);
+            try {
+                List<User> authors = UserRepository.getList(transaction, submission, Privilege.AUTHOR);
+                transaction.commit();
+                List<String> addresses = authors.stream().map(User::getEmailAddress).toList();
+                EmailUtil.sendEmail(addresses.toArray(new String[0]), null, subject, body);
+            } catch (DataNotCompleteException | NotFoundException e) {
+                transaction.abort();
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("noEmailsSent"), MessageCategory.ERROR));
+            } catch (EmailTransmissionFailedException e) {
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("emailNotSent") + " " + String.join(", ", e.getInvalidAddresses()), MessageCategory.ERROR));
+            }
         }
     }
 
