@@ -82,8 +82,6 @@ public class ProfileBacking implements Serializable {
      *         the user for the admin password input
      *     </li>
      * </ul>
-     * @throws IllegalAccessException If someone tries to access a profile that
-     *                                does not belong to him.
      */
     @PostConstruct
     public void init() {
@@ -110,10 +108,17 @@ public class ProfileBacking implements Serializable {
      * </ul>
      * @throws IllegalUserFlowException If there is no integer provided as view
      *                                  param
+     * @throws IllegalAccessException If someone who is not an editor or admin tries to access a profile that
+     *                                does not belong to him.
      */
     public void onLoad() {
         if (user.getId() == null) {
             throw new IllegalUserFlowException("Profile page called without an id");
+        }
+        User accessingUser = sessionInformation.getUser();
+        if (!(accessingUser.isAdmin() || accessingUser.isEditor()
+                || Objects.equals(accessingUser.getId(), user.getId()))) {
+            throw new IllegalAccessException("Illegal access to profile.");
         }
         user = userService.get(user);
         userForAdminSettings = user.clone();
