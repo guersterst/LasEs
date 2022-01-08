@@ -12,6 +12,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import java.io.Serial;
+import java.io.Serializable;
 
 /**
  * Backing bean for the result list.
@@ -21,7 +22,7 @@ import java.io.Serial;
 @ViewScoped
 @Named
 public class ResultListBacking implements SubmissionPaginationBacking, ScientificForumPaginationBacking,
-        UserPaginationBacking {
+        UserPaginationBacking, Serializable {
 
     private enum Tab {
         OWN_SUBMISSIONS, SUBMISSIONS_TO_EDIT, SUBMISSIONS_TO_REVIEW

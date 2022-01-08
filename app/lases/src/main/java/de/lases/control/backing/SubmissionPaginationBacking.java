@@ -5,9 +5,7 @@ import de.lases.global.transport.DateSelect;
 import de.lases.global.transport.Submission;
 import de.lases.global.transport.SubmissionState;
 
-import java.io.Serializable;
-
-public interface SubmissionPaginationBacking extends Serializable {
+public interface SubmissionPaginationBacking {
 
     /**
      * Get the pagination for the submissions submitted by the user.
