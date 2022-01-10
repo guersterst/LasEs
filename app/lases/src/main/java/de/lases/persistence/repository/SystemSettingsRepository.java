@@ -130,10 +130,6 @@ public class SystemSettingsRepository {
                 logger.severe("The logo could not be found in the query results.");
                 throw new NotFoundException("The logo could not be found in the query results.");
             }
-
-            if (logoResult.next()) {
-                throw new IllegalStateException("There must not be two 'system' entries in the database.");
-            }
         } catch (SQLException ex) {
             if (TransientSQLExceptionChecker.isTransient(ex.getSQLState())) {
                 logger.warning("The logo could not be fetched.");
