@@ -1,6 +1,6 @@
 package de.lases.control.internal;
 
-import de.lases.global.transport.*;
+import de.lases.global.transport.User;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
@@ -9,8 +9,6 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.List;
-import java.util.Locale;
 
 /**
  * Encapsulates all information that is needed for the management of the
@@ -40,7 +38,7 @@ public class SessionInformation implements Serializable {
      * Set the user that is currently logged in. This will also change the
      * sessionId to avoid session fixation.
      *
-     * @param user A user dto filled with an id and privileges for the user that is logged.
+     * @param user A filled user dto.
      */
     public void setUser(User user) {
         this.user = user;

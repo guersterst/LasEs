@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  * @author Thomas Kirz
  */
 @WebListener
-public class LifeTimeListener implements ServletContextListener {
+public class LifetimeListener implements ServletContextListener {
 
     @Inject
     private ConfigPropagator configPropagator;
@@ -28,8 +28,6 @@ public class LifeTimeListener implements ServletContextListener {
             "/WEB-INF/config/config.properties";
     private final static String LOGGER_CONFIG_PATH =
             "/WEB-INF/config/logger.properties";
-
-    private final Logger l = Logger.getLogger(LifeTimeListener.class.getName());
 
     /**
      * On shutdown we make sure all used resources are closed gracefully.
@@ -51,7 +49,7 @@ public class LifeTimeListener implements ServletContextListener {
         // Top comment:
         // https://stackoverflow.com/questions/9173132/stop-scheduled-timer-when-shutdown-tomcat/9186070#9186070
         Lifetime.shutdown();
-        Logger.getLogger(LifeTimeListener.class.getName()).info("DB Pool Shutdown Hook executed.");
+        Logger.getLogger(LifetimeListener.class.getName()).info("DB Pool Shutdown Hook executed.");
     }
 
     /**
@@ -70,7 +68,9 @@ public class LifeTimeListener implements ServletContextListener {
     public void contextInitialized(final ServletContextEvent sce) {
         ServletContext sctx = sce.getServletContext();
         initializeAppConfig(sctx);
-        Lifetime.startup(sctx.getResourceAsStream(LOGGER_CONFIG_PATH));
+        FileDTO loggerConfigFile = new FileDTO();
+        loggerConfigFile.setInputStream(sctx.getResourceAsStream(LOGGER_CONFIG_PATH));
+        Lifetime.startup(loggerConfigFile);
     }
 
     private void initializeAppConfig(ServletContext sctx) {

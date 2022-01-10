@@ -1,18 +1,32 @@
 package de.lases.business.service;
 
+import de.lases.business.util.EmailUtil;
 import de.lases.global.transport.*;
+import de.lases.persistence.exception.DataNotCompleteException;
+import de.lases.persistence.exception.DataNotWrittenException;
+import de.lases.persistence.exception.EmailTransmissionFailedException;
+import de.lases.persistence.exception.NotFoundException;
+import de.lases.persistence.internal.ConfigReader;
 import de.lases.persistence.repository.ReviewRepository;
+import de.lases.persistence.repository.SubmissionRepository;
 import de.lases.persistence.repository.Transaction;
+import de.lases.persistence.repository.UserRepository;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
-import jakarta.faces.component.UIMessage;
+import jakarta.enterprise.inject.spi.CDI;
+import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.PropertyResourceBundle;
+import java.util.logging.Logger;
 
 /**
+ * @author Stefanie Gürster
+ *
  * Provides functionality for dealing with reviews of submission papers.
  * In case of an unexpected state, a {@link UIMessage} event will be fired.
  */
@@ -26,16 +40,29 @@ public class ReviewService implements Serializable {
     private Event<UIMessage> uiMessageEvent;
 
     @Inject
-    private ReviewRepository reviewRepository;
+    private transient PropertyResourceBundle resourceBundle;
+
+    @Inject
+    private FacesContext facesContext;
+
+    private static final Logger logger = Logger.getLogger(PaperService.class.getName());
 
     /**
      * Gets a {@link Review}.
      *
-     * @param review The requested {@code Review} containing a valid id.
-     * @return The fully filled requested {@code Review}.
+     * @param review The requested {@code Review} containing submissionId, versionNumber, reviewerId.
+     * @return The fully filled requested {@code Review}, null if not found.
      */
     public Review get(Review review) {
-        return null;
+        Transaction transaction = new Transaction();
+        try {
+            Review retReview = ReviewRepository.get(review, transaction);
+            transaction.commit();
+            return retReview;
+        } catch (NotFoundException e) {
+            transaction.abort();
+            return null;
+        }
     }
 
     /**
@@ -48,6 +75,60 @@ public class ReviewService implements Serializable {
      *                  </p>
      */
     public void change(Review newReview) {
+        if (newReview == null) {
+            throw new IllegalArgumentException("Cannot change null review.");
+        }
+        Transaction transaction = new Transaction();
+        try {
+            ReviewRepository.change(newReview, transaction);
+            transaction.commit();
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("changeData"), MessageCategory.INFO));
+        } catch (DataNotWrittenException e) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewCouldNotUpdate"), MessageCategory.ERROR));
+            transaction.abort();
+            return;
+        } catch (NotFoundException e) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewNotExist"), MessageCategory.INFO));
+            transaction.abort();
+            return;
+        }
+
+        // Email notification to author and co-authors about new review.
+        if (newReview.isVisible()) {
+            transaction = new Transaction();
+
+            Submission submission = new Submission();
+            submission.setId(newReview.getSubmissionId());
+
+            try {
+                submission = SubmissionRepository.get(submission, transaction);
+            } catch (DataNotCompleteException e) {
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("notComplete"), MessageCategory.ERROR));
+                transaction.abort();
+                return;
+            } catch (NotFoundException e) {
+                uiMessageEvent.fire(new UIMessage("submissionNotFound", MessageCategory.ERROR));
+                transaction.abort();
+                return;
+            }
+
+            String subject = resourceBundle.getString("email.releaseReview.subject");
+            String body = resourceBundle.getString("email.releaseReview.body")
+                    + "\n" + submission.getTitle() + "\n"
+                    + EmailUtil.generateSubmissionURL(submission, facesContext);
+
+            try {
+                List<User> authors = UserRepository.getList(transaction, submission, Privilege.AUTHOR);
+                transaction.commit();
+                List<String> addresses = authors.stream().map(User::getEmailAddress).toList();
+                EmailUtil.sendEmail(addresses.toArray(new String[0]), null, subject, body);
+            } catch (DataNotCompleteException | NotFoundException e) {
+                transaction.abort();
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("noEmailsSent"), MessageCategory.ERROR));
+            } catch (EmailTransmissionFailedException e) {
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("emailNotSent") + " " + String.join(", ", e.getInvalidAddresses()), MessageCategory.ERROR));
+            }
+        }
     }
 
     /**
@@ -62,28 +143,20 @@ public class ReviewService implements Serializable {
      * @param review The {@code Review} that is submitted.
      *               Must be filled with a valid
      *               reviewerId, paperVersion and submissionId.
-     * @param file   The {@link FileDTO} containing the pdf review itself..
+     * @param file   The {@link FileDTO} containing the pdf review itself.
      */
     public void add(Review review, FileDTO file) {
-
-    }
-
-    /**
-     * Removes a {@link Review}.
-     * <p>
-     * If the {@code User} removing the review is not
-     * the reviewer himself an email will be dispatched to the
-     * reviewer informing him about this action.
-     * The {@link de.lases.business.util.EmailUtil} utility will
-     * be used for this.
-     * </p>
-     *
-     * @param review The {@code Review} that is to be removed. Must be filled with a valid
-     *               reviewerId, paperId and submissionId.
-     * @param user The {@link User} who removes the {@code Review}.
-     *             Must contain a valid id.
-     */
-    public void remove(Review review, User user) {
+        Transaction transaction = new Transaction();
+        try {
+            ReviewRepository.add(review, file, transaction);
+            transaction.commit();
+        } catch (DataNotWrittenException e) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewCouldNotUpload"), MessageCategory.ERROR));
+            transaction.abort();
+        } catch (NotFoundException e) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewCannotUpload"), MessageCategory.ERROR));
+            transaction.abort();
+        }
     }
 
     /**
@@ -98,7 +171,34 @@ public class ReviewService implements Serializable {
      */
     public List<Review> getList(Submission submission, User user,
                                 ResultListParameters resultListParameters) {
-        return null;
+        Transaction transaction = new Transaction();
+        try {
+            List<Review> reviewsList = ReviewRepository.getList(submission, user, transaction, resultListParameters);
+            transaction.commit();
+            return reviewsList;
+        } catch (DataNotCompleteException | NotFoundException e) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewCouldNotGetList"), MessageCategory.ERROR));
+            transaction.abort();
+        }
+        return new ArrayList<>();
+    }
+
+    public int getListCountPages(Submission submission, User user, ResultListParameters resultListParameters) {
+        Transaction transaction = new Transaction();
+        int items = 0;
+        int pages = 0;
+        try {
+            items = ReviewRepository.getCountItemsList(submission, user, transaction, resultListParameters);
+            ConfigReader configReader = CDI.current().select(ConfigReader.class).get();
+            int paginationLength = Integer.parseInt(configReader.getProperty("MAX_PAGINATION_LIST_LENGTH"));
+            // Calculate number of pages.
+            pages = (int) Math.ceil((double) items / paginationLength);
+        } catch (DataNotCompleteException | NotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            transaction.commit();
+        }
+        return pages;
     }
 
     /**
@@ -109,6 +209,28 @@ public class ReviewService implements Serializable {
      * @return The requested {@code File}.
      */
     public FileDTO getFile(Review review) {
-        return null;
+        if (review == null) {
+            logger.severe("This review is not valid. Therefore no file dto can be queried.");
+            throw new IllegalArgumentException(resourceBundle.getString("idMissing"));
+        } else {
+            Transaction transaction = new Transaction();
+            FileDTO file = null;
+            try {
+                file = ReviewRepository.getPDF(review, transaction);
+                transaction.commit();
+            } catch (NotFoundException exception) {
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewNotFound"), MessageCategory.ERROR));
+                transaction.abort();
+            } catch (DataNotCompleteException e) {
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewNotLoaded"), MessageCategory.WARNING));
+                transaction.abort();
+            }
+
+            if (file == null || file.getFile() == null) {
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewNotExist"), MessageCategory.INFO));
+            }
+
+            return file;
+        }
     }
 }

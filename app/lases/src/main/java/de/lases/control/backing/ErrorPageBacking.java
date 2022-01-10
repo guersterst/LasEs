@@ -2,11 +2,13 @@ package de.lases.control.backing;
 
 import de.lases.business.internal.ConfigPropagator;
 import de.lases.global.transport.ErrorMessage;
-import de.lases.global.transport.UIMessage;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+
+import java.util.PropertyResourceBundle;
 
 /**
  * Backing bean for the error page.
@@ -16,15 +18,45 @@ import jakarta.inject.Named;
 public class ErrorPageBacking {
 
     @Inject
+    private FacesContext facesContext;
+
+    @Inject
     private ConfigPropagator configPropagator;
+
+    @Inject
+    private PropertyResourceBundle bundle;
 
     private ErrorMessage errorMessage;
 
     /**
-     * Initialize the error message dto.
+     * Check if the error message is initialized.
      */
     @PostConstruct
     public void init() {
+        Object sessionObject = facesContext.getExternalContext().getSessionMap().get("internal_error_message");
+        if (sessionObject instanceof ErrorMessage) {
+            errorMessage = (ErrorMessage) sessionObject;
+            facesContext.getExternalContext().getSessionMap().remove("internal_error_message");
+        } else {
+            int errorStatusCode = -1;
+            if (facesContext.getExternalContext().getRequestMap()
+                    .get("jakarta.servlet.error.status_code") instanceof Integer) {
+                errorStatusCode = (Integer) facesContext.getExternalContext().getRequestMap()
+                        .get("jakarta.servlet.error.status_code");
+            }
+            String requestErrorMessage = "";
+            if (facesContext.getExternalContext().getRequestMap()
+                    .get("jakarta.servlet.error.message") instanceof String) {
+                requestErrorMessage = (String) facesContext.getExternalContext().getRequestMap()
+                        .get("jakarta.servlet.error.message");
+            }
+
+            if (errorStatusCode == 404) {
+                errorMessage = new ErrorMessage(bundle.getString("error.404"), requestErrorMessage);
+            } else {
+                errorMessage = new ErrorMessage(bundle.getString("error.unknown"), requestErrorMessage);
+            }
+        }
     }
 
     /**
@@ -55,6 +87,6 @@ public class ErrorPageBacking {
      * @return Is the app in development mode?
      */
     public boolean isDevelopmentMode() {
-        return true;
+        return configPropagator.getProperty("DEBUG_AND_TEST_MODE").equals("true");
     }
 }

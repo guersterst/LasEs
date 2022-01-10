@@ -1,8 +1,10 @@
 package de.lases.control.backing;
 
 import de.lases.business.service.ScientificForumService;
-import de.lases.control.internal.*;
-import de.lases.global.transport.*;
+import de.lases.control.internal.Pagination;
+import de.lases.control.internal.SessionInformation;
+import de.lases.global.transport.DateSelect;
+import de.lases.global.transport.ScientificForum;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -16,7 +18,7 @@ import java.io.Serializable;
  */
 @ViewScoped
 @Named
-public class ScientificForumListBacking implements Serializable {
+public class ScientificForumListBacking implements Serializable, ScientificForumPaginationBacking {
 
     @Serial
     private static final long serialVersionUID = 288940091897301232L;
@@ -29,18 +31,29 @@ public class ScientificForumListBacking implements Serializable {
 
     private Pagination<ScientificForum> scientificForumPagination;
 
-    /**
-     * Initialize the scientific forum pagination and load the first page from
-     * the datasource.
-     */
-    @PostConstruct
-    public void init() {
+    private void initPagination() {
+        scientificForumPagination = new Pagination<>("name") {
+
+            @Override
+            public void loadData() {
+                setEntries(scientificForumService.getList(getResultListParameters()));
+            }
+
+            @Override
+            protected Integer calculateNumberPages() {
+                return scientificForumService.getListCountPages(scientificForumPagination.getResultListParameters());
+            }
+        };
+        scientificForumPagination.applyFilters();
+        scientificForumPagination.loadData();
     }
 
     /**
-     * Apply the selected deadline filter.
+     * Initializes the pagination.
      */
-    public void applyFilters() {
+    @PostConstruct
+    public void init() {
+        initPagination();
     }
 
     /**
@@ -48,6 +61,7 @@ public class ScientificForumListBacking implements Serializable {
      *
      * @return The pagination for scientific forums.
      */
+    @Override
     public Pagination<ScientificForum> getScientificForumPagination() {
         return scientificForumPagination;
     }
@@ -59,15 +73,6 @@ public class ScientificForumListBacking implements Serializable {
      */
     public SessionInformation getSessionInformation() {
         return sessionInformation;
-    }
-
-    /**
-     * Return an array of all values the DateSelect enum can have.
-     *
-     * @return ALl options of DateSelect.
-     */
-    public DateSelect[] getDateSelects() {
-        return DateSelect.values();
     }
 
 }

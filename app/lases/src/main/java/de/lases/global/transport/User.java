@@ -1,9 +1,8 @@
 package de.lases.global.transport;
 
 import java.time.LocalDate;
-import java.util.*;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -12,11 +11,9 @@ import java.util.Objects;
  */
 public class User implements Cloneable {
 
-    private int verificationId;
-
     private Integer id; // SQL: id
 
-    private List<Privilege> privileges = new ArrayList<>(); // SQL implicit
+    private List<Privilege> privileges; // SQL implicit
 
     private String title; // SQL: title
 
@@ -38,6 +35,8 @@ public class User implements Cloneable {
 
     private boolean isRegistered; // SQL: is_registered
 
+    private boolean isVerified; // SQL implicit
+
     private int numberOfSubmissions; // SQL
 
     public User() {
@@ -54,6 +53,15 @@ public class User implements Cloneable {
     }
 
     /**
+     * Return if the user is an editor.
+     *
+     * @return Is the user an editor.
+     */
+    public Boolean isEditor() {
+        return privileges.contains(Privilege.EDITOR);
+    }
+
+    /**
      * Set the flag whether this user is an admin.
      * This does not change the {@link User#privileges}.
      *
@@ -65,19 +73,6 @@ public class User implements Cloneable {
         } else {
             privileges.removeAll(Collections.singleton(Privilege.ADMIN));
         }
-    }
-
-    public int getVerificationId() {
-        return verificationId;
-    }
-
-    /**
-     * Set the id of the verification belonging to this user.
-     *
-     * @param verificationId The id of the verification.
-     */
-    public void setVerificationId(int verificationId) {
-        this.verificationId = verificationId;
     }
 
     public Integer getId() {
@@ -224,6 +219,18 @@ public class User implements Cloneable {
         isRegistered = registered;
     }
 
+    public boolean isVerified() {
+        return isVerified;
+    }
+
+    /**
+     * Decide if the user's email address verified or not.
+     * @param verified If the user's email address is verified.
+     */
+    public void setVerified(boolean verified) {
+        isVerified = verified;
+    }
+
     public List<Privilege> getPrivileges() {
         return privileges;
     }
@@ -235,7 +242,8 @@ public class User implements Cloneable {
      * @param privileges The list of privileges.
      */
     public void setPrivileges(List<Privilege> privileges) {
-        this.privileges = privileges;
+        this.privileges.clear();
+        this.privileges.addAll(privileges);
     }
 
     /**
@@ -287,7 +295,8 @@ public class User implements Cloneable {
     public User clone() {
         try {
             User clone = (User) super.clone();
-            clone.privileges = List.copyOf(this.privileges);
+            clone.privileges = new ArrayList<>();
+            clone.privileges.addAll(this.privileges);
             return clone;
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();

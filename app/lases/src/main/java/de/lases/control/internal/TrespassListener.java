@@ -1,11 +1,8 @@
 package de.lases.control.internal;
 
 import de.lases.control.exception.IllegalAccessException;
-import de.lases.global.transport.MessageCategory;
 import de.lases.global.transport.Privilege;
-import de.lases.global.transport.UIMessage;
 import de.lases.global.transport.User;
-import jakarta.enterprise.event.Event;
 import jakarta.enterprise.inject.spi.CDI;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.application.NavigationHandler;
@@ -15,7 +12,6 @@ import jakarta.faces.context.FacesContext;
 import jakarta.faces.event.PhaseEvent;
 import jakarta.faces.event.PhaseId;
 import jakarta.faces.event.PhaseListener;
-import jakarta.inject.Inject;
 
 import java.io.Serial;
 import java.util.PropertyResourceBundle;
@@ -32,7 +28,7 @@ public class TrespassListener implements PhaseListener {
     private static final long serialVersionUID = -1137139795334466811L;
 
     private PropertyResourceBundle propertyResourceBundle =
-            (PropertyResourceBundle) ResourceBundle.getBundle("resource_bundles/message");
+            (PropertyResourceBundle) ResourceBundle.getBundle("de/lases/resource_bundles/message");
 
     private final Logger logger = Logger.getLogger(TrespassListener.class.getName());
 
@@ -81,7 +77,7 @@ public class TrespassListener implements PhaseListener {
 
         // Load localised messages to avoid CDI.
         propertyResourceBundle = (PropertyResourceBundle)
-                ResourceBundle.getBundle("resource_bundles/message", viewRoot.getLocale());
+                ResourceBundle.getBundle("de/lases/resource_bundles/message", viewRoot.getLocale());
 
         String viewId = viewRoot.getViewId();
         if (viewId.contains("/anonymous/")) {
@@ -93,6 +89,11 @@ public class TrespassListener implements PhaseListener {
             logger.warning("An unregistered user tried illegally access "
                     + "a page using the url: " + viewId);
             navigateToLogin(fctx);
+        } else if (!user.isVerified()) {
+
+            // Illegal access by user without verified email address.
+            logger.warning("An unverified user tried illegally access a page using the url: " + viewId);
+            throw new IllegalAccessException(propertyResourceBundle.getString("unverified"));
         } else if (!user.getPrivileges().contains(Privilege.EDITOR) && !user.isAdmin() && viewId.contains("/editor/")) {
 
             // Illegal access to a site which is visible to editors and admins only.

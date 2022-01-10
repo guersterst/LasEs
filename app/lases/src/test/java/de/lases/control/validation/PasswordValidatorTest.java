@@ -1,11 +1,29 @@
 package de.lases.control.validation;
 
+import jakarta.enterprise.inject.Produces;
 import jakarta.faces.validator.ValidatorException;
+import org.jboss.weld.junit5.WeldInitiator;
+import org.jboss.weld.junit5.WeldJunit5Extension;
+import org.jboss.weld.junit5.WeldSetup;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
+
+import java.util.PropertyResourceBundle;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 
+@ExtendWith(WeldJunit5Extension.class)
 class PasswordValidatorTest {
+
+    @WeldSetup
+    public WeldInitiator weld = WeldInitiator.from(PasswordValidatorTest.class).build();
+
+    @Produces
+    PropertyResourceBundle propertyResourceBundleProducer() {
+        return Mockito.when(Mockito.mock(PropertyResourceBundle.class).getString(any())).thenReturn("").getMock();
+    }
 
     @Test
     void testValidate() {

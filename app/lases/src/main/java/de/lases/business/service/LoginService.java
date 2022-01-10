@@ -12,7 +12,6 @@ import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 
 import java.util.PropertyResourceBundle;
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 /**
@@ -28,7 +27,7 @@ public class LoginService {
     @Inject
     private PropertyResourceBundle propertyResourceBundle;
 
-    private final Logger l = Logger.getLogger(LoginService.class.getName());
+    private final Logger logger = Logger.getLogger(LoginService.class.getName());
 
     /**
      * Authenticates a user
@@ -46,11 +45,11 @@ public class LoginService {
             String gotHash = Hashing.hashWithGivenSalt(user.getPasswordNotHashed(), matchingEmailUser.getPasswordSalt());
             if (gotHash.equals(expectedHash)) {
                 // success
-                l.info("Login successful for user " + user.getId() + " " + user.getEmailAddress());
+                logger.info("Login successful for user " + user.getId() + " " + user.getEmailAddress());
                 return matchingEmailUser;
             } else {
                 // fail
-                l.info("Login attempt unsuccessful for user " + user.getId() + " " + user.getEmailAddress());
+                logger.info("Login attempt unsuccessful for user " + user.getId() + " " + user.getEmailAddress());
                 uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("authFailed"), MessageCategory.ERROR));
             }
         } catch (NotFoundException e) {

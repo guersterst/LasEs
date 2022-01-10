@@ -9,7 +9,7 @@ public enum AcceptanceStatus {
     /**
      * The reviewer has yet to decide.
      */
-    PENDING,
+    NO_DECISION,
 
     /**
      * The reviewer accepted.

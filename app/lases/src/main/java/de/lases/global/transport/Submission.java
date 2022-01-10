@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 /**
  * Represents a submission.
+ *
+ * @author Sebastian Vogt
  */
 public class Submission implements Cloneable {
 
@@ -13,7 +15,7 @@ public class Submission implements Cloneable {
 
     private int authorId;
 
-    private int editorId;
+    private Integer editorId;
 
     private String title;
 
@@ -78,7 +80,7 @@ public class Submission implements Cloneable {
         this.authorId = authorId;
     }
 
-    public int getEditorId() {
+    public Integer getEditorId() {
         return editorId;
     }
 
@@ -87,7 +89,7 @@ public class Submission implements Cloneable {
      *
      * @param editorId Id of the editor.
      */
-    public void setEditorId(int editorId) {
+    public void setEditorId(Integer editorId) {
         this.editorId = editorId;
     }
 
@@ -152,13 +154,12 @@ public class Submission implements Cloneable {
     @Override
     public Submission clone() {
         try {
-            Submission clone = (Submission) super.clone();
 
             /*
              * Nothing to do here, since all references of Submission are
              * immutable.
              */
-            return clone;
+            return (Submission) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }
@@ -175,10 +176,9 @@ public class Submission implements Cloneable {
         if (object == this) {
             return true;
         }
-        if (!(object instanceof Submission)) {
+        if (!(object instanceof Submission submission)) {
             return false;
         }
-        Submission submission = (Submission) object;
         return submission.getId().equals(this.getId());
     }
 }

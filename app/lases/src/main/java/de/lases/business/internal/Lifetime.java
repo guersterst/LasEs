@@ -1,5 +1,6 @@
 package de.lases.business.internal;
 
+import de.lases.global.transport.FileDTO;
 import de.lases.persistence.exception.ConfigNotReadableException;
 import de.lases.persistence.repository.ConnectionPool;
 
@@ -15,8 +16,6 @@ import java.util.logging.Logger;
  */
 public class Lifetime {
 
-    private static final Logger l = Logger.getLogger(Lifetime.class.getName());
-
     /**
      * On startup the resources used by the system are initialized.
      *
@@ -27,11 +26,12 @@ public class Lifetime {
      *     <li> and the logger. </li>
      * </ul>
      *
-     * @param loggerConfigStream The logger config file.
+     * @param loggerConfig File containing the logger properties as InputStream.
      */
-    public static void startup(InputStream loggerConfigStream) {
-        initializeLogger(loggerConfigStream);
+    public static void startup(FileDTO loggerConfig) {
+        initializeLogger(loggerConfig.getInputStream());
         initializeDBPool();
+        initializePeriodicWorker();
     }
 
     /**
@@ -46,6 +46,7 @@ public class Lifetime {
      * </ul>
      */
     public static void shutdown() {
+        PeriodicWorker.stop();
         ConnectionPool.shutDown();
     }
 
@@ -53,7 +54,7 @@ public class Lifetime {
         // initialize logger with logger config file
         try {
             LogManager.getLogManager().readConfiguration(loggerConfigStream);
-            l.info("Logger initialized");
+            Logger.getLogger(Lifetime.class.getName()).info("Logger initialized");
         } catch (IOException e) {
             throw new ConfigNotReadableException("Could not read logger config file", e);
         }
@@ -63,5 +64,7 @@ public class Lifetime {
         ConnectionPool.init();
     }
 
-
+    private static void initializePeriodicWorker() {
+        PeriodicWorker.init();
+    }
 }

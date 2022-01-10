@@ -1,12 +1,17 @@
 package de.lases.control.validation;
 
 import de.lases.business.service.UserService;
+import de.lases.global.transport.User;
+import jakarta.enterprise.inject.spi.CDI;
+import jakarta.faces.application.FacesMessage;
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.validator.FacesValidator;
 import jakarta.faces.validator.Validator;
 import jakarta.faces.validator.ValidatorException;
-import jakarta.inject.Inject;
+
+import java.util.PropertyResourceBundle;
+import java.util.logging.Logger;
 
 /**
  * Validator for email addresses that checks if a given email address is part
@@ -15,8 +20,7 @@ import jakarta.inject.Inject;
 @FacesValidator
 public class EmailAddressExistsValidator implements Validator<String> {
 
-    @Inject
-    private UserService userService;
+    private final Logger logger = Logger.getLogger(EmailAddressUnoccupiedValidator.class.getName());
 
     /**
      * Validates an email address as specified in the class description.
@@ -29,6 +33,16 @@ public class EmailAddressExistsValidator implements Validator<String> {
     @Override
     public void validate(FacesContext facesContext, UIComponent uiComponent,
                          String address) throws ValidatorException {
+        User user = new User();
+        user.setEmailAddress(address);
+        UserService userService = CDI.current().select(UserService.class).get();
+        if (!userService.emailExists(user)) {
+            PropertyResourceBundle bundle = CDI.current().select(PropertyResourceBundle.class).get();
+            logger.finer("Validation failed: " + address + " does not exist.");
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, bundle.getString("emailNotExists"),
+                    null);
+            throw new ValidatorException(message);
+        }
     }
 
 }

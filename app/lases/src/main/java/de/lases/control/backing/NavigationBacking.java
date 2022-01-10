@@ -4,6 +4,7 @@ import de.lases.control.internal.SessionInformation;
 import de.lases.global.transport.ResultListParameters;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.application.NavigationHandler;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -23,7 +24,9 @@ public class NavigationBacking {
     private SessionInformation sessionInformation;
 
     @Inject
-    private ResultListBacking resultListBacking;
+    private FacesContext facesContext;
+
+    private NavigationHandler navHandler;
 
     private ResultListParameters resultListParameters;
 
@@ -32,6 +35,7 @@ public class NavigationBacking {
      */
     @PostConstruct
     public void init() {
+       navHandler = facesContext.getApplication().getNavigationHandler();
        resultListParameters = new ResultListParameters();
     }
     /**
@@ -52,13 +56,13 @@ public class NavigationBacking {
      *
      * @return Show the result list page.
      */
-    public String search() {
+    public void search() {
         String searchWord = resultListParameters.getGlobalSearchWord();
         if (searchWord == null) {
             searchWord = "";
         }
-        resultListBacking.setSearchWord(searchWord);
-        return "/views/authenticated/resultList.xhtml?faces-redirect=true";
+        navHandler.handleNavigation(facesContext, null,
+                "/views/authenticated/resultList.xhtml?faces-redirect=true&search-word=" + searchWord);
     }
 
     /**

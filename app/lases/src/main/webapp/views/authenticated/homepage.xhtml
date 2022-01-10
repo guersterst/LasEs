@@ -1,27 +1,21 @@
+
 <ui:composition template="/resources/templates/main.xhtml"
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:pg="http://xmlns.jcp.org/jsf/composite/templates/composites/pagination"
-                xmlns:col="http://xmlns.jcp.org/jsf/composite/templates/composites/sortsearchcolumn"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
+                xmlns:st="http://xmlns.jcp.org/jsf/composite/templates/composites/submissionTable">
 
     <!-- Page title -->
-    <ui:define name="title">Homepage</ui:define>
-    <!-- TODO update title -->
+    <ui:define name="title">#{labels['homePage.title']}</ui:define>
 
     <!-- Content of homepage.xhtml -->
     <ui:define name="content">
 
-        <f:metadata>
-            <f:viewAction action="#{homepageBacking.submissionPagination.loadData}"/>
-        </f:metadata>
-
         <div class="container">
-            <h1>Welcome to LasEs</h1>
             <div class="card">
                 <div class="card-head">
-                    <h:form>
+                    <!-- Tabs for the different views -->
+                    <h:form id="tabs">
                         <ul class="nav nav-tabs justify-content-center">
                             <li class="nav-item">
                                 <h:commandLink value="#{labels['ownSubmissions']}"
@@ -43,88 +37,10 @@
                 </div>
 
                 <div class="card-body">
-                    <h:form>
-                        <div class="btn-group">
-                        <h:selectOneMenu id="date-slctom"
-                                         value="#{homepageBacking.submissionPagination.resultListParameters.dateSelect}"
-                                         title="#{help.dateSelect}" styleClass="btn btn-secondary">
-                            <f:selectItems value="#{homepageBacking.dateSelects}" var="select"
-                                           itemLabel="#{labels['dateSelect.' += select]}"
-                                           itemValue="#{select}"/>
-                        </h:selectOneMenu>
-                        <h:selectOneMenu id="state-slctom"
-                                         value="#{homepageBacking.submissionPagination.resultListParameters.submissionState}"
-                                         title="#{help.stateSubSelect}" styleClass="btn btn-secondary">
-                            <f:selectItem itemValue="#{null}" itemLabel="#{labels['stateSelect.ALL']}"/>
-                            <f:selectItems value="#{homepageBacking.submissionStates}" var="select"
-                                           itemLabel="#{labels['stateSelect.' += select]}"
-                                           itemValue="#{select}"/>
-                        </h:selectOneMenu>
-                        </div>
-                        <pg:pagination paginator="#{homepageBacking.submissionPagination}">
-                            <h:column>
-                                <f:facet name="header">
-                                    <col:sortsearchcolumn id="title-ssc"
-                                                          paginator="#{homepageBacking.submissionPagination}"
-                                                          columnIdentifier="title"
-                                                          columnNamei18n="Title"/>
-                                </f:facet>
-                                <h:link value="#{var.title}" outcome="/views/authenticated/submission"
-                                        includeViewParams="true">
-                                    <f:param name="id" value="#{var.id}"/>
-                                </h:link>
-                            </h:column>
-
-                            <h:column>
-                                <f:facet name="header">
-                                    <div class="input-group">
-                                        <h:outputText value="#{labels.date}" styleClass="input-group-text"/>
-                                    </div>
-                                </f:facet>
-                                <h:outputText value="#{var.submissionTime}">
-                                    <f:convertDateTime type="localDate"/>
-                                </h:outputText>
-                            </h:column>
-
-                            <h:column>
-                                <f:facet name="header">
-                                    <div class="input-group">
-                                        <h:outputText value="#{labels.deadline}" styleClass="input-group-text"/>
-                                    </div>
-                                </f:facet>
-                                <h:outputText value="#{var.deadlineRevision}">
-                                    <f:convertDateTime type="localDate"/>
-                                </h:outputText>
-                            </h:column>
-
-                            <h:column>
-                                <f:facet name="header">
-                                    <div class="input-group">
-                                        <h:outputText value="#{labels.stateSub}" styleClass="input-group-text"/>
-                                    </div>
-                                </f:facet>
-                                <h:outputText id="state-otxt" value="#{var.state}"/>
-                            </h:column>
-
-                            <h:column>
-                                <f:facet name="header">
-                                    <col:sortsearchcolumn columnNamei18n="#{labels.forumSub}"
-                                                          paginator="#{homepageBacking.submissionPagination}"
-                                                          columnIdentifier="forum"/>
-                                </f:facet>
-                                <h:link id="forum-lnk" value="#{homepageBacking.getForumName(var)}"
-                                        outcome="/views/authenticated/scientificForum"
-                                        includeViewParams="true">
-                                    <f:param name="id" value="#{var.scientificForumId}"/>
-                                </h:link>
-                            </h:column>
-                        </pg:pagination>
-                    </h:form>
+                    <st:submissiontable backing="#{homepageBacking}"/>
                 </div>
             </div>
         </div>
-
-        <h:messages/>
     </ui:define>
 
 </ui:composition>

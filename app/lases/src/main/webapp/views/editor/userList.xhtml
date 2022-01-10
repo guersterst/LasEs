@@ -1,0 +1,23 @@
+<ui:composition template="/resources/templates/main.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:ut="http://xmlns.jcp.org/jsf/composite/templates/composites/usertable"
+                xmlns:h="http://java.sun.com/jsf/html">
+
+    <!-- page title -->
+    <ui:define name="title">#{labels['userList']}</ui:define>
+
+    <!-- content of userList.xhtml -->
+    <ui:define name="content">
+        <div class="container" id="user-list-pagination">
+            <div class="card">
+                <div class="card-header">
+                    <h:outputText id="heading-user-list-otxt" value="#{labels.userList}" styleClass="h4"/>
+                </div>
+                <div class="card-body">
+                    <ut:usertable backing="#{userListBacking}"/>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>

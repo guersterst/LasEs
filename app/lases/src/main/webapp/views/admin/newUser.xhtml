@@ -1,0 +1,122 @@
+<ui:composition template="/resources/templates/main.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+>
+    <f:metadata>
+        <f:importConstants type="de.lases.control.internal.Constants" var="Const"/>
+    </f:metadata>
+    <ui:define name="title">#{labels['newUser.title']}</ui:define>
+
+    <ui:define name="content">
+        <div class="container">
+
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h:outputText value="#{labels['newUser.header']}"/>
+                        </div>
+                        <h:form id="register-frm" styleClass="card-body">
+
+                            <!-- Password -->
+                            <div class="form-group">
+                                <h:outputLabel for="password-iscrt" value="#{labels['password']}"
+                                               styleClass="form-label"/>
+                                <h:inputSecret id="password-iscrt"
+                                               value="#{newUserBacking.newUser.passwordNotHashed}"
+                                               title="#{help.password}" required="true"
+                                               requiredMessage="#{message.passwordNeeded}"
+                                               styleClass="form-control">
+                                    <f:validator for="password-iscrt" validatorId="passwordValidator"/>
+                                </h:inputSecret>
+                            </div>
+                            <h:message for="password-iscrt"/>
+                            <hr/>
+
+                            <!-- Title -->
+                            <div class="form-group">
+                                <h:outputLabel for="title-itxt" value="#{labels['titleInput']}"
+                                               styleClass="form-label"/>
+                                <h:inputText id="title-itxt" value="#{newUserBacking.newUser.title}"
+                                             maxlength="#{Const.TITLE_MAX}" styleClass="form-control"/>
+                            </div>
+                            <h:message for="title-itxt"/>
+                            <hr/>
+
+                            <!-- First name -->
+                            <div class="form-group">
+                                <h:outputLabel for="first-name-itxt" value="#{labels['firstName']}"
+                                               styleClass="form-label"/>
+                                <h:inputText id="first-name-itxt" value="#{newUserBacking.newUser.firstName}"
+                                             title="#{help.firstName}" required="true"
+                                             requiredMessage="#{message.firstNameRequired}"
+                                             maxlength="#{Const.FIRST_NAME_MAX}"
+                                             styleClass="form-control"/>
+                            </div>
+                            <h:message for="first-name-itxt"/>
+                            <hr/>
+
+                            <!-- Last Name -->
+                            <div class="form-group">
+                                <h:outputLabel for="last-name-itxt" value="#{labels['lastName']}"
+                                               styleClass="form-label"/>
+                                <h:inputText id="last-name-itxt" value="#{newUserBacking.newUser.lastName}"
+                                             title="#{help.lastName}" required="true"
+                                             requiredMessage="#{message.lastNameRequired}"
+                                             maxlength="#{Const.LAST_NAME_MAX}"
+                                             styleClass="form-control"/>
+                            </div>
+                            <h:message for="last-name-itxt"/>
+                            <hr/>
+
+                            <!-- Email -->
+                            <div class="form-group">
+                                <h:outputLabel for="email-itxt" value="#{labels['email']}"
+                                               styleClass="form-label"/>
+                                <h:inputText id="email-itxt" value="#{newUserBacking.newUser.emailAddress}"
+                                             title="#{help.email}" required="true"
+                                             requiredMessage="#{message.emailRequired}"
+                                             maxlength="#{Const.EMAIL_MAX}"
+                                             styleClass="form-control">
+                                    <f:validator for="email-itxt"
+                                                 validatorId="emailAddressUnoccupiedValidator"/>
+                                    <f:validator for="email-itxt" validatorId="emailAddressLayoutValidator"/>
+                                </h:inputText>
+                            </div>
+                            <h:message for="email-itxt"/>
+                            <hr/>
+
+                            <!-- Admin checkbox -->
+                            <div class="form-group">
+                                <h:outputLabel for="is-admin-cbx" value="#{labels['newUser.grantAdminRights']}"
+                                               styleClass="form-label"/>
+                                <br/>
+                                <h:selectBooleanCheckbox id="is-admin-cbx"
+                                                         value="#{newUserBacking.newUser.admin}"/>
+                            </div>
+                            <hr/>
+
+                            <!-- Add user button -->
+                            <div class="form-group">
+                                <h:commandButton id="save-btn" value="#{labels['newUser.addUser']}"
+                                                 action="#{newUserBacking.saveUser()}"
+                                                 styleClass="btn btn-primary"/>
+                            </div>
+                            <hr/>
+                            <!-- Abort link -->
+                            <div class="form-group">
+                                <h:link id="abort-lnk" value="#{labels.welcomeLink}"
+                                        outcome="/views/editor/userList" title="#{help.welcomePage}"
+                                        styleClass="btn btn-secondary"/>
+                            </div>
+                        </h:form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>
