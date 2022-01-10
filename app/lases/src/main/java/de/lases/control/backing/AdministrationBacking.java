@@ -3,30 +3,20 @@ package de.lases.control.backing;
 import de.lases.business.internal.ConfigPropagator;
 import de.lases.business.service.CustomizationService;
 import de.lases.control.exception.IllegalAccessException;
-import de.lases.global.transport.*;
+import de.lases.global.transport.FileDTO;
+import de.lases.global.transport.MessageCategory;
+import de.lases.global.transport.SystemSettings;
+import de.lases.global.transport.UIMessage;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.event.Event;
-import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.servlet.http.Part;
-import org.jboss.weld.util.reflection.Reflections;
-import org.primefaces.shaded.commons.io.IOUtils;
 
-import java.io.*;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
 import java.util.PropertyResourceBundle;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 /**
  * Backing bean for the administration page.
@@ -146,7 +136,12 @@ public class AdministrationBacking {
      * @return Path to stylesheet.
      */
     public String getPathToStyle() {
-        return PATH_TO_STYLE_DIRECTORY.concat(systemSettings.getStyle() + ".css");
+        if (systemSettings == null) {
+            // If the db connection failed, we just use the orange one.
+            return PATH_TO_STYLE_DIRECTORY + "orange.css";
+        } else {
+            return PATH_TO_STYLE_DIRECTORY.concat(systemSettings.getStyle() + ".css");
+        }
     }
 
     /**
