@@ -101,7 +101,9 @@
                                              requiredMessage="#{message.newScienceField}"
                                              maxlength="#{Const.SCIENCE_FIELD_MAX}"/>
                                 <h:commandButton id="add-science-field-btn" value="#{labels.newForumCreate}"
-                                                 action="#{newScientificForumBacking.createNewScienceField}" styleClass="btn btn-secondary"/>
+                                                 action="#{newScientificForumBacking.createNewScienceField}"
+                                                 styleClass="btn btn-secondary"
+                                                 title="#{help.createScienceField}"/>
                             </h:panelGrid>
                             <h:message for="new-science-field-itxt" style="color: red"/>
                         </div>
@@ -166,7 +168,8 @@
                                                 <hr/>
                                                 <h:commandButton id="add-science-field" value="#{labels.add}"
                                                                  action="#{newScientificForumBacking.addScienceField()}"
-                                                                 styleClass="btn btn-secondary"/>
+                                                                 styleClass="btn btn-secondary"
+                                                                 title="#{help.addScienceFieldToList}"/>
                                                 <h:message for="science-field-slct" style="color: red"/>
                                             </div>
                                         </h:form>
