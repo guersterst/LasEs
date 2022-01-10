@@ -87,6 +87,7 @@ public class DatasourceUtil {
             transaction.commit();
         } catch (SQLException e) {
             logSQLException(e, logger);
+            transaction.abort();
             throw new DatasourceNotFoundException(e.getMessage());
         }
     }
