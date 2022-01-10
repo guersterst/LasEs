@@ -414,7 +414,7 @@ public class SubmissionBacking implements Serializable {
      *
      * @param paper The revision (which is a {@code paper}) to release
      */
-    public void releaseRevision(Paper paper) {
+    public String releaseRevision(Paper paper) {
        if (loggedInUserIsEditor() || isAdmin()) {
            if (submission.getState() == SubmissionState.REJECTED) {
                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("rejected"), MessageCategory.WARNING));
@@ -424,10 +424,12 @@ public class SubmissionBacking implements Serializable {
                paper.setVisible(true);
                paperService.change(paper);
            }
+           return "/views/authenticated/submission.xhtml?faces-redirect=true&id=" + submission.getId();
        } else {
            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("noPermission"), MessageCategory.WARNING));
        }
        toolbarBacking.onLoad(submission);
+       return null;
     }
 
     /**
