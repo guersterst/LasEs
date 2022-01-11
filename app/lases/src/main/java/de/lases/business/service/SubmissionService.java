@@ -70,7 +70,6 @@ public class SubmissionService implements Serializable {
             t.commit();
             logger.finer("Submission with id " + submission.getId() + " retrieved.");
         } catch (NotFoundException | DataNotCompleteException e) {
-            logger.severe("Submission not found.");
             uiMessageEvent.fire(new UIMessage(
                     resourceBundle.getString("error.requestedSubmissionDoesNotExist"),
                     MessageCategory.ERROR));
@@ -697,7 +696,6 @@ public class SubmissionService implements Serializable {
             submission = SubmissionRepository.get(submission, t);
             logger.finer("Submission with id " + submission.getId() + " retrieved.");
         } catch (NotFoundException | DataNotCompleteException e) {
-            logger.severe("Submission with id " + submission.getId() + " not found.");
             uiMessageEvent.fire(new UIMessage(
                     resourceBundle.getString("error.loadingSubmissionFailed"),
                     MessageCategory.ERROR));
@@ -743,12 +741,10 @@ public class SubmissionService implements Serializable {
             t.commit();
             logger.finer("List of submissions retrieved.");
         } catch (DataNotCompleteException e) {
-            logger.warning("Data not complete: " + e.getMessage());
             uiMessageEvent.fire(new UIMessage(
                     resourceBundle.getString("warning.dataNotComplete"),
                     MessageCategory.WARNING));
         } catch (NotFoundException e) {
-            logger.severe("User to get submissions for not found.");
             uiMessageEvent.fire(new UIMessage(
                     resourceBundle.getString("error.findingSubmissionListFailed"),
                     MessageCategory.ERROR));
@@ -822,12 +818,10 @@ public class SubmissionService implements Serializable {
             t.commit();
             logger.finer("List of submissions retrieved.");
         } catch (DataNotCompleteException e) {
-            logger.warning("Data not complete: " + e.getMessage());
             uiMessageEvent.fire(new UIMessage(
                     resourceBundle.getString("warning.dataNotComplete"),
                     MessageCategory.WARNING));
         } catch (NotFoundException e) {
-            logger.severe("ScientificForum to get submissions for not found.");
             uiMessageEvent.fire(new UIMessage(
                     resourceBundle.getString("error.findingSubmissionListFailed"),
                     MessageCategory.ERROR));
@@ -860,8 +854,6 @@ public class SubmissionService implements Serializable {
             count = SubmissionRepository.countSubmissions(user, privilege, t, resultParams);
             t.commit();
         } catch (NotFoundException | DataNotCompleteException e) {
-
-            logger.severe("User to count submissions for not found.");
             uiMessageEvent.fire(new UIMessage(
                     resourceBundle.getString("error.findingSubmissionListFailed"),
                     MessageCategory.ERROR));
