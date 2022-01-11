@@ -1,5 +1,6 @@
 package de.lases.business.service;
 
+import de.lases.business.util.EmailUtil;
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
 import de.lases.persistence.internal.ConfigReader;
@@ -7,6 +8,7 @@ import de.lases.persistence.repository.*;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.enterprise.inject.spi.CDI;
+import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 
 import java.io.Serial;
@@ -113,9 +115,11 @@ public class ScientificForumService implements Serializable {
      */
     public ScientificForum add(ScientificForum forum, List<ScienceField> scienceFields, List<User> editors) {
         Transaction transaction = new Transaction();
+        String forumNameCopy = forum.getName();
         try {
             // overwriting the parameter here to have the ID.
             forum = ScientificForumRepository.add(forum, transaction);
+            forum.setName(forumNameCopy);
 
             for (User editor : editors) {
                 ScientificForumRepository.addEditor(forum, editor, transaction);
@@ -124,6 +128,8 @@ public class ScientificForumService implements Serializable {
                 ScientificForumRepository.addScienceField(forum, scienceField, transaction);
             }
             transaction.commit();
+
+            sendEmailForumCreation(forum, editors);
             return forum;
 
         } catch (DataNotWrittenException | NotFoundException e) {
@@ -136,6 +142,18 @@ public class ScientificForumService implements Serializable {
             uiMessageEvent.fire(new UIMessage("Forum name is already in use.", MessageCategory.ERROR));
         }
         return null;
+    }
+
+    private void sendEmailForumCreation(ScientificForum forum, List<User> editors) {
+        List<String> addresses = editors.stream().map(User::getEmailAddress).toList();
+
+        String subject = bundle.getString("email.newScientificForum.subject") + forum.getName();
+        String body = bundle.getString("email.newScientificForum.body") + "\n\n" + EmailUtil.generateForumURL(forum, FacesContext.getCurrentInstance());
+        try {
+            EmailUtil.sendEmail(addresses.toArray(new String[0]), null, subject, body);
+        } catch (EmailTransmissionFailedException e) {
+            uiMessageEvent.fire(new UIMessage(bundle.getString("noEmailsSent"), MessageCategory.WARNING));
+        }
     }
 
     /**

@@ -2,6 +2,7 @@ package de.lases.business.service;
 
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.DataNotWrittenException;
+import de.lases.persistence.exception.DatasourceQueryFailedException;
 import de.lases.persistence.exception.InvalidFieldsException;
 import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.repository.SystemSettingsRepository;
@@ -13,7 +14,6 @@ import jakarta.inject.Inject;
 
 import java.io.IOException;
 import java.util.PropertyResourceBundle;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -69,8 +69,14 @@ public class CustomizationService {
      */
     public SystemSettings get() {
         Transaction transaction = new Transaction();
-        SystemSettings systemSettings = SystemSettingsRepository.getSettings(transaction);
-        transaction.commit();
+        SystemSettings systemSettings = null;
+        try {
+            systemSettings = SystemSettingsRepository.getSettings(transaction);
+            transaction.commit();
+        } catch (DatasourceQueryFailedException ignored) {
+            transaction.abort();
+            // In case the DB Connection failed, we still want the error page to work.
+        }
         return systemSettings;
     }
 
@@ -129,14 +135,16 @@ public class CustomizationService {
      */
     public FileDTO getLogo() {
         Transaction transaction = new Transaction();
-        FileDTO logo;
+        FileDTO logo = null;
         try {
             logo = SystemSettingsRepository.getLogo(transaction);
             transaction.commit();
         } catch (NotFoundException | DataNotWrittenException e) {
             transaction.abort();
             uiMessageEvent.fire(new UIMessage(props.getString("dataNotFound"), MessageCategory.ERROR));
-            throw new IllegalStateException("No logo could be fetched.");
+        } catch (DatasourceQueryFailedException ignored) {
+            uiMessageEvent.fire(new UIMessage(props.getString("dataNotFound"), MessageCategory.FATAL));
+            // In case the logo can't be fetched, the application shall still work.
         }
         return logo;
     }

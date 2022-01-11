@@ -2,6 +2,7 @@ package de.lases.business.util;
 
 
 import de.lases.business.internal.ConfigPropagator;
+import de.lases.global.transport.ScientificForum;
 import de.lases.global.transport.Submission;
 import de.lases.persistence.exception.EmailTransmissionFailedException;
 import de.lases.persistence.util.EmailSender;
@@ -89,6 +90,11 @@ public class EmailUtil {
     public static String generateSubmissionURL(Submission submission, FacesContext facesContext) {
         String base = generateLinkForEmail(facesContext, "views/authenticated/submission.xhtml");
         return facesContext.getExternalContext().encodeBookmarkableURL(base, Map.of("id", List.of(submission.getId().toString())));
+    }
+
+    public static String generateForumURL(ScientificForum scientificForum, FacesContext facesContext) {
+        String base = generateLinkForEmail(facesContext, "views/authenticated/scientificForum.xhtml");
+        return facesContext.getExternalContext().encodeBookmarkableURL(base, Map.of("id", List.of(scientificForum.getId().toString())));
     }
 
 }
