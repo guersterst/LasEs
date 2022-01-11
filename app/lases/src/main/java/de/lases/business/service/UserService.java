@@ -462,7 +462,6 @@ public class UserService implements Serializable {
             storedVerification = UserRepository.getVerification(verification, transaction);
         } catch (NotFoundException e) {
             transaction.abort();
-            logger.warning("Could not find verification.");
             uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("verification.failure"),
                     MessageCategory.ERROR));
             return verification;
@@ -470,7 +469,6 @@ public class UserService implements Serializable {
 
         if (storedVerification.isVerified()) {
             transaction.abort();
-            logger.warning("User already verified");
             uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("verification.alreadyVerified"),
                     MessageCategory.ERROR));
             return verification;
@@ -482,14 +480,8 @@ public class UserService implements Serializable {
             try {
                 UserRepository.changeVerification(storedVerification, transaction);
                 logger.info("Successfully verified user with id " + storedVerification.getUserId());
-            } catch (NotFoundException e) {
+            } catch (NotFoundException | DataNotWrittenException e) {
                 transaction.abort();
-                logger.severe("Could not update verification as the user does not exist.");
-                uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("verification.failure"),
-                        MessageCategory.ERROR));
-            } catch (DataNotWrittenException e) {
-                transaction.abort();
-                logger.severe("Verification could not be updated in data source.");
                 uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("verification.failure"),
                         MessageCategory.ERROR));
             }
