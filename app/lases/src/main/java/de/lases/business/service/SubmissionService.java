@@ -90,6 +90,9 @@ public class SubmissionService implements Serializable {
      * @param submission The submission's data in a {@link Submission}.
      *                   Must contain a valid forum's id, authorId, editorId, state and title.
      * @param coAuthors  The desired co-athors as proper {@link User}-DTOs with an email-address.
+     * @param paper The first paper of this new submission.
+     * @param file File DTO for the submitted paper.
+     *
      * @return The submission that was added, but filled with its id.
      * @author Sebastian Vogt
      */

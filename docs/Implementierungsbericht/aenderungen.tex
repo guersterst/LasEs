@@ -1,3 +1,24 @@
 \localauthor{Stefanie Gürster}
 
+\subsection{Klassen}
+
+Damit ein Weiterleiten auf die nächste Seite einer \emph{Pagination} funktioniert, müssen alle zugehörigen Einträge gezählt werden. Dies übernehmen Methoden im Service sowie in den Repositories mit der Namenskonvention \emph{count...()}. Eine solche Methode wird zum Beispiel im PaperService verwendet, um alle Paper einer Submission zu zählen. Um Redundanzen im Folgenden zu vermeiden wird diese Methode im Weiteren nicht mehr angesprochen.
+
+\subsubsection{business.internal}
+
+\textbf{Lifetime} In der Methode \emph{startup()} wird nun zusätzlich ein FileDTO, welches \emph{logger properties} als \emph{ImputStream} enthält, als Parameter übergeben.
+
+\textbf{PeriodicWorker} Um den PeriodicWorker zu implementieren wird ein Timer Objekt verwendet. Dieser Timer wird durch \emph{init()} gestartet und durch \emph{stop()} gestoppt.
+
+\subsubsection{business.service}
+
+\textbf{PaperService} Für die Methode \emph{getLatest()} wird nur ein Submission-DTO benötigt und kein User-DTO wie zuvor angenommen. \newline
+Die Methode \emph{remove()} wurde entfernt, da sie nicht benötigt wird.
+
+\textbf{ScienceFieldService} Die Funktion eine einzelnes Fachgebiet mit \emph{get()} zu laden wurde nicht benötigt.
+
+\textbf{SubmissionService} In \emph{add()} werden zusätzlich ein Paper-DTO, sowie ein File-DTO mitübergeben. Im Gegensatz dazu wird eine Liste von Gutachter nicht mehr benötigt. \newline
+Der Rückgabewert der Methode \emph{change()} wurde von \emph{void} zu \emph{boolean} verändert, um Rückmeldung der Änderung zu erhalten.
+
 \localauthor{Johannes Garstenauer}
+
