@@ -76,7 +76,7 @@ public class RegistrationService {
 
         user = register(user, t);
 
-        if (initiateVerificationProcess(user, t)) {
+        if (user != null && initiateVerificationProcess(user, t)) {
             String msg = message.getString("registrationSuccessful");
             uiMessageEvent.fire(new UIMessage(msg, MessageCategory.INFO));
 
@@ -100,7 +100,6 @@ public class RegistrationService {
             try {
                 oldUser = UserRepository.get(user, t);
             } catch (NotFoundException e) {
-                logger.severe("User with email " + user.getEmailAddress() + " should exist but was not found.");
                 t.abort();
                 return null;
             }
@@ -114,18 +113,7 @@ public class RegistrationService {
             user.setId(oldUser.getId());
             try {
                 UserRepository.change(user, t);
-            } catch (DataNotWrittenException e) {
-                logger.severe("User with email " + user.getEmailAddress() + " could not be updated: "
-                        + e.getMessage());
-                t.abort();
-                return null;
-            } catch (NotFoundException e) {
-                logger.severe("User with email " + user.getEmailAddress() + " should exist but was not found.");
-                t.abort();
-                return null;
-            } catch (KeyExistsException e) {
-                logger.severe("User with combination of email " + user.getEmailAddress() + " and id " + user.getId()
-                        + " could not be updated: " + e.getMessage());
+            } catch (DataNotWrittenException | NotFoundException | KeyExistsException e) {
                 t.abort();
                 return null;
             }
@@ -133,9 +121,8 @@ public class RegistrationService {
             try {
                 UserRepository.add(user, t);
             } catch (DataNotWrittenException e) {
-                uiMessageEvent.fire(new UIMessage(message.getString("registrationFailed"), MessageCategory.ERROR));
                 t.abort();
-                return user;
+                return null;
             }
         }
 
