@@ -21,14 +21,25 @@ Hier wurden acht Stunden mehr benötigt, als ursprünglich angenommen. Grund daf
 
 Wie der Name schon impliziert, wurde hier bereits ein größeres Arbeitspaket aufgespalten. Die Seite einer Einreichung ist das Kernstück der Anwendung und umfasst damit viel Funktionalität. Der große Aufwand war uns bewusst, dennoch wurden zehn Stunden mehr benötigt als geplant. Grund hier war neben den bereits genannten Gründen natürlich auch Startschwierigkeiten mit  \emph{Jakarta Server Faces}. Der Projektumfang ist wesentlich angestiegen und somit auch die Anforderungen an den Programmierer, sich tiefer mit der Technologie auseinander zu setzen.
 
+\subsubsection{Arbeitspaket Profile}
+
+Der zusätzliche Zeitaufwand kam hier durch die Notwendigkeit eines \emph{Servlets} hinzu, welches die Profilbilder zur Verfügung stellt.
+Das war ein Exkurs von der bisherigen Arbeit mit \emph{JSF} und beanspruchte
+mehr Zeit als angenommen.
+
 \subsubsection{Fazit}
 
 Der Zeitaufwand für Arbeitspakete, bei denen bereits viel Zeit eingeschätzt war, hat sich häufig um viel mehr Zeit verlängert, als bei Arbeitspakten, bei welchen die Zeit von Beginn an geringer eingeschätzt war. Eine weitere Aufteilung der Arbeitspakete hätte das gegebenenfalls verhindern können, hätte aber auch gegenseitige Abhängigkeiten während der Implementierung erzeugt. Das hätte zu anderweitigen Verzögerungen geführt.
 
-
-Abweichungen von zwei bis drei Stunden waren abzusehen und sind auch bei den meisten Arbeitspaketen aufgetreten, sowohl als Verlängerung als auch Verkürzung der tatsächlichen Arbeitszeit.
+Abweichungen von zwei bis drei Stunden waren abzusehen und sind auch bei den meisten Arbeitspaketen aufgetreten, sowohl als Verlängerung als auch Verkürzung der tatsächlichen Arbeitszeit. Häufiger wurde allerdings mehr Zeit benötigt als ursprünglich angenommen. Die großen Ausreißer in der benötigten Zeit gab es nach Milestone 1 nicht mehr. Grund dafür ist sicherlich die Vertrautheit mit der
+Systemarchitektur und der bereits vorhandenen Code Infrastruktur.
 
 \subsection{Direkte Probleme bei der Programmierung}
+
+\subsubsection{JSF}
+
+\emph{Jarkarta Server Faces} stellte häufig größere Herausforderungen. Besonders bei der Verwendung von \emph{Custom Components} wurde oftmals mehr Zeit benötigt. Dazu gehört unter anderem die \emph{Pagination}. Wobei der Prototyp bereits bestand und lauffähig war, müssen im Einsatz mehrere Objekte durch die \emph{@PostConstruct init()} Methode und zusätzlich einer \emph{f:viewAction onLoad()} Methode initialisiert werden.
+Die Komplexität davon wurde im voraus nicht richtig eingeschätzt und führte damit zu erheblichen Verlängerungen in Arbeitspaketen, in welchen diese verwendet wurde.
 
 \subsubsection{JDBC}
 
