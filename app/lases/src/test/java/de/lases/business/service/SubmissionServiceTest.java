@@ -142,19 +142,6 @@ class SubmissionServiceTest {
     }
 
     @Test
-    void testReleaseReview() {
-        Submission submission = new Submission();
-        submission.setId(FIRST_SUBMISSION_ID);
-        Review review = new Review();
-        review.setPaperVersion(EXAMPLE_REVIEW_VERSION);
-        review.setSubmissionId(FIRST_SUBMISSION_ID);
-
-        submissionService.releaseReview(review, submission);
-
-        reviewRepo.verify(() -> ReviewRepository.change(eq(review), any(Transaction.class)), times(1));
-    }
-
-    @Test
     void testGetOwnSubmissions() {
         User user = new User();
         user.setId(EXAMPLE_USER_ID);

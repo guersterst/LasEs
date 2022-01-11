@@ -647,26 +647,6 @@ public class SubmissionService implements Serializable {
     }
 
     /**
-     * Releases a review to be viewed by the submitter.
-     *
-     * @param review     The review to be released.
-     * @param submission The submission containing that review.
-     */
-    public void releaseReview(Review review, Submission submission) {
-    }
-
-    /**
-     * Adds a co-author.
-     *
-     * @param coAuthor   The co-author to be added. This can be a regular {@link User}-DTO
-     *                   with a valid id
-     *                   or exclusively contain an email address.
-     * @param submission The submission, that receives a new co-author.
-     */
-    public void addCoAuthor(Submission submission, User coAuthor) {
-    }
-
-    /**
      * Determines whether a user has permission to view a submission
      *
      * @param submission The {@link Submission}, with a valid id, to be viewed.

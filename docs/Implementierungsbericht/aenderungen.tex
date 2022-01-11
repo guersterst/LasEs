@@ -4,6 +4,8 @@
 
 Damit ein Weiterleiten auf die nächste Seite einer \emph{Pagination} funktioniert, müssen alle zugehörigen Einträge gezählt werden. Dies übernehmen Methoden im Service sowie in den Repositories mit der Namenskonvention \emph{count...()}. Eine solche Methode wird zum Beispiel im PaperService verwendet, um alle Paper einer Submission zu zählen. Um Redundanzen im Folgenden zu vermeiden wird diese Methode im Weiteren nicht mehr angesprochen.
 
+\todo{SubmissionService: addReviewer(ohne Submission)}
+
 \subsubsection{business.internal}
 
 \textbf{Lifetime} In der Methode \emph{startup()} wird nun zusätzlich ein FileDTO, welches \emph{logger properties} als \emph{ImputStream} enthält, als Parameter übergeben.
@@ -18,7 +20,10 @@ Die Methode \emph{remove()} wurde entfernt, da sie nicht benötigt wird.
 \textbf{ScienceFieldService} Die Funktion eine einzelnes Fachgebiet mit \emph{get()} zu laden wurde nicht benötigt.
 
 \textbf{SubmissionService} In \emph{add()} werden zusätzlich ein Paper-DTO, sowie ein File-DTO mitübergeben. Im Gegensatz dazu wird eine Liste von Gutachter nicht mehr benötigt. \newline
-Der Rückgabewert der Methode \emph{change()} wurde von \emph{void} zu \emph{boolean} verändert, um Rückmeldung der Änderung zu erhalten.
+Der Rückgabewert der Methode \emph{change()} wurde von \emph{void} zu \emph{boolean} verändert, um Rückmeldung der Änderung zu erhalten. \newline
+Beispielsweise wird in der Toolbar eine Liste von Gutachtern der jeweiligen Einreichung geladen. Daher wurde die Methode \emph{getList(Submission submission)} neu hinzugefügt. \newline
+Die Methode \emph{releaseReview()} wird bereits im \emph{ReviewService} durch \emph{change()} implementiert und ist somit hier überflüssig. \newline
+Ebenso wird die Methode \emph{addCoAuthor()} nicht mehr verwendet, da Co-Autoren nur bei der Einreichung selbst hinzugefügt werden. Die Funktionalität liegt also schon in der Methode \emph{add()}.
 
 \localauthor{Johannes Garstenauer}
 
