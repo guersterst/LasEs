@@ -292,15 +292,6 @@ public class UserService implements Serializable {
     }
 
     /**
-     * Deletes a user's avatar.
-     *
-     * @param user The {@link User} whose avatar is being deleted.
-     *             Must contain a valid id.
-     */
-    public void deleteAvatar(User user) {
-    }
-
-    /**
      * Adds an area of expertise, e.g. a {@link ScienceField} to a {@link User}.
      *
      * @param user         The user who receives a new {@code ScienceField}.
