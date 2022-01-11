@@ -1,9 +1,9 @@
 package de.lases.control.backing;
 
-import de.lases.business.internal.ConfigPropagator;
 import de.lases.global.transport.ErrorMessage;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.application.ProjectStage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -19,9 +19,6 @@ public class ErrorPageBacking {
 
     @Inject
     private FacesContext facesContext;
-
-    @Inject
-    private ConfigPropagator configPropagator;
 
     @Inject
     private PropertyResourceBundle bundle;
@@ -87,6 +84,6 @@ public class ErrorPageBacking {
      * @return Is the app in development mode?
      */
     public boolean isDevelopmentMode() {
-        return configPropagator.getProperty("DEBUG_AND_TEST_MODE").equals("true");
+        return !facesContext.isProjectStage(ProjectStage.Production);
     }
 }

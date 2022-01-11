@@ -7,12 +7,12 @@ import de.lases.business.util.Hashing;
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
 import de.lases.persistence.internal.ConfigReader;
-import de.lases.persistence.repository.ScientificForumRepository;
 import de.lases.persistence.repository.Transaction;
 import de.lases.persistence.repository.UserRepository;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.enterprise.inject.spi.CDI;
+import jakarta.faces.application.ProjectStage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 
@@ -181,8 +181,8 @@ public class UserService implements Serializable {
             return false;
         }
 
-        // UIMessage containing verification random if test mode is enabled
-        if (configPropagator.getProperty("DEBUG_AND_TEST_MODE").equalsIgnoreCase("true")) {
+        // UIMessage containing verification random if development or test mode is enabled
+        if (!facesContext.isProjectStage(ProjectStage.Production)) {
             uiMessageEvent.fire(new UIMessage(generateValidationUrl(verification), MessageCategory.INFO));
         }
 

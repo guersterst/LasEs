@@ -16,6 +16,7 @@ import de.lases.persistence.repository.Transaction;
 import de.lases.persistence.repository.UserRepository;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
+import jakarta.faces.application.ProjectStage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 
@@ -143,7 +144,7 @@ public class RegistrationService {
 
     /**
      * Creates a verification dto with a random string and sends an email to the user.
-     * If the debug and test mode is enabled, the random string will be shown as a UIMessage.
+     * If the development or test project stage is enabled, the random string will be shown as a UIMessage.
      * No other messages will be shown.
      *
      * @param user The user to be verified filled with id and email address.
@@ -177,8 +178,8 @@ public class RegistrationService {
             return false;
         }
 
-        // UIMessage containing verification random if test mode is enabled
-        if (configPropagator.getProperty("DEBUG_AND_TEST_MODE").equalsIgnoreCase("true")) {
+        // UIMessage containing verification random if development or test mode is enabled
+        if (!facesContext.isProjectStage(ProjectStage.Production)) {
             uiMessageEvent.fire(new UIMessage(generateValidationUrl(verification), MessageCategory.INFO));
         }
 

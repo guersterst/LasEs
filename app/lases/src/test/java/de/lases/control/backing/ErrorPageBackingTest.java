@@ -1,11 +1,10 @@
 
 package de.lases.control.backing;
 
-import de.lases.business.internal.ConfigPropagator;
 import de.lases.global.transport.ErrorMessage;
+import jakarta.faces.application.ProjectStage;
 import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -23,8 +22,6 @@ class ErrorPageBackingTest {
     private static final String TEST_ERROR_MESSAGE = "Test Error Message";
     private static final String TEST_STACKTRACE = "Test Stacktrace";
 
-    @Mock ConfigPropagator configPropagator;
-
     @Mock
     FacesContext facesContext;
 
@@ -35,13 +32,6 @@ class ErrorPageBackingTest {
     Map<String, Object> sessionMap;
 
     private final ErrorPageBacking errorPageBacking = new ErrorPageBacking();
-
-    @BeforeEach
-    void setBackingDependencies() throws Exception {
-        Field configPropagatorField = errorPageBacking.getClass().getDeclaredField("configPropagator");
-        configPropagatorField.setAccessible(true);
-        configPropagatorField.set(errorPageBacking, configPropagator);
-    }
 
     @Test
     void testErrorPageBacking() throws Exception{
@@ -63,16 +53,23 @@ class ErrorPageBackingTest {
     }
 
     @Test
-    void testDevelopmentModeOn() {
-        when(configPropagator.getProperty("DEBUG_AND_TEST_MODE")).thenReturn("true");
+    void testDevelopmentModeOn() throws Exception {
+        setProductionMode(false);
         assertTrue(errorPageBacking.isDevelopmentMode());
     }
 
     @Test
-    void testDevelopmentModeOff() {
-        when(configPropagator.getProperty("DEBUG_AND_TEST_MODE")).thenReturn("false");
+    void testDevelopmentModeff() throws Exception {
+        setProductionMode(true);
         assertFalse(errorPageBacking.isDevelopmentMode());
 
+    }
+
+    private void setProductionMode(boolean mode) throws NoSuchFieldException, IllegalAccessException {
+        when(facesContext.isProjectStage(ProjectStage.Production)).thenReturn(mode);
+        Field facesContextField = errorPageBacking.getClass().getDeclaredField("facesContext");
+        facesContextField.setAccessible(true);
+        facesContextField.set(errorPageBacking, facesContext);
     }
 
 }
