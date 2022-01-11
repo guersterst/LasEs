@@ -34,7 +34,7 @@ Abweichungen von zwei bis drei Stunden waren abzusehen und sind auch bei den mei
 
 Die Verbindung zur Datenbank wurde nach Voraussetzung mit \emph{Java Database Connectivity} umgesetzt. Die Technologie war im geringen Maße bereits bekannt und konnte sehr schnell eingesetzt werden. Probleme entstanden durch benötigte Aufrufe von \emph{Close Methoden}. Diese werden benötigt um sowohl \emph{Connections} an den \emph{Connection Pool} zurückzugeben, als auch \emph{SQL Statements} zu schließen.
 
-Anfangs führte das zu vielen \emph{Leaks} an Datenbankverbindungen, die nicht mehr ordnungsgemäß zurückgegeben wurden. Gelöst wurde das Problem durch besseres \emph{Logging} der Datenbankverbindungen und Verwendung von \emph{Try-with-Ressource} Codeblöcken. Das benötigte zusätzliche Zeit zu debuggen und implementieren und hat die Arbeitszeit bei vielen Arbeitspaketen gestreckt.
+Anfangs führte das zu vielen \emph{Leaks} an Datenbankverbindungen, die nicht mehr ordnungsgemäß zurückgegeben wurden. Gelöst wurde das Problem durch besseres \emph{Logging} der Datenbankverbindungen und Verwendung von \emph{Try-with-Ressource} Codeblöcken. Das benötigte zusätzliche Zeit zu debuggen und implementieren und hat die Arbeitszeit bei vielen Arbeitspaketen gestreckt.\newline
 
 Ein weiteres Problem war das \emph{Error-Handling} von SQL Errors. \emph{PostgreSQL} und \emph{JDBC} geben hier nur numerische Fehlercodes zurück und keine direkte Information, ob es sich um eine \emph{Checked- oder Unchecked Exception} handelt. Hier wurde ein Prototyp von Sebastian Vogt entwickelt, allerdings zuerst nur vereinzelt von ihm umgesetzt. Es benötigte anschließend einen gemeinsamen Einsatz aller Teammitglieder alle Datenbankzugriffsmethoden mit der neuen Fehlerbehandlung auszustatten.
 
@@ -49,3 +49,13 @@ Gelöst wurde das Problem durch die Verwendung von \emph{Default} Werten, falls 
 
 \subsubsection{Testing}
 
+Viele Testfälle basieren auf Mocking mit der Softwarebibliothek \emph{Mockito}. Hier entstanden Zeitverzögerungen dadurch, dass alle Entwickler vorher keinen bis wenigen Kontakt zu diesem Framework hatten. Damit streckte sich der Zeitaufwand in die Länge.
+
+Ein weiteres Problem waren \emph{"Phantom Bugs"}. Mockito injiziert zum Mocking \emph{Byte Code} direkt in den auszuführenden Code. Das hat zur Folge, dass in Testfunktionen in welchen Mockito nur lokal verwendet wird, auch
+in anderen Funktionen der gleichen Klasse zur Ausführung von gemockten Code führt.
+
+Das führte zu langen Suchen nach Bugs, in denen sogar im Debug Modus anderer Code ausgeführt wurde. Anschließend gelöst wurde das Problem durch auftrennen des Codes in unterschiedliche Testklassen, mit oder ohne Mockito.\newline
+
+Die Abhängigkeit von \emph{CDI} in Tests stellte ein weiteres Problem dar. Grundsätzlich wird es im Produktiv Code durch den \emph{Application Server} zur Verfügung gestellt. Wurde nun aber versucht ein von \emph{CDI} abhängige Methode in einem Test aufzurufen, sind diese immer fehlgeschlagen.
+
+Durch die Verwendung einer weiteren Softwarebibliothek\footnote{\url{https://mvnrepository.com/artifact/org.jboss.weld/weld-junit-parent}}, wird das Testen von CDI Komponenten vereinfacht und konnte damit auch umgesetzt werden.
