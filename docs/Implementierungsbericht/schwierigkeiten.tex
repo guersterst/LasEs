@@ -38,6 +38,14 @@ Anfangs führte das zu vielen \emph{Leaks} an Datenbankverbindungen, die nicht m
 
 Ein weiteres Problem war das \emph{Error-Handling} von SQL Errors. \emph{PostgreSQL} und \emph{JDBC} geben hier nur numerische Fehlercodes zurück und keine direkte Information, ob es sich um eine \emph{Checked- oder Unchecked Exception} handelt. Hier wurde ein Prototyp von Sebastian Vogt entwickelt, allerdings zuerst nur vereinzelt von ihm umgesetzt. Es benötigte anschließend einen gemeinsamen Einsatz aller Teammitglieder alle Datenbankzugriffsmethoden mit der neuen Fehlerbehandlung auszustatten.
 
-\subsubsection{Fehlerseiten Facelet}
+\subsubsection{Fatale Datenbankfehler}
+
+Ein Nutzer wird auf eine Fehlerseite geleitet, falls auf eine nicht existierende Seite navigiert wird oder ein interner Error in LasEs auftritt.
+Ein schwerwiegender Fehler kann dabei der Abbruch der Verbindung zum Datenbankserver sein.
+Tritt ein solcher Fehler auf können keine Daten aus der Datenbank geladen werden und es wird auf die Fehlerseite weitergeleitet. Hier ergab sich das Problem eines rekursiven Fehlers.\newline
+Da diese Seite das \emph{Templating} verwendet, wurde wiederum versucht das Firmenlogo und die Auswahl des \emph{Styles}  aus der Datenbank zu laden. Hier trat wiederum ein Datenbankfehler auf und es wurde wieder auf die Fehlerseite weitergeleitet, auf welcher sich der Prozess wiederholte.
+
+Gelöst wurde das Problem durch die Verwendung von \emph{Default} Werten, falls die Datenbankverbindung auf der Fehlerseite nicht erfolgreich ist.
 
 \subsubsection{Testing}
+
