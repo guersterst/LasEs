@@ -44,6 +44,7 @@ public class ScientificForumService implements Serializable {
      *
      * @param forum A {@link ScientificForum}-DTO containing a valid id.
      * @return The requested scientific forum.
+     * @author Thomas Kirz
      */
     public ScientificForum get(ScientificForum forum) {
         if (forum.getId() == null) {

@@ -55,6 +55,7 @@ public class SubmissionService implements Serializable {
      *
      * @param submission A {@link Submission}-DTO containing a valid id.
      * @return The submission's data.
+     * @author Thomas Kirz
      */
     public Submission get(Submission submission) {
         if (submission.getId() == null) {
@@ -670,6 +671,7 @@ public class SubmissionService implements Serializable {
      * @param user       The {@link User} whose view access is being determined.
      *                   Must contain an id.
      * @return {@code false} if view access is restricted, {@code true} otherwise.
+     * @author Thomas Kirz
      */
     public boolean canView(Submission submission, User user) {
         if (submission.getId() == null || user.getId() == null) {
@@ -726,6 +728,7 @@ public class SubmissionService implements Serializable {
      * @param user         The user, whose editorial, reviewed or own and coauthored submissions.
      * @param resultParams The parameters, that control filtering and sorting of the resulting list.
      * @return The resulting list of submissions, which a user is involved in.
+     * @author Thomas Kirz
      */
     public List<Submission> getList(Privilege privilege, User user, ResultListParameters resultParams) {
         if (user.getId() == null) {
@@ -766,6 +769,7 @@ public class SubmissionService implements Serializable {
      *                        reviews or has submitted himself.
      * @param resultParams    The parameters, that control filtering and sorting of the resulting list.
      * @return The resulting list of submissions, that were submitted to a given scientific forum.
+     * @author Thomas Kirz
      */
     public List<Submission> getList(ScientificForum scientificForum, User user, Privilege privilege,
                                     ResultListParameters resultParams) {
@@ -802,6 +806,7 @@ public class SubmissionService implements Serializable {
      *                        parameters from the pagination like
      *                        filtering, sorting or number of elements.
      * @return A list of all {@link Submission}s that belong to a given scientific forum.
+     * @author Thomas Kirz
      */
     public List<Submission> getList(ScientificForum scientificForum,
                                     ResultListParameters resultParams) {
@@ -841,6 +846,7 @@ public class SubmissionService implements Serializable {
      * @param user      A {@link User}-DTO with a valid id.
      * @return The number of submission the specified user authored and -1
      * if retrieving the amount of submissions failed.
+     * @author Thomas Kirz
      */
     public int countSubmissions(User user, Privilege privilege, ResultListParameters resultParams) {
         if (user.getId() == null) {

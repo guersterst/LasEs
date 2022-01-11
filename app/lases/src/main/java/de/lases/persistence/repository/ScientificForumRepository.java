@@ -38,6 +38,7 @@ public class ScientificForumRepository {
      *                                        belong to two different scientific forums.
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
+     * @author Thomas Kirz
      */
     public static ScientificForum get(ScientificForum scientificForum,
                                       Transaction transaction)
