@@ -421,17 +421,6 @@ public class UserService implements Serializable {
     }
 
     /**
-     * Determines whether a users email-address is already verified.
-     *
-     * @param user The {@link User} whose {@link Verification} is requested.
-     *             Must contain a valid id.
-     * @return A fully filled {@code Verification} dto.
-     */
-    public Verification getVerification(User user) {
-        return null;
-    }
-
-    /**
      * Verifies a user's email-address.
      *
      * @param verification The {@link Verification}, containing the validation random, otherwise
