@@ -15,7 +15,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.MalformedParametersException;
 import java.net.MalformedURLException;
-import java.util.Enumeration;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -156,7 +155,7 @@ public class ImageServlet extends HttpServlet {
         if (img == null || img.getFile() == null) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             logger.severe("The image file must no be null");
-            throw new IllegalStateException();
+            // throw new IllegalStateException(); No illegal state, there is just no image served.
         }
         return img;
     }

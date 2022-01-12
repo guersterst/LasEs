@@ -17,7 +17,7 @@
     <h:dataTable id="pagination" value="#{cc.attrs.paginator.entries}" var="var" styleClass="table table-striped">
         <composite:insertChildren/>
     </h:dataTable>
-    <h:outputText value="No entries." rendered="#{cc.attrs.paginator.entries.isEmpty()}"/>
+    <h:outputText value="#{labels.noEntries}" rendered="#{cc.attrs.paginator.entries.isEmpty()}"/>
     <ul class="pagination">
 <!--        <h:panelGrid columns="5">-->
             <li class="page-item">

@@ -1,0 +1,157 @@
+\documentclass[a4paper,11pt]{article}
+
+\usepackage[ngerman]{babel}
+
+\usepackage{url}
+\usepackage{abstract}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{tabularx}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{todonotes}
+\usepackage{siunitx}
+\usepackage{hyphenat}
+\usepackage{fontspec}
+\usepackage{todonotes}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{rotating}
+\usepackage{pdflscape}
+\usepackage{caption}
+\usepackage{makecell}
+%%\usepackage[bottom]{footmisc} breaks referencing of footnotes idk
+
+\usepackage{tgpagella}
+\setmainfont{TeX Gyre Pagella}
+
+\usepackage[top=3cm]{geometry}
+\usepackage{parskip} %% Absatz anstatt amerikanischer Einrückung
+
+% configure vertical spacing in lists
+\usepackage{enumitem}
+\setitemize{partopsep=4pt,parsep=2pt}
+\setdescription{partopsep=4pt,parsep=6pt}
+
+\makeatletter
+\def\namedlabel#1#2{\begingroup
+#2%
+\def\@currentlabel{#2}%
+\phantomsection\label{#1}\endgroup
+}
+\makeatother
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{
+    numbers=none,
+    language=SQL,
+    frame=tb,
+    captionpos=below,
+    aboveskip=3mm,
+    belowskip=3mm,
+    xleftmargin=.01\textwidth, xrightmargin=.01\textwidth,
+    showstringspaces=false,
+    columns=flexible,
+    basicstyle={\small\ttfamily},
+    numberstyle=\tiny\color{gray},
+    keywordstyle=\color{blue},
+    commentstyle=\color{dkgreen},
+    stringstyle=\color{mauve},
+    breaklines=false,
+    breakatwhitespace=true,
+    tabsize=4
+}
+
+\newcommand{\shellcmd}[1]{\texttt{\footnotesize\$ #1}}
+
+\newcommand{\localauthor}[1]{\color{gray} #1 \normalcolor}
+
+\newcommand{\XXitem}[2]{\item[] \textbf{#1} \phantomsection \label{#2}}
+
+\newcommand{\phantomLabel}[1]{\phantomsection\label{#1}}
+
+\newcommand{\doubletitle}[2]{\title{#1 \\ [1ex] \normalsize #2}}
+\newcommand{\extauthor}[2]{\author{#1 \\ \normalsize #2}}
+\newcommand{\code}[1]{\texttt{#1}}
+
+\begin{document}
+
+    \begin{titlepage}
+        \centering
+
+        $~$
+
+        \vspace{0.2cm} %% Hack for vspace to work
+
+        \Huge \textbf{Implementierungsbericht}\\
+
+        \Huge Team 2
+        \Large
+
+        SEP WS 2021/22
+
+        \vspace{2cm}
+
+        \includegraphics[width=0.8\linewidth]{graphics/LasEs-logo}
+
+        \vspace{2cm}
+
+        Betreuer:
+
+        \textsc{Prof. Dr. Christian Bachmaier}
+
+        \vspace{1cm}
+
+        \begin{table}[H]
+            \centering
+            \Large
+            \begin{tabular}{ll}
+                \toprule
+                \textbf{Projektphase} & \textbf{Leiter} \\
+                \midrule
+                Pflichtenheft & Johann Schicho \\
+                Entwurf & Stefanie Gürster \\
+                Feinspezifikation & Johannes Garstenauer \\
+                Implementierung & Thomas Kirz \\
+                Validierung & Sebastian Vogt \\
+                \bottomrule
+            \end{tabular}
+        \end{table}
+
+        \vspace{1cm}
+
+        14. Januar 2021
+
+    \end{titlepage}
+
+    \pagenumbering{gobble}
+
+    %%\maketitle
+    \tableofcontents
+    %%\listoftodos
+
+    %% ENDE Titelblatt
+
+    \newpage
+    \pagenumbering{arabic}
+
+    \section{Tatsächlicher Aufwand}\label{sec:aufwand}
+    \input{aufwand}
+
+    \section{Schwierigkeiten}\label{sec:schwierigkeiten}
+    \input{schwierigkeiten}
+
+    \section{Code Metrics}\label{sec:metrics}
+    \input{metrics}
+
+    \section{Änderungen gegenüber Spezifikation}\label{sec:aenderungen}
+    \input{aenderungen}
+
+\end{document}
