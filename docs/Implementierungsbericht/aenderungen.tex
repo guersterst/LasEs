@@ -35,3 +35,18 @@ werden in einigen E-Mails auch passend generierte Links mit versendet. Dafür wu
 
 \localauthor{Johannes Garstenauer}
 
+\subsubsection{persistence.util}
+
+\textbf{DataSourceUtil} Es ist die Methode \emph{logSQLException()} hinzugekommen, welche die Erstellung
+semantisch aussagekräftiger Logs für \emph{SQL-Exceptions} ermöglicht.
+
+Hierbei ist auch die neue Klasse \textbf{TransientSQLExceptionChecker} zu erwähnen, welche
+die Methode \emph{isTransient()} anbietet.
+Hierdurch ist es möglich, zu überprüfen, ob ein Vorgang,
+welcher eine \emph{SQL-Exception} hervorgerufen hat, bei einem erneutem Versuch
+mit gleichen Parametern funktionieren könnte.
+Dies ermöglicht es den Entwicklern einen Nutzer darauf hinzuweisen,
+eine fehlgeschlagene Operation erneut zu versuchen.
+
+\subsubsection{persistence.repository}
+
