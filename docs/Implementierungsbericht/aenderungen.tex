@@ -50,3 +50,34 @@ eine fehlgeschlagene Operation erneut zu versuchen.
 
 \subsubsection{persistence.repository}
 
+\textbf{PaperRepository} Es gibt keine \emph{setPDF()}-Methode mehr.
+Generell wurden im gesamten Entwicklungsprozess des öfteren individuelle Setter für
+bestimmte Datenelemente zugunsten von allgemeineren \emph{add()} und \emph{change()} Methoden ersetzt.
+Diese enthalten dann alle Datenelemente eines zugehörigen Facelets.
+Hierduch entstehen übersichtlichere Interfaces.
+
+\textbf{ConnectionPool} Die neue Methode \emph{getNumberOfFreeConnections}
+wurde hinzugefügt um ein aussagekräftigeres Logging der Verwendung von Connections
+zu ermöglichen.
+Dies fand vor allem im Finden von \emph{Connection-Leaks} Verwendung.
+
+\textbf{ReviewedByRepository} Die Notwendigkeit der neuen Methoden
+\emph{removeReviewer()} und \emph{getList()} hat sich erst im Laufe des
+Entwicklungsprozesses ergeben.
+\todo{hier verallgemeinern}
+
+\textbf{ReviewRepository} setPDF remove nicht mehr vorhanden:
+siehe PaperRepository
+
+\textbf{ScienceFieldRepository} Die \emph{get()} Methode,
+zum Erhalten eines wissenschaftlichen Themas, wurde schlichtweg nicht benötigt,
+da es sich um ein \emph{DTO} mit wenig Inhalt und geringer Wichtigkeit im System handelt.
+
+\textbf{SubmissionRepository} Die \emph{removeReviewer()-Methode war hier schlicht an
+der falschen Stelle. Sie hätte sich schon in der Dokumentation im \emph{ReviewedByRepository}
+befinden sollen.
+\todo{verknüpfen mit reviewedbyrepository}
+
+\textbf{UserRepository} fehlte: addVerification (umbenannt: setVerification), changeVerification, ein getVerification
+
+
