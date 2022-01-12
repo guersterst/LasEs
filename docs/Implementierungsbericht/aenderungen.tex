@@ -35,8 +35,13 @@ werden in einigen E-Mails auch passend generierte Links mit versendet. Dafür wu
 
 \subsubsection{control.backing}
 
-\textbf{andministrationBacking} Um die Funktionalität zu erweitern, ein neues Logo hochladen zukönnen. wurde zusätzlich \emph{uploadNewLogo()} hinzugefügt. \newline
+Diesem Paket wurden drei weitere Interfaces hinzugefügt: \emph{ScientificForumPaginationBacking, SubmissionPaginationBacking und UserPaginationBacking}. Der Grund dafür war die Erweiterung der \emph{Templates} um drei \emph{Composite Component}. Die einzelnen \emph{Paginations} werden an mehreren Orten verwendet. Um Codeduplikationen zu vermeiden und für die jeweilige Komponente, die benötigten Methoden zur Verfügung zu stellen, wurden die genannten Interfaces implementiert.
+
+\textbf{AdministrationBacking} Um die Funktionalität zu erweitern, ein neues Logo hochladen zukönnen. wurde zusätzlich \emph{uploadNewLogo()} hinzugefügt. \newline
 Damit das momentan ausgewählte Stylesheet geladen wird und dem Benutzer angezeigt werden kann, wurde \emph{getPathToStyle()} hinzugefügt.
+
+\textbf{HomepageBacking} Der Name eines zugehörigen Forums zu einer Einreichung wird über \emph{getForumName()} geladen, damit dieser in der Pagination angezeigt werden kann. \newline
+Um einzelne Tabs per \emph{CSS} dynamisch zu aktivieren, wird dies über \emph{get...CssClassSuffix()} gesetzt.
 
 \localauthor{Johannes Garstenauer}
 
