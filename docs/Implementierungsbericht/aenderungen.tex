@@ -37,11 +37,25 @@ werden in einigen E-Mails auch passend generierte Links mit versendet. Dafür wu
 
 Diesem Paket wurden drei weitere Interfaces hinzugefügt: \emph{ScientificForumPaginationBacking, SubmissionPaginationBacking und UserPaginationBacking}. Der Grund dafür war die Erweiterung der \emph{Templates} um drei \emph{Composite Component}. Die einzelnen \emph{Paginations} werden an mehreren Orten verwendet. Um Codeduplikationen zu vermeiden und für die jeweilige Komponente, die benötigten Methoden zur Verfügung zu stellen, wurden die genannten Interfaces implementiert.
 
+Im Weiteren folgt aus dem Verwenden den oben genannten Interfaces, dass Methoden wie \emph{getDateSelect()} (also alle Methoden, die zur Filterung dienen (Dropdown)) nicht mehr in den einzelnen \emph{Backing Beans} implementiert werden.
+
+War auf einer Seite keine \emph{Pagination} vorgesehen und man musste jedoch die übergebenen \emph{Viewparameter} überprüfen oder die Zugangsrechte eines Benutzers, so wurde in manchen Fällen noch eine \emph{onLoad()} oder eine \emph{preRenderViewListener()} Methode hinzugefügt.
+
 \textbf{AdministrationBacking} Um die Funktionalität zu erweitern, ein neues Logo hochladen zukönnen. wurde zusätzlich \emph{uploadNewLogo()} hinzugefügt. \newline
 Damit das momentan ausgewählte Stylesheet geladen wird und dem Benutzer angezeigt werden kann, wurde \emph{getPathToStyle()} hinzugefügt.
 
 \textbf{HomepageBacking} Der Name eines zugehörigen Forums zu einer Einreichung wird über \emph{getForumName()} geladen, damit dieser in der Pagination angezeigt werden kann. \newline
 Um einzelne Tabs per \emph{CSS} dynamisch zu aktivieren, wird dies über \emph{get...CssClassSuffix()} gesetzt.
+
+\textbf{NavigationBacking} Hier wurde die Methode \emph{init()} noch hinzugefügt.
+
+\textbf{NewScientificForumBacking} Damit ein neues Fachgebiet hinzugefügt werden kann, wurde die \emph{createNewScienceField()} implementiert. Wurde ein neues Fachgebiet erstellt, erscheint es in einer Art Liste. Hier kann der Benutzer ein Gebiet auswählen und hinzufügen, indem er jenes nicht in ein Feld eingibt, sondern anklickt. Dementsprechenden wurden auch die Methoden im \emph{Backing Bean} angepasst.
+
+\textbf{NewSubmissionBacking} Sollte ein Eingabefehler seitens des Benutzers erfolgen, so  wird \emph{initNewSubmission()} aufgerufen, um den zuvor erhaltenen \emph{Viewparamter} nun händisch setzen zu können.\newline
+Zudem reicht hier eine Methode zum laden einer Liste von Editoren aus, da die Auswahl über ein \emph{selectOneMenue} erfolgt.
+
+\textbf{ProfileBacking} Damit Adminrechte an Nutzer vergeben werden können, wurden \emph{Getter} und \emph{Setter} des jewiligen betroffenen Nutzers hinzugefügt.
+
 
 \localauthor{Johannes Garstenauer}
 
