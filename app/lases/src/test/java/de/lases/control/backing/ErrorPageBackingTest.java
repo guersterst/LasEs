@@ -59,7 +59,7 @@ class ErrorPageBackingTest {
     }
 
     @Test
-    void testDevelopmentModeff() throws Exception {
+    void testDevelopmentModOff() throws Exception {
         setProductionMode(true);
         assertFalse(errorPageBacking.isDevelopmentMode());
 
