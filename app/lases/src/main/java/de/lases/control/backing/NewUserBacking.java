@@ -37,8 +37,8 @@ public class NewUserBacking {
      * @return Go to the user list.
      */
     public String saveUser() {
-        if (registrationService.registerByAdmin(newUser) != null) {
-            return "/views/editor/userList";
+        if ((newUser = registrationService.registerByAdmin(newUser)) != null) {
+            return "/views/authenticated/profile?faces-redirect=true&id=" + newUser.getId();
         } else {
             return null;
         }
