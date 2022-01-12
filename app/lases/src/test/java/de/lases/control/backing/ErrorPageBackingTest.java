@@ -1,4 +1,3 @@
-
 package de.lases.control.backing;
 
 import de.lases.global.transport.ErrorMessage;
@@ -59,7 +58,7 @@ class ErrorPageBackingTest {
     }
 
     @Test
-    void testDevelopmentModeff() throws Exception {
+    void testDevelopmentModeOff() throws Exception {
         setProductionMode(true);
         assertFalse(errorPageBacking.isDevelopmentMode());
 
