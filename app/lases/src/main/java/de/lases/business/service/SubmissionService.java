@@ -460,11 +460,12 @@ public class SubmissionService implements Serializable {
             uiMessageEvent.fire(new UIMessage(
                     resourceBundle.getString("dataNotWritten"),
                     MessageCategory.ERROR));
-            logger.log(Level.WARNING, e.getMessage());
             transaction.abort();
             return;
         } catch (NotFoundException e) {
-            logger.log(Level.SEVERE, e.getMessage());
+            uiMessageEvent.fire(new UIMessage(
+                    resourceBundle.getString("dataNotFound"),
+                    MessageCategory.ERROR));
             transaction.abort();
             return;
         }
@@ -491,11 +492,9 @@ public class SubmissionService implements Serializable {
                     ReviewedByRepository.change(reviewedBy, transaction);
                 } catch (DataNotWrittenException e) {
                     transaction.abort();
-                    logger.info("Could not update ReviewedBy: " + reviewedBy + e.getMessage());
                     uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewRequestDoesNotExist"), MessageCategory.ERROR));
                 } catch (NotFoundException e) {
                     transaction.abort();
-                    logger.info("Could not update ReviewedBy: " + reviewedBy + e.getMessage());
                     uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewReviewedByCouldNotUpdate"), MessageCategory.ERROR));
                 }
             } else {
@@ -823,12 +822,10 @@ public class SubmissionService implements Serializable {
             t.commit();
             logger.finer("List of submissions retrieved.");
         } catch (DataNotCompleteException e) {
-            logger.warning("Data not complete: " + e.getMessage());
             uiMessageEvent.fire(new UIMessage(
                     resourceBundle.getString("warning.dataNotComplete"),
                     MessageCategory.WARNING));
         } catch (NotFoundException e) {
-            logger.severe("User to get submissions for not found.");
             uiMessageEvent.fire(new UIMessage(
                     resourceBundle.getString("error.findingSubmissionListFailed"),
                     MessageCategory.ERROR));
@@ -938,7 +935,6 @@ public class SubmissionService implements Serializable {
             t.commit();
         } catch (NotFoundException | DataNotCompleteException e) {
 
-            logger.severe("User to count submissions for not found.");
             uiMessageEvent.fire(new UIMessage(
                     resourceBundle.getString("error.findingSubmissionListFailed"),
                     MessageCategory.ERROR));
