@@ -169,37 +169,17 @@ public class ToolbarBacking implements Serializable {
      * The currently entered user will be added as a reviewer.
      */
     public void addReviewer() {
-        User newUser = new User();
-        newUser.setEmailAddress(reviewerInput.getEmailAddress());
-        User newReviewer = userService.get(newUser);
+        User newReviewer = new User();
+        newReviewer.setEmailAddress(reviewerInput.getEmailAddress());
 
-        if (newReviewer != null) {
-            logger.finest("Reviewer is an existing person.");
-        } else {
-            return;
-        }
 
-        if (submission.getAuthorId() != newReviewer.getId() || newReviewer.isAdmin()) {
-            ReviewedBy reviewedBy = reviewedByInput.clone();
-            reviewedBy.setReviewerId(newReviewer.getId());
-            reviewedBy.setSubmissionId(submission.getId());
-            reviewedBy.setHasAccepted(AcceptanceStatus.NO_DECISION);
+        ReviewedBy reviewedBy = reviewedByInput.clone();
+        reviewedBy.setSubmissionId(submission.getId());
+        reviewedBy.setHasAccepted(AcceptanceStatus.NO_DECISION);
 
-            // In case the user is already reviewer you only change the deadline.
-            if (reviewer.containsKey(newReviewer)) {
-                submissionService.changeReviewedBy(reviewedBy);
-                reviewer.remove(newReviewer);
-            } else {
-                submissionService.addReviewer(newReviewer, reviewedBy);
-                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("addReviewerToSub"), MessageCategory.INFO));
-            }
+        submissionService.manageReviewer(newReviewer, reviewedBy, getReviewer());
 
-            reviewer.put(newReviewer, reviewedBy);
-        } else {
-            // In case of a user is already author he could not be reviewer except he is an admin.
-            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("alreadyAuthor"), MessageCategory.WARNING));
-        }
-
+        loadReviewerList();
     }
 
     /**
