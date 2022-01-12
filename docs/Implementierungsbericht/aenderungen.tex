@@ -25,7 +25,13 @@ Beispielsweise wird in der Toolbar eine Liste von Gutachtern der jeweiligen Einr
 Die Methode \emph{releaseReview()} wird bereits im \emph{ReviewService} durch \emph{change()} implementiert und ist somit hier überflüssig. \newline
 Ebenso wird die Methode \emph{addCoAuthor()} nicht mehr verwendet, da Co-Autoren nur bei der Einreichung selbst hinzugefügt werden. Die Funktionalität liegt also schon in der Methode \emph{add()}.
 
-\textbf{UserService} Um den Avatar eines Nutzers zu löschen, wird \emph{setAvatar()} verwendet. Daher ist \emph{deleteAvatar()} überflüssig.
+\textbf{UserService} Um den Avatar eines Nutzers zu löschen, wird \emph{setAvatar()} verwendet. Daher ist \emph{deleteAvatar()} überflüssig. \newline
+Die Methode \emph{getVerification()}, welche bestimmt ob eine E-Mail-Adresse schon verifiziert ist, wird nicht mehr benötigt, da die Verifikation bereits über \emph{isVerified()} aus dem User DTO abgefragt, oder über \emph{verify()} eine E-Mail-Adresse verifiziert werden kann.
+
+\subsubsection{business.util}
+
+\textbf{EmailUtil} Aufgrund von Benutzerfreundlichkeit wird
+werden in einigen E-Mails auch passend generierte Links mit versendet. Dafür wurden folgende Methoden neu hinzugefügt: \emph{generateLinkForEmail, generateSubmissionURL, generateForumURL}.
 
 \localauthor{Johannes Garstenauer}
 
