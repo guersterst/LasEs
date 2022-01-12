@@ -4,7 +4,7 @@
 
 Damit ein Weiterleiten auf die nächste Seite einer \emph{Pagination} funktioniert, müssen alle zugehörigen Einträge gezählt werden. Dies übernehmen Methoden im Service sowie in den Repositories mit der Namenskonvention \emph{count...()}. Eine solche Methode wird zum Beispiel im PaperService verwendet, um alle Paper einer Submission zu zählen. Um Redundanzen im Folgenden zu vermeiden wird diese Methode im Weiteren nicht mehr angesprochen.
 
-\todo{SubmissionService: addReviewer(ohne Submission)}
+\todo{SubmissionService: addReviewer(ohne Submission) Toolbarbacking: removeReviewer(User user) nicht als String}
 
 \subsubsection{business.internal}
 
@@ -35,7 +35,7 @@ werden in einigen E-Mails auch passend generierte Links mit versendet. Dafür wu
 
 \subsubsection{control.backing}
 
-Diesem Paket wurden drei weitere Interfaces hinzugefügt: \emph{ScientificForumPaginationBacking, SubmissionPaginationBacking und UserPaginationBacking}. Der Grund dafür war die Erweiterung der \emph{Templates} um drei \emph{Composite Component}. Die einzelnen \emph{Paginations} werden an mehreren Orten verwendet. Um Codeduplikationen zu vermeiden und für die jeweilige Komponente, die benötigten Methoden zur Verfügung zu stellen, wurden die genannten Interfaces implementiert.
+Diesem Paket wurden drei weitere Interfaces hinzugefügt: \emph{ScientificForumPaginationBacking, SubmissionPaginationBacking und UserPaginationBacking}. Der Grund dafür war die Erweiterung der \emph{Templates} um drei \emph{Composite Component}. Die einzelnen \emph{Paginations} werden an mehreren Orten verwendet. Um Codeduplikationen zu vermeiden und für die jeweilige Komponente, die benötigten Methoden zur Verfügung zu stellen, wurden die genannten Interfaces implementiert. Die Folgenden Klassen implementieren ein oder mehrere Interfaces: \emph{ResultListBacking, UserListBacking und ScientificForumList}.
 
 Im Weiteren folgt aus dem Verwenden den oben genannten Interfaces, dass Methoden wie \emph{getDateSelect()} (also alle Methoden, die zur Filterung dienen (Dropdown)) nicht mehr in den einzelnen \emph{Backing Beans} implementiert werden.
 
@@ -45,7 +45,7 @@ War auf einer Seite keine \emph{Pagination} vorgesehen und man musste jedoch die
 Damit das momentan ausgewählte Stylesheet geladen wird und dem Benutzer angezeigt werden kann, wurde \emph{getPathToStyle()} hinzugefügt.
 
 \textbf{HomepageBacking} Der Name eines zugehörigen Forums zu einer Einreichung wird über \emph{getForumName()} geladen, damit dieser in der Pagination angezeigt werden kann. \newline
-Um einzelne Tabs per \emph{CSS} dynamisch zu aktivieren, wird dies über \emph{get...CssClassSuffix()} gesetzt.
+Um einzelne Tabs per \emph{CSS} dynamisch zu aktivieren, wird dies über \emph{get...CssClassSuffix()} gesetzt. Dieselbe Funktionalität mit verschiedenen Reitern wurde auch beim \emph{ResultlistBacking}, sowie dem \emph{ScientificForumBacking} benötigt daher wurde die Klasse dementsprechend erweitert.
 
 \textbf{NavigationBacking} Hier wurde die Methode \emph{init()} noch hinzugefügt.
 
@@ -55,6 +55,27 @@ Um einzelne Tabs per \emph{CSS} dynamisch zu aktivieren, wird dies über \emph{g
 Zudem reicht hier eine Methode zum laden einer Liste von Editoren aus, da die Auswahl über ein \emph{selectOneMenue} erfolgt.
 
 \textbf{ProfileBacking} Damit Adminrechte an Nutzer vergeben werden können, wurden \emph{Getter} und \emph{Setter} des jewiligen betroffenen Nutzers hinzugefügt.
+
+\textbf{ScientificForumBacking} Editoren sowie Fachgebiete werden in einer Liste wiedergegeben, welche durch ein Eingabefeld ergänzt werden können. Hierzu wurden entsprechende Methoden hinzugefügt. \newline
+Außerdem wird die Forumsseite um Informationen wie der Deadline eines Forums erweitert.\newline
+Die Information, ob ein Nutzer gutachter ist wird hier nicht benötigt, sondern lediglich ob dieser Admin oder Editor ist.
+
+\textbf{SubmissionBacking} Je nach Status einer Einreichung sollte diese entsprechend mit Hilfe von \emph{styleSubmissionState()} farblich markiert werden. \newline
+\emph{disableReviewUploadButton} steuert die Möglichkeit zum Hochladen eines Gutachtens und wurde neu hinzugefügt. Außerdem wird mit  \emph{loggedInUserHasPendingReviewerRequest} geprüft ob ein angefragter Gutachter bereits der Rolle zugestimmt hat. \newline
+Alle Methoden, welche die Filterauswahl bereitstellen, wurden hier hinzugefügt, da das Backing Bean kein Interface implementiert.
+\newline Damit beim Klicken auf einen Namen oder E-Mail-Adresse über ein MailTo-Link weitergeleitet wird, wird \emph{sentMailTo()} implementiert.
+
+\textbf{ToolbarBacking} Zur Unterstützung der Benutzerfreundlichkeit ist es möglich schon hinzugefügte Gutachter leichter zu bearbeiten, indem dessen Daten wieder in das jeweilige Eingabefeld geschrieben werden. Zusätzlich wird, abhängig von der Sprache, das Datumsformat als \emph{Placeholder} angezeigt und generiert.
+
+\subsubsection{control.conversion}
+
+Neu sind hier ein \emph{Converter} für einen Benutzer und einem Fachgebiet, um diese als String darstellen oder als DTO wieder auswerten zu können.
+
+\subsubsection{control.internal}
+
+\textbf{Constants} Hier werden alle Längen, die zur Validierung benötigt werden, in Form von Konstanten erfasst.
+
+\textbf{Pagination} Anstatt dass die Methode \emph{applyFilter()} in den einzelnen Backing Beans implementiert wird, wurde sie nun allgemein in dieser Klasse eingefügt.
 
 
 \localauthor{Johannes Garstenauer}
