@@ -13,6 +13,7 @@ public class IllegalAccessException extends RuntimeException {
      * Constructs an exception.
      */
     public IllegalAccessException() {
+        super();
     }
 
     /**

@@ -16,6 +16,7 @@ public class NotFoundException extends Exception {
      * Construct an exception.
      */
     public NotFoundException() {
+        super();
     }
 
     /**
