@@ -678,7 +678,7 @@ public class UserRepository {
             }
 
             // Global Search Word
-            for (String ignored : userListColumnNames) {
+            for (int index = 0; index < userListColumnNames.size(); index++) {
                 ps.setString(i[0], "%"
                         + Objects.requireNonNullElse(resultListParameters.getGlobalSearchWord(), "") + "%");
                 i[0]++;
@@ -1281,7 +1281,7 @@ public class UserRepository {
             }
 
             // Global Search Word
-            for (String ignored : userListColumnNames) {
+            for (int index = 0; index < userListColumnNames.size(); index++) {
                 ps.setString(i, "%"
                         + Objects.requireNonNullElse(resultListParameters.getGlobalSearchWord(), "") + "%");
                 i++;

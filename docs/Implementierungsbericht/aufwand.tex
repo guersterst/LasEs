@@ -1,5 +1,3 @@
-\localauthor{Sebastian Vogt}
-
 %%%%%% BEGIN MACROS %%%%%%
 \newcommand{\atable}[3]{\begin{longtable}{llllllll}
 		\caption{#2}\label{tab:#1} \\
@@ -34,14 +32,18 @@
 
 \begin{landscape}
 	
+	\section{Tatsächlicher Aufwand}\label{sec:aufwand}
+	\localauthor{Sebastian Vogt}
+	
 	\subsection{Allgemeines}
 	
 	Zusätzlich zu den geplanten Arbeitspaketen sind in der Implementierung auch ungeplante Aufgaben aufgekommen. Diese sind in einer extra Tabelle aufgelistet:
 	\begin{itemize}
 		\item \textbf{Code Review:} Pull Requests von anderen Teammitgliedern reviewen.
 		\item \textbf{Testing:} Hiermit ist weniger das Schreiben der Tests selbst und mehr das lauffähig machen von Tests aus dem Implementierungsplan sowie das Integrieren von CDI in die Tests gemeint.
-		\item \textbf{Allgemeines Debugging:} Diese Debugging Arbeiten lassen sich nicht eindeutig einem Arbeitspaket zuordnen, da sie sie auf das System als ganzes beziehen.
+		\item \textbf{Allgemeines Debugging:} Diese Debugging Arbeiten lassen sich nicht eindeutig einem Arbeitspaket zuordnen, da sie sich auf das System als ganzes beziehen.
 	\end{itemize}
+	Bei Arbeitspaketen ohne tatsächliche Zeit handelt es sich um Pakete, bei denen es schon Prototypen gab, die entgegen der Erwartung 1:1 übernommen werden konnten.
 
 	\subsection{Milestone 1}
 	\subsubsection{Geplante Arbeitspakete}
@@ -171,6 +173,7 @@
     }
 
 	\subsubsection{Zusätzlicher Aufwand}
+	In diesem Meilenstein musste zusätzlich noch die Versendung der E-Mails in bestehenden Service Code eingearbeitet werden.
 	
 	\begin{center}
 		\begin{tabular}{ c c c c c c }
@@ -182,7 +185,7 @@
 			
 			Allgemeines Debugging & 8,1~h & 12,5~h & 5~h & 5,75~h & 7,5~h \\
 			
-			E-Mail Versendung in bestehenden Code einbauen & 4,4~h & & & 4,3~h &
+			E-Mail Versendung & 4,4~h & & & 4,3~h &
 		\end{tabular}
 	\end{center}
 	
