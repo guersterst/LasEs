@@ -97,7 +97,9 @@ eine fehlgeschlagene Operation erneut zu versuchen.
 Generell wurden im gesamten Entwicklungsprozess des öfteren individuelle Setter für
 bestimmte Datenelemente zugunsten von allgemeineren \emph{add()} und \emph{change()} Methoden ersetzt.
 Diese enthalten dann alle Datenelemente eines zugehörigen Facelets.
-Hierduch entstehen übersichtlichere Interfaces.
+Ein weiteres Beispiel hierfür sind die Methoden \emph{setPDF()} und \emph{remove()}
+im \textbf{ReviewRepository}.
+Änderungen dieser Art wurden zugunsten übersichtlicherer Interfaces gemacht.
 
 \textbf{ConnectionPool} Die neue Methode \emph{getNumberOfFreeConnections()}
 wurde hinzugefügt um ein aussagekräftigeres Logging der Verwendung von Connections
@@ -111,24 +113,22 @@ und \emph{Connection-Leaks}, verurusacht durch Programmierfehler,
 schnell behoben werden.
 
 Es ist unter anderem manchmal vorgekommen, dass sich die Notwendigkeit bestimmter
-Methoden erst während der Entwicklung ergeben hat. Allerdings beschränkt sich das
-nur auf eine handvoll Methoden, wodurch wir die Genauigkeit der Spezifikation bestätigt
+Methoden erst während der Entwicklung ergeben hat.
+Allerdings beschränkt sich das nur auf eine handvoll Methoden, wodurch wir die Genauigkeit der Spezifikation bestätigt
 sehen.
- Ein Beispiel hierfür ist das \textbf{ReviewedByRepository}.
-Die Methoden
-\emph{removeReviewer()} und \emph{getList()} haben sich erst später als notwendig erwiesen.
+Ein Beispiel hierfür ist das \textbf{ReviewedByRepository}.
+Die \emph{getList()}-Methode hat sich hier erst später als notwendig erwiesen.
+Andererseits ist es seltener auch zu Verschiebung von Methoden zwischen Klassen gekommen.
+Die \emph{removeReviewer()}-Methode im \textbf{SubmissionRepository}  war hier schlicht an
+der falschen Stelle.
+Sie hätte sich schon in der Spezifikation im \emph{ReviewedByRepository} befinden sollen.
+Änderungen dieser Art wurden zugunsten des \emph{single-responsibility principle} gemacht,
+wonach eine Klasse nur Methoden zu einem bestimmten Zweck besitzen sollter.
 
-\textbf{ReviewRepository} setPDF remove nicht mehr vorhanden:
-siehe PaperRepository
 
 \textbf{ScienceFieldRepository} Die \emph{get()} Methode,
 zum Erhalten eines wissenschaftlichen Themas, wurde schlichtweg nicht benötigt,
 da es sich um ein \emph{DTO} mit wenig Inhalt und geringer Wichtigkeit im System handelt.
-
-\textbf{SubmissionRepository} Die \emph{removeReviewer()}-Methode war hier schlicht an
-der falschen Stelle. Sie hätte sich schon in der Dokumentation im \emph{ReviewedByRepository}
-befinden sollen.
-\todo{verknüpfen mit reviewedbyrepository}
 
 \textbf{UserRepository} Die neuen \emph{changeVerification()} und \emph{getVerification()}
 Methoden erlauben die Nutzervalidierung. Auch wenn dieser Punkt in der Spezifikation durchaus nicht
