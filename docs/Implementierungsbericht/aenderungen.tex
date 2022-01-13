@@ -169,7 +169,7 @@ Es wurde die \textbf{Style} Enumeration entfernt. Die Auswahl von Farbschemata d
 Systems basiert nun dynamisch auf den im Anwendungsverzeichnis existierenden zugehörigen
 CSS-Dateien.
 
-\subsection{Funktionalitäten}
+\subsection{Funktionalitäten und Leistungen}
 \localauthor{Johannes Garstenauer}
 
 Es wurde größtenteils darauf geachtet den, im Pflichtenheft definierten, Produktfunktionen treu zu bleiben.
@@ -183,6 +183,20 @@ Das Weglassen bestimmter Wunschfunktionen, wie:
 \end{itemize}
 In diesem Fall dienten die Änderungen der Übersichtlichkeit der Registrationsseite und der
 Verringerung des Arbeitsaufwandes in diesem Arbeitspaket.
+
+\newline
+Eine weitere nennenswerte Änderung liegt in den Produktleistungen.
+Hier wurden die Ansprüche an die Pagination festgelegt:
+\begin{itemize}
+    \item \textbf{/L042/} Listen sind filterbar.
+    Eine Spalte kann also auf einen bestimmten Wert gefiltert werden.
+    \item \textbf{/L045/} Alle Listen sind nach ihren Spalten auf- oder absteigend sortierbar.
+\end{itemize}
+Diese Anforderungen beziehen sich auf alle Spalten der jeweiligen Pagination.
+Im Entwicklungsprozess ist klar geworden, dass das nicht im Sinne der Übersichtlichkeit
+und Nutzerfreundlichkeit des Systems ist.
+Daher sind nun nicht mehr alle Spalten einer Pagination filter- und sortierbar,
+sondern nurnoch diejenigen bei welchen es Sinn ergibt.
 
 \subsection{Facelets}
 \localauthor{Stefanie Gürster}
