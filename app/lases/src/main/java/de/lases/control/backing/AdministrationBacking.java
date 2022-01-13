@@ -15,8 +15,14 @@ import jakarta.inject.Named;
 import jakarta.servlet.http.Part;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.PropertyResourceBundle;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 /**
  * Backing bean for the administration page.
@@ -45,7 +51,7 @@ public class AdministrationBacking {
 
     private Part uploadedLogo;
 
-    private static final String PATH_TO_STYLE_DIRECTORY = "design/css/themes/";
+    private static final String STYLE_DIRECTORY = "design/css/themes/";
 
     /**
      * Loads the current system settings from the datasource.
@@ -136,12 +142,14 @@ public class AdministrationBacking {
      * @return Path to stylesheet.
      */
     public String getPathToStyle() {
+
         if (systemSettings == null) {
             // If the db connection failed, we just use the orange one.
-            return PATH_TO_STYLE_DIRECTORY + "orange.css";
+            return STYLE_DIRECTORY + CustomizationService.DEFAULT_STYLE;
         } else {
-            return PATH_TO_STYLE_DIRECTORY.concat(systemSettings.getStyle() + ".css");
+            return STYLE_DIRECTORY.concat(systemSettings.getStyle());
         }
+
     }
 
     /**
@@ -150,6 +158,7 @@ public class AdministrationBacking {
      * @return all available styles.
      */
     public String[] getStyles() {
-        return configPropagator.getProperty("STYLE").split("#");
+        //return configPropagator.getProperty("STYLE").split("#");
+        return customizationService.loadStyles();
     }
 }

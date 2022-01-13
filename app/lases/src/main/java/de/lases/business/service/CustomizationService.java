@@ -10,11 +10,21 @@ import de.lases.persistence.repository.Transaction;
 import de.lases.persistence.util.DatasourceUtil;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.facelets.FaceletContext;
 import jakarta.inject.Inject;
+import jakarta.servlet.ServletContext;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.PropertyResourceBundle;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 /**
  * Provides functionality for the customization of the applications look and feel and for
@@ -35,6 +45,10 @@ public class CustomizationService {
     @Inject
     private PropertyResourceBundle resourceBundle;
 
+    private static final String PATH_TO_STYLE_DIRECTORY = "/resources/design/css/themes/";
+
+    public static final String DEFAULT_STYLE = "orange.css";
+
     /**
      * Sets the application's settings, that determine its look and feel.
      *
@@ -52,11 +66,11 @@ public class CustomizationService {
 
         try {
             SystemSettingsRepository.updateSettings(systemSettings, transaction);
-            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("successSystemsetting"),MessageCategory.INFO));
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("successSystemsetting"), MessageCategory.INFO));
             logger.finest("Changed system settings");
 
             transaction.commit();
-        }  catch (DataNotWrittenException exception) {
+        } catch (DataNotWrittenException exception) {
 
             uiMessageEvent.fire(new UIMessage(props.getString("dataNotWritten"), MessageCategory.ERROR));
 
@@ -111,7 +125,7 @@ public class CustomizationService {
      * @param logo The applications logo.
      */
     public void setLogo(FileDTO logo) {
-        if  (logo == null || logo.getFile() == null) {
+        if (logo == null || logo.getFile() == null) {
             logger.severe("The FileDTO or the image wrapped in it are null.");
             throw new InvalidFieldsException(props.getString("idMissing"));
         }
@@ -119,7 +133,7 @@ public class CustomizationService {
         Transaction transaction = new Transaction();
         try {
             SystemSettingsRepository.setLogo(logo, transaction);
-            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("successSystemsetting"),MessageCategory.INFO));
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("successSystemsetting"), MessageCategory.INFO));
             logger.finest("Successfully set the logo of the application.");
 
             transaction.commit();
@@ -147,5 +161,27 @@ public class CustomizationService {
             // In case the logo can't be fetched, the application shall still work.
         }
         return logo;
+    }
+
+    public String[] loadStyles() {
+        List<String> styleList = new ArrayList<>();
+
+        String prefix = System.getProperty("user.dir");
+        String moveIntoWebApps = "/../webapps";
+        String contextPath = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+
+        String fullPath = prefix + moveIntoWebApps + contextPath + PATH_TO_STYLE_DIRECTORY;
+
+        File themesPath = new File(fullPath);
+        System.out.println(fullPath);
+        File[] files = themesPath.listFiles();
+        if (files != null) {
+            for (File theme : files) {
+                styleList.add(theme.getName());
+            }
+        } else {
+            styleList.add(DEFAULT_STYLE);
+        }
+        return styleList.toArray(new String[0]);
     }
 }
