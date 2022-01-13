@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 /**
@@ -311,7 +312,7 @@ public class ReviewRepository {
      */
     private static Privilege getPrivilegeForReviews(Transaction transaction, User user, Submission submission)
             throws DataNotCompleteException, NotFoundException {
-        if (user.isAdmin() || user.getId() == submission.getEditorId()) {
+        if (user.isAdmin() || Objects.equals(user.getId(), submission.getEditorId())) {
             return Privilege.EDITOR;
         } else if (UserRepository.getList(transaction, submission, Privilege.REVIEWER).contains(user)) {
             return Privilege.REVIEWER;
