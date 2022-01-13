@@ -15,14 +15,8 @@ import jakarta.inject.Named;
 import jakarta.servlet.http.Part;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.PropertyResourceBundle;
 import java.util.logging.Logger;
-import java.util.stream.Stream;
 
 /**
  * Backing bean for the administration page.
@@ -42,8 +36,8 @@ public class AdministrationBacking {
     @Inject
     private transient PropertyResourceBundle resourceBundle;
 
-     @Inject
-     private ConfigPropagator configPropagator;
+    @Inject
+    private ConfigPropagator configPropagator;
 
     private static final Logger logger = Logger.getLogger(AdministrationBacking.class.getName());
 
