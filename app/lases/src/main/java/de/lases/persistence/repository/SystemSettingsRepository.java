@@ -2,7 +2,10 @@ package de.lases.persistence.repository;
 
 import de.lases.global.transport.FileDTO;
 import de.lases.global.transport.SystemSettings;
-import de.lases.persistence.exception.*;
+import de.lases.persistence.exception.DataNotWrittenException;
+import de.lases.persistence.exception.DatasourceQueryFailedException;
+import de.lases.persistence.exception.InvalidFieldsException;
+import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.util.DatasourceUtil;
 import de.lases.persistence.util.TransientSQLExceptionChecker;
 
@@ -11,8 +14,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Logger;
-
-import java.sql.*;
 
 /**
  * Offers get/update operations on the system settings and the
@@ -163,7 +164,6 @@ public class SystemSettingsRepository {
             throw new InvalidFieldsException();
         }
 
-        @SuppressWarnings({"'Update' statement without 'where' updates all table rows at once"})
         String sql = """
                 UPDATE system
                 SET logo_image = ?

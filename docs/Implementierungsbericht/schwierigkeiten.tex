@@ -49,7 +49,7 @@ Anfangs führte das zu vielen \emph{Leaks} an Datenbankverbindungen, die nicht m
 
 Ein weiteres Problem war das \emph{Error-Handling} von SQL Errors. \emph{PostgreSQL} und \emph{JDBC} geben hier nur numerische Fehlercodes zurück und keine direkte Information, ob es sich um eine \emph{Checked- oder Unchecked Exception} handelt. Hier wurde ein Prototyp von Sebastian Vogt entwickelt, allerdings zuerst nur vereinzelt von ihm umgesetzt. Es benötigte anschließend einen gemeinsamen Einsatz aller Teammitglieder alle Datenbankzugriffsmethoden mit der neuen Fehlerbehandlung auszustatten. \newline
 
-JDBC benötigt die manuelle Formulierung von \emph{SQL Statements}. Für die Implementierung der Paginierung mit den zusätzlich filterbaren Spalten ist eine dynamische Generierung des \emph{SQL Statements} nötig. Dadurch wurde der Code viel länger und komplizierter als ursprünglich angenommen. Dadurch wurde in vielen Arbeitspaketen die Zeit rein durch das Schreiben und \emph{R´efactoren} der \emph{SQL Statements} gestreckt.
+JDBC benötigt die manuelle Formulierung von \emph{SQL Statements}. Für die Implementierung der Paginierung mit den zusätzlich filterbaren Spalten ist eine dynamische Generierung des \emph{SQL Statements} nötig. Dadurch wurde der Code viel länger und komplizierter als ursprünglich angenommen. Dadurch wurde in vielen Arbeitspaketen die Zeit rein durch das Schreiben und \emph{Refactoren} der \emph{SQL Statements} gestreckt.
 
 \subsubsection{Fatale Datenbankfehler}
 

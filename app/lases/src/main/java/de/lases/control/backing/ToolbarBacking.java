@@ -4,7 +4,7 @@ import de.lases.business.service.SubmissionService;
 import de.lases.business.service.UserService;
 import de.lases.business.util.EmailUtil;
 import de.lases.control.exception.IllegalUserFlowException;
-import de.lases.control.internal.*;
+import de.lases.control.internal.SessionInformation;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.event.Event;
@@ -20,7 +20,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.logging.Logger;
 
 
 /**
@@ -50,8 +49,6 @@ public class ToolbarBacking implements Serializable {
 
     @Inject
     private transient PropertyResourceBundle resourceBundle;
-
-    private static final Logger logger = Logger.getLogger(ToolbarBacking.class.getName());
 
     private Submission submission;
 

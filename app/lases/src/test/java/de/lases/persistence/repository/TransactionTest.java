@@ -1,6 +1,5 @@
 package de.lases.persistence.repository;
 
-import de.lases.business.service.ScienceFieldServiceTestNoMock;
 import de.lases.global.transport.FileDTO;
 import de.lases.persistence.internal.ConfigReader;
 import jakarta.enterprise.context.RequestScoped;
@@ -15,10 +14,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.InputStream;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -38,7 +36,7 @@ class TransactionTest {
     void startConnectionPool() {
         FileDTO file = new FileDTO();
 
-        Class clazz = TransactionTest.class;
+        Class<TransactionTest> clazz = TransactionTest.class;
         InputStream inputStream = clazz.getResourceAsStream("/config.properties");
 
         file.setInputStream(inputStream);
@@ -52,33 +50,50 @@ class TransactionTest {
         ConnectionPool.shutDown();
     }
 
-
-    @Disabled
+    /**
+     * @author Sebastian Vogt
+     */
+    @SuppressWarnings("unchecked")
     @Test
     void testCommitCommitsOnConnection() throws NoSuchFieldException,
             IllegalAccessException, SQLException {
         Transaction transaction = new Transaction();
         Connection mockConnection = Mockito.mock(Connection.class);
 
+        Field usedConnections = ConnectionPool.class.getDeclaredField("usedConnections");
+        usedConnections.setAccessible(true);
+        List<Connection> connectionList = (List<Connection>) usedConnections.get(ConnectionPool.getInstance());
+        connectionList.add(mockConnection);
+
         Field connectionField
                 = Transaction.class.getDeclaredField("connection");
         connectionField.setAccessible(true);
+        ConnectionPool.getInstance().releaseConnection((Connection) connectionField.get(transaction));
         connectionField.set(transaction, mockConnection);
 
         transaction.commit();
         Mockito.verify(mockConnection).commit();
     }
 
-    @Disabled
+    /**
+     * @author Sebastian Vogt
+     */
+    @SuppressWarnings("unchecked")
     @Test
     void testAbortAbortsOnConnection() throws NoSuchFieldException,
             IllegalAccessException, SQLException {
         Transaction transaction = new Transaction();
         Connection mockConnection = Mockito.mock(Connection.class);
 
+        Field usedConnections = ConnectionPool.class.getDeclaredField("usedConnections");
+        usedConnections.setAccessible(true);
+        List<Connection> connectionList = (List<Connection>) usedConnections.get(ConnectionPool.getInstance());
+        connectionList.add(mockConnection);
+
         Field connectionField
                 = Transaction.class.getDeclaredField("connection");
         connectionField.setAccessible(true);
+        ConnectionPool.getInstance().releaseConnection((Connection) connectionField.get(transaction));
         connectionField.set(transaction, mockConnection);
 
         transaction.abort();

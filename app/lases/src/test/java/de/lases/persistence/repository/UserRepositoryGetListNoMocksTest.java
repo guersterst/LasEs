@@ -18,6 +18,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
+ * TESTINFO @basti not working
  * @author Johann Schicho
  */
 @ExtendWith(WeldJunit5Extension.class)

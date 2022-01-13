@@ -1,7 +1,9 @@
 package de.lases.business.service;
 
+import de.lases.business.util.EmailUtil;
 import de.lases.global.transport.FileDTO;
 import de.lases.global.transport.ScientificForum;
+import de.lases.global.transport.UIMessage;
 import de.lases.global.transport.User;
 import de.lases.persistence.internal.ConfigReader;
 import de.lases.persistence.repository.ConnectionPool;
@@ -10,18 +12,22 @@ import de.lases.persistence.repository.Transaction;
 import de.lases.persistence.repository.UserRepository;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.enterprise.event.Event;
 import org.jboss.weld.junit5.WeldInitiator;
 import org.jboss.weld.junit5.WeldJunit5Extension;
 import org.jboss.weld.junit5.WeldSetup;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.PropertyResourceBundle;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.eq;
@@ -48,7 +54,7 @@ public class ScientificForumServiceTest {
     void startConnectionPool() {
         FileDTO file = new FileDTO();
 
-        Class clazz = ScientificForumServiceTest.class;
+        Class<ScientificForumServiceTest> clazz = ScientificForumServiceTest.class;
         InputStream inputStream = clazz.getResourceAsStream("/config.properties");
 
         file.setInputStream(inputStream);
@@ -65,6 +71,8 @@ public class ScientificForumServiceTest {
     // The required repository.
     private static MockedStatic<ScientificForumRepository> forumRepoMock;
     private static MockedStatic<UserRepository> userRepoMock;
+
+    private static MockedStatic<EmailUtil> emailUtilMockedStatic;
 
     // The required service.
     private static ScientificForumService forumService;
@@ -83,18 +91,31 @@ public class ScientificForumServiceTest {
 
 
     @BeforeAll
-    static void init() {
+    static void init() throws NoSuchFieldException, IllegalAccessException {
         forum = new ScientificForum();
         // Mock repository and initialize services.
         forumRepoMock = mockStatic(ScientificForumRepository.class);
         userRepoMock = mockStatic(UserRepository.class);
+        emailUtilMockedStatic = mockStatic(EmailUtil.class);
         forumService = new ScientificForumService();
         forum.setId(EXAMPLE_FORUM_ID);
         forum.setName(EXAMPLE_FORUM_NAME);
 
+
+        PropertyResourceBundle bundle = Mockito.mock(PropertyResourceBundle.class);
+        Field bundleField = forumService.getClass().getDeclaredField("bundle");
+        bundleField.setAccessible(true);
+        bundleField.set(forumService, bundle);
+
         // Mock get to return a forum with a name if the id is correct.
         forumRepoMock.when(() -> ScientificForumRepository
                 .get(eq(forum), any(Transaction.class))).thenReturn(forum);
+        forumRepoMock.when(() -> ScientificForumRepository.add(eq(forum), any(Transaction.class))).thenReturn(forum);
+
+        Event<UIMessage> uiMessageEvent = Mockito.mock(Event.class);
+        Field uiMessageField = forumService.getClass().getDeclaredField("uiMessageEvent");
+        uiMessageField.setAccessible(true);
+        uiMessageField.set(forumService, uiMessageEvent);
     }
 
 
@@ -108,6 +129,9 @@ public class ScientificForumServiceTest {
 
     @Test
     void testGet() {
+
+        // set name to avoid null-pointer
+        forum.setName(EXAMPLE_FORUM_NAME);
         forumService.add(forum, Collections.emptyList(), Collections.emptyList());
 
         // Request the forum with name from the forum with just an id.

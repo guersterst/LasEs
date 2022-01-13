@@ -9,7 +9,10 @@ import jakarta.enterprise.context.SessionScoped;
 import org.jboss.weld.junit5.WeldInitiator;
 import org.jboss.weld.junit5.WeldJunit5Extension;
 import org.jboss.weld.junit5.WeldSetup;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.InputStream;
@@ -22,6 +25,12 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * TESTINFO @vogte working
+ * TESTINFO @steffi not working
+ * TESTINFO @thomas working
+ * !!! THESE TESTS MUST BE RUN SEPARATELY !!!
+ */
 @ExtendWith(WeldJunit5Extension.class)
 class SubmissionRepositoryTest {
 
@@ -32,9 +41,22 @@ class SubmissionRepositoryTest {
     private static final String EXAMPLE_SUBMISSION_TITLE_1 = "Submission title";
     private static final String EXAMPLE_SUBMISSION_TITLE_2 = "Different title";
 
+    private static Submission submission;
+
     @WeldSetup
     public WeldInitiator weld  = WeldInitiator.from(ConnectionPool.class, ConfigReader.class)
             .activate(RequestScoped.class, SessionScoped.class).build();
+
+    @BeforeAll
+    static void initSubmission() {
+        submission = new Submission();
+        submission.setScientificForumId(1);
+        submission.setAuthorId(4);
+        submission.setEditorId(1);
+        submission.setTitle("Sebastian testet die add Methode!");
+        submission.setState(SubmissionState.ACCEPTED);
+        submission.setSubmissionTime(LocalDateTime.now());
+    }
 
     @BeforeEach
     void startConnectionPool() {
@@ -54,15 +76,11 @@ class SubmissionRepositoryTest {
         ConnectionPool.shutDown();
     }
 
+    /**
+     * @author Sebastian Vogt
+     */
     @Test
     void testAddSubmission() throws DataNotWrittenException, SQLException {
-        Submission submission = new Submission();
-        submission.setScientificForumId(1);
-        submission.setAuthorId(4);
-        submission.setEditorId(1);
-        submission.setTitle("Sebastian testet die add Methode!");
-        submission.setState(SubmissionState.ACCEPTED);
-        submission.setSubmissionTime(LocalDateTime.now());
 
         Transaction transaction = new Transaction();
         Connection conn = transaction.getConnection();
@@ -88,15 +106,18 @@ class SubmissionRepositoryTest {
         transaction.abort();
     }
 
+    /**
+     * @author Sebastian Vogt
+     */
     @Test
     void testAddCoAuthorBasic() throws SQLException, DataNotWrittenException, NotFoundException {
-        Submission submission = new Submission();
-        submission.setId(671);
-
         User user = new User();
         user.setId(69);
 
         Transaction transaction = new Transaction();
+
+
+
         Connection conn = transaction.getConnection();
         PreparedStatement stmt = conn.prepareStatement(
                 """
@@ -108,6 +129,7 @@ class SubmissionRepositoryTest {
             i++;
         }
 
+        submission = SubmissionRepository.add(submission, transaction);
         SubmissionRepository.addCoAuthor(submission, user, transaction);
 
         ResultSet resultSet2 = stmt.executeQuery();
@@ -119,8 +141,11 @@ class SubmissionRepositoryTest {
         assertEquals(1, j - i);
     }
 
+    /**
+     * @author Sebastian Vogt
+     */
     @Test
-    void testAddSubmissionNotFoundException() throws DataNotWrittenException, NotFoundException {
+    void testAddSubmissionNotFoundException() {
         Submission submission = new Submission();
         Transaction transaction = new Transaction();
         // Diese Submission sollte nicht existieren in der Datenbank
@@ -133,12 +158,15 @@ class SubmissionRepositoryTest {
         transaction.abort();
     }
 
+    /**
+     * @author Sebastian Vogt
+     */
     @Test
-    void testAddCoAuthorNotFoundException() throws DataNotWrittenException, NotFoundException {
+    void testAddCoAuthorNotFoundException() {
         Submission submission = new Submission();
         Transaction transaction = new Transaction();
         // Diese Submission sollte nicht existieren in der Datenbank
-        submission.setId(666);
+        submission.setId(-666);
 
         User user = new User();
         user.setId(2000);
@@ -147,6 +175,9 @@ class SubmissionRepositoryTest {
         transaction.abort();
     }
 
+    /**
+     * @author Stefanie Gürster
+     */
     @Test
     void testAddReviewer() throws SQLException, DataNotWrittenException, NotFoundException {
         Transaction transaction = new Transaction();
@@ -164,7 +195,7 @@ class SubmissionRepositoryTest {
 
         ReviewedBy reviewedBy = new ReviewedBy();
         reviewedBy.setReviewerId(1);
-        reviewedBy.setSubmissionId(5);
+        reviewedBy.setSubmissionId(742);
         reviewedBy.setHasAccepted(AcceptanceStatus.NO_DECISION);
         reviewedBy.setTimestampDeadline(LocalDateTime.now());
 
@@ -196,6 +227,9 @@ class SubmissionRepositoryTest {
         EXAMPLE_USER_ID_2 = user2.getId();
     }
 
+    /**
+     * @author Thomas Kirz
+     */
     @Test
     void testAddAndGetList() throws Exception {
         Transaction transaction = new Transaction();
@@ -238,6 +272,9 @@ class SubmissionRepositoryTest {
         transaction.abort();
     }
 
+    /**
+     * @author Thomas Kirz
+     */
     @Test
     void testAddAndAbort() throws Exception {
         Transaction transaction = new Transaction();
@@ -263,6 +300,9 @@ class SubmissionRepositoryTest {
         transaction2.abort();
     }
 
+    /**
+     * @author Thomas Kirz
+     */
     @Test
     void testCountSubmissions() throws Exception {
         Transaction transaction = new Transaction();
