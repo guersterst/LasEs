@@ -1,1 +1,74 @@
 \localauthor{Johann Schicho}
+
+Wie bereits aus Kapitel 1 hervorgeht, gab es teilweise größere Abweichungen von den geplanten Zeiten. Diese werden hier nochmal aufgefasst und genauer beschrieben. Ziel ist es zu reflektieren und die Gründe für größere Verzögerungen zu erörtern. Zusätzlich wird auch auf Probleme in der Programmierung selbst eingegangen.
+
+\subsection{Größere Abweichungen in der geschätzten Zeit}
+
+\subsubsection{Arbeitspaket NewSubmission}
+
+Dieses Arbeitspaket benötigte 13 Stunden mehr als ursprünglich geplant.
+\emph{NewSubmission} war Teil des ersten Milestones. Dadurch war viel Code noch nicht vorhanden. Da wir alle Arbeitspakete vertikal implementiert haben, das heißt zu jedem Frontend-Code wurde der zugehörige Backend-Code von der gleichen Person implementiert, war es sehr viel Arbeit für einen Einzelnen. Zusätzlich benötigte dieses Arbeitspakete auch viele unterschiedliche \emph{Services} und damit verschob sich der Zeitaufwand immens.
+
+\subsubsection{Arbeitspaket Pagination \& SortSearchColumn}
+
+Diese Arbeitspakete benötigten während der Implementierungsphase keine weitere Zeit. Grund dafür war, das bereits Prototypen in den Wochen davor programmiert worden sind. Damit war die Arbeit bereits abgeschlossen und konnte direkt übernommen werden.
+
+\subsubsection{Arbeitspaket Homepage}
+
+Hier wurden acht Stunden mehr benötigt, als ursprünglich angenommen. Grund dafür war ähnlich wie bei \emph{NewSubmission}. Die Übersichtsseite sammelt Informationen aus vielen Ecken des Systems und stellt diese dar, dafür musste viele Code geschrieben werden. Außerdem wurde hier zum ersten mal die Paginierung implementiert, was viele Rückfragen im Team und dadurch extra Zeit benötigte. Im Rahmen des Implementierungszeitraums wurde durch die gesammelte Erfahrung das Implementieren dieser einfacher. Den Aufwand, besonders während des ersten Milestones, haben wir hier unterschätzt.
+
+\subsubsection{Arbeitspaket Submission ohne Gutachten}
+
+Wie der Name schon impliziert, wurde hier bereits ein größeres Arbeitspaket aufgespalten. Die Seite einer Einreichung ist das Kernstück der Anwendung und umfasst damit viel Funktionalität. Der große Aufwand war uns bewusst, dennoch wurden zehn Stunden mehr benötigt als geplant. Grund hier war neben den bereits genannten Gründen natürlich auch Startschwierigkeiten mit \emph{Jakarta Server Faces}. Der Projektumfang ist wesentlich angestiegen und somit auch die Anforderungen an den Programmierer, sich tiefer mit der Technologie auseinander zu setzen.
+
+\subsubsection{Arbeitspaket Profile}
+
+Der zusätzliche Zeitaufwand kam hier durch die Notwendigkeit eines \emph{Servlets} hinzu, welches die Profilbilder zur Verfügung stellt.
+Das war ein Exkurs von der bisherigen Arbeit mit \emph{JSF} und beanspruchte
+mehr Zeit als angenommen.
+
+\subsubsection{Fazit}
+
+Der Zeitaufwand für Arbeitspakete, bei denen bereits viel Zeit eingeschätzt war, hat sich häufig um viel mehr Zeit verlängert, als bei Arbeitspakten, bei welchen die Zeit von Beginn an geringer eingeschätzt war. Eine weitere Aufteilung der Arbeitspakete hätte das gegebenenfalls verhindern können, hätte aber auch gegenseitige Abhängigkeiten während der Implementierung erzeugt. Das hätte zu anderweitigen Verzögerungen geführt.
+
+Abweichungen von zwei bis drei Stunden waren abzusehen und sind auch bei den meisten Arbeitspaketen aufgetreten, sowohl als Verlängerung als auch Verkürzung der tatsächlichen Arbeitszeit. Häufiger wurde allerdings mehr Zeit benötigt als ursprünglich angenommen. Die großen Ausreißer in der benötigten Zeit gab es nach Milestone 1 nicht mehr. Grund dafür ist sicherlich die Vertrautheit mit der
+Systemarchitektur und der bereits vorhandenen Code Infrastruktur.
+
+\subsection{Direkte Probleme bei der Programmierung}
+
+\subsubsection{JSF}
+
+\emph{Jarkarta Server Faces} stellte häufig größere Herausforderungen. Besonders bei der Verwendung von \emph{Custom Components} wurde oftmals mehr Zeit benötigt. Dazu gehört unter anderem die \emph{Pagination}. Wobei der Prototyp bereits bestand und lauffähig war, müssen im Einsatz mehrere Objekte durch die \emph{@PostConstruct init()} Methode und zusätzlich einer \emph{f:viewAction onLoad()} Methode initialisiert werden.
+Die Komplexität davon wurde im Voraus nicht richtig eingeschätzt und führte damit zu erheblichen Verlängerungen in Arbeitspaketen, in welchen diese verwendet wurde.
+
+\subsubsection{JDBC}
+
+Die Verbindung zur Datenbank wurde nach Voraussetzung mit \emph{Java Database Connectivity} umgesetzt. Die Technologie war im geringen Maße bereits bekannt und konnte sehr schnell eingesetzt werden. Probleme entstanden durch benötigte Aufrufe von \emph{Close Methoden}. Diese werden benötigt um sowohl \emph{Connections} an den \emph{Connection Pool} zurückzugeben, als auch \emph{SQL Statements} zu schließen.
+
+Anfangs führte das zu vielen \emph{Leaks} an Datenbankverbindungen, die nicht mehr ordnungsgemäß zurückgegeben wurden. Gelöst wurde das Problem durch besseres \emph{Logging} der Datenbankverbindungen und Verwendung von \emph{Try-with-Ressource} Codeblöcken. Das benötigte zusätzliche Zeit zu debuggen und implementieren und hat die Arbeitszeit bei vielen Arbeitspaketen gestreckt.\newline
+
+Ein weiteres Problem war das \emph{Error-Handling} von SQL Errors. \emph{PostgreSQL} und \emph{JDBC} geben hier nur numerische Fehlercodes zurück und keine direkte Information, ob es sich um eine \emph{Checked- oder Unchecked Exception} handelt. Hier wurde ein Prototyp von Sebastian Vogt entwickelt, allerdings zuerst nur vereinzelt von ihm umgesetzt. Es benötigte anschließend einen gemeinsamen Einsatz aller Teammitglieder alle Datenbankzugriffsmethoden mit der neuen Fehlerbehandlung auszustatten. \newline
+
+JDBC benötigt die manuelle Formulierung von \emph{SQL Statements}. Für die Implementierung der Paginierung mit den zusätzlich filterbaren Spalten ist eine dynamische Generierung des \emph{SQL Statements} nötig. Dadurch wurde der Code viel länger und komplizierter als ursprünglich angenommen. Dadurch wurde in vielen Arbeitspaketen die Zeit rein durch das Schreiben und \emph{R´efactoren} der \emph{SQL Statements} gestreckt.
+
+\subsubsection{Fatale Datenbankfehler}
+
+Ein Nutzer wird auf eine Fehlerseite geleitet, falls auf eine nicht existierende Seite navigiert wird oder ein interner Error in LasEs auftritt.
+Ein schwerwiegender Fehler kann dabei der Abbruch der Verbindung zum Datenbankserver sein.
+Tritt ein solcher Fehler auf können keine Daten aus der Datenbank geladen werden und es wird auf die Fehlerseite weitergeleitet. Hier ergab sich das Problem eines rekursiven Fehlers.\newline
+Da diese Seite das \emph{Templating} verwendet, wurde wiederum versucht das Firmenlogo und die Auswahl des \emph{Styles}  aus der Datenbank zu laden. Hier trat wiederum ein Datenbankfehler auf und es wurde wieder auf die Fehlerseite weitergeleitet, auf welcher sich der Prozess wiederholte.
+
+Gelöst wurde das Problem durch die Verwendung von \emph{Default} Werten, falls die Datenbankverbindung auf der Fehlerseite nicht erfolgreich ist.
+
+\subsubsection{Testing}
+
+Viele Testfälle basieren auf Mocking mit der Softwarebibliothek \emph{Mockito}. Hier entstanden Zeitverzögerungen dadurch, dass alle Entwickler vorher keinen bis wenigen Kontakt zu diesem Framework hatten. Damit streckte sich der Zeitaufwand in die Länge.
+
+Ein weiteres Problem waren \emph{"Phantom Bugs"}. Mockito injiziert zum Mocking \emph{Byte Code} direkt in den auszuführenden Code. Das hat zur Folge, dass in Testfunktionen in welchen Mockito nur lokal verwendet wird, auch
+in anderen Funktionen der gleichen Klasse zur Ausführung von gemockten Code führt.
+
+Das führte zu langen Suchen nach Bugs, in denen sogar im Debug Modus anderer Code ausgeführt wurde. Anschließend gelöst wurde das Problem durch Auftrennen des Codes in unterschiedliche Testklassen, mit oder ohne Mockito.\newline
+
+Die Abhängigkeit von \emph{CDI} in Tests stellte ein weiteres Problem dar. Grundsätzlich wird es im Produktiv Code durch den \emph{Application Server} zur Verfügung gestellt. Wurde nun aber versucht ein von \emph{CDI} abhängige Methode in einem Test aufzurufen, sind diese immer fehlgeschlagen.
+
+Durch die Verwendung einer weiteren Softwarebibliothek\footnote{\url{https://mvnrepository.com/artifact/org.jboss.weld/weld-junit-parent}}, wird das Testen von CDI Komponenten vereinfacht und konnte damit auch umgesetzt werden.
