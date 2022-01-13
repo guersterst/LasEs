@@ -1,1 +1,212 @@
 \localauthor{Sebastian Vogt}
+
+%%%%%% BEGIN MACROS %%%%%%
+\newcommand{\atable}[3]{\begin{longtable}{llllllll}
+		\caption{#2}\label{tab:#1} \\
+		\toprule
+		\makecell{\textbf{Arbeitspaket}} & \makecell{\textbf{Start}} & \makecell{\textbf{Ende}} & \makecell{\textbf{Aufwand}} & \makecell{\textbf{Tatsächlicher}\\\textbf{Start}} &
+		\makecell{\textbf{Tatsächliches}\\\textbf{Ende}} & \makecell{\textbf{Tatsächlicher}\\\textbf{Aufwand}} & \makecell{\textbf{Bearbeiter:in}}
+		\\
+		\midrule
+		\endfirsthead
+		
+		\caption{#2 \emph{(Fortsetzung)}} \\
+		\toprule
+		\makecell{\textbf{Arbeitspaket}} & \makecell{\textbf{Start}} & \makecell{\textbf{Ende}} & \makecell{\textbf{Aufwand}} & \makecell{\textbf{Tatsächlicher}\\\textbf{Start}} &
+\makecell{\textbf{Tatsächliches}\\\textbf{Ende}} & \makecell{\textbf{Tatsächlicher}\\\textbf{Aufwand}} & \makecell{\textbf{Bearbeiter:in}}
+		\\
+		\midrule
+		\endhead
+		
+		\multicolumn{8}{r}{{Fortsetzung auf der nächsten Seite}}
+		\endfoot
+		
+		\bottomrule
+		\endlastfoot
+		
+		#3
+	\end{longtable}
+}
+\newcommand{\aentry}[8]{\footnotesize\makecell{#1} & \footnotesize\makecell{#2} & \footnotesize\makecell{#3} & \footnotesize\makecell{#4} & \footnotesize\makecell{#5} & \footnotesize\makecell{#6} & \footnotesize\makecell{#7} & \footnotesize\makecell{#8}\\\midrule}
+%%%%%% END MACROS %%%%%%
+
+\renewcommand{\cellalign}{cl}
+
+\begin{landscape}
+	
+	\subsection{Allgemeines}
+	
+	Zusätzlich zu den geplanten Arbeitspaketen sind in der Implementierung auch ungeplante Aufgaben aufgekommen. Diese sind in einer extra Tabelle aufgelistet:
+	\begin{itemize}
+		\item \textbf{Code Review:} Pull Requests von anderen Teammitgliedern reviewen.
+		\item \textbf{Testing:} Hiermit ist weniger das Schreiben der Tests selbst und mehr das lauffähig machen von Tests aus dem Implementierungsplan sowie das Integrieren von CDI in die Tests gemeint.
+		\item \textbf{Allgemeines Debugging:} Diese Debugging Arbeiten lassen sich nicht eindeutig einem Arbeitspaket zuordnen, da sie sie auf das System als ganzes beziehen.
+	\end{itemize}
+
+	\subsection{Milestone 1}
+	\subsubsection{Geplante Arbeitspakete}
+	\atable{milestone1}{Milestone 1}{
+		\aentry{NewSubmission}{6.12.10\\10:00 Uhr}{8.12.2021\\16:00 Uhr}{10~h}{06.12.2021\\11:30 Uhr}{10.12.2021\\03:00 Uhr}{23,7~h}{Sebastian Vogt}
+		
+		\aentry{Crypto}{6.12.2021\\17:00 Uhr}{7.12.2021\\14:00 Uhr}{3~h}{07.12.2021\\21:50 Uhr}{07.12.2021\\22:30 Uhr}{0,7~h}{Sebastian Vogt}
+		
+		\aentry{Connection Pool}{9.12.2021\\8:00 Uhr}{9.12.2021\\19:00 Uhr}{6~h}{09.12.2021\\08:00 Uhr}{09.12\\19:00 Uhr}{7,0~h}{Sebastian Vogt}
+		
+		\aentry{SQL Datenschema}{6.12.2021\\10:00 Uhr}{6.12.2021\\11:00 Uhr}{0,5~h}{06.12.2021\\11:00 Uhr}{08.12.2021\\01:15}{2,25~h}{Johann Schicho}
+		
+		\aentry{Pagination}{6.12.2021\\11:00 Uhr}{6.12.2021\\15:00 Uhr}{2~h}{-}{-}{0~h}{Johann Schicho}
+		
+		\aentry{Template:\\SortSearchColumn}{6.12.2021\\15:00 uhr}{6.12.2021\\16:00 Uhr}{1~h}{-}{-}{0~h}{Johann Schicho}
+		
+		\aentry{Welcome}{6.12.2021\\16:00 Uhr}{7.12.2021\\14:00 Uhr}{5~h}{06.12.2021\\14:00 Uhr}{08.12.2021\\14:00 Uhr}{7~h}{Johann Schicho}
+		
+		\aentry{LifeTime}{7.12.2021\\14:00Uhr}{8.12.2021\\15:00 Uhr}{7,0~h}{07.12.2021\\13:00 Uhr}{07.12.2021\\14:30}{1,5~h}{Johann Schicho}
+		
+		\aentry{UserGetLists}{8.12.2021\\15:00 Uhr}{9.12.2021\\16:00Uhr}{5~h}{07.12.2021\\15:30 Uhr}{08.12.2021\\21:15 Uhr}{6,25~h}{Johann Schicho}
+		
+		\aentry{LifeTime: Logger}{6.12.2021\\10:00 Uhr}{6.12.2021\\14:00 Uhr}{3~h}{06.12.2021\\11:00 Uhr}{06.12.2021\\14:00 Uhr}{1~h}{Thomas Kirz}
+		
+		\aentry{Homepage}{6.12.2021\\14:00 Uhr}{9.12.2021\\19:00 Uhr}{13~h}{06.12.2021\\15:00 Uhr}{09.12.2021\\23:00 Uhr}{21~h}{Thomas Kirz}
+		
+		\aentry{Message Bundle\\Producer}{6.12.2021\\17:00 Uhr}{7.12.2021\\10:00 Uhr}{2~h}{06.12.2021\\14:00 Uhr}{06.12.2021\\15:00 Uhr}{1~h}{Thomas Kirz}
+		
+		\aentry{Exceptions}{7.12.2021\\10:00 Uhr}{7.10.2021\\11:00 Uhr}{0,5~h}{Thomas Kirz}{}{}{}
+		
+		\aentry{Template: Main}{6.12.2021\\10:00 Uhr}{7.12.2021\\16:00 Uhr}{2~h}{06.12.2021\\10:45 Uhr}{07.12.2021\\15:00 Uhr}{4,5~h}{Stefanie Gürster}
+		
+		\aentry{Submission ohne\\Gutachten}{6.12.2021\\16:00 Uhr}{9.12.2021\\18:00 Uhr}{17~h}{06.12.2021\\14:15 Uhr}{09.12.2021\\03:30 Uhr}{25~h}{Stefanie Gürster}
+		
+		\aentry{SessionInformation}{6.12.2021\\10:00 Uhr}{6.12.2021\\14:00 Uhr}{2~h}{06.12.2021\\10:50 Uhr}{07.12.2021\\15:20 Uhr}{9,17~h}{Johannes Garstenauer}
+		
+		\aentry{TrespassListener}{6.12.2021\\14:00 Uhr}{6.12.2021\\19:00 Uhr}{4~h}{07.12.2021\\15:30 Uhr}{07.12.2021\\18:30 Uhr}{3~h}{Johannes Garstenauer}
+		
+		\aentry{UIMessage Generator}{7.12.2021\\10:00Uhr}{7.12.2021\\17:00 Uhr}{5~h}{-}{-}{0~h}{Johannes Garstenauer}
+		
+		\aentry{Templates:\\Header, Footer}{7.12.2021\\17:00 Uhr}{8.12.2021\\16:00 Uhr}{4~h}{08.12.2021\\13:00 Uhr}{09.12.2021\\20:00 Uhr}{13,5~h}{Johannes Garstenauer}
+		
+		\aentry{Config Reader}{8.12.2021\\16:00 Uhr}{9.12.2021\\14:00 Uhr}{3~h}{07.12.2021\\18:40 Uhr}{07.12.2021\\19:00}{0,33~h}{Johannes Garstenauer}
+    }
+
+	\subsubsection{Zusätzlicher Aufwand}
+	
+	\begin{center}
+		\begin{tabular}{ c c c c c c }
+			\textbf{Aufgabe} & \textbf{Sebastian Vogt} & \textbf{Johann Schicho} & \textbf{Thomas Kirz} & \textbf{Stefanie Gürster} & \textbf{Johannes Garstenauer} \\
+			
+			Code Review & 1,8~h & 1,5~h & 1~h & 1~h & 1~h \\
+			
+			Testing & & 3,25~h & 1~h & 1~h & \\
+			
+			Allgemeines Debugging & & 2,75~h & & & 2~h
+		\end{tabular}
+	\end{center}
+	
+	\subsubsection{Stundenanzahl}
+	\begin{center}
+		\begin{tabular}{ c c c }
+			\textbf{Teammitglied} & \textbf{Stundenanzahl Geplant} & \textbf{Stundenanzahl Tatsächlich}\\
+			Sebastian Vogt & 19~h & 33,2~h \\
+			Johann Schicho & 20,5~h & 22~h \\
+			Thomas Kirz & 18,5~h & 25~h \\
+			Stefanie Gürster & 19~h & 31,5~h \\
+			Johannes Garstenauer & 18~h & 32~h
+		\end{tabular}
+	\end{center}
+	
+	\subsection{Milestone 2}
+	\subsubsection{Geplante Arbeitspakete}
+	\atable{milestone2}{Milestone 2} {
+		\aentry{ScienceFields}{13.12.2021\\ 10:00}{13.12.2021\\ 20:00}{5~h}{13.12.2021\\16:00 Uhr}{14.12.2021\\14:00 Uhr}{4,5~h}{Sebastian Vogt}
+		\aentry{Profile}{14.12.2021\\ 08:00}{16.12.2021\\ 11:30}{12~h}{14.12.2021\\14:00 Uhr}{17.12.2021\\02:15 Uhr}{18~h}{Sebastian Vogt}
+		\aentry{NewReview}{13.12.2021\\ 14:00}{13.12.2021\\ 18:00}{4~h}{14.12.2021\\19:00 Uhr}{15.12.2021\\19:30 Uhr}{4~h}{Johann Schicho}
+		\aentry{Submission: Reviews}{13.12.2021\\ 18:00}{15.12.2021\\ 15:00}{10~h}{13.12.2021\\13:00 Uhr}{15.12.2021\\21:30 Uhr}{14~h}{Johann Schicho}
+		\aentry{NewScientificForum}{16.12.2021\\ 10:00}{16.12.2021\\ 15:30}{4~h}{16.12.2021\\13:30 Uhr}{17.12.2021\\00:30 Uhr}{7,5~h}{Johann Schicho}
+		\aentry{Registration}{13.12.2021 \\ 14:00}{14.12.2021 \\ 17:00}{10~h}{13.12.2021\\13:00 Uhr}{15.12.2021\\11:00 Uhr}{11~h}{Thomas Kirz}
+		\aentry{Verification}{15.12.2021\\ 13:00}{16.12.2021\\17:00}{10~h}{14.12.2021\\15:00 Uhr}{16.12.2021\\19:00 Uhr}{13~h}{Thomas Kirz}
+		\aentry{Administration}{13.12.2021\\10:00}{14.12.2021\\14:00}{6~h}{15.12.2021\\21:40 Uhr}{16.12.2021\\23:30 Uhr}{9,5~h}{Stefanie Gürster}
+		\aentry{Toolbar}{14.12.2021\\ 15:00}{16.12.2021\\ 19:00}{10~h}{13.12.2021\\17:00 Uhr}{17.12.2021\\02:00 Uhr}{13~h}{Stefanie Gürster}
+		\aentry{ScientificForum}{13.12.2021\\ 16:00}{15.12.2021\\18:00}{15~h}{13.12.2021\\13:00 Uhr}{16.12.2021\\19:45 Uhr}{22,5~h}{Johannes \\ Garstenauer}
+		\aentry{ScientificForumList}{16.12.2021\\ 13:00}{16.12.2021 \\18:00}{5~h}{16.12.2021\\21:00 Uhr}{17.12.2021\\02:30 Uhr}{5,5~h}{Johannes \\ Garstenauer}
+    }
+
+	\subsubsection{Zusätzlicher Aufwand}
+	
+	\begin{center}
+		\begin{tabular}{ c c c c c c }
+			\textbf{Aufgabe} & \textbf{Sebastian Vogt} & \textbf{Johann Schicho} & \textbf{Thomas Kirz} & \textbf{Stefanie Gürster} & \textbf{Johannes Garstenauer} \\
+			
+			Code Review &  &  & 1~h & 1~h & \\
+			
+			Testing & 4,6~h & 2,5~h & 1~h & 2,5~h & \\
+			
+			Allgemeines Debugging & 3,4~h & 1~h & 4~h & 1~h &
+		\end{tabular}
+	\end{center}
+
+	\subsubsection{Stundenanzahl}
+	\begin{center}
+		\begin{tabular}{ c c c }
+			\textbf{Teammitglied} & \textbf{Stundenanzahl Geplant} & \textbf{Stundenanzahl Tatsächlich}\\
+			Sebastian Vogt & 17~h & 30,5~h \\
+			Johann Schicho & 18~h & 29~h\\
+			Thomas Kirz & 20~h & 30~h \\
+			Stefanie Gürster & 16~h & 27~h \\
+			Johannes Garstenauer & 20~h & 28~h
+		\end{tabular}
+	\end{center}
+	
+	\subsection{Milestone 3}
+	\subsubsection{Geplante Arbeitspakete}
+	\atable{milestone3}{Milestone 3}{
+		\aentry{ResultList}{03.01.2022\\10 Uhr}{06.01.2022\\ 14 Uhr}{15~h}{20.12.2021\\13:30 Uhr}{06.01.2022\\12:00}{6,9~h}{Sebastian Vogt}
+		\aentry{PeriodicWorker}{03.01.2022\\10 Uhr}{04.01.2022\\18 Uhr}{4~h}{21.12.2021\\13:30 Uhr}{21.12.2021\\15:30 Uhr}{2~h}{Johann Schicho}
+		\aentry{InitialConfig}{05.01.2022\\10 Uhr}{06.01.2022\\14 Uhr}{4~h}{21.12.2021\\15:30 Uhr}{23.12.2021\\17:15 Uhr}{7,5~h}{Johann Schicho}
+		\aentry{ErrorPage}{03.01.2022\\10 Uhr}{03.01.2022\\18 Uhr}{3~h}{20.12.2021\\11:00 Uhr}{20.12.2021\\18:00 Uhr}{3,5~h}{Thomas Kirz}
+		\aentry{E-Mail}{04.01.2022\\12 Uhr}{05.01.2022\\14 Uhr}{5~h}{21.12.2021\\13:00 Uhr}{06.01.2022\\16:00 Uhr}{8~h}{Thomas Kirz}
+		\aentry{NewUser}{05.01.2022\\14 Uhr}{06.01.2022\\14 Uhr}{5~h}{22.12.2021\\11:00 Uhr}{04.01.2022\\13:00 Uhr}{4~h}{Thomas Kirz}
+		\aentry{Imprint}{03.01.2022 \\10 Uhr}{03.01.2022\\18 Uhr}{3~h}{21.12.2021\\15:10 Uhr}{21.12.2021\\16:10 Uhr}{1~h}{Stefanie Gürster}
+		\aentry{CSS Themes}{04.01.2022\\10 Uhr}{06.01.2022\\14 Uhr}{10~h}{20.12.2021\\14:16 Uhr}{04.01.2022\\17:00 Uhr}{12~h}{Stefanie Gürster}
+		\aentry{UncheckedExceptionHandler}{03.01.2022\\10 Uhr}{04.01.2022\\18 Uhr}{7~h}{04.01.2022\\11:00 Uhr}{04.01.2022\\17:00 Uhr}{4,25~h}{Johannes Garstenauer}
+		\aentry{UserList}{05.01.2022\\10 Uhr}{06.01.2022\\14 Uhr}{4~h}{18.12.2021\\15:00 Uhr}{06.01.2022\\17:00 Uhr}{16,5~h}{Johannes Garstenauer}
+    }
+
+	\subsubsection{Zusätzlicher Aufwand}
+	
+	\begin{center}
+		\begin{tabular}{ c c c c c c }
+			\textbf{Aufgabe} & \textbf{Sebastian Vogt} & \textbf{Johann Schicho} & \textbf{Thomas Kirz} & \textbf{Stefanie Gürster} & \textbf{Johannes Garstenauer} \\
+			
+			Code Review &  &  & 1,5~h &  & \\
+			
+			Testing &  &  & 0,5~h &  & \\
+			
+			Allgemeines Debugging & 8,1~h & 12,5~h & 5~h & 5,75~h & 7,5~h \\
+			
+			E-Mail Versendung in bestehenden Code einbauen & 4,4~h & & & 4,3~h &
+		\end{tabular}
+	\end{center}
+	
+	\subsubsection{Stundenanzahl}
+	\begin{center}
+		\begin{tabular}{ c c c }
+			\textbf{Teammitglied} & \textbf{Stundenanzahl Geplant} & \textbf{Stundenzahl Tatsächlich} \\
+			Sebastian Vogt        & 15~h & 19,4~h                 \\
+			Johann Schicho        & 8~h & 22~h                 \\
+			Thomas Kirz           & 13~h & 22,5~h                 \\
+			Stefanie Gürster      & 13~h & 23,05~h                 \\
+			Johannes Garstenauer  & 11~h & 28,25~h
+		\end{tabular}
+	\end{center}
+	
+	\subsection{Stundenanzahl aller Milestones}
+	\begin{center}
+		\begin{tabular}{ c c c }
+			\textbf{Teammitglied} & \textbf{Stundenanzahl Geplant} & \textbf{Stundenanzahl Tatsächlich} \\
+			Sebastian Vogt & 51~h & 83,1~h \\
+			Johann Schicho & 46,5~h & 73~h \\
+			Thomas Kirz & 51,5~h & 77,5~h \\
+			Stefanie Gürster & 48~h & 81,55~h \\
+			Johannes Garstenauer & 49~h & 88,25~h
+		\end{tabular}
+	\end{center}
+\end{landscape}
