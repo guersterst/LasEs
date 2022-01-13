@@ -95,4 +95,11 @@ Im Allgemeinen wurden hier nur Änderungen unter dem Motiv der Benutzerfreundlic
 
 Änderungen, welche im oberen Teil zu den \emph{Backing Beans} bereits beschrieben wurden haben Teils kleine Auswirkungen auf das jeweilige Facelet. Diese werden aber dann hier nicht weiter erläutert, um Duplikation zu vermeiden.
 
-\emph{errorPage.xhtml} Hier wurde noch ein zusätzlicher \emph{outputLink} hinzugefügt, der den \emph{Stack Trace} nur im \emph{developmentMode} ausklappen kann.
+\textbf{errorPage.xhtml} Hier wurde noch ein zusätzlicher \emph{outputLink} hinzugefügt, der den \emph{Stack Trace} nur im \emph{developmentMode} ausklappen kann.
+
+\textbf{scientificForum.xhtml} Ist der aktuelle Benutzende nicht befugt ein Forum zu editieren, so wird ihm die Anleitung zum Gutachten nicht in einer deaktivierten \emph{textArea} angezeigt, sonder es erscheint beim Klicken des entsprechenden Buttons ein \emph{Dialog.}
+
+\subsection{Bibliotheken}
+\localauthor{Stefanie Gürster}
+
+\textbf{Weld JUnit Extentions} Um Methoden, welche CDI benötigen, ebenfalls testen zu können, haben wir zusätzlich \emph{Weld JUnit Extentions}\footnote{\url{https://mvnrepository.com/artifact/org.jboss.weld/weld-junit-parent}} verwendet.
