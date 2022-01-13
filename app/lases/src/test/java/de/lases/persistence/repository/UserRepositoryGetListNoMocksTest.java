@@ -2,6 +2,7 @@ package de.lases.persistence.repository;
 
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.DataNotCompleteException;
+import de.lases.persistence.exception.DataNotWrittenException;
 import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.internal.ConfigReader;
 import jakarta.enterprise.context.RequestScoped;
@@ -13,6 +14,8 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.InputStream;
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalAmount;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,16 +30,22 @@ public class UserRepositoryGetListNoMocksTest {
     public WeldInitiator weld = WeldInitiator.from(ConnectionPool.class, ConfigReader.class, ConfigReader.class)
             .activate(RequestScoped.class, SessionScoped.class).build();
 
+    private Submission submissionInstance;
+    private ScientificForum scientificForum;
+    private User author1;
+    private User author2;
+    private User reviewer1;
+
     /*
      * Unfortunately we have to do this before every single test, since @BeforeAll methods are static and static
      * methods don't work with our weld plugin.
      */
     @BeforeEach
-    void startConnectionPool() {
+    void startConnectionPool() throws Exception {
         FileDTO file = new FileDTO();
 
-        Class reviewService = UserRepositoryGetListNoMocksTest.class;
-        InputStream inputStream = reviewService.getResourceAsStream("/config.properties");
+        Class<UserRepositoryGetListNoMocksTest> clazz = UserRepositoryGetListNoMocksTest.class;
+        InputStream inputStream = clazz.getResourceAsStream("/config.properties");
 
         file.setInputStream(inputStream);
 
@@ -44,6 +53,63 @@ public class UserRepositoryGetListNoMocksTest {
         ConnectionPool.init();
 
         transaction = new Transaction();
+
+        createData();
+    }
+
+    void createData() throws Exception {
+        author1 = new User();
+        author1.setFirstName("Otto");
+        author1.setLastName("Motor");
+        author1.setEmailAddress("otto.motor@example.com");
+        author1.setAdmin(false);
+
+        author1 = UserRepository.add(author1, transaction);
+
+        author2 = new User();
+        author2.setFirstName("Toto");
+        author2.setLastName("Wolff");
+        author2.setEmailAddress("toto.wolff@example.com");
+        author2.setAdmin(false);
+
+        author2 = UserRepository.add(author2, transaction);
+
+        reviewer1 = new User();
+        reviewer1.setFirstName("Ronald");
+        reviewer1.setLastName("Reviewer");
+        reviewer1.setEmailAddress("ronald.reviewer@example.com");
+        reviewer1.setAdmin(false);
+
+        reviewer1 = UserRepository.add(reviewer1, transaction);
+
+        scientificForum = new ScientificForum();
+        scientificForum.setName("The Future of Motorsports");
+
+        scientificForum = ScientificForumRepository.add(scientificForum, transaction);
+        // valid values so the repositories do not complain. Please note author2 is editor.
+        ScientificForumRepository.addEditor(scientificForum, author2, transaction);
+
+        Submission submission = new Submission();
+        submission.setTitle("Bring the V12s back.");
+        submission.setState(SubmissionState.SUBMITTED);
+        submission.setRevisionRequired(false);
+        submission.setSubmissionTime(LocalDateTime.now());
+        // valid values so the repositories do not complain.
+        submission.setAuthorId(author1.getId());
+        submission.setEditorId(author2.getId());
+        submission.setScientificForumId(scientificForum.getId());
+
+        submissionInstance = SubmissionRepository.add(submission, transaction);
+
+        SubmissionRepository.addCoAuthor(submission, author2, transaction);
+
+        ReviewedBy reviewedBy = new ReviewedBy();
+        reviewedBy.setHasAccepted(AcceptanceStatus.ACCEPTED);
+        reviewedBy.setTimestampDeadline(LocalDateTime.now());
+        reviewedBy.setSubmissionId(submissionInstance.getId());
+        reviewedBy.setReviewerId(reviewer1.getId());
+
+        SubmissionRepository.addReviewer(reviewedBy, transaction);
     }
 
     @AfterEach
@@ -56,56 +122,32 @@ public class UserRepositoryGetListNoMocksTest {
 
     @Test
     void testGetListUsersForSubmissionAuthors() throws NotFoundException, DataNotCompleteException {
-        Submission submission = new Submission();
-        submission.setId(666);
-
-        User basti = new User();
-        basti.setId(420);
-
-        User alfred = new User();
-        alfred.setId(69);
-
-        List<User> userList = UserRepository.getList(transaction, submission, Privilege.AUTHOR);
+        List<User> userList = UserRepository.getList(transaction, submissionInstance, Privilege.AUTHOR);
 
         assertAll(
                 () -> assertEquals(2, userList.size()),
-                () -> assertTrue(userList.contains(basti)),
-                () -> assertTrue(userList.contains(alfred))
+                () -> assertTrue(userList.contains(author1)),
+                () -> assertTrue(userList.contains(author2))
         );
     }
 
     @Test
     void testGetListUsersForSubmissionReviewers() throws NotFoundException, DataNotCompleteException {
-        Submission submission = new Submission();
-        submission.setId(666);
-
-        User carl = new User();
-        carl.setId(1003);
-
-        List<User> userList = UserRepository.getList(transaction, submission, Privilege.REVIEWER);
+        List<User> userList = UserRepository.getList(transaction, submissionInstance, Privilege.REVIEWER);
 
         assertAll(
-                () -> assertEquals(2, userList.size()),
-                () -> assertTrue(userList.contains(carl))
+                () -> assertEquals(1, userList.size()),
+                () -> assertTrue(userList.contains(reviewer1))
         );
     }
 
     @Test
     void testGetListOfEditors() throws DataNotCompleteException, NotFoundException {
-        ScientificForum sf = new ScientificForum();
-        sf.setId(1);
-
-        User edith = new User();
-        edith.setId(1001);
-        User peter = new User();
-        peter.setId(1);
-
-        List<User> userList = UserRepository.getList(transaction, sf);
+        List<User> userList = UserRepository.getList(transaction, scientificForum);
 
         assertAll(
-                () -> assertEquals(8, userList.size()),
-                () -> assertTrue(userList.contains(edith)),
-                () -> assertFalse(userList.contains(peter))
+                () -> assertEquals(1, userList.size()),
+                () -> assertTrue(userList.contains(author2))
         );
     }
 
