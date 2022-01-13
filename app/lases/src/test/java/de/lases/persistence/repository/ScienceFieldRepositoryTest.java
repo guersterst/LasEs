@@ -3,7 +3,6 @@ package de.lases.persistence.repository;
 import de.lases.global.transport.FileDTO;
 import de.lases.global.transport.ResultListParameters;
 import de.lases.global.transport.ScienceField;
-import de.lases.global.transport.ScientificForum;
 import de.lases.persistence.exception.DataNotCompleteException;
 import de.lases.persistence.exception.DataNotWrittenException;
 import de.lases.persistence.exception.KeyExistsException;
@@ -54,7 +53,7 @@ class ScienceFieldRepositoryTest {
     void startConnectionPool() {
         FileDTO file = new FileDTO();
 
-        Class clazz = ScienceFieldRepositoryTest.class;
+        Class<ScienceFieldRepositoryTest> clazz = ScienceFieldRepositoryTest.class;
         InputStream inputStream = clazz.getResourceAsStream("/config.properties");
 
         file.setInputStream(inputStream);
@@ -170,17 +169,13 @@ class ScienceFieldRepositoryTest {
         transaction.abort();
     }
 
-    @Disabled
+    /**
+     * @author Sebastian Vogt
+     */
     @Test
     void testGetListForum() throws SQLException, DataNotCompleteException, NotFoundException, DataNotWrittenException,
             KeyExistsException {
         Transaction transaction = new Transaction();
-
-        ScientificForum scientificForum = new ScientificForum();
-        scientificForum.setId(2);
-
-        List<ScienceField> scienceFieldList = ScienceFieldRepository.getList(scientificForum, transaction,
-                new ResultListParameters());
 
         PreparedStatement stmt = transaction.getConnection().prepareStatement("""
                                                 TRUNCATE science_field CASCADE
@@ -205,32 +200,13 @@ class ScienceFieldRepositoryTest {
             ScienceFieldRepository.add(s3, transaction);
         }
 
+        List<ScienceField> scienceFieldList = ScienceFieldRepository.getList(transaction,
+                new ResultListParameters());
+
         List<ScienceField> expected = List.of(s1, s2, s3);
 
-        assertTrue(expected.containsAll(scienceFieldList) && scienceFieldList.containsAll(expected));
-
-        transaction.abort();
-    }
-
-    @Disabled
-    @Test
-    void testGetListForumFilter() throws SQLException, DataNotCompleteException, NotFoundException {
-        Transaction transaction = new Transaction();
-
-        ScientificForum scientificForum = new ScientificForum();
-        scientificForum.setId(2);
-
-        ResultListParameters params = new ResultListParameters();
-        params.setGlobalSearchWord("computer");
-
-        List<ScienceField> scienceFieldList = ScienceFieldRepository.getList(scientificForum, transaction, params);
-
-
-        ScienceField s2 = new ScienceField();
-
-        s2.setName("Computer Science");
-
-        List<ScienceField> expected = List.of(s2);
+        System.out.println(expected);
+        System.out.println(scienceFieldList);
 
         assertTrue(expected.containsAll(scienceFieldList) && scienceFieldList.containsAll(expected));
 

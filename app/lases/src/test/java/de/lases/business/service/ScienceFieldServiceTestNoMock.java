@@ -32,7 +32,7 @@ public class ScienceFieldServiceTestNoMock {
     void startConnectionPool() {
         FileDTO file = new FileDTO();
 
-        Class clazz = ScienceFieldServiceTestNoMock.class;
+        Class<ScienceFieldServiceTestNoMock> clazz = ScienceFieldServiceTestNoMock.class;
         InputStream inputStream = clazz.getResourceAsStream("/config.properties");
 
         file.setInputStream(inputStream);
