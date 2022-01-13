@@ -14,6 +14,8 @@
 
         <f:metadata>
             <f:importConstants type="de.lases.control.internal.Constants" var="Const"/>
+            <f:event id="pre-render-evnt" type="preRenderView"
+                     listener="#{newSubmissionBacking.preRenderViewListener}"/>
             <f:viewParam name="forumId" required="false" value="#{newSubmissionBacking.forumInput.id}"/>
             <f:viewAction action="#{newSubmissionBacking.onLoad()}"/>
         </f:metadata>

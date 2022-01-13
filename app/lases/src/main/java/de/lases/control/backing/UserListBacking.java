@@ -1,10 +1,8 @@
 package de.lases.control.backing;
 
 import de.lases.business.service.UserService;
-import de.lases.business.util.EmailUtil;
 import de.lases.control.internal.Pagination;
 import de.lases.control.internal.SessionInformation;
-import de.lases.global.transport.Privilege;
 import de.lases.global.transport.User;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
@@ -13,7 +11,6 @@ import jakarta.inject.Named;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Arrays;
 
 /**
  * Backing bean for the user list page.

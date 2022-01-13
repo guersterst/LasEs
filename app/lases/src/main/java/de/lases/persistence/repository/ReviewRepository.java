@@ -269,7 +269,6 @@ public class ReviewRepository {
 
         Connection conn = transaction.getConnection();
         ResultSet resultSet;
-        List<Review> reviewList = new ArrayList<>();
 
         Privilege privilege = getPrivilegeForReviews(transaction, user, submission);
 

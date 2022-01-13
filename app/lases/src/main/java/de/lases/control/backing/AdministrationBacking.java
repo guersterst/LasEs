@@ -36,8 +36,8 @@ public class AdministrationBacking {
     @Inject
     private transient PropertyResourceBundle resourceBundle;
 
-     @Inject
-     private ConfigPropagator configPropagator;
+    @Inject
+    private ConfigPropagator configPropagator;
 
     private static final Logger logger = Logger.getLogger(AdministrationBacking.class.getName());
 
@@ -45,7 +45,7 @@ public class AdministrationBacking {
 
     private Part uploadedLogo;
 
-    private static final String PATH_TO_STYLE_DIRECTORY = "design/css/themes/";
+    private static final String STYLE_DIRECTORY = "design/css/themes/";
 
     /**
      * Loads the current system settings from the datasource.
@@ -136,12 +136,14 @@ public class AdministrationBacking {
      * @return Path to stylesheet.
      */
     public String getPathToStyle() {
+
         if (systemSettings == null) {
             // If the db connection failed, we just use the orange one.
-            return PATH_TO_STYLE_DIRECTORY + "orange.css";
+            return STYLE_DIRECTORY + CustomizationService.DEFAULT_STYLE;
         } else {
-            return PATH_TO_STYLE_DIRECTORY.concat(systemSettings.getStyle() + ".css");
+            return STYLE_DIRECTORY.concat(systemSettings.getStyle());
         }
+
     }
 
     /**
@@ -150,6 +152,6 @@ public class AdministrationBacking {
      * @return all available styles.
      */
     public String[] getStyles() {
-        return configPropagator.getProperty("STYLE").split("#");
+        return customizationService.loadStyles();
     }
 }

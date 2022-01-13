@@ -12,7 +12,7 @@
 <composite:implementation>
     <div class="btn-group">
         <h:commandButton value="#{labels.applyFilter}" action="#{cc.attrs.paginator.applyFilters}"
-                         styleClass="btn btn-primary"/>
+                         styleClass="btn btn-primary" title="#{help.applyFilter}"/>
     </div>
     <h:dataTable id="pagination" value="#{cc.attrs.paginator.entries}" var="var" styleClass="table table-striped">
         <composite:insertChildren/>

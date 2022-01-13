@@ -1,3 +1,283 @@
+\subsection{Klassen}
 \localauthor{Stefanie Gürster}
 
+Veränderungen bezüglich der Parameterübergabe von Methoden treten im Allgemeinen nur bedingt auf. Ein Beispiel dafür wäre, dass in der Methode \emph{addReviewer()} in der Klasse \emph{SubmissionService} kein \emph{Submission-DTO} mehr mit übergeben wird, da lediglich die Id der Einreichung zum Abspeichern in der Datenbank benötigt wird. Diese Id wird aber bereits mit einem \emph{ReviewedBy-DTO} übergeben. Die Submission wäre also hier überflüssig.
+
+Damit ein Weiterleiten auf die nächste Seite einer \emph{Pagination} funktioniert, müssen alle zugehörigen Einträge gezählt werden. Dies übernehmen Methoden im Service sowie in den Repositories mit der Namenskonvention \emph{count...()} o.ä.. Eine solche Methode wird zum Beispiel im PaperService verwendet, um alle Paper einer Submission zu zählen. Um Redundanzen im Folgenden zu vermeiden, wird diese Methode im Weiteren nicht mehr angesprochen.
+
+\subsubsection{business.internal}
+
+\textbf{Lifetime} In der Methode \emph{startup()} wird nun zusätzlich ein FileDTO, welches \emph{logger properties} als \emph{InputStream} enthält, als Parameter übergeben.
+
+\textbf{PeriodicWorker} Um den PeriodicWorker zu implementieren wird ein Timer Objekt verwendet. Dieser Timer wird durch \emph{init()} gestartet und durch \emph{stop()} gestoppt.
+
+\subsubsection{business.service}
+
+\textbf{PaperService} Für die Methode \emph{getLatest()} wird nur ein Submission-DTO benötigt und kein User-DTO wie zuvor angenommen. \newline
+Die Methode \emph{remove()} wurde entfernt, da sie nicht benötigt wird.
+
+\textbf{ScienceFieldService} Die Funktion, ein einzelnes Fachgebiet mit \emph{get()} zu laden wurde nicht benötigt.
+
+\textbf{SubmissionService} In \emph{add()} werden zusätzlich ein Paper-DTO, sowie ein File-DTO übergeben. Im Gegensatz dazu wird eine Liste von Gutachter nicht mehr benötigt. \newline
+Der Rückgabewert der Methode \emph{change()} wurde von \emph{void} zu \emph{boolean} verändert, um Rückmeldung der Änderung zu erhalten. \newline
+Außerdem wird in der Toolbar eine Liste von Gutachtern der jeweiligen Einreichung geladen. Daher wurde die Methode \emph{getList(Submission submission)} neu hinzugefügt. \newline
+Die Methode \emph{releaseReview()} wird bereits im \emph{ReviewService} durch \emph{change()} implementiert und ist somit hier überflüssig. \newline
+Ebenso wird die Methode \emph{addCoAuthor()} nicht mehr verwendet, da Co-Autoren nur bei der Einreichung selbst hinzugefügt werden. Die Funktionalität liegt also schon in der Methode \emph{add()}.
+
+\textbf{UserService} Um den Avatar eines Nutzers zu löschen, wird \emph{setAvatar()} verwendet. Daher ist \emph{deleteAvatar()} überflüssig. \newline
+Die Methode \emph{getVerification()}, welche bestimmt, ob eine E-Mail-Adresse schon verifiziert ist, wird nicht mehr benötigt, da die Verifikation bereits über \emph{isVerified()} aus dem User DTO abgefragt, oder über \emph{verify()} eine E-Mail-Adresse verifiziert werden kann.
+
+\subsubsection{business.util}
+
+\textbf{EmailUtil} Aufgrund von Benutzerfreundlichkeit
+werden in einigen E-Mails auch passend generierte Links mit versendet. Dafür wurden folgende Methoden neu hinzugefügt: \emph{generateLinkForEmail, generateSubmissionURL, generateForumURL}.
+
+\subsubsection{control.backing}
+
+Diesem Paket wurden drei weitere Interfaces hinzugefügt: \emph{ScientificForumPaginationBacking, SubmissionPaginationBacking und UserPaginationBacking}. Der Grund dafür war die Erweiterung der \emph{Templates} um drei \emph{Composite Components}. Die einzelnen \emph{Paginations} werden an mehreren Orten verwendet. Um Codeduplikationen zu vermeiden und für die jeweilige Komponente die benötigten Methoden zur Verfügung zu stellen, wurden die genannten Interfaces implementiert. Die folgenden Klassen implementieren ein oder mehrere Interfaces: \emph{ResultListBacking, UserListBacking und ScientificForumList}.
+
+Im Weiteren folgt aus dem Verwenden der oben genannten Interfaces, dass Methoden wie \emph{getDateSelect()} (also alle Methoden, die zur Filterung dienen (Dropdown)) nur bedingt in den einzelnen \emph{Backing Beans} implementiert werden.
+
+War auf einer Seite keine \emph{Pagination} vorgesehen und es war nötig jedoch die übergebenen \emph{Viewparameter} überprüfen oder die Zugangsrechte eines Benutzers, so wurde in manchen Fällen noch eine \emph{onLoad()} oder eine \emph{preRenderViewListener()} Methode hinzugefügt.
+
+\textbf{AdministrationBacking} Um die Funktionalität zu erweitern, ein neues Logo hochladen zu können, wurde zusätzlich \emph{uploadNewLogo()} hinzugefügt. \newline
+Damit das momentan ausgewählte Stylesheet geladen wird und dem Benutzer angezeigt werden kann, wurde \emph{getPathToStyle()} hinzugefügt.
+
+\textbf{HomepageBacking} Der Name eines zugehörigen Forums zu einer Einreichung wird über \emph{getForumName()} geladen, damit dieser in der Pagination angezeigt werden kann. \newline
+Um einzelne Tabs per \emph{CSS} dynamisch zu aktivieren, wird dies über \emph{get...CssClassSuffix()} gesetzt. Dieselbe Funktionalität mit verschiedenen Reitern wurde auch beim \emph{ResultlistBacking}, sowie dem \emph{ScientificForumBacking} benötigt, daher wurde die Klasse dementsprechend erweitert.
+
+\textbf{NavigationBacking} Hier wurde die Methode \emph{init()} noch hinzugefügt.
+
+\textbf{NewScientificForumBacking} Damit ein neues Fachgebiet hinzugefügt werden kann, wurde die Methode \emph{createNewScienceField()} implementiert. Wurde ein neues Fachgebiet erstellt, erscheint es in einer Art Liste. Hier kann der Benutzer ein Gebiet auswählen und hinzufügen, indem er jenes nicht in ein Feld eingibt, sondern anklickt. Dementsprechenden wurden auch die Methoden im \emph{Backing Bean} angepasst.
+
+\textbf{NewSubmissionBacking} Sollte ein Eingabefehler seitens des Benutzers erfolgen, so  wird \emph{initNewSubmission()} aufgerufen, um den zuvor erhaltenen \emph{Viewparamter} nun händisch setzen zu können.\newline
+Zudem reicht hier eine Methode zum Laden einer Liste von Editoren aus, da die Auswahl über ein \emph{selectOneMenu} erfolgt.
+
+\textbf{ProfileBacking} Damit Adminrechte an Nutzer vergeben werden können, wurden \emph{Getter} und \emph{Setter} für den jeweiligen betroffenen Nutzer hinzugefügt.
+
+\textbf{ScientificForumBacking} Editoren, sowie Fachgebiete werden in einer Liste wiedergegeben, welche durch ein Eingabefeld ergänzt werden können. Hierzu wurden entsprechende Methoden hinzugefügt. \newline
+Zusätzlich wurde die Forumsseite um Informationen wie der Deadline eines Forums erweitert.\newline
+Die Information, ob ein Nutzer Gutachter ist, wird hier nicht benötigt, sondern lediglich ob dieser Admin oder Editor ist.
+
+\textbf{SubmissionBacking} Je nach Status einer Einreichung sollte diese entsprechend mit Hilfe von \emph{styleSubmissionState()} farblich markiert werden. \newline
+\emph{disableReviewUploadButton} steuert die Möglichkeit zum Hochladen eines Gutachtens und wurde neu hinzugefügt. \newline Außerdem wird mit  \emph{loggedInUserHasPendingReviewerRequest} geprüft ob ein angefragter Gutachter bereits der Rolle zugestimmt hat. \newline
+Alle Methoden, welche die Filterauswahl bereitstellen, wurden hier,falls noch nicht existent, hinzugefügt, da das Backing Bean kein Interface implementiert.
+\newline Damit beim Klicken auf einen Namen oder E-Mail-Adresse über ein MailTo-Link weitergeleitet wird, wurde \emph{sentMailTo()} implementiert.
+
+\textbf{ToolbarBacking} Zur Unterstützung der Benutzerfreundlichkeit ist es möglich schon hinzugefügte Gutachter leichter zu bearbeiten, indem dessen Daten wieder in das jeweilige Eingabefeld geschrieben werden. Zusätzlich wird, abhängig von der Sprache, das Datumsformat als \emph{Placeholder} angezeigt und generiert.
+
+\subsubsection{control.conversion}
+
+Neu ist hier ein \emph{Converter} für ein Fachgebiet, um dieses als String darstellen oder als DTO wieder auswerten zu können.
+
+\subsubsection{control.internal}
+
+\textbf{Constants} Hier werden alle Längen, die zur Validierung benötigt werden, in Form von Konstanten erfasst.
+
+\textbf{Pagination} Anstatt dass die Methode \emph{applyFilter()} in den einzelnen Backing Beans implementiert wird, wurde sie nun allgemein in dieser Klasse eingefügt.
+
+\subsubsection{persistence.util}
+\localauthor{Von hier an: Johannes Garstenauer}
+
+\textbf{DataSourceUtil} Es ist die Methode \emph{logSQLException()} hinzugekommen, welche die Erstellung
+semantisch aussagekräftiger Logs für \emph{SQL-Exceptions} ermöglicht.
+
+Hierbei ist auch die neue Klasse \textbf{TransientSQLExceptionChecker} zu erwähnen, welche
+die Methode \emph{isTransient()} anbietet.
+Hierdurch ist es möglich, zu überprüfen, ob ein Vorgang,
+welcher eine \emph{SQL-Exception} hervorgerufen hat, bei einem erneutem Versuch
+mit gleichen Parametern funktionieren könnte.
+Dies ermöglicht es den Entwicklern einen Nutzer darauf hinzuweisen,
+eine fehlgeschlagene Operation erneut zu versuchen.
+
+\subsubsection{persistence.repository}
+
+\textbf{PaperRepository} Es gibt keine \emph{setPDF()}-Methode mehr.
+Generell wurden im gesamten Entwicklungsprozess des öfteren individuelle Setter für
+bestimmte Datenelemente zugunsten von allgemeineren \emph{add()} und \emph{change()} Methoden ersetzt.
+Diese enthalten dann alle Datenelemente eines zugehörigen Facelets.
+Ein weiteres Beispiel hierfür sind die Methoden \emph{setPDF()} und \emph{remove()}
+im \textbf{ReviewRepository}.
+Änderungen dieser Art wurden zugunsten übersichtlicherer Interfaces gemacht.
+
+\textbf{ConnectionPool} Die neue Methode \emph{getNumberOfFreeConnections()}
+wurde hinzugefügt um ein aussagekräftigeres Logging der Verwendung von Connections
+zu ermöglichen.
+Dies fand vor allem im Finden von \emph{Connection-Leaks} Verwendung.
+Hierbei wurde nun geloggt, wann, von welcher Methode und in welcher Zeile eine
+Connection geöffnet wurde.
+Außerdem wurde festgehalten wie viele offene Connections noch bestehen.
+Hierdurch konnte die Korrektheit des \emph{Connection-Pool} bestätigt
+und \emph{Connection-Leaks}, verurusacht durch Programmierfehler,
+schnell behoben werden.
+
+Es ist unter anderem manchmal vorgekommen, dass sich die Notwendigkeit bestimmter
+Methoden erst während der Entwicklung ergeben hat.
+Allerdings beschränkt sich das nur auf eine handvoll Methoden, wodurch wir die Genauigkeit der Spezifikation bestätigt
+sehen.
+Ein Beispiel hierfür ist das \textbf{ReviewedByRepository}.
+Die \emph{getList()}-Methode hat sich hier erst später als notwendig erwiesen.
+Andererseits ist es seltener auch zu Verschiebung von Methoden zwischen Klassen gekommen.
+Die \emph{removeReviewer()}-Methode im \textbf{SubmissionRepository}  war hier schlicht an
+der falschen Stelle.
+Sie hätte sich schon in der Spezifikation im \emph{ReviewedByRepository} befinden sollen.
+Änderungen dieser Art wurden zugunsten des \emph{single-responsibility principle} gemacht,
+wonach eine Klasse nur Methoden zu einem bestimmten Zweck besitzen sollte.
+
+Es kam an wenigen Stellen auch vor, dass Methoden schlichtweg nicht benötigt wurden.
+Hier ist die \emph{get()} Methode aus dem \textbf{ScienceFieldRepository} zu nennen.
+Sie diente dem Erhalten eines wissenschaftlichen Themas aus der Datenbank.
+Ursprünglich war diese Methode in der Spezifikation enthalten, da
+bei der Spezifikation der Repositories generell
+vorgesehen war \emph{CRUD}-Operationen:
+\begin{itemize}
+    \item \emph{CREATE}
+    \item \emph{READ}
+    \item \emph{UPDATE}
+    \item \emph{CHANGE}
+\end{itemize}
+anzubieten.
+Allerdings wurde ein wissenschaftliches Thema nie alleine sondern immer nur im Verbund
+(mithilfe der \emph{getList()}-Methoden) benötigt.
+Somit lässt sich feststellen, dass der Versuch gewisse Patterns konsequent umzusetzen,
+in wenigen Fällen zu Unstimmigkeit mit der Spezifikation geführt hat.
+
+\textbf{UserRepository} Die neuen \emph{changeVerification()} und \emph{getVerification()}
+Methoden erlauben die Nutzervalidierung. Auch wenn diese Funktionalität in der Spezifikation nicht
+vergessen wurde, musste hier nachgearbeitet werden.
+In diesem Fall wurden die zwei genannten Methoden hinzugefügt um die Funktionalität zu implementieren.
+
+\subsubsection{global.transport}
+
+In der  Enumeration \textbf{Privilege} musste eine geringfügige Funktionalitätserweiterung vorgenommen werden.
+Es wurde die Methode \emph{getPrivilege()} hinzugefügt,
+um die Umwandlung von Datenbankspalten in das Modell der Businesslogik zu ermöglichen.
+Der Grund hierfür war in der Spezifikation im Vorhinein schwer zu antizipieren,
+und kann daher als ein erwartbarer Wandel im Entwicklungsprozess gewertet werden.
+
+Es ist ebenfalls aufgetreten, dass neue Repräsentationen benötigt wurden.
+\textbf{Recommendation} modelliert
+das Empfehlungsverhalten von Gutachtern.
+Die \textbf{Visibility}-Enumeration wurde hinzugefügt um die Sichtbarkeit eines
+Papers innerhalb einer Einreichung zu repräsentieren.
+
+Auch das Entfernen von Repräsentationen ist aufgetreten.
+Dies geschah zu Gunsten einer besseren Erweiterbarkeit der Anwendung, in diesem Fall um das dynamische Hinzufügen
+neuer \emph{CSS-Stylesheets} zu ermöglichen.
+Es wurde die \textbf{Style} Enumeration entfernt. Die Auswahl von Farbschemata des
+Systems basiert nun dynamisch auf den im Anwendungsverzeichnis existierenden zugehörigen
+CSS-Dateien.
+
+\subsection{Funktionalitäten und Leistungen}
 \localauthor{Johannes Garstenauer}
+
+Es wurde größtenteils darauf geachtet den, im Pflichtenheft definierten, Produktfunktionen treu zu bleiben.
+Dies ist der \textbf{LasEs}-Anwendung größtenteils gelungen.
+Vorgenommene Änderungen sind:
+\newline
+Das Weglassen bestimmter Wunschfunktionen, wie:
+\begin{itemize}
+    \item \textbf{/FW061/} Optional ist das Einfügen eines Avatarbildes, siehe /DW015/, bei der Registration.
+    \item \textbf{/FW062/} Weiterhin kann der Nutzer optional weitere Daten, wie in /FW240/ beschrieben, angeben.
+\end{itemize}
+In diesem Fall dienten die Änderungen der Übersichtlichkeit der Registrationsseite und der
+Verringerung des Arbeitsaufwandes in diesem Arbeitspaket.
+
+Eine weitere nennenswerte Änderung liegt in den Produktleistungen.
+Hier wurden die Ansprüche an die Pagination festgelegt:
+\begin{itemize}
+    \item \textbf{/L042/} Listen sind filterbar.
+    Eine Spalte kann also auf einen bestimmten Wert gefiltert werden.
+    \item \textbf{/L045/} Alle Listen sind nach ihren Spalten auf- oder absteigend sortierbar.
+\end{itemize}
+Diese Anforderungen beziehen sich auf alle Spalten der jeweiligen Pagination.
+Im Entwicklungsprozess ist klar geworden, dass das nicht im Sinne der Übersichtlichkeit
+und Nutzerfreundlichkeit des Systems ist.
+Daher sind nun nicht mehr alle Spalten einer Pagination filter- und sortierbar,
+sondern nurnoch diejenigen wo es Sinn ergibt.
+
+\subsection{Datenbankschema}
+\localauthor{Johannes Garstenauer}
+\newline
+Das spezifizierte Datenbankschema wurde grötenteils unverändert in die \emph{LasEs}-Anwendung
+übernommen.
+
+Die Änderungen betreffen die Ergänzung um einen Eintrag
+zum \emph{Look} des Systems.
+\begin{verbatim}
+    TABLE system:
+        css_theme VARCHAR(20)
+\end{verbatim}
+
+Weiterhin wurde eine \emph{View} eingeführt:
+\begin{verbatim}
+create view user_data as
+select u.id,
+       u.email_address,
+       u.firstname,
+       u.lastname,
+       u.title,
+       u.birthdate,
+       u.employer,
+       u.is_registered,
+       count(distinct s.id) as count_submissions,
+       (   case
+               when u.is_administrator then 'admin'
+               when exists(select * from member_of mo
+                    where mo.editor_id = u.id) then 'editor'
+               when exists(select * from reviewed_by rb
+                    where rb.reviewer_id = u.id) then 'reviewer'
+               else 'none'
+               end)  as user_role
+from "user" u
+         left JOIN submission s
+                   on u.id = s.author_id
+         left join co_authored ca
+                   on (u.id = ca.user_id and ca.submission_id = s.id)
+group by u.id;
+\end{verbatim}
+\textbf{user\_data} bietet einige für den Entwickler nützliche Zusatzinformationen
+über User des Systems an, wie:
+\begin{itemize}
+    \item die Gesamtanzahl von Einreichungen,
+    \item die höchste Rolle, welche der Nutzer im System innehat.
+\end{itemize}
+Die \emph{view} wurde eingeführt, nachdem diese während der Entwicklung mehrfach angefragt wurden.
+
+Letztlich wurde das Datenbankschema so erweitert, dass beim initialen Setup ein
+generischer Administrator als Nutzer hinzugefügt wird.
+\begin{verbatim}
+
+INSERT INTO "user"(id, email_address, is_administrator, firstname, lastname,
+                   is_registered, password_hash, password_salt)
+VALUES (-1, 'admin@example.com', TRUE, 'Administrator', 'Administrator', TRUE,
+                   'CWDkErZ4M1iW4LJjHB8kAA==', '7aj1fcaMrRpJrtS9ZNsIsQ==');
+
+INSERT INTO verification(id, is_verified)
+VALUES (-1, TRUE);
+\end{verbatim}
+
+\subsection{Facelets}
+\localauthor{Stefanie Gürster}
+
+\subsubsection{Composite Components}
+
+Neben der \emph{Pagination} wurden zusätzliche \emph{Composite Components} erstellt. Alle Komponenten: \emph{scientificForumTable, submissionTable} und \emph{userTable} verwenden eine \emph{Pagination} und wurden erstellt, da die einzelnen Tabellen an mehreren Stellen benötigt werden. Beispielsweise wird eine \emph{submissionTable} auf der Homepage, auf der Seite eines Forums und auf der Seite, welche die Suchergebnisse anzeigt, verwendet. Ähnlich geschieht dies bei den anderen Tabellen.
+
+Die Facelets wurden zusätzlich mit einer \emph{content.xhtml} ergänzt, welche als eine Art \emph{fall back} Seite fungiert. Sollten bei Änderungen der \emph{main.xhtml} Fehler auftreten wird als default eben dieses Facelet angezeigt.
+
+\subsection{Views}
+\localauthor{Stefanie Gürster}
+
+Im Allgemeinen wurden hier nur Änderungen unter dem Motiv der Benutzerfreundlichkeit vorgenommen. Das heißt beispielsweise, dass zusätzlicher Text oder kleinere Funktionalitäten mit Hilfe von Buttons hinzugefügt worden sind. Außerdem wurde die Funktionalität von einigen \emph{Paginations} in, wie oben beschrieben, \emph{Composite Components} ausgelagert.
+
+Änderungen, welche im oberen Teil zu den \emph{Backing Beans} bereits beschrieben wurden haben Teils kleine Auswirkungen auf das jeweilige Facelet. Diese werden aber dann hier nicht weiter erläutert, um Duplikation zu vermeiden.
+
+\textbf{errorPage.xhtml} Hier wurde noch ein zusätzlicher \emph{outputLink} hinzugefügt, der den \emph{Stack Trace} nur im \emph{developmentMode} ausklappen kann.
+
+\textbf{scientificForum.xhtml} Die Anleitung zum Erstellen eines Gutachtens wird nicht in einer \emph{textArea} angezeigt, sondern es erscheint beim Klicken des entsprechenden Buttons ein \emph{Dialog} mit den zugehörigen Informationen.
+
+\subsection{Bibliotheken}
+\localauthor{Stefanie Gürster}
+
+\textbf{Weld JUnit Extentions} Um Methoden, welche CDI benötigen, ebenfalls testen zu können, haben wir zusätzlich \emph{Weld JUnit Extentions}\footnote{\url{https://mvnrepository.com/artifact/org.jboss.weld/weld-junit-parent}} verwendet.

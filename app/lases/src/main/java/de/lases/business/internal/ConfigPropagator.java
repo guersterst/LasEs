@@ -5,7 +5,6 @@ import de.lases.persistence.exception.InvalidFieldsException;
 import de.lases.persistence.internal.ConfigReader;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import org.primefaces.component.log.Log;
 
 import java.util.logging.Logger;
 

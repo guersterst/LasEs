@@ -1,8 +1,7 @@
-package de.lases.persistence.repository.LOL;
+package de.lases.persistence.repository;
 
 import de.lases.global.transport.FileDTO;
 import de.lases.persistence.internal.ConfigReader;
-import de.lases.persistence.repository.ConnectionPool;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.context.SessionScoped;
 import org.jboss.weld.junit5.WeldInitiator;
@@ -48,7 +47,7 @@ class ConnectionPoolTest {
     void startConnectionPool() throws NoSuchMethodException {
         FileDTO file = new FileDTO();
 
-        Class clazz = ConnectionPoolTest.class;
+        Class<ConnectionPoolTest> clazz = ConnectionPoolTest.class;
         InputStream inputStream = clazz.getResourceAsStream("/config.properties");
 
         file.setInputStream(inputStream);

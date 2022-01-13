@@ -2,22 +2,26 @@ package de.lases.business.service;
 
 import de.lases.global.transport.FileDTO;
 import de.lases.global.transport.Paper;
+import de.lases.global.transport.UIMessage;
 import de.lases.persistence.internal.ConfigReader;
 import de.lases.persistence.repository.ConnectionPool;
 import de.lases.persistence.repository.PaperRepository;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.enterprise.event.Event;
 import org.jboss.weld.junit5.WeldInitiator;
 import org.jboss.weld.junit5.WeldJunit5Extension;
 import org.jboss.weld.junit5.WeldSetup;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.InputStream;
-import java.time.LocalDateTime;
+import java.lang.reflect.Field;
+import java.util.PropertyResourceBundle;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.eq;
@@ -29,7 +33,7 @@ import static org.mockito.Mockito.mockStatic;
  */
 @ExtendWith(MockitoExtension.class)
 @ExtendWith(WeldJunit5Extension.class)
-public class PaperServiceTest {
+public class ServicePaperTest {
 
     @WeldSetup
     public WeldInitiator weld = WeldInitiator.from(ConnectionPool.class, ConfigReader.class, ConfigReader.class)
@@ -44,7 +48,7 @@ public class PaperServiceTest {
     void startConnectionPool() {
         FileDTO file = new FileDTO();
 
-        Class clazz = PaperServiceTest.class;
+        Class clazz = ServicePaperTest.class;
         InputStream inputStream = clazz.getResourceAsStream("/config.properties");
 
         file.setInputStream(inputStream);
@@ -80,7 +84,7 @@ public class PaperServiceTest {
 
 
     @BeforeAll
-    static void init() {
+    static void init() throws NoSuchFieldException, IllegalAccessException {
 
         // Mock repositories and initialize services.
         paperRepoMocked = mockStatic(PaperRepository.class);
@@ -89,6 +93,16 @@ public class PaperServiceTest {
         // Mock get to return a paper or file if the ids are correct.
         paperRepoMocked.when(() -> PaperRepository.get(eq(paper), any(Transaction.class))).thenReturn(paper);
         paperRepoMocked.when(() -> PaperRepository.getPDF(eq(paper), any(Transaction.class))).thenReturn(fileDTO);
+
+        PropertyResourceBundle bundle = Mockito.mock(PropertyResourceBundle.class);
+        Field bundleField = paperService.getClass().getDeclaredField("resourceBundle");
+        bundleField.setAccessible(true);
+        bundleField.set(paperService, bundle);
+
+        Event<UIMessage> uiMessageEvent = Mockito.mock(Event.class);
+        Field uiMessageField = paperService.getClass().getDeclaredField("uiMessageEvent");
+        uiMessageField.setAccessible(true);
+        uiMessageField.set(paperService, uiMessageEvent);
     }
 
     @AfterAll

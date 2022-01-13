@@ -1,21 +1,19 @@
 package de.lases.persistence.repository;
 
-import de.lases.business.service.SubmissionService;
-import de.lases.global.transport.*;
-import de.lases.persistence.exception.*;
+import de.lases.global.transport.AcceptanceStatus;
+import de.lases.global.transport.ReviewedBy;
+import de.lases.global.transport.Submission;
+import de.lases.global.transport.User;
+import de.lases.persistence.exception.DataNotWrittenException;
+import de.lases.persistence.exception.DatasourceQueryFailedException;
+import de.lases.persistence.exception.InvalidFieldsException;
+import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.util.DatasourceUtil;
 import de.lases.persistence.util.TransientSQLExceptionChecker;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.LocalDateTime;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
-
-import java.sql.*;
 import java.util.logging.Logger;
 
 /**

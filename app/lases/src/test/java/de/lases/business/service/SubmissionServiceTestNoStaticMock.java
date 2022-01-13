@@ -1,19 +1,25 @@
 package de.lases.business.service;
 
+import de.lases.business.util.EmailUtil;
 import de.lases.global.transport.*;
 import de.lases.persistence.internal.ConfigReader;
 import de.lases.persistence.repository.ConnectionPool;
-import de.lases.persistence.repository.SubmissionRepository;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.enterprise.event.Event;
+import jakarta.faces.context.FacesContext;
 import org.jboss.weld.junit5.WeldInitiator;
 import org.jboss.weld.junit5.WeldJunit5Extension;
 import org.jboss.weld.junit5.WeldSetup;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,11 +27,24 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PropertyResourceBundle;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(MockitoExtension.class)
 @ExtendWith(WeldJunit5Extension.class)
-class SubmissionServiceTestNoMock {
+class SubmissionServiceTestNoStaticMock {
+
+    private static PropertyResourceBundle bundle;
+
+    @Mock
+    private FacesContext facesContext;
+
+    static MockedStatic<EmailUtil> emailUtilMockedStatic = Mockito.mockStatic(EmailUtil.class);
+
+    private PropertyResourceBundle resourceBundle;
+
+    private Event<UIMessage> uiMessageEvent;
 
     @WeldSetup
     public WeldInitiator weld = WeldInitiator.from(ConnectionPool.class, ConfigReader.class, ConfigReader.class)
@@ -36,12 +55,19 @@ class SubmissionServiceTestNoMock {
     private static FileDTO fileDTO;
 
     @BeforeAll
+    static void initMocks() {
+        bundle = Mockito.mock(PropertyResourceBundle.class);
+        Mockito.when(bundle.getString(Mockito.anyString())).thenReturn("");
+    }
+
+    @BeforeAll
     static void initPaper() {
         paper = new Paper();
         paper.setVisible(false);
         paper.setUploadTime(LocalDateTime.now());
         fileDTO = new FileDTO();
         fileDTO.setFile(new byte[]{});
+
     }
 
     /*
@@ -52,7 +78,7 @@ class SubmissionServiceTestNoMock {
     void startConnectionPool() {
         FileDTO file = new FileDTO();
 
-        Class clazz = SubmissionServiceTestNoMock.class;
+        Class<SubmissionServiceTestNoStaticMock> clazz = SubmissionServiceTestNoStaticMock.class;
         InputStream inputStream = clazz.getResourceAsStream("/config.properties");
 
         file.setInputStream(inputStream);
@@ -71,7 +97,7 @@ class SubmissionServiceTestNoMock {
      * @author Sebastian Vogt
      */
     @Test
-    void testAddBasic() throws SQLException {
+    void testAddBasic() throws SQLException, NoSuchFieldException, IllegalAccessException {
         Submission submission = new Submission();
         submission.setScientificForumId(1);
         submission.setAuthorId(4);
@@ -81,6 +107,12 @@ class SubmissionServiceTestNoMock {
         submission.setSubmissionTime(LocalDateTime.now());
 
         SubmissionService submissionService = new SubmissionService();
+        Field bundleField = submissionService.getClass().getDeclaredField("resourceBundle");
+        bundleField.setAccessible(true);
+        bundleField.set(submissionService, bundle);
+        Field contextField = submissionService.getClass().getDeclaredField("facesContext");
+        contextField.setAccessible(true);
+        contextField.set(submissionService, facesContext);
 
         Transaction transaction = new Transaction();
         Connection conn = transaction.getConnection();
@@ -112,7 +144,7 @@ class SubmissionServiceTestNoMock {
      * @author Sebastian Vogt
      */
     @Test
-    void testAddWithExistentCoAuthors() throws SQLException {
+    void testAddWithExistentCoAuthors() throws SQLException, NoSuchFieldException, IllegalAccessException {
         Transaction transaction = new Transaction();
 
         try {
@@ -127,8 +159,13 @@ class SubmissionServiceTestNoMock {
             User user = new User();
             // TODO hier koennte man den user adden, dann ist es nicht vom zustand der Datenbank abhaengig
             user.setEmailAddress("michael@gmail.com");
+            user.setFirstName("Michael");
+            user.setLastName("Mittermaier");
 
             SubmissionService submissionService = new SubmissionService();
+            Field bundleField = submissionService.getClass().getDeclaredField("resourceBundle");
+            bundleField.setAccessible(true);
+            bundleField.set(submissionService, bundle);
 
             Connection conn = transaction.getConnection();
             PreparedStatement stmt = conn.prepareStatement(
@@ -181,6 +218,9 @@ class SubmissionServiceTestNoMock {
             user.setLastName("Hanslmaier");
 
             SubmissionService submissionService = new SubmissionService();
+            Field bundleField = submissionService.getClass().getDeclaredField("resourceBundle");
+            bundleField.setAccessible(true);
+            bundleField.set(submissionService, bundle);
 
             Connection conn = transaction.getConnection();
             PreparedStatement stmt = conn.prepareStatement(
@@ -204,30 +244,46 @@ class SubmissionServiceTestNoMock {
 
             assertEquals(1, j - i);
             submissionService.remove(submission);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
         } finally {
             transaction.abort();
         }
     }
 
+    /**
+     * @author Stefanie Gürster
+     */
     @Test
-    @Disabled
-    void testAddReviewer() throws SQLException {
+    void testAddReviewer() throws SQLException, NoSuchFieldException, IllegalAccessException {
         User user = new User();
         user.setEmailAddress("schicho@fim.uni.passau.de");
 
         User reviewer = new User();
-        reviewer.setId(420);
+        reviewer.setId(30);
 
         List<User> reviewerList = new ArrayList<>();
         reviewerList.add(reviewer);
 
         ReviewedBy reviewedBy = new ReviewedBy();
-        reviewedBy.setSubmissionId(5);
+        reviewedBy.setSubmissionId(742);
         reviewedBy.setReviewerId(user.getId());
         reviewedBy.setTimestampDeadline(LocalDateTime.now());
         reviewedBy.setHasAccepted(AcceptanceStatus.NO_DECISION);
 
         SubmissionService submissionService = new SubmissionService();
+        
+        resourceBundle = Mockito.mock(PropertyResourceBundle.class);
+        Mockito.when(resourceBundle.getString(Mockito.anyString())).thenReturn("a greicharts");
+        submissionService = new SubmissionService();
+        Field bundleField = submissionService.getClass().getDeclaredField("resourceBundle");
+        bundleField.setAccessible(true);
+        bundleField.set(submissionService, resourceBundle);
+
+        uiMessageEvent = Mockito.mock(Event.class);
+        Field eventField = submissionService.getClass().getDeclaredField("uiMessageEvent");
+        eventField.setAccessible(true);
+        eventField.set(submissionService, uiMessageEvent);
 
         Transaction transaction = new Transaction();
         Connection connection = transaction.getConnection();
@@ -250,6 +306,11 @@ class SubmissionServiceTestNoMock {
         }
 
         assertEquals(i, j - 1);
+
+        Submission submission = new Submission();
+        submission.setId(reviewedBy.getSubmissionId());
+
+        submissionService.removeReviewer(submission, user);
         transaction.abort();
     }
 

@@ -19,6 +19,7 @@ import java.io.InputStream;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
+ * !!! THESE TESTS NEED TO BE RUN SEPARATELY !!!
  * @author Sebastian Vogt
  */
 @ExtendWith(WeldJunit5Extension.class)
@@ -50,7 +51,7 @@ class SystemSettingsRepositoryTest {
     void startConnectionPool() {
         FileDTO file = new FileDTO();
 
-        Class clazz = TransactionTest.class;
+        Class<TransactionTest> clazz = TransactionTest.class;
         InputStream inputStream = clazz.getResourceAsStream("/config.properties");
 
         file.setInputStream(inputStream);

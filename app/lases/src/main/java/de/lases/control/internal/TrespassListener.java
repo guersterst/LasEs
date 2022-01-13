@@ -88,12 +88,12 @@ public class TrespassListener implements PhaseListener {
             // Illegal access to a site which is visible to registered users only.
             logger.warning("An unregistered user tried illegally access "
                     + "a page using the url: " + viewId);
-            navigateToLogin(fctx);
+            navigateToLogin(fctx, propertyResourceBundle.getString("unauthenticatedAccess"));
         } else if (!user.isVerified()) {
 
             // Illegal access by user without verified email address.
             logger.warning("An unverified user tried illegally access a page using the url: " + viewId);
-            throw new IllegalAccessException(propertyResourceBundle.getString("unverified"));
+            navigateToLogin(fctx, propertyResourceBundle.getString("unverified"));
         } else if (!user.getPrivileges().contains(Privilege.EDITOR) && !user.isAdmin() && viewId.contains("/editor/")) {
 
             // Illegal access to a site which is visible to editors and admins only.
@@ -114,9 +114,10 @@ public class TrespassListener implements PhaseListener {
      * accessing restricted sites using a {@code FacesMessage}.
      *
      * @param fctx The current instance of the faces-context.
+     * @param message The message to be displayed to the user.
      */
-    private void navigateToLogin(FacesContext fctx) {
-        setErrorMessage(fctx, propertyResourceBundle.getString("unauthenticatedAccess"));
+    private void navigateToLogin(FacesContext fctx, String message) {
+        setErrorMessage(fctx, message);
 
         NavigationHandler nav = fctx.getApplication().getNavigationHandler();
         nav.handleNavigation(fctx, null, "/views/anonymous/welcome.xhtml?faces-redirect=true");

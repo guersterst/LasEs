@@ -77,13 +77,11 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-inline</artifactId>
             <version>${mockito.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
             <version>${mockito.version}</version>
-            <scope>test</scope>
         </dependency>
 
         <!-- Selenium 4.0.0 Dependencies -->
@@ -118,7 +116,6 @@
             <groupId>org.jboss.weld</groupId>
             <artifactId>weld-junit5</artifactId>
             <version>${weld-junit5.version}</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 
