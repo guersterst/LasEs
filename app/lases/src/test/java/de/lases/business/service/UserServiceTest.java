@@ -41,7 +41,7 @@ public class UserServiceTest {
     void startConnectionPool() {
         FileDTO file = new FileDTO();
 
-        Class clazz = UserServiceTestNoMocks.class;
+        Class clazz = UserServiceTest.class;
         InputStream inputStream = clazz.getResourceAsStream("/config.properties");
 
         file.setInputStream(inputStream);
