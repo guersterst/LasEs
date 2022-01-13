@@ -5,8 +5,13 @@ import de.lases.global.transport.SortOrder;
 import de.lases.global.transport.User;
 import de.lases.persistence.exception.DataNotCompleteException;
 import de.lases.persistence.internal.ConfigReader;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.context.SessionScoped;
 import jakarta.enterprise.inject.Instance;
 import jakarta.enterprise.inject.spi.CDI;
+import org.jboss.weld.junit5.WeldInitiator;
+import org.jboss.weld.junit5.WeldJunit5Extension;
+import org.jboss.weld.junit5.WeldSetup;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,6 +30,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+/**
+ * @author Johann Schicho
+ */
 @ExtendWith(MockitoExtension.class)
 public class UserRepositoryGetListTest {
 
@@ -69,7 +77,7 @@ public class UserRepositoryGetListTest {
     }
 
     @Test
-    void testGetListSortByFirstname() throws NoSuchFieldException, IllegalAccessException, DataNotCompleteException {
+    void testGetListSortByFirstname() throws DataNotCompleteException {
         ResultListParameters params = new ResultListParameters();
         params.setPageNo(1);
         params.setSortColumn("firstname");
@@ -87,7 +95,7 @@ public class UserRepositoryGetListTest {
 
         try {
             // Return default pagination size
-            when(mockConfig.getProperty("MAX_PAGINATION_LENGTH")).thenReturn("25");
+            when(mockConfig.getProperty("MAX_PAGINATION_LIST_LENGTH")).thenReturn("25");
 
             // Mock CDI
             MockedStatic<CDI> cdiMockedStatic = mockStatic(CDI.class);
