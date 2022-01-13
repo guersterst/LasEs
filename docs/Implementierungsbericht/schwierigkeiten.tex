@@ -15,11 +15,11 @@ Diese Arbeitspakete benötigten während der Implementierungsphase keine weitere
 
 \subsubsection{Arbeitspaket Homepage}
 
-Hier wurden acht Stunden mehr benötigt, als ursprünglich angenommen. Grund dafür war ähnlich wie bei \emph{NewSubmission}. Die Übersichtsseite sammelt Informationen aus vielen Ecken des Systems und stellt diese dar, dafür muss natürlich auch viele Code geschrieben werden. Den Aufwand, besonders während des ersten Milestones, haben wir hier unterschätzt.
+Hier wurden acht Stunden mehr benötigt, als ursprünglich angenommen. Grund dafür war ähnlich wie bei \emph{NewSubmission}. Die Übersichtsseite sammelt Informationen aus vielen Ecken des Systems und stellt diese dar, dafür musste viele Code geschrieben werden. Außerdem wurde hier zum ersten mal die Paginierung implementiert, was viele Rückfragen im Team und dadurch extra Zeit benötigte. Im Rahmen des Implementierungszeitraums wurde durch die gesammelte Erfahrung das Implementieren dieser einfacher. Den Aufwand, besonders während des ersten Milestones, haben wir hier unterschätzt.
 
 \subsubsection{Arbeitspaket Submission ohne Gutachten}
 
-Wie der Name schon impliziert, wurde hier bereits ein größeres Arbeitspaket aufgespalten. Die Seite einer Einreichung ist das Kernstück der Anwendung und umfasst damit viel Funktionalität. Der große Aufwand war uns bewusst, dennoch wurden zehn Stunden mehr benötigt als geplant. Grund hier war neben den bereits genannten Gründen natürlich auch Startschwierigkeiten mit  \emph{Jakarta Server Faces}. Der Projektumfang ist wesentlich angestiegen und somit auch die Anforderungen an den Programmierer, sich tiefer mit der Technologie auseinander zu setzen.
+Wie der Name schon impliziert, wurde hier bereits ein größeres Arbeitspaket aufgespalten. Die Seite einer Einreichung ist das Kernstück der Anwendung und umfasst damit viel Funktionalität. Der große Aufwand war uns bewusst, dennoch wurden zehn Stunden mehr benötigt als geplant. Grund hier war neben den bereits genannten Gründen natürlich auch Startschwierigkeiten mit \emph{Jakarta Server Faces}. Der Projektumfang ist wesentlich angestiegen und somit auch die Anforderungen an den Programmierer, sich tiefer mit der Technologie auseinander zu setzen.
 
 \subsubsection{Arbeitspaket Profile}
 
@@ -39,7 +39,7 @@ Systemarchitektur und der bereits vorhandenen Code Infrastruktur.
 \subsubsection{JSF}
 
 \emph{Jarkarta Server Faces} stellte häufig größere Herausforderungen. Besonders bei der Verwendung von \emph{Custom Components} wurde oftmals mehr Zeit benötigt. Dazu gehört unter anderem die \emph{Pagination}. Wobei der Prototyp bereits bestand und lauffähig war, müssen im Einsatz mehrere Objekte durch die \emph{@PostConstruct init()} Methode und zusätzlich einer \emph{f:viewAction onLoad()} Methode initialisiert werden.
-Die Komplexität davon wurde im voraus nicht richtig eingeschätzt und führte damit zu erheblichen Verlängerungen in Arbeitspaketen, in welchen diese verwendet wurde.
+Die Komplexität davon wurde im Voraus nicht richtig eingeschätzt und führte damit zu erheblichen Verlängerungen in Arbeitspaketen, in welchen diese verwendet wurde.
 
 \subsubsection{JDBC}
 
@@ -47,7 +47,9 @@ Die Verbindung zur Datenbank wurde nach Voraussetzung mit \emph{Java Database Co
 
 Anfangs führte das zu vielen \emph{Leaks} an Datenbankverbindungen, die nicht mehr ordnungsgemäß zurückgegeben wurden. Gelöst wurde das Problem durch besseres \emph{Logging} der Datenbankverbindungen und Verwendung von \emph{Try-with-Ressource} Codeblöcken. Das benötigte zusätzliche Zeit zu debuggen und implementieren und hat die Arbeitszeit bei vielen Arbeitspaketen gestreckt.\newline
 
-Ein weiteres Problem war das \emph{Error-Handling} von SQL Errors. \emph{PostgreSQL} und \emph{JDBC} geben hier nur numerische Fehlercodes zurück und keine direkte Information, ob es sich um eine \emph{Checked- oder Unchecked Exception} handelt. Hier wurde ein Prototyp von Sebastian Vogt entwickelt, allerdings zuerst nur vereinzelt von ihm umgesetzt. Es benötigte anschließend einen gemeinsamen Einsatz aller Teammitglieder alle Datenbankzugriffsmethoden mit der neuen Fehlerbehandlung auszustatten.
+Ein weiteres Problem war das \emph{Error-Handling} von SQL Errors. \emph{PostgreSQL} und \emph{JDBC} geben hier nur numerische Fehlercodes zurück und keine direkte Information, ob es sich um eine \emph{Checked- oder Unchecked Exception} handelt. Hier wurde ein Prototyp von Sebastian Vogt entwickelt, allerdings zuerst nur vereinzelt von ihm umgesetzt. Es benötigte anschließend einen gemeinsamen Einsatz aller Teammitglieder alle Datenbankzugriffsmethoden mit der neuen Fehlerbehandlung auszustatten. \newline
+
+JDBC benötigt die manuelle Formulierung von \emph{SQL Statements}. Für die Implementierung der Paginierung mit den zusätzlich filterbaren Spalten ist eine dynamische Generierung des \emph{SQL Statements} nötig. Dadurch wurde der Code viel länger und komplizierter als ursprünglich angenommen. Dadurch wurde in vielen Arbeitspaketen die Zeit rein durch das Schreiben und \emph{R´efactoren} der \emph{SQL Statements} gestreckt.
 
 \subsubsection{Fatale Datenbankfehler}
 
@@ -65,7 +67,7 @@ Viele Testfälle basieren auf Mocking mit der Softwarebibliothek \emph{Mockito}.
 Ein weiteres Problem waren \emph{"Phantom Bugs"}. Mockito injiziert zum Mocking \emph{Byte Code} direkt in den auszuführenden Code. Das hat zur Folge, dass in Testfunktionen in welchen Mockito nur lokal verwendet wird, auch
 in anderen Funktionen der gleichen Klasse zur Ausführung von gemockten Code führt.
 
-Das führte zu langen Suchen nach Bugs, in denen sogar im Debug Modus anderer Code ausgeführt wurde. Anschließend gelöst wurde das Problem durch auftrennen des Codes in unterschiedliche Testklassen, mit oder ohne Mockito.\newline
+Das führte zu langen Suchen nach Bugs, in denen sogar im Debug Modus anderer Code ausgeführt wurde. Anschließend gelöst wurde das Problem durch Auftrennen des Codes in unterschiedliche Testklassen, mit oder ohne Mockito.\newline
 
 Die Abhängigkeit von \emph{CDI} in Tests stellte ein weiteres Problem dar. Grundsätzlich wird es im Produktiv Code durch den \emph{Application Server} zur Verfügung gestellt. Wurde nun aber versucht ein von \emph{CDI} abhängige Methode in einem Test aufzurufen, sind diese immer fehlgeschlagen.
 
