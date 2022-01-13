@@ -77,7 +77,7 @@ public class EmailSender {
             throw new IllegalArgumentException("Invalid email address", e);
         } catch (SendFailedException e) {
             // Could not send the email to one or more recipients
-            logger.severe("Sending email failed (recoverable): " + e.getMessage());
+            logger.warning("Sending email failed (recoverable): " + e.getMessage());
             String[] invalidAddresses = Arrays.stream(e.getInvalidAddresses()).map(Address::toString)
                     .toArray(String[]::new);
             throw new EmailTransmissionFailedException("Sending email failed", e, invalidAddresses);

@@ -14,6 +14,7 @@ public class LogsNotWritableException extends RuntimeException {
      * Constructs an exception.
      */
     public LogsNotWritableException() {
+        super();
     }
 
     /**

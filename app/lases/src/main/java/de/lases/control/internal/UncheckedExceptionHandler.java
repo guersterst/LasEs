@@ -7,6 +7,7 @@ import jakarta.el.ELException;
 import jakarta.enterprise.inject.spi.CDI;
 import jakarta.faces.FacesException;
 import jakarta.faces.application.NavigationHandler;
+import jakarta.faces.application.ViewExpiredException;
 import jakarta.faces.context.ExceptionHandler;
 import jakarta.faces.context.ExceptionHandlerWrapper;
 import jakarta.faces.context.FacesContext;
@@ -77,6 +78,10 @@ public class UncheckedExceptionHandler extends ExceptionHandlerWrapper {
 
                 // Handle 404 exceptions.
                 errorMessage = new ErrorMessage(bundle.getString("error.404"),
+                        throwable.getMessage() + "\n" +
+                                Arrays.toString(throwable.getStackTrace()));
+            } else if (throwable instanceof ViewExpiredException) {
+                errorMessage = new ErrorMessage(bundle.getString("error.viewExpired"),
                         throwable.getMessage() + "\n" +
                                 Arrays.toString(throwable.getStackTrace()));
             } else {

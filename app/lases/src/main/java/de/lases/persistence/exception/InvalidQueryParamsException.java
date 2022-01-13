@@ -15,6 +15,7 @@ public class InvalidQueryParamsException extends IllegalArgumentException {
      * Constructs an exception.
      */
     public InvalidQueryParamsException() {
+        super();
     }
 
     /**

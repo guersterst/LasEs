@@ -22,12 +22,11 @@
                         <h:form id="register-frm" styleClass="card-body">
 
                             <!-- Password -->
-                            <div class="form-group">
+                            <div class="form-group" title="#{help['register.password']}">
                                 <h:outputLabel for="password-iscrt" value="#{labels['password']}"
                                                styleClass="form-label"/>
                                 <h:inputSecret id="password-iscrt"
-                                               value="#{newUserBacking.newUser.passwordNotHashed}"
-                                               title="#{help.password}" required="true"
+                                               value="#{newUserBacking.newUser.passwordNotHashed}" required="true"
                                                requiredMessage="#{message.passwordNeeded}"
                                                styleClass="form-control">
                                     <f:validator for="password-iscrt" validatorId="passwordValidator"/>
@@ -37,7 +36,7 @@
                             <hr/>
 
                             <!-- Title -->
-                            <div class="form-group">
+                            <div class="form-group" title="#{help['register.title']}">
                                 <h:outputLabel for="title-itxt" value="#{labels['titleInput']}"
                                                styleClass="form-label"/>
                                 <h:inputText id="title-itxt" value="#{newUserBacking.newUser.title}"
@@ -47,11 +46,11 @@
                             <hr/>
 
                             <!-- First name -->
-                            <div class="form-group">
+                            <div class="form-group" title="#{help['register.firstName']}">
                                 <h:outputLabel for="first-name-itxt" value="#{labels['firstName']}"
                                                styleClass="form-label"/>
                                 <h:inputText id="first-name-itxt" value="#{newUserBacking.newUser.firstName}"
-                                             title="#{help.firstName}" required="true"
+                                             required="true"
                                              requiredMessage="#{message.firstNameRequired}"
                                              maxlength="#{Const.FIRST_NAME_MAX}"
                                              styleClass="form-control"/>
@@ -60,11 +59,11 @@
                             <hr/>
 
                             <!-- Last Name -->
-                            <div class="form-group">
+                            <div class="form-group" title="#{help['register.lastName']}">
                                 <h:outputLabel for="last-name-itxt" value="#{labels['lastName']}"
                                                styleClass="form-label"/>
                                 <h:inputText id="last-name-itxt" value="#{newUserBacking.newUser.lastName}"
-                                             title="#{help.lastName}" required="true"
+                                             required="true"
                                              requiredMessage="#{message.lastNameRequired}"
                                              maxlength="#{Const.LAST_NAME_MAX}"
                                              styleClass="form-control"/>
@@ -73,11 +72,11 @@
                             <hr/>
 
                             <!-- Email -->
-                            <div class="form-group">
+                            <div class="form-group" title="#{help['register.email']}">
                                 <h:outputLabel for="email-itxt" value="#{labels['email']}"
                                                styleClass="form-label"/>
                                 <h:inputText id="email-itxt" value="#{newUserBacking.newUser.emailAddress}"
-                                             title="#{help.email}" required="true"
+                                             required="true"
                                              requiredMessage="#{message.emailRequired}"
                                              maxlength="#{Const.EMAIL_MAX}"
                                              styleClass="form-control">
@@ -90,7 +89,7 @@
                             <hr/>
 
                             <!-- Admin checkbox -->
-                            <div class="form-group">
+                            <div class="form-group" title="#{help['newUser.grantAdminRights']}">
                                 <h:outputLabel for="is-admin-cbx" value="#{labels['newUser.grantAdminRights']}"
                                                styleClass="form-label"/>
                                 <br/>
@@ -108,8 +107,8 @@
                             <hr/>
                             <!-- Abort link -->
                             <div class="form-group">
-                                <h:link id="abort-lnk" value="#{labels.welcomeLink}"
-                                        outcome="/views/editor/userList" title="#{help.welcomePage}"
+                                <h:link id="abort-lnk" value="#{labels['newUser.abort']}"
+                                        outcome="/views/admin/administration" title="#{help['newUser.abort']}"
                                         styleClass="btn btn-secondary"/>
                             </div>
                         </h:form>

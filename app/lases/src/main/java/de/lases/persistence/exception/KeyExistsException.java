@@ -15,6 +15,7 @@ public class KeyExistsException extends Exception {
      * Constructs an exception.
      */
     public KeyExistsException() {
+        super();
     }
 
     /**

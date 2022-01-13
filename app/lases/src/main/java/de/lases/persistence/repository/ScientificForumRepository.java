@@ -25,19 +25,14 @@ public class ScientificForumRepository {
     private static final Logger logger = Logger.getLogger(ScientificForumRepository.class.getName());
 
     /**
-     * Takes a scientific forum dto that is filled with a valid id or a valid
-     * name and returns a fully filled scientific forum dto.
+     * Takes a scientific forum dto that is filled with a valid id and returns a fully filled scientific forum dto.
      *
-     * @param scientificForum A {@code ScientificForum} dto that must be filled
-     *                        with a valid id or name.
+     * @param scientificForum A {@code ScientificForum} dto that must be filled with a valid id.
      * @param transaction     The transaction to use.
      * @return A fully filled {@code ScientificForum} dto.
-     * @throws NotFoundException              If there is no scientific forum with the
-     *                                        provided id or name.
-     * @throws InvalidFieldsException         If both name and id are provided, but they
-     *                                        belong to two different scientific forums.
-     * @throws DatasourceQueryFailedException If the datasource cannot be
-     *                                        queried.
+     * @throws NotFoundException              If there is no scientific forum with the provided id.
+     * @throws DatasourceQueryFailedException If the datasource cannot be queried.
+     * @author Thomas Kirz
      */
     public static ScientificForum get(ScientificForum scientificForum,
                                       Transaction transaction)
@@ -66,6 +61,7 @@ public class ScientificForumRepository {
                 throw new NotFoundException("No scientific forum with id " + scientificForum.getId());
             }
         } catch (SQLException e) {
+            DatasourceUtil.logSQLException(e, logger);
             throw new DatasourceQueryFailedException(e.getMessage(), e);
         }
 

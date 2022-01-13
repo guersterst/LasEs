@@ -22,7 +22,7 @@
                         <h:form id="register-frm" styleClass="card-body">
 
                             <!-- Title -->
-                            <div class="form-group">
+                            <div class="form-group" title="#{help['register.title']}">
                                 <h:outputLabel for="title-itxt" value="#{labels['titleInput']}"
                                                styleClass="form-label"/>
                                 <h:inputText id="title-itxt" value="#{registrationBacking.newUser.title}"
@@ -32,12 +32,11 @@
                             <hr/>
 
                             <!-- First name -->
-                            <div class="form-group">
+                            <div class="form-group" title="#{help['register.firstName']}">
                                 <h:outputLabel for="first-name-itxt" value="#{labels['firstName']}"
                                                styleClass="form-label"/>
                                 <h:inputText id="first-name-itxt"
-                                             value="#{registrationBacking.newUser.firstName}"
-                                             title="#{help.firstName}" required="true"
+                                             value="#{registrationBacking.newUser.firstName}" required="true"
                                              requiredMessage="#{message.firstNameRequired}"
                                              maxlength="#{Const.FIRST_NAME_MAX}"
                                              styleClass="form-control"/>
@@ -46,11 +45,11 @@
                             <hr/>
 
                             <!-- Last Name -->
-                            <div class="form-group">
+                            <div class="form-group" title="#{help['register.lastName']}">
                                 <h:outputLabel for="last-name-itxt" value="#{labels['lastName']}"
                                                styleClass="form-label"/>
                                 <h:inputText id="last-name-itxt" value="#{registrationBacking.newUser.lastName}"
-                                             title="#{help.lastName}" required="true"
+                                             required="true"
                                              requiredMessage="#{message.lastNameRequired}"
                                              maxlength="#{Const.LAST_NAME_MAX}"
                                              styleClass="form-control"/>
@@ -59,11 +58,11 @@
                             <hr/>
 
                             <!-- Email -->
-                            <div class="form-group">
+                            <div class="form-group" title="#{help['register.email']}">
                                 <h:outputLabel for="email-itxt" value="#{labels['email']}"
                                                styleClass="form-label"/>
                                 <h:inputText id="email-itxt" value="#{registrationBacking.newUser.emailAddress}"
-                                             title="#{help.email}" required="true"
+                                             required="true"
                                              requiredMessage="#{message.emailRequired}"
                                              maxlength="#{Const.EMAIL_MAX}"
                                              styleClass="form-control">
@@ -76,11 +75,12 @@
                             <hr/>
 
                             <!-- Password -->
-                            <div class="form-group">
-                                <h:outputLabel for="password-iscrt" value="#{labels['password']}" styleClass="form-label"/>
+                            <div class="form-group" title="#{help['register.password']}">
+                                <h:outputLabel for="password-iscrt" value="#{labels['password']}"
+                                               styleClass="form-label"/>
                                 <h:inputSecret id="password-iscrt"
                                                value="#{registrationBacking.newUser.passwordNotHashed}"
-                                               title="#{help.password}" required="true"
+                                               required="true"
                                                requiredMessage="#{message.passwordNeeded}"
                                                styleClass="form-control">
                                     <f:validator for="password-iscrt" validatorId="passwordValidator"/>
@@ -99,7 +99,7 @@
                             <!-- Login link -->
                             <div class="form-group">
                                 <h:link id="welcomepage-lnk" value="#{labels.welcomeLink}"
-                                        outcome="/views/anonymous/welcome" title="#{help.welcomePage}"
+                                        outcome="/views/anonymous/welcome" title="#{help['register.welcomePage']}"
                                         styleClass="btn btn-secondary"/>
                             </div>
 

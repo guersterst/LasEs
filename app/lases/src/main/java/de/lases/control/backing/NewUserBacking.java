@@ -1,7 +1,6 @@
 package de.lases.control.backing;
 
 import de.lases.business.service.RegistrationService;
-import de.lases.control.internal.SessionInformation;
 import de.lases.global.transport.User;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
@@ -17,9 +16,6 @@ public class NewUserBacking {
 
     @Inject
     private RegistrationService registrationService;
-
-    @Inject
-    private SessionInformation sessionInformation;
 
     private User newUser;
 
@@ -37,8 +33,8 @@ public class NewUserBacking {
      * @return Go to the user list.
      */
     public String saveUser() {
-        if (registrationService.registerByAdmin(newUser) != null) {
-            return "/views/editor/userList";
+        if ((newUser = registrationService.registerByAdmin(newUser)) != null) {
+            return "/views/authenticated/profile?faces-redirect=true&id=" + newUser.getId();
         } else {
             return null;
         }
