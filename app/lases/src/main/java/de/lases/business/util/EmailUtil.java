@@ -88,7 +88,7 @@ public class EmailUtil {
     }
 
     /**
-     * Generates a URL especially for a submission.
+     * Generates a URL specific to a submission.
      *
      * @param submission The submission the link has to navigate to.
      * @param facesContext The current faces context.
