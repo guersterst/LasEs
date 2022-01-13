@@ -4,7 +4,6 @@ import de.lases.business.util.EmailUtil;
 import de.lases.global.transport.*;
 import de.lases.persistence.internal.ConfigReader;
 import de.lases.persistence.repository.ConnectionPool;
-import de.lases.persistence.repository.SubmissionRepository;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.context.SessionScoped;
@@ -34,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 @ExtendWith(WeldJunit5Extension.class)
-class SubmissionServiceTestNoMock {
+class SubmissionServiceTestNoStaticMock {
 
     private static PropertyResourceBundle bundle;
 
@@ -74,7 +73,7 @@ class SubmissionServiceTestNoMock {
     void startConnectionPool() {
         FileDTO file = new FileDTO();
 
-        Class clazz = SubmissionServiceTestNoMock.class;
+        Class clazz = SubmissionServiceTestNoStaticMock.class;
         InputStream inputStream = clazz.getResourceAsStream("/config.properties");
 
         file.setInputStream(inputStream);
