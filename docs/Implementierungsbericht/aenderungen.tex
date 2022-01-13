@@ -123,12 +123,25 @@ Die \emph{removeReviewer()}-Methode im \textbf{SubmissionRepository}  war hier s
 der falschen Stelle.
 Sie hätte sich schon in der Spezifikation im \emph{ReviewedByRepository} befinden sollen.
 Änderungen dieser Art wurden zugunsten des \emph{single-responsibility principle} gemacht,
-wonach eine Klasse nur Methoden zu einem bestimmten Zweck besitzen sollter.
+wonach eine Klasse nur Methoden zu einem bestimmten Zweck besitzen sollte.
 
-
-\textbf{ScienceFieldRepository} Die \emph{get()} Methode,
-zum Erhalten eines wissenschaftlichen Themas, wurde schlichtweg nicht benötigt,
-da es sich um ein \emph{DTO} mit wenig Inhalt und geringer Wichtigkeit im System handelt.
+Es kam an wenigen Stellen auch vor, dass Methoden schlichtweg nicht benötigt wurden.
+Hier ist die \emph{get()} Methode aus dem \textbf{ScienceFieldRepository} zu nennen.
+Sie diente dem Erhalten eines wissenschaftlichen Themas aus der Datenbank.
+Ursprünglich war diese Methode in der Spezifikation enthalten, da
+bei der Spezifikation der Repositories generell
+vorgesehen war \emph{CRUD}-Operationen:
+\begin{itemize}
+    \item \emph{CREATE}
+    \item \emph{READ}
+    \item \emph{UPDATE}
+    \item \emph{CHANGE}
+\end{itemize}
+anzubieten.
+Allerdings wurde ein wissenschaftliches Thema nie alleine sondern immer nur im Verbund
+(mithilfe der \emph{getList()}-Methoden) benötigt.
+Somit lässt sich feststellen, dass der Versuch gewisse Patterns konsequent umzusetzen,
+in wenigen Fällen zu Unstimmigkeit mit der Spezifikation geführt hat.
 
 \textbf{UserRepository} Die neuen \emph{changeVerification()} und \emph{getVerification()}
 Methoden erlauben die Nutzervalidierung. Auch wenn dieser Punkt in der Spezifikation durchaus nicht
