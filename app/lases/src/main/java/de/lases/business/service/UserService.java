@@ -134,7 +134,7 @@ public class UserService implements Serializable {
                         MessageCategory.INFO));
                 transaction.commit();
             } else {
-                uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataNorWritten"),
+                uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataNotWritten"),
                         MessageCategory.ERROR));
                 transaction.abort();
             }
@@ -148,7 +148,7 @@ public class UserService implements Serializable {
                     MessageCategory.ERROR));
         } catch (DataNotWrittenException e) {
             transaction.abort();
-            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataNorWritten"),
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataNotWritten"),
                     MessageCategory.ERROR));
         }
     }
@@ -178,6 +178,8 @@ public class UserService implements Serializable {
             EmailUtil.sendEmail(new String[]{user.getEmailAddress()},
                     null, propertyResourceBundle.getString("email.verification.subject"), emailBody);
         } catch (EmailTransmissionFailedException e) {
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("emailInvalid"),
+                    MessageCategory.ERROR));
             return false;
         }
 
@@ -254,7 +256,7 @@ public class UserService implements Serializable {
             transaction.commit();
         } catch (DataNotWrittenException | IOException e) {
             transaction.abort();
-            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataNorWritten"),
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataNotWritten"),
                     MessageCategory.ERROR));
         } catch (NotFoundException e) {
             transaction.abort();
