@@ -6,6 +6,7 @@ import de.lases.business.util.Hashing;
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
 import de.lases.persistence.internal.ConfigReader;
+import de.lases.persistence.repository.SubmissionRepository;
 import de.lases.persistence.repository.Transaction;
 import de.lases.persistence.repository.UserRepository;
 import jakarta.enterprise.context.Dependent;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.PropertyResourceBundle;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -50,6 +52,9 @@ public class UserService implements Serializable {
 
     @Inject
     private FacesContext facesContext;
+
+    @Inject
+    private transient PropertyResourceBundle resourceBundle;
 
     /**
      * Gets a {@code User}.
@@ -95,10 +100,11 @@ public class UserService implements Serializable {
      *                         and will not be deleted if empty.
      *                   When the email address is changed the verification process is initiated
      *                   using the {@code EmailUtil} utility.
+     * @param changer The user that submitted the changes (with isAdmin either true or false)
      *
      * @author Sebastian Vogt
      */
-    public void change(User newUser) {
+    public void change(User newUser, User changer) {
         Transaction transaction = new Transaction();
 
         if (newUser.getPasswordNotHashed() != null) {
@@ -120,7 +126,7 @@ public class UserService implements Serializable {
 
             UserRepository.change(newUser, transaction);
 
-            if (newUser.getEmailAddress().equals(oldUser.getEmailAddress())) {
+            if (newUser.getEmailAddress().equals(oldUser.getEmailAddress()) || changer.isAdmin()) {
                 uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataSaved"),
                         MessageCategory.INFO));
                 transaction.commit();
@@ -129,7 +135,7 @@ public class UserService implements Serializable {
                         MessageCategory.INFO));
                 transaction.commit();
             } else {
-                uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataNorWritten"),
+                uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataNotWritten"),
                         MessageCategory.ERROR));
                 transaction.abort();
             }
@@ -143,7 +149,7 @@ public class UserService implements Serializable {
                     MessageCategory.ERROR));
         } catch (DataNotWrittenException e) {
             transaction.abort();
-            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataNorWritten"),
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataNotWritten"),
                     MessageCategory.ERROR));
         }
     }
@@ -173,6 +179,8 @@ public class UserService implements Serializable {
             EmailUtil.sendEmail(new String[]{user.getEmailAddress()},
                     null, propertyResourceBundle.getString("email.verification.subject"), emailBody);
         } catch (EmailTransmissionFailedException e) {
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("emailInvalid"),
+                    MessageCategory.ERROR));
             return false;
         }
 
@@ -196,16 +204,52 @@ public class UserService implements Serializable {
         Transaction transaction = new Transaction();
 
         try {
+            List<Submission> submissions =
+                    SubmissionRepository.getList(user, Privilege.AUTHOR, transaction, new ResultListParameters());
+            List<Submission> non_finished = submissions.stream()
+                    .filter(submission -> submission.getState() != SubmissionState.REJECTED
+                            && submission.getState() != SubmissionState.ACCEPTED).toList();
+            for (Submission submission: non_finished) {
+                User editor = new User();
+                editor.setId(submission.getEditorId());
+                editor = UserRepository.get(editor, transaction);
+                List<User> reviewersToInform = UserRepository.getList(transaction, submission, Privilege.REVIEWER);
+                sendEmailsForDelete(submission, editor, reviewersToInform);
+            }
+
             UserRepository.remove(user, transaction);
             transaction.commit();
         } catch (NotFoundException e) {
             transaction.abort();
             uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dateNotFound"),
                     MessageCategory.ERROR));
-        } catch (DataNotWrittenException e) {
+        } catch (DataNotWrittenException | DataNotCompleteException e) {
             uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataNotWritten"),
                     MessageCategory.ERROR));
             transaction.abort();
+        }
+    }
+
+    /**
+     * @author Sebastian Vogt
+     */
+    private void sendEmailsForDelete(Submission submission, User editor, List<User> reviewer) {
+        String editorEmail = editor.getEmailAddress();
+        List<String> reviewerEmails = reviewer.stream().map(User::getEmailAddress).toList();
+
+        assert editorEmail != null;
+        assert !reviewerEmails.isEmpty();
+
+        try {
+            EmailUtil.sendEmail(new String[]{editorEmail}, null,
+                    resourceBundle.getString("email.deleteUser.subject"),
+                    resourceBundle.getString("email.deleteUserEditor.body") + "\n" + submission.getTitle());
+            EmailUtil.sendEmail(reviewerEmails.toArray(new String[0]), null,
+                    resourceBundle.getString("email.deleteUser.subject"),
+                    resourceBundle.getString("email.deleteUserReviewer.body") + "\n" + submission.getTitle());
+        } catch (EmailTransmissionFailedException e) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("emailNotSent") + " "
+                    + String.join(", ", e.getInvalidAddresses()), MessageCategory.ERROR));
         }
     }
 
@@ -244,7 +288,7 @@ public class UserService implements Serializable {
             transaction.commit();
         } catch (DataNotWrittenException | IOException e) {
             transaction.abort();
-            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataNorWritten"),
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataNotWritten"),
                     MessageCategory.ERROR));
         } catch (NotFoundException e) {
             transaction.abort();

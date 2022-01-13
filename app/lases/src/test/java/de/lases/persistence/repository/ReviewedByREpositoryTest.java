@@ -36,7 +36,7 @@ public class ReviewedByREpositoryTest {
     void startConnectionPool() {
         FileDTO file = new FileDTO();
 
-        Class clazz = ScienceFieldRepositoryTest.class;
+        Class<ScienceFieldRepositoryTest> clazz = ScienceFieldRepositoryTest.class;
         InputStream inputStream = clazz.getResourceAsStream("/config.properties");
 
         file.setInputStream(inputStream);

@@ -11,18 +11,13 @@ import org.jboss.weld.junit5.WeldInitiator;
 import org.jboss.weld.junit5.WeldJunit5Extension;
 import org.jboss.weld.junit5.WeldSetup;
 import org.junit.jupiter.api.*;
-import de.lases.persistence.exception.NotFoundException;
-import de.lases.persistence.exception.InvalidFieldsException;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.InputStream;
 import java.sql.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -72,7 +67,7 @@ class PaperRepositoryTest {
     void startConnectionPool() {
         FileDTO file = new FileDTO();
 
-        Class clazz = PaperRepositoryTest.class;
+        Class<PaperRepositoryTest> clazz = PaperRepositoryTest.class;
         InputStream inputStream = clazz.getResourceAsStream("/config.properties");
 
         file.setInputStream(inputStream);
@@ -151,48 +146,50 @@ class PaperRepositoryTest {
         transaction.abort();
     }
 
+    /**
+     * @author Sebastian Vogt
+     */
     @Test
     void testAdd() throws SQLException, DataNotWrittenException {
         Transaction transaction = new Transaction();
         Connection conn = transaction.getConnection();
         PreparedStatement stmt = conn.prepareStatement(
                 """
-                        SELECT * FROM paper
+                        SELECT count(*) FROM paper
                         """);
         ResultSet resultSet = stmt.executeQuery();
-        int i = 0;
-        while (resultSet.next()) {
-            i++;
-        }
+        resultSet.next();
+        int i = resultSet.getInt(1);
 
         PaperRepository.add(paperNonExistent, pdf, transaction);
 
         ResultSet resultSet2 = stmt.executeQuery();
-        int j = 0;
-        while (resultSet2.next()) {
-            j++;
-        }
+        resultSet2.next();
+        int j = resultSet2.getInt(1);
 
         assertEquals(1, j - i);
         transaction.abort();
     }
 
+    /**
+     * @author Sebastian Vogt
+     */
     @Test
     void testNull() {
-        Transaction transaction = new Transaction();
+        Transaction transaction1 = new Transaction();
+        Transaction transaction2 = new Transaction();
         assertAll(
                 () -> {
                     assertThrows(InvalidFieldsException.class,
                             () -> PaperRepository.add(paper, new FileDTO(),
-                                    transaction));
+                                    transaction1));
                 },
                 () -> {
                     assertThrows(InvalidFieldsException.class,
                             () -> PaperRepository.add(new Paper(), pdf,
-                                    transaction));
+                                    transaction2));
                 }
         );
-        transaction.abort();
     }
 
     @Test

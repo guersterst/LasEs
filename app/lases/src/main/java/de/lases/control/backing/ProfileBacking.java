@@ -145,7 +145,7 @@ public class ProfileBacking implements Serializable {
      * shown that asks the user to check his inbox.
      */
     public void submitChanges() {
-        userService.change(user);
+        userService.change(user, sessionInformation.getUser());
     }
 
     /**
@@ -156,7 +156,7 @@ public class ProfileBacking implements Serializable {
      * be displayed.
      */
     public void submitAdminChanges() {
-        userService.change(userForAdminSettings);
+        userService.change(userForAdminSettings, sessionInformation.getUser());
     }
 
     /**

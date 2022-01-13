@@ -116,6 +116,19 @@ public class NewSubmissionBacking implements Serializable {
     }
 
     /**
+     * Checks if the view param is an integer and throws an exception if it is
+     * not
+     *
+     * @throws IllegalUserFlowException If there is no integer provided as view
+     *                                  param
+     */
+    public void preRenderViewListener() {
+        if (forumInput.getId() == null) {
+            throw new IllegalUserFlowException("NewSubmission page called without a forum id.");
+        }
+    }
+
+    /**
      * Must be called after forumInput has been initialized.
      */
     private void initNewSubmission() {

@@ -56,7 +56,7 @@ public class ScienceFieldServiceTest {
     void startConnectionPool() {
         FileDTO file = new FileDTO();
 
-        Class clazz = ScienceFieldServiceTest.class;
+        Class<ScienceFieldServiceTest> clazz = ScienceFieldServiceTest.class;
         InputStream inputStream = clazz.getResourceAsStream("/config.properties");
 
         file.setInputStream(inputStream);
