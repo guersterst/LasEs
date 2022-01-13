@@ -99,10 +99,16 @@ bestimmte Datenelemente zugunsten von allgemeineren \emph{add()} und \emph{chang
 Diese enthalten dann alle Datenelemente eines zugehörigen Facelets.
 Hierduch entstehen übersichtlichere Interfaces.
 
-\textbf{ConnectionPool} Die neue Methode \emph{getNumberOfFreeConnections}
+\textbf{ConnectionPool} Die neue Methode \emph{getNumberOfFreeConnections()}
 wurde hinzugefügt um ein aussagekräftigeres Logging der Verwendung von Connections
 zu ermöglichen.
 Dies fand vor allem im Finden von \emph{Connection-Leaks} Verwendung.
+Hierbei wurde nun geloggt, wann, von welcher Methode und in welcher Zeile eine
+Connection geöffnet wurde.
+Außerdem wurde festgehalten wie viele offene Connections noch bestehen.
+Hierdurch konnte die Korrektheit des \emph{Connection-Pool} bestätigt
+und \emph{Connection-Leaks}, verurusacht durch Programmierfehler,
+schnell behoben werden.
 
 \textbf{ReviewedByRepository} Die Notwendigkeit der neuen Methoden
 \emph{removeReviewer()} und \emph{getList()} hat sich erst im Laufe des
