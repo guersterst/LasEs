@@ -708,10 +708,12 @@ public class SubmissionService implements Serializable {
 
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotWritten"), MessageCategory.WARNING));
             transaction.abort();
+            return;
         } catch (NotFoundException e) {
 
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotFound"), MessageCategory.ERROR));
             transaction.abort();
+            return;
         }
 
         String subject = resourceBundle.getString("email.removeReviewer.subject");
