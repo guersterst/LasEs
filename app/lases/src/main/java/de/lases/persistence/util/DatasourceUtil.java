@@ -25,6 +25,8 @@ public class DatasourceUtil {
 
     private static final Logger logger = Logger.getLogger(DatasourceUtil.class.getName());
 
+    private static final String SQL_FILE_LOCATION = "/WEB-INF/classes/de/lases/persistence/util/CREATE_ALL.sql";
+
     /**
      * Deletes all users/verifications (if the user already has a valid email
      * address they will not be deleted) from the datasource that need to verify
@@ -77,7 +79,7 @@ public class DatasourceUtil {
      */
     public static void createDatasource() throws IOException {
         ServletContext sctx = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
-        String sql = new String(sctx.getResourceAsStream("/WEB-INF/config/sql/CREATE_ALL.sql").readAllBytes(),
+        String sql = new String(sctx.getResourceAsStream(SQL_FILE_LOCATION).readAllBytes(),
                 StandardCharsets.UTF_8);
         Transaction transaction = new Transaction();
         Connection conn = transaction.getConnection();
