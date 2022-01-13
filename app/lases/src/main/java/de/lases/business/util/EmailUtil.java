@@ -103,7 +103,7 @@ public class EmailUtil {
 
 
     /**
-     * Generates a URL especially for a scientific forum.
+     * Generates a URL specific to a scientific forum.
      *
      * @param scientificForum The scientific forum the link has to navigate to.
      * @param facesContext The current faces context.
