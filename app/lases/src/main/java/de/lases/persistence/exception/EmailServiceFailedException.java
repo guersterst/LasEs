@@ -14,6 +14,7 @@ public class EmailServiceFailedException extends RuntimeException {
      * Constructs an exception.
      */
     public EmailServiceFailedException() {
+        super();
     }
 
     /**

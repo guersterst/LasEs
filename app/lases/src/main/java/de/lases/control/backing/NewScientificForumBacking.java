@@ -2,7 +2,7 @@ package de.lases.control.backing;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.List;
+import java.util.*;
 
 import de.lases.business.service.ScienceFieldService;
 import de.lases.business.service.ScientificForumService;
@@ -11,12 +11,15 @@ import de.lases.control.internal.*;
 import de.lases.global.transport.*;
 import de.lases.control.exception.IllegalAccessException;
 import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.event.Event;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 /**
  * Backing bean for the new scientific forum page.
+ *
+ * @author Johann Schicho
  */
 @ViewScoped
 @Named
@@ -24,6 +27,12 @@ public class NewScientificForumBacking implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 6091783394131851720L;
+
+    @Inject
+    private Event<UIMessage> uiMessageEvent;
+
+    @Inject
+    private transient PropertyResourceBundle propertyResourceBundle;
 
     @Inject
     private ScienceFieldService scienceFieldService;
@@ -43,7 +52,7 @@ public class NewScientificForumBacking implements Serializable {
 
     private ScienceField scienceFieldSelectionInput;
 
-    private ScienceField newScienceFieldInput;
+    private ScienceField scienceFieldToAdd;
 
     private List<ScienceField> selectedScienceFields;
 
@@ -70,12 +79,30 @@ public class NewScientificForumBacking implements Serializable {
      */
     @PostConstruct
     public void init() {
+        newScientificForum = new ScientificForum();
+        newEditorInput = new User();
+        editors = new ArrayList<>();
+
+        scienceFieldToAdd = new ScienceField();
+        scienceFieldSelectionInput = new ScienceField();
+        selectedScienceFields = new ArrayList<>();
+        scienceFields = scienceFieldService.getList(new ResultListParameters());
     }
 
     /**
      * Add the editor that is currently entered to the list of editors.
      */
     public void addEditor() {
+        User userToAdd = userService.get(newEditorInput);
+        if (userToAdd == null) {
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("newForumUserUserNotExists"), MessageCategory.ERROR));
+        } else if (editors.contains(userToAdd)) {
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("newForumUserAlreadyAdded"), MessageCategory.INFO));
+        } else {
+            editors.add(userToAdd);
+        }
+        // reset new editor
+        newEditorInput = new User();
     }
 
     /**
@@ -84,13 +111,21 @@ public class NewScientificForumBacking implements Serializable {
      * @param editor Editor to remove.
      */
     public void removeEditor(User editor) {
+        editors.remove(editor);
+    }
+
+    public void removeSelectedScienceField(ScienceField scienceField) {
+        selectedScienceFields.remove(scienceField);
     }
 
     /**
-     * Add the science field that is currently entered to the global list of
-     * science fields.
+     * Create a new science field.
      */
-    public void addNewScienceField() {
+    public void createNewScienceField() {
+        scienceFieldService.add(scienceFieldToAdd);
+        scienceFieldToAdd = new ScienceField();
+
+        scienceFields = scienceFieldService.getList(new ResultListParameters());
     }
 
     /**
@@ -98,6 +133,9 @@ public class NewScientificForumBacking implements Serializable {
      * for this scientific forum.
      */
     public void addScienceField() {
+        if (scienceFieldSelectionInput != null && !selectedScienceFields.contains(scienceFieldSelectionInput)) {
+            selectedScienceFields.add(scienceFieldSelectionInput);
+        }
     }
 
     /**
@@ -106,7 +144,8 @@ public class NewScientificForumBacking implements Serializable {
      * @return Go to the overview page of the crated scientific forum.
      */
     public String create() {
-        return null;
+        ScientificForum ret = scientificForumService.add(newScientificForum, selectedScienceFields, editors);
+        return "/views/authenticated/scientificForum?faces-redirect=true&id=" + ret.getId();
     }
 
     /**
@@ -116,7 +155,7 @@ public class NewScientificForumBacking implements Serializable {
      * @return Go to the administration page.
      */
     public String abort() {
-        return null;
+        return "/views/authenticated/homepage.xhtml";
     }
 
     /**
@@ -142,7 +181,7 @@ public class NewScientificForumBacking implements Serializable {
      * forum.
      *
      * @return The dto that encapsulates the parameters for the new scientific
-     *         forum.
+     * forum.
      */
     public ScientificForum getNewScientificForum() {
         return newScientificForum;
@@ -164,7 +203,7 @@ public class NewScientificForumBacking implements Serializable {
      * it to the list of selected science fields for this forum.
      *
      * @return The science field the administrator
-     *         has entered.
+     * has entered.
      */
     public ScienceField getScienceFieldSelectionInput() {
         return scienceFieldSelectionInput;
@@ -187,21 +226,21 @@ public class NewScientificForumBacking implements Serializable {
      * it to the list of global science fields.
      *
      * @return The science field the administrator has
-     *         entered.
+     * entered.
      */
-    public ScienceField getNewScienceFieldInput() {
-        return newScienceFieldInput;
+    public ScienceField getScienceFieldToAdd() {
+        return scienceFieldToAdd;
     }
 
     /**
      * Set the science field that the administrator has entered in order to add
      * it to the list of global science fields.
      *
-     * @param newScienceFieldInput The science field the administrator has
-     *                             entered.
+     * @param scienceFieldToAdd The science field the administrator has
+     *                          entered.
      */
-    public void setNewScienceFieldInput(ScienceField newScienceFieldInput) {
-        this.newScienceFieldInput = newScienceFieldInput;
+    public void setScienceFieldToAdd(ScienceField scienceFieldToAdd) {
+        this.scienceFieldToAdd = scienceFieldToAdd;
     }
 
     /**
@@ -209,7 +248,7 @@ public class NewScientificForumBacking implements Serializable {
      * forum.
      *
      * @return The list of science fields that are selected for this scientific
-     *         forum.
+     * forum.
      */
     public List<ScienceField> getSelectedScienceFields() {
         return selectedScienceFields;
@@ -220,7 +259,7 @@ public class NewScientificForumBacking implements Serializable {
      * scientific forum.
      *
      * @return The list of users that are currently added as editors to this
-     *         scientific forum.
+     * scientific forum.
      */
     public List<User> getEditors() {
         return editors;
@@ -230,7 +269,7 @@ public class NewScientificForumBacking implements Serializable {
      * Get the user that the administrator wants to add to the list of editors.
      *
      * @return The user that the administrator wants to add to
-     *         the list of editors.
+     * the list of editors.
      */
     public User getNewEditorInput() {
         return newEditorInput;

@@ -15,6 +15,7 @@ public class InvalidFieldsException extends IllegalArgumentException {
      * Constructs an exception.
      */
     public InvalidFieldsException() {
+        super();
     }
 
     /**

@@ -1,0 +1,23 @@
+<ui:composition template="/resources/templates/main.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:sft="http://xmlns.jcp.org/jsf/composite/templates/composites/scientificForumTable"
+                xmlns:h="http://java.sun.com/jsf/html">
+
+    <!-- page title -->
+    <ui:define name="title">#{labels['forumListTitle']}</ui:define>
+
+    <!-- content of scientificForumList.xhtml -->
+    <ui:define name="content">
+        <div class="container" id="forum-list-pagination">
+            <div class="card">
+                <div class="card-header">
+                    <h:outputText id="heading-forum-list-otxt" value="#{labels.scientificForums}" styleClass="h4"/>
+                </div>
+                <div class="card-body">
+                    <sft:scientificForumTable backing="#{scientificForumListBacking}"/>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>

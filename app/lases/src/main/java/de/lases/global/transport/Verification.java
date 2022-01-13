@@ -5,12 +5,12 @@ import java.time.LocalDateTime;
 /**
  * Bundles information about the verification process is somebody is newly
  * registered or has just changed their email.
+ *
+ * @author Thomas Kirz
  */
 public class Verification implements Cloneable {
 
     private int userId;
-
-    private int id;
 
     private String validationRandom;
 
@@ -31,19 +31,6 @@ public class Verification implements Cloneable {
      */
     public void setUserId(int userId) {
         this.userId = userId;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * Set id of this verification.
-     *
-     * @param id Id of this verification.
-     */
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getValidationRandom() {
@@ -119,9 +106,7 @@ public class Verification implements Cloneable {
     @Override
     public Verification clone() {
         try {
-            Verification clone = (Verification) super.clone();
-            // TODO: copy mutable state here, so the clone can't change the internals of the original
-            return clone;
+            return (Verification) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }

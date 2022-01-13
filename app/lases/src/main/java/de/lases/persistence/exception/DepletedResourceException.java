@@ -14,6 +14,7 @@ public class DepletedResourceException extends RuntimeException {
      * Constructs an exception.
      */
     public DepletedResourceException() {
+        super();
     }
 
     /**

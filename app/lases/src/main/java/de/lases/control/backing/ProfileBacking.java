@@ -1,27 +1,30 @@
 package de.lases.control.backing;
 
-import de.lases.business.internal.ConfigPropagator;
 import de.lases.business.service.ScienceFieldService;
-import de.lases.business.service.SubmissionService;
 import de.lases.business.service.UserService;
 import de.lases.control.exception.IllegalUserFlowException;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
 import de.lases.control.exception.IllegalAccessException;
 import jakarta.annotation.PostConstruct;
-import jakarta.faces.event.ComponentSystemEvent;
+import jakarta.enterprise.event.Event;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.servlet.http.Part;
 
+import java.io.IOException;
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.PropertyResourceBundle;
 
 /**
  * Backing bean for the profile page.
+ *
+ * @author Sebastian Vogt
  */
 @ViewScoped
 @Named
@@ -40,14 +43,16 @@ public class ProfileBacking implements Serializable {
     private ScienceFieldService scienceFieldService;
 
     @Inject
-    private SubmissionService submissionService;
+    private Event<UIMessage> uiMessageEvent;
 
     @Inject
-    private ConfigPropagator configPropagator;
+    private transient PropertyResourceBundle messageBundle;
 
     private Part uploadedAvatar;
 
     private User user;
+
+    private User userForAdminSettings;
 
     private List<ScienceField> usersScienceFields;
 
@@ -77,11 +82,16 @@ public class ProfileBacking implements Serializable {
      *         the user for the admin password input
      *     </li>
      * </ul>
-     * @throws IllegalAccessException If someone tries to access a profile that
-     *                                does not belong to him.
      */
     @PostConstruct
     public void init() {
+        user = new User();
+        scienceFields = new ArrayList<>();
+        usersScienceFields = new ArrayList<>();
+        selectedScienceField = new ScienceField();
+        adminPasswordInPopup = new User();
+
+        scienceFields = scienceFieldService.getList(new ResultListParameters());
     }
 
     /**
@@ -96,19 +106,37 @@ public class ProfileBacking implements Serializable {
      *         the list of science fields of the user
      *     </li>
      * </ul>
+     * @throws IllegalUserFlowException If there is no integer provided as view
+     *                                  param
+     * @throws IllegalAccessException If someone who is not an editor or admin tries to access a profile that
+     *                                does not belong to him.
      */
-    public void onLoad() { }
+    public void onLoad() {
+        if (user.getId() == null) {
+            throw new IllegalUserFlowException("Profile page called without an id");
+        }
+        User accessingUser = sessionInformation.getUser();
+        if (!(accessingUser.isAdmin() || accessingUser.isEditor()
+                || Objects.equals(accessingUser.getId(), user.getId()))) {
+            throw new IllegalAccessException("Illegal access to profile.");
+        }
+        user = userService.get(user);
+        userForAdminSettings = user.clone();
+        usersScienceFields = scienceFieldService.getList(user, new ResultListParameters());
+    }
 
     /**
      * Checks if the view param is an integer and throws an exception if it is
      * not
      *
-     * @param event The component system event that happens before rendering
-     *              the view param.
      * @throws IllegalUserFlowException If there is no integer provided as view
      *                                  param
      */
-    public void preRenderViewListener(ComponentSystemEvent event) {}
+    public void preRenderViewListener() {
+        if (user.getId() == null) {
+            throw new IllegalUserFlowException("Profile page called without an id.");
+        }
+    }
 
     /**
      * Save the changes to the user profile excluding profile picture,
@@ -117,6 +145,7 @@ public class ProfileBacking implements Serializable {
      * shown that asks the user to check his inbox.
      */
     public void submitChanges() {
+        userService.change(user);
     }
 
     /**
@@ -127,31 +156,38 @@ public class ProfileBacking implements Serializable {
      * be displayed.
      */
     public void submitAdminChanges() {
-
+        userService.change(userForAdminSettings);
     }
-    /**
-     * Abort the changes made to the user and show a fresh profile page.
-     */
-    public void abort() {
-    }
-
 
     /**
      * Set a new avatar for the user.
      */
     public void uploadAvatar() {
+        FileDTO avatar = new FileDTO();
+        try {
+            avatar.setFile(uploadedAvatar.getInputStream().readAllBytes());
+            userService.setAvatar(avatar, user);
+        } catch (IOException e) {
+            uiMessageEvent.fire(new UIMessage(messageBundle.getString("failedUpload"), MessageCategory.ERROR));
+        }
     }
 
     /**
      * Delete the current avatar for the user.
      */
     public void deleteAvatar() {
+        userService.setAvatar(null, user);
     }
 
     /**
      * Add selected science field to the user's science fields.
      */
     public void addScienceField() {
+        if (!usersScienceFields.contains(selectedScienceField)) {
+            ScienceField selectedClone = selectedScienceField.clone();
+            usersScienceFields.add(selectedClone);
+            userService.addScienceField(user, selectedClone);
+        }
     }
 
     /**
@@ -160,6 +196,8 @@ public class ProfileBacking implements Serializable {
      * @param field The science field to be removed.
      */
     public void deleteScienceField(ScienceField field) {
+        usersScienceFields.remove(field);
+        userService.removeScienceField(user, field);
     }
 
     /**
@@ -168,7 +206,8 @@ public class ProfileBacking implements Serializable {
      * @return Go to the welcome page.
      */
     public String deleteProfile() {
-        return null;
+        userService.remove(user);
+        return "/views/anonymous/welcome";
     }
 
     /**
@@ -276,7 +315,25 @@ public class ProfileBacking implements Serializable {
      * @return true if they have edit rights.
      */
     public boolean hasViewerEditRights() {
-        return sessionInformation.getUser().getId() == user.getId()
+        return Objects.equals(sessionInformation.getUser(), user)
                 || sessionInformation.getUser().isAdmin();
+    }
+
+    /**
+     * Get the user object that should be used to write the admin changes.
+     *
+     * @return The user.
+     */
+    public User getUserForAdminSettings() {
+        return userForAdminSettings;
+    }
+
+    /**
+     * Set the user object that should be used to write the admin changes.
+     *
+     * @param userForAdminSettings The user.
+     */
+    public void setUserForAdminSettings(User userForAdminSettings) {
+        this.userForAdminSettings = userForAdminSettings;
     }
 }

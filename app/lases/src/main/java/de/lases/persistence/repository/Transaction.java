@@ -1,23 +1,29 @@
 package de.lases.persistence.repository;
 
 import de.lases.persistence.exception.DatasourceQueryFailedException;
-import de.lases.persistence.exception.DepletedResourceException;
 import de.lases.persistence.util.DatasourceUtil;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  * Transactions for repository operations.
+ *
+ * @author Sebastian Vogt
  */
 public class Transaction {
 
-    private Connection connection;
+    private final Connection connection;
 
     private static final Logger logger
             = Logger.getLogger(Transaction.class.getName());
+
+    private final ScheduledExecutorService executor;
 
     /**
      * Is the transaction already aborted or commited?
@@ -30,6 +36,18 @@ public class Transaction {
     public Transaction() {
         connection = ConnectionPool.getInstance().getConnection();
         transactionOver = false;
+
+        StackTraceElement lastStackTraceElement = Thread.currentThread().getStackTrace()[2];
+        logger.log(Level.INFO, "Transaction " + this.hashCode()
+                + " was opened. The connection pool has: " + ConnectionPool.getInstance().getNumberOfFreeConnections()
+                + " free connections of " + ConnectionPool.POOL_SIZE + ". I was opened by "
+                + lastStackTraceElement.getMethodName() + " in class "
+                + lastStackTraceElement.getClassName() + " on line " + lastStackTraceElement.getLineNumber());
+
+        Runnable logOpenTransaction = () -> logger.log(Level.INFO, "Transaction " + this.hashCode()
+                + " is still open.");
+        executor = Executors.newScheduledThreadPool(1);
+        executor.scheduleAtFixedRate(logOpenTransaction, 3, 3, TimeUnit.SECONDS);
     }
 
     /**
@@ -43,9 +61,7 @@ public class Transaction {
             connection.rollback();
         } catch (SQLException e) {
             try {
-                if (connection != null) {
-                    connection.close();
-                }
+                connection.close();
             } catch (SQLException ex) {
                 DatasourceUtil.logSQLException(ex, logger);
             }
@@ -55,6 +71,11 @@ public class Transaction {
         }
         transactionOver = true;
         ConnectionPool.getInstance().releaseConnection(connection);
+
+        logger.log(Level.INFO, "Transaction " + this.hashCode()
+                + " was closed. The connection pool has: " + ConnectionPool.getInstance().getNumberOfFreeConnections()
+                + " free connections of " + ConnectionPool.POOL_SIZE);
+        executor.shutdown();
     }
 
     /**
@@ -67,19 +88,22 @@ public class Transaction {
         try {
             connection.commit();
         } catch (SQLException e) {
-            if (connection != null) {
-                try {
-                    connection.rollback();
-                    connection.close();
-                } catch (SQLException ex) {
-                    DatasourceUtil.logSQLException(ex, logger);
-                }
+            try {
+                connection.rollback();
+                connection.close();
+            } catch (SQLException ex) {
+                DatasourceUtil.logSQLException(ex, logger);
             }
             DatasourceUtil.logSQLException(e, logger);
             throw new DatasourceQueryFailedException("Commit failed");
         }
         transactionOver = true;
         ConnectionPool.getInstance().releaseConnection(connection);
+
+        logger.log(Level.INFO, "Transaction " + this.hashCode()
+                + " was closed. The connection pool has: " + ConnectionPool.getInstance().getNumberOfFreeConnections()
+                + " free connections of " + ConnectionPool.POOL_SIZE);
+        executor.shutdown();
     }
 
     /**

@@ -15,7 +15,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.MalformedParametersException;
 import java.net.MalformedURLException;
-import java.util.Enumeration;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -35,8 +34,6 @@ public class ImageServlet extends HttpServlet {
     private SessionInformation sessionInformation;
 
     private static final Logger logger = Logger.getLogger(ImageServlet.class.getName());
-
-    private static final int MAX_AGE = 15 * 60 * 1000; // 15 minutes.
 
     /**
      * Answers a get request that requests a specific image resource specified
@@ -128,9 +125,8 @@ public class ImageServlet extends HttpServlet {
      *                 This does not occur here though. Rather they are used for metadata calculations.
      */
     private static void configureResponse(HttpServletResponse response, byte[] imgBytes) {
-        response.setHeader("Cache-Control", "private, max-age=" + MAX_AGE);
         response.setContentLength(imgBytes.length);
-        response.setContentType("image/jpg");
+        response.setContentType("image/*");
         response.setStatus(HttpServletResponse.SC_OK);
     }
 
@@ -159,7 +155,7 @@ public class ImageServlet extends HttpServlet {
         if (img == null || img.getFile() == null) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             logger.severe("The image file must no be null");
-            throw new IllegalStateException();
+            // throw new IllegalStateException(); No illegal state, there is just no image served.
         }
         return img;
     }

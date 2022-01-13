@@ -1,16 +1,27 @@
 package de.lases.control.backing;
 
+import de.lases.business.internal.ConfigPropagator;
 import de.lases.business.service.CustomizationService;
 import de.lases.control.exception.IllegalAccessException;
-import de.lases.global.transport.*;
+import de.lases.global.transport.FileDTO;
+import de.lases.global.transport.MessageCategory;
+import de.lases.global.transport.SystemSettings;
+import de.lases.global.transport.UIMessage;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.servlet.http.Part;
 
+import java.io.IOException;
+import java.util.PropertyResourceBundle;
+import java.util.logging.Logger;
+
 /**
  * Backing bean for the administration page.
+ *
+ * @author Stefanie Gürster
  */
 @RequestScoped
 @Named
@@ -19,9 +30,22 @@ public class AdministrationBacking {
     @Inject
     private CustomizationService customizationService;
 
+    @Inject
+    private Event<UIMessage> uiMessageEvent;
+
+    @Inject
+    private transient PropertyResourceBundle resourceBundle;
+
+     @Inject
+     private ConfigPropagator configPropagator;
+
+    private static final Logger logger = Logger.getLogger(AdministrationBacking.class.getName());
+
     private SystemSettings systemSettings;
 
     private Part uploadedLogo;
+
+    private static final String PATH_TO_STYLE_DIRECTORY = "design/css/themes/";
 
     /**
      * Loads the current system settings from the datasource.
@@ -31,6 +55,7 @@ public class AdministrationBacking {
      */
     @PostConstruct
     public void init() {
+        systemSettings = customizationService.get();
     }
 
     /**
@@ -41,7 +66,8 @@ public class AdministrationBacking {
      * @return Show this page again.
      */
     public String save() {
-        return null;
+        customizationService.change(systemSettings);
+        return "administration";
     }
 
     /**
@@ -50,7 +76,7 @@ public class AdministrationBacking {
      * @return Show the homepage.
      */
     public String abort() {
-        return null;
+        return "administration?faces-redirect=true";
     }
 
     /**
@@ -90,13 +116,40 @@ public class AdministrationBacking {
     }
 
     /**
-     * Return an array of all values the Style enum can have.
+     * Upload a new logo.
+     */
+    public void uploadNewLogo() {
+
+        try {
+            FileDTO logo = new FileDTO();
+            logo.setFile(uploadedLogo.getInputStream().readAllBytes());
+            customizationService.setLogo(logo);
+        } catch (IOException exception) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("uploadImage"), MessageCategory.WARNING));
+            logger.severe("Upload a logo went wrong.");
+        }
+    }
+
+    /**
+     * Creates the path to the current stylesheet.
      *
-     * @return ALl options of Style.
+     * @return Path to stylesheet.
+     */
+    public String getPathToStyle() {
+        if (systemSettings == null) {
+            // If the db connection failed, we just use the orange one.
+            return PATH_TO_STYLE_DIRECTORY + "orange.css";
+        } else {
+            return PATH_TO_STYLE_DIRECTORY.concat(systemSettings.getStyle() + ".css");
+        }
+    }
+
+    /**
+     * Get all styles.
+     *
+     * @return all available styles.
      */
     public String[] getStyles() {
-        // TODO @implementierer: Hier muss man irgendwie alle styles aus dem
-        // backend holen. (da fehlen Methoden)
-        return null;
+        return configPropagator.getProperty("STYLE").split("#");
     }
 }

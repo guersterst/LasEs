@@ -1,15 +1,13 @@
 package de.lases.business.service;
 
-import de.lases.business.util.AvatarUtil;
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.DataNotWrittenException;
+import de.lases.persistence.exception.DatasourceQueryFailedException;
 import de.lases.persistence.exception.InvalidFieldsException;
 import de.lases.persistence.exception.NotFoundException;
-import de.lases.global.transport.ConnectionState;
-import de.lases.global.transport.FileDTO;
-import de.lases.global.transport.SystemSettings;
 import de.lases.persistence.repository.SystemSettingsRepository;
 import de.lases.persistence.repository.Transaction;
+import de.lases.persistence.util.DatasourceUtil;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
@@ -34,12 +32,36 @@ public class CustomizationService {
     @Inject
     private PropertyResourceBundle props;
 
+    @Inject
+    private PropertyResourceBundle resourceBundle;
+
     /**
      * Sets the application's settings, that determine its look and feel.
      *
      * @param systemSettings The filled {@link SystemSettings}.
      */
     public void change(SystemSettings systemSettings) {
+        if (systemSettings.getImprint() == null || systemSettings.getCompanyName() == null
+                || systemSettings.getHeadlineWelcomePage() == null || systemSettings.getMessageWelcomePage() == null
+                || systemSettings.getStyle() == null) {
+            logger.severe("One of the fields in systemSettings is null.");
+            throw new InvalidFieldsException("Fields in systemSettings are null.");
+        }
+
+        Transaction transaction = new Transaction();
+
+        try {
+            SystemSettingsRepository.updateSettings(systemSettings, transaction);
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("successSystemsetting"),MessageCategory.INFO));
+            logger.finest("Changed system settings");
+
+            transaction.commit();
+        }  catch (DataNotWrittenException exception) {
+
+            uiMessageEvent.fire(new UIMessage(props.getString("dataNotWritten"), MessageCategory.ERROR));
+
+            transaction.abort();
+        }
     }
 
     /**
@@ -47,22 +69,38 @@ public class CustomizationService {
      */
     public SystemSettings get() {
         Transaction transaction = new Transaction();
-        SystemSettings systemSettings = SystemSettingsRepository.getSettings(transaction);
-        transaction.commit();
+        SystemSettings systemSettings = null;
+        try {
+            systemSettings = SystemSettingsRepository.getSettings(transaction);
+            transaction.commit();
+        } catch (DatasourceQueryFailedException ignored) {
+            transaction.abort();
+            // In case the DB Connection failed, we still want the error page to work.
+        }
         return systemSettings;
     }
 
     /**
      * Initiates the creation of the datasource's schema.
+     *
+     * @return True if the creation succeeded.
      */
-    public void createDataSourceSchema() {
+    public boolean createDataSourceSchema() {
+        try {
+            DatasourceUtil.createDatasource();
+        } catch (IOException e) {
+            logger.severe("Could not read SQL CREATE_ALL file. " + e.getMessage());
+            uiMessageEvent.fire(new UIMessage("Could not read SQL CREATE_ALL file. " + e.getMessage(), MessageCategory.FATAL));
+            return false;
+        }
+        return true;
     }
 
     /**
      * @return The current state of the database connection.
      */
     public ConnectionState getConnectionState() {
-        return null;
+        return DatasourceUtil.testDatasourceConnection();
     }
 
     /**
@@ -75,24 +113,19 @@ public class CustomizationService {
     public void setLogo(FileDTO logo) {
         if  (logo == null || logo.getFile() == null) {
             logger.severe("The FileDTO or the image wrapped in it are null.");
-            throw new InvalidFieldsException();
-        }
-
-        FileDTO thumbnailedLogo = new FileDTO();
-        try {
-            thumbnailedLogo = AvatarUtil.generateThumbnail(logo);
-        } catch (IOException e) {
-            uiMessageEvent.fire(new UIMessage(props.getString("imageNotThumbnailed"), MessageCategory.ERROR));
+            throw new InvalidFieldsException(props.getString("idMissing"));
         }
 
         Transaction transaction = new Transaction();
         try {
-            SystemSettingsRepository.setLogo(thumbnailedLogo, transaction);
-            transaction.commit();
+            SystemSettingsRepository.setLogo(logo, transaction);
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("successSystemsetting"),MessageCategory.INFO));
             logger.finest("Successfully set the logo of the application.");
+
+            transaction.commit();
+
         } catch (DataNotWrittenException ex) {
             transaction.abort();
-            logger.severe("A DataNotWrittenException occurred when attempting to set the logo.");
             uiMessageEvent.fire(new UIMessage(props.getString("dataNotWritten"), MessageCategory.ERROR));
         }
     }
@@ -105,11 +138,14 @@ public class CustomizationService {
         FileDTO logo = null;
         try {
             logo = SystemSettingsRepository.getLogo(transaction);
-        } catch (NotFoundException e) {
+            transaction.commit();
+        } catch (NotFoundException | DataNotWrittenException e) {
             transaction.abort();
-            throw new IllegalStateException("No logo could be fetched.");
+            uiMessageEvent.fire(new UIMessage(props.getString("dataNotFound"), MessageCategory.ERROR));
+        } catch (DatasourceQueryFailedException ignored) {
+            uiMessageEvent.fire(new UIMessage(props.getString("dataNotFound"), MessageCategory.FATAL));
+            // In case the logo can't be fetched, the application shall still work.
         }
-        transaction.commit();
         return logo;
     }
 }

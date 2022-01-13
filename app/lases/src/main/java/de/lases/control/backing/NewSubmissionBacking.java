@@ -1,14 +1,13 @@
 package de.lases.control.backing;
 
-import de.lases.business.service.PaperService;
 import de.lases.business.service.ScientificForumService;
 import de.lases.business.service.SubmissionService;
 import de.lases.business.service.UserService;
+import de.lases.control.exception.IllegalUserFlowException;
 import de.lases.control.internal.*;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.enterprise.context.SessionScoped;
+import jakarta.enterprise.event.Event;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -20,11 +19,14 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PropertyResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  * Backing bean for the new submission page.
+ *
+ * @author Sebastian Vogt
  */
 @ViewScoped
 @Named
@@ -42,13 +44,16 @@ public class NewSubmissionBacking implements Serializable {
     private SubmissionService submissionService;
 
     @Inject
-    private PaperService paperService;
-
-    @Inject
-    private ScientificForumService scientificForumService;
-
-    @Inject
     private UserService userService;
+
+    @Inject
+    private ScientificForumService forumService;
+
+    @Inject
+    private Event<UIMessage> uiMessageEvent;
+
+    @Inject
+    private transient PropertyResourceBundle messageBundle;
 
     private Submission newSubmission;
 
@@ -92,30 +97,37 @@ public class NewSubmissionBacking implements Serializable {
      */
     @PostConstruct
     public void init() {
-        newSubmission = new Submission();
         coAuthorInput = new User();
         coAuthors = new ArrayList<>();
-        if (forumInput != null) {
-            editors = userService.getList(forumInput);
-        } else {
-            forumInput = new ScientificForum();
-            editors = new ArrayList<>();
+        forumInput = new ScientificForum();
+        newSubmission = new Submission();
+    }
+
+    public void onLoad() {
+
+        if (forumInput.getId() == null || !ScientificForumService.exists(forumInput)) {
+            throw new IllegalUserFlowException("The URL parameters are invalid. Possible cause: the forum from the "
+                    + "redirect was performed is not valid");
         }
 
-        // TODO: Wenn das Scientific forume existiert muss das hier vorausgefuellt sein und eine illegal user flow
-        // exception kommen falls nicht!
-        forumInput.setName("Mathematik Konferenz 2022");
-        forumInput.setId(1);
-        newSubmission.setScientificForumId(forumInput.getId());
+        forumInput = forumService.get(forumInput);
         editors = userService.getList(forumInput);
+        newSubmission.setScientificForumId(forumInput.getId());
+    }
+
+    /**
+     * Must be called after forumInput has been initialized.
+     */
+    private void initNewSubmission() {
+        newSubmission = new Submission();
+        newSubmission.setScientificForumId(forumInput.getId());
     }
 
     /**
      * Add the entered co-author to the list of co-authors.
      */
     public void submitCoAuthor() {
-        coAuthorInput = coAuthorInput.clone();
-        for (User coAuthor: coAuthors) {
+        for (User coAuthor : coAuthors) {
             if (coAuthor.getEmailAddress().equals(coAuthorInput.getEmailAddress())) {
                 coAuthor.setTitle(coAuthorInput.getTitle());
                 coAuthor.setFirstName(coAuthorInput.getFirstName());
@@ -123,7 +135,7 @@ public class NewSubmissionBacking implements Serializable {
                 return;
             }
         }
-        coAuthors.add(coAuthorInput);
+        coAuthors.add(coAuthorInput.clone());
     }
 
     /**
@@ -132,7 +144,7 @@ public class NewSubmissionBacking implements Serializable {
      * @param user The co-author to delete.
      */
     public void deleteCoAuthor(User user) {
-        coAuthors.remove(user);
+        coAuthors.removeIf(current -> current.getEmailAddress().equals(user.getEmailAddress()));
     }
 
     /**
@@ -140,28 +152,35 @@ public class NewSubmissionBacking implements Serializable {
      *
      * @return The page of the entered submission.
      */
-    public String submit() throws IOException {
+    public String submit() {
         newSubmission.setSubmissionTime(LocalDateTime.now());
         newSubmission.setState(SubmissionState.SUBMITTED);
-        // TODO: Was, wenn der User nicht angemeldet ist?
         newSubmission.setAuthorId(sessionInformation.getUser().getId());
-        newSubmission = submissionService.add(newSubmission, coAuthors);
+
+        Paper paper = new Paper();
+        paper.setVisible(true);
+        paper.setUploadTime(LocalDateTime.now());
+        FileDTO file = new FileDTO();
+
+        try {
+            file.setFile(uploadedPDF.getInputStream().readAllBytes());
+            newSubmission = submissionService.add(newSubmission, coAuthors, paper, file);
+        } catch (IOException e) {
+            initNewSubmission();
+
+            uiMessageEvent.fire(new UIMessage(messageBundle.getString("failedUpload"), MessageCategory.ERROR));
+            logger.log(Level.WARNING, "the submission was not successfully added.");
+            return null;
+        }
 
         if (newSubmission == null) {
-            logger.log(Level.SEVERE, "the submission was not successfully added.");
+            initNewSubmission();
+
+            logger.log(Level.WARNING, "the submission was not successfully added.");
             return null;
         } else {
-            Paper paper = new Paper();
-            logger.log(Level.INFO, "Adding paper to the submission with id: " + newSubmission.getId());
-            paper.setSubmissionId(newSubmission.getId());
-            paper.setVisible(false);
-            paper.setUploadTime(LocalDateTime.now());
-            FileDTO file = new FileDTO();
-            file.setFile(uploadedPDF.getInputStream().readAllBytes());
-            paperService.add(file, paper);
+            return "submission?faces-redirect=true&id=" + newSubmission.getId();
         }
-        // TODO: hier die submission Seite returnen!
-        return "submission?faces-redirect=true&id=" + newSubmission.getId();
     }
 
     /**
@@ -255,5 +274,4 @@ public class NewSubmissionBacking implements Serializable {
     public List<User> getEditors() {
         return editors;
     }
-
 }

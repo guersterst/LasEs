@@ -1,15 +1,17 @@
 package de.lases.business.service;
 
+import de.lases.business.util.EmailUtil;
 import de.lases.global.transport.*;
-import de.lases.persistence.exception.DataNotCompleteException;
-import de.lases.persistence.exception.DataNotWrittenException;
-import de.lases.persistence.exception.InvalidFieldsException;
-import de.lases.persistence.exception.NotFoundException;
+import de.lases.persistence.exception.*;
+import de.lases.persistence.internal.ConfigReader;
 import de.lases.persistence.repository.PaperRepository;
 import de.lases.persistence.repository.SubmissionRepository;
 import de.lases.persistence.repository.Transaction;
+import de.lases.persistence.repository.UserRepository;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
+import jakarta.enterprise.inject.spi.CDI;
+import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 
 import java.io.Serializable;
@@ -20,10 +22,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @author Stefanie Gürster, Sebastian Vogt
  * <p>
  * Provides functionality for handling papers in {@link Submission}s.
  * In case of an unexpected state, a {@link UIMessage} event will be fired.
+ *
+ * @author Stefanie Gürster
+ * @author Sebastian Vogt
  */
 @Dependent
 public class PaperService implements Serializable {
@@ -33,6 +37,9 @@ public class PaperService implements Serializable {
 
     @Inject
     private transient PropertyResourceBundle resourceBundle;
+
+    @Inject
+    private FacesContext facesContext;
 
     private static final Logger logger = Logger.getLogger(PaperService.class.getName());
 
@@ -49,7 +56,7 @@ public class PaperService implements Serializable {
         if (paper.getSubmissionId() == null && paper.getVersionNumber() == null) {
 
             logger.severe("The id of the paper is not valid. Therefore no paper object can be queried.");
-            throw new IllegalArgumentException(resourceBundle.getString("idMissing"));
+            throw new InvalidFieldsException(resourceBundle.getString("idMissing"));
 
         } else {
 
@@ -66,9 +73,6 @@ public class PaperService implements Serializable {
                 String message = resourceBundle.getString("paperNotFound");
                 uiMessageEvent.fire(new UIMessage(message, MessageCategory.ERROR));
 
-                logger.fine("Error while loading a paper with the submission id: " + paper.getSubmissionId()
-                        + " and version number: " + paper.getVersionNumber());
-
                 transaction.abort();
 
             }
@@ -77,59 +81,17 @@ public class PaperService implements Serializable {
     }
 
     /**
-     * Adds a {@link Paper} to a submission.
-     * <p>
-     * Whether this is a submission-pdf or a revision-pdf is determined internally.
-     * If this is a revision the editor will be informed by mail about this,
+     * Adds a {@link Paper} to a submission. The editor will be informed by mail about this,
      * using the {@link de.lases.business.util.EmailUtil}-utility.
-     * </p>
      *
      * @param file  The {@link FileDTO} to be added with the paper,
      *              containing a {@code byte[]} with the pdf.
      * @param paper The filled {@link Paper} to be added.
+     *
+     * @author Sebastian Vogt
      */
     public void add(FileDTO file, Paper paper) {
         Transaction transaction = new Transaction();
-
-        // Create the submission dto for checking if the added paper is the
-        // first one added to the submission.
-        Submission submission = new Submission();
-        submission.setId(paper.getSubmissionId());
-
-        // Create an admin to get full access to the list of added papers
-        User user = new User();
-        user.setAdmin(true);
-
-        List<Paper> paperList;
-
-        // TODO: Das email zeug wieder einkommentieren
-        logger.log(Level.SEVERE, "einkommentieren");
-//        try {
-//            // TODO: De Methode geht ned, do muss ich mir eine eigene schreiben!
-//            paperList = PaperRepository.getList(submission, transaction,
-//                    user, new ResultListParameters());
-//        } catch (DataNotCompleteException e) {
-//            uiMessageEvent.fire(new UIMessage(resourceBundle.getString(
-//                    "dataNotWritten"), MessageCategory.ERROR));
-//            logger.log(Level.WARNING, e.getMessage());
-//            transaction.abort();
-//            return;
-//        } catch (NotFoundException e) {
-//            transaction.abort();
-//            throw new InvalidFieldsException("the submission specified in the"
-//                    + "paper DTO was not found", e);
-//        }
-//
-//        // TODO: Sobald die richtige Methode implementiert ist hier ein assert anstatt ein if einbauen!
-//        if (paperList == null) {
-//            logger.log(Level.SEVERE, "paperList is still null, probably because the paperGetList method is not" +
-//                    "implemented yet!");
-//        } else {
-//            if (!paperList.isEmpty()) {
-//                logger.log(Level.INFO, "Sending email to an editor.");
-//                // TODO: Email senden oder a ned in develop mode.
-//            }
-//        }
 
         try {
             PaperRepository.add(paper, file, transaction);
@@ -141,7 +103,59 @@ public class PaperService implements Serializable {
             transaction.abort();
             return;
         }
-        transaction.commit();
+
+        if (sendEmailsForPaper(paper, transaction)) {
+            transaction.commit();
+        } else {
+            transaction.abort();
+        }
+    }
+
+    /**
+     * @author Sebastian Vogt
+     */
+    private boolean sendEmailsForPaper(Paper paper, Transaction transaction) {
+        Submission submission = new Submission();
+        submission.setId(paper.getSubmissionId());
+
+        try {
+            submission = SubmissionRepository.get(submission, transaction);
+        } catch (NotFoundException | DataNotCompleteException e) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString(
+                    "dataNotWritten"), MessageCategory.ERROR));
+            logger.log(Level.WARNING, "Submission was not found or could not be loaded " +
+                    "when adding a paper.");
+            return false;
+        }
+
+        User editor = new User();
+        editor.setId(submission.getEditorId());
+
+        try {
+            editor = UserRepository.get(editor, transaction);
+        } catch (NotFoundException ex) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString(
+                    "dataNotWritten"), MessageCategory.ERROR));
+            logger.log(Level.WARNING, "Editor was not found when adding a paper.");
+            return false;
+        }
+
+        assert editor != null;
+        assert editor.getEmailAddress() != null;
+
+        String emailEditor = editor.getEmailAddress();
+
+        try {
+            EmailUtil.sendEmail(new String[]{emailEditor}, null,
+                    resourceBundle.getString("email.editorRevision.subject"),
+                    resourceBundle.getString("email.editorRevision.body") + "\n" + submission.getTitle()
+                            + "\n" + EmailUtil.generateSubmissionURL(submission, facesContext));
+        } catch (EmailTransmissionFailedException e) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("emailNotSent") + " "
+                    + String.join(", ", e.getInvalidAddresses()), MessageCategory.ERROR));
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -165,6 +179,7 @@ public class PaperService implements Serializable {
             try {
 
                 PaperRepository.change(paper, transaction);
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reminder"), MessageCategory.INFO));
                 transaction.commit();
 
             } catch (DataNotWrittenException exception) {
@@ -214,15 +229,11 @@ public class PaperService implements Serializable {
             } catch (DataNotWrittenException exception) {
 
                 uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotWritten"), MessageCategory.ERROR));
-                logger.log(Level.WARNING, exception.getMessage());
-
                 transaction.abort();
+
             } catch (NotFoundException exception) {
 
                 uiMessageEvent.fire(new UIMessage(resourceBundle.getString("paperNotFound"), MessageCategory.ERROR));
-                logger.fine("Error while removing a paper with the submission id: " + paper.getSubmissionId()
-                        + " and version number: " + paper.getVersionNumber());
-
                 transaction.abort();
 
             }
@@ -254,9 +265,6 @@ public class PaperService implements Serializable {
             }  catch (NotFoundException exception) {
 
                 uiMessageEvent.fire(new UIMessage(resourceBundle.getString("paperNotFound"), MessageCategory.ERROR));
-                logger.fine("Error while loading a file of a paper with the submission id: " + paper.getSubmissionId()
-                        + " and version number: " + paper.getVersionNumber());
-
                 transaction.abort();
 
             }
@@ -285,38 +293,74 @@ public class PaperService implements Serializable {
         try{
             logger.finest("Getting paper list of a specific submission");
             paperList = PaperRepository.getList(submission, transaction, user, resultListParameters);
+            transaction.commit();
         } catch (DataNotCompleteException e) {
-
-            logger.fine("Error while loading a list of a paper with the submission id: " + submission.getId()
-                    + " and a user with the id: " + user.getId());
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotComplete"), MessageCategory.WARNING));
 
+            transaction.abort();
 
         } catch (NotFoundException e) {
-            logger.fine("Error while loading a list of a paper with the submission id: " + submission.getId()
-                    + " and a user with the id: " + user.getId());
+
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotFound"), MessageCategory.WARNING));
 
+            transaction.abort();
         }
         return paperList;
     }
 
     /**
-     * Returns the latest paper of a submission.
+     * Returns the latest visible paper of a submission.
      *
      * <p>
      * If there are no revisions for this submission the original {@link Paper} is the latest.
-     * The paper returned is determined by the highest privilege, which that
-     * user possesses on that submission. Meaning he might not have view access
-     * on unreleased papers
      * </p>
      *
      * @param submission A {@link Submission}-DTO containing a valid id.
-     * @param user       The user who requests the papers, containing a valid view-privilege.
      * @return The submissions paper, which was least recently uploaded.
      */
-    public Paper getLatest(Submission submission, User user) {
-        return null;
+    public Paper getLatest(Submission submission) {
+        Transaction transaction = new Transaction();
+        Paper paper = null;
+        try {
+            paper = PaperRepository.getNewestPaperForSubmission(submission, transaction);
+        } catch (NotFoundException e) {
+            uiMessageEvent.fire(new UIMessage("No review can be uploaded, as no paper was submitted.", MessageCategory.ERROR));
+        } finally {
+            transaction.commit();
+        }
+        return paper;
+    }
+
+    public int countPaper(Submission submission, User user, ResultListParameters resultListParameters) {
+        if (submission.getId() == null || user.getId() == null){
+            logger.severe("Submission id: " + submission.getId() + " user id: " + user.getId() + " must not be null.");
+            throw new InvalidFieldsException("Id of submission or user should not be null.");
+        }
+
+        Transaction transaction = new Transaction();
+        int pages = 0;
+
+        try {
+            int items = PaperRepository.countPaper(user,submission,transaction,resultListParameters);
+            transaction.commit();
+
+            ConfigReader configReader = CDI.current().select(ConfigReader.class).get();
+            int maxLengthOfPagination = Integer.parseInt(configReader.getProperty("MAX_PAGINATION_LIST_LENGTH"));
+
+            pages = (int) Math.ceil((double) items / maxLengthOfPagination);
+
+        } catch (DataNotCompleteException e) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("notComplete"), MessageCategory.ERROR));
+
+            transaction.abort();
+
+        } catch (NotFoundException e) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("getPaperListFailed"), MessageCategory.ERROR));
+
+            transaction.abort();
+        }
+
+        return pages;
     }
 
 }

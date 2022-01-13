@@ -2,19 +2,20 @@
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 
     <!--Title of a Submission as Title of the page.-->
     <ui:define
-            name="title">Hello</ui:define>
+            name="title">#{labels.newSubmission}</ui:define>
 
     <!--Content of submission.xhtml.-->
     <ui:define name="content">
 
         <f:metadata>
             <f:importConstants type="de.lases.control.internal.Constants" var="Const"/>
+            <f:viewParam name="forumId" required="false" value="#{newSubmissionBacking.forumInput.id}"/>
+            <f:viewAction action="#{newSubmissionBacking.onLoad()}"/>
         </f:metadata>
 
         <div class="container-fluid">
@@ -32,7 +33,8 @@
                                         <h:outputLabel for="forum-name-itxt" value="#{labels.forumName}"/>
                                         <h:inputText id="forum-name-itxt" value="#{newSubmissionBacking.forumInput.name}"
                                                      required="true" requiredMessage="#{message.forum}"
-                                                     class="form-control" readonly="true"/>
+                                                     class="form-control" readonly="true"
+                                                     title="#{help['newSubmission.forumInput']}"/>
                                         <h:message for="forum-name-itxt"/>
                                     </div>
 
@@ -50,11 +52,13 @@
                                     <hr/>
 
                                     <div class="form-group">
+                                        <h:outputLabel for="editor-slctom" value="#{labels.editor}"/><br/>
                                         <h:selectOneMenu id="editor-slctom" styleClass="btn btn-secondary dropdown-toggle"
-                                                         value="#{newSubmissionBacking.newSubmission.editorId}">
-                                            <f:selectItems value="#{newSubmissionBacking.editors}" var="editor"
-                                                           itemLabel="#{editor.firstName.concat(' ').concat(editor.lastName)}"
-                                                           itemValue="#{editor.id}"/>
+                                                         value="#{newSubmissionBacking.newSubmission.editorId}"
+                                                         title = "#{help['newSubmission.selectEditor']}">
+                                            <f:selectItems value="#{newSubmissionBacking.editors}" var="item"
+                                                           itemLabel="#{item.firstName.concat(' ').concat(item.lastName)}"
+                                                           itemValue="#{item.id}"/>
                                         </h:selectOneMenu>
                                         <h:message for="editor-slctom"/>
                                     </div>
@@ -65,16 +69,16 @@
                                         <h:inputFile id="pdf-upload-ifile" value="#{newSubmissionBacking.uploadedPDF}"
                                                      required="true" requiredMessage="#{message.inputFile}"
                                                      validator="pdfValidator"
-                                                     class="form-control"/>
+                                                     class="form-control" title="#{help['newSubmission.uploadPDF']}"/>
                                         <h:message for="pdf-upload-ifile"/>
                                     </div>
 
                                     <hr/>
 
                                     <div class="form-group">
-                                        <h:commandButton styleClass="btn btn-primary" id="submitcbtn" value="#{labels.save}"
+                                        <h:commandButton styleClass="btn btn-primary" id="submitcbtn" value="#{labels.submit}"
                                                          action="#{newSubmissionBacking.submit()}"
-                                                         type="submit"/>
+                                                         type="submit" title="#{help['newSubmission.submit']}"/>
                                     </div>
                                 </h:form>
                             </div>
@@ -129,6 +133,8 @@
                                                      value="#{newSubmissionBacking.coAuthorInput.emailAddress}"
                                                      maxlength="#{Const.EMAIL_MAX}" required="true"
                                                      class="form-control"
+                                                     validator="emailAddressLayoutValidator"
+                                                     validatorMessage="#{message.emailInvalid}"
                                                      requiredMessage="#{message.emailRequired}"/>
                                         <h:message for="co-author-email-itxt"/>
                                     </div>
@@ -136,27 +142,43 @@
                                     <hr/>
 
                                     <div class="form-group">
-                                        <h:commandButton id="submit-co-author-cbtn" value="#{labels.add}"
+                                        <h:commandButton id="submit-co-author-cbtn" value="#{labels.addChange}"
                                                          styleClass="btn btn-secondary" type="submit"
-                                                         action="#{newSubmissionBacking.submitCoAuthor()}">
+                                                         action="#{newSubmissionBacking.submitCoAuthor()}"
+                                                         title="#{help['newSubmission.addCoAuthor']}">
                                             <f:ajax execute="co-authors-form" render="co-authors-form" />
                                         </h:commandButton>
                                     </div>
 
                                     <hr/>
 
+                                    <b><h:outputLabel value="#{labels.addedCoAuthors}"/></b>
                                     <h:dataTable id="co-author-list" value="#{newSubmissionBacking.coAuthors}"
-                                                 var="user">
+                                                 var="user" styleClass="table table-striped">
                                         <h:column>
-                                            <f:facet name="header">#{labels.addedCoAuthors}</f:facet>
-                                            #{user.title}
-                                            #{user.firstName}
-                                            #{user.lastName}
-                                            #{user.emailAddress}
+                                            <f:facet name="header">#{labels.titleInput}</f:facet>
+                                            <h:outputText value="#{user.title}"/>
+                                        </h:column>
+                                        <h:column>
+                                            <f:facet name="header">#{labels.firstName}</f:facet>
+                                            <h:outputText value="#{user.firstName}"/>
+                                        </h:column>
+                                        <h:column>
+                                            <f:facet name="header">#{labels.lastName}</f:facet>
+                                            <h:outputText value="#{user.lastName}"/>
+                                        </h:column>
+                                        <h:column>
+                                            <f:facet name="header">#{labels.email}</f:facet>
+                                            <h:outputText value="#{user.emailAddress}"/>
+                                        </h:column>
+                                        <h:column>
+                                            <f:facet name="header">#{labels.delete}</f:facet>
+
                                             <h:commandButton id="delete-co-author-cbtn" value="#{labels.delete}"
                                                              styleClass="btn-secondary btn" type="submit"
-                                                             action="#{newSubmissionBacking.deleteCoAuthor(user)}">
-                                                <f:ajax execute="co-authors-form" render="co-authors-form" />
+                                                             action="#{newSubmissionBacking.deleteCoAuthor(user)}"
+                                                             title="#{help['newSubmission.deleteCoAuthor']}">
+                                                <f:ajax execute="co-authors-form" render="co-authors-form"/>
                                             </h:commandButton>
                                         </h:column>
                                     </h:dataTable>

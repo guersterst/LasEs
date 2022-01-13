@@ -1,0 +1,89 @@
+<ui:composition template="/resources/templates/main.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:st="http://xmlns.jcp.org/jsf/composite/templates/composites/submissionTable"
+                xmlns:sft="http://xmlns.jcp.org/jsf/composite/templates/composites/scientificForumTable"
+                xmlns:ut="http://xmlns.jcp.org/jsf/composite/templates/composites/usertable">
+
+<!-- Page title -->
+<ui:define name="title">#{labels['homePage.title']}</ui:define>
+
+<!-- Content of homepage.xhtml -->
+<ui:define name="content">
+
+    <f:metadata>
+        <f:viewAction action="#{resultListBacking.onLoad()}"/>
+        <f:viewParam value="#{resultListBacking.searchWord}"
+                     name="search-word"/>
+    </f:metadata>
+
+    <div class="container">
+
+        <div class="card">
+            <div class="card-body">
+                <h:outputText value="#{labels.youSearched}"/>:
+                <h:outputText value="#{resultListBacking.searchWord}"/>
+            </div>
+        </div>
+
+        <hr/>
+
+        <div class="card">
+            <div class="card-head">
+                <!-- Tabs for the different views -->
+                <h:form id="tabs">
+                    <ul class="nav nav-tabs justify-content-center">
+                        <li class="nav-item">
+                            <h:commandLink value="#{labels['ownSubmissions']}"
+                                           action="#{resultListBacking.showOwnSubmissionsTab()}"
+                                           styleClass="#{'nav-link'.concat(resultListBacking.ownCssClassSuffix)}"/>
+                        </li>
+                        <li class="nav-item">
+                            <h:commandLink value="#{labels['reviewedSubmissions']}"
+                                           action="#{resultListBacking.showSubmissionsToReviewTab()}"
+                                           styleClass="#{'nav-link'.concat(resultListBacking.reviewCssClassSuffix)}"/>
+                        </li>
+                        <li class="nav-item">
+                            <h:commandLink value="#{labels['editedSubmissions']}"
+                                           action="#{resultListBacking.showSubmissionsToEditTab()}"
+                                           styleClass="#{'nav-link'.concat(resultListBacking.editCssClassSuffix)}"/>
+                        </li>
+                    </ul>
+                </h:form>
+            </div>
+
+            <div class="card-body">
+                <st:submissiontable backing="#{resultListBacking}"/>
+            </div>
+        </div>
+
+        <hr/>
+
+        <div class="card">
+            <div class="card-header">
+                #{labels.scientificForums}
+            </div>
+            <div class="card-body">
+                <sft:scientificForumTable backing="#{resultListBacking}"/>
+            </div>
+        </div>
+
+        <h:panelGroup rendered="#{navigationBacking.sessionInformation.user.isEditor()
+                        || navigationBacking.sessionInformation.user.isAdmin()}" layout="block">
+            <hr/>
+            <div class="card">
+                <div class="card-header">
+                    #{labels.userList}
+                </div>
+                <div class="card-body">
+                    <ut:usertable backing="#{resultListBacking}"/>
+                </div>
+            </div>
+        </h:panelGroup>
+
+    </div>
+</ui:define>
+
+</ui:composition>

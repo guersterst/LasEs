@@ -12,17 +12,23 @@
     <title>
         <ui:insert name="title">LasEs</ui:insert>
     </title>
+
+    <h:outputScript name="design/bootstrap/js/bootstrap.bundle.min.js"/>
     <h:outputStylesheet name="design/bootstrap/css/bootstrap.min.css"/>
     <h:outputStylesheet name="design/css/main.css"/>
     <h:outputStylesheet name="design/css/welcome.css"/>
+
+    <!--Stylesheet for different themes-->
+    <!--This sheet should be the last stylesheet. So there should be no problems with bootstrap.-->
+    <h:outputStylesheet name="#{administrationBacking.pathToStyle}"/>
+
 </h:head>
 
 <!--Inorder to include a page you have to use ui:composition and ui:define -->
 <!--ui:composition with template="../../resources/template/main.xhtml-->
 <!--ui:define overrides the default-->
 <!--See welcome.xhtml. It already includes welcome.xhtml right-->
-<h:body>
-    <div id="page">
+<h:body id="page">
         
         <!--Includes navigaton.-->
         <div id="navigation">
@@ -30,20 +36,22 @@
                 <ui:include src="navigation.xhtml"></ui:include>
             </ui:insert>
         </div>
-        
+
         <!--Includes content for default-->
         <div id="content">
+            <div class="top">
+                <h:messages globalOnly="true" styleClass="text-center alert"
+                            errorClass="alert-danger error" infoClass="alert-info info" warnClass="warning alert-warning"/>
+            </div>
             <ui:insert name="content">
                 <ui:include src="content.xhtml"></ui:include>
             </ui:insert>
         </div>
         <!--Includes footer-->
-        <div id="footer">
+        <div id="footer-insert">
             <ui:insert name="footer">
                 <ui:include src="footer.xhtml"></ui:include>
             </ui:insert>
         </div>
-        
-    </div>
 </h:body>
 </html>

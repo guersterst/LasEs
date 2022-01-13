@@ -1,7 +1,508 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition template="/resources/templates/main.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:pg="http://xmlns.jcp.org/jsf/composite/templates/composites/pagination"
+                xmlns:col="http://xmlns.jcp.org/jsf/composite/templates/composites/sortsearchcolumn"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
 
+    <!-- page title -->
+    <ui:define name="title">#{scientificForumBacking.forum.name}</ui:define>
+
+    <!-- content of scientificForum.xhtml -->
+    <ui:define name="content">
+
+        <f:metadata>
+            <f:viewParam value="#{scientificForumBacking.forum.id}" name="id"/>
+            <f:event type="preRenderView" listener="#{scientificForumBacking.preRenderViewListener}"/>
+            <f:viewAction action="#{scientificForumBacking.onLoad()}"/>
+        </f:metadata>
+
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="container" id="container-forum">
+                        <div class="card" id="toolbox">
+
+                            <!-- header -->
+                            <div class="card-header">
+                                <div class="row">
+
+                                    <!-- delete forum -->
+                                    <div class="col-md-6">
+                                        <h:form>
+                                            <h:commandButton styleClass="btn btn-secondary"
+                                                             id="delete-forum-cbtn"
+                                                             title="#{help.deleteForum}"
+                                                             value="#{labels.deleteButtonForum}"
+                                                             onclick="PF('dlg').show()"
+                                                             rendered="#{scientificForumBacking.sessionInformation.user.admin}"
+                                                             type="button"/>
+                                            <p:dialog id="delete-forum-dlg" widgetVar="dlg">
+                                                <div class="text-center">
+                                                    <h:outputText id="delete-warning-otxt"
+                                                                  value="#{message.deleteWarningForum}"/>
+                                                </div>
+                                                <br/>
+                                                <div class="text-center">
+                                                    <h:commandButton styleClass="btn btn-primary"
+                                                                     id="agree-delete-cbtn"
+                                                                     value="#{labels.agreeButton}"
+                                                                     action="#{scientificForumBacking.deleteForum()}"/>
+                                                </div>
+                                            </p:dialog>
+                                        </h:form>
+                                    </div>
+
+                                    <!-- new submission -->
+                                    <div class="col-md-2">
+                                        <h:form>
+                                            <h:button
+                                                    title="#{help.createNewSubmission}"
+                                                    value="#{labels.createNewSubmission}"
+                                                    id="new-submission-btn"
+                                                    outcome="#{'/views/authenticated/newSubmission?forumId='
+                                                        .concat(scientificForumBacking.forum.id)}"
+                                                    styleClass="btn btn-secondary"/>
+                                        </h:form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--general inomformation about the forum-->
+                            <div class="card-body">
+                                <div class="row">
+
+                                    <!-- forum information column -->
+                                    <div class="col-md-6">
+                                        <h:form>
+
+                                            <!-- name -->
+                                            <div class="form-group">
+                                                <h:inputText id="forum-name-itxt"
+                                                             value="#{scientificForumBacking.forum.name}"
+                                                             rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
+                                                             readonly="#{!scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
+                                                             title="#{help.forumName}"
+                                                             required="true"
+                                                             requiredMessage="#{message.requiredForForum}"
+                                                             styleClass="h4 form-control"
+                                                             size="37">
+                                                    <f:validator validatorId="forumNameExistsValidator"/>
+                                                </h:inputText>
+                                                <h:message for="forum-name-itxt"/>
+                                            </div>
+
+                                            <!-- alternative name output for non editors -->
+                                            <div class="form-group">
+                                                <h:outputText id="forum-name-otxt"
+                                                              value="#{scientificForumBacking.forum.name}"
+                                                              rendered="#{!scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
+                                                              tite="#{help.forumName}"
+                                                              styleClass="h4 form-control">
+                                                    <br/>
+                                                </h:outputText>
+                                            </div>
+                                            <div class="body">
+
+                                                <!-- desc -->
+                                                <div class="form-group">
+                                                    <h:inputTextarea
+                                                            id="description-itxt"
+                                                            value="#{scientificForumBacking.forum.description}"
+                                                            readonly="#{!scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
+                                                            rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
+                                                            required="true"
+                                                            requiredMessage="#{message.requiredForForum}"
+                                                            tite="#{help.forumDesc}"
+                                                            styleClass="form-control"
+                                                            rows="9"/>
+                                                </div>
+
+                                                <!-- alternative desc output for non editors -->
+                                                <div class="form-group">
+                                                    <h:outputText id="description-otxt"
+                                                                  value="#{scientificForumBacking.forum.description}"
+                                                                  rendered="#{!scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
+                                                                  tite="#{help.forumDesc}"
+                                                                  styleClass="form-control"/>
+                                                </div>
+
+                                                <hr/>
+
+                                                <!-- url -->
+                                                <div class="form-group my-2">
+                                                    <h:outputText id="url-otxt"
+                                                                  value="#{labels.website}"
+                                                                  style="margin: 3px"
+                                                                  styleClass="text-muted"
+                                                                  rendered="#{scientificForumBacking.forum.url != null}"/>
+                                                    <h:inputText id="change-url-itxt"
+                                                                 value="#{scientificForumBacking.forum.url}"
+                                                                 rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
+                                                                 required="true"
+                                                                 size="60"
+                                                                 requiredMessage="#{message.requiredForForum}"
+                                                                 title="#{help.forumURL}"
+                                                                 styleClass="form-control"/>
+
+                                                    <!-- alternative url output for non editors -->
+                                                    <h:outputLink value="#{scientificForumBacking.forum.url}"
+                                                                  rendered="#{!scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
+                                                                  title="#{help.forumURL}"
+                                                                  styleClass="form-control">
+                                                        <h:outputText value="#{scientificForumBacking.forum.url}"/>
+                                                    </h:outputLink>
+                                                </div>
+                                            </div>
+
+                                            <!-- deadline -->
+                                            <div class="form-group">
+                                                <h:outputText id="deadline-submission-otxt"
+                                                              value="#{labels.submissionDeadline}"
+                                                              style="margin: 3px"
+                                                              styleClass="text-muted"
+                                                              rendered="#{scientificForumBacking.forum.deadline != null
+                                                              and (!scientificForumBacking.loggedInUserIsEditorOrAdmin())}"/>
+                                                <h:outputText id="date-review-deadline-otxt"
+                                                              value="#{scientificForumBacking.forum.deadline}"
+                                                              style="margin: 3px"
+                                                              title="#{help.forumDeadLine}"
+                                                              rendered="#{(scientificForumBacking.forum.deadline != null)
+                                                              and (!scientificForumBacking.loggedInUserIsEditorOrAdmin())}"
+                                                              styleClass="form-control">
+                                                    <f:convertDateTime type="localDateTime"/>
+                                                </h:outputText>
+
+                                                <!-- change deadline -->
+                                                <h:outputText id="deadline-submission-change-otxt"
+                                                              value="#{labels.submissionDeadline}"
+                                                              style="margin: 3px"
+                                                              styleClass="text-muted"
+                                                              rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}"/>
+                                                <h:inputText id="change-deadline-itxt"
+                                                             value="#{scientificForumBacking.forumDeadLineInput}"
+                                                             rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
+                                                             title="#{help.forumDeadLine}"
+                                                             a:type="date"
+                                                             converterMessage="#{message.wrongDate}"
+                                                             styleClass="form-control">
+                                                    <f:convertDateTime type="localDate" pattern="yyyy-MM-dd"/>
+                                                </h:inputText>
+                                            </div>
+                                            <br/>
+
+                                            <!-- review manual -->
+                                            <h:outputText id="reviewManual-otxt"
+                                                          value="#{labels.reviewManual}"
+                                                          style="margin: 3px"
+                                                          styleClass="text-muted"
+                                                          rendered="#{scientificForumBacking.forum.reviewManual != null}"/>
+                                            <h:commandButton id="review-manual-cbtn"
+                                                             styleClass="btn btn-secondary"
+                                                             value="#{labels.displayReviewManual}"
+                                                             style="margin: 3px"
+                                                             rendered="#{scientificForumBacking.forum.reviewManual != null}"
+                                                             onclick="PF('revMnDlg').show()"
+                                                             type="button"
+                                                             title="#{help.forumReviewManual}"/>
+                                            <p:dialog id="review-manual-dlg"
+                                                      widgetVar="revMnDlg">
+                                                <div class="text-center">
+                                                    <h:outputText id="review-manual-otxt"
+                                                                  value="#{scientificForumBacking.forum.reviewManual}"
+                                                                  rendered="#{!scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
+                                                                  styleClass="form-control"/>
+                                                    <h:inputTextarea
+                                                            id="review-manual-itxt"
+                                                            value="#{scientificForumBacking.forum.reviewManual}"
+                                                            readonly="#{!scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
+                                                            rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
+                                                            required="true"
+                                                            requiredMessage="#{message.requiredForForum}"
+                                                            rows="10"
+                                                            cols="20"
+                                                            styleClass="form-control"/>
+                                                </div>
+                                                <br/>
+                                                <div class="text-center">
+                                                    <h:commandButton styleClass="btn btn-primary"
+                                                                     id="save-review-manual-cbtn"
+                                                                     value="#{labels.save}"
+                                                                     rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
+                                                                     type="submit"/>
+                                                </div>
+                                            </p:dialog>
+
+
+                                            <!-- submit changes -->
+                                            <div class="form-group">
+                                                <h:commandButton id="submit-forum-changes-cbtn"
+                                                                 value="#{labels.agreeButton}"
+                                                                 styleClass="btn btn-primary"
+                                                                 type="submit"
+                                                                 action="#{scientificForumBacking.submitChanges}"
+                                                                 title="#{help.forumChanges}"
+                                                                 rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}"/>
+                                            </div>
+                                        </h:form>
+                                    </div>
+
+                                    <!-- editor column -->
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+
+                                            <!-- editor controls -->
+                                            <!-- add editor -->
+                                            <h:form>
+                                                <div class="form-group">
+                                                    <h:outputLabel for="editor-email-itxt"
+                                                                   value="#{labels.forumAddEditor}"
+                                                                   rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}"/>
+                                                    <h:inputText id="editor-email-itxt"
+                                                                 value="#{scientificForumBacking.newEditorInput.emailAddress}"
+                                                                 class="form-control"
+                                                                 required="true"
+                                                                 requiredMessage="#{message.requiredToAddEditor}"
+                                                                 rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}">
+                                                        <f:validator validatorId="emailAddressExistsValidator"/>
+                                                    </h:inputText>
+                                                    <h:message for="editor-email-itxt"/>
+                                                </div>
+                                                <div class="form-group">
+                                                    <h:commandButton id="add-editor-cbtn"
+                                                                     value="#{labels.add}"
+                                                                     styleClass="btn btn-primary mt-2"
+                                                                     type="submit"
+                                                                     action="#{scientificForumBacking.addEditor()}"
+                                                                     rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}">
+                                                        <hr/>
+                                                    </h:commandButton>
+                                                </div>
+                                            </h:form>
+
+                                            <!--- editor list -->
+                                            <h:form id="editor-list-frm">
+                                                <h:dataTable id="editor-list"
+                                                             value="#{scientificForumBacking.editors}"
+                                                             var="editor">
+                                                    <h:column>
+                                                        <f:facet name="header">#{labels.editorsForum}</f:facet>
+                                                        #{editor.title}
+                                                        #{editor.firstName}
+                                                        #{editor.lastName}
+                                                    </h:column>
+                                                    <h:column>
+                                                        <f:facet name="header"/>
+                                                        <h:commandButton id="delete-editor-cbtn"
+                                                                         value="#{labels.deleteX}"
+                                                                         styleClass="btn-secondary btn mx-2"
+                                                                         type="submit"
+                                                                         action="#{scientificForumBacking.removeEditor(editor)}"
+                                                                         rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}">
+                                                            <f:ajax execute="editor-list-frm"
+                                                                    render="editor-list-frm"/>
+                                                        </h:commandButton>
+                                                    </h:column>
+                                                </h:dataTable>
+                                            </h:form>
+                                        </div>
+                                    </div>
+
+                                    <!-- science field column -->
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+
+                                            <!-- add sciencefield -->
+                                            <h:form id="fields-add-frm">
+                                                <div class="form-group">
+                                                    <p:outputLabel for="@next"
+                                                                   value="#{labels.addScienceField}"
+                                                                   rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}"/>
+                                                    <p:selectOneMenu id="advanced"
+                                                                     value="#{scientificForumBacking.selectedScienceFieldInput}"
+                                                                     panelStyle="width:180px"
+                                                                     effect="fade"
+                                                                     var="s"
+                                                                     filter="true"
+                                                                     filterMatchMode="startsWith"
+                                                                     rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}"
+                                                                     styleClass="form-control">
+                                                        <f:selectItems
+                                                                value="#{scientificForumBacking.allScienceFields}"
+                                                                var="scienceField"
+                                                                itemLabel="#{scienceField.name}"
+                                                                itemValue="#{scienceField}"
+                                                                styleClass="form-control"/>
+                                                        <p:column>
+                                                            <f:facet name="header">
+                                                                <h:outputText value="Name"/>
+                                                            </f:facet>
+                                                            <h:outputText value="#{s.name}"/>
+                                                        </p:column>
+                                                    </p:selectOneMenu>
+
+                                                    <div class="form-group">
+                                                        <h:commandButton id="apply-field-add-cbtn"
+                                                                         value="#{labels.add}"
+                                                                         styleClass="btn btn-primary"
+                                                                         action="#{scientificForumBacking.addScienceField}"
+                                                                         rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}">
+                                                            <hr/>
+                                                        </h:commandButton>
+                                                    </div>
+                                                </div>
+                                            </h:form>
+
+                                            <!-- fields list -->
+                                            <h:form id="fields-list-frm">
+                                                <h:dataTable id="science-field-list"
+                                                             value="#{scientificForumBacking.currentScienceFields}"
+                                                             var="currField">
+                                                    <h:column>
+                                                        <f:facet name="header">#{labels.scienceFieldsForum}</f:facet>
+                                                        #{currField.name}
+                                                    </h:column>
+                                                    <h:column>
+                                                        <f:facet name="header"/>
+                                                        <h:commandButton id="delete-field-cbtn"
+                                                                         value="#{labels.deleteX}"
+                                                                         styleClass="btn-secondary btn mx-2"
+                                                                         type="submit"
+                                                                         action="#{scientificForumBacking.removeScienceField(currField)}"
+                                                                         rendered="#{scientificForumBacking.loggedInUserIsEditorOrAdmin()}">
+                                                            <f:ajax execute="fields-list-frm"
+                                                                    render="fields-list-frm"/>
+                                                        </h:commandButton>
+                                                    </h:column>
+                                                </h:dataTable>
+                                            </h:form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- submission pagination -->
+                <div id="submission-pagination" class="col-md-12">
+                    <div class="container mt-5">
+                        <div class="card">
+                            <div class="card-head">
+                                <!-- Tabs for the different views -->
+                                <h:form id="tabs">
+                                    <ul class="nav nav-tabs justify-content-center">
+                                        <li class="nav-item">
+                                            <h:commandLink value="#{labels['ownSubmissions']}"
+                                                           action="#{scientificForumBacking.displayOwnSubmissionsTab()}"
+                                                           styleClass="#{'nav-link'.concat(scientificForumBacking.getOwnCssClassSuffix())}"/>
+                                        </li>
+                                        <li class="nav-item">
+                                            <h:commandLink value="#{labels['reviewedSubmissions']}"
+                                                           action="#{scientificForumBacking.displayReviewSubmissionsTab()}"
+                                                           styleClass="#{'nav-link'.concat(scientificForumBacking.getReviewCssClassSuffix())}"/>
+                                        </li>
+                                        <li class="nav-item">
+                                            <h:commandLink value="#{labels['editedSubmissions']}"
+                                                           action="#{scientificForumBacking.displayEditSubmissionsTab()}"
+                                                           styleClass="#{'nav-link'.concat(scientificForumBacking.getEditCssClassSuffix())}"/>
+                                        </li>
+                                    </ul>
+                                </h:form>
+                            </div>
+
+                            <div class="card-body">
+                                <h:form>
+                                    <!-- Filter controls -->
+                                    <div class="btn-group">
+                                        <!-- Date filtering -->
+                                        <h:selectOneMenu id="date-slctom"
+                                                         value="#{scientificForumBacking.submissionPagination.resultListParameters.dateSelect}"
+                                                         title="#{help.dateSelectForum}"
+                                                         styleClass="btn btn-secondary">
+                                            <f:selectItems value="#{scientificForumBacking.dateSelects}"
+                                                           var="select"
+                                                           itemLabel="#{labels['dateSelect.' += select]}"
+                                                           itemValue="#{select}"/>
+                                        </h:selectOneMenu>
+                                        <!-- Submission state filtering -->
+                                        <h:selectOneMenu id="state-slctom"
+                                                         value="#{scientificForumBacking.submissionPagination.resultListParameters.submissionState}"
+                                                         title="#{help.stateSelectForum}"
+                                                         styleClass="btn btn-secondary">
+                                            <f:selectItem itemValue="#{null}"
+                                                          itemLabel="#{labels['stateSelect.ALL']}"/>
+                                            <f:selectItems value="#{scientificForumBacking.submissionStates}"
+                                                           var="select"
+                                                           itemLabel="#{labels['stateSelect.' += select]}"
+                                                           itemValue="#{select}"/>
+                                        </h:selectOneMenu>
+                                    </div>
+                                    <pg:pagination paginator="#{scientificForumBacking.submissionPagination}">
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <col:sortsearchcolumn id="title-ssc"
+                                                                      paginator="#{scientificForumBacking.submissionPagination}"
+                                                                      columnIdentifier="title"
+                                                                      columnNamei18n="#{labels.title}"/>
+                                            </f:facet>
+                                            <h:link value="#{var.title}"
+                                                    outcome="/views/authenticated/submission"
+                                                    includeViewParams="true">
+                                                <f:param name="id" value="#{var.id}"/>
+                                            </h:link>
+                                        </h:column>
+
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <div class="input-group">
+                                                    <h:commandLink value="#{labels['homePage.submissionDate']}"
+                                                                   action="#{scientificForumBacking.submissionPagination.sortBy('timestamp_submission')}"
+                                                                   styleClass="input-group-text"/>
+                                                </div>
+                                            </f:facet>
+                                            <h:outputText value="#{var.submissionTime}">
+                                                <f:convertDateTime type="localDate"/>
+                                            </h:outputText>
+                                        </h:column>
+
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <div class="input-group">
+                                                    <h:commandLink value="#{labels.deadline}"
+                                                                   action="#{scientificForumBacking.submissionPagination.sortBy('timestamp_deadline_revision')}"
+                                                                   styleClass="input-group-text"/>
+                                                </div>
+                                            </f:facet>
+                                            <h:outputText value="#{var.deadlineRevision}">
+                                                <f:convertDateTime type="localDate"/>
+                                            </h:outputText>
+                                        </h:column>
+
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <div class="input-group">
+                                                    <h:commandLink value="#{labels.stateSub}"
+                                                                   action="#{scientificForumBacking.submissionPagination.sortBy('state')}"
+                                                                   styleClass="input-group-text"/>
+                                                </div>
+                                            </f:facet>
+                                            <h:outputText id="state-otxt"
+                                                          value="#{labels['stateSelect.' += var.state]}"
+                                                          styleClass="form-control text-center #{var.state}"/>
+                                        </h:column>
+                                    </pg:pagination>
+                                </h:form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ui:define>
 </ui:composition>
 

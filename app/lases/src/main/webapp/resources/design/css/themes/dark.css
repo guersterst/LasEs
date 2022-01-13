@@ -1,0 +1,244 @@
+/*
+Main css.
+ */
+#page {
+    background: rgba(131, 126, 124, 0.98);
+    border-color: black;
+}
+
+/*
+Css for footer.
+ */
+#footer {
+    background-color: #625d5a;
+    color: white;
+}
+
+/*
+Navigation
+ */
+.navbar {
+    background-color: #625d5a;
+}
+.navbar .navbar-brand {
+    color: #030877;
+}
+.navbar .navbar-brand:hover,
+.navbar .navbar-brand:focus {
+    color: white;
+}
+.navbar .navbar-text {
+    color: #070e9f;
+}
+.navbar .navbar-text a {
+    color: white;
+}
+.navbar .navbar-text a:hover,
+.navbar .navbar-text a:focus {
+    color: #0c15be;
+}
+.navbar .navbar-nav .nav-link {
+    color: white;
+    border-radius: .25rem;
+    margin: 0 0.25em;
+}
+.navbar .navbar-nav .nav-link:not(.disabled):hover,
+.navbar .navbar-nav .nav-link:not(.disabled):focus {
+    color: #424af6;
+}
+.navbar .navbar-nav .nav-item.active .nav-link,
+.navbar .navbar-nav .nav-item.active .nav-link:hover,
+.navbar .navbar-nav .nav-item.active .nav-link:focus,
+.navbar .navbar-nav .nav-item.show .nav-link,
+.navbar .navbar-nav .nav-item.show .nav-link:hover,
+.navbar .navbar-nav .nav-item.show .nav-link:focus {
+    color: #424af6;
+    background-color: #44403e;
+}
+.navbar .navbar-collapse,
+.navbar .navbar-form {
+    border-color: #ecf0f1;
+}
+.navbar .navbar-link {
+    color: white;
+}
+.navbar .navbar-link:hover {
+    color: #0a11af;
+}
+
+.navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item {
+    color: #424af6;
+}
+.navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item:hover,
+.navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item:focus {
+    color: #424af6;
+}
+.navbar-expand .navbar-nav .show .dropdown-menu .dropdown-item.active {
+    color: #424af6;
+    background-color: #070e9f;
+}
+
+
+
+/*
+Setting for buttons.
+ */
+.btn-primary {
+    background-color: black;
+    text-decoration-color: white;
+    border-color: black;
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active{
+    background-color: #424af6;
+    color: white;
+    border-color: #424af6;
+}
+
+.btn-primary:disabled {
+    background-color: #747477;
+    color: white;
+    border-color: #747477;
+}
+
+/*
+Buttons for pagination.
+ */
+.page-link {
+    background-color: #b6b2b1;
+    color: #070e9f;
+    border-color: #070e9f;
+}
+
+.active, .page-link:hover {
+    background-color: #070e9f;
+    color: white;
+    border-color: #070e9f;
+}
+
+/*
+Tabs for homepage.
+ */
+#tabs {
+    background-color: #030877;
+}
+
+#tabs> .nav-item {
+    text-decoration: none;
+    color: white;
+}
+
+#tabs > .nav-item > .reiter {
+    background-color: #424af6;
+    color: black;
+}
+
+/*
+Style all links
+ */
+a {
+    color: #070e9f;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #424af6;
+    text-decoration: none;
+}
+
+#impressum-lnk {
+    color: white;
+}
+
+#impressum-lnk:hover {
+    color: #454dee;
+}
+
+.nav-item > a {
+    color: white;
+    border-color: #070e9f;
+}
+
+.nav-item > a:hover {
+    color: white;
+    border-color: #424af6;
+}
+
+/*
+Profile styling
+ */
+.card-body, .card {
+    background-color: #a29e9c;
+}
+
+.card-header {
+    background-color: #030877;
+    color: white;
+}
+
+#toolbar > .card-body {
+    background-color: #a29e9c;
+}
+
+#is-admin-cbx {
+    background-color: #424af6;
+}
+
+.form-control:valid, .form-control, input{
+    background-color: #c9c6c6;
+}
+
+input:placeholder-shown {
+    color: #070e9f;
+}
+
+.input-group-text {
+    background-color: #9d9592;
+}
+
+
+/*
+Submission state
+ */
+.ACCEPTED ,.REJECTED, .REVISION_REQUIRED, .SUBMITTED {
+    color: white;
+    font-weight: bold;
+}
+
+.SUBMITTED {
+    background-color: #595952;
+    border-color: #595952;
+}
+
+.ACCEPTED {
+    background-color: #038d03;
+    border-color: #038d03;
+}
+
+.REJECTED {
+    background-color: #9a0404;
+    border-color: #9a0404;
+}
+
+.REVISION_REQUIRED {
+    background-color: #a18d03;
+    border-color: #a18d03;
+}
+
+.alert-danger {
+    background-color: #cc0707;
+}
+
+.alert-info {
+    background-color: #424af6;
+}
+
+.alert-warning {
+    background-color: #c0a906;
+}
+
+.alert-danger, .alert-info, .alert-warning {
+    color: white;
+}
+
+

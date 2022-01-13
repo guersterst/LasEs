@@ -1,6 +1,7 @@
 package de.lases.control.backing;
 
 import de.lases.business.service.*;
+import de.lases.business.util.EmailUtil;
 import de.lases.control.exception.IllegalAccessException;
 import de.lases.control.exception.IllegalUserFlowException;
 import de.lases.control.internal.*;
@@ -24,6 +25,7 @@ import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PropertyResourceBundle;
+import java.util.logging.Logger;
 
 /**
  * @author Stefanie Gürster
@@ -56,9 +58,6 @@ public class SubmissionBacking implements Serializable {
     private PaperService paperService;
 
     @Inject
-    private NewReviewBacking newReviewBacking;
-
-    @Inject
     private ToolbarBacking toolbarBacking;
 
     @Inject
@@ -66,6 +65,8 @@ public class SubmissionBacking implements Serializable {
 
     @Inject
     private transient PropertyResourceBundle resourceBundle;
+
+    private static final Logger logger = Logger.getLogger(SubmissionBacking.class.getName());
 
     private Part uploadedRevisionPDF;
 
@@ -75,15 +76,23 @@ public class SubmissionBacking implements Serializable {
 
     private List<User> coAuthors;
 
+    private List<User> reviewers;
+
     private User author;
 
     private Pagination<Paper> paperPagination;
 
     private Pagination<Review> reviewPagination;
 
-    private ReviewedBy reviewedBy;
-
     private Paper newestPaper;
+
+    private static final String PATH_TO_STYLE_DIRECTORY = "design/css/";
+    private static final String STYLE_RED = "red";
+    private static final String STYLE_GREEN = "green";
+    private static final String STYLE_YELLOW = "yellow";
+    private static final String STYLE_DEFAULT = "default";
+
+    private String styleStatus;
 
     /**
      * Initialize the dtos.
@@ -124,20 +133,29 @@ public class SubmissionBacking implements Serializable {
         coAuthors = new LinkedList<>();
         author = new User();
 
-        paperPagination = new Pagination<Paper>("version") {
+        paperPagination = new Pagination<>("version") {
             @Override
             public void loadData() {
-                paperPagination.getResultListParameters().setVisibleFilter(Visibility.ALL);
-                paperPagination.getResultListParameters().setDateSelect(DateSelect.ALL);
-                paperPagination.setEntries(paperService.getList(submission,sessionInformation.getUser(),paperPagination.getResultListParameters()));
+               setEntries(paperService.getList(submission, sessionInformation.getUser(), paperPagination.getResultListParameters()));
+                }
+
+            @Override
+            protected Integer calculateNumberPages() {
+                return paperService.countPaper(submission, sessionInformation.getUser(), paperPagination.getResultListParameters());
+            }
+        };
+
+        reviewPagination = new Pagination<Review>("version") {
+            @Override
+            public void loadData() {
+                reviewPagination.setEntries(reviewService.getList(submission, sessionInformation.getUser(), reviewPagination.getResultListParameters()));
             }
 
             @Override
             protected Integer calculateNumberPages() {
-                return 1;
+               return reviewService.getListCountPages(submission, sessionInformation.getUser(), reviewPagination.getResultListParameters());
             }
         };
-
     }
 
     /**
@@ -171,39 +189,59 @@ public class SubmissionBacking implements Serializable {
      * @throws IllegalAccessException If the user has no access rights for this
      *                                submission
      */
-    public void onLoad() {/*
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        if (!facesContext.isPostback()) {
-            //TODO: rausnehmen.
-
-        }*/
+    public void onLoad() {
         submission = submissionService.get(submission);
 
-        author.setId(submission.getAuthorId());
-        author = userService.get(author);
+        if (submissionService.canView(submission, sessionInformation.getUser())) {
+            //Style text field of the submission state.
+            styleSubmissionState(submission.getState());
 
-        scientificForum.setId(submission.getScientificForumId());
-        scientificForum = scientificForumService.get(scientificForum);
+            author.setId(submission.getAuthorId());
+            author = userService.get(author);
 
-        coAuthors = userService.getList(submission, Privilege.AUTHOR);
+            scientificForum.setId(submission.getScientificForumId());
+            scientificForum = scientificForumService.get(scientificForum);
 
-        paperPagination.loadData();
+            newestPaper = paperService.getLatest(submission);
 
+            coAuthors = userService.getList(submission, Privilege.AUTHOR);
+            coAuthors.removeIf(user -> user.getId().equals(author.getId()));
 
+            reviewers = userService.getList(submission, Privilege.REVIEWER);
+
+            paperPagination.loadData();
+            reviewPagination.loadData();
+
+            toolbarBacking.onLoad(submission);
+        } else {
+            logger.severe("Access denied to submission: " + submission.getId() + " for user with id: " + sessionInformation.getUser().getId());
+            throw new IllegalAccessException("Access denied to this submission because user is not allowed to access it.");
+        }
     }
 
+    public String styleSubmissionState(SubmissionState state) {
+        switch (state) {
+            case ACCEPTED -> styleStatus = PATH_TO_STYLE_DIRECTORY + STYLE_GREEN;
+            case SUBMITTED -> styleStatus = PATH_TO_STYLE_DIRECTORY + STYLE_DEFAULT;
+            case REJECTED -> styleStatus = PATH_TO_STYLE_DIRECTORY + STYLE_RED;
+            case REVISION_REQUIRED -> styleStatus = PATH_TO_STYLE_DIRECTORY + STYLE_YELLOW;
+        }
+        return styleStatus;
+    }
 
 
     /**
      * Checks if the view param is an integer and throws an exception if it is
      * not
      *
-     * @param event The component system event that happens before rendering
-     *              the view param.
      * @throws IllegalUserFlowException If there is no integer provided as view
      *                                  param
      */
-    public void preRenderViewListener(ComponentSystemEvent event) {}
+    public void preRenderViewListener(ComponentSystemEvent event) {
+        if (submission.getId() == null) {
+            throw new IllegalUserFlowException("Submission page called without an id.");
+        }
+    }
 
     /**
      * Set the state of the submission, which can be SUBMITTED,
@@ -220,7 +258,35 @@ public class SubmissionBacking implements Serializable {
      * @param review The review to download.
      * @throws IOException If the download fails.
      */
-    public void downloadReview(Review review) throws IOException {
+    public void downloadReview(Review review) {
+        FileDTO file = reviewService.getFile(review);
+        byte[] pdf = file.getFile();
+
+        if (pdf == null) {
+            // Error occured and a message event has been fired by the service.
+            return;
+        }
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(pdf.length);
+        baos.write(pdf, 0, pdf.length);
+
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+
+        HttpServletResponse response = (HttpServletResponse) facesContext.getExternalContext().getResponse();
+        response.setContentType(submission.getTitle() + "/pdf");
+        response.setContentLength(pdf.length);
+        response.setHeader("Content-disposition", "attachment;filename=review_" + getReviewerForReview(review).getLastName() + "_" + submission.getTitle() + ".pdf");
+
+        try {
+            ServletOutputStream outputStream = response.getOutputStream();
+            baos.writeTo(outputStream);
+            outputStream.flush();
+            response.flushBuffer();
+        } catch (IOException exception) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("failedDownload"), MessageCategory.WARNING));
+        }
+
+        facesContext.responseComplete();
     }
 
     /**
@@ -229,6 +295,11 @@ public class SubmissionBacking implements Serializable {
      * @param review The review to release.
      */
     public void releaseReview(Review review) {
+        if (review == null) {
+            throw new IllegalArgumentException("Cannot release null review");
+        }
+        review.setVisible(true);
+        reviewService.change(review);
     }
 
     /**
@@ -249,7 +320,7 @@ public class SubmissionBacking implements Serializable {
         HttpServletResponse response = (HttpServletResponse) facesContext.getExternalContext().getResponse();
         response.setContentType(submission.getTitle() + "/pdf");
         response.setContentLength(pdf.length);
-        response.setHeader("Content-disposition","attachment;filename="+ submission.getTitle() + ".pdf");
+        response.setHeader("Content-disposition", "attachment;filename=" + submission.getTitle() + ".pdf");
 
         try {
             ServletOutputStream outputStream = response.getOutputStream();
@@ -270,7 +341,31 @@ public class SubmissionBacking implements Serializable {
      * @return The page for a new review
      */
     public String uploadReview() {
-        return null;
+        return "/views/reviewer/newReview.xhtml?faces-redirect=true&id=" + submission.getId();
+    }
+
+    /**
+     * Checks if the "upload review" button should be disabled.
+     * Disabled if reviewer has already uploaded a review.
+     * @return whether the button needs to be disabled.
+     */
+    public boolean disableReviewUploadButton() {
+        boolean disable = true;
+
+        // Cases for both admin and reviewer.
+        if (!loggedInUserHasPendingReviewRequest()) {
+            if (sessionInformation.getUser().isAdmin() || loggedInUserIsReviewer()) {
+                Review reviewAlreadyWritten = new Review();
+                reviewAlreadyWritten.setSubmissionId(submission.getId());
+                reviewAlreadyWritten.setReviewerId(sessionInformation.getUser().getId());
+                reviewAlreadyWritten.setPaperVersion(newestPaper.getVersionNumber());
+                // Only render if no review has been written yet.
+                if (reviewService.get(reviewAlreadyWritten) == null && newestPaper.isVisible()) {
+                    disable = false;
+                }
+            }
+        }
+        return disable;
     }
 
     /**
@@ -279,6 +374,9 @@ public class SubmissionBacking implements Serializable {
      * @param user The user that accepted to be a reviewer.
      */
     public void acceptReviewing(User user) {
+        ReviewedBy update = submissionService.getReviewedBy(submission, user);
+        update.setHasAccepted(AcceptanceStatus.ACCEPTED);
+        submissionService.changeReviewedBy(update);
     }
 
     /**
@@ -287,27 +385,51 @@ public class SubmissionBacking implements Serializable {
      * @param user The user that declined to be a reviewer.
      */
     public void declineReviewing(User user) {
+        ReviewedBy update = submissionService.getReviewedBy(submission, user);
+        update.setHasAccepted(AcceptanceStatus.REJECTED);
+        submissionService.changeReviewedBy(update);
     }
 
     /**
-     * Apply all the filters that are specified outside the pagination to
-     * the table.
+     * Get the Deadline for a reviewer.
+     * @param user user DTO of the reviewer with a valid ID.
+     * @return LocalDateTime of the Deadline
      */
-    public void applyFilters() {
+    public LocalDateTime getDeadlineForReviewer(User user) {
+        ReviewedBy reviewedBy = reviewedByForUser(user);
+        if (reviewedBy != null) {
+            return reviewedBy.getTimestampDeadline();
+        } else {
+            return LocalDateTime.of(1970, 1, 1, 0, 0);
+        }
     }
+
+    private ReviewedBy reviewedByForUser(User user) {
+        return submissionService.getReviewedBy(submission, user);
+    }
+
 
     /**
      * Release a specific revision so that it can be viewed by the reviewers.
      *
      * @param paper The revision (which is a {@code paper}) to release
      */
-    public void releaseRevision(Paper paper) {
-       if (loggedInUserIsEditor()) {
-           paper.setVisible(true);
-           paperService.change(paper);
+    public String releaseRevision(Paper paper) {
+       if (loggedInUserIsEditor() || isAdmin()) {
+           if (submission.getState() == SubmissionState.REJECTED) {
+               uiMessageEvent.fire(new UIMessage(resourceBundle.getString("rejected"), MessageCategory.WARNING));
+           } else if (submission.getState() == SubmissionState.ACCEPTED ){
+               uiMessageEvent.fire(new UIMessage(resourceBundle.getString("accepted"), MessageCategory.WARNING));
+           } else {
+               paper.setVisible(true);
+               paperService.change(paper);
+           }
+           return "/views/authenticated/submission.xhtml?faces-redirect=true&id=" + submission.getId();
        } else {
-           uiMessageEvent.fire(new UIMessage(resourceBundle.getString("releaseRevision"), MessageCategory.WARNING));
+           uiMessageEvent.fire(new UIMessage(resourceBundle.getString("noPermission"), MessageCategory.WARNING));
        }
+       toolbarBacking.onLoad(submission);
+       return null;
     }
 
     /**
@@ -317,6 +439,11 @@ public class SubmissionBacking implements Serializable {
      * @return The reviewer who submitted the review.
      */
     public User getReviewerForReview(Review review) {
+        for (User reviewer: reviewers) {
+            if (reviewer.getId() == review.getReviewerId()) {
+                return reviewer;
+            }
+        }
         return null;
     }
 
@@ -330,13 +457,6 @@ public class SubmissionBacking implements Serializable {
         return author;
     }
 
-    /**
-     * Apply changes for the submission state.
-     */
-    public void applyState() {
-        submission.setRevisionRequired(submission.getState() == SubmissionState.REVISION_REQUIRED);
-        submissionService.change(submission.clone());
-    }
 
     /**
      * Upload a new revision as a pdf.
@@ -355,13 +475,16 @@ public class SubmissionBacking implements Serializable {
             revision.setSubmissionId(submission.getId());
             revision.setUploadTime(LocalDateTime.now());
 
-            paperService.add(file,revision);
+            paperService.add(file, revision);
 
             Submission newSubmission = submission.clone();
             newSubmission.setState(SubmissionState.SUBMITTED);
-            newSubmission.setRevisionRequired(false);
+            newSubmission.setRevisionRequired(newSubmission.getState() == SubmissionState.REVISION_REQUIRED);
+            newSubmission.setDeadlineRevision(null);
 
             submissionService.change(newSubmission);
+            submission = newSubmission;
+            toolbarBacking.onLoad(submission);
 
         }catch (IOException e) {
 
@@ -378,7 +501,7 @@ public class SubmissionBacking implements Serializable {
      */
     public String deleteSubmission() {
         if (isViewerSubmitter() || sessionInformation.getUser().isAdmin()) {
-            submissionService.remove(submission.clone());
+            submissionService.remove(submission);
             return "/views/authenticated/homepage";
         }
         uiMessageEvent.fire(new UIMessage(resourceBundle.getString("failedDelete"), MessageCategory.WARNING));
@@ -402,6 +525,7 @@ public class SubmissionBacking implements Serializable {
     public void setUploadedRevisionPDF(Part uploadedRevisionPDF) {
         this.uploadedRevisionPDF = uploadedRevisionPDF;
     }
+
 
     /**
      * Get the submission this page belongs to.
@@ -472,7 +596,15 @@ public class SubmissionBacking implements Serializable {
      * @return true if the viewer is the submitter of this submission.
      */
     public boolean isViewerSubmitter() {
-        return submission.getAuthorId() == sessionInformation.getUser().getId();
+        if (submission.getAuthorId() == sessionInformation.getUser().getId()) {
+            return true;
+        }
+        for (User user :  coAuthors) {
+            if (sessionInformation.getUser().getId().equals(user.getId())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean isAdmin() {
@@ -507,13 +639,12 @@ public class SubmissionBacking implements Serializable {
     }
 
     /**
-     * Get the possible reviewed-by relationship between this submission and
-     * the logged-in user. May be null if there is none.
+     * Array  of all possible recommendation filter options.
      *
-     * @return Reviewed-by between the logged-in user and this submission.
+     * @return All options.
      */
-    public ReviewedBy getReviewedBy() {
-        return reviewedBy;
+    public Recommendation[] getRecommendation() {
+        return Recommendation.values();
     }
 
     /**
@@ -531,7 +662,8 @@ public class SubmissionBacking implements Serializable {
      * @return Is the logged-in user editor of this submission?
      */
     public boolean loggedInUserIsEditor() {
-        return sessionInformation.getUser().getId().equals(submission.getEditorId());
+        boolean b = sessionInformation.getUser().getId().equals(submission.getEditorId()) || sessionInformation.getUser().isAdmin();
+        return b;
     }
 
     /**
@@ -540,7 +672,47 @@ public class SubmissionBacking implements Serializable {
      * @return Is the logged-in user reviewer of this submission?
      */
     public boolean loggedInUserIsReviewer() {
-        return false;
+        return reviewers.contains(sessionInformation.getUser());
     }
 
+    /**
+     * Return if the logged-in user is a reviewer of this submission,
+     * and whether they have accepted the review request.
+     *
+     * @return false if user is not a reviewer, yes or no depending on the acceptance state.
+     */
+    public boolean loggedInUserHasPendingReviewRequest() {
+        if (loggedInUserIsReviewer()) {
+            ReviewedBy reviewedBy = submissionService.getReviewedBy(submission, sessionInformation.getUser());
+            if (reviewedBy == null) {
+                return false;
+            } else {
+                return reviewedBy.getHasAccepted() == AcceptanceStatus.NO_DECISION;
+            }
+        } else {
+            return false;
+        }
+    }
+
+
+    /**
+     * Get the style of the state input text field.
+     *
+     * @return red if the submission is rejected, green if accepted,
+     * yellow if a submission requires a revision and black as default.
+     */
+    public String getStyleStatus() {
+        return styleSubmissionState(submission.getState());
+    }
+
+    /**
+     * Generates a mail to link.
+     *
+     * @param user the recipient.
+     * @return a mail to link.
+     */
+    public String sendMailTo(User user) {
+        String[] email = {user.getEmailAddress()};
+        return EmailUtil.generateMailToLink(email, null, null, null);
+    }
 }

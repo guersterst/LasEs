@@ -19,12 +19,18 @@ public class HashingTest {
     private static final String SALT2 = "i845jdlkfjDkjf34ljsdSS==";
     private static final String HASH2 = "Yz7+fC9F2UuxC1dsOI4OGg==";
 
+    /**
+     * @author Sebastian Vogt
+     */
     @Test
     void testSaltLength() {
         String salt = Hashing.generateRandomSalt();
         assertEquals(Hashing.SALT_LENGTH_BASE64, salt.length());
     }
 
+    /**
+     * @author Stefanie Guerster
+     */
     @Test
     void testCorrectHashing() {
         String calculatedHash1 = Hashing.hashWithGivenSalt(PASSWORD1, SALT1);
