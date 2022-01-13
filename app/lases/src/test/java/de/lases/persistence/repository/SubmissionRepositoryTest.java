@@ -26,9 +26,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * TESTINFO @vogte working
- * TESTINFO @steffi not working
- * TESTINFO @thomas working
  * !!! THESE TESTS MUST BE RUN SEPARATELY !!!
  */
 @ExtendWith(WeldJunit5Extension.class)
