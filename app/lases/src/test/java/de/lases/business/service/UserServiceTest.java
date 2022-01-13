@@ -9,7 +9,6 @@ import de.lases.persistence.repository.ConnectionPool;
 import de.lases.persistence.repository.UserRepository;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.context.SessionScoped;
-import jdk.jfr.Event;
 import org.jboss.weld.junit5.WeldInitiator;
 import org.jboss.weld.junit5.WeldJunit5Extension;
 import org.jboss.weld.junit5.WeldSetup;
@@ -23,7 +22,8 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.PropertyResourceBundle;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mockStatic;
