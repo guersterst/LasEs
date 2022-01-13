@@ -180,7 +180,6 @@ public class CustomizationService {
             }
         } else {
             styleList.add(DEFAULT_STYLE);
-            uiMessageEvent.fire(new UIMessage(props.getString("stylesNotLoaded"), MessageCategory.ERROR));
         }
         return styleList.toArray(new String[0]);
     }
