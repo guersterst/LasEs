@@ -163,6 +163,11 @@ public class CustomizationService {
         return logo;
     }
 
+    /**
+     * Loads all names of the css themes.
+     *
+     * @return A list of all themes.
+     */
     public String[] loadStyles() {
         List<String> styleList = new ArrayList<>();
 

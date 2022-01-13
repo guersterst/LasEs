@@ -158,7 +158,6 @@ public class AdministrationBacking {
      * @return all available styles.
      */
     public String[] getStyles() {
-        //return configPropagator.getProperty("STYLE").split("#");
         return customizationService.loadStyles();
     }
 }
