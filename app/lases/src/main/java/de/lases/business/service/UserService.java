@@ -1,6 +1,5 @@
 package de.lases.business.service;
 
-import de.lases.business.internal.ConfigPropagator;
 import de.lases.business.util.AvatarUtil;
 import de.lases.business.util.EmailUtil;
 import de.lases.business.util.Hashing;
@@ -12,7 +11,6 @@ import de.lases.persistence.repository.UserRepository;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.enterprise.inject.spi.CDI;
-import jakarta.faces.application.ProjectStage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 
@@ -49,9 +47,6 @@ public class UserService implements Serializable {
 
     @Inject
     private PropertyResourceBundle propertyResourceBundle;
-
-    @Inject
-    private ConfigPropagator configPropagator;
 
     @Inject
     private FacesContext facesContext;
@@ -179,11 +174,6 @@ public class UserService implements Serializable {
                     null, propertyResourceBundle.getString("email.verification.subject"), emailBody);
         } catch (EmailTransmissionFailedException e) {
             return false;
-        }
-
-        // UIMessage containing verification random if development or test mode is enabled
-        if (!facesContext.isProjectStage(ProjectStage.Production)) {
-            uiMessageEvent.fire(new UIMessage(generateValidationUrl(verification), MessageCategory.INFO));
         }
 
         return true;

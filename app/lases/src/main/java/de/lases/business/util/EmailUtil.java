@@ -7,6 +7,8 @@ import de.lases.global.transport.Submission;
 import de.lases.persistence.exception.EmailTransmissionFailedException;
 import de.lases.persistence.util.EmailSender;
 import jakarta.enterprise.inject.spi.CDI;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.application.ProjectStage;
 import jakarta.faces.context.FacesContext;
 
 import java.net.URLEncoder;
@@ -34,6 +36,15 @@ public class EmailUtil {
             throws EmailTransmissionFailedException {
         ConfigPropagator config = CDI.current().select(ConfigPropagator.class).get();
         EmailSender.sendEmail(config.getProperty("MAIL_ADDRESS_FROM"), recipients, cc, subject, body);
+
+        // In development or test mode, show a message to the user with a FacesMessage for each line
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (!context.isProjectStage(ProjectStage.Production)) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    "Email sent to " + String.join(", ", recipients), null));
+            body.lines().forEach(line -> context.addMessage(null, new FacesMessage(
+                    FacesMessage.SEVERITY_INFO, line, null)));
+        }
     }
 
     /**

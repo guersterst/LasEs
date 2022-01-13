@@ -1,7 +1,6 @@
 package de.lases.business.service;
 
 
-import de.lases.business.internal.ConfigPropagator;
 import de.lases.business.util.EmailUtil;
 import de.lases.business.util.Hashing;
 import de.lases.global.transport.MessageCategory;
@@ -16,7 +15,6 @@ import de.lases.persistence.repository.Transaction;
 import de.lases.persistence.repository.UserRepository;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
-import jakarta.faces.application.ProjectStage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 
@@ -37,9 +35,6 @@ import java.util.logging.Logger;
 public class RegistrationService {
 
     private final Logger logger = Logger.getLogger(RegistrationService.class.getName());
-
-    @Inject
-    private ConfigPropagator configPropagator;
 
     @Inject
     private PropertyResourceBundle message;
@@ -163,11 +158,6 @@ public class RegistrationService {
                     null, message.getString("email.verification.subject"), emailBody);
         } catch (EmailTransmissionFailedException e) {
             return false;
-        }
-
-        // UIMessage containing verification random if development or test mode is enabled
-        if (!facesContext.isProjectStage(ProjectStage.Production)) {
-            uiMessageEvent.fire(new UIMessage(generateValidationUrl(verification), MessageCategory.INFO));
         }
 
         return true;
