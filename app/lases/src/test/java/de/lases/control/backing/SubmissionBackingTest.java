@@ -5,6 +5,7 @@ import de.lases.control.exception.IllegalAccessException;
 import de.lases.control.internal.SessionInformation;
 import de.lases.global.transport.Privilege;
 import de.lases.global.transport.Submission;
+import de.lases.global.transport.SubmissionState;
 import de.lases.global.transport.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -77,6 +78,7 @@ class SubmissionBackingTest {
     void testInitAndOnLoad() throws Exception{
         Submission sub = new Submission();
         sub.setId(EXAMPLE_SUBMISSION_ID);
+        sub.setState(SubmissionState.SUBMITTED);
         User user = new User();
         user.setId(EXAMPLE_USER_ID);
 
@@ -100,7 +102,6 @@ class SubmissionBackingTest {
 
     @Test
     void testInitAndOnLoadIllegal() throws Exception {
-        // TODO steffi
         Submission sub = new Submission();
         sub.setId(EXAMPLE_SUBMISSION_ID);
         // User with no rights to view the submission

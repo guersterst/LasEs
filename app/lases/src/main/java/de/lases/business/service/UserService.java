@@ -282,15 +282,6 @@ public class UserService implements Serializable {
     }
 
     /**
-     * Deletes a user's avatar.
-     *
-     * @param user The {@link User} whose avatar is being deleted.
-     *             Must contain a valid id.
-     */
-    public void deleteAvatar(User user) {
-    }
-
-    /**
      * Adds an area of expertise, e.g. a {@link ScienceField} to a {@link User}.
      *
      * @param user         The user who receives a new {@code ScienceField}.
@@ -417,17 +408,6 @@ public class UserService implements Serializable {
             transaction.commit();
         }
         return userList;
-    }
-
-    /**
-     * Determines whether a users email-address is already verified.
-     *
-     * @param user The {@link User} whose {@link Verification} is requested.
-     *             Must contain a valid id.
-     * @return A fully filled {@code Verification} dto.
-     */
-    public Verification getVerification(User user) {
-        return null;
     }
 
     /**
