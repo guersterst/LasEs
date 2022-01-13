@@ -48,7 +48,7 @@ class ConnectionPoolTest {
     void startConnectionPool() throws NoSuchMethodException {
         FileDTO file = new FileDTO();
 
-        Class clazz = ConnectionPoolTest.class;
+        Class<ConnectionPoolTest> clazz = ConnectionPoolTest.class;
         InputStream inputStream = clazz.getResourceAsStream("/config.properties");
 
         file.setInputStream(inputStream);

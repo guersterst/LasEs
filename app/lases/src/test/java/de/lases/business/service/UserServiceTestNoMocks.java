@@ -38,7 +38,7 @@ public class UserServiceTestNoMocks {
     void startConnectionPool() {
         FileDTO file = new FileDTO();
 
-        Class clazz = UserServiceTestNoMocks.class;
+        Class<UserServiceTestNoMocks> clazz = UserServiceTestNoMocks.class;
         InputStream inputStream = clazz.getResourceAsStream("/config.properties");
 
         file.setInputStream(inputStream);

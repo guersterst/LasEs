@@ -1,7 +1,6 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.FileDTO;
-import de.lases.global.transport.Paper;
 import de.lases.global.transport.Review;
 import de.lases.persistence.internal.ConfigReader;
 import de.lases.persistence.repository.ConnectionPool;
@@ -45,7 +44,7 @@ public class ReviewServiceTest {
     void startConnectionPool() {
         FileDTO file = new FileDTO();
 
-        Class clazz = PaperServiceTest.class;
+        Class<PaperServiceTest> clazz = PaperServiceTest.class;
         InputStream inputStream = clazz.getResourceAsStream("/config.properties");
 
         file.setInputStream(inputStream);

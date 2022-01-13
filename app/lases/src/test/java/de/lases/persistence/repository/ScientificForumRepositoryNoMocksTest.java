@@ -13,7 +13,6 @@ import org.jboss.weld.junit5.WeldJunit5Extension;
 import org.jboss.weld.junit5.WeldSetup;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -36,7 +35,7 @@ public class ScientificForumRepositoryNoMocksTest {
     void startConnectionPool() {
         FileDTO file = new FileDTO();
 
-        Class clazz = ScienceFieldRepositoryTest.class;
+        Class<ScienceFieldRepositoryTest> clazz = ScienceFieldRepositoryTest.class;
         InputStream inputStream = clazz.getResourceAsStream("/config.properties");
 
         file.setInputStream(inputStream);

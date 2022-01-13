@@ -40,7 +40,7 @@ class UserRepositoryTest {
     void startConnectionPool() {
         FileDTO file = new FileDTO();
 
-        Class clazz = UserRepositoryTest.class;
+        Class<UserRepositoryTest> clazz = UserRepositoryTest.class;
         InputStream inputStream = clazz.getResourceAsStream("/config.properties");
 
         file.setInputStream(inputStream);

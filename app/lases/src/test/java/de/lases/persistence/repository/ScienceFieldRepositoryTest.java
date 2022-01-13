@@ -3,7 +3,6 @@ package de.lases.persistence.repository;
 import de.lases.global.transport.FileDTO;
 import de.lases.global.transport.ResultListParameters;
 import de.lases.global.transport.ScienceField;
-import de.lases.global.transport.ScientificForum;
 import de.lases.persistence.exception.DataNotCompleteException;
 import de.lases.persistence.exception.DataNotWrittenException;
 import de.lases.persistence.exception.KeyExistsException;
@@ -54,7 +53,7 @@ class ScienceFieldRepositoryTest {
     void startConnectionPool() {
         FileDTO file = new FileDTO();
 
-        Class clazz = ScienceFieldRepositoryTest.class;
+        Class<ScienceFieldRepositoryTest> clazz = ScienceFieldRepositoryTest.class;
         InputStream inputStream = clazz.getResourceAsStream("/config.properties");
 
         file.setInputStream(inputStream);

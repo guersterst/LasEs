@@ -50,7 +50,7 @@ class SystemSettingsRepositoryTest {
     void startConnectionPool() {
         FileDTO file = new FileDTO();
 
-        Class clazz = TransactionTest.class;
+        Class<TransactionTest> clazz = TransactionTest.class;
         InputStream inputStream = clazz.getResourceAsStream("/config.properties");
 
         file.setInputStream(inputStream);

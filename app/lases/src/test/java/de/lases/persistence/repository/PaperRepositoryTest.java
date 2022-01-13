@@ -11,18 +11,13 @@ import org.jboss.weld.junit5.WeldInitiator;
 import org.jboss.weld.junit5.WeldJunit5Extension;
 import org.jboss.weld.junit5.WeldSetup;
 import org.junit.jupiter.api.*;
-import de.lases.persistence.exception.NotFoundException;
-import de.lases.persistence.exception.InvalidFieldsException;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.InputStream;
 import java.sql.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -72,7 +67,7 @@ class PaperRepositoryTest {
     void startConnectionPool() {
         FileDTO file = new FileDTO();
 
-        Class clazz = PaperRepositoryTest.class;
+        Class<PaperRepositoryTest> clazz = PaperRepositoryTest.class;
         InputStream inputStream = clazz.getResourceAsStream("/config.properties");
 
         file.setInputStream(inputStream);

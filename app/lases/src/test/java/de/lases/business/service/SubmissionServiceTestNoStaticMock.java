@@ -73,7 +73,7 @@ class SubmissionServiceTestNoStaticMock {
     void startConnectionPool() {
         FileDTO file = new FileDTO();
 
-        Class clazz = SubmissionServiceTestNoStaticMock.class;
+        Class<SubmissionServiceTestNoStaticMock> clazz = SubmissionServiceTestNoStaticMock.class;
         InputStream inputStream = clazz.getResourceAsStream("/config.properties");
 
         file.setInputStream(inputStream);
