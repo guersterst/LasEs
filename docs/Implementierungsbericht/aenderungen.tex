@@ -183,7 +183,6 @@ Das Weglassen bestimmter Wunschfunktionen, wie:
 In diesem Fall dienten die Änderungen der Übersichtlichkeit der Registrationsseite und der
 Verringerung des Arbeitsaufwandes in diesem Arbeitspaket.
 
-\newline
 Eine weitere nennenswerte Änderung liegt in den Produktleistungen.
 Hier wurden die Ansprüche an die Pagination festgelegt:
 \begin{itemize}
@@ -203,7 +202,6 @@ sondern nurnoch diejenigen wo es Sinn ergibt.
 Das spezifizierte Datenbankschema wurde grötenteils unverändert in die \emph{LasEs}-Anwendung
 übernommen.
 
-\newline
 Die Änderungen betreffen die Ergänzung um einen Eintrag
 zum \emph{Look} des Systems.
 \begin{verbatim}
@@ -211,7 +209,6 @@ zum \emph{Look} des Systems.
         css_theme VARCHAR(20)
 \end{verbatim}
 
-\newline
 Weiterhin wurde eine \emph{View} eingeführt:
 \begin{verbatim}
 create view user_data as
@@ -247,7 +244,6 @@ group by u.id;
 \end{itemize}
 Die \emph{view} wurde eingeführt, nachdem diese während der Entwicklung mehrfach angefragt wurden.
 
-\newline
 Letztlich wurde das Datenbankschema so erweitert, dass beim initialen Setup ein
 generischer Administrator als Nutzer hinzugefügt wird.
 \begin{verbatim}
