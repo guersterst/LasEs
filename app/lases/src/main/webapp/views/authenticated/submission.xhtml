@@ -251,7 +251,7 @@
                                             </f:facet>
                                             <h:commandButton id="download-btn" styleClass="btn btn-primary"
                                                              value="#{labels.downloadCol}"
-                                                             action="#{submissionBacking.downloadPaper(var)}"/>
+                                                             action="#{submissionBacking.downloadPaper(var)}" title="#{help.download}"/>
                                         </h:column>
 
                                     </pg:pagination>
@@ -429,7 +429,7 @@
                                                 </f:facet>
                                                 <h:commandButton id="download-review-btn" styleClass="btn btn-primary"
                                                                  value="#{labels.downloadCol}"
-                                                                 action="#{submissionBacking.downloadReview(var)}"/>
+                                                                 action="#{submissionBacking.downloadReview(var)}" title="#{help.download}"/>
                                             </h:column>
                                         </pg:pagination>
                                     </h:form>
