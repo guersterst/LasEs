@@ -151,48 +151,50 @@ class PaperRepositoryTest {
         transaction.abort();
     }
 
+    /**
+     * @author Sebastian Vogt
+     */
     @Test
     void testAdd() throws SQLException, DataNotWrittenException {
         Transaction transaction = new Transaction();
         Connection conn = transaction.getConnection();
         PreparedStatement stmt = conn.prepareStatement(
                 """
-                        SELECT * FROM paper
+                        SELECT count(*) FROM paper
                         """);
         ResultSet resultSet = stmt.executeQuery();
-        int i = 0;
-        while (resultSet.next()) {
-            i++;
-        }
+        resultSet.next();
+        int i = resultSet.getInt(1);
 
         PaperRepository.add(paperNonExistent, pdf, transaction);
 
         ResultSet resultSet2 = stmt.executeQuery();
-        int j = 0;
-        while (resultSet2.next()) {
-            j++;
-        }
+        resultSet2.next();
+        int j = resultSet2.getInt(1);
 
         assertEquals(1, j - i);
         transaction.abort();
     }
 
+    /**
+     * @author Sebastian Vogt
+     */
     @Test
     void testNull() {
-        Transaction transaction = new Transaction();
+        Transaction transaction1 = new Transaction();
+        Transaction transaction2 = new Transaction();
         assertAll(
                 () -> {
                     assertThrows(InvalidFieldsException.class,
                             () -> PaperRepository.add(paper, new FileDTO(),
-                                    transaction));
+                                    transaction1));
                 },
                 () -> {
                     assertThrows(InvalidFieldsException.class,
                             () -> PaperRepository.add(new Paper(), pdf,
-                                    transaction));
+                                    transaction2));
                 }
         );
-        transaction.abort();
     }
 
     @Test
