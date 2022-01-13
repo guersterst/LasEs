@@ -25,7 +25,7 @@ public class LoginService {
     private Event<UIMessage> uiMessageEvent;
 
     @Inject
-    private PropertyResourceBundle propertyResourceBundle;
+    private PropertyResourceBundle resourceBundle;
 
     private final Logger logger = Logger.getLogger(LoginService.class.getName());
 
@@ -50,10 +50,10 @@ public class LoginService {
             } else {
                 // fail
                 logger.info("Login attempt unsuccessful for user " + user.getId() + " " + user.getEmailAddress());
-                uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("authFailed"), MessageCategory.ERROR));
+                uiMessageEvent.fire(new UIMessage(resourceBundle.getString("authFailed"), MessageCategory.ERROR));
             }
         } catch (NotFoundException e) {
-            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("authFailed"), MessageCategory.FATAL));
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("authFailed"), MessageCategory.FATAL));
         } finally {
             transaction.commit();
         }
