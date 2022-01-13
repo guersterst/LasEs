@@ -153,5 +153,19 @@ Methoden erlauben die Nutzervalidierung. Auch wenn dieser Punkt in der Spezifika
 vergessen wurde, musste hier nachgearbeitet werden. In diesem Fall wurden die zwei genannten Methoden
 hinzugefügt um die Funktionalität zu implementieren.
 
+\subsubsection{global.transport}
 
+\textbf{Privilege} Diese Enumeration enthält zusätzlich die Methode \emph{getPrivilege()}
+um die Umwandlung von Datenbankspalten in das Modell der Businesslogik zu ermöglichen.
+\todo{Privilege kann man die verwendung und deren wandel     (und schwierigkeiten) im system erklären. der ganz brainfuck halt}
+
+\textbf{Recommendation} Diese Enumeration ist neu hinzugekommmen und modelliert
+das Empfehlungsverhalten von Gutachtern.
+
+Die \textbf{Style} Enumeration wurde entfernt. Die Auswahl von Farbschemata des
+Systems basiert nun dynamisch auf den im Anwendungsverzeichnis existierenden zugehörigen
+CSS-Dateien.
+
+Die \textbf{Visibility} Enumeration wurde im Implementierungsprozess hinzugefügt um die Sichtbarkeit eines
+Papers innerhalb einer Einreichung zu repräsentieren.
 
