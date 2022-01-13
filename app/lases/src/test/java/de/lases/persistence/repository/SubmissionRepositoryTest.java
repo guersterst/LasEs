@@ -147,6 +147,9 @@ class SubmissionRepositoryTest {
         transaction.abort();
     }
 
+    /**
+     * @author Stefanie Gürster
+     */
     @Test
     void testAddReviewer() throws SQLException, DataNotWrittenException, NotFoundException {
         Transaction transaction = new Transaction();
@@ -164,7 +167,7 @@ class SubmissionRepositoryTest {
 
         ReviewedBy reviewedBy = new ReviewedBy();
         reviewedBy.setReviewerId(1);
-        reviewedBy.setSubmissionId(5);
+        reviewedBy.setSubmissionId(742);
         reviewedBy.setHasAccepted(AcceptanceStatus.NO_DECISION);
         reviewedBy.setTimestampDeadline(LocalDateTime.now());
 
