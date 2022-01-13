@@ -3,7 +3,6 @@ package de.lases.control.backing;
 import de.lases.business.service.ScientificForumService;
 import de.lases.control.internal.Pagination;
 import de.lases.control.internal.SessionInformation;
-import de.lases.global.transport.DateSelect;
 import de.lases.global.transport.ScientificForum;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
