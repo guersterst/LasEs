@@ -1,6 +1,5 @@
 package de.lases.business.service;
 
-import de.lases.business.internal.ConfigPropagator;
 import de.lases.business.util.EmailUtil;
 import de.lases.business.util.Hashing;
 import de.lases.global.transport.FileDTO;
@@ -16,7 +15,6 @@ import jakarta.enterprise.event.Event;
 import jakarta.enterprise.inject.Produces;
 import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
-import jakarta.inject.Inject;
 import org.jboss.weld.junit5.WeldInitiator;
 import org.jboss.weld.junit5.WeldJunit5Extension;
 import org.jboss.weld.junit5.WeldSetup;
@@ -35,6 +33,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * @author Thomas Kirz
+ */
 @ExtendWith(WeldJunit5Extension.class)
 @ExtendWith(MockitoExtension.class)
 class RegistrationServiceTest {
@@ -48,13 +49,13 @@ class RegistrationServiceTest {
 
     private static MockedStatic<Hashing> mockedHashing;
     private static MockedStatic<EmailUtil> mockedEmailUtil;
-    private static MockedStatic<FacesContext> mockedFacesContext;
+    private static MockedStatic<FacesContext> staticMockedFacesContext;
 
     private RegistrationService registrationService;
     private UserService userService;
 
-    @Inject
-    ConfigPropagator configPropagator;
+    @Mock
+    private FacesContext mockedFacesContext;
 
     @Mock
     private PropertyResourceBundle mockedResourceBundle;
@@ -64,7 +65,7 @@ class RegistrationServiceTest {
 
     @WeldSetup
     public WeldInitiator weld = WeldInitiator.from(RegistrationServiceTest.class, ConnectionPool.class,
-                    ConfigReader.class, ConfigPropagator.class)
+                    ConfigReader.class)
             .activate(RequestScoped.class, SessionScoped.class).build();
 
     @Produces
@@ -76,12 +77,12 @@ class RegistrationServiceTest {
     static void mockStaticClasses() {
         mockedHashing = mockStatic(Hashing.class);
         mockedEmailUtil = mockStatic(EmailUtil.class);
-        mockedFacesContext = mockStatic(FacesContext.class);
+        staticMockedFacesContext = mockStatic(FacesContext.class);
 
         ExternalContext externalContext = mock(ExternalContext.class);
         FacesContext facesContext = mock(FacesContext.class);
 
-        mockedFacesContext.when(FacesContext::getCurrentInstance).thenReturn(facesContext);
+        staticMockedFacesContext.when(FacesContext::getCurrentInstance).thenReturn(facesContext);
         when(facesContext.getExternalContext()).thenReturn(externalContext);
     }
 
@@ -89,12 +90,17 @@ class RegistrationServiceTest {
     static void closeMocks() {
         mockedHashing.close();
         mockedEmailUtil.close();
-        mockedFacesContext.close();
+        staticMockedFacesContext.close();
     }
 
     @BeforeEach
     void setServiceDependencies() throws Exception {
         registrationService = new RegistrationService();
+
+        when(mockedFacesContext.getExternalContext()).thenReturn(mock(ExternalContext.class));
+        Field facesContextField = registrationService.getClass().getDeclaredField("facesContext");
+        facesContextField.setAccessible(true);
+        facesContextField.set(registrationService, mockedFacesContext);
 
         Field bundleFieldReg = registrationService.getClass().getDeclaredField("message");
         bundleFieldReg.setAccessible(true);
@@ -103,10 +109,6 @@ class RegistrationServiceTest {
         Field eventFieldReg = registrationService.getClass().getDeclaredField("uiMessageEvent");
         eventFieldReg.setAccessible(true);
         eventFieldReg.set(registrationService, mockedEvent);
-
-        Field propagatorFieldReg = registrationService.getClass().getDeclaredField("configPropagator");
-        propagatorFieldReg.setAccessible(true);
-        propagatorFieldReg.set(registrationService, configPropagator);
 
         userService = new UserService();
 
@@ -120,7 +122,7 @@ class RegistrationServiceTest {
     void startConnectionPool() {
         FileDTO file = new FileDTO();
 
-        Class c = SubmissionServiceTest.class;
+        Class<RegistrationServiceTest> c = RegistrationServiceTest.class;
         InputStream inputStream = c.getResourceAsStream("/config.properties");
 
         file.setInputStream(inputStream);
@@ -136,8 +138,6 @@ class RegistrationServiceTest {
 
     @Test
     void testSelfRegister() throws Exception {
-        configPropagator.getProperty("test");
-
         User user = new User();
         user.setEmailAddress(EXAMPLE_EMAIL_ADDRESS);
         user.setFirstName(EXAMPLE_FIRST_NAME);
