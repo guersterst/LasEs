@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.lang.reflect.MalformedParametersException;
 import java.net.MalformedURLException;
 import java.util.Objects;
@@ -23,6 +24,9 @@ import java.util.logging.Logger;
  * Serves images under the /image* url.
  */
 public class ImageServlet extends HttpServlet {
+
+    @Serial
+    private static final long serialVersionUID = 2523808732109510250L;
 
     @Inject
     private UserService userService;
@@ -117,7 +121,7 @@ public class ImageServlet extends HttpServlet {
     }
 
     /**
-     * Configures the response to use browser-private caching for a maximum time of {@link ImageServlet#MAX_AGE}.
+     * Configures the response to use browser-private caching for a maximum time.
      * Also sets other metadata, like the content-length, content-type and response status.
      *
      * @param response The {@code HttpServletResponse} to write the image to.

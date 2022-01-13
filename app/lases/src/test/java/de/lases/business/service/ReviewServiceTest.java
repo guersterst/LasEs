@@ -1,23 +1,27 @@
 package de.lases.business.service;
 
 import de.lases.global.transport.FileDTO;
-import de.lases.global.transport.Paper;
 import de.lases.global.transport.Review;
+import de.lases.global.transport.UIMessage;
 import de.lases.persistence.internal.ConfigReader;
 import de.lases.persistence.repository.ConnectionPool;
 import de.lases.persistence.repository.ReviewRepository;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.enterprise.event.Event;
 import org.jboss.weld.junit5.WeldInitiator;
 import org.jboss.weld.junit5.WeldJunit5Extension;
 import org.jboss.weld.junit5.WeldSetup;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.util.PropertyResourceBundle;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -45,7 +49,7 @@ public class ReviewServiceTest {
     void startConnectionPool() {
         FileDTO file = new FileDTO();
 
-        Class clazz = PaperServiceTest.class;
+        Class clazz = ReviewServiceTest.class;
         InputStream inputStream = clazz.getResourceAsStream("/config.properties");
 
         file.setInputStream(inputStream);
@@ -76,7 +80,8 @@ public class ReviewServiceTest {
     private static final String EXAMPLE_NEW_COMMENT = "MY EYES ARE BLEEDING";
 
     @BeforeAll
-    static void init() {
+    static void init() throws NoSuchFieldException, IllegalAccessException {
+
         // Mock repository and initialize service.
         reviewRepoMocked = mockStatic(ReviewRepository.class);
         reviewService = new ReviewService();
@@ -84,6 +89,16 @@ public class ReviewServiceTest {
         // Mock get to return a review if the ids are correct.
         reviewRepoMocked.when(() -> ReviewRepository.get(eq(review), any(Transaction.class))).thenReturn(review);
         reviewRepoMocked.when(() -> ReviewRepository.getPDF(eq(review), any(Transaction.class))).thenReturn(pdf);
+
+        Event<UIMessage> uiMessageEvent = Mockito.mock(Event.class);
+        Field uiMessageField = reviewService.getClass().getDeclaredField("uiMessageEvent");
+        uiMessageField.setAccessible(true);
+        uiMessageField.set(reviewService, uiMessageEvent);
+
+        PropertyResourceBundle bundle = Mockito.mock(PropertyResourceBundle.class);
+        Field bundleField = reviewService.getClass().getDeclaredField("resourceBundle");
+        bundleField.setAccessible(true);
+        bundleField.set(reviewService, bundle);
     }
 
     @BeforeEach

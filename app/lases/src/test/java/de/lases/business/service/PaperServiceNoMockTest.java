@@ -122,24 +122,4 @@ public class PaperServiceNoMockTest {
         // remove the paper again so the test will run through more than once
         paperService.remove(paper);
     }
-
-//    @Test
-//    void testRemove() {
-//        paperService.add(pdf, paper);
-//        paperService.remove(paper);
-//        Paper find = paperService.get(paper);
-//
-//        assertNull(find);
-//    }
-
-
-//    @Test
-//    void testGetPDF() {
-//        FileDTO paperFile = new FileDTO();
-//        paperFile.setFile(new byte[0]);
-//        FileDTO fileDTO = paperService.getFile(paper);
-//        int length = fileDTO.getFile().length;
-//
-//        assertEquals(paperFile.getFile().length, length);
-//    }
 }

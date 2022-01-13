@@ -20,6 +20,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
 
+/**
+ * TESTINFO @basti not working
+ */
 @ExtendWith(MockitoExtension.class)
 public class UserRepositoryGetListCDIMock {
 
