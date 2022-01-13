@@ -101,7 +101,7 @@ public class UserServiceTest {
 
         mockedRepo.when(() -> UserRepository.get(eq(oldUser), any())).thenReturn(newUser);
 
-        userService.change(newUser);
+        userService.change(newUser, new User());
 
         assertEquals(newUser, userService.get(oldUser));
     }
@@ -124,7 +124,7 @@ public class UserServiceTest {
 
         mockedRepo.when(() -> UserRepository.get(eq(user), any())).thenReturn(changedEmail);
 
-        userService.change(changedEmail);
+        userService.change(changedEmail, new User());
 
         assertFalse(userService.getVerification(user).isVerified());
     }

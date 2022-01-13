@@ -100,10 +100,11 @@ public class UserService implements Serializable {
      *                         and will not be deleted if empty.
      *                   When the email address is changed the verification process is initiated
      *                   using the {@code EmailUtil} utility.
+     * @param changer The user that submitted the changes (with isAdmin either true or false)
      *
      * @author Sebastian Vogt
      */
-    public void change(User newUser) {
+    public void change(User newUser, User changer) {
         Transaction transaction = new Transaction();
 
         if (newUser.getPasswordNotHashed() != null) {
@@ -125,7 +126,7 @@ public class UserService implements Serializable {
 
             UserRepository.change(newUser, transaction);
 
-            if (newUser.getEmailAddress().equals(oldUser.getEmailAddress())) {
+            if (newUser.getEmailAddress().equals(oldUser.getEmailAddress()) || changer.isAdmin()) {
                 uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataSaved"),
                         MessageCategory.INFO));
                 transaction.commit();
