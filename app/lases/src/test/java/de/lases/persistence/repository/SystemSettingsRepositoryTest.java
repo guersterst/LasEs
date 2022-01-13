@@ -19,6 +19,7 @@ import java.io.InputStream;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
+ * !!! THESE TESTS NEED TO BE RUN SEPARATELY !!!
  * @author Sebastian Vogt
  */
 @ExtendWith(WeldJunit5Extension.class)

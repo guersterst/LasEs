@@ -1,7 +1,6 @@
 package de.lases.persistence.repository;
 
 import de.lases.global.transport.*;
-import de.lases.persistence.exception.DataNotCompleteException;
 import de.lases.persistence.exception.DataNotWrittenException;
 import de.lases.persistence.exception.NotFoundException;
 import de.lases.persistence.internal.ConfigReader;
@@ -10,7 +9,10 @@ import jakarta.enterprise.context.SessionScoped;
 import org.jboss.weld.junit5.WeldInitiator;
 import org.jboss.weld.junit5.WeldJunit5Extension;
 import org.jboss.weld.junit5.WeldSetup;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.InputStream;
@@ -18,12 +20,17 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * TESTINFO @vogte working
+ * TESTINFO @steffi not working
+ * TESTINFO @thomas working
+ * !!! THESE TESTS MUST BE RUN SEPARATELY !!!
+ */
 @ExtendWith(WeldJunit5Extension.class)
 class SubmissionRepositoryTest {
 
@@ -217,6 +224,9 @@ class SubmissionRepositoryTest {
         EXAMPLE_USER_ID_2 = user2.getId();
     }
 
+    /**
+     * @author Thomas Kirz
+     */
     @Test
     void testAddAndGetList() throws Exception {
         Transaction transaction = new Transaction();
@@ -259,6 +269,9 @@ class SubmissionRepositoryTest {
         transaction.abort();
     }
 
+    /**
+     * @author Thomas Kirz
+     */
     @Test
     void testAddAndAbort() throws Exception {
         Transaction transaction = new Transaction();
@@ -284,6 +297,9 @@ class SubmissionRepositoryTest {
         transaction2.abort();
     }
 
+    /**
+     * @author Thomas Kirz
+     */
     @Test
     void testCountSubmissions() throws Exception {
         Transaction transaction = new Transaction();

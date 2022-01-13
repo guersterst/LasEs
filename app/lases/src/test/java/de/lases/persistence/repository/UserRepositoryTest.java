@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserRepositoryTest {
 
     private static final String EXAMPLE_EMAIL_ADDRESS = "john.doe@foo.bar";
+    private static final String INVALID_EMAIL_ADDRESS = "not.stored.in.db";
     private static final String EXAMPLE_FIRST_NAME = "John";
     private static final String EXAMPLE_LAST_NAME = "Doe";
     private static final String EXAMPLE_HASH = "thisissuppposedtobeahash";
@@ -54,6 +55,9 @@ class UserRepositoryTest {
         ConnectionPool.shutDown();
     }
 
+    /**
+     * @author Thomas Kirz
+     */
     @Test
     void testAddEmailExists() throws Exception {
         Transaction transaction = new Transaction();
@@ -70,13 +74,15 @@ class UserRepositoryTest {
         transaction.abort();
     }
 
+    /**
+     * @author Thomas Kirz
+     */
     @Test
     void testEmailDoesNotExist() throws Exception {
         User user = new User();
-        user.setEmailAddress(EXAMPLE_EMAIL_ADDRESS);
+        user.setEmailAddress(INVALID_EMAIL_ADDRESS);
 
         Transaction transaction = new Transaction();
-        UserRepository.remove(user, transaction);
         assertFalse(UserRepository.emailExists(user, transaction));
         transaction.abort();
     }
