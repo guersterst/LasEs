@@ -200,6 +200,7 @@ sondern nurnoch diejenigen wo es Sinn ergibt.
 
 \subsection{Datenbankschema}
 \localauthor{Johannes Garstenauer}
+\newline
 Das spezifizierte Datenbankschema wurde grötenteils unverändert in die \emph{LasEs}-Anwendung
 übernommen.
 
@@ -252,10 +253,10 @@ Letztlich wurde das Datenbankschema so erweitert, dass beim initialen Setup ein
 generischer Administrator als Nutzer hinzugefügt wird.
 \begin{verbatim}
 
-INSERT INTO "user"(id, email_address, is_administrator, firstname, lastname, is_registered, password_hash,
-                   password_salt)
-VALUES (-1, 'admin@example.com', TRUE, 'Administrator', 'Administrator', TRUE, 'CWDkErZ4M1iW4LJjHB8kAA==',
-        '7aj1fcaMrRpJrtS9ZNsIsQ==');
+INSERT INTO "user"(id, email_address, is_administrator, firstname, lastname,
+                   is_registered, password_hash, password_salt)
+VALUES (-1, 'admin@example.com', TRUE, 'Administrator', 'Administrator', TRUE,
+                   'CWDkErZ4M1iW4LJjHB8kAA==', '7aj1fcaMrRpJrtS9ZNsIsQ==');
 
 INSERT INTO verification(id, is_verified)
 VALUES (-1, TRUE);
