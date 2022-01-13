@@ -28,6 +28,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
+/**
+ * @author Thomas Kirz
+ */
 @ExtendWith(WeldJunit5Extension.class)
 @ExtendWith(MockitoExtension.class)
 class SubmissionServiceTest {
