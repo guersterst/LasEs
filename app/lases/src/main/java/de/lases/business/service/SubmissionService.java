@@ -218,7 +218,6 @@ public class SubmissionService implements Serializable {
      * @param submission A {@link Submission}-DTO containing a valid id.
      */
     public void remove(Submission submission) {
-        //TODO: EMail to inform editor
 
         if (submission.getId() == null) {
             logger.severe("The id of the submission is not valid . Submission can't be deleted");

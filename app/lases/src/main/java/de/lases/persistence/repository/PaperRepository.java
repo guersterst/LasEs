@@ -160,7 +160,7 @@ public class PaperRepository {
             } else {
                 transaction.abort();
                 throw new DatasourceQueryFailedException("A datasource exception"
-                        + "occurred", ex);
+                        + " occurred", ex);
             }
         }
     }
