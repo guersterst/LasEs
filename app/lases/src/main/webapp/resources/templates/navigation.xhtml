@@ -35,13 +35,13 @@
                         styleClass="nav-item nav-link"/>
                 <h:link
                         value="#{labels.administration}"
-                        title="#{labels.navigateAdministration}"
+                        title="#{help.navigateAdministration}"
                         outcome="/views/admin/administration"
                         rendered="#{navigationBacking.sessionInformation.user.isAdmin()}"
                         styleClass="nav-item nav-link"/>
                 <h:link
                         value="#{labels.navProfile}"
-                        title="#{labels.navigateProfile}"
+                        title="#{help.navigateProfile}"
                         outcome="#{'/views/authenticated/profile?id='.concat(sessionInformation.user.id)}"
                         rendered="#{navigationBacking.sessionInformation.user != null}"
                         styleClass="nav-item nav-link"/>
