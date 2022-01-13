@@ -90,6 +90,9 @@ public class SubmissionService implements Serializable {
      * @param submission The submission's data in a {@link Submission}.
      *                   Must contain a valid forum's id, authorId, editorId, state and title.
      * @param coAuthors  The desired co-athors as proper {@link User}-DTOs with an email-address.
+     * @param paper The first paper of this new submission.
+     * @param file File DTO for the submitted paper.
+     *
      * @return The submission that was added, but filled with its id.
      * @author Sebastian Vogt
      */
@@ -723,26 +726,6 @@ public class SubmissionService implements Serializable {
         } else {
             transaction.abort();
         }
-    }
-
-    /**
-     * Releases a review to be viewed by the submitter.
-     *
-     * @param review     The review to be released.
-     * @param submission The submission containing that review.
-     */
-    public void releaseReview(Review review, Submission submission) {
-    }
-
-    /**
-     * Adds a co-author.
-     *
-     * @param coAuthor   The co-author to be added. This can be a regular {@link User}-DTO
-     *                   with a valid id
-     *                   or exclusively contain an email address.
-     * @param submission The submission, that receives a new co-author.
-     */
-    public void addCoAuthor(Submission submission, User coAuthor) {
     }
 
     /**

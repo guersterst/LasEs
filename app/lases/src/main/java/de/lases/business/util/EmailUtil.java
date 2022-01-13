@@ -98,11 +98,30 @@ public class EmailUtil {
         return protocol + "://" + host + contextPath + "/" + outcome;
     }
 
+    /**
+     * Generates a URL specific to a submission.
+     *
+     * @param submission The submission the link has to navigate to.
+     * @param facesContext The current faces context.
+     * @return The URL that can be shared via email including scheme,
+     * host, port (if not standard), the context path and
+     * the outcome.
+     */
     public static String generateSubmissionURL(Submission submission, FacesContext facesContext) {
         String base = generateLinkForEmail(facesContext, "views/authenticated/submission.xhtml");
         return facesContext.getExternalContext().encodeBookmarkableURL(base, Map.of("id", List.of(submission.getId().toString())));
     }
 
+
+    /**
+     * Generates a URL specific to a scientific forum.
+     *
+     * @param scientificForum The scientific forum the link has to navigate to.
+     * @param facesContext The current faces context.
+     * @return The URL that can be shared via email including scheme,
+     * host, port (if not standard), the context path and
+     * the outcome.
+     */
     public static String generateForumURL(ScientificForum scientificForum, FacesContext facesContext) {
         String base = generateLinkForEmail(facesContext, "views/authenticated/scientificForum.xhtml");
         return facesContext.getExternalContext().encodeBookmarkableURL(base, Map.of("id", List.of(scientificForum.getId().toString())));
