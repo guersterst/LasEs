@@ -150,19 +150,25 @@ hinzugefügt um die Funktionalität zu implementieren.
 
 \subsubsection{global.transport}
 
-\textbf{Privilege} Diese Enumeration enthält zusätzlich die Methode \emph{getPrivilege()}
+In der  Enumeration \textbf{Privilege} musste eine geringfügige Funktionalitätserweiterung vorgenommen werden.
+Es wurde die Methode \emph{getPrivilege()} hinzugefügt,
 um die Umwandlung von Datenbankspalten in das Modell der Businesslogik zu ermöglichen.
-\todo{Privilege kann man die verwendung und deren wandel     (und schwierigkeiten) im system erklären. der ganz brainfuck halt}
+Der Grund hierfür war in der Spezifikation im Vorhinein schwer zu antizipieren,
+und kann daher als ein erwartbarer Wandel im Entwicklungsprozess gewertet werden.
 
-\textbf{Recommendation} Diese Enumeration ist neu hinzugekommmen und modelliert
+Es ist ebenfalls aufgetreten, dass neue Repräsentationen benötigt wurden.
+\textbf{Recommendation} modelliert
 das Empfehlungsverhalten von Gutachtern.
+Die \textbf{Visibility}-Enumeration wurde hinzugefügt um die Sichtbarkeit eines
+Papers innerhalb einer Einreichung zu repräsentieren.
 
-Die \textbf{Style} Enumeration wurde entfernt. Die Auswahl von Farbschemata des
+Auch das Entfernen von Repräsentationen ist aufgetreten.
+Dies geschah zu Gunsten einer besseren Erweiterbarkeit der Anwendung, in diesem Fall um das dynamische Hinzufügen
+neuer \emph{CSS-Stylesheets} zu ermöglichen.
+Beispielsweise wurde die \textbf{Style} Enumeration entfernt. Die Auswahl von Farbschemata des
 Systems basiert nun dynamisch auf den im Anwendungsverzeichnis existierenden zugehörigen
 CSS-Dateien.
 
-Die \textbf{Visibility} Enumeration wurde im Implementierungsprozess hinzugefügt um die Sichtbarkeit eines
-Papers innerhalb einer Einreichung zu repräsentieren.
 
 \subsection{Facelets}
 \localauthor{Stefanie Gürster}
