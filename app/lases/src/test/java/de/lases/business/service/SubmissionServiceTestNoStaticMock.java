@@ -7,17 +7,17 @@ import de.lases.persistence.repository.ConnectionPool;
 import de.lases.persistence.repository.Transaction;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.enterprise.event.Event;
 import jakarta.faces.context.FacesContext;
 import org.jboss.weld.junit5.WeldInitiator;
 import org.jboss.weld.junit5.WeldJunit5Extension;
 import org.jboss.weld.junit5.WeldSetup;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.sql.Connection;
@@ -42,6 +42,10 @@ class SubmissionServiceTestNoStaticMock {
 
     static MockedStatic<EmailUtil> emailUtilMockedStatic = Mockito.mockStatic(EmailUtil.class);
 
+    private PropertyResourceBundle resourceBundle;
+
+    private Event<UIMessage> uiMessageEvent;
+
     @WeldSetup
     public WeldInitiator weld = WeldInitiator.from(ConnectionPool.class, ConfigReader.class, ConfigReader.class)
             .activate(RequestScoped.class, SessionScoped.class).build();
@@ -63,6 +67,7 @@ class SubmissionServiceTestNoStaticMock {
         paper.setUploadTime(LocalDateTime.now());
         fileDTO = new FileDTO();
         fileDTO.setFile(new byte[]{});
+
     }
 
     /*
@@ -246,25 +251,39 @@ class SubmissionServiceTestNoStaticMock {
         }
     }
 
+    /**
+     * @author Stefanie Gürster
+     */
     @Test
-    @Disabled
-    void testAddReviewer() throws SQLException {
+    void testAddReviewer() throws SQLException, NoSuchFieldException, IllegalAccessException {
         User user = new User();
         user.setEmailAddress("schicho@fim.uni.passau.de");
 
         User reviewer = new User();
-        reviewer.setId(420);
+        reviewer.setId(30);
 
         List<User> reviewerList = new ArrayList<>();
         reviewerList.add(reviewer);
 
         ReviewedBy reviewedBy = new ReviewedBy();
-        reviewedBy.setSubmissionId(5);
+        reviewedBy.setSubmissionId(742);
         reviewedBy.setReviewerId(user.getId());
         reviewedBy.setTimestampDeadline(LocalDateTime.now());
         reviewedBy.setHasAccepted(AcceptanceStatus.NO_DECISION);
 
         SubmissionService submissionService = new SubmissionService();
+        
+        resourceBundle = Mockito.mock(PropertyResourceBundle.class);
+        Mockito.when(resourceBundle.getString(Mockito.anyString())).thenReturn("a greicharts");
+        submissionService = new SubmissionService();
+        Field bundleField = submissionService.getClass().getDeclaredField("resourceBundle");
+        bundleField.setAccessible(true);
+        bundleField.set(submissionService, resourceBundle);
+
+        uiMessageEvent = Mockito.mock(Event.class);
+        Field eventField = submissionService.getClass().getDeclaredField("uiMessageEvent");
+        eventField.setAccessible(true);
+        eventField.set(submissionService, uiMessageEvent);
 
         Transaction transaction = new Transaction();
         Connection connection = transaction.getConnection();
@@ -287,6 +306,11 @@ class SubmissionServiceTestNoStaticMock {
         }
 
         assertEquals(i, j - 1);
+
+        Submission submission = new Submission();
+        submission.setId(reviewedBy.getSubmissionId());
+
+        submissionService.removeReviewer(submission, user);
         transaction.abort();
     }
 

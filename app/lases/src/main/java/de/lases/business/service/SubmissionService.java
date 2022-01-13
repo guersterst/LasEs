@@ -218,7 +218,6 @@ public class SubmissionService implements Serializable {
      * @param submission A {@link Submission}-DTO containing a valid id.
      */
     public void remove(Submission submission) {
-        //TODO: EMail to inform editor
 
         if (submission.getId() == null) {
             logger.severe("The id of the submission is not valid . Submission can't be deleted");
@@ -709,10 +708,12 @@ public class SubmissionService implements Serializable {
 
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotWritten"), MessageCategory.WARNING));
             transaction.abort();
+            return;
         } catch (NotFoundException e) {
 
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotFound"), MessageCategory.ERROR));
             transaction.abort();
+            return;
         }
 
         String subject = resourceBundle.getString("email.removeReviewer.subject");
