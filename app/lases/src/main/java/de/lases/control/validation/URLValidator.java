@@ -17,7 +17,8 @@ import java.util.regex.Pattern;
  * url.
  */
 @FacesValidator
-public class URLValidator implements Validator<String> {
+public class
+URLValidator implements Validator<String> {
 
     @Inject
     private PropertyResourceBundle resourceBundle;
