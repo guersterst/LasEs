@@ -7,7 +7,7 @@ Damit ein Weiterleiten auf die nächste Seite einer \emph{Pagination} funktionie
 
 \subsubsection{business.internal}
 
-\textbf{Lifetime} In der Methode \emph{startup()} wird nun zusätzlich ein FileDTO, welches \emph{logger properties} als \emph{ImputStream} enthält, als Parameter übergeben.
+\textbf{Lifetime} In der Methode \emph{startup()} wird nun zusätzlich ein FileDTO, welches \emph{logger properties} als \emph{InputStream} enthält, als Parameter übergeben.
 
 \textbf{PeriodicWorker} Um den PeriodicWorker zu implementieren wird ein Timer Objekt verwendet. Dieser Timer wird durch \emph{init()} gestartet und durch \emph{stop()} gestoppt.
 
@@ -16,7 +16,7 @@ Damit ein Weiterleiten auf die nächste Seite einer \emph{Pagination} funktionie
 \textbf{PaperService} Für die Methode \emph{getLatest()} wird nur ein Submission-DTO benötigt und kein User-DTO wie zuvor angenommen. \newline
 Die Methode \emph{remove()} wurde entfernt, da sie nicht benötigt wird.
 
-\textbf{ScienceFieldService} Die Funktion ein einzelnes Fachgebiet mit \emph{get()} zu laden wurde nicht benötigt.
+\textbf{ScienceFieldService} Die Funktion, ein einzelnes Fachgebiet mit \emph{get()} zu laden wurde nicht benötigt.
 
 \textbf{SubmissionService} In \emph{add()} werden zusätzlich ein Paper-DTO, sowie ein File-DTO übergeben. Im Gegensatz dazu wird eine Liste von Gutachter nicht mehr benötigt. \newline
 Der Rückgabewert der Methode \emph{change()} wurde von \emph{void} zu \emph{boolean} verändert, um Rückmeldung der Änderung zu erhalten. \newline
@@ -25,18 +25,18 @@ Die Methode \emph{releaseReview()} wird bereits im \emph{ReviewService} durch \e
 Ebenso wird die Methode \emph{addCoAuthor()} nicht mehr verwendet, da Co-Autoren nur bei der Einreichung selbst hinzugefügt werden. Die Funktionalität liegt also schon in der Methode \emph{add()}.
 
 \textbf{UserService} Um den Avatar eines Nutzers zu löschen, wird \emph{setAvatar()} verwendet. Daher ist \emph{deleteAvatar()} überflüssig. \newline
-Die Methode \emph{getVerification()}, welche bestimmt ob eine E-Mail-Adresse schon verifiziert ist, wird nicht mehr benötigt, da die Verifikation bereits über \emph{isVerified()} aus dem User DTO abgefragt, oder über \emph{verify()} eine E-Mail-Adresse verifiziert werden kann.
+Die Methode \emph{getVerification()}, welche bestimmt, ob eine E-Mail-Adresse schon verifiziert ist, wird nicht mehr benötigt, da die Verifikation bereits über \emph{isVerified()} aus dem User DTO abgefragt, oder über \emph{verify()} eine E-Mail-Adresse verifiziert werden kann.
 
 \subsubsection{business.util}
 
-\textbf{EmailUtil} Aufgrund von Benutzerfreundlichkeit wird
+\textbf{EmailUtil} Aufgrund von Benutzerfreundlichkeit
 werden in einigen E-Mails auch passend generierte Links mit versendet. Dafür wurden folgende Methoden neu hinzugefügt: \emph{generateLinkForEmail, generateSubmissionURL, generateForumURL}.
 
 \subsubsection{control.backing}
 
 Diesem Paket wurden drei weitere Interfaces hinzugefügt: \emph{ScientificForumPaginationBacking, SubmissionPaginationBacking und UserPaginationBacking}. Der Grund dafür war die Erweiterung der \emph{Templates} um drei \emph{Composite Component}. Die einzelnen \emph{Paginations} werden an mehreren Orten verwendet. Um Codeduplikationen zu vermeiden und für die jeweilige Komponente, die benötigten Methoden zur Verfügung zu stellen, wurden die genannten Interfaces implementiert. Die Folgenden Klassen implementieren ein oder mehrere Interfaces: \emph{ResultListBacking, UserListBacking und ScientificForumList}.
 
-Im Weiteren folgt aus dem Verwenden den oben genannten Interfaces, dass Methoden wie \emph{getDateSelect()} (also alle Methoden, die zur Filterung dienen (Dropdown)) nur bedingt in den einzelnen \emph{Backing Beans} implementiert werden.
+Im Weiteren folgt aus dem Verwenden der oben genannten Interfaces, dass Methoden wie \emph{getDateSelect()} (also alle Methoden, die zur Filterung dienen (Dropdown)) nur bedingt in den einzelnen \emph{Backing Beans} implementiert werden.
 
 War auf einer Seite keine \emph{Pagination} vorgesehen und es war nötig jedoch die übergebenen \emph{Viewparameter} überprüfen oder die Zugangsrechte eines Benutzers, so wurde in manchen Fällen noch eine \emph{onLoad()} oder eine \emph{preRenderViewListener()} Methode hinzugefügt.
 
@@ -44,16 +44,16 @@ War auf einer Seite keine \emph{Pagination} vorgesehen und es war nötig jedoch 
 Damit das momentan ausgewählte Stylesheet geladen wird und dem Benutzer angezeigt werden kann, wurde \emph{getPathToStyle()} hinzugefügt.
 
 \textbf{HomepageBacking} Der Name eines zugehörigen Forums zu einer Einreichung wird über \emph{getForumName()} geladen, damit dieser in der Pagination angezeigt werden kann. \newline
-Um einzelne Tabs per \emph{CSS} dynamisch zu aktivieren, wird dies über \emph{get...CssClassSuffix()} gesetzt. Dieselbe Funktionalität mit verschiedenen Reitern wurde auch beim \emph{ResultlistBacking}, sowie dem \emph{ScientificForumBacking} benötigt daher wurde die Klasse dementsprechend erweitert.
+Um einzelne Tabs per \emph{CSS} dynamisch zu aktivieren, wird dies über \emph{get...CssClassSuffix()} gesetzt. Dieselbe Funktionalität mit verschiedenen Reitern wurde auch beim \emph{ResultlistBacking}, sowie dem \emph{ScientificForumBacking} benötigt, daher wurde die Klasse dementsprechend erweitert.
 
 \textbf{NavigationBacking} Hier wurde die Methode \emph{init()} noch hinzugefügt.
 
-\textbf{NewScientificForumBacking} Damit ein neues Fachgebiet hinzugefügt werden kann, wurde die \emph{createNewScienceField()} implementiert. Wurde ein neues Fachgebiet erstellt, erscheint es in einer Art Liste. Hier kann der Benutzer ein Gebiet auswählen und hinzufügen, indem er jenes nicht in ein Feld eingibt, sondern anklickt. Dementsprechenden wurden auch die Methoden im \emph{Backing Bean} angepasst.
+\textbf{NewScientificForumBacking} Damit ein neues Fachgebiet hinzugefügt werden kann, wurde die Methode \emph{createNewScienceField()} implementiert. Wurde ein neues Fachgebiet erstellt, erscheint es in einer Art Liste. Hier kann der Benutzer ein Gebiet auswählen und hinzufügen, indem er jenes nicht in ein Feld eingibt, sondern anklickt. Dementsprechenden wurden auch die Methoden im \emph{Backing Bean} angepasst.
 
 \textbf{NewSubmissionBacking} Sollte ein Eingabefehler seitens des Benutzers erfolgen, so  wird \emph{initNewSubmission()} aufgerufen, um den zuvor erhaltenen \emph{Viewparamter} nun händisch setzen zu können.\newline
-Zudem reicht hier eine Methode zum Laden einer Liste von Editoren aus, da die Auswahl über ein \emph{selectOneMenue} erfolgt.
+Zudem reicht hier eine Methode zum Laden einer Liste von Editoren aus, da die Auswahl über ein \emph{selectOneMenu} erfolgt.
 
-\textbf{ProfileBacking} Damit Adminrechte an Nutzer vergeben werden können, wurden \emph{Getter} und \emph{Setter} für den jeweiligen betroffenen Nutzers hinzugefügt.
+\textbf{ProfileBacking} Damit Adminrechte an Nutzer vergeben werden können, wurden \emph{Getter} und \emph{Setter} für den jeweiligen betroffenen Nutzer hinzugefügt.
 
 \textbf{ScientificForumBacking} Editoren, sowie Fachgebiete werden in einer Liste wiedergegeben, welche durch ein Eingabefeld ergänzt werden können. Hierzu wurden entsprechende Methoden hinzugefügt. \newline
 Zusätzlich wurde die Forumsseite um Informationen wie der Deadline eines Forums erweitert.\newline
@@ -84,9 +84,9 @@ Neu ist hier ein \emph{Converter} für einen Benutzer und einem Fachgebiet, um d
 
 \subsubsection{Composite Components}
 
-Neben der \emph{Pagination} wurden zusätzliche \emph{Composite Component} erstellt. Alle Komponenten: \emph{scientificForumTable, submissionTable} und \emph{userTable} verwenden eine  \emph{Pagination} und wurden erstellt, da die einzelnen Tabellen an mehreren Stellen benötigt wird. Beispielsweise wird eine \emph{submissionTable} auf der Homepage, auf der Seite eines Forums und auf der Seite, welche die Suchergebnisse anzeigt, verwendet. Ähnlich geschieht dies bei den anderen Tabellen.
+Neben der \emph{Pagination} wurden zusätzliche \emph{Composite Components} erstellt. Alle Komponenten: \emph{scientificForumTable, submissionTable} und \emph{userTable} verwenden eine \emph{Pagination} und wurden erstellt, da die einzelnen Tabellen an mehreren Stellen benötigt werden. Beispielsweise wird eine \emph{submissionTable} auf der Homepage, auf der Seite eines Forums und auf der Seite, welche die Suchergebnisse anzeigt, verwendet. Ähnlich geschieht dies bei den anderen Tabellen.
 
-Die Facelets wurden zusätzlich mit einer \emph{content.xhtml} ergänzt, welche als eine Art \emph{fall back} Seite fungiert. Sollten  bei Änderungen der \emph{main.xhtml} Fehler auftreten wird als default eben dieses Facelet angezeigt.
+Die Facelets wurden zusätzlich mit einer \emph{content.xhtml} ergänzt, welche als eine Art \emph{fall back} Seite fungiert. Sollten bei Änderungen der \emph{main.xhtml} Fehler auftreten wird als default eben dieses Facelet angezeigt.
 
 \subsection{Views}
 
@@ -96,7 +96,7 @@ Im Allgemeinen wurden hier nur Änderungen unter dem Motiv der Benutzerfreundlic
 
 \textbf{errorPage.xhtml} Hier wurde noch ein zusätzlicher \emph{outputLink} hinzugefügt, der den \emph{Stack Trace} nur im \emph{developmentMode} ausklappen kann.
 
-\textbf{scientificForum.xhtml} Ist der aktuelle Benutzende nicht befugt ein Forum zu editieren, so wird ihm die Anleitung zum Gutachten nicht in einer deaktivierten \emph{textArea} angezeigt, sonder es erscheint beim Klicken des entsprechenden Buttons ein \emph{Dialog.}
+\textbf{scientificForum.xhtml} Ist der aktuelle Benutzende nicht befugt ein Forum zu editieren, so wird ihm die Anleitung zum Gutachten nicht in einer deaktivierten \emph{textArea} angezeigt, sondern es erscheint beim Klicken des entsprechenden Buttons ein \emph{Dialog.}
 
 \subsection{Bibliotheken}
 \localauthor{Stefanie Gürster}
