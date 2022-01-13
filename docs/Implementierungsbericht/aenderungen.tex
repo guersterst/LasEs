@@ -110,10 +110,13 @@ Hierdurch konnte die Korrektheit des \emph{Connection-Pool} bestätigt
 und \emph{Connection-Leaks}, verurusacht durch Programmierfehler,
 schnell behoben werden.
 
-\textbf{ReviewedByRepository} Die Notwendigkeit der neuen Methoden
-\emph{removeReviewer()} und \emph{getList()} hat sich erst im Laufe des
-Entwicklungsprozesses ergeben.
-\todo{hier verallgemeinern}
+Es ist unter anderem manchmal vorgekommen, dass sich die Notwendigkeit bestimmter
+Methoden erst während der Entwicklung ergeben hat. Allerdings beschränkt sich das
+nur auf eine handvoll Methoden, wodurch wir die Genauigkeit der Spezifikation bestätigt
+sehen.
+ Ein Beispiel hierfür ist das \textbf{ReviewedByRepository}.
+Die Methoden
+\emph{removeReviewer()} und \emph{getList()} haben sich erst später als notwendig erwiesen.
 
 \textbf{ReviewRepository} setPDF remove nicht mehr vorhanden:
 siehe PaperRepository
