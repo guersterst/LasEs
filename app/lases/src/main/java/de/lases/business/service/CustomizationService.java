@@ -11,20 +11,14 @@ import de.lases.persistence.util.DatasourceUtil;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.faces.context.FacesContext;
-import jakarta.faces.view.facelets.FaceletContext;
 import jakarta.inject.Inject;
-import jakarta.servlet.ServletContext;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.PropertyResourceBundle;
 import java.util.logging.Logger;
-import java.util.stream.Stream;
 
 /**
  * Provides functionality for the customization of the applications look and feel and for
