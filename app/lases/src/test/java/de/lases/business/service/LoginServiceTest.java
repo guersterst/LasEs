@@ -30,6 +30,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
+/**
+ * @author Johann Schicho
+ */
 @ExtendWith(MockitoExtension.class)
 @ExtendWith(WeldJunit5Extension.class)
 class LoginServiceTest {
