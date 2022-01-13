@@ -1,7 +1,7 @@
 \subsection{Klassen}
 \localauthor{Stefanie Gürster}
 
-Veränderungen bezüglich der  Parameterübergabe von Methoden treten im Allgemeinen nur bedingt auf. Ein Beispiel dafür wäre, dass in der Methode \emph{addReviewer()} in der Klasse \emph{SubmissioneService} kein \emph{Submission-DTO} mehr mit übergeben wird, da lediglich die Id der Einreichung zum Abspeichern in der Datenbank benötigt wird. Diese Id wird aber bereits mit einem \emph{ReviewedBy-DTO} übergeben. Die Submission wäre also hier überflüssig.
+Veränderungen bezüglich der Parameterübergabe von Methoden treten im Allgemeinen nur bedingt auf. Ein Beispiel dafür wäre, dass in der Methode \emph{addReviewer()} in der Klasse \emph{SubmissionService} kein \emph{Submission-DTO} mehr mit übergeben wird, da lediglich die Id der Einreichung zum Abspeichern in der Datenbank benötigt wird. Diese Id wird aber bereits mit einem \emph{ReviewedBy-DTO} übergeben. Die Submission wäre also hier überflüssig.
 
 Damit ein Weiterleiten auf die nächste Seite einer \emph{Pagination} funktioniert, müssen alle zugehörigen Einträge gezählt werden. Dies übernehmen Methoden im Service sowie in den Repositories mit der Namenskonvention \emph{count...()} o.ä.. Eine solche Methode wird zum Beispiel im PaperService verwendet, um alle Paper einer Submission zu zählen. Um Redundanzen im Folgenden zu vermeiden wird diese Methode im Weiteren nicht mehr angesprochen.
 
