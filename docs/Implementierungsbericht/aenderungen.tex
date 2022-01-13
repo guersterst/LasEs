@@ -76,33 +76,6 @@ Neu sind hier ein \emph{Converter} für einen Benutzer und einem Fachgebiet, um 
 
 \textbf{Pagination} Anstatt dass die Methode \emph{applyFilter()} in den einzelnen Backing Beans implementiert wird, wurde sie nun allgemein in dieser Klasse eingefügt.
 
-
-\localauthor{Johannes Garstenauer}
-
-\subsection{Facelets}
-\localauthor{Stefanie Gürster}
-
-\subsubsection{Composite Components}
-
-Neben der \emph{Pagination} wurden zusätzliche \emph{Composite Component} erstellt. Alle Komponenten: \emph{scientificForumTable, submissionTable} und \emph{userTable} verwenden eine  \emph{Pagination} und wurden erstellt, da die einzelnen Tabellen an mehreren Stellen benötigt wird. Beispielsweise wird eine \emph{submissionTable} auf der Homepage, auf der Seite eines Forums und auf der Seite, welche die Suchergebnisse anzeigt, verwendet. Ähnlich geschieht dies bei den anderen Tabellen.
-
-Die Facelets wurden zusätzlich mit einer \emph{content.xhtml} ergänzt, welche als eine Art \emph{fall back} Seite fungiert. Sollten  bei Änderungen der \emph{main.xhtml} Fehler auftreten wird als default eben dieses Facelet angezeigt.
-
-\subsection{Views}
-
-Im Allgemeinen wurden hier nur Änderungen unter dem Motiv der Benutzerfreundlichkeit vorgenommen. Das heißt beispielsweise, dass zusätzlicher Text oder kleinere Funktionalitäten mit Hilfe von Buttons hinzugefügt worden sind. Außerdem wurde die Funktionalität von einigen \emph{Paginations} in, wie oben beschrieben, \emph{Composite Components} ausgelagert.
-
-Änderungen, welche im oberen Teil zu den \emph{Backing Beans} bereits beschrieben wurden haben Teils kleine Auswirkungen auf das jeweilige Facelet. Diese werden aber dann hier nicht weiter erläutert, um Duplikation zu vermeiden.
-
-\textbf{errorPage.xhtml} Hier wurde noch ein zusätzlicher \emph{outputLink} hinzugefügt, der den \emph{Stack Trace} nur im \emph{developmentMode} ausklappen kann.
-
-\textbf{scientificForum.xhtml} Ist der aktuelle Benutzende nicht befugt ein Forum zu editieren, so wird ihm die Anleitung zum Gutachten nicht in einer deaktivierten \emph{textArea} angezeigt, sonder es erscheint beim Klicken des entsprechenden Buttons ein \emph{Dialog.}
-
-\subsection{Bibliotheken}
-\localauthor{Stefanie Gürster}
-
-\textbf{Weld JUnit Extentions} Um Methoden, welche CDI benötigen, ebenfalls testen zu können, haben wir zusätzlich \emph{Weld JUnit Extentions}\footnote{\url{https://mvnrepository.com/artifact/org.jboss.weld/weld-junit-parent}} verwendet.
-
 \localauthor{Johannes Garstenauer}
 
 \subsubsection{persistence.util}
@@ -143,7 +116,7 @@ siehe PaperRepository
 zum Erhalten eines wissenschaftlichen Themas, wurde schlichtweg nicht benötigt,
 da es sich um ein \emph{DTO} mit wenig Inhalt und geringer Wichtigkeit im System handelt.
 
-\textbf{SubmissionRepository} Die \emph{removeReviewer()-Methode war hier schlicht an
+\textbf{SubmissionRepository} Die \emph{removeReviewer()}-Methode war hier schlicht an
 der falschen Stelle. Sie hätte sich schon in der Dokumentation im \emph{ReviewedByRepository}
 befinden sollen.
 \todo{verknüpfen mit reviewedbyrepository}
@@ -168,4 +141,29 @@ CSS-Dateien.
 
 Die \textbf{Visibility} Enumeration wurde im Implementierungsprozess hinzugefügt um die Sichtbarkeit eines
 Papers innerhalb einer Einreichung zu repräsentieren.
+
+\subsection{Facelets}
+\localauthor{Stefanie Gürster}
+
+\subsubsection{Composite Components}
+
+Neben der \emph{Pagination} wurden zusätzliche \emph{Composite Component} erstellt. Alle Komponenten: \emph{scientificForumTable, submissionTable} und \emph{userTable} verwenden eine  \emph{Pagination} und wurden erstellt, da die einzelnen Tabellen an mehreren Stellen benötigt wird. Beispielsweise wird eine \emph{submissionTable} auf der Homepage, auf der Seite eines Forums und auf der Seite, welche die Suchergebnisse anzeigt, verwendet. Ähnlich geschieht dies bei den anderen Tabellen.
+
+Die Facelets wurden zusätzlich mit einer \emph{content.xhtml} ergänzt, welche als eine Art \emph{fall back} Seite fungiert. Sollten  bei Änderungen der \emph{main.xhtml} Fehler auftreten wird als default eben dieses Facelet angezeigt.
+
+\subsection{Views}
+
+Im Allgemeinen wurden hier nur Änderungen unter dem Motiv der Benutzerfreundlichkeit vorgenommen. Das heißt beispielsweise, dass zusätzlicher Text oder kleinere Funktionalitäten mit Hilfe von Buttons hinzugefügt worden sind. Außerdem wurde die Funktionalität von einigen \emph{Paginations} in, wie oben beschrieben, \emph{Composite Components} ausgelagert.
+
+Änderungen, welche im oberen Teil zu den \emph{Backing Beans} bereits beschrieben wurden haben Teils kleine Auswirkungen auf das jeweilige Facelet. Diese werden aber dann hier nicht weiter erläutert, um Duplikation zu vermeiden.
+
+\textbf{errorPage.xhtml} Hier wurde noch ein zusätzlicher \emph{outputLink} hinzugefügt, der den \emph{Stack Trace} nur im \emph{developmentMode} ausklappen kann.
+
+\textbf{scientificForum.xhtml} Ist der aktuelle Benutzende nicht befugt ein Forum zu editieren, so wird ihm die Anleitung zum Gutachten nicht in einer deaktivierten \emph{textArea} angezeigt, sonder es erscheint beim Klicken des entsprechenden Buttons ein \emph{Dialog.}
+
+\subsection{Bibliotheken}
+\localauthor{Stefanie Gürster}
+
+\textbf{Weld JUnit Extentions} Um Methoden, welche CDI benötigen, ebenfalls testen zu können, haben wir zusätzlich \emph{Weld JUnit Extentions}\footnote{\url{https://mvnrepository.com/artifact/org.jboss.weld/weld-junit-parent}} verwendet.
+
 
