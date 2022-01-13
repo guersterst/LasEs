@@ -34,7 +34,6 @@ class SubmissionServiceTest {
 
     // id of submission in mocked repository
     private static final int FIRST_SUBMISSION_ID = 0;
-    private static final int EXAMPLE_REVIEW_VERSION = 3;
     private static final int EXAMPLE_USER_ID = 6;
     private static final String EXAMPLE_SUBMISSION_TITLE = "Submission title";
 
@@ -95,7 +94,7 @@ class SubmissionServiceTest {
     void startConnectionPool() {
         FileDTO file = new FileDTO();
 
-        Class c = SubmissionServiceTest.class;
+        Class<SubmissionServiceTest> c = SubmissionServiceTest.class;
         InputStream inputStream = c.getResourceAsStream("/config.properties");
 
         file.setInputStream(inputStream);
@@ -124,10 +123,6 @@ class SubmissionServiceTest {
 
     @Test
     void testGetNotFound() throws Exception {
-        Submission submissionFromRepo = new Submission();
-        submissionFromRepo.setId(FIRST_SUBMISSION_ID);
-        submissionFromRepo.setTitle(EXAMPLE_SUBMISSION_TITLE);
-
         // Submission with different id
         Submission sub = new Submission();
         sub.setId(FIRST_SUBMISSION_ID + 1);
@@ -139,19 +134,6 @@ class SubmissionServiceTest {
         field.set(submissionService, bundle);
 
         assertNull(submissionService.get(sub));
-    }
-
-    @Test
-    void testReleaseReview() {
-        Submission submission = new Submission();
-        submission.setId(FIRST_SUBMISSION_ID);
-        Review review = new Review();
-        review.setPaperVersion(EXAMPLE_REVIEW_VERSION);
-        review.setSubmissionId(FIRST_SUBMISSION_ID);
-
-        submissionService.releaseReview(review, submission);
-
-        reviewRepo.verify(() -> ReviewRepository.change(eq(review), any(Transaction.class)), times(1));
     }
 
     @Test

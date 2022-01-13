@@ -14,6 +14,7 @@ public class IllegalUserFlowException extends RuntimeException {
      * Constructs an exception.
      */
     public IllegalUserFlowException() {
+        super();
     }
 
     /**

@@ -17,6 +17,7 @@ public class EmailTransmissionFailedException extends Exception {
      * Constructs an exception.
      */
     public EmailTransmissionFailedException() {
+        super();
     }
 
     /**

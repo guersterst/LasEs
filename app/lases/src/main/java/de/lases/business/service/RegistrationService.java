@@ -1,7 +1,6 @@
 package de.lases.business.service;
 
 
-import de.lases.business.internal.ConfigPropagator;
 import de.lases.business.util.EmailUtil;
 import de.lases.business.util.Hashing;
 import de.lases.global.transport.MessageCategory;
@@ -38,9 +37,6 @@ public class RegistrationService {
     private final Logger logger = Logger.getLogger(RegistrationService.class.getName());
 
     @Inject
-    private ConfigPropagator configPropagator;
-
-    @Inject
     private PropertyResourceBundle message;
 
     @Inject
@@ -75,7 +71,7 @@ public class RegistrationService {
 
         user = register(user, t);
 
-        if (initiateVerificationProcess(user, t)) {
+        if (user != null && initiateVerificationProcess(user, t)) {
             String msg = message.getString("registrationSuccessful");
             uiMessageEvent.fire(new UIMessage(msg, MessageCategory.INFO));
 
@@ -99,7 +95,6 @@ public class RegistrationService {
             try {
                 oldUser = UserRepository.get(user, t);
             } catch (NotFoundException e) {
-                logger.severe("User with email " + user.getEmailAddress() + " should exist but was not found.");
                 t.abort();
                 return null;
             }
@@ -113,18 +108,7 @@ public class RegistrationService {
             user.setId(oldUser.getId());
             try {
                 UserRepository.change(user, t);
-            } catch (DataNotWrittenException e) {
-                logger.severe("User with email " + user.getEmailAddress() + " could not be updated: "
-                        + e.getMessage());
-                t.abort();
-                return null;
-            } catch (NotFoundException e) {
-                logger.severe("User with email " + user.getEmailAddress() + " should exist but was not found.");
-                t.abort();
-                return null;
-            } catch (KeyExistsException e) {
-                logger.severe("User with combination of email " + user.getEmailAddress() + " and id " + user.getId()
-                        + " could not be updated: " + e.getMessage());
+            } catch (DataNotWrittenException | NotFoundException | KeyExistsException e) {
                 t.abort();
                 return null;
             }
@@ -132,9 +116,8 @@ public class RegistrationService {
             try {
                 UserRepository.add(user, t);
             } catch (DataNotWrittenException e) {
-                uiMessageEvent.fire(new UIMessage(message.getString("registrationFailed"), MessageCategory.ERROR));
                 t.abort();
-                return user;
+                return null;
             }
         }
 
@@ -143,7 +126,7 @@ public class RegistrationService {
 
     /**
      * Creates a verification dto with a random string and sends an email to the user.
-     * If the debug and test mode is enabled, the random string will be shown as a UIMessage.
+     * If the development or test project stage is enabled, the random string will be shown as a UIMessage.
      * No other messages will be shown.
      *
      * @param user The user to be verified filled with id and email address.
@@ -175,11 +158,6 @@ public class RegistrationService {
                     null, message.getString("email.verification.subject"), emailBody);
         } catch (EmailTransmissionFailedException e) {
             return false;
-        }
-
-        // UIMessage containing verification random if test mode is enabled
-        if (configPropagator.getProperty("DEBUG_AND_TEST_MODE").equalsIgnoreCase("true")) {
-            uiMessageEvent.fire(new UIMessage(generateValidationUrl(verification), MessageCategory.INFO));
         }
 
         return true;

@@ -1,13 +1,11 @@
 package de.lases.business.service;
 
-import de.lases.business.internal.ConfigPropagator;
 import de.lases.business.util.AvatarUtil;
 import de.lases.business.util.EmailUtil;
 import de.lases.business.util.Hashing;
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
 import de.lases.persistence.internal.ConfigReader;
-import de.lases.persistence.repository.ScientificForumRepository;
 import de.lases.persistence.repository.SubmissionRepository;
 import de.lases.persistence.repository.Transaction;
 import de.lases.persistence.repository.UserRepository;
@@ -51,9 +49,6 @@ public class UserService implements Serializable {
 
     @Inject
     private PropertyResourceBundle propertyResourceBundle;
-
-    @Inject
-    private ConfigPropagator configPropagator;
 
     @Inject
     private FacesContext facesContext;
@@ -187,11 +182,6 @@ public class UserService implements Serializable {
             uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("emailInvalid"),
                     MessageCategory.ERROR));
             return false;
-        }
-
-        // UIMessage containing verification random if test mode is enabled
-        if (configPropagator.getProperty("DEBUG_AND_TEST_MODE").equalsIgnoreCase("true")) {
-            uiMessageEvent.fire(new UIMessage(generateValidationUrl(verification), MessageCategory.INFO));
         }
 
         return true;
@@ -336,15 +326,6 @@ public class UserService implements Serializable {
     }
 
     /**
-     * Deletes a user's avatar.
-     *
-     * @param user The {@link User} whose avatar is being deleted.
-     *             Must contain a valid id.
-     */
-    public void deleteAvatar(User user) {
-    }
-
-    /**
      * Adds an area of expertise, e.g. a {@link ScienceField} to a {@link User}.
      *
      * @param user         The user who receives a new {@code ScienceField}.
@@ -474,17 +455,6 @@ public class UserService implements Serializable {
     }
 
     /**
-     * Determines whether a users email-address is already verified.
-     *
-     * @param user The {@link User} whose {@link Verification} is requested.
-     *             Must contain a valid id.
-     * @return A fully filled {@code Verification} dto.
-     */
-    public Verification getVerification(User user) {
-        return null;
-    }
-
-    /**
      * Verifies a user's email-address.
      *
      * @param verification The {@link Verification}, containing the validation random, otherwise
@@ -506,7 +476,6 @@ public class UserService implements Serializable {
             storedVerification = UserRepository.getVerification(verification, transaction);
         } catch (NotFoundException e) {
             transaction.abort();
-            logger.warning("Could not find verification.");
             uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("verification.failure"),
                     MessageCategory.ERROR));
             return verification;
@@ -514,7 +483,6 @@ public class UserService implements Serializable {
 
         if (storedVerification.isVerified()) {
             transaction.abort();
-            logger.warning("User already verified");
             uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("verification.alreadyVerified"),
                     MessageCategory.ERROR));
             return verification;
@@ -526,14 +494,8 @@ public class UserService implements Serializable {
             try {
                 UserRepository.changeVerification(storedVerification, transaction);
                 logger.info("Successfully verified user with id " + storedVerification.getUserId());
-            } catch (NotFoundException e) {
+            } catch (NotFoundException | DataNotWrittenException e) {
                 transaction.abort();
-                logger.severe("Could not update verification as the user does not exist.");
-                uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("verification.failure"),
-                        MessageCategory.ERROR));
-            } catch (DataNotWrittenException e) {
-                transaction.abort();
-                logger.severe("Verification could not be updated in data source.");
                 uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("verification.failure"),
                         MessageCategory.ERROR));
             }

@@ -55,6 +55,7 @@ public class SubmissionService implements Serializable {
      *
      * @param submission A {@link Submission}-DTO containing a valid id.
      * @return The submission's data.
+     * @author Thomas Kirz
      */
     public Submission get(Submission submission) {
         if (submission.getId() == null) {
@@ -69,7 +70,6 @@ public class SubmissionService implements Serializable {
             t.commit();
             logger.finer("Submission with id " + submission.getId() + " retrieved.");
         } catch (NotFoundException | DataNotCompleteException e) {
-            logger.severe("Submission not found.");
             uiMessageEvent.fire(new UIMessage(
                     resourceBundle.getString("error.requestedSubmissionDoesNotExist"),
                     MessageCategory.ERROR));
@@ -90,6 +90,9 @@ public class SubmissionService implements Serializable {
      * @param submission The submission's data in a {@link Submission}.
      *                   Must contain a valid forum's id, authorId, editorId, state and title.
      * @param coAuthors  The desired co-athors as proper {@link User}-DTOs with an email-address.
+     * @param paper The first paper of this new submission.
+     * @param file File DTO for the submitted paper.
+     *
      * @return The submission that was added, but filled with its id.
      * @author Sebastian Vogt
      */
@@ -726,32 +729,13 @@ public class SubmissionService implements Serializable {
     }
 
     /**
-     * Releases a review to be viewed by the submitter.
-     *
-     * @param review     The review to be released.
-     * @param submission The submission containing that review.
-     */
-    public void releaseReview(Review review, Submission submission) {
-    }
-
-    /**
-     * Adds a co-author.
-     *
-     * @param coAuthor   The co-author to be added. This can be a regular {@link User}-DTO
-     *                   with a valid id
-     *                   or exclusively contain an email address.
-     * @param submission The submission, that receives a new co-author.
-     */
-    public void addCoAuthor(Submission submission, User coAuthor) {
-    }
-
-    /**
      * Determines whether a user has permission to view a submission
      *
      * @param submission The {@link Submission}, with a valid id, to be viewed.
      * @param user       The {@link User} whose view access is being determined.
      *                   Must contain an id.
      * @return {@code false} if view access is restricted, {@code true} otherwise.
+     * @author Thomas Kirz
      */
     public boolean canView(Submission submission, User user) {
         if (submission.getId() == null || user.getId() == null) {
@@ -777,7 +761,6 @@ public class SubmissionService implements Serializable {
             submission = SubmissionRepository.get(submission, t);
             logger.finer("Submission with id " + submission.getId() + " retrieved.");
         } catch (NotFoundException | DataNotCompleteException e) {
-            logger.severe("Submission with id " + submission.getId() + " not found.");
             uiMessageEvent.fire(new UIMessage(
                     resourceBundle.getString("error.loadingSubmissionFailed"),
                     MessageCategory.ERROR));
@@ -808,6 +791,7 @@ public class SubmissionService implements Serializable {
      * @param user         The user, whose editorial, reviewed or own and coauthored submissions.
      * @param resultParams The parameters, that control filtering and sorting of the resulting list.
      * @return The resulting list of submissions, which a user is involved in.
+     * @author Thomas Kirz
      */
     public List<Submission> getList(Privilege privilege, User user, ResultListParameters resultParams) {
         if (user.getId() == null) {
@@ -846,6 +830,7 @@ public class SubmissionService implements Serializable {
      *                        reviews or has submitted himself.
      * @param resultParams    The parameters, that control filtering and sorting of the resulting list.
      * @return The resulting list of submissions, that were submitted to a given scientific forum.
+     * @author Thomas Kirz
      */
     public List<Submission> getList(ScientificForum scientificForum, User user, Privilege privilege,
                                     ResultListParameters resultParams) {
@@ -882,6 +867,7 @@ public class SubmissionService implements Serializable {
      *                        parameters from the pagination like
      *                        filtering, sorting or number of elements.
      * @return A list of all {@link Submission}s that belong to a given scientific forum.
+     * @author Thomas Kirz
      */
     public List<Submission> getList(ScientificForum scientificForum,
                                     ResultListParameters resultParams) {
@@ -897,12 +883,10 @@ public class SubmissionService implements Serializable {
             t.commit();
             logger.finer("List of submissions retrieved.");
         } catch (DataNotCompleteException e) {
-            logger.warning("Data not complete: " + e.getMessage());
             uiMessageEvent.fire(new UIMessage(
                     resourceBundle.getString("warning.dataNotComplete"),
                     MessageCategory.WARNING));
         } catch (NotFoundException e) {
-            logger.severe("ScientificForum to get submissions for not found.");
             uiMessageEvent.fire(new UIMessage(
                     resourceBundle.getString("error.findingSubmissionListFailed"),
                     MessageCategory.ERROR));
@@ -921,6 +905,7 @@ public class SubmissionService implements Serializable {
      * @param user      A {@link User}-DTO with a valid id.
      * @return The number of submission the specified user authored and -1
      * if retrieving the amount of submissions failed.
+     * @author Thomas Kirz
      */
     public int countSubmissions(User user, Privilege privilege, ResultListParameters resultParams) {
         if (user.getId() == null) {
@@ -934,7 +919,6 @@ public class SubmissionService implements Serializable {
             count = SubmissionRepository.countSubmissions(user, privilege, t, resultParams);
             t.commit();
         } catch (NotFoundException | DataNotCompleteException e) {
-
             uiMessageEvent.fire(new UIMessage(
                     resourceBundle.getString("error.findingSubmissionListFailed"),
                     MessageCategory.ERROR));
