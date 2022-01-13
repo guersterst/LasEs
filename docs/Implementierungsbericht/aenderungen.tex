@@ -34,7 +34,7 @@ werden in einigen E-Mails auch passend generierte Links mit versendet. Dafür wu
 
 \subsubsection{control.backing}
 
-Diesem Paket wurden drei weitere Interfaces hinzugefügt: \emph{ScientificForumPaginationBacking, SubmissionPaginationBacking und UserPaginationBacking}. Der Grund dafür war die Erweiterung der \emph{Templates} um drei \emph{Composite Component}. Die einzelnen \emph{Paginations} werden an mehreren Orten verwendet. Um Codeduplikationen zu vermeiden und für die jeweilige Komponente, die benötigten Methoden zur Verfügung zu stellen, wurden die genannten Interfaces implementiert. Die Folgenden Klassen implementieren ein oder mehrere Interfaces: \emph{ResultListBacking, UserListBacking und ScientificForumList}.
+Diesem Paket wurden drei weitere Interfaces hinzugefügt: \emph{ScientificForumPaginationBacking, SubmissionPaginationBacking und UserPaginationBacking}. Der Grund dafür war die Erweiterung der \emph{Templates} um drei \emph{Composite Components}. Die einzelnen \emph{Paginations} werden an mehreren Orten verwendet. Um Codeduplikationen zu vermeiden und für die jeweilige Komponente die benötigten Methoden zur Verfügung zu stellen, wurden die genannten Interfaces implementiert. Die folgenden Klassen implementieren ein oder mehrere Interfaces: \emph{ResultListBacking, UserListBacking und ScientificForumList}.
 
 Im Weiteren folgt aus dem Verwenden der oben genannten Interfaces, dass Methoden wie \emph{getDateSelect()} (also alle Methoden, die zur Filterung dienen (Dropdown)) nur bedingt in den einzelnen \emph{Backing Beans} implementiert werden.
 
