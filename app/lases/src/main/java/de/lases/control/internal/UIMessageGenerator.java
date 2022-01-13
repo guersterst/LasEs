@@ -1,12 +1,12 @@
 package de.lases.control.internal;
 
-import de.lases.global.transport.*;
+import de.lases.global.transport.MessageCategory;
+import de.lases.global.transport.UIMessage;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.enterprise.event.Observes;
 import jakarta.enterprise.inject.Any;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
-import jakarta.inject.Inject;
 
 import java.io.Serial;
 import java.io.Serializable;

@@ -14,6 +14,7 @@ import jakarta.enterprise.inject.spi.CDI;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,9 @@ import java.util.logging.Logger;
  */
 @Dependent
 public class PaperService implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = -6799015652446918829L;
 
     @Inject
     private Event<UIMessage> uiMessageEvent;

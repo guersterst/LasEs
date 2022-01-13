@@ -1,6 +1,5 @@
 package de.lases.control.validation;
 
-import de.lases.business.service.UserService;
 import jakarta.enterprise.inject.spi.CDI;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.component.UIComponent;
@@ -10,8 +9,6 @@ import jakarta.faces.validator.Validator;
 import jakarta.faces.validator.ValidatorException;
 
 import java.time.LocalDateTime;
-import java.time.Period;
-import java.time.temporal.Temporal;
 import java.util.PropertyResourceBundle;
 
 /**
