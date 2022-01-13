@@ -213,7 +213,13 @@ class SubmissionServiceTestNoMock {
     @Disabled
     void testAddReviewer() throws SQLException {
         User user = new User();
-        user.setId(1);
+        user.setEmailAddress("schicho@fim.uni.passau.de");
+
+        User reviewer = new User();
+        reviewer.setId(420);
+
+        List<User> reviewerList = new ArrayList<>();
+        reviewerList.add(reviewer);
 
         ReviewedBy reviewedBy = new ReviewedBy();
         reviewedBy.setSubmissionId(5);
@@ -235,7 +241,7 @@ class SubmissionServiceTestNoMock {
             i++;
         }
 
-        submissionService.addReviewer(user, reviewedBy);
+        submissionService.manageReviewer(user, reviewedBy,reviewerList);
 
         ResultSet after= statement.executeQuery();
         int j = 0;

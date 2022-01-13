@@ -437,6 +437,80 @@ public class SubmissionService implements Serializable {
 
     }
 
+    public void manageReviewer(User newReviewer, ReviewedBy reviewedBy, List<User> reviewerList) {
+        Transaction transaction = new Transaction();
+
+        if (newReviewer.getEmailAddress() == null) {
+            logger.severe("The email address is null");
+            throw new InvalidFieldsException("The email address is null.");
+        }
+
+        User reviewer = new User();
+
+        try {
+            if (!UserRepository.emailExists(newReviewer, transaction)) {
+                newReviewer.setRegistered(false);
+                newReviewer.setFirstName(" ");
+                newReviewer.setLastName(" ");
+                reviewer = UserRepository.add(newReviewer, transaction);
+            } else {
+                reviewer = UserRepository.get(newReviewer, transaction);
+            }
+        } catch (DataNotWrittenException e) {
+            uiMessageEvent.fire(new UIMessage(
+                    resourceBundle.getString("dataNotWritten"),
+                    MessageCategory.ERROR));
+            transaction.abort();
+            return;
+        } catch (NotFoundException e) {
+            uiMessageEvent.fire(new UIMessage(
+                    resourceBundle.getString("dataNotFound"),
+                    MessageCategory.ERROR));
+            transaction.abort();
+            return;
+        }
+
+        reviewedBy.setReviewerId(reviewer.getId());
+        Submission submission = new Submission();
+        submission.setId(reviewedBy.getSubmissionId());
+
+        List<User> coAuthors = getCoAuthors(transaction, submission);
+        boolean isAuthor = false;
+
+        // If you are author or co-author you should not review your own submission.
+        for (User user : coAuthors) {
+            if (user.getId() == reviewer.getId()) {
+                isAuthor = true;
+                break;
+            }
+        }
+
+        // An admin is always allowed to review.
+        if (!isAuthor || reviewer.isAdmin()) {
+            if (reviewerList.contains(reviewer)) {
+                try {
+                    ReviewedByRepository.change(reviewedBy, transaction);
+                } catch (DataNotWrittenException e) {
+                    transaction.abort();
+                    uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewRequestDoesNotExist"), MessageCategory.ERROR));
+                } catch (NotFoundException e) {
+                    transaction.abort();
+                    uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewReviewedByCouldNotUpdate"), MessageCategory.ERROR));
+                }
+            } else {
+                if (addReviewer(reviewer, reviewedBy, transaction)) {
+                    uiMessageEvent.fire(new UIMessage(resourceBundle.getString("addReviewerToSub"), MessageCategory.INFO));
+                } else {
+                    uiMessageEvent.fire(new UIMessage(resourceBundle.getString("couldNotInformReviewer"), MessageCategory.WARNING));
+                }
+            }
+        } else {
+            // In case of a user is already author he could not be reviewer except he is an admin.
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("alreadyAuthor"), MessageCategory.WARNING));
+            transaction.abort();
+        }
+    }
+
     /**
      * Adds a reviewer to a submission.
      * <p>
@@ -447,13 +521,11 @@ public class SubmissionService implements Serializable {
      * @param reviewer   The reviewer to be added to the submission.
      * @param reviewedBy Information about the review-request relationship.
      */
-    public void addReviewer(User reviewer, ReviewedBy reviewedBy) {
+    private boolean addReviewer(User reviewer, ReviewedBy reviewedBy, Transaction transaction) {
         if (reviewer.getId() == null || !reviewer.getId().equals(reviewedBy.getReviewerId())) {
-            logger.severe("The id in the reviewed_by DTO and the id in the user DTO does not match or at least one of them are null");
+            logger.severe("The id in the reviewed_by DTO and the id in the user DTO does not match or at least one of them is null");
             throw new InvalidFieldsException("The id's need to be equal and must not be null.");
         }
-
-        Transaction transaction = new Transaction();
 
         try {
             SubmissionRepository.addReviewer(reviewedBy, transaction);
@@ -461,12 +533,12 @@ public class SubmissionService implements Serializable {
 
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotWritten"), MessageCategory.WARNING));
             transaction.abort();
-            return;
+            return false;
 
         } catch (NotFoundException e) {
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotFound"), MessageCategory.WARNING));
             transaction.abort();
-            return;
+            return false;
         }
 
         Submission submission = new Submission();
@@ -477,13 +549,23 @@ public class SubmissionService implements Serializable {
         assert submission != null : "Submission is null";
 
         String subject = resourceBundle.getString("email.assignedReviewer.subject");
-        String body = resourceBundle.getString("email.assignedReviewer.body") + "\n"
-                + submission.getTitle() + "\n" + EmailUtil.generateSubmissionURL(submission, facesContext);
+        String body = "";
+
+        if (reviewer.isRegistered()) {
+            body = resourceBundle.getString("email.assignedReviewer.body") + "\n"
+                    + submission.getTitle() + "\n" + EmailUtil.generateSubmissionURL(submission, facesContext);
+        } else {
+            body = resourceBundle.getString("email.assignedNewReviewer.body") + "\n" + submission.getTitle() + "\n"
+                    + resourceBundle.getString("email.assignedNewReviewerRegister.body") + "\n"
+                    + EmailUtil.generateLinkForEmail(facesContext, "views/anonymous/register.xhtml\"");
+        }
 
         if (sendEmail(reviewer, subject, null, body)) {
             transaction.commit();
+            return true;
         } else {
             transaction.abort();
+            return false;
         }
     }
 
@@ -740,12 +822,10 @@ public class SubmissionService implements Serializable {
             t.commit();
             logger.finer("List of submissions retrieved.");
         } catch (DataNotCompleteException e) {
-            logger.warning("Data not complete: " + e.getMessage());
             uiMessageEvent.fire(new UIMessage(
                     resourceBundle.getString("warning.dataNotComplete"),
                     MessageCategory.WARNING));
         } catch (NotFoundException e) {
-            logger.severe("User to get submissions for not found.");
             uiMessageEvent.fire(new UIMessage(
                     resourceBundle.getString("error.findingSubmissionListFailed"),
                     MessageCategory.ERROR));
@@ -855,7 +935,6 @@ public class SubmissionService implements Serializable {
             t.commit();
         } catch (NotFoundException | DataNotCompleteException e) {
 
-            logger.severe("User to count submissions for not found.");
             uiMessageEvent.fire(new UIMessage(
                     resourceBundle.getString("error.findingSubmissionListFailed"),
                     MessageCategory.ERROR));

@@ -574,10 +574,9 @@ public class PaperRepository {
                 logger.severe("Submission or user was not found. Count was not successful.");
                 throw new NotFoundException();
             } else {
-                resultSet.previous();
-                while (resultSet.next()) {
+                do {
                     count++;
-                }
+                } while (resultSet.next());
             }
 
         } catch (SQLException e) {
