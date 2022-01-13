@@ -1,11 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
 <!-- include themes here.-->
 <h:head>
@@ -33,7 +29,7 @@
         <!--Includes navigaton.-->
         <div id="navigation">
             <ui:insert name="navigation">
-                <ui:include src="navigation.xhtml"></ui:include>
+                <ui:include src="navigation.xhtml"/>
             </ui:insert>
         </div>
 
@@ -44,13 +40,13 @@
                             errorClass="alert-danger error" infoClass="alert-info info" warnClass="warning alert-warning"/>
             </div>
             <ui:insert name="content">
-                <ui:include src="content.xhtml"></ui:include>
+                <ui:include src="content.xhtml"/>
             </ui:insert>
         </div>
         <!--Includes footer-->
         <div id="footer-insert">
             <ui:insert name="footer">
-                <ui:include src="footer.xhtml"></ui:include>
+                <ui:include src="footer.xhtml"/>
             </ui:insert>
         </div>
 </h:body>
