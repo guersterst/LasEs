@@ -1,6 +1,7 @@
 package de.lases.business.service;
 
 import de.lases.business.util.EmailUtil;
+import de.lases.control.internal.SessionInformation;
 import de.lases.global.transport.*;
 
 import de.lases.persistence.exception.*;
@@ -48,6 +49,9 @@ public class SubmissionService implements Serializable {
 
     @Inject
     private FacesContext facesContext;
+
+    @Inject
+    private SessionInformation sessionInformation;
 
 
     /**
@@ -225,6 +229,8 @@ public class SubmissionService implements Serializable {
         } else {
             Transaction transaction = new Transaction();
 
+            List<User> coAuthorList = getCoAuthors(transaction, submission);
+
             try {
                 SubmissionRepository.remove(submission, transaction);
             } catch (DataNotWrittenException e) {
@@ -243,25 +249,42 @@ public class SubmissionService implements Serializable {
 
 
             if (submission.getEditorId() != null) {
-                User editor = new User();
-                editor.setId(submission.getEditorId());
-
-                try {
-                    editor = UserRepository.get(editor, transaction);
-                } catch (NotFoundException e) {
-                    uiMessageEvent.fire(new UIMessage(resourceBundle.getString("userNotFound"), MessageCategory.ERROR));
-                    transaction.abort();
-                    return;
-                }
-
                 String subject = resourceBundle.getString("email.removeSubmission.subject");
                 String body = resourceBundle.getString("email.removeSubmission.body")
                         .concat("\n").concat(submission.getTitle());
 
-                if (sendEmail(editor, subject, null, body)) {
-                    transaction.commit();
+                User user = sessionInformation.getUser();
+                if (user.getId().equals(submission.getEditorId())) {
+
+                    User author = coAuthorList.get(0);
+                    coAuthorList.remove(0);
+                    List<String> emailAddress = coAuthorList.stream().map(User::getEmailAddress).toList();
+
+                    if (sendEmail(author, subject, emailAddress.toArray(new String[0]), body)) {
+                        transaction.commit();
+                    } else {
+                        transaction.abort();
+                    }
+
                 } else {
-                    transaction.abort();
+
+                    User editor = new User();
+                    editor.setId(submission.getEditorId());
+
+                    try {
+                        editor = UserRepository.get(editor, transaction);
+                    } catch (NotFoundException e) {
+                        uiMessageEvent.fire(new UIMessage(resourceBundle.getString("userNotFound"), MessageCategory.ERROR));
+                        transaction.abort();
+                        return;
+                    }
+
+                    if (sendEmail(editor, subject, null, body)) {
+                        transaction.commit();
+                    } else {
+                        transaction.abort();
+                    }
+
                 }
             } else {
                 transaction.commit();
