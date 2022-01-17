@@ -3,7 +3,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-@Order(2)
+@Order(1)
 @TestMethodOrder(MethodOrderer.MethodName.class)
 public class SecondTestClass {
 
