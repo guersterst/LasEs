@@ -77,6 +77,7 @@
                                         </div>
                                     </f:facet>
                                     <h:commandButton id="delete-editor-btn" value="#{labels.delete}"
+                                                     title="#{help.removeEditorFromForum}"
                                                      action="#{newScientificForumBacking.removeEditor(item)}"
                                                      styleClass="btn btn-sm btn-outline-secondary"/>
                                 </h:column>
@@ -140,6 +141,7 @@
                                                     </f:facet>
                                                     <h:commandButton id="remove-science-field-btn"
                                                                      value="#{labels.delete}"
+                                                                     title="#{help.removeScienceFieldFromForum}"
                                                                      action="#{newScientificForumBacking.removeSelectedScienceField(itemField)}"
                                                                      styleClass="btn btn-sm btn-outline-secondary"/>
                                                 </h:column>
@@ -227,6 +229,7 @@
                             <label for="review-manual-itxt" class="form-label">#{labels.newForumReviewManual}</label>
                             <h:inputTextarea id="review-manual-itxt"
                                              value="#{newScientificForumBacking.newScientificForum.reviewManual}"
+                                             title="#{help.reviewGuideLineHelp}"
                                              a:placeholder="#{labels.newForumReviewManualPlaceHolder}"
                                              styleClass="form-control"
                                              required="true"
