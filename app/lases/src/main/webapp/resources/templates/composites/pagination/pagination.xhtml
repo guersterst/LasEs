@@ -21,19 +21,19 @@
     <ul class="pagination">
 <!--        <h:panelGrid columns="5">-->
             <li class="page-item">
-                <h:commandButton value="First" action="#{cc.attrs.paginator.firstPage}" styleClass="page-link"/>
+                <h:commandButton value="#{labels.pagiFirst}" action="#{cc.attrs.paginator.firstPage}" title="#{help.pagiHelpFirst}" styleClass="page-link"/>
             </li>
             <li class="page-item">
-                <h:commandButton value="Back" action="#{cc.attrs.paginator.previousPage}" styleClass="page-link"/>
+                <h:commandButton value="#{labels.pagiBack}" action="#{cc.attrs.paginator.previousPage}" title="#{help.pagiHelpBack}" styleClass="page-link"/>
             </li>
             <li class="page-item">
-                <h:outputText value="#{cc.attrs.paginator.resultListParameters.pageNo}" styleClass="page-link active"/>
+                <h:outputText value="#{cc.attrs.paginator.resultListParameters.pageNo}" title="#{help.pagiHelpCurrent}" styleClass="page-link active"/>
             </li>
             <li class="page-item">
-                <h:commandButton value="Next" action="#{cc.attrs.paginator.nextPage}" styleClass="page-link"/>
+                <h:commandButton value="#{labels.pagiNext}" action="#{cc.attrs.paginator.nextPage}" title="#{help.pagiHelpNext}" styleClass="page-link"/>
             </li>
             <li class="page-item">
-                <h:commandButton value="Last" action="#{cc.attrs.paginator.lastPage}" styleClass="page-link"/>
+                <h:commandButton value="#{labels.pagiLast}" action="#{cc.attrs.paginator.lastPage}" title="#{help.pagiHelpLast}" styleClass="page-link"/>
             </li>
 <!--        </h:panelGrid>-->
     </ul>
