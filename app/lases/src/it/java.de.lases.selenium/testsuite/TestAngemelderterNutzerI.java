@@ -16,7 +16,17 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.MethodName.class)
 public class TestAngemelderterNutzerI {
 
-    WebDriver webDriver = WebDriverFactory.createFirefoxWebDriver();
+    private static WebDriver webDriver;
+
+    @BeforeAll
+    static void createWebdriver() {
+        webDriver = WebDriverFactory.createFirefoxWebDriver();
+    }
+
+    @AfterAll
+    static void closeWebdriver() {
+        webDriver.close();
+    }
 
     @Test()
     @DisplayName("/T020/")
@@ -41,6 +51,27 @@ public class TestAngemelderterNutzerI {
                 () -> assertEquals(1, tableEntries.size()),
                 () -> assertEquals("Chemie Tagung", tableEntries.get(0).findElement(By.tagName("a")).getText())
         );
+    }
+
+    @Test()
+    @DisplayName("/T030/")
+    void test002GoToUploadSubmission() {
+        // Click on entry
+        WebElement tableBody = webDriver.findElement(By.id("sft-cc:sft-frm:sft-pg:pagination")).findElement(By.tagName("tbody"));
+        tableBody.findElements(By.tagName("tr")).get(0).findElement(By.tagName("a")).click();
+
+        webDriver.findElement(By.id("new-submission-frm:new-submission-btn")).click();
+
+        assertAll(
+                () -> assertEquals("Chemie Tagung", webDriver.findElement(By.id("new-submission-form:forum-name-itxt")).getAttribute("value")),
+                () -> assertTrue(webDriver.getCurrentUrl().contains("newSubmission.xhtml"))
+        );
+    }
+
+    @Test()
+    @DisplayName("/T040/")
+    void test003UserUploadFile() {
+        // upload file
     }
 
 }
