@@ -12,6 +12,7 @@ import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
+import jakarta.servlet.ServletContext;
 
 import java.io.File;
 import java.io.IOException;
@@ -165,12 +166,8 @@ public class CustomizationService {
     public String[] loadStyles() {
         List<String> styleList = new ArrayList<>();
 
-        String prefix = System.getProperty("user.dir");
-        String moveIntoWebApps = "/../webapps";
-        String contextPath = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-
-        String fullPath = prefix + moveIntoWebApps + contextPath + PATH_TO_STYLE_DIRECTORY;
-
+        ServletContext sctc = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        String fullPath = sctc.getRealPath("/resources/design/css/themes/");
         File themesPath = new File(fullPath);
         System.out.println(fullPath);
         File[] files = themesPath.listFiles();
