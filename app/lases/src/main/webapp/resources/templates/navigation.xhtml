@@ -52,12 +52,14 @@
                         styleClass="nav-item nav-link"/>
 
                 <!-- search form -->
-                <h:form>
+                <h:form id="global-search-frm">
                     <h:panelGrid columns="2" rendered="#{navigationBacking.sessionInformation.user != null}">
                         <h:inputText styleClass="form-control mr-sm2"
+                                     id="search-itxt"
                                      value="#{navigationBacking.resultListParameters.globalSearchWord}"
                                      title="#{help.search}"/>
                         <h:commandButton action="#{navigationBacking.search}"
+                                         id="search-btn"
                                          value="#{labels.search}"
                                          title="#{help.search}"
                                          styleClass="btn btn-primary my-2 my-sm-0"/>
