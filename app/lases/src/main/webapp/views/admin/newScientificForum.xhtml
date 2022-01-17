@@ -10,7 +10,7 @@
     <ui:define name="title">#{''.concat(labels.appName).concat(' - ').concat(labels.newForumTitle)}</ui:define>
 
     <ui:define name="content">
-
+        <div id="main-content">
         <f:metadata>
             <f:importConstants type="de.lases.control.internal.Constants" var="Const"/>
         </f:metadata>
@@ -196,12 +196,13 @@
 
                         <div class="form-group" style="margin-top: 1rem">
                             <label for="forum-name-itxt" class="form-label">#{labels.newForumDeadline}</label>
-                            <h:inputText id="dealine-itxt"
+                            <h:inputText id="deadline-itxt"
                                          value="#{newScientificForumBacking.newScientificForum.deadline}"
                                          a:placeholder="#{labels.date}"
                                          styleClass="form-control">
                                 <f:convertDateTime type="localDateTime"/>
                             </h:inputText>
+                            <h:messages for="deadline-itxt"/>
                         </div>
 
                         <div class="form-group" style="margin-top: 1rem">
@@ -262,6 +263,6 @@
                 </div>
             </div>
         </div>
-
+        </div>
     </ui:define>
 </ui:composition>

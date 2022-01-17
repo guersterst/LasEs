@@ -11,6 +11,7 @@ public class WebDriverFactory {
     public static WebDriver createFirefoxWebDriver() {
         FirefoxOptions firefoxOptions = new FirefoxOptions();
         firefoxOptions.addArguments("--allow-insecure-localhost");
+        firefoxOptions.addPreference("intl.accept_languages", "de-DE");
 
         return new FirefoxDriver(firefoxOptions);
     }

@@ -23,24 +23,29 @@
             <div class="navbar-nav">
                 <h:link
                         value="#{labels.userList}"
+                        id="nav-userlist-link"
                         outcome="/views/editor/userList"
                         title="#{help.userList}"
                         rendered="#{navigationBacking.sessionInformation.user.isEditor()
                         || navigationBacking.sessionInformation.user.isAdmin()}"
                         styleClass="nav-item nav-link"/>
                 <h:link
-                        value="#{labels.forumList}" outcome="/views/authenticated/scientificForumList"
+                        value="#{labels.forumList}"
+                        id="nav-forumlist-link"
+                        outcome="/views/authenticated/scientificForumList"
                         title="#{help.forumList}"
                         rendered="#{navigationBacking.sessionInformation.user != null}"
                         styleClass="nav-item nav-link"/>
                 <h:link
                         value="#{labels.administration}"
+                        id="nav-administration-link"
                         title="#{help.navigateAdministration}"
                         outcome="/views/admin/administration"
                         rendered="#{navigationBacking.sessionInformation.user.isAdmin()}"
                         styleClass="nav-item nav-link"/>
                 <h:link
                         value="#{labels.navProfile}"
+                        id="nav-profile-link"
                         title="#{help.navigateProfile}"
                         outcome="#{'/views/authenticated/profile?id='.concat(sessionInformation.user.id)}"
                         rendered="#{navigationBacking.sessionInformation.user != null}"

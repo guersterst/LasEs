@@ -4,6 +4,6 @@ import org.junit.platform.suite.api.SelectClasses;
 import org.junit.platform.suite.api.Suite;
 
 @Suite
-@SelectClasses({Test010.class})
+@SelectClasses({TestAdminCreateForum.class})
 public class ProductionTestSuite {
 }
