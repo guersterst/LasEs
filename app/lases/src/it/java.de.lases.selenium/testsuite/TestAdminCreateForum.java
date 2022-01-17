@@ -10,7 +10,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @Order(10)
 public class TestAdminCreateForum {
@@ -43,8 +43,8 @@ public class TestAdminCreateForum {
 
 
         // scroll down manually as buttons are hidden
-        ((JavascriptExecutor) webDriver)
-                .executeScript("arguments[0].scrollIntoView(true)", webDriver.findElement(By.id("create-forum-form:save-btn")));
+        JavascriptExecutor js = (JavascriptExecutor) webDriver;
+        js.executeScript("arguments[0].scrollIntoView(true)", webDriver.findElement(By.id("create-forum-form:save-btn")));
         Actions actions = new Actions(webDriver);
         actions.moveToElement(webDriver.findElement(By.id("main-content")));
         actions.perform();
@@ -61,8 +61,12 @@ public class TestAdminCreateForum {
 
         webDriver.findElement(By.id("create-forum-form:save-btn")).click();
 
-        assertEquals("Chemie Tagung", webDriver.findElement(By.id("forum-information-frm:forum-name-itxt")).getText());
-        webDriver.quit();
+        assertAll(
+                () -> assertTrue(webDriver.getCurrentUrl().contains("scientificForum.xhtml")),
+                () -> assertEquals("Chemie Tagung", webDriver.findElement(
+                        By.id("forum-information-frm:forum-name-itxt")).getAttribute("value"))
+        );
+        webDriver.close();
     }
 
 }
