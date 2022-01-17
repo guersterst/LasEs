@@ -1,10 +1,14 @@
+package testsuite;
+
 import factory.WebDriverFactory;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-public class SeleniumExampleTest {
+@Order(10)
+public class Test010 {
 
     WebDriver webDriver = WebDriverFactory.createFirefoxWebDriver();
 
@@ -22,4 +26,5 @@ public class SeleniumExampleTest {
 
         // webdriver.quit();
     }
+
 }
