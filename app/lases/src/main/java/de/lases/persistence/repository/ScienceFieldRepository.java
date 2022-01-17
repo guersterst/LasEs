@@ -258,6 +258,7 @@ public class ScienceFieldRepository {
         String query = """
                 SELECT name FROM science_field
                 WHERE name ILIKE ?
+                ORDER BY name ASC
                 """;
 
         try (PreparedStatement stmt = conn.prepareStatement(query)) {
