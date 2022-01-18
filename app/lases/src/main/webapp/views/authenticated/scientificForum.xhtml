@@ -33,7 +33,7 @@
 
                                     <!-- delete forum -->
                                     <div class="col-md-6">
-                                        <h:form>
+                                        <h:form id="forum-delete-frm">
                                             <h:commandButton styleClass="btn btn-secondary"
                                                              id="delete-forum-cbtn"
                                                              title="#{help.deleteForum}"
@@ -59,7 +59,7 @@
 
                                     <!-- new submission -->
                                     <div class="col-md-2">
-                                        <h:form>
+                                        <h:form id="new-submission-frm">
                                             <h:button
                                                     title="#{help.createNewSubmission}"
                                                     value="#{labels.createNewSubmission}"
@@ -78,7 +78,7 @@
 
                                     <!-- forum information column -->
                                     <div class="col-md-6">
-                                        <h:form>
+                                        <h:form id="forum-information-frm">
 
                                             <!-- name -->
                                             <div class="form-group">
@@ -257,7 +257,7 @@
 
                                             <!-- editor controls -->
                                             <!-- add editor -->
-                                            <h:form>
+                                            <h:form id="forum-editor-controls-frm">
                                                 <div class="form-group">
                                                     <h:outputLabel for="editor-email-itxt"
                                                                    value="#{labels.forumAddEditor}"
@@ -416,7 +416,7 @@
                             </div>
 
                             <div class="card-body">
-                                <h:form>
+                                <h:form if="pg-frm">
                                     <!-- Filter controls -->
                                     <div class="btn-group">
                                         <!-- Date filtering -->

@@ -1,0 +1,34 @@
+\localauthor{Thomas Kirz}
+
+Zusätzlich zu den Tests aus dem Pflichtenheft wurden folgende Tests geschrieben,
+um verschiedene Sicherheitsaspekte des Systems zu testen.
+
+\subsection{Injection}\label{subsec:injection-test}
+Dieser Test prüft den Schutz gegen SQL- und HTML/JavaScript-Injection.
+
+Dazu wird ein Nutzerkonto angelegt mit dem Titel \emph{;DROP table user;--}.
+Wäre hier SQL-Injection möglich, würde dieser Titel bei Ausführung des \code{INSERT}-Statements in der Datenbank
+die \code{user}-Tabelle löschen.
+Hier wird geprüft, dass die Nutzerdaten auf der Profilseite korrekt angezeigt werden.
+
+Dann lädt der Nutzer eine Einreichung mit dem Titel \emph{<script>alert('XSS');</script>} hoch.
+Der Titel soll jetzt so wie eingegeben angezeigt werden, ohne dass JavaScript ausgeführt wird.
+
+\subsection{Aufruf ohne Login}\label{subsec:unauthorized-test}
+Ohne sich anzumelden, wird versucht, die Startseite (für authorisierte Nutzende) aufzurufen.
+Der Nutzer soll auf die Anmeldeseite weitergeleitet werden.
+
+\subsection{Session Fixation}\label{subsec:session-fixation-test}
+Für diesen Test werden Cookies deaktiviert, damit die Session-ID in die URL geschrieben wird.
+
+Ein Nutzer ruft die Webseite auf und bekommt eine Session-ID\@.
+Mit dieser Session meldet er sich an.
+Wird die Webseite nun erneut mit der alten Session-ID aufgerufen, darf der Nutzer nicht angemeldet sein.
+
+\subsection{Insecure Direct Object Reference}\label{subsec:idor-test}
+Dieser Test prüft, dass ein Nutzer nicht unberechtigt auf Inhalte zugreifen kann, indem er deren ID herausfindet.
+
+Dazu legt ein angemeldeter Nutzer eine Einreichung an.
+Ein weiterer, neu registrierter Nutzer versucht jetzt,
+die Seite für diese Einreichung (mit richtiger ID als URL-Parameter) aufzurufen.
+Die Einreichung darf nicht angezeigt werden.

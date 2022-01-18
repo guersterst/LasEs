@@ -16,6 +16,7 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <junit.version>5.8.1</junit.version>
+        <junitplatform.version>1</junitplatform.version>
         <majorra.version>3.0.1</majorra.version>
         <weld.version>4.0.2.Final</weld.version>
         <primefaces.version>10.0.0</primefaces.version>
@@ -111,6 +112,13 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-suite</artifactId>
+            <version>1.8.2</version>
+            <scope>test</scope>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.jboss.weld/weld-junit-parent -->
         <dependency>
             <groupId>org.jboss.weld</groupId>
@@ -146,9 +154,13 @@
             </plugin>
 
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.2</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/selenium/**</exclude>
+                    </excludes>
+                </configuration>
             </plugin>
         </plugins>
     </build>
