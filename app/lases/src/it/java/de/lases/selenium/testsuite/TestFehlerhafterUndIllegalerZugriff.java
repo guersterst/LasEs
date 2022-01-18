@@ -1,9 +1,7 @@
 package de.lases.selenium.testsuite;
 
 import de.lases.selenium.factory.WebDriverFactory;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -12,13 +10,15 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Order(200)
+@TestMethodOrder(MethodOrderer.MethodName.class)
 public class TestFehlerhafterUndIllegalerZugriff {
 
-    WebDriver webDriver = WebDriverFactory.createFirefoxWebDriver();
+    private static WebDriver webDriver;
 
-    @Test
-    @DisplayName("/T200/")
-    void testBadAccess() {
+    @BeforeAll
+    static void createStartSituation() {
+        webDriver = WebDriverFactory.createFirefoxWebDriver();
+
         webDriver.get(WebDriverFactory.LOCALHOST_URL);
 
         WebElement emailBox = webDriver.findElement(By.id("login-form:email-itxt"));
@@ -28,12 +28,29 @@ public class TestFehlerhafterUndIllegalerZugriff {
         passwordBox.sendKeys("SupaDöner1970!");
 
         webDriver.findElement(By.id("login-form:login-cbtn")).click();
+    }
+
+    @AfterAll
+    static void closeWebdriver() {
+        //webDriver.close();
+    }
+
+    @Test()
+    @DisplayName("/T200/")
+    void test001BadAccess() {
 
         // Call a random non-existing page.
         webDriver.get(WebDriverFactory.LOCALHOST_URL + "freebitcoin.html");
 
         assertTrue(webDriver.findElement(By.id("error-message-otxt")).getText().contains("404"));
 
-        webDriver.close();
+    }
+
+    @Test()
+    @DisplayName("/T210")
+    void test002IllegalAccess() {
+        webDriver.get(WebDriverFactory.LOCALHOST_URL + "administration.xhtml");
+
+        assertTrue(webDriver.findElement(By.id("error-message-otxt")).getText().contains("404"));
     }
 }
