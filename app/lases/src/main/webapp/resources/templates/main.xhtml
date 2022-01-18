@@ -24,8 +24,8 @@
 <!--ui:composition with template="../../resources/template/main.xhtml-->
 <!--ui:define overrides the default-->
 <!--See welcome.xhtml. It already includes welcome.xhtml right-->
-<h:body id="page">
-        
+<h:body id="page" styleClass="d-flex flex-column min-vh-100">
+    <div id="flex-box-div" class="wrapper flex-grow-1">
         <!--Includes navigaton.-->
         <div id="navigation">
             <ui:insert name="navigation">
@@ -37,17 +37,19 @@
         <div id="content">
             <div class="top">
                 <h:messages id="global-msgs" globalOnly="true" styleClass="text-center alert"
-                            errorClass="alert-danger error" infoClass="alert-info info" warnClass="warning alert-warning"/>
+                            errorClass="alert-danger error" infoClass="alert-info info"
+                            warnClass="warning alert-warning"/>
             </div>
             <ui:insert name="content">
                 <ui:include src="content.xhtml"/>
             </ui:insert>
         </div>
-        <!--Includes footer-->
-        <div id="footer-insert">
-            <ui:insert name="footer">
-                <ui:include src="footer.xhtml"/>
-            </ui:insert>
-        </div>
+    </div>
+    <!--Includes footer-->
+    <div id="footer-insert">
+        <ui:insert name="footer">
+            <ui:include src="footer.xhtml"/>
+        </ui:insert>
+    </div>
 </h:body>
 </html>
