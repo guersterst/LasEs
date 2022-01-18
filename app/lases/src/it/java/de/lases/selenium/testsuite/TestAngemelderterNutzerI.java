@@ -1,12 +1,10 @@
-package testsuite;
+package de.lases.selenium.testsuite;
 
-import factory.WebDriverFactory;
+import de.lases.selenium.factory.WebDriverFactory;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 
 import java.util.List;
 
@@ -72,6 +70,10 @@ public class TestAngemelderterNutzerI {
     @DisplayName("/T040/")
     void test003UserUploadFile() {
         // upload file
+        System.out.println(System.getProperty("user.dir"));
+        String fullPathToPdfFile = System.getProperty("user.dir") + "/src/it/java/de/lases/selenium/testsuite/paper.pdf";
+        WebElement fileInput = webDriver.findElement(By.id("new-submission-form:pdf-upload-ifile"));
+        fileInput.sendKeys(fullPathToPdfFile);
     }
 
 }

@@ -1,4 +1,6 @@
-import factory.WebDriverFactory;
+package de.lases.selenium;
+
+import de.lases.selenium.factory.WebDriverFactory;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
