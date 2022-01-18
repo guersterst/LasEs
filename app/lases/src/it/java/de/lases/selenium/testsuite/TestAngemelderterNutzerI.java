@@ -23,7 +23,7 @@ public class TestAngemelderterNutzerI {
 
     @AfterAll
     static void closeWebdriver() {
-        webDriver.close();
+        //webDriver.close();
     }
 
     @Test()
@@ -94,7 +94,7 @@ public class TestAngemelderterNutzerI {
 
     @Test()
     @DisplayName("/T050/")
-    void test005UserUEnterInvalidData() {
+    void test005UserSubmitSubmission() {
         webDriver.findElement(By.id("co-authors-form:co-author-email-itxt")).clear();
         webDriver.findElement(By.id("co-authors-form:co-author-email-itxt")).sendKeys("garstenaue@fim.uni-passau.de");
 
@@ -115,5 +115,12 @@ public class TestAngemelderterNutzerI {
                     );
                 }
         );
+    }
+
+    @Test
+    @DisplayName("/T060/")
+    void test006UserLogout() {
+        webDriver.findElement(By.id("logout-frm:logout-cbtn")).click();
+        assertTrue(webDriver.getCurrentUrl().contains("welcome.xhtml"));
     }
 }
