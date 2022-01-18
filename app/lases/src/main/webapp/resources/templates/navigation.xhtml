@@ -51,7 +51,9 @@
                     <h:panelGrid columns="2" rendered="#{navigationBacking.sessionInformation.user != null}">
                         <h:inputText styleClass="form-control mr-sm2"
                                      value="#{navigationBacking.resultListParameters.globalSearchWord}"
-                                     title="#{help.search}"/>
+                                     title="#{help.search}"
+                                     maxlength="30"
+                        />
                         <h:commandButton action="#{navigationBacking.search}"
                                          value="#{labels.search}"
                                          title="#{help.search}"
