@@ -23,7 +23,7 @@ public class TestAngemelderterNutzerI {
 
     @AfterAll
     static void closeWebdriver() {
-        webDriver.close();
+        //webDriver.close();
     }
 
     @Test()
@@ -70,10 +70,26 @@ public class TestAngemelderterNutzerI {
     @DisplayName("/T040/")
     void test003UserUploadFile() {
         // upload file
-        System.out.println(System.getProperty("user.dir"));
         String fullPathToPdfFile = System.getProperty("user.dir") + "/src/it/java/de/lases/selenium/testsuite/paper.pdf";
         WebElement fileInput = webDriver.findElement(By.id("new-submission-form:pdf-upload-ifile"));
         fileInput.sendKeys(fullPathToPdfFile);
+
+        // Can't read out value in upload box
+    }
+
+    @Test()
+    @DisplayName("/T045/")
+    void test004UserUEnterInvalidData() {
+        webDriver.findElement(By.id("new-submission-form:submission-title-itxt")).sendKeys("P != NP");
+        webDriver.findElement(By.id("co-authors-form:co-author-firstname-itxt")).sendKeys("Christian");
+        webDriver.findElement(By.id("co-authors-form:co-author-lastname-itxt")).sendKeys("Bachmaier");
+        webDriver.findElement(By.id("co-authors-form:co-author-email-itxt")).sendKeys("garstenaue");
+
+        webDriver.findElement(By.id("co-authors-form:submit-co-author-cbtn")).click();
+
+        WebElement errorMessage = webDriver.findElement(By.xpath("/html/body/div[2]/div[2]/div/div[2]/div/div/div[2]/form/div[4]"));
+
+        assertEquals("Ungültige E-Mail-Adresse.", errorMessage.getText());
     }
 
 }
