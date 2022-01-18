@@ -18,19 +18,19 @@
                     <h:form id="tabs">
                         <ul class="nav nav-tabs justify-content-center">
                             <li class="nav-item">
-                                <h:commandLink value="#{labels['ownSubmissions']}"
+                                <h:commandLink value="#{labels['ownSubmissions']}" id="own-sub-tab-cmdlnk"
                                                title="#{help['ownSubmissions']}"
                                                action="#{homepageBacking.showOwnSubmissionsTab()}"
                                                styleClass="#{'nav-link'.concat(homepageBacking.ownCssClassSuffix)}"/>
                             </li>
                             <li class="nav-item">
-                                <h:commandLink value="#{labels['reviewedSubmissions']}"
+                                <h:commandLink value="#{labels['reviewedSubmissions']}" id="reviewer-tab-cmdlnk"
                                                title="#{help['reviewedSubmissions']}"
                                                action="#{homepageBacking.showSubmissionsToReviewTab()}"
                                                styleClass="#{'nav-link'.concat(homepageBacking.reviewCssClassSuffix)}"/>
                             </li>
                             <li class="nav-item">
-                                <h:commandLink value="#{labels['editedSubmissions']}"
+                                <h:commandLink value="#{labels['editedSubmissions']}" id="editor-tab-cmdlnk"
                                                title="#{help['editedSubmissions']}"
                                                action="#{homepageBacking.showSubmissionsToEditTab()}"
                                                styleClass="#{'nav-link'.concat(homepageBacking.editCssClassSuffix)}"/>
@@ -40,7 +40,7 @@
                 </div>
 
                 <div class="card-body">
-                    <st:submissiontable backing="#{homepageBacking}"/>
+                    <st:submissiontable backing="#{homepageBacking}" id="sft-cc"/>
                 </div>
             </div>
         </div>

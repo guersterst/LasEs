@@ -13,7 +13,7 @@
 
 
 <composite:implementation>
-    <h:form>
+    <h:form id="submissiontable-frm">
         <!-- Filter controls -->
         <div class="btn-group">
             <!-- Date filtering -->
@@ -34,7 +34,7 @@
                                itemValue="#{select}"/>
             </h:selectOneMenu>
         </div>
-        <pg:pagination paginator="#{cc.attrs.backing.submissionPagination}">
+        <pg:pagination paginator="#{cc.attrs.backing.submissionPagination}" id="submission-png">
             <h:column>
                 <f:facet name="header">
                     <col:sortsearchcolumn id="title-ssc"
