@@ -78,7 +78,7 @@ public class EmailSender {
         } catch (SendFailedException e) {
             // Could not send the email to one or more recipients
             logger.warning("Sending email failed (recoverable): " + e.getMessage());
-            String[] invalidAddresses = null;
+            String[] invalidAddresses = new String[0];
             if (e.getInvalidAddresses() != null) {
                 invalidAddresses = Arrays.stream(e.getInvalidAddresses()).map(Address::toString)
                         .toArray(String[]::new);
