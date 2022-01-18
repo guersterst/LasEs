@@ -23,7 +23,7 @@ public class TestAngemelderterNutzerI {
 
     @AfterAll
     static void closeWebdriver() {
-        //webDriver.close();
+        webDriver.close();
     }
 
     @Test()
@@ -89,7 +89,31 @@ public class TestAngemelderterNutzerI {
 
         WebElement errorMessage = webDriver.findElement(By.xpath("/html/body/div[2]/div[2]/div/div[2]/div/div/div[2]/form/div[4]"));
 
-        assertEquals("Ungültige E-Mail-Adresse.", errorMessage.getText());
+        assertTrue(errorMessage.getText().contains("Ungültige E-Mail-Adresse."));
     }
 
+    @Test()
+    @DisplayName("/T050/")
+    void test005UserUEnterInvalidData() {
+        webDriver.findElement(By.id("co-authors-form:co-author-email-itxt")).clear();
+        webDriver.findElement(By.id("co-authors-form:co-author-email-itxt")).sendKeys("garstenaue@fim.uni-passau.de");
+
+        webDriver.findElement(By.id("co-authors-form:submit-co-author-cbtn")).click();
+
+        List<WebElement> listEntries = webDriver.findElement(By.id("co-authors-form:co-author-list"))
+                .findElement(By.tagName("tbody")).findElements(By.tagName("tr"));
+
+        assertAll(
+                () -> assertEquals(1, listEntries.size()),
+                // Create submission
+                () -> {
+                    webDriver.findElement(By.id("new-submission-form:submitcbtn")).click();
+                    assertAll(
+                            () -> assertTrue(webDriver.getCurrentUrl().contains("submission.xhtml")),
+                            () -> assertEquals("P != NP",
+                                    webDriver.findElement(By.id("info-submission:submission-title-otxt")).getText())
+                    );
+                }
+        );
+    }
 }
