@@ -78,8 +78,11 @@ public class EmailSender {
         } catch (SendFailedException e) {
             // Could not send the email to one or more recipients
             logger.warning("Sending email failed (recoverable): " + e.getMessage());
-            String[] invalidAddresses = Arrays.stream(e.getInvalidAddresses()).map(Address::toString)
-                    .toArray(String[]::new);
+            String[] invalidAddresses = null;
+            if (e.getInvalidAddresses() != null) {
+                invalidAddresses = Arrays.stream(e.getInvalidAddresses()).map(Address::toString)
+                        .toArray(String[]::new);
+            }
             throw new EmailTransmissionFailedException("Sending email failed", e, invalidAddresses);
         } catch (MessagingException e) {
             // Non-recoverable error, throw unchecked exception
