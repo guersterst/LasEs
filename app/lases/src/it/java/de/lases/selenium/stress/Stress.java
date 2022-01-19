@@ -13,6 +13,8 @@ public class Stress {
 
     public static final int N = 5;
 
+    public static final String URL = "http://ds9.fim.uni-passau.de:8002/lases/";
+
     static ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(N);
 
     public static void main(String... args) throws ExecutionException, InterruptedException, FileNotFoundException {

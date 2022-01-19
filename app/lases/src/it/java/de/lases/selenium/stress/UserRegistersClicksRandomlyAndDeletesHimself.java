@@ -19,6 +19,8 @@ import java.util.concurrent.Callable;
 
 public class UserRegistersClicksRandomlyAndDeletesHimself implements Callable<List<ResponseTimeEntry>> {
 
+    private static int globalId = 1;
+
     private final WebDriver driver;
     private final JavascriptExecutor js;
 
@@ -31,18 +33,22 @@ public class UserRegistersClicksRandomlyAndDeletesHimself implements Callable<Li
 
     @Override
     public List<ResponseTimeEntry> call() {
-        return userRegistersClicksRandomlyAndDeletesHimself(hashCode());
+        try {
+            return userRegistersClicksRandomlyAndDeletesHimself(globalId++);
+        } finally {
+            tearDown();
+        }
     }
 
     private void tearDown() {
         driver.quit();
     }
 
-    private List<ResponseTimeEntry> userRegistersClicksRandomlyAndDeletesHimself(int threadIdentifier) {
+    private List<ResponseTimeEntry> userRegistersClicksRandomlyAndDeletesHimself(int globalId) {
         List<ResponseTimeEntry> responseTimes = new LinkedList<>();
 
         long start = System.currentTimeMillis();
-        driver.get("http://localhost:8082/lases_1_0_SNAPSHOT_war/");
+        driver.get(Stress.URL);
         long end = System.currentTimeMillis();
         responseTimes.add(new ResponseTimeEntry("callPage", end - start));
 
@@ -59,7 +65,7 @@ public class UserRegistersClicksRandomlyAndDeletesHimself implements Callable<Li
         driver.findElement(By.id("register-frm:last-name-itxt")).click();
         driver.findElement(By.id("register-frm:last-name-itxt")).sendKeys("Stressmensch");
         driver.findElement(By.id("register-frm:email-itxt")).click();
-        driver.findElement(By.id("register-frm:email-itxt")).sendKeys(threadIdentifier +
+        driver.findElement(By.id("register-frm:email-itxt")).sendKeys(globalId +
                 "Stress.Stress@sebastianvogt.me");
         driver.findElement(By.id("register-frm:password-iscrt")).sendKeys("Password1!");
 
@@ -133,7 +139,6 @@ public class UserRegistersClicksRandomlyAndDeletesHimself implements Callable<Li
         end = System.currentTimeMillis();
         responseTimes.add(new ResponseTimeEntry("action:profileDelete", end - start));
 
-        tearDown();
         return responseTimes;
     }
 }
