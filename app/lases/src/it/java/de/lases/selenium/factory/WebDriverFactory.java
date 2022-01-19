@@ -16,4 +16,13 @@ public class WebDriverFactory {
 
         return new FirefoxDriver(firefoxOptions);
     }
+
+    public static WebDriver createFirefoxWebDriverNoCookies() {
+        FirefoxOptions firefoxOptions = new FirefoxOptions();
+        firefoxOptions.addArguments("--allow-insecure-localhost");
+        firefoxOptions.addPreference("intl.accept_languages", "de-DE");
+        firefoxOptions.addPreference("network.cookie.cookieBehavior", 2);
+
+        return new FirefoxDriver(firefoxOptions);
+    }
 }

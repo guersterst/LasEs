@@ -3,7 +3,10 @@ package de.lases.selenium.security;
 import de.lases.selenium.factory.WebDriverFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -12,18 +15,17 @@ import java.nio.file.Paths;
 import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 
 public class InjectionTest {
 
-    private WebDriver driver = WebDriverFactory.createFirefoxWebDriver();
+    private final WebDriver driver = WebDriverFactory.createFirefoxWebDriver();
 
-    private WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+    private final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
     private static final String ADMIN_EMAIL = "thomas.kirz2+lasesadmin@gmail.com";
     private static final String ADMIN_PASSWORD = "Password1!";
 
-    private static final String TEST_NAME = "\";DROP TABLE user;--";
+    private static final String TEST_TITLE = "\";DROP TABLE user;--";
 
     /**
      * Prerequisite: Admin 'thomas.kirz2+lasesadmin@gmail.com' w/ Password 'Password1!' exists in the database.
@@ -45,7 +47,7 @@ public class InjectionTest {
         registerButton.click();
 
         driver.findElement(By.id("register-frm:title-itxt")).clear();
-        driver.findElement(By.id("register-frm:title-itxt")).sendKeys(TEST_NAME);
+        driver.findElement(By.id("register-frm:title-itxt")).sendKeys(TEST_TITLE);
         driver.findElement(By.id("register-frm:first-name-itxt")).click();
         driver.findElement(By.id("register-frm:first-name-itxt")).clear();
         driver.findElement(By.id("register-frm:first-name-itxt")).sendKeys("Bobby");
@@ -95,7 +97,7 @@ public class InjectionTest {
 
         // Title and name should be displayed correctly
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("edit-profile-form:title-itxt")));
-        assertEquals(TEST_NAME,
+        assertEquals(TEST_TITLE,
                 driver.findElement(By.id("edit-profile-form:title-itxt")).getAttribute("value"));
         assertEquals("Bobby",
                 driver.findElement(By.id("edit-profile-form:firstname-itxt")).getAttribute("value"));
@@ -129,7 +131,7 @@ public class InjectionTest {
 
         // add editor.
         WebElement emailField = driver.findElement(By.id("add-editors-form:email-editor-itxt"));
-        emailField.sendKeys("thomas.kirz2+lasesadmin@gmail.com");
+        emailField.sendKeys(ADMIN_EMAIL);
         driver.findElement(By.id("add-editors-form:add-editor-btn")).click();
 
 
