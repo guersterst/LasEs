@@ -49,7 +49,6 @@ public class TestAddReviewer {
                 break;
             }
         }
-
         webDriver.findElement(By.id("add-reviewer-frm:add-reviewer-itxt")).sendKeys("schicho@fim.uni-passau.de");
         webDriver.findElement(By.id("add-reviewer-frm:add-deadline-reviewer-itxt")).sendKeys("31.12.2022, 17:00:00 ");
 

@@ -32,7 +32,7 @@ public class TestFehlerhafterUndIllegalerZugriff {
 
     @AfterAll
     static void closeWebdriver() {
-        //webDriver.close();
+        webDriver.close();
     }
 
     @Test()
