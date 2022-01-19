@@ -1,1 +1,20 @@
 \localauthor{Stefanie Gürster, Johann Schicho}
+
+Wir verwenden das \emph{Selenium Framework} um mehrere Nutzerabläufe im Webbrowser zu automatisieren.
+Dabei übernimmt ein Programm den Browser und navigiert anhand der \emph{ID}
+der Webelemente. Dabei wird dann gegen die angezeigten Meldungen getestet, um
+den korrekten Ablauf sicherzustellen.
+
+\subsection{Probleme zu Beginn}
+
+\begin{itemize}
+	\item Verwendung von \emph{IDs} in JSF-Komponenten. Bereits während der
+	Implementierung wurden überall, nach Definition der Feinspezifikation, IDs in den \emph{Facelets} verwendet.
+
+	Allerdings wurde übersehen, dass auch \emph{Forms} und \emph{Composite Components} immer eigene IDs benötigen, da ansonsten JSF diese dynamisch
+	generiert. Die dynamisch generierten IDs können sich bei jedem \emph{Render Vorgang} wieder ändern und erlauben damit also leider keine Identifikation.\newline
+	Es wurden an allen Stellen, an denen die IDs vergessen wurden, diese noch eingefügt.
+
+
+
+\end{itemize}
