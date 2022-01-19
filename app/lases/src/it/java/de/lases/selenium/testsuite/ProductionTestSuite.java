@@ -1,9 +1,11 @@
 package de.lases.selenium.testsuite;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.platform.suite.api.SelectClasses;
 import org.junit.platform.suite.api.Suite;
 
 @Suite
+@DisplayName("Integration Tests")
 @SelectClasses({
         TestSetup.class,
         TestReset.class,
