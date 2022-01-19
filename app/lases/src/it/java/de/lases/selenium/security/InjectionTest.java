@@ -19,13 +19,18 @@ public class InjectionTest {
     private boolean acceptNextAlert = true;
     private StringBuffer verificationErrors = new StringBuffer();
 
-    private WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+    private WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
+    private static final String ADMIN_EMAIL = "thomas.kirz2+lasesadmin@gmail.com";
+    private static final String ADMIN_PASSWORD = "Password1!";
+
+    /**
+     * Prerequisite: Admin 'thomas.kirz2+lasesadmin@gmail.com' w/ Password 'Password1!' exists in the database.
+     */
     @Test
     public void injectionTest() {
         // Create Security forum
         createForum();
-
 
         driver.get(WebDriverFactory.LOCALHOST_URL);
 
@@ -87,6 +92,13 @@ public class InjectionTest {
 
         driver.findElement(By.linkText("Profil")).click();
 
+        // Title and name should be displayed correctly
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("edit-profile-form:title-itxt")));
+        assertEquals(";DROP table user;--",
+                driver.findElement(By.id("edit-profile-form:title-itxt")).getAttribute("value"));
+        assertEquals("Bobby",
+                driver.findElement(By.id("edit-profile-form:firstname-itxt")).getAttribute("value"));
+
         // Scroll to and click on 'Delete' button
         WebElement deleteButton = driver.findElement(By.id("delete-profile-form:delete-cbtn"));
         js.executeScript("arguments[0].scrollIntoView(true)", deleteButton);
@@ -95,7 +107,8 @@ public class InjectionTest {
         driver.findElement(By.id("delete-profile-form:delete-really-cbtn")).click();
 
         // Delete Forum
-        driver.findElement(By.linkText("Abmelden")).click();
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("login-form:email-itxt")));
+        deleteForum();
     }
 
     private void createForum() {
@@ -104,8 +117,8 @@ public class InjectionTest {
         WebElement emailBox = driver.findElement(By.id("login-form:email-itxt"));
         WebElement passwordBox = driver.findElement(By.id("login-form:password-iscrt"));
 
-        emailBox.sendKeys("kirz@fim.uni-passau.de");
-        passwordBox.sendKeys("UniDorfen1870!");
+        emailBox.sendKeys(ADMIN_EMAIL);
+        passwordBox.sendKeys(ADMIN_PASSWORD);
 
         driver.findElement(By.id("login-form:login-cbtn")).click();
 
@@ -115,7 +128,7 @@ public class InjectionTest {
 
         // add editor.
         WebElement emailField = driver.findElement(By.id("add-editors-form:email-editor-itxt"));
-        emailField.sendKeys("kirz@fim.uni-passau.de");
+        emailField.sendKeys("thomas.kirz2+lasesadmin@gmail.com");
         driver.findElement(By.id("add-editors-form:add-editor-btn")).click();
 
 
@@ -141,13 +154,11 @@ public class InjectionTest {
     }
 
     private void deleteForum() {
-        driver.get(WebDriverFactory.LOCALHOST_URL);
-
         WebElement emailBox = driver.findElement(By.id("login-form:email-itxt"));
         WebElement passwordBox = driver.findElement(By.id("login-form:password-iscrt"));
 
-        emailBox.sendKeys("kirz@fim.uni-passau.de");
-        passwordBox.sendKeys("UniDorfen1870!");
+        emailBox.sendKeys(ADMIN_EMAIL);
+        passwordBox.sendKeys(ADMIN_PASSWORD);
 
         driver.findElement(By.id("login-form:login-cbtn")).click();
 
@@ -156,8 +167,7 @@ public class InjectionTest {
 
         driver.findElement(By.linkText("Security Conference")).click();
 
-        driver.findElement(By.linkText("Löschen")).click();
-
+        driver.findElement(By.id("forum-delete-frm:delete-forum-cbtn")).click();
         driver.findElement(By.id("forum-delete-frm:agree-delete-cbtn")).click();
 
         wait.until(ExpectedConditions.elementToBeClickable(By.id("logout-frm:logout-cbtn")));
