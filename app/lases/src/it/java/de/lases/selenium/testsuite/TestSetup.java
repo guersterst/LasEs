@@ -26,7 +26,7 @@ public class TestSetup {
 
     @AfterAll
     static void closeWebdriver() {
-        //webDriver.close();
+        webDriver.close();
     }
 
     @Test()
