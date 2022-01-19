@@ -1,15 +1,14 @@
 package de.lases.selenium.stress;
 
 import org.openqa.selenium.*;
-import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.nio.file.Paths;
 import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -23,7 +22,7 @@ public class UserCreatesForumAndSubmission implements Callable<List<ResponseTime
 
     public UserCreatesForumAndSubmission() {
         FirefoxOptions options = new FirefoxOptions();
-        options.setHeadless(true);
+//        options.setHeadless(true);
         driver = new FirefoxDriver(options);
         js = (JavascriptExecutor) driver;
     }
@@ -31,7 +30,17 @@ public class UserCreatesForumAndSubmission implements Callable<List<ResponseTime
     @Override
     public List<ResponseTimeEntry> call() {
         try {
-            return userCreatesForumAndSubmission(globalId++);
+            List<ResponseTimeEntry> entries = userCreatesForumAndSubmission(globalId++);
+            tearDown();
+            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            System.out.println("Durchgelaufen: " + globalId);
+            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            return entries;
+        } catch (Exception e) {
+            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            System.out.println("Kaputt");
+            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            return new LinkedList<>();
         } finally {
             tearDown();
         }
@@ -42,6 +51,7 @@ public class UserCreatesForumAndSubmission implements Callable<List<ResponseTime
     }
 
     private List<ResponseTimeEntry> userCreatesForumAndSubmission(int globalId) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         List<ResponseTimeEntry> responseTimes = new LinkedList<>();
 
         long start = System.currentTimeMillis();
@@ -56,6 +66,7 @@ public class UserCreatesForumAndSubmission implements Callable<List<ResponseTime
 
         start = System.currentTimeMillis();
         driver.findElement(By.id("login-form:login-cbtn")).click();
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("nav-administration-link")));
         end = System.currentTimeMillis();
         responseTimes.add(new ResponseTimeEntry("action:login", end - start));
 
@@ -129,6 +140,7 @@ public class UserCreatesForumAndSubmission implements Callable<List<ResponseTime
 
         start = System.currentTimeMillis();
         driver.findElement(By.id("create-forum-form:save-btn")).click();
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("new-submission-frm:new-submission-btn")));
         end = System.currentTimeMillis();
         responseTimes.add(new ResponseTimeEntry("action:newForumSave", end - start));
 
@@ -140,13 +152,14 @@ public class UserCreatesForumAndSubmission implements Callable<List<ResponseTime
         driver.findElement(By.id("new-submission-form:submission-title-itxt")).click();
         driver.findElement(By.id("new-submission-form:submission-title-itxt")).sendKeys(globalId + "An Empirical Study about the Stress on Lases on a FIM Computer");
 
-        String fullPathToPdfFile = System.getProperty("user.dir") + "/app/lases/src/it/java/de/lases/selenium/testsuite/paper.pdf";
+        String fullPathToPdfFile = Paths.get(System.getProperty("user.dir"),
+                "/src/it/java/de/lases/selenium/testsuite/paper.pdf").toString();
         WebElement fileInput = driver.findElement(By.id("new-submission-form:pdf-upload-ifile"));
         fileInput.sendKeys(fullPathToPdfFile);
 
         start = System.currentTimeMillis();
         driver.findElement(By.id("new-submission-form:submitcbtn")).click();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(9));
+
         wait.until(ExpectedConditions.presenceOfElementLocated(By.id("revision-required-frm:revision-required-cbtn")));
         end = System.currentTimeMillis();
         responseTimes.add(new ResponseTimeEntry("action:newSubmissionSubmit", end - start));

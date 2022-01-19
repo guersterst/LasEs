@@ -11,9 +11,9 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 public class Stress {
 
-    public static final int USER_CREATION = 5;
+    public static final int USER_CREATION = 30;
 
-    public static final int FORUM_SUBMISSION = 10;
+    public static final int FORUM_SUBMISSION = 20;
 
     public static final int THREADS = FORUM_SUBMISSION + USER_CREATION;
 
@@ -35,6 +35,7 @@ public class Stress {
         Map<String, List<Long>> responseTimes = new HashMap<>();
 
         for (int i = 0; i < THREADS; i++) {
+            executor.
             List<ResponseTimeEntry> responseTimeEntries = futures.pop().get();
             for (ResponseTimeEntry responseTimeEntry: responseTimeEntries) {
                 String actionName = responseTimeEntry.actionName();

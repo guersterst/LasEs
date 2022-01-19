@@ -1,18 +1,16 @@
 package de.lases.selenium.stress;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxBinary;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -76,8 +74,8 @@ public class UserRegistersClicksRandomlyAndDeletesHimself implements Callable<Li
 
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(9));
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".alert-info:nth-child(4)")));
-        String url = driver.findElement(By.cssSelector(".alert-info:nth-child(4)")).getText();
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".alert-info:nth-child(7)")));
+        String url = driver.findElement(By.cssSelector(".alert-info:nth-child(7)")).getText();
 
         start = System.currentTimeMillis();
         driver.get(url);
