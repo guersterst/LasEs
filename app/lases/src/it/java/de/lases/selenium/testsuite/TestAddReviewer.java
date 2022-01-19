@@ -43,8 +43,6 @@ public class TestAddReviewer {
         for (int i = 0; i < elementList.size(); i++) {
             WebElement webElement = elementList.get(i).findElement(By.tagName("td")).findElement(By.id("sft-cc:submissiontable-frm:submission-png:pagination:"+ i + ":submission-lnk"));
             if (webElement.getText().equals("P != NP")) {
-
-                System.out.println("found");
                 wait.until(ExpectedConditions.elementToBeClickable(By.id("sft-cc:submissiontable-frm:submission-png:pagination:"+ i + ":submission-lnk")));
                 webElement.click();
                 break;

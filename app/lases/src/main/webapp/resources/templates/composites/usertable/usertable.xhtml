@@ -13,7 +13,7 @@
 
 
 <composite:implementation>
-    <h:form>
+    <h:form id="user-table-frm">
 
         <!-- Filter controls: role select -->
         <div class="btn-group">
@@ -30,7 +30,7 @@
 
 
         <!-- Pagination -->
-        <pg:pagination paginator="#{cc.attrs.backing.userPagination}">
+        <pg:pagination paginator="#{cc.attrs.backing.userPagination}" id="user-png">
 
             <!-- title -->
             <h:column>
@@ -54,7 +54,7 @@
                 </f:facet>
                 <h:link value="#{var.firstName += ' ' += var.lastName}"
                         outcome="/views/authenticated/profile"
-                        includeViewParams="true">
+                        includeViewParams="true" id="name-lnk">
                     <f:param name="id" value="#{var.id}"/>
                 </h:link>
             </h:column>
