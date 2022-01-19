@@ -64,8 +64,8 @@ public class TestAngemelderterNutzerII {
         // confirm deletion
         webDriver.findElement(By.id("delete-profile-form:delete-really-cbtn")).click();
 
-        wait.until(ExpectedConditions.urlContains("welcome.xhtml"));
-        assertTrue(webDriver.getCurrentUrl().contains("welcome.xhtml"));
+        wait.until(ExpectedConditions.urlContains("welcome"));
+        assertTrue(webDriver.getCurrentUrl().contains("welcome"));
     }
 
     @Test()

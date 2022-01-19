@@ -69,7 +69,8 @@ public class TestReset {
 
         removeUser("Johanna Mayer");
         removeUser("Franz Huber");
-        removeUser("Petra Müller");
+        // removeUser("Petra Müller"); self deletes in Angemeldeter Nutzer 2
+        removeUser("Christian Bachmaier");
         removeUser("Tuti Aslan");
     }
 
