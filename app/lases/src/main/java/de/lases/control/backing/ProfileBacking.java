@@ -206,8 +206,14 @@ public class ProfileBacking implements Serializable {
      * @return Go to the welcome page.
      */
     public String deleteProfile() {
-        userService.remove(user);
-        return "/views/anonymous/welcome.xhtml?faces-redirect=true";
+        if( sessionInformation.getUser() == user) {
+            userService.remove(user);
+            sessionInformation.setUser(null);
+            return "/views/anonymous/welcome.xhtml?faces-redirect=true";
+        } else {
+            userService.remove(user);
+            return "/views/authenticated/homepage.xhtml";
+        }
     }
 
     /**
