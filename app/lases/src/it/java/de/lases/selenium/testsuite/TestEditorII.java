@@ -22,7 +22,7 @@ public class TestEditorII {
 
     @Test
     @DisplayName("/T100/")
-    void testAddReviewer() {
+    void testReleaseReview() {
         webDriver.get(WebDriverFactory.LOCALHOST_URL);
 
         WebElement emailBox = webDriver.findElement(By.id("login-form:email-itxt"));

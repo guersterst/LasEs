@@ -118,6 +118,7 @@ public class TestAngemelderterNutzerI {
                     webDriver.findElement(By.id("new-submission-form:submitcbtn")).click();
                     WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(20));
                     wait.until(ExpectedConditions.urlContains("submission.xhtml"));
+                    wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("info-submission:submission-title-otxt")));
                     assertAll(
                             () -> assertTrue(webDriver.getCurrentUrl().contains("submission.xhtml")),
                             () -> assertEquals("P != NP",

@@ -56,7 +56,7 @@ public class TestAngemelderterNutzerII {
         webDriver.findElement(By.id("nav-profile-link")).click();
 
         By deleteButton = By.id("delete-profile-form:delete-cbtn");
-        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
+        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.elementToBeClickable(deleteButton));
 
         webDriver.findElement(deleteButton).click();
@@ -64,6 +64,7 @@ public class TestAngemelderterNutzerII {
         // confirm deletion
         webDriver.findElement(By.id("delete-profile-form:delete-really-cbtn")).click();
 
+        wait.until(ExpectedConditions.urlContains("welcome.xhtml"));
         assertTrue(webDriver.getCurrentUrl().contains("welcome.xhtml"));
     }
 
