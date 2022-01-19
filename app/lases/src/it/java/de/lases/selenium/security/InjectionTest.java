@@ -23,6 +23,8 @@ public class InjectionTest {
     private static final String ADMIN_EMAIL = "thomas.kirz2+lasesadmin@gmail.com";
     private static final String ADMIN_PASSWORD = "Password1!";
 
+    private static final String TEST_NAME = "\";DROP TABLE user;--";
+
     /**
      * Prerequisite: Admin 'thomas.kirz2+lasesadmin@gmail.com' w/ Password 'Password1!' exists in the database.
      */
@@ -43,7 +45,7 @@ public class InjectionTest {
         registerButton.click();
 
         driver.findElement(By.id("register-frm:title-itxt")).clear();
-        driver.findElement(By.id("register-frm:title-itxt")).sendKeys(";DROP table user;--");
+        driver.findElement(By.id("register-frm:title-itxt")).sendKeys(TEST_NAME);
         driver.findElement(By.id("register-frm:first-name-itxt")).click();
         driver.findElement(By.id("register-frm:first-name-itxt")).clear();
         driver.findElement(By.id("register-frm:first-name-itxt")).sendKeys("Bobby");
@@ -93,7 +95,7 @@ public class InjectionTest {
 
         // Title and name should be displayed correctly
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("edit-profile-form:title-itxt")));
-        assertEquals(";DROP table user;--",
+        assertEquals(TEST_NAME,
                 driver.findElement(By.id("edit-profile-form:title-itxt")).getAttribute("value"));
         assertEquals("Bobby",
                 driver.findElement(By.id("edit-profile-form:firstname-itxt")).getAttribute("value"));
