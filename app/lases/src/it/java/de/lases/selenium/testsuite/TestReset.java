@@ -26,7 +26,7 @@ public class TestReset {
 
     @AfterAll
     static void closeWebdriver() {
-        //webDriver.close();
+        webDriver.close();
     }
 
     @Test()
