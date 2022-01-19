@@ -38,16 +38,17 @@ public class TestAddReviewer {
         WebElement tableBody = webDriver.findElement(By.id("sft-cc:submissiontable-frm:submission-png:pagination")).findElement(By.tagName("tbody"));
         List<WebElement> elementList = tableBody.findElements(By.tagName("tr"));
 
+        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
+
         for (int i = 0; i < elementList.size(); i++) {
             WebElement webElement = elementList.get(i).findElement(By.tagName("td")).findElement(By.id("sft-cc:submissiontable-frm:submission-png:pagination:"+ i + ":submission-lnk"));
             if (webElement.getText().equals("P != NP")) {
-
-                WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
                 wait.until(ExpectedConditions.elementToBeClickable(By.id("sft-cc:submissiontable-frm:submission-png:pagination:"+ i + ":submission-lnk")));
                 webElement.click();
                 break;
             }
         }
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("add-reviewer-frm:add-reviewer-itxt")));
 
         webDriver.findElement(By.id("add-reviewer-frm:add-reviewer-itxt")).sendKeys("schicho@fim.uni-passau.de");
         webDriver.findElement(By.id("add-reviewer-frm:add-deadline-reviewer-itxt")).sendKeys("31.12.2022, 17:00:00 ");

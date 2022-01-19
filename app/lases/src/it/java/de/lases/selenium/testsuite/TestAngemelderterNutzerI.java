@@ -5,7 +5,10 @@ import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -87,8 +90,7 @@ public class TestAngemelderterNutzerI {
 
         webDriver.findElement(By.id("co-authors-form:submit-co-author-cbtn")).click();
 
-        WebElement errorMessage = webDriver.findElement(By.xpath("/html/body/div[2]/div[2]/div/div[2]/div/div/div[2]/form/div[4]"));
-
+        WebElement errorMessage = webDriver.findElement(By.xpath("//*[@id=\"co-authors-form\"]/div[4]"));
         assertTrue(errorMessage.getText().contains("Ungültige E-Mail-Adresse."));
     }
 
@@ -100,14 +102,22 @@ public class TestAngemelderterNutzerI {
 
         webDriver.findElement(By.id("co-authors-form:submit-co-author-cbtn")).click();
 
-        List<WebElement> listEntries = webDriver.findElement(By.id("co-authors-form:co-author-list"))
-                .findElement(By.tagName("tbody")).findElements(By.tagName("tr"));
+        WebElement listCoAuthors = webDriver.findElement(By.id("co-authors-form:co-author-list"))
+                .findElement(By.tagName("tbody"));
+
+        // find again, because it has been updated.
+        listCoAuthors = webDriver.findElement(By.id("co-authors-form:co-author-list"))
+                .findElement(By.tagName("tbody"));
+
+        List<WebElement> listEntries = listCoAuthors.findElements(By.tagName("tr"));
 
         assertAll(
                 () -> assertEquals(1, listEntries.size()),
                 // Create submission
                 () -> {
                     webDriver.findElement(By.id("new-submission-form:submitcbtn")).click();
+                    WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(20));
+                    wait.until(ExpectedConditions.urlContains("submission.xhtml"));
                     assertAll(
                             () -> assertTrue(webDriver.getCurrentUrl().contains("submission.xhtml")),
                             () -> assertEquals("P != NP",
