@@ -1,4 +1,4 @@
-package example;
+package de.lases.selenium.example;
 
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
