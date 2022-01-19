@@ -11,11 +11,15 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 public class Stress {
 
-    public static final int N = 5;
+    public static final int N = 2;
+
+    public static final int M = 2;
+
+    public static final int THREADS = M + N;
 
     public static final String URL = "http://ds9.fim.uni-passau.de:8002/lases/";
 
-    static ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(N);
+    static ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(THREADS);
 
     public static void main(String... args) throws ExecutionException, InterruptedException, FileNotFoundException {
 
@@ -24,10 +28,13 @@ public class Stress {
         for (int i = 0; i < N; i++) {
             futures.push(executor.submit(new UserRegistersClicksRandomlyAndDeletesHimself()));
         }
+        for (int i = 0; i < M; i++) {
+            futures.push(executor.submit(new UserCreatesForumAndSubmission()));
+        }
 
         Map<String, List<Long>> responseTimes = new HashMap<>();
 
-        for (int i = 0; i < N; i++) {
+        for (int i = 0; i < THREADS; i++) {
             List<ResponseTimeEntry> responseTimeEntries = futures.pop().get();
             for (ResponseTimeEntry responseTimeEntry: responseTimeEntries) {
                 String actionName = responseTimeEntry.actionName();
