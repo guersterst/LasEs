@@ -807,9 +807,13 @@ public class UserRepository {
         case AUTHOR -> {
             try {
                 PreparedStatement ps = conn.prepareStatement(
-                        "SELECT DISTINCT u.* FROM \"user\" u, submission s, co_authored c " +
-                                "WHERE ((u.id = s.author_id) OR (u.id = c.user_id AND  c.submission_id = s.id)) " +
-                                "AND s.id = ?"
+                        """
+                                SELECT DISTINCT u.*
+                                FROM "user" u
+                                         JOIN submission s ON u.id = s.author_id
+                                         LEFT JOIN co_authored c ON u.id = c.user_id AND s.id = c.submission_id
+                                WHERE s.id = ?
+                                """
                 );
                 ps.setInt(1, submissionId);
                 ResultSet rs = ps.executeQuery();
