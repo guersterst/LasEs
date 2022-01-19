@@ -407,7 +407,7 @@ public class PaperRepository {
         Privilege privilege = null;
         if (user.isAdmin()) {
             privilege = Privilege.ADMIN;
-        } else if (user.getId() == submission.getEditorId()) {
+        } else if (user.getId().equals(submission.getEditorId())) {
             privilege = Privilege.EDITOR;
         } else if (user.getId() == submission.getAuthorId()) {
             privilege = Privilege.AUTHOR;

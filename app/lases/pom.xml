@@ -15,7 +15,7 @@
         <java.version>16</java.version>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.source>${java.version}</maven.compiler.source>
-        <junit.version>5.8.1</junit.version>
+        <junit.version>5.8.2</junit.version>
         <junitplatform.version>1</junitplatform.version>
         <majorra.version>3.0.1</majorra.version>
         <weld.version>4.0.2.Final</weld.version>

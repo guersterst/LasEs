@@ -226,7 +226,7 @@
 
                                         <!--Release state-->
                                         <h:column
-                                                rendered="#{submissionBacking.loggedInUserIsEditor() || submissionBacking.isViewerSubmitter()}">
+                                                rendered="#{submissionBacking.loggedInUserIsEditor() || submissionBacking.isViewerSubmitter() || submissionBacking.admin}">
                                             <f:facet name="header">
                                                 <div class="input-group">
                                                     <h:outputText id="state-col" value="#{labels.stateCol}"

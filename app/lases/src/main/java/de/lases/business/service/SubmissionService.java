@@ -229,6 +229,7 @@ public class SubmissionService implements Serializable {
 
             try {
                 SubmissionRepository.remove(submission, transaction);
+                transaction.commit();
             } catch (DataNotWrittenException e) {
 
                 uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotWritten"), MessageCategory.WARNING));
@@ -256,34 +257,26 @@ public class SubmissionService implements Serializable {
                     coAuthorList.remove(0);
                     List<String> emailAddress = coAuthorList.stream().map(User::getEmailAddress).toList();
 
-                    if (sendEmail(author, subject, emailAddress.toArray(new String[0]), body)) {
-                        transaction.commit();
-                    } else {
-                        transaction.abort();
-                    }
+                    sendEmail(author, subject, emailAddress.toArray(new String[0]), body);
 
                 } else {
 
                     User editor = new User();
                     editor.setId(submission.getEditorId());
 
+                    Transaction trans = new Transaction();
                     try {
-                        editor = UserRepository.get(editor, transaction);
+                        editor = UserRepository.get(editor, trans);
+                        trans.commit();
                     } catch (NotFoundException e) {
                         uiMessageEvent.fire(new UIMessage(resourceBundle.getString("userNotFound"), MessageCategory.ERROR));
-                        transaction.abort();
+                        trans.abort();
                         return;
                     }
 
-                    if (sendEmail(editor, subject, null, body)) {
-                        transaction.commit();
-                    } else {
-                        transaction.abort();
-                    }
+                    sendEmail(editor, subject, null, body);
 
                 }
-            } else {
-                transaction.commit();
             }
         }
 
