@@ -58,7 +58,6 @@ public class TestSetup {
             WebElement webElement = elementList.get(i).findElements(By.tagName("td")).get(1).findElement(By.id("user-tbl:user-table-frm:user-png:pagination:" + i + ":name-lnk"));
             if (webElement.getText().equals("Johanna Mayer")) {
 
-                System.out.println("found");
                 WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
                 wait.until(ExpectedConditions.elementToBeClickable(By.id("user-tbl:user-table-frm:user-png:pagination:" + i + ":name-lnk")));
                 webElement.click();
