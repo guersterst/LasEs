@@ -8,13 +8,21 @@ den korrekten Ablauf sicherzustellen.
 \subsection{Probleme zu Beginn}
 
 \begin{itemize}
-	\item Verwendung von \emph{IDs} in JSF-Komponenten. Bereits während der
+	\item \textbf{Verwendung von \emph{IDs} in JSF-Komponenten.} Bereits während der
 	Implementierung wurden überall, nach Definition der Feinspezifikation, IDs in den \emph{Facelets} verwendet.
 
 	Allerdings wurde übersehen, dass auch \emph{Forms} und \emph{Composite Components} immer eigene IDs benötigen, da ansonsten JSF diese dynamisch
 	generiert. Die dynamisch generierten IDs können sich bei jedem \emph{Render Vorgang} wieder ändern und erlauben damit also leider keine Identifikation.\newline
 	Es wurden an allen Stellen, an denen die IDs vergessen wurden, diese noch eingefügt.
 
+	\item \textbf{Testsuites mit JUnit5.} Testsuite erlauben eine Zusammenfassung von mehreren Tests in ein Gesamtpaket. Das ist eine wichitge
+	Anforderung für unsere \emph{Integration Tests}, da diese von einander abhängig sind, also eine Reihenfolge festgelegt werden muss.
 
+	JUnit5 besaß bis zu Release 5.8\footnote{\url{https://junit.org/junit5/docs/5.8.0/release-notes/}}
+	am 12. September 2021 keine Möglichkeiten für Test Suites. Bisher waren immer Abhängigkeiten zu Junit4 nötig, um diese
+	Funktionalität in JUnit5 zu verwenden. Unsere Testsuite benutzt die neue
+	\emph{@Suite Annotation} von JUnit5. Anfangs gab es damit Startschwierigkeiten, da das Feature sehr neu ist und die offizielle
+	Dokumentation spärlich ist.
 
 \end{itemize}
+
