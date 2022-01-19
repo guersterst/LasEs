@@ -11,11 +11,11 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 public class Stress {
 
-    public static final int N = 2;
+    public static final int USER_CREATION = 5;
 
-    public static final int M = 2;
+    public static final int FORUM_SUBMISSION = 10;
 
-    public static final int THREADS = M + N;
+    public static final int THREADS = FORUM_SUBMISSION + USER_CREATION;
 
     public static final String URL = "http://ds9.fim.uni-passau.de:8002/lases/";
 
@@ -25,10 +25,10 @@ public class Stress {
 
         Deque<Future<List<ResponseTimeEntry>>> futures = new ArrayDeque<>();
 
-        for (int i = 0; i < N; i++) {
+        for (int i = 0; i < USER_CREATION; i++) {
             futures.push(executor.submit(new UserRegistersClicksRandomlyAndDeletesHimself()));
         }
-        for (int i = 0; i < M; i++) {
+        for (int i = 0; i < FORUM_SUBMISSION; i++) {
             futures.push(executor.submit(new UserCreatesForumAndSubmission()));
         }
 
