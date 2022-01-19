@@ -1,0 +1,24 @@
+goto:administration, 4939, 3170, 4331, 2798, 4716, 3775, 4122, 4920, 1889, 2222
+goto:newUser, 3417, 4267, 3944, 4350, 4885
+action:saveNewUser, 3658, 3888, 4164, 4622, 6766
+action:search, 1707, 3001, 2229, 2054, 1433
+action:newForumSave, 8628, 9356, 9232, 8561, 956
+action:newSubmissionRejectRevision, 2078, 2106, 1848, 2387, 2084
+action:logOut, 2527, 2433, 1884, 2483, 2618
+action:newForumAddEditor, 2930, 2727, 3041, 1874, 6135
+action:newSubmissionSubmit, 5490, 5739, 5747, 4715, 7906
+action:login, 2476, 2277, 1862, 2093, 2409, 2469, 1774, 2596, 1420, 1425
+goto:register, 3887, 3958, 4007, 4064, 4122
+goto:homepage, 3164, 3141, 2943, 3487, 2948
+goto:forum, 1492, 1408, 1310, 1780, 1856
+goto:newForum, 10590, 11497, 9591, 9534, 8843
+action:newSubmissionRevision, 2642, 2510, 3018, 2312, 5552
+action:newSubmissionReleaseRevision, 2946, 2421, 2117, 2470, 2480
+goto:forumList, 2452, 2783, 2521, 2683, 2849
+action:forumDelete, 702, 622, 988, 1428, 1932
+goto:newSubmission, 3072, 3151, 2888, 3153, 1533
+goto:profile, 999, 998, 907, 1163, 1430, 3657, 6264, 4138, 9694, 3747, 6553, 3431, 5784, 2975, 3797
+callPage, 6029, 6004, 6044, 6054, 5549, 3837, 4609, 3857, 4389, 4055, 3909, 3610, 4639, 3728, 4036
+action:register, 3844, 4217, 4699, 3710, 4772
+action:profileSave, 10268, 4393, 8367, 9363, 10679
+action:profileDelete, 402, 339, 364, 827, 773, 473, 571, 958, 942, 1947
