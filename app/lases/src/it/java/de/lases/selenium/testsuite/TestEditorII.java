@@ -15,13 +15,13 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@Order(80)
-public class TestAddReviewer {
+@Order(100)
+public class TestEditorII {
 
     WebDriver webDriver = WebDriverFactory.createFirefoxWebDriver();
 
     @Test
-    @DisplayName("/T080/")
+    @DisplayName("/T100/")
     void testAddReviewer() {
         webDriver.get(WebDriverFactory.LOCALHOST_URL);
 
@@ -42,7 +42,7 @@ public class TestAddReviewer {
             WebElement webElement = elementList.get(i).findElement(By.tagName("td")).findElement(By.id("sft-cc:submissiontable-frm:submission-png:pagination:"+ i + ":submission-lnk"));
             if (webElement.getText().equals("P != NP")) {
 
-                System.out.println("found");
+                //System.out.println("found");
                 WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
                 wait.until(ExpectedConditions.elementToBeClickable(By.id("sft-cc:submissiontable-frm:submission-png:pagination:"+ i + ":submission-lnk")));
                 webElement.click();
@@ -50,20 +50,16 @@ public class TestAddReviewer {
             }
         }
 
-        webDriver.findElement(By.id("add-reviewer-frm:add-reviewer-itxt")).sendKeys("schicho@fim.uni-passau.de");
-        webDriver.findElement(By.id("add-reviewer-frm:add-deadline-reviewer-itxt")).sendKeys("31.12.2022, 17:00:00 ");
+        // release review, wait for long page load
+        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
+        By releaseButton = By.id("review-pg-frm:review-pg:pagination:0:set-visible-cbtn");
+        wait.until(ExpectedConditions.elementToBeClickable(releaseButton));
 
-        webDriver.findElement(By.id("add-reviewer-frm:add-reviewer-cbtn")).click();
+        webDriver.findElement(releaseButton).click();
 
         List<WebElement> messages = webDriver.findElement(By.id("global-msgs")).findElements(By.tagName("li"));
-        boolean found = false;
-        for (WebElement element : messages) {
-            if (element.getText().equals("Ein neuer Gutachter wurde zu dieser Einreichung hinzugefügt.")) {
-                found = true;
-            }
-        }
 
+        assertTrue(messages.size() > 1);
         webDriver.close();
-        assertTrue(found);
     }
 }
