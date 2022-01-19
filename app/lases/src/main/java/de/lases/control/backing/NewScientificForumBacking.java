@@ -145,7 +145,11 @@ public class NewScientificForumBacking implements Serializable {
      */
     public String create() {
         ScientificForum ret = scientificForumService.add(newScientificForum, selectedScienceFields, editors);
-        return "/views/authenticated/scientificForum?faces-redirect=true&id=" + ret.getId();
+        if (ret != null) {
+            return "/views/authenticated/scientificForum?faces-redirect=true&id=" + ret.getId();
+        } else {
+            return null;
+        }
     }
 
     /**

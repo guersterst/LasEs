@@ -171,4 +171,4 @@ VALUES (-1, TRUE);
 -- create system settings.
 
 INSERT INTO system
-VALUES (0, 'LasEs', 'Welcome to LasEs', 'World Class Review Managment System', 'orange', '', NULL);
+VALUES (0, 'LasEs', 'Welcome to LasEs', 'World Class Review Managment System', 'orange.css', '', NULL);

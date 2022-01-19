@@ -9,12 +9,13 @@ Dieser Test prüft den Schutz gegen SQL- und HTML/JavaScript-Injection.
 Dazu wird ein Nutzerkonto angelegt mit dem Titel \emph{;DROP table user;--}.
 Wäre hier SQL-Injection möglich, würde dieser Titel bei Ausführung des \code{INSERT}-Statements in der Datenbank
 die \code{user}-Tabelle löschen.
+Hier wird geprüft, dass die Nutzerdaten auf der Profilseite korrekt angezeigt werden.
 
 Dann lädt der Nutzer eine Einreichung mit dem Titel \emph{<script>alert('XSS');</script>} hoch.
 Der Titel soll jetzt so wie eingegeben angezeigt werden, ohne dass JavaScript ausgeführt wird.
 
 \subsection{Aufruf ohne Login}\label{subsec:unauthorized-test}
-Ohne anzumelden, wird versucht, die Startseite (für authorisierte Nutzende) aufzurufen.
+Ohne sich anzumelden, wird versucht, die Startseite (für authorisierte Nutzende) aufzurufen.
 Der Nutzer soll auf die Anmeldeseite weitergeleitet werden.
 
 \subsection{Session Fixation}\label{subsec:session-fixation-test}

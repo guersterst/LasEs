@@ -261,7 +261,7 @@
 
                         <div id="review-request" style="margin-top: 1cm">
                             <div class="card">
-                                <h:form rendered="#{submissionBacking.loggedInUserIsReviewer()}">
+                                <h:form id="review-request-frm" rendered="#{submissionBacking.loggedInUserIsReviewer()}">
                                     <div class="btn-group-justified">
                                         <h:panelGroup id="request-box" layout="block"
                                                       rendered="#{submissionBacking.loggedInUserHasPendingReviewRequest()}">
@@ -297,7 +297,7 @@
                                     <h:outputText id="review-lbl" value="#{labels.reviews}" styleClass="h2"/>
                                 </div>
                                 <div class="card-body" style="padding: 10px 10px 10px 10px">
-                                    <h:form>
+                                    <h:form id="review-pg-frm">
                                         <div class="btn-group">
                                             <div class="input-group">
                                                 <h:outputLabel for="recommended-review-slctom"

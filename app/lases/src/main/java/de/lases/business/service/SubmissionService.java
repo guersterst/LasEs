@@ -148,19 +148,6 @@ public class SubmissionService implements Serializable {
             }
         }
 
-        if (sendEmailsForAddSubmission(submission, transaction, coAuthorsFilled)) {
-            transaction.commit();
-            return submission;
-        } else {
-            transaction.abort();
-            return null;
-        }
-    }
-
-    /**
-     * @author Sebastian Vogt
-     */
-    private boolean sendEmailsForAddSubmission(Submission submission, Transaction transaction, List<User> coAuthors) {
         User editor = new User();
         editor.setId(submission.getEditorId());
         try {
@@ -169,9 +156,19 @@ public class SubmissionService implements Serializable {
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString(
                     "dataNotWritten"), MessageCategory.ERROR));
             logger.log(Level.WARNING, "Editor was not found when adding a submission.");
-            return false;
+            transaction.abort();
+            return null;
         }
 
+        transaction.commit();
+        sendEmailsForAddSubmission(submission, editor, coAuthorsFilled);
+        return submission;
+    }
+
+    /**
+     * @author Sebastian Vogt
+     */
+    private void sendEmailsForAddSubmission(Submission submission, User editor, List<User> coAuthors) {
         assert editor != null;
         assert editor.getEmailAddress() != null;
 
@@ -207,9 +204,8 @@ public class SubmissionService implements Serializable {
         } catch (EmailTransmissionFailedException e) {
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("emailNotSent") + " "
                     + String.join(", ", e.getInvalidAddresses()), MessageCategory.ERROR));
-            return false;
+            logger.log(Level.WARNING, "Emails not sent when adding a submission");
         }
-        return true;
     }
 
     /**

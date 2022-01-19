@@ -13,7 +13,7 @@
 
 
 <composite:implementation>
-    <h:form>
+    <h:form id="sft-frm">
 
         <!-- Filter controls: deadline -->
         <div class="btn-group">
@@ -28,7 +28,7 @@
             </h:selectOneMenu>
         </div>
 
-        <pg:pagination paginator="#{cc.attrs.backing.scientificForumPagination}">
+        <pg:pagination paginator="#{cc.attrs.backing.scientificForumPagination}" id="sft-pg">
             <h:column>
                 <f:facet name="header">
                     <col:sortsearchcolumn id="name-ssc"
@@ -38,7 +38,7 @@
                 </f:facet>
                 <h:link value="#{var.name}"
                         outcome="/views/authenticated/scientificForum"
-                        includeViewParams="true">
+                        includeViewParams="true" id="forum-lnk">
                     <f:param name="id" value="#{var.id}"/>
                 </h:link>
             </h:column>

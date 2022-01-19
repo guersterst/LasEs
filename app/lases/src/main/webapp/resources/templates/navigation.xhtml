@@ -23,36 +23,43 @@
             <div class="navbar-nav">
                 <h:link
                         value="#{labels.userList}"
+                        id="nav-userlist-link"
                         outcome="/views/editor/userList"
                         title="#{help.userList}"
                         rendered="#{navigationBacking.sessionInformation.user.isEditor()
                         || navigationBacking.sessionInformation.user.isAdmin()}"
                         styleClass="nav-item nav-link"/>
                 <h:link
-                        value="#{labels.forumList}" outcome="/views/authenticated/scientificForumList"
+                        value="#{labels.forumList}"
+                        id="nav-forumlist-link"
+                        outcome="/views/authenticated/scientificForumList"
                         title="#{help.forumList}"
                         rendered="#{navigationBacking.sessionInformation.user != null}"
                         styleClass="nav-item nav-link"/>
                 <h:link
                         value="#{labels.administration}"
+                        id="nav-administration-link"
                         title="#{help.navigateAdministration}"
                         outcome="/views/admin/administration"
                         rendered="#{navigationBacking.sessionInformation.user.isAdmin()}"
                         styleClass="nav-item nav-link"/>
                 <h:link
                         value="#{labels.navProfile}"
+                        id="nav-profile-link"
                         title="#{help.navigateProfile}"
                         outcome="#{'/views/authenticated/profile?id='.concat(sessionInformation.user.id)}"
                         rendered="#{navigationBacking.sessionInformation.user != null}"
                         styleClass="nav-item nav-link"/>
 
                 <!-- search form -->
-                <h:form>
+                <h:form id="global-search-frm">
                     <h:panelGrid columns="2" rendered="#{navigationBacking.sessionInformation.user != null}">
                         <h:inputText styleClass="form-control mr-sm2"
+                                     id="search-itxt"
                                      value="#{navigationBacking.resultListParameters.globalSearchWord}"
                                      title="#{help.search}"/>
                         <h:commandButton action="#{navigationBacking.search}"
+                                         id="search-btn"
                                          value="#{labels.search}"
                                          title="#{help.search}"
                                          styleClass="btn btn-primary my-2 my-sm-0"/>
@@ -62,7 +69,7 @@
         </div>
 
         <!-- logout -->
-        <h:form styleClass="form-inline mx-3">
+        <h:form id="logout-frm" styleClass="form-inline mx-3">
             <h:commandButton id="logout-cbtn"
                     value="#{labels.logout}"
                     action="#{navigationBacking.logout}"

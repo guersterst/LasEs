@@ -11,11 +11,20 @@
     <ui:define name="content">
         <div class="container" id="forum-list-pagination">
             <div class="card">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between">
                     <h:outputText id="heading-forum-list-otxt" value="#{labels.scientificForums}" styleClass="h4"/>
+                    <div class="btn-group">
+                        <div class="link">
+                            <h:link id="new-forum-link" value="#{labels.goToNewScientificForum}"
+                                    outcome="/views/admin/newScientificForum" title="#{help.newForum}"
+                                    styleClass="btn btn-outline-secondary"
+                                    rendered="#{scientificForumListBacking.sessionInformation.user.admin}"
+                            />
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body">
-                    <sft:scientificForumTable backing="#{scientificForumListBacking}"/>
+                    <sft:scientificForumTable backing="#{scientificForumListBacking}" id="sft-tbl"/>
                 </div>
             </div>
         </div>
