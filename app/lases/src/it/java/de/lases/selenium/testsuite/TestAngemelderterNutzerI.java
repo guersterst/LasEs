@@ -23,7 +23,7 @@ public class TestAngemelderterNutzerI {
 
     @AfterAll
     static void closeWebdriver() {
-        //webDriver.close();
+        webDriver.close();
     }
 
     @Test()
