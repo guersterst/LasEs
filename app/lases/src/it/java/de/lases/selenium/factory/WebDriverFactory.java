@@ -5,6 +5,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
+import java.time.Duration;
+
 public class WebDriverFactory {
 
     public static String LOCALHOST_URL = "http://localhost:8080/lases_war_exploded/";
@@ -18,6 +20,8 @@ public class WebDriverFactory {
 
         Dimension dm = new Dimension(1800,950);
         webDriver.manage().window().setSize(dm);
+
+        webDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(1));
 
         return webDriver;
     }

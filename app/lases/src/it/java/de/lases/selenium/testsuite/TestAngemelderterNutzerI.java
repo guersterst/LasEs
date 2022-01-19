@@ -102,14 +102,9 @@ public class TestAngemelderterNutzerI {
 
         webDriver.findElement(By.id("co-authors-form:submit-co-author-cbtn")).click();
 
-        WebElement listCoAuthors = webDriver.findElement(By.id("co-authors-form:co-author-list"))
-                .findElement(By.tagName("tbody"));
-
-        // find again, because it has been updated.
-        listCoAuthors = webDriver.findElement(By.id("co-authors-form:co-author-list"))
-                .findElement(By.tagName("tbody"));
-
-        List<WebElement> listEntries = listCoAuthors.findElements(By.tagName("tr"));
+        // list can go stale while user is added.
+        List<WebElement> listEntries = webDriver.findElement(By.id("co-authors-form:co-author-list"))
+                .findElement(By.tagName("tbody")).findElements(By.tagName("tr"));
 
         assertAll(
                 () -> assertEquals(1, listEntries.size()),
