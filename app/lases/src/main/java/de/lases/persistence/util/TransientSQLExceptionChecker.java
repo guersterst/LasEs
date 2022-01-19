@@ -7,6 +7,8 @@ import java.util.List;
  */
 public class TransientSQLExceptionChecker {
 
+    public static final String UNIQUE_VIOLATION = "23505";
+
     private static final List<String> transientCodes = List.of(
             // insufficient_resources
             "53000",
