@@ -1,6 +1,6 @@
-package testsuite;
+package de.lases.selenium.testsuite;
 
-import factory.WebDriverFactory;
+import de.lases.selenium.factory.WebDriverFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
