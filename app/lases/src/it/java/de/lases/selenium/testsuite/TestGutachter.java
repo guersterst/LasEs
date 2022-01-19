@@ -78,7 +78,7 @@ public class TestGutachter {
         // wait for long page load
         // review-pg-frm:review-pg:pagination
         By table = By.id("review-pg-frm:review-pg:pagination");
-        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(20));
         wait.until(ExpectedConditions.visibilityOfElementLocated(table));
 
         List<WebElement> reviewList = webDriver.findElement(table).findElement(By.tagName("tbody")).findElements(By.tagName("tr"));
