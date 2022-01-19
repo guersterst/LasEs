@@ -225,6 +225,7 @@ public class SubmissionService implements Serializable {
             Transaction transaction = new Transaction();
 
             List<User> coAuthorList = getCoAuthors(transaction, submission);
+            List<User> reviewerList = getReviewerList(submission);
 
             try {
                 SubmissionRepository.remove(submission, transaction);
@@ -275,8 +276,6 @@ public class SubmissionService implements Serializable {
 
                 sendEmail(author, subject, emailAddress.toArray(new String[0]), body);
             }
-
-            List<User> reviewerList = getReviewerList(submission);
 
             if (reviewerList != null) {
 
