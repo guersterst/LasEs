@@ -1,0 +1,9 @@
+action:search, 772, 967, 1076, 998, 1163
+goto:forumList, 532, 795, 601, 630, 509
+goto:profile, 833, 677, 1021, 816, 1367, 1147, 1074, 1103, 871, 1145
+callPage, 556, 608, 550, 736, 453, 873, 629, 610, 678, 914
+goto:register, 781, 549, 463, 441, 473
+action:register, 2031, 2244, 1736, 1713, 1749
+action:profileSave, 655, 753, 850, 946, 1250
+goto:homepage, 436, 687, 754, 505, 651
+action:profileDelete, 629, 546, 692, 689, 809
