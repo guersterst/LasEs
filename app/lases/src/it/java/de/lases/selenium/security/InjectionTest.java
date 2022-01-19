@@ -19,12 +19,13 @@ public class InjectionTest {
     private boolean acceptNextAlert = true;
     private StringBuffer verificationErrors = new StringBuffer();
 
+    private WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+
     @Test
     public void injectionTest() {
         // Create Security forum
-//        createForum();
+        createForum();
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
         driver.get(WebDriverFactory.LOCALHOST_URL);
 
@@ -89,11 +90,12 @@ public class InjectionTest {
         // Scroll to and click on 'Delete' button
         WebElement deleteButton = driver.findElement(By.id("delete-profile-form:delete-cbtn"));
         js.executeScript("arguments[0].scrollIntoView(true)", deleteButton);
-        actions.moveToElement(deleteButton);
-        actions.perform();
         deleteButton.click();
 
         driver.findElement(By.id("delete-profile-form:delete-really-cbtn")).click();
+
+        // Delete Forum
+        driver.findElement(By.linkText("Abmelden")).click();
     }
 
     private void createForum() {
@@ -133,6 +135,33 @@ public class InjectionTest {
         driver.findElement(By.id("create-forum-form:review-manual-itxt")).sendKeys("Begutachten Sie.");
 
         driver.findElement(By.id("create-forum-form:save-btn")).click();
+
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("logout-frm:logout-cbtn")));
+        driver.findElement(By.id("logout-frm:logout-cbtn")).click();
+    }
+
+    private void deleteForum() {
+        driver.get(WebDriverFactory.LOCALHOST_URL);
+
+        WebElement emailBox = driver.findElement(By.id("login-form:email-itxt"));
+        WebElement passwordBox = driver.findElement(By.id("login-form:password-iscrt"));
+
+        emailBox.sendKeys("kirz@fim.uni-passau.de");
+        passwordBox.sendKeys("UniDorfen1870!");
+
+        driver.findElement(By.id("login-form:login-cbtn")).click();
+
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-forumlist-link")));
+        driver.findElement(By.id("nav-forumlist-link")).click();
+
+        driver.findElement(By.linkText("Security Conference")).click();
+
+        driver.findElement(By.linkText("Löschen")).click();
+
+        driver.findElement(By.id("forum-delete-frm:agree-delete-cbtn")).click();
+
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("logout-frm:logout-cbtn")));
+        driver.findElement(By.id("logout-frm:logout-cbtn")).click();
     }
 
     @AfterEach
