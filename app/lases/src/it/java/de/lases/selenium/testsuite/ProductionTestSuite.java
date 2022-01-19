@@ -5,6 +5,8 @@ import org.junit.platform.suite.api.Suite;
 
 @Suite
 @SelectClasses({
+        TestSetup.class,
+        TestReset.class,
         TestAddReviewer.class,
         TestAdminCreateForum.class,
         TestAngemelderterNutzerI.class,
