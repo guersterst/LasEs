@@ -6,6 +6,7 @@ der Webelemente. Dabei wird dann gegen die angezeigten Meldungen getestet, um
 den korrekten Ablauf sicherzustellen.
 
 \subsection{Probleme zu Beginn}
+\localauthor{Johann Schicho}
 
 \begin{itemize}
 	\item \textbf{Verwendung von \emph{IDs} in JSF-Komponenten.} Bereits während der
@@ -25,44 +26,37 @@ den korrekten Ablauf sicherzustellen.
 	Dokumentation spärlich ist.
 \end{itemize}
 
+\subsection{Testfälle}
 \localauthor{Stefanie Gürster}
 
-\begin{table}[H]
-	\centering
-	\begin{tabular}{m{1.2cm}|m{3cm}|m{3.5cm}|m{3.5cm}|l}
-		\toprule
-		\textbf{Test} & \textbf{Beschreibung} & \textbf{Änderungen} & \textbf{Bugfixes} & \textbf{Zuständigkeit} \\\midrule
-		/T001/ & Setup. & - & - & Stefanie Gürster \\\midrule
-		/T010/ & Erstellen eines neuen Forums. & - & - & Johann Schicho \\\midrule
-		/T020/ & Navigation zu einem Forum über Suche. & - & - & Johann Schicho \\\midrule
-		/T030/ & Einreichungsseite eines bestimmten Forums. & - & - & Johann Schicho \\\midrule
-		/T040/ & Hochladen eines Papers. & - & - & Johann Schicho \\\midrule
-		/T045/ & Invalide Daten bei Einreichung. & Co-Autoren werden zunächst unabhängig in deine Liste eingefügt. Dabei wird bereits geprüft, ob die Daten valide sind. Erst über den Submitbutton werden die Co-Autoren tatsächlich hinzugefügt. & - & Johann Schicho \\\midrule
-		/T050/ & Submission einreichen. & - & Die Transaktion eine Submission einzureichen war zuvor abhängig, ob die jeweiligen E-Mails gesendet werden konnten. War dies nicht der Falle, so wurde die Transaktion abgebrochen. & Johann Schicho \\\midrule
-		/T060/ & Logout. & Der Logout-Button ist nun direkt erreichbar. & - & Johann Schicho \\\midrule
-		/T080/ & Hinzufügen eines Gutachters. & - & - & Stefanie Gürster \\\midrule
-					
-		
-	\end{tabular}
-\end{table}
+Die Tests sind aufeinander aufbauend und werden aufsteigend nach ihrer
+Testnummer durchgeführt.
 
-\begin{table}[H]
-	\centering
-	\begin{tabular}{m{1.2cm}|m{3cm}|m{3.5cm}|m{3.5cm}|l}
-		\toprule
-		\textbf{Test} & \textbf{Beschreibung} & \textbf{Änderungen} & \textbf{Bugfixes} & \textbf{Zuständigkeit} \\\midrule
-		/T085/ & Gutachten annehmen. & Ein Gutachten wird nun über einen Button auf der jeweiligen Einreichungsseite angenommen oder abgelehnt. & - & Johann Schicho \\\midrule
-		/T090/ & Gutachten hochladen. & - & - & Johann Schicho \\\midrule
-		/T100/ & Gutachten freischalten. & - & - & Johann Schicho \\\midrule
-		/T110/ & Anonymer Nutzer. & - & - & Johann Schicho \\\midrule
-		/T120/ & Registrierung. & - & - & Johann Schicho \\\midrule
-		/T130/ & Verifizierung & - & - & Johann Schicho \\\midrule
-		/T140/ & Neuer Nutzer ist bereits Co-Autor. & - & - & Johann Schicho \\\midrule
-		/T150/ & Download eines Gutachtens. & - & - & Johann Schicho \\\midrule
-		/T160/ & Löschen des eigenen Accounts. & - & Nach dem Löschen des Accounts wurde die Session nicht beendet. & Johann Schicho \\\midrule
-		/T170/ & Überprüfe kaskadierendes Löschen. & Neu. & - & Johann Schicho \\\midrule
-		/T200/ & Fehlerhafter Zugriff. & - & - & Stefanie Gürster \\\midrule
-		/T210/ & Illegaler Zugriff. & Hier wird ebenso auf eine 404-Fehlerseite weitergeleitet, um so wenig wie möglich Informationen nach außen zu geben. & - & Stefanie Gürster \\\midrule
-		/T1000/ & Reset. & - & - & Stefanie Gürster
-	\end{tabular}
-\end{table}
+
+	\begin{longtable}{|m{1.2cm}|m{3cm}|m{3.5cm}|m{3.5cm}|l|}
+		\hline
+		\textbf{Test} & \textbf{Beschreibung} & \textbf{Änderungen} & \textbf{Bugfixes} & \textbf{Zuständigkeit} \\\hline
+		/T001/ & Setup. Erstellen der initialen Nutzerdaten. & - & - & Stefanie Gürster \\\hline
+		/T010/ & Erstellen eines neuen Forums. & Zur Deadline ist nun auch eine Uhrzeit angegeben. & - & Stefanie Gürster \\\hline
+		/T020/ & Navigation zu einem Forum über Suche. & - & - & Johann Schicho \\\hline
+		/T030/ & Einreichungsseite eines bestimmten Forums. & - & - & Johann Schicho \\\hline
+		/T040/ & Hochladen eines Papers. & - & - & Johann Schicho \\\hline
+		/T045/ & Invalide Daten bei Einreichung. & Co-Autoren werden zunächst unabhängig in deine Liste eingefügt. Dabei wird bereits geprüft, ob die Daten valide sind. Erst über den Submitbutton werden die Co-Autoren tatsächlich hinzugefügt. & - & Johann Schicho \\\hline
+		/T050/ & Submission einreichen. & - & Die Transaktion eine Submission einzureichen war zuvor abhängig, ob die jeweiligen E-Mails gesendet werden konnten. War dies nicht der Fall, so wurde die Transaktion abgebrochen. & Johann Schicho \\\hline
+		/T060/ & Logout. & Der Logout-Button ist nun direkt erreichbar. & - & Johann Schicho \\\hline
+		/T080/ & Hinzufügen eines Gutachters. & - & War die Koautorrelation in der Datenbank leer, konnte nicht auf die Einreichung zugegriffen werden. & Stefanie Gürster \\\hline
+		/T085/ & Gutachten annehmen. & Ein Gutachten wird nun über einen Button auf der jeweiligen Einreichungsseite angenommen oder abgelehnt. & - & Stefanie Gürster \\\hline
+		/T090/ & Gutachten hochladen. & - & - & Stefanie Gürster \\\hline
+		/T100/ & Gutachten freischalten. & - & - & Johann Schicho \\\hline
+		/T110/ & Anonymer Nutzer. & - & - & Johann Schicho \\\hline
+		/T120/ & Registrierung. & - & - & Johann Schicho \\\hline
+		/T130/ & Verifizierung & - & - & Johann Schicho \\\hline
+		/T140/ & Neuer Nutzer ist bereits Co-Autor. & - & - & Johann Schicho \\\hline
+		/T150/ & Download eines Gutachtens. & Selenium kann keine Downloads durchführen. Es wird nur überprüft, ob ein Download möglich ist. & - & Johann Schicho \\\hline
+		/T160/ & Löschen des eigenen Accounts. & - & Nach dem Löschen des Accounts wurde die Session nicht beendet. & Johann Schicho \\\hline
+		/T170/ & Überprüfe kaskadierendes Löschen. & Neu. Die Überprüfung wurde aus /T160/ in einen eigenen Test heraus getrennt. & - & Johann Schicho \\\hline
+		/T200/ & Fehlerhafter Zugriff. & - & - & Stefanie Gürster \\\hline
+		/T210/ & Illegaler Zugriff. & Hier wird ebenso auf eine 404-Fehlerseite weitergeleitet, um so wenig wie möglich Informationen nach außen zu geben. & - & Stefanie Gürster \\\hline
+		/T1000/ & Reset. Löschen der erstellten Daten. & - & - & Stefanie Gürster \\\hline
+	\end{longtable}
+
