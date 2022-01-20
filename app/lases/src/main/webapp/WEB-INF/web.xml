@@ -65,6 +65,9 @@
     </error-page>
 
     <session-config>
+        <cookie-config>
+            <name>sessionid</name>
+        </cookie-config>
         <session-timeout>30</session-timeout>
     </session-config>
 
