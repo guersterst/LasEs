@@ -8,9 +8,9 @@ import java.util.concurrent.*;
 
 public class Stress {
 
-    public static final int USER_CREATION = 10;
+    public static final int USER_CREATION = 7;
 
-    public static final int FORUM_SUBMISSION = 10;
+    public static final int FORUM_SUBMISSION = 8;
 
     public static final int THREADS = FORUM_SUBMISSION + USER_CREATION;
 

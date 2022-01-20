@@ -1,0 +1,41 @@
+# Veusz saved document (version 3.4)
+# Saved at 2022-01-20T15:12:52.650715
+
+SetCompatLevel(1)
+AddImportPath('/home/sebastian/projects/sep/lases/docs/Validierungsbericht/graphics')
+ImportFileCSV('../../../app/lases/stress/CSVS/bothRunsAll.csv', linked=True, readrows=True)
+ImportString('`new dataset`(numeric)','''
+2.500000e-01
+7.500000e-01
+''')
+SetDataText('new dataset 1', [
+    '30 Nutzer',
+    '50 Nutzer',
+])
+Set('colorTheme', 'default-latest')
+Set('StyleSheet/axis-function/autoRange', 'next-tick')
+Add('page', name='page1', autoadd=False)
+To('page1')
+Add('graph', name='graph1', autoadd=False)
+To('graph1')
+Add('axis', name='x', autoadd=False)
+To('x')
+Set('mode', 'labels')
+To('..')
+Add('axis', name='y', autoadd=False)
+To('y')
+Set('direction', 'vertical')
+To('..')
+Add('boxplot', name='boxplot1', autoadd=False)
+To('boxplot1')
+Set('values', ('bei30', 'bei50'))
+Set('posn', 'new dataset')
+Set('labels', 'new dataset 1')
+Set('direction', 'vertical')
+Set('whiskermode', '9/91 percentile')
+Set('fillfraction', 0.75)
+Set('meanmarker', 'circle')
+Set('markerSize', '5pt')
+To('..')
+To('..')
+To('..')

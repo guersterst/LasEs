@@ -16,14 +16,14 @@ import java.util.concurrent.TimeUnit;
 
 public class UserCreatesForumAndSubmission implements Callable<List<ResponseTimeEntry>> {
 
-    private static int globalId = 1;
+    private static int globalId = 1000;
 
     private final WebDriver driver;
     private final JavascriptExecutor js;
 
     public UserCreatesForumAndSubmission() {
         FirefoxOptions options = new FirefoxOptions();
-//        options.setHeadless(true);
+        options.setHeadless(true);
         driver = new FirefoxDriver(options);
         js = (JavascriptExecutor) driver;
     }
