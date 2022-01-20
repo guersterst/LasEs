@@ -46,6 +46,8 @@ class PaperRepositoryTest {
 
     private static Paper paper2;
 
+    private static Paper paper3;
+
     private static Submission submission1;
 
     private static Submission submission2;
@@ -53,6 +55,8 @@ class PaperRepositoryTest {
     private static ScientificForum scientificForum1;
 
     private static User editor;
+
+    private static ResultListParameters resultListParameters;
 
     @BeforeAll
     static void initPaper() {
@@ -161,6 +165,17 @@ class PaperRepositoryTest {
 
         paper2 = PaperRepository.get(existingPaper, transaction);
 
+        Paper addPaper = new Paper();
+        addPaper.setSubmissionId(submission2.getId());
+        addPaper.setUploadTime(LocalDateTime.now());
+        addPaper.setVersionNumber(2);
+
+        PaperRepository.add(addPaper, pdf, transaction);
+        paper3 = PaperRepository.get(addPaper, transaction);
+
+        resultListParameters = new ResultListParameters();
+        resultListParameters.setVisibleFilter(Visibility.ALL);
+        resultListParameters.setDateSelect(DateSelect.ALL);
     }
 
     /**
@@ -329,51 +344,50 @@ class PaperRepositoryTest {
         );
     }
 
+
+
     @Test
-    void testRemove() throws SQLException, DataNotWrittenException, NotFoundException {
-        Transaction transaction = new Transaction();
-        Connection conn = transaction.getConnection();
+    void testRemovePaper() throws DataNotCompleteException, NotFoundException, DataNotWrittenException {
+        int countPaperBefore = PaperRepository.countPaper(user1, submission2, transaction,resultListParameters);
+        PaperRepository.remove(paper3, transaction);
 
-        PaperRepository.add(paperNonExistent, pdf, transaction);
+        int countPaperAfter = PaperRepository.countPaper(user1, submission2, transaction, resultListParameters);
 
-        PreparedStatement stmt = conn.prepareStatement(
-                """
-                        SELECT * FROM paper
-                        """);
-        ResultSet resultSet = stmt.executeQuery();
-        int i = 0;
-        while (resultSet.next()) {
-            i++;
-        }
-
-        PaperRepository.remove(paper, transaction);
-
-        ResultSet resultSet2 = stmt.executeQuery();
-        int j = 0;
-        while (resultSet2.next()) {
-            j++;
-        }
-
-        assertEquals(1, i - j);
-        transaction.abort();
+        assertEquals(countPaperAfter, countPaperBefore - 1);
     }
 
     @Test
     void testRemoveNotFound() {
-        Transaction transaction = new Transaction();
         Paper paper = new Paper();
-        paper.setSubmissionId(900000);
-        paper.setVersionNumber(9000000);
+        paper.setSubmissionId(-900000);
+        paper.setVersionNumber(-9000000);
 
         assertThrows(NotFoundException.class, () -> PaperRepository.remove(paper, transaction));
-        transaction.abort();
     }
+
+    @Test
+    void testRemovePaperNoSubmissionId() {
+        Paper noId = new Paper();
+
+        Transaction transaction = new Transaction();
+        assertThrows(InvalidFieldsException.class, () -> PaperRepository.remove(noId, transaction));
+    }
+
+    @Test
+    void testRemovePaperNoVersion() {
+        Paper noVersion = new Paper();
+        noVersion.setSubmissionId(submission1.getId());
+
+        Transaction transaction = new Transaction();
+        assertThrows(InvalidFieldsException.class, () -> PaperRepository.remove(noVersion, transaction));
+    }
+
 
     @Test
     void testFileSize() throws SQLException, NotFoundException, DataNotWrittenException {
         Transaction transaction = new Transaction();
-        PaperRepository.add(paperNonExistent,pdf,transaction);
-        FileDTO fileDTO = PaperRepository.getPDF(paperNonExistent,transaction);
+        PaperRepository.add(paperNonExistent, pdf, transaction);
+        FileDTO fileDTO = PaperRepository.getPDF(paperNonExistent, transaction);
         int fileLength = fileDTO.getFile().length;
 
         assertEquals(pdf.getFile().length, fileLength);
