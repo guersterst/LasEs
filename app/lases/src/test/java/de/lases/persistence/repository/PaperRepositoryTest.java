@@ -52,6 +52,8 @@ class PaperRepositoryTest {
 
     private static Submission submission2;
 
+    private  static Submission submission3;
+
     private static ScientificForum scientificForum1;
 
     private static User editor;
@@ -155,6 +157,17 @@ class PaperRepositoryTest {
 
         SubmissionRepository.add(submission2, transaction);
         submission2 = SubmissionRepository.get(submission2, transaction);
+
+        submission3 = new Submission();
+        submission3.setAuthorId(user1.getId());
+        submission3.setScientificForumId(scientificForum1.getId());
+        submission3.setTitle("Test submission");
+        submission3.setEditorId(editor.getId());
+        submission3.setState(SubmissionState.SUBMITTED);
+        submission3.setSubmissionTime(LocalDateTime.now());
+
+        SubmissionRepository.add(submission3, transaction);
+        submission3 = SubmissionRepository.get(submission3, transaction);
 
         Paper existingPaper = new Paper();
         existingPaper.setSubmissionId(submission2.getId());
@@ -408,47 +421,25 @@ class PaperRepositoryTest {
         assertThrows(NotFoundException.class, () -> PaperRepository.countPaper(user1, submission, transaction, resultListParameters));
     }
 
-
     @Test
-    void testFileSize() throws SQLException, NotFoundException, DataNotWrittenException {
-        Transaction transaction = new Transaction();
-        PaperRepository.add(paperNonExistent, pdf, transaction);
-        FileDTO fileDTO = PaperRepository.getPDF(paperNonExistent, transaction);
+    void testSizeOfFile() throws NotFoundException {
+        FileDTO fileDTO = PaperRepository.getPDF(paper2, transaction);
         int fileLength = fileDTO.getFile().length;
 
         assertEquals(pdf.getFile().length, fileLength);
-        transaction.abort();
     }
 
     @Test
     void testGetNewestPaper() throws DataNotWrittenException, NotFoundException {
-        Transaction transaction = new Transaction();
-        Submission submission = new Submission();
-        submission.setId(5);
-        submission.setAuthorId(1);
-
-        User author = new User();
-        author.setId(1);
-
-        PaperRepository.add(paper, pdf, transaction);
-
-        Paper newestPaper = new Paper();
-        newestPaper.setSubmissionId(5);
-        newestPaper.setUploadTime(LocalDateTime.of(2021, 12, 8, 14, 22));
-        newestPaper.setVersionNumber(4);
-        newestPaper.setVisible(false);
-        pdf = new FileDTO();
-        pdf.setFile(new byte[]{1, 2, 3, 4});
+        Paper newestPaper = paper1.clone();
+        newestPaper.setSubmissionId(submission3.getId());
+        newestPaper.setVersionNumber(1);
+        newestPaper.setVisible(true);
 
         PaperRepository.add(newestPaper, pdf, transaction);
+        newestPaper = PaperRepository.get(newestPaper, transaction);
 
-        Paper getNewestPaper = PaperRepository.getNewestPaperForSubmission(submission, transaction);
-
-        assertAll(
-                () -> assertEquals(newestPaper.getVersionNumber(), newestPaper.getVersionNumber()),
-                () -> assertEquals(newestPaper.getUploadTime(), getNewestPaper.getUploadTime())
-        );
-        transaction.abort();
+        assertEquals(newestPaper, PaperRepository.getNewestPaperForSubmission(submission3, transaction));
     }
 
     @Test
