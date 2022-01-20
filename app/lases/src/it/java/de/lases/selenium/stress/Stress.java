@@ -12,11 +12,9 @@ public class Stress {
 
     public static final int FORUM_SUBMISSION = 8;
 
-    public static final int THREADS = FORUM_SUBMISSION + USER_CREATION;
-
     public static final String URL = "http://ds9.fim.uni-passau.de:8002/lases/";
 
-    public static void main(String... args) throws ExecutionException, InterruptedException, FileNotFoundException {
+    public static void main(String... args) throws InterruptedException, FileNotFoundException {
 
         Deque<List<ResponseTimeEntry>> futures = new ConcurrentLinkedDeque<>();
 
