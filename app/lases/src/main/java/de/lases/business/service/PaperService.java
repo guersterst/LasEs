@@ -4,10 +4,7 @@ import de.lases.business.util.EmailUtil;
 import de.lases.global.transport.*;
 import de.lases.persistence.exception.*;
 import de.lases.persistence.internal.ConfigReader;
-import de.lases.persistence.repository.PaperRepository;
-import de.lases.persistence.repository.SubmissionRepository;
-import de.lases.persistence.repository.Transaction;
-import de.lases.persistence.repository.UserRepository;
+import de.lases.persistence.repository.*;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Event;
 import jakarta.enterprise.inject.spi.CDI;
@@ -184,6 +181,7 @@ public class PaperService implements Serializable {
 
                 PaperRepository.change(paper, transaction);
                 uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reminder"), MessageCategory.INFO));
+                sendEmailForRevisionToReviewer(paper);
                 transaction.commit();
 
             } catch (DataNotWrittenException exception) {
@@ -203,6 +201,41 @@ public class PaperService implements Serializable {
 
             }
         }
+
+    }
+
+    private boolean sendEmailForRevisionToReviewer(Paper paper) {
+        Submission submission = new Submission();
+        submission.setId(paper.getSubmissionId());
+        List<User> reviewerList = new ArrayList<>();
+
+        Transaction trans = new Transaction();
+        try {
+            reviewerList = UserRepository.getList(trans, submission, Privilege.REVIEWER);
+            trans.commit();
+        } catch (NotFoundException e) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("submissionNotFound"), MessageCategory.ERROR));
+            trans.abort();
+            return false;
+        } catch (DataNotCompleteException e) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("notComplete"), MessageCategory.ERROR));
+            trans.abort();
+            return false;
+        }
+
+        List<String> emailAddressList = reviewerList.stream().map(User::getEmailAddress).toList();
+
+        try {
+            EmailUtil.sendEmail(emailAddressList.toArray(new String[0]), null,
+                    resourceBundle.getString("email.editorRevision.subject"),
+                    resourceBundle.getString("email.editorRevision.body") + "\n" + submission.getTitle()
+                            + "\n" + EmailUtil.generateSubmissionURL(submission, facesContext));
+        } catch (EmailTransmissionFailedException e) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("emailNotSent") + " "
+                    + String.join(", ", e.getInvalidAddresses()), MessageCategory.ERROR));
+            return false;
+        }
+        return true;
 
     }
 

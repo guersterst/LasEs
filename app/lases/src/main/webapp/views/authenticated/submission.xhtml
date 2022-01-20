@@ -47,7 +47,7 @@
                                             <h:commandButton styleClass="btn btn-secondary" id="delete-sub-cbtn"
                                                              title="#{help.deleteSubmission}"
                                                              value="#{labels.deleteButton}" onclick="PF('dlg').show()"
-                                                             rendered="#{submissionBacking.isViewerSubmitter() || submissionBacking.admin}"/>
+                                                             rendered="#{submissionBacking.isViewerSubmitter() || submissionBacking.admin || submissionBacking.loggedInUserIsEditor()}"/>
                                             <p:dialog id="delete-sub-dlg" widgetVar="dlg">
                                                 <div class="text-center">
                                                     <h:outputText id="delete-warning-otxt"
@@ -226,7 +226,7 @@
 
                                         <!--Release state-->
                                         <h:column
-                                                rendered="#{submissionBacking.loggedInUserIsEditor() || submissionBacking.isViewerSubmitter()}">
+                                                rendered="#{submissionBacking.loggedInUserIsEditor() || submissionBacking.isViewerSubmitter() || submissionBacking.admin}">
                                             <f:facet name="header">
                                                 <div class="input-group">
                                                     <h:outputText id="state-col" value="#{labels.stateCol}"
