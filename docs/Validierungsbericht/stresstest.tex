@@ -9,22 +9,25 @@
 	\item Der FIM Rechner galactica als System für die Latenzmessungen.
 	\item Die drei Entwicklerlaptops \emph{Lenovo IdeaPad Flex 5 14IIL05} (kurz \textbf{Lenovo5}), \emph{Lenovo IdeaPad C340-14IML} (kurz \textbf{LenovoC}) und \emph{Acer Aspire A515-54G} (kurz \textbf{Acer}), wie im Pflichtenheft spezifiziert. Diese haben über das Bayern-WLAN an der Universität Passau und VPN auf den Webserver zugegriffen.
 \end{itemize}
+
+\subsubsection{Messung der Antwortzeiten}\label{sec:mess}
 Wir haben uns dafür entschieden, die Messung der Antwortzeiten auf einem Rechner in der FIM zu machen. Dies hat folgende Vorteile:
 \begin{itemize}
 	\item Die Stressoren und der Messungsrechner sind nicht im selben Netwerk, d.h. die von den Stressoren generierte Auslastung des Netzwerks wird vom Messungsrechner nicht mitgemessen
 	\item Da der Messungsrechner im selben Netzwerk ist wie der Webserver, verfälscht die Internetverbindung des Messungsrechners nicht das Ergebnis.
 	\item Da der Messungsrechner und die Stressoren verschieden sind, verfälscht die Auslastung der Stressoren selbst durch die Belastungstests nicht das Messergebnis.	
 \end{itemize}
-Natürlich hat diese Entscheidung einen großen Nachteil: Die im Pflichtenheft geforderte Antwortzeit von maximal 3 Sekunden bezieht sich auf den Endnutzer, aber in den Messdaten fehlt die round trip Time zwischen dem Endnutzer und dem Universitätsnetzwerk. Es ist wohl eine sinnvolle Annahme, dass eine Verdreifachung der Messwerte diesen Effekt im Mittel ausgleicht. Also müssen wir im folgenden Überprüfen, dass unsere Messwerte unter einer Sekunde liegen.
+Natürlich hat diese Entscheidung einen Nachteil:\\
+ Die im Pflichtenheft geforderte Antwortzeit von maximal 3 Sekunden bezieht sich auf den Endnutzer, aber in den Messdaten fehlt die Propagationszeit zwischen dem Endnutzer und dem Universitätsnetzwerk. Es ist wohl eine sinnvolle Annahme, dass eine Verdreifachung der Messwerte diesen Effekt im Mittel ausgleicht. Also müssen wir im folgenden Überprüfen, dass unsere Messwerte unter einer Sekunde liegen.
 
 \subsubsection{Software}
 
 Für die Lasttests wurden zwei gängige Nutzerflüsse auf LasEs mit Selenium automatisiert:
 \begin{itemize}
-	\item Nutzerfluss 1:
-	\item Nutzerfluss 2:
+	\item Nutzerfluss 1: Hier registriert sich ein neuer Nutzer im System, navigiert eine Zeit lang im System und löscht dann sein Konto wieder.
+	\item Nutzerfluss 2: Hier wird ein neues wissenschaftliches Forum erstellt, eine neue Einreichung erstellt und eine Revision angefordert und eingereicht.
 \end{itemize}
-In der Browserautomatisierung wird bei jedem http-request die Antwortzeit des Servers gemessen und zusammen mit Kontextinformation über die ausgeführte Interaktion abgespeichert. Diese Testsuite wurde auf den Stressoren und dem Messungsrechner ausgeführt.
+In der Browserautomatisierung wird bei jedem HTTP-Request die Antwortzeit des Servers gemessen und zusammen mit Kontextinformation über die ausgeführte Interaktion abgespeichert. Diese Testsuite wurde auf den Stressoren und dem Messungsrechner ausgeführt.
 
 Dabei gab es zwei Konfigurationen, bei denen die Testsuite je folgendermaßen ausgeführt wurde:
 
@@ -36,21 +39,21 @@ Dabei gab es zwei Konfigurationen, bei denen die Testsuite je folgendermaßen au
 
 \paragraph{Konfiguration 2: 50 Stressoren}
 \begin{itemize}
-	\item \textbf{Lenovo5}: 7 parallele Ausführungen von Nutzerfluss 1 und gleichzeitig 8 parallele Ausführungen von Nutzerfluss 2
+	\item \textbf{Lenovo5}: 7 parallele Ausführungen von Nutzerfluss 1 und gleichzeitig 8 parallele Ausführungen von Nutzerfluss 2.
 	\item \textbf{LenovoC}: 10 parallele Ausführungen von Nutzerfluss 1 und gleichzeitig 10 parallele Ausführungen von Nutzerfluss 2.
-	\item \textbf{Acer}: 7 parallele Ausführungen von Nutzerfluss 1 und gleichzeitig 8 parallele Ausführungen von Nutzerfluss 2
+	\item \textbf{Acer}: 7 parallele Ausführungen von Nutzerfluss 1 und gleichzeitig 8 parallele Ausführungen von Nutzerfluss 2.
 \end{itemize}
 
 \paragraph{Konfigurationsunabhängig\\}
 Bei beiden Konfigurationen wurde auf den restlichen Rechnern je folgendes ausgeführt:
 \begin{itemize}
-	\item Der Messungsrechner führt jeden Nutzerfluss einmal parallel aus
-	\item Webserver und Datenbankserver führen das LasEs System auf Tomcat und die PostgreSQL Datenbank aus
+	\item Der Messungsrechner führt jeden Nutzerfluss einmal parallel aus und speichert danach die Antwortzeitmessungen in einer CSV Datei.
+	\item Application Server und Datenbankserver führen das LasEs System auf Tomcat und die PostgreSQL Datenbank aus.
 \end{itemize}
 
 \subsection{Ergebnisse}
 
-Bei beiden Konfigurartionen wurden für eine Reihe verschiedener Nutzerinteraktionen Messwerte aufgezeichnet. Meistens existiert pro Nutzerinteraktion ein Messwert. Wenn zwei oder drei Messwerte existieren wurde im folgenden Balkendiagramm jeweils der größte Messwert aufgenommen. Alle Messwerte werden in Millisekunden angegeben. In \hyperref[fig:worst30]{Abbildung 1} findet sich das Balkendiagramm für Konfiguration 1, in \hyperref[fig:worst50]{Abbildung 2} findet sich das Balkendiagramm für Konfiguration 2.
+Bei beiden Konfigurartionen wurden für eine Reihe verschiedener Nutzerinteraktionen Messwerte aufgezeichnet. Meistens existiert pro Nutzerinteraktion ein Messwert. Wenn zwei oder drei Messwerte existieren, wurde im folgenden Balkendiagramm jeweils der größte Messwert aufgenommen. Alle Messwerte werden in Millisekunden angegeben. In \hyperref[fig:worst30]{Abbildung 1} findet sich das Balkendiagramm für Konfiguration 1, in \hyperref[fig:worst50]{Abbildung 2} findet sich das Balkendiagramm für Konfiguration 2.
 
 \begin{figure}[H]
 	\includegraphics[width=\linewidth]{graphics/30worstcase.pdf}
@@ -63,7 +66,7 @@ Bei beiden Konfigurartionen wurden für eine Reihe verschiedener Nutzerinterakti
 	\label{fig:worst50}	
 \end{figure}
 
-In \hyperref[fig:boxplot]{Abbildung 2} sieht man einen Boxplot, der die Werte der zwei Konfigurationen vergleicht. Im Boxplot zeigen die Whisker das 9/91 Perzentil. Der Kreis in der Box ist jeweils der Mittelwert.
+In \hyperref[fig:boxplot]{Abbildung 2} sieht man einen Boxplot, der die Werte der zwei Konfigurationen vergleicht. Im Boxplot zeigen die Whisker das 9/91 Perzentil. Der Kreis in der Box ist jeweils der Mittelwert. Die Kreise außerhalb sind alle Messwerte, die nicht innerhalb des Wertebereichs der Whisker liegen.
 
 \begin{figure}[H]
 	\includegraphics[width=\linewidth]{graphics/boxplots.pdf}
@@ -74,4 +77,15 @@ In \hyperref[fig:boxplot]{Abbildung 2} sieht man einen Boxplot, der die Werte de
 
 \subsection{Interpretation}
 
+Alle Zeitmessungen befinden sich im Bereich unter einer Sekunde, insbesondere bei 50 gleichzeitigen Nutzern. Wie im Bereich \hyperref[sec:mess]{Messung der Antwortzeiten} begründet, erfüllt dies die Skalierbarkeitsanforderung des Pflichtenhefts.
+
+Die langsamste Nutzerinteraktion war in beiden Konfigurationen das Einreichen einer neuen Einreichung. Dies war bereits in der Entwicklungsphase abzusehen, da die Einreichungsseite eine große Menge an Daten anzeigen und somit laden muss.
+
+Interessanterweite ist die Ausführung bei 50 Nutzern im Median nur verschwindend langsamer, im Durchschnitt sogar schneller als bei 30 Nutzern. Dies ist vielleicht dadurch zu erklären, dass bei 50 Nutzern die Ausführung der Stressoren auf einem der drei Laptops in einigen Threads sehr schnell zu Fehlern geführt hat und neugestartet werden musste. Dies führt uns auch schon zum letzten Punkt, und zwar den einschränkenden Bedingungen dieser Untersuchung.
+
 \subsection{Einschränkungen}
+
+Die Ausführung der Stressoren war sehr instabil. Dies ist auf zwei Gründe zurückzuführen. Einerseits ist die Ausführung der Selenium-Routinen oft plattformabhängig. Nicht nur das Betriebssystem, sondern auch verschiedene Hardwarekonfigurationen führen dazu, dass eine Operation auf einem Rechner fehlschlägt und auf einem anderen nicht. Andererseits stießen die verwendeten Laptops bei der Ausführung der Stresstest sehr schnell an ihre eigenen Belastungsgrenzen, was dazu führte, dass einzelne Threads wegen Zeitüberschreitung mit einer Selenium Exception endeten. Diese brachten dann narürlich den ganzen Ausführungsthread zum erliegen, wodurch ein simulierter Nutzer verloren ging.
+
+Als zweiter einschränkender Faktor ist natürlich die Näherung der tatsächlichen Endnutzer Antwortzeit durch das Dreifache unserer Antwortzeit zu nennen. Im Idealfall würde die Antwortzeit durch einen seperaten Rechner, der sich in einem anderen Netz als die Stressoren oder der Webserver befindet, durchgeführt.
+
