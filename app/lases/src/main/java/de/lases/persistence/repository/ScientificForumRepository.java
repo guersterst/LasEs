@@ -192,7 +192,7 @@ public class ScientificForumRepository {
                 throw new DataNotWrittenException();
             } else {
                 transaction.abort();
-                throw new DataNotWrittenException();
+                throw new DatasourceQueryFailedException();
             }
         }
     }

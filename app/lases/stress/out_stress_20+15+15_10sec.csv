@@ -1,0 +1,24 @@
+goto:administration, 240, 219
+goto:newUser, 207
+action:saveNewUser, 358
+action:search, 212
+action:newForumSave, 358
+action:newSubmissionRejectRevision, 394
+action:logOut, 206
+action:newForumAddEditor, 132
+action:newSubmissionSubmit, 537
+action:login, 274, 321
+goto:register, 108
+goto:homepage, 212
+goto:forum, 332
+goto:newForum, 311
+action:newSubmissionRevision, 469
+action:newSubmissionReleaseRevision, 434
+goto:forumList, 159
+action:forumDelete, 264
+goto:newSubmission, 152
+goto:profile, 342, 337, 339
+callPage, 139, 203, 188
+action:register, 488
+action:profileSave, 275
+action:profileDelete, 266, 219
