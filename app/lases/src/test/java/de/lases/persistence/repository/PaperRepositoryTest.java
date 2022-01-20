@@ -176,6 +176,15 @@ class PaperRepositoryTest {
     }
 
     @Test
+    void testAddPaperNoFile() {
+        FileDTO fileDTO = new FileDTO();
+        paper1.setVersionNumber(-3);
+
+        Transaction transaction = new Transaction();
+        assertThrows(InvalidFieldsException.class, () -> PaperRepository.add(paper1, fileDTO, transaction));
+    }
+
+    @Test
     void testChange() throws SQLException, DataNotWrittenException, NotFoundException {
         Transaction transaction = new Transaction();
         Connection connection = transaction.getConnection();
