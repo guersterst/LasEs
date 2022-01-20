@@ -271,6 +271,18 @@ class PaperRepositoryTest {
         assertThrows(InvalidFieldsException.class, () -> PaperRepository.change(paper, transaction));
     }
 
+    @Test
+    void testChangePaperNoVersion() {
+        Paper paper = new Paper();
+        paper.setSubmissionId(submission1.getId());
+        paper.setVisible(true);
+
+        Transaction transaction = new Transaction();
+        assertThrows(InvalidFieldsException.class, () -> PaperRepository.change(paper, transaction));
+    }
+
+
+
     /**
      * @author Sebastian Vogt
      */
