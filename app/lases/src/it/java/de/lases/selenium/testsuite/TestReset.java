@@ -30,7 +30,7 @@ public class TestReset {
     }
 
     @Test()
-    @DisplayName("removeForum")
+    @DisplayName("/T1000")
     void testRemoveForum() {
         webDriver.get(WebDriverFactory.LOCALHOST_URL);
 
