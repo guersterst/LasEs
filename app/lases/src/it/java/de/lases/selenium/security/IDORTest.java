@@ -25,9 +25,10 @@ public class IDORTest {
     private WebDriver driver;
     private WebDriverWait wait;
 
-    private static final String ADMIN_EMAIL = "thomas.kirz2+lasesadmin@gmail.com";
-    private static final String PASSWORD = "Password1!";
-
+    private static final String TEST_PASSWORD = "Password1!";
+    private static final String ORIGINAL_ADMIN_EMAIL = "admin@example.com";
+    private static final String ORIGINAL_ADMIN_PASSWORD = "admin1!ADMIN";
+    private static final String TEST_ADMIN_EMAIL = "thomas.kirz2+lasesadmin@gmail.com";
     private static final String AUTHOR_EMAIL = "thomas.kirz+author@gmail.com";
     private static final String ATTACKER_EMAIL = "thomas.kirz+sus@gmail.com";
 
@@ -39,7 +40,7 @@ public class IDORTest {
 
     @Test
     public void testNotAuthenticated() {
-        createForum();
+        createForumAndAddAdmin();
         registerAuthor();
         uploadSubmission();
 
@@ -68,15 +69,41 @@ public class IDORTest {
         deleteForum();
     }
 
-    private void createForum() {
+    private void createForumAndAddAdmin() {
         driver.get(WebDriverFactory.LOCALHOST_URL);
 
+        // Login as original admin
         WebElement emailBox = driver.findElement(By.id("login-form:email-itxt"));
         WebElement passwordBox = driver.findElement(By.id("login-form:password-iscrt"));
+        emailBox.sendKeys(ORIGINAL_ADMIN_EMAIL);
+        passwordBox.sendKeys(ORIGINAL_ADMIN_PASSWORD);
+        driver.findElement(By.id("login-form:login-cbtn")).click();
 
-        emailBox.sendKeys(ADMIN_EMAIL);
-        passwordBox.sendKeys(PASSWORD);
+        // Create second admin
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-administration-link")));
+        driver.findElement(By.id("nav-administration-link")).click();
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("new-user-link")));
+        driver.findElement(By.id("new-user-link")).click();
+        driver.findElement(By.id("register-frm:password-iscrt")).click();
+        driver.findElement(By.id("register-frm:password-iscrt")).clear();
+        driver.findElement(By.id("register-frm:password-iscrt")).sendKeys("Password1!");
+        driver.findElement(By.id("register-frm:first-name-itxt")).click();
+        driver.findElement(By.id("register-frm:first-name-itxt")).clear();
+        driver.findElement(By.id("register-frm:first-name-itxt")).sendKeys("Thomas");
+        driver.findElement(By.id("register-frm:last-name-itxt")).click();
+        driver.findElement(By.id("register-frm:last-name-itxt")).clear();
+        driver.findElement(By.id("register-frm:last-name-itxt")).sendKeys("James II");
+        driver.findElement(By.id("register-frm:email-itxt")).click();
+        driver.findElement(By.id("register-frm:email-itxt")).clear();
+        driver.findElement(By.id("register-frm:email-itxt")).sendKeys(TEST_ADMIN_EMAIL);
+        driver.findElement(By.id("register-frm:is-admin-cbx")).click();
+        driver.findElement(By.id("register-frm:save-btn")).click();
 
+        // Login as new admin
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("logout-frm:logout-cbtn")));
+        driver.findElement(By.id("logout-frm:logout-cbtn")).click();
+        driver.findElement(By.id("login-form:email-itxt")).sendKeys(TEST_ADMIN_EMAIL);
+        driver.findElement(By.id("login-form:password-iscrt")).sendKeys(TEST_PASSWORD);
         driver.findElement(By.id("login-form:login-cbtn")).click();
 
         driver.findElement(By.id("nav-forumlist-link")).click();
@@ -85,7 +112,7 @@ public class IDORTest {
 
         // add editor.
         WebElement emailField = driver.findElement(By.id("add-editors-form:email-editor-itxt"));
-        emailField.sendKeys("thomas.kirz2+lasesadmin@gmail.com");
+        emailField.sendKeys(TEST_ADMIN_EMAIL);
         driver.findElement(By.id("add-editors-form:add-editor-btn")).click();
 
 
@@ -97,7 +124,6 @@ public class IDORTest {
         actions.perform();
 
         // enter the rest of the data.
-
         driver.findElement(By.id("create-forum-form:forum-name-itxt")).sendKeys("Security Conference");
         driver.findElement(By.id("create-forum-form:deadline-itxt")).sendKeys("30.12.2099, 22:00:00");
         driver.findElement(By.id("create-forum-form:url-itxt")).sendKeys("https://security.las.es/");
@@ -114,8 +140,8 @@ public class IDORTest {
         WebElement emailBox = driver.findElement(By.id("login-form:email-itxt"));
         WebElement passwordBox = driver.findElement(By.id("login-form:password-iscrt"));
 
-        emailBox.sendKeys(ADMIN_EMAIL);
-        passwordBox.sendKeys(PASSWORD);
+        emailBox.sendKeys(TEST_ADMIN_EMAIL);
+        passwordBox.sendKeys(TEST_PASSWORD);
 
         driver.findElement(By.id("login-form:login-cbtn")).click();
 
@@ -152,7 +178,7 @@ public class IDORTest {
         driver.findElement(By.id("register-frm:email-itxt")).sendKeys(AUTHOR_EMAIL);
         driver.findElement(By.id("register-frm:password-iscrt")).click();
         driver.findElement(By.id("register-frm:password-iscrt")).clear();
-        driver.findElement(By.id("register-frm:password-iscrt")).sendKeys(PASSWORD);
+        driver.findElement(By.id("register-frm:password-iscrt")).sendKeys(TEST_PASSWORD);
 
         // Scroll to and click on 'Register' button
         WebElement registerButton2 = driver.findElement(By.id("register-frm:register-cbtn"));
@@ -209,7 +235,7 @@ public class IDORTest {
         driver.findElement(By.id("register-frm:email-itxt")).sendKeys(ATTACKER_EMAIL);
         driver.findElement(By.id("register-frm:password-iscrt")).click();
         driver.findElement(By.id("register-frm:password-iscrt")).clear();
-        driver.findElement(By.id("register-frm:password-iscrt")).sendKeys(PASSWORD);
+        driver.findElement(By.id("register-frm:password-iscrt")).sendKeys(TEST_PASSWORD);
 
         // Scroll to and click on 'Register' button
         WebElement registerButton2 = driver.findElement(By.id("register-frm:register-cbtn"));
@@ -228,14 +254,14 @@ public class IDORTest {
     private void deleteUsers() {
         JavascriptExecutor js = (JavascriptExecutor) driver;
 
-        List.of(AUTHOR_EMAIL, ATTACKER_EMAIL).forEach(email -> {
+        List.of(AUTHOR_EMAIL, ATTACKER_EMAIL, TEST_ADMIN_EMAIL).forEach(email -> {
             // Log in
             driver.get(WebDriverFactory.LOCALHOST_URL);
             WebElement emailBox = driver.findElement(By.id("login-form:email-itxt"));
             WebElement passwordBox = driver.findElement(By.id("login-form:password-iscrt"));
 
             emailBox.sendKeys(email);
-            passwordBox.sendKeys(PASSWORD);
+            passwordBox.sendKeys(TEST_PASSWORD);
 
             driver.findElement(By.id("login-form:login-cbtn")).click();
 
