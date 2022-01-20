@@ -103,7 +103,7 @@ class PaperRepositoryTest {
         ConnectionPool.shutDown();
     }
 
-    void createData() throws Exception{
+    void createData() throws Exception {
         user1 = new User();
         user1.setFirstName("Hans");
         user1.setLastName("Mayer");
@@ -127,7 +127,7 @@ class PaperRepositoryTest {
         scientificForum1.setDescription("great forum");
         scientificForum1.setReviewManual("just review");
 
-        scientificForum1 = ScientificForumRepository.add(scientificForum1,transaction);
+        scientificForum1 = ScientificForumRepository.add(scientificForum1, transaction);
         ScientificForumRepository.addEditor(scientificForum1, editor, transaction);
 
         submission1 = new Submission();
@@ -273,7 +273,9 @@ class PaperRepositoryTest {
         notFoundPaper.setSubmissionId(-10000000);
         notFoundPaper.setVersionNumber(-1000);
 
-        assertThrows(NotFoundException.class, () -> {PaperRepository.change(notFoundPaper, transaction);});
+        assertThrows(NotFoundException.class, () -> {
+            PaperRepository.change(notFoundPaper, transaction);
+        });
     }
 
     @Test
@@ -295,7 +297,6 @@ class PaperRepositoryTest {
         Transaction transaction = new Transaction();
         assertThrows(InvalidFieldsException.class, () -> PaperRepository.change(paper, transaction));
     }
-
 
 
     /**
@@ -345,10 +346,9 @@ class PaperRepositoryTest {
     }
 
 
-
     @Test
     void testRemovePaper() throws DataNotCompleteException, NotFoundException, DataNotWrittenException {
-        int countPaperBefore = PaperRepository.countPaper(user1, submission2, transaction,resultListParameters);
+        int countPaperBefore = PaperRepository.countPaper(user1, submission2, transaction, resultListParameters);
         PaperRepository.remove(paper3, transaction);
 
         int countPaperAfter = PaperRepository.countPaper(user1, submission2, transaction, resultListParameters);
@@ -382,6 +382,32 @@ class PaperRepositoryTest {
         assertThrows(InvalidFieldsException.class, () -> PaperRepository.remove(noVersion, transaction));
     }
 
+    @Test
+    void testCountPaper() throws DataNotCompleteException, NotFoundException {
+        ResultListParameters parameters = resultListParameters;
+        parameters.getFilterColumns().put("version", paper2.getVersionNumber().toString());
+
+        int count = PaperRepository.countPaper(user1, submission2, transaction, parameters);
+
+        assertEquals(1, count);
+    }
+
+    @Test
+    void testCountPaperParamsNull() {
+        Transaction transaction = new Transaction();
+
+        assertThrows(InvalidQueryParamsException.class, () -> PaperRepository.countPaper(user1, submission2, transaction, null));
+
+    }
+
+    @Test
+    void testCountPaperNotFound() {
+        Submission submission = submission1.clone();
+        submission.setId(-10000);
+
+        assertThrows(NotFoundException.class, () -> PaperRepository.countPaper(user1, submission, transaction, resultListParameters));
+    }
+
 
     @Test
     void testFileSize() throws SQLException, NotFoundException, DataNotWrittenException {
@@ -404,19 +430,19 @@ class PaperRepositoryTest {
         User author = new User();
         author.setId(1);
 
-        PaperRepository.add(paper,pdf,transaction);
+        PaperRepository.add(paper, pdf, transaction);
 
         Paper newestPaper = new Paper();
         newestPaper.setSubmissionId(5);
-        newestPaper.setUploadTime(LocalDateTime.of(2021,12,8,14,22));
+        newestPaper.setUploadTime(LocalDateTime.of(2021, 12, 8, 14, 22));
         newestPaper.setVersionNumber(4);
         newestPaper.setVisible(false);
         pdf = new FileDTO();
         pdf.setFile(new byte[]{1, 2, 3, 4});
 
-        PaperRepository.add(newestPaper,pdf,transaction);
+        PaperRepository.add(newestPaper, pdf, transaction);
 
-        Paper getNewestPaper = PaperRepository.getNewestPaperForSubmission(submission,transaction);
+        Paper getNewestPaper = PaperRepository.getNewestPaperForSubmission(submission, transaction);
 
         assertAll(
                 () -> assertEquals(newestPaper.getVersionNumber(), newestPaper.getVersionNumber()),
@@ -436,7 +462,9 @@ class PaperRepositoryTest {
 
         ResultListParameters resultListParameters = new ResultListParameters();
 
-        assertThrows(NotFoundException.class, () -> {PaperRepository.getList(submission, transaction,user,resultListParameters);});
+        assertThrows(NotFoundException.class, () -> {
+            PaperRepository.getList(submission, transaction, user, resultListParameters);
+        });
         transaction.abort();
     }
 
