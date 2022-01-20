@@ -12,10 +12,18 @@ Die geprüften Bedingungen für den Erfolg der Tests sind \textbf{fett} geschrie
 \subsection{Injection}\label{subsec:injection-test}
 Dieser Test prüft den Schutz gegen SQL- und HTML/JavaScript-Injection.
 
-Dazu wird ein Nutzerkonto angelegt mit dem Titel \emph{";DROP table user;}.
-Wäre hier SQL-Injection möglich, würde dieser Titel bei Ausführung des \code{INSERT}-Statements in der Datenbank
+Dazu wird ein Nutzerkonto angelegt mit dem Titel \emph{";DROP table user;} (auch bekannt als Little Bobby Tables, siehe Abbildung~\ref{fig:xkcd}).
+Wäre hier SQL-Injection möglich, könnte dieser Titel bei Ausführung des \code{INSERT}-Statements in der Datenbank
 die \code{user}-Tabelle löschen.
 \textbf{Es wird geprüft, dass die Nutzerdaten auf der Profilseite korrekt angezeigt werden.}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{graphics/xkcd}
+    \caption[XKCD]{\emph{Exploits of a Mom}\footnotemark}
+    \label{fig:xkcd}
+\end{figure}
+\footnotetext{Abbildung von \href{https://xkcd.com/327/}{XKCD}, lizenziert unter \href{https://creativecommons.org/licenses/by-nc/2.5/legalcode}{Namensnennung-Nicht kommerziell 2.5 Generic (CC BY-NC 2.5)}}
 
 Dann lädt der Nutzer eine Einreichung mit dem Titel \emph{<script>alert('XSS');</script>} hoch.
 \textbf{Der Titel soll jetzt so wie eingegeben angezeigt werden anstatt dass der JavaScript-Code ausgeführt wird.}
