@@ -12,6 +12,7 @@ import java.time.Duration;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
 public class UserCreatesForumAndSubmission implements Callable<List<ResponseTimeEntry>> {
 
@@ -40,6 +41,7 @@ public class UserCreatesForumAndSubmission implements Callable<List<ResponseTime
             System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             System.out.println("Kaputt");
             System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            e.printStackTrace();
             return new LinkedList<>();
         } finally {
             tearDown();
@@ -50,7 +52,7 @@ public class UserCreatesForumAndSubmission implements Callable<List<ResponseTime
         driver.quit();
     }
 
-    private List<ResponseTimeEntry> userCreatesForumAndSubmission(int globalId) {
+    private List<ResponseTimeEntry> userCreatesForumAndSubmission(int globalId) throws InterruptedException {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         List<ResponseTimeEntry> responseTimes = new LinkedList<>();
 
@@ -58,6 +60,8 @@ public class UserCreatesForumAndSubmission implements Callable<List<ResponseTime
         driver.get(Stress.URL);
         long end = System.currentTimeMillis();
         responseTimes.add(new ResponseTimeEntry("callPage", end - start));
+
+        TimeUnit.SECONDS.sleep(10);
 
         driver.manage().window().setSize(new Dimension(1536, 832));
         driver.findElement(By.id("login-form:email-itxt")).click();
@@ -70,15 +74,21 @@ public class UserCreatesForumAndSubmission implements Callable<List<ResponseTime
         end = System.currentTimeMillis();
         responseTimes.add(new ResponseTimeEntry("action:login", end - start));
 
+        TimeUnit.SECONDS.sleep(10);
+
         start = System.currentTimeMillis();
         driver.findElement(By.id("nav-administration-link")).click();
         end = System.currentTimeMillis();
         responseTimes.add(new ResponseTimeEntry("goto:administration", end - start));
 
+        TimeUnit.SECONDS.sleep(10);
+
         start = System.currentTimeMillis();
         driver.findElement(By.id("new-user-link")).click();
         end = System.currentTimeMillis();
         responseTimes.add(new ResponseTimeEntry("goto:newUser", end - start));
+
+        TimeUnit.SECONDS.sleep(10);
 
         driver.findElement(By.id("register-frm:password-iscrt")).click();
         driver.findElement(By.id("register-frm:password-iscrt")).sendKeys("Password1!");
@@ -92,15 +102,21 @@ public class UserCreatesForumAndSubmission implements Callable<List<ResponseTime
         driver.findElement(By.id("register-frm:email-itxt")).sendKeys(globalId + "Stressor.Editor.Admin@sebastianvogt.me");
         driver.findElement(By.id("register-frm:is-admin-cbx")).click();
 
+        TimeUnit.SECONDS.sleep(10);
+
         start = System.currentTimeMillis();
         driver.findElement(By.id("register-frm:save-btn")).click();
         end = System.currentTimeMillis();
         responseTimes.add(new ResponseTimeEntry("action:saveNewUser", end - start));
 
+        TimeUnit.SECONDS.sleep(10);
+
         start = System.currentTimeMillis();
         driver.findElement(By.id("logout-frm:logout-cbtn")).click();
         end = System.currentTimeMillis();
         responseTimes.add(new ResponseTimeEntry("action:logOut", end - start));
+
+        TimeUnit.SECONDS.sleep(10);
 
         driver.findElement(By.id("login-form:email-itxt")).click();
         driver.findElement(By.id("login-form:email-itxt")).sendKeys(globalId + "stressor.Editor.Admin@sebastianvogt.me");
@@ -111,15 +127,21 @@ public class UserCreatesForumAndSubmission implements Callable<List<ResponseTime
         end = System.currentTimeMillis();
         responseTimes.add(new ResponseTimeEntry("action:login", end - start));
 
+        TimeUnit.SECONDS.sleep(10);
+
         start = System.currentTimeMillis();
         driver.findElement(By.id("nav-administration-link")).click();
         end = System.currentTimeMillis();
         responseTimes.add(new ResponseTimeEntry("goto:administration", end - start));
 
+        TimeUnit.SECONDS.sleep(10);
+
         start = System.currentTimeMillis();
         driver.findElement(By.id("new-forum-link")).click();
         end = System.currentTimeMillis();
         responseTimes.add(new ResponseTimeEntry("goto:newForum", end - start));
+
+        TimeUnit.SECONDS.sleep(10);
 
         driver.findElement(By.id("add-editors-form:email-editor-itxt")).click();
         driver.findElement(By.id("add-editors-form:email-editor-itxt")).sendKeys(globalId + "stressor.editor.admin@sebastianvogt.me");
@@ -128,6 +150,8 @@ public class UserCreatesForumAndSubmission implements Callable<List<ResponseTime
         driver.findElement(By.id("add-editors-form:add-editor-btn")).click();
         end = System.currentTimeMillis();
         responseTimes.add(new ResponseTimeEntry("action:newForumAddEditor", end - start));
+
+        TimeUnit.SECONDS.sleep(10);
 
         driver.findElement(By.id("create-forum-form:forum-name-itxt")).click();
         driver.findElement(By.id("create-forum-form:forum-name-itxt")).sendKeys(globalId + "Form für Stresstests");
@@ -144,10 +168,14 @@ public class UserCreatesForumAndSubmission implements Callable<List<ResponseTime
         end = System.currentTimeMillis();
         responseTimes.add(new ResponseTimeEntry("action:newForumSave", end - start));
 
+        TimeUnit.SECONDS.sleep(10);
+
         start = System.currentTimeMillis();
         driver.findElement(By.id("new-submission-frm:new-submission-btn")).click();
         end = System.currentTimeMillis();
         responseTimes.add(new ResponseTimeEntry("goto:newSubmission", end - start));
+
+        TimeUnit.SECONDS.sleep(10);
 
         driver.findElement(By.id("new-submission-form:submission-title-itxt")).click();
         driver.findElement(By.id("new-submission-form:submission-title-itxt")).sendKeys(globalId + "An Empirical Study about the Stress on Lases on a FIM Computer");
@@ -163,6 +191,8 @@ public class UserCreatesForumAndSubmission implements Callable<List<ResponseTime
         wait.until(ExpectedConditions.presenceOfElementLocated(By.id("revision-required-frm:revision-required-cbtn")));
         end = System.currentTimeMillis();
         responseTimes.add(new ResponseTimeEntry("action:newSubmissionSubmit", end - start));
+
+        TimeUnit.SECONDS.sleep(10);
 
         driver.findElement(By.id("revision-required-frm:revision-required-cbtn")).click();
         driver.findElement(By.id("revision-required-frm:revision-required-cbtn")).click();
@@ -182,20 +212,28 @@ public class UserCreatesForumAndSubmission implements Callable<List<ResponseTime
         end = System.currentTimeMillis();
         responseTimes.add(new ResponseTimeEntry("action:newSubmissionRevision", end - start));
 
+        TimeUnit.SECONDS.sleep(10);
+
         start = System.currentTimeMillis();
         driver.findElement(By.cssSelector("input[id *= '1:release-revision-cbtn']")).click();
         end = System.currentTimeMillis();
         responseTimes.add(new ResponseTimeEntry("action:newSubmissionReleaseRevision", end - start));
+
+        TimeUnit.SECONDS.sleep(10);
 
         start = System.currentTimeMillis();
         driver.findElement(By.id("accept-reject-frm:reject-submission-cbtn")).click();
         end = System.currentTimeMillis();
         responseTimes.add(new ResponseTimeEntry("action:newSubmissionRejectRevision", end - start));
 
+        TimeUnit.SECONDS.sleep(10);
+
         start = System.currentTimeMillis();
         driver.findElement(By.id("info-submission:forum-lnk")).click();
         end = System.currentTimeMillis();
         responseTimes.add(new ResponseTimeEntry("goto:forum", end - start));
+
+        TimeUnit.SECONDS.sleep(10);
 
         driver.findElement(By.id("forum-delete-frm:delete-forum-cbtn")).click();
 
@@ -204,10 +242,14 @@ public class UserCreatesForumAndSubmission implements Callable<List<ResponseTime
         end = System.currentTimeMillis();
         responseTimes.add(new ResponseTimeEntry("action:forumDelete", end - start));
 
+        TimeUnit.SECONDS.sleep(10);
+
         start = System.currentTimeMillis();
         driver.findElement(By.id("nav-profile-link")).click();
         end = System.currentTimeMillis();
         responseTimes.add(new ResponseTimeEntry("goto:profile", end - start));
+
+        TimeUnit.SECONDS.sleep(10);
 
         driver.findElement(By.id("delete-profile-form:delete-cbtn")).click();
         {

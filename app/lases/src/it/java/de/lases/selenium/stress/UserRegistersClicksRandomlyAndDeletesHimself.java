@@ -14,6 +14,7 @@ import java.time.Duration;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
 public class UserRegistersClicksRandomlyAndDeletesHimself implements Callable<List<ResponseTimeEntry>> {
 
@@ -42,6 +43,7 @@ public class UserRegistersClicksRandomlyAndDeletesHimself implements Callable<Li
             System.out.println("?????????????????????????????????????????????????");
             System.out.println("Kaputt");
             System.out.println("??????????????????????????????????????????????????//");
+            e.printStackTrace();
             return new LinkedList<>();
         } finally {
             tearDown();
@@ -60,6 +62,8 @@ public class UserRegistersClicksRandomlyAndDeletesHimself implements Callable<Li
         long end = System.currentTimeMillis();
         responseTimes.add(new ResponseTimeEntry("callPage", end - start));
 
+        TimeUnit.SECONDS.sleep(10);
+
         driver.manage().window().maximize();
         js.executeScript("window.scroll(0, document.documentElement.offsetHeight);");
 
@@ -67,6 +71,8 @@ public class UserRegistersClicksRandomlyAndDeletesHimself implements Callable<Li
         driver.findElement(By.id("register-frm:register-cbtn")).click();
         end = System.currentTimeMillis();
         responseTimes.add(new ResponseTimeEntry("goto:register", end - start));
+
+        TimeUnit.SECONDS.sleep(10);
 
         driver.findElement(By.id("register-frm:first-name-itxt")).click();
         driver.findElement(By.id("register-frm:first-name-itxt")).sendKeys("Stressor");
@@ -82,6 +88,7 @@ public class UserRegistersClicksRandomlyAndDeletesHimself implements Callable<Li
         end = System.currentTimeMillis();
         responseTimes.add(new ResponseTimeEntry("action:register", end - start));
 
+        TimeUnit.SECONDS.sleep(10);
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(9));
         wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".alert-info:nth-child(7)")));
@@ -92,30 +99,42 @@ public class UserRegistersClicksRandomlyAndDeletesHimself implements Callable<Li
         end = System.currentTimeMillis();
         responseTimes.add(new ResponseTimeEntry("callPage", end - start));
 
+        TimeUnit.SECONDS.sleep(10);
+
         start = System.currentTimeMillis();
         driver.findElement(By.id("go-to-homepage-lnk")).click();
         end = System.currentTimeMillis();
         responseTimes.add(new ResponseTimeEntry("goto:homepage", end - start));
+
+        TimeUnit.SECONDS.sleep(10);
 
         start = System.currentTimeMillis();
         driver.findElement(By.id("nav-forumlist-link")).click();
         end = System.currentTimeMillis();
         responseTimes.add(new ResponseTimeEntry("goto:forumList", end - start));
 
+        TimeUnit.SECONDS.sleep(10);
+
         start = System.currentTimeMillis();
         driver.findElement(By.id("nav-profile-link")).click();
         end = System.currentTimeMillis();
         responseTimes.add(new ResponseTimeEntry("goto:profile", end - start));
+
+        TimeUnit.SECONDS.sleep(10);
 
         start = System.currentTimeMillis();
         driver.findElement(By.id("global-search-frm:search-btn")).click();
         end = System.currentTimeMillis();
         responseTimes.add(new ResponseTimeEntry("action:search", end - start));
 
+        TimeUnit.SECONDS.sleep(10);
+
         start = System.currentTimeMillis();
         driver.findElement(By.id("nav-profile-link")).click();
         end = System.currentTimeMillis();
         responseTimes.add(new ResponseTimeEntry("goto:profile", end - start));
+
+        TimeUnit.SECONDS.sleep(10);
 
         js.executeScript("window.scroll(0, document.documentElement.offsetHeight);");
         driver.findElement(By.id("edit-profile-form:employer-itxt")).click();
@@ -128,6 +147,8 @@ public class UserRegistersClicksRandomlyAndDeletesHimself implements Callable<Li
         driver.findElement(By.id("edit-profile-form:save-cbtn")).click();
         end = System.currentTimeMillis();
         responseTimes.add(new ResponseTimeEntry("action:profileSave", end - start));
+
+        TimeUnit.SECONDS.sleep(10);
 
         driver.findElement(By.id("delete-profile-form:delete-cbtn")).click();
 
