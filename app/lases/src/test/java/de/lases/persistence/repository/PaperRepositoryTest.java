@@ -246,13 +246,21 @@ class PaperRepositoryTest {
 
     @Test
     void testChangeNotFoundPaper() throws DataNotWrittenException, NotFoundException {
-        Transaction transaction = new Transaction();
         Paper notFoundPaper = new Paper();
-        notFoundPaper.setSubmissionId(10000000);
-        notFoundPaper.setVersionNumber(1000);
+        notFoundPaper.setSubmissionId(-10000000);
+        notFoundPaper.setVersionNumber(-1000);
 
         assertThrows(NotFoundException.class, () -> {PaperRepository.change(notFoundPaper, transaction);});
-        transaction.abort();
+    }
+
+    @Test
+    void testChangePaperNoSubmissionId() {
+        Paper paper = new Paper();
+        paper.setVersionNumber(1);
+        paper.setVisible(true);
+
+        Transaction transaction = new Transaction();
+        assertThrows(InvalidFieldsException.class, () -> PaperRepository.change(paper, transaction));
     }
 
     /**
