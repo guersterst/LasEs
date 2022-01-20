@@ -245,6 +245,14 @@ class PaperRepositoryTest {
     }
 
     @Test
+    void testChangePaperWithoutChange() throws DataNotWrittenException, NotFoundException {
+        PaperRepository.change(paper2, transaction);
+        Paper gottenPaper = PaperRepository.get(paper2, transaction);
+
+        assertEquals(paper2, gottenPaper);
+    }
+
+    @Test
     void testChangeNotFoundPaper() throws DataNotWrittenException, NotFoundException {
         Paper notFoundPaper = new Paper();
         notFoundPaper.setSubmissionId(-10000000);
