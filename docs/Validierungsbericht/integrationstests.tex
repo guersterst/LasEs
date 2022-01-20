@@ -25,6 +25,8 @@ den korrekten Ablauf sicherzustellen.
 	Dokumentation spärlich ist.
 \end{itemize}
 
+\localauthor{Stefanie Gürster}
+
 \begin{table}[H]
 	\centering
 	\begin{tabular}{m{1.2cm}|m{3cm}|m{3.5cm}|m{3.5cm}|l}
@@ -36,14 +38,10 @@ den korrekten Ablauf sicherzustellen.
 		/T030/ & Einreichungsseite eines bestimmten Forums. & - & - & Johann Schicho \\\midrule
 		/T040/ & Hochladen eines Papers. & - & - & Johann Schicho \\\midrule
 		/T045/ & Invalide Daten bei Einreichung. & Co-Autoren werden zunächst unabhängig in deine Liste eingefügt. Dabei wird bereits geprüft, ob die Daten valide sind. Erst über den Submitbutton werden die Co-Autoren tatsächlich hinzugefügt. & - & Johann Schicho \\\midrule
-		/T050/ & Submission einreichen. & - & - & Johann Schicho \\\midrule
+		/T050/ & Submission einreichen. & - & Die Transaktion eine Submission einzureichen war zuvor abhängig, ob die jeweiligen E-Mails gesendet werden konnten. War dies nicht der Falle, so wurde die Transaktion abgebrochen. & Johann Schicho \\\midrule
 		/T060/ & Logout. & Der Logout-Button ist nun direkt erreichbar. & - & Johann Schicho \\\midrule
 		/T080/ & Hinzufügen eines Gutachters. & - & - & Stefanie Gürster \\\midrule
-		/T085/ & Gutachten annehmen. & Ein Gutachten wird nun über einen Button auf der jeweiligen Einreichungsseite angenommen oder abgelehnt. & - & Johann Schicho \\\midrule
-		/T090/ & Gutachten hochladen. & - & - & Johann Schicho \\\midrule
-		/T100/ & Gutachten freischalten. & - & - & Johann Schicho \\\midrule
-		/T110/ & Anonymer Nutzer. & - & - & Johann Schicho \\\midrule
-		
+					
 		
 	\end{tabular}
 \end{table}
@@ -53,11 +51,15 @@ den korrekten Ablauf sicherzustellen.
 	\begin{tabular}{m{1.2cm}|m{3cm}|m{3.5cm}|m{3.5cm}|l}
 		\toprule
 		\textbf{Test} & \textbf{Beschreibung} & \textbf{Änderungen} & \textbf{Bugfixes} & \textbf{Zuständigkeit} \\\midrule
+		/T085/ & Gutachten annehmen. & Ein Gutachten wird nun über einen Button auf der jeweiligen Einreichungsseite angenommen oder abgelehnt. & - & Johann Schicho \\\midrule
+		/T090/ & Gutachten hochladen. & - & - & Johann Schicho \\\midrule
+		/T100/ & Gutachten freischalten. & - & - & Johann Schicho \\\midrule
+		/T110/ & Anonymer Nutzer. & - & - & Johann Schicho \\\midrule
 		/T120/ & Registrierung. & - & - & Johann Schicho \\\midrule
 		/T130/ & Verifizierung & - & - & Johann Schicho \\\midrule
 		/T140/ & Neuer Nutzer ist bereits Co-Autor. & - & - & Johann Schicho \\\midrule
 		/T150/ & Download eines Gutachtens. & - & - & Johann Schicho \\\midrule
-		/T160/ & Löschen des eigenen Accounts. & - & - & Johann Schicho \\\midrule
+		/T160/ & Löschen des eigenen Accounts. & - & Nach dem Löschen des Accounts wurde die Session nicht beendet. & Johann Schicho \\\midrule
 		/T170/ & Überprüfe kaskadierendes Löschen. & Neu. & - & Johann Schicho \\\midrule
 		/T200/ & Fehlerhafter Zugriff. & - & - & Stefanie Gürster \\\midrule
 		/T210/ & Illegaler Zugriff. & Hier wird ebenso auf eine 404-Fehlerseite weitergeleitet, um so wenig wie möglich Informationen nach außen zu geben. & - & Stefanie Gürster \\\midrule
