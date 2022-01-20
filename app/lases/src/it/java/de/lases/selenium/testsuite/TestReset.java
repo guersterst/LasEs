@@ -30,8 +30,8 @@ public class TestReset {
     }
 
     @Test()
-    @DisplayName("removeForum")
-    void testRemoveForum() {
+    @DisplayName("/T1000/")
+    void testRemoveAll() {
         webDriver.get(WebDriverFactory.LOCALHOST_URL);
 
         // login as admin.

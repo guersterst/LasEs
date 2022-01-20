@@ -1,1 +1,62 @@
 \localauthor{Stefanie Gürster, Johann Schicho}
+
+Wir verwenden das \emph{Selenium Framework} um mehrere Nutzerabläufe im Webbrowser zu automatisieren.
+Dabei übernimmt ein Programm den Browser und navigiert anhand der \emph{ID}
+der Webelemente. Dabei wird dann gegen die angezeigten Meldungen getestet, um
+den korrekten Ablauf sicherzustellen.
+
+\subsection{Probleme zu Beginn}
+\localauthor{Johann Schicho}
+
+\begin{itemize}
+	\item \textbf{Verwendung von \emph{IDs} in JSF-Komponenten.} Bereits während der
+	Implementierung wurden überall, nach Definition der Feinspezifikation, IDs in den \emph{Facelets} verwendet.
+
+	Allerdings wurde übersehen, dass auch \emph{Forms} und \emph{Composite Components} immer eigene IDs benötigen, da ansonsten JSF diese dynamisch
+	generiert. Die dynamisch generierten IDs können sich bei jedem \emph{Render Vorgang} wieder ändern und erlauben damit also leider keine Identifikation.\newline
+	Es wurden an allen Stellen, an denen die IDs vergessen wurden, diese noch eingefügt.
+
+	\item \textbf{Testsuites mit JUnit5.} Testsuite erlauben eine Zusammenfassung von mehreren Tests in ein Gesamtpaket. Das ist eine wichtige
+	Anforderung für unsere \emph{Integration Tests}, da diese von einander abhängig sind, also eine Reihenfolge festgelegt werden muss.
+
+	JUnit5 besaß bis zu Release 5.8\footnote{\url{https://junit.org/junit5/docs/5.8.0/release-notes/}}
+	am 12. September 2021 keine Möglichkeiten für Test Suites. Bisher waren immer Abhängigkeiten zu Junit4 nötig, um diese
+	Funktionalität in JUnit5 zu verwenden. Unsere Testsuite benutzt die neue
+	\emph{@Suite Annotation} von JUnit5. Anfangs gab es damit Startschwierigkeiten, da das Feature sehr neu ist und die offizielle
+	Dokumentation spärlich ist.
+\end{itemize}
+
+\subsection{Testfälle}
+\localauthor{Stefanie Gürster}
+
+Die Tests sind aufeinander aufbauend und werden aufsteigend nach ihrer
+Testnummer durchgeführt.
+
+
+	\begin{longtable}{|m{1.2cm}|m{3cm}|m{3.5cm}|m{3.5cm}|l|}
+		\hline
+		\textbf{Test} & \textbf{Beschreibung} & \textbf{Änderungen} & \textbf{Bugfixes} & \textbf{Zuständigkeit} \\\hline
+		/T001/ & Setup. Erstellen der initialen Nutzerdaten. & - & - & Stefanie Gürster \\\hline
+		/T010/ & Erstellen eines neuen Forums. & Zur Deadline ist nun auch eine Uhrzeit angegeben. & - & Stefanie Gürster \\\hline
+		/T020/ & Navigation zu einem Forum über Suche. & - & - & Johann Schicho \\\hline
+		/T030/ & Einreichungsseite eines bestimmten Forums. & - & - & Johann Schicho \\\hline
+		/T040/ & Hochladen eines Papers. & - & - & Johann Schicho \\\hline
+		/T045/ & Invalide Daten bei Einreichung. & Co-Autoren werden zunächst unabhängig in deine Liste eingefügt. Dabei wird bereits geprüft, ob die Daten valide sind. Erst über den Submitbutton werden die Co-Autoren tatsächlich hinzugefügt. & - & Johann Schicho \\\hline
+		/T050/ & Submission einreichen. & - & Die Transaktion eine Submission einzureichen war zuvor abhängig, ob die jeweiligen E-Mails gesendet werden konnten. War dies nicht der Fall, so wurde die Transaktion abgebrochen. & Johann Schicho \\\hline
+		/T060/ & Logout. & Der Logout-Button ist nun direkt erreichbar. & - & Johann Schicho \\\hline
+		/T080/ & Hinzufügen eines Gutachters. & - & War die Koautorrelation in der Datenbank leer, konnte nicht auf die Einreichung zugegriffen werden. & Stefanie Gürster \\\hline
+		/T085/ & Gutachten annehmen. & Ein Gutachten wird nun über einen Button auf der jeweiligen Einreichungsseite angenommen oder abgelehnt. & - & Stefanie Gürster \\\hline
+		/T090/ & Gutachten hochladen. & - & - & Stefanie Gürster \\\hline
+		/T100/ & Gutachten freischalten. & - & - & Johann Schicho \\\hline
+		/T110/ & Anonymer Nutzer. & - & - & Johann Schicho \\\hline
+		/T120/ & Registrierung. & - & - & Johann Schicho \\\hline
+		/T130/ & Verifizierung & - & - & Johann Schicho \\\hline
+		/T140/ & Neuer Nutzer ist bereits Co-Autor. & - & - & Johann Schicho \\\hline
+		/T150/ & Download eines Gutachtens. & Selenium kann keine Downloads durchführen. Es wird nur überprüft, ob ein Download möglich ist. & - & Johann Schicho \\\hline
+		/T160/ & Löschen des eigenen Accounts. & - & Nach dem Löschen des Accounts wurde die Session nicht beendet. & Johann Schicho \\\hline
+		/T170/ & Überprüfe kaskadierendes Löschen. & Neu. Die Überprüfung wurde aus /T160/ in einen eigenen Test heraus getrennt. & - & Johann Schicho \\\hline
+		/T200/ & Fehlerhafter Zugriff. & - & - & Stefanie Gürster \\\hline
+		/T210/ & Illegaler Zugriff. & Hier wird ebenso auf eine 404-Fehlerseite weitergeleitet, um so wenig wie möglich Informationen nach außen zu geben. & - & Stefanie Gürster \\\hline
+		/T1000/ & Reset. Löschen der erstellten Daten. & - & - & Stefanie Gürster \\\hline
+	\end{longtable}
+
