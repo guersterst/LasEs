@@ -252,6 +252,8 @@ public class ScientificForumRepository {
 
             if (TransientSQLExceptionChecker.isTransient(ex.getSQLState())) {
                 throw new DataNotWrittenException("The forum could not be changed", ex);
+            } else if (ex.getSQLState().equals(TransientSQLExceptionChecker.UNIQUE_VIOLATION)) {
+                throw new KeyExistsException("The name: " + scientificForum.getName() + " already exists", ex);
             } else {
                 transaction.abort();
                 throw new DatasourceQueryFailedException("A datasource exception"
@@ -383,9 +385,7 @@ public class ScientificForumRepository {
         sb.append("""
                 FROM scientific_forum f
                 """).append("\n");
-        if (!doCount) {
-            sb.append("WHERE").append("\n");
-        }
+        sb.append("WHERE").append("\n");
 
         boolean hasPriorCond = false;
         if (isFilled(params.getFilterColumns().get("name"))) {
@@ -414,21 +414,19 @@ public class ScientificForumRepository {
             sb = newSb;
         }
 
+        // Filter according to global search word.
+        if (!"".equals(params.getGlobalSearchWord())) {
+            if (hasPriorCond) {
+                sb.append(" AND");
+            }
+            sb.append(" (");
+            sb.append(" f.name ILIKE ?\n");
+            sb.append(" OR f.description ILIKE ?\n");
+            sb.append(")\n");
+        }
 
         // Sort according to sort column parameters
         if (!doCount) {
-
-            // Filter according to global search word.
-            if (!"".equals(params.getGlobalSearchWord())) {
-                if (hasPriorCond) {
-                    sb.append(" AND");
-                }
-                sb.append(" (");
-                sb.append(" f.name ILIKE ?\n");
-                sb.append(" OR f.description ILIKE ?\n");
-                sb.append(")\n");
-            }
-
             if (isFilled(params.getSortColumn())) {
                 if (params.getSortColumn().equals("name")) {
                     sb.append(" ORDER BY f.name");
@@ -466,9 +464,21 @@ public class ScientificForumRepository {
         ResultSet resultSet;
 
         try (PreparedStatement ps = connection.prepareStatement(getStatementForumList(resultListParameters, true))) {
+            int i = 1;
             if (isFilled(resultListParameters.getFilterColumns().get("name"))) {
-                ps.setString(1, "%" + resultListParameters.getFilterColumns().get("name") + "%");
+                ps.setString(i, "%" + resultListParameters.getFilterColumns().get("name") + "%");
+                i++;
+
             }
+
+            // Global Search Word
+            ps.setString(i, "%"
+                    + Objects.requireNonNullElse(resultListParameters.getGlobalSearchWord(), "") + "%");
+
+            i++;
+            ps.setString(i, "%"
+                    + Objects.requireNonNullElse(resultListParameters.getGlobalSearchWord(), "") + "%");
+
             resultSet = ps.executeQuery();
 
             if (resultSet.next()) {

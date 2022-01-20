@@ -411,7 +411,6 @@ public class SubmissionService implements Serializable {
 
                 Transaction transInform = new Transaction();
                 informAboutState(transInform, newSubmission, subject, body);
-                transInform.commit();
 
                 List<User> reviewerList = getReviewerList(newSubmission);
 
