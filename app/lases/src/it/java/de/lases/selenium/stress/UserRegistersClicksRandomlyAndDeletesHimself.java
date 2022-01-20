@@ -91,8 +91,8 @@ public class UserRegistersClicksRandomlyAndDeletesHimself implements Callable<Li
         TimeUnit.SECONDS.sleep(10);
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(9));
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".alert-info:nth-child(7)")));
-        String url = driver.findElement(By.cssSelector(".alert-info:nth-child(7)")).getText();
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//li[contains(text(), 'verification.xhtml')]")));
+        String url = driver.findElement(By.xpath("//li[contains(text(), 'verification.xhtml')]")).getText();
 
         start = System.currentTimeMillis();
         driver.get(url);
