@@ -810,12 +810,17 @@ public class UserRepository {
                         """
                                 SELECT DISTINCT u.*
                                 FROM "user" u
-                                         JOIN submission s ON u.id = s.author_id
-                                         LEFT JOIN co_authored c ON u.id = c.user_id AND s.id = c.submission_id
-                                WHERE s.id = ?
+                                JOIN submission s1 ON u.id = s1.author_id
+                                WHERE s1.id = ?
+                                UNION
+                                SELECT DISTINCT u.*
+                                FROM "user" u, co_authored c, submission s2
+                                WHERE u.id = c.user_id AND c.submission_id = s2.id
+                                AND s2.id = ?
                                 """
                 );
                 ps.setInt(1, submissionId);
+                ps.setInt(2, submissionId);
                 ResultSet rs = ps.executeQuery();
 
                 while (rs.next()) {

@@ -500,7 +500,7 @@ public class SubmissionBacking implements Serializable {
      * @return Go to the homepage.
      */
     public String deleteSubmission() {
-        if (isViewerSubmitter() || sessionInformation.getUser().isAdmin()) {
+        if (isViewerSubmitter() || sessionInformation.getUser().isAdmin() || loggedInUserIsEditor()) {
             submissionService.remove(submission);
             return "/views/authenticated/homepage";
         }

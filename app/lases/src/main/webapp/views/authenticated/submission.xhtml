@@ -47,7 +47,7 @@
                                             <h:commandButton styleClass="btn btn-secondary" id="delete-sub-cbtn"
                                                              title="#{help.deleteSubmission}"
                                                              value="#{labels.deleteButton}" onclick="PF('dlg').show()"
-                                                             rendered="#{submissionBacking.isViewerSubmitter() || submissionBacking.admin}"/>
+                                                             rendered="#{submissionBacking.isViewerSubmitter() || submissionBacking.admin || submissionBacking.loggedInUserIsEditor()}"/>
                                             <p:dialog id="delete-sub-dlg" widgetVar="dlg">
                                                 <div class="text-center">
                                                     <h:outputText id="delete-warning-otxt"
@@ -58,7 +58,7 @@
                                                     <h:form>
                                                         <h:commandButton styleClass="btn btn-primary"
                                                                          id="agree-delete-cbtn"
-                                                                         value="#{labels.agreeButton}"
+                                                                         value="#{labels.agreeButton}" title="#{help.deleteSubmission}"
                                                                          action="#{submissionBacking.deleteSubmission()}"/>
                                                     </h:form>
                                                 </div>
@@ -89,7 +89,7 @@
                                                 <div class="form-group">
                                                     <h:inputFile id="upload-revision-ifile"
                                                                  value="#{submissionBacking.uploadedRevisionPDF}"
-                                                                 required="true"
+                                                                 required="true" title="#{help.uploadPaper}"
                                                                  requiredMessage="#{message.inputFile}"
                                                                  rendered="#{submissionBacking.isViewerSubmitter()}"
                                                                  styleClass="form-control">
@@ -226,7 +226,7 @@
 
                                         <!--Release state-->
                                         <h:column
-                                                rendered="#{submissionBacking.loggedInUserIsEditor() || submissionBacking.isViewerSubmitter()}">
+                                                rendered="#{submissionBacking.loggedInUserIsEditor() || submissionBacking.isViewerSubmitter() || submissionBacking.admin}">
                                             <f:facet name="header">
                                                 <div class="input-group">
                                                     <h:outputText id="state-col" value="#{labels.stateCol}"
@@ -261,7 +261,7 @@
 
                         <div id="review-request" style="margin-top: 1cm">
                             <div class="card">
-                                <h:form rendered="#{submissionBacking.loggedInUserIsReviewer()}">
+                                <h:form id="review-request-frm" rendered="#{submissionBacking.loggedInUserIsReviewer()}">
                                     <div class="btn-group-justified">
                                         <h:panelGroup id="request-box" layout="block"
                                                       rendered="#{submissionBacking.loggedInUserHasPendingReviewRequest()}">
@@ -297,7 +297,7 @@
                                     <h:outputText id="review-lbl" value="#{labels.reviews}" styleClass="h2"/>
                                 </div>
                                 <div class="card-body" style="padding: 10px 10px 10px 10px">
-                                    <h:form>
+                                    <h:form id="review-pg-frm">
                                         <div class="btn-group">
                                             <div class="input-group">
                                                 <h:outputLabel for="recommended-review-slctom"

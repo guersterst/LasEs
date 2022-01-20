@@ -63,7 +63,7 @@
                                     <h:outputText id="header-name" value="#{labels.name}"/>
                                 </f:facet>
                                 <h:link id="reviewer-name-lnk"
-                                        value="#{user.firstName.concat(' ').concat(user.lastName).concat(': ')}"
+                                        value="#{user.firstName.concat(' ').concat(user.lastName)}"
                                         outcome="/views/authenticated/profile"
                                         includeViewParams="true" title="#{help.directToProfile}">
                                     <f:param value="#{user.id}" name="id"/>
@@ -145,7 +145,7 @@
                 <div class="btn-group">
                     <h:commandButton id="save-editor-cbtn" value="#{labels.saveButton}"
                                      action="#{toolbarBacking.chooseNewManagingEditor}"
-                                     styleClass="btn btn-primary"
+                                     styleClass="btn btn-primary" title="#{help.saveChanges}"
                                      disabled="#{toolbarBacking.accepted || toolbarBacking.rejected}"/>
                 </div>
             </div>

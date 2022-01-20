@@ -1,6 +1,7 @@
 package de.lases.business.service;
 
 import de.lases.business.util.EmailUtil;
+import de.lases.control.internal.SessionInformation;
 import de.lases.global.transport.*;
 
 import de.lases.persistence.exception.*;
@@ -49,6 +50,9 @@ public class SubmissionService implements Serializable {
     @Inject
     private FacesContext facesContext;
 
+    @Inject
+    private SessionInformation sessionInformation;
+
 
     /**
      * Gets a submission.
@@ -90,9 +94,8 @@ public class SubmissionService implements Serializable {
      * @param submission The submission's data in a {@link Submission}.
      *                   Must contain a valid forum's id, authorId, editorId, state and title.
      * @param coAuthors  The desired co-athors as proper {@link User}-DTOs with an email-address.
-     * @param paper The first paper of this new submission.
-     * @param file File DTO for the submitted paper.
-     *
+     * @param paper      The first paper of this new submission.
+     * @param file       File DTO for the submitted paper.
      * @return The submission that was added, but filled with its id.
      * @author Sebastian Vogt
      */
@@ -144,19 +147,6 @@ public class SubmissionService implements Serializable {
             }
         }
 
-        if (sendEmailsForAddSubmission(submission, transaction, coAuthorsFilled)) {
-            transaction.commit();
-            return submission;
-        } else {
-            transaction.abort();
-            return null;
-        }
-    }
-
-    /**
-     * @author Sebastian Vogt
-     */
-    private boolean sendEmailsForAddSubmission(Submission submission, Transaction transaction, List<User> coAuthors) {
         User editor = new User();
         editor.setId(submission.getEditorId());
         try {
@@ -165,9 +155,19 @@ public class SubmissionService implements Serializable {
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString(
                     "dataNotWritten"), MessageCategory.ERROR));
             logger.log(Level.WARNING, "Editor was not found when adding a submission.");
-            return false;
+            transaction.abort();
+            return null;
         }
 
+        transaction.commit();
+        sendEmailsForAddSubmission(submission, editor, coAuthorsFilled);
+        return submission;
+    }
+
+    /**
+     * @author Sebastian Vogt
+     */
+    private void sendEmailsForAddSubmission(Submission submission, User editor, List<User> coAuthors) {
         assert editor != null;
         assert editor.getEmailAddress() != null;
 
@@ -186,7 +186,7 @@ public class SubmissionService implements Serializable {
                 EmailUtil.sendEmail(emailsCoAuthorsNotRegistered.toArray(new String[0]), null,
                         resourceBundle.getString("email.assignedCoAuthor.subject"),
                         resourceBundle.getString("email.assignedCoAuthor.body") + "\n"
-                                +  submission.getTitle() + "\n" + EmailUtil.generateLinkForEmail(facesContext,
+                                + submission.getTitle() + "\n" + EmailUtil.generateLinkForEmail(facesContext,
                                 "views/anonymous/register.xhtml"));
             }
             if (!emailsCoAuthorsRegistered.isEmpty()) {
@@ -199,13 +199,12 @@ public class SubmissionService implements Serializable {
             EmailUtil.sendEmail(new String[]{emailEditor}, null,
                     resourceBundle.getString("email.assignedEditor.subject"),
                     resourceBundle.getString("email.assignedEditor.body") + "\n" + submission.getTitle()
-                                + "\n" + EmailUtil.generateSubmissionURL(submission, facesContext));
+                            + "\n" + EmailUtil.generateSubmissionURL(submission, facesContext));
         } catch (EmailTransmissionFailedException e) {
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("emailNotSent") + " "
                     + String.join(", ", e.getInvalidAddresses()), MessageCategory.ERROR));
-            return false;
+            logger.log(Level.WARNING, "Emails not sent when adding a submission");
         }
-        return true;
     }
 
     /**
@@ -225,8 +224,12 @@ public class SubmissionService implements Serializable {
         } else {
             Transaction transaction = new Transaction();
 
+            List<User> coAuthorList = getCoAuthors(transaction, submission);
+            List<User> reviewerList = getReviewerList(submission);
+
             try {
                 SubmissionRepository.remove(submission, transaction);
+                transaction.commit();
             } catch (DataNotWrittenException e) {
 
                 uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotWritten"), MessageCategory.WARNING));
@@ -242,30 +245,43 @@ public class SubmissionService implements Serializable {
             }
 
 
-            if (submission.getEditorId() != null) {
+            User user = sessionInformation.getUser();
+
+            String subject = resourceBundle.getString("email.removeSubmission.subject");
+            String body = resourceBundle.getString("email.removeSubmission.body")
+                    .concat("\n").concat(submission.getTitle());
+
+            if (submission.getEditorId() != null && !user.getId().equals(submission.getEditorId())) {
+
                 User editor = new User();
                 editor.setId(submission.getEditorId());
 
+                Transaction trans = new Transaction();
                 try {
-                    editor = UserRepository.get(editor, transaction);
+                    editor = UserRepository.get(editor, trans);
+                    trans.commit();
                 } catch (NotFoundException e) {
                     uiMessageEvent.fire(new UIMessage(resourceBundle.getString("userNotFound"), MessageCategory.ERROR));
-                    transaction.abort();
+                    trans.abort();
                     return;
                 }
 
-                String subject = resourceBundle.getString("email.removeSubmission.subject");
-                String body = resourceBundle.getString("email.removeSubmission.body")
-                        .concat("\n").concat(submission.getTitle());
+                sendEmail(editor, subject, null, body);
 
-                if (sendEmail(editor, subject, null, body)) {
-                    transaction.commit();
-                } else {
-                    transaction.abort();
-                }
+
             } else {
-                transaction.commit();
+                User author = coAuthorList.get(0);
+                coAuthorList.remove(0);
+                List<String> emailAddress = coAuthorList.stream().map(User::getEmailAddress).toList();
+
+                sendEmail(author, subject, emailAddress.toArray(new String[0]), body);
             }
+
+            if (reviewerList != null) {
+
+                sendMultipleEmails(null, reviewerList, subject, body);
+            }
+
         }
 
     }
@@ -312,6 +328,7 @@ public class SubmissionService implements Serializable {
             try {
                 oldSubmission = SubmissionRepository.get(newSubmission, transaction);
                 SubmissionRepository.change(newSubmission, transaction);
+                transaction.commit();
             } catch (DataNotWrittenException e) {
                 uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotWritten"), MessageCategory.ERROR));
                 transaction.abort();
@@ -338,12 +355,14 @@ public class SubmissionService implements Serializable {
                 User oldEditor = new User();
                 oldEditor.setId(oldSubmission.getEditorId());
 
+                Transaction transChangeEditor = new Transaction();
                 try {
-                    newEditor = UserRepository.get(newEditor, transaction);
-                    oldEditor = UserRepository.get(oldEditor, transaction);
+                    newEditor = UserRepository.get(newEditor, transChangeEditor);
+                    oldEditor = UserRepository.get(oldEditor, transChangeEditor);
+                    transChangeEditor.commit();
                 } catch (NotFoundException e) {
                     uiMessageEvent.fire(new UIMessage(resourceBundle.getString("userNotFound"), MessageCategory.ERROR));
-                    transaction.abort();
+                    transChangeEditor.abort();
                     return false;
                 }
 
@@ -356,13 +375,7 @@ public class SubmissionService implements Serializable {
                 String bodyOldEditor = resourceBundle.getString("email.removeEditor.body")
                         .concat("\n").concat(newSubmission.getTitle());
 
-                if (sendEmail(newEditor, subjectNewEditor, null, bodyNewEditor) && sendEmail(oldEditor, subjectOldEditor, null, bodyOldEditor)) {
-                    transaction.commit();
-                    return true;
-                } else {
-                    transaction.abort();
-                    return false;
-                }
+                return sendEmail(newEditor, subjectNewEditor, null, bodyNewEditor) && sendEmail(oldEditor, subjectOldEditor, null, bodyOldEditor);
             } else if (newSubmission.getState() == SubmissionState.ACCEPTED || newSubmission.getState() == SubmissionState.REJECTED) {
 
                 // Inform submitter a co-authors about a changed submission state.
@@ -385,7 +398,10 @@ public class SubmissionService implements Serializable {
                             + url;
 
                 }
-                return informAboutState(transaction, newSubmission, subject, body);
+                Transaction transInform = new Transaction();
+                return informAboutState(transInform, newSubmission, subject, body);
+
+
             } else if (newSubmission.getState() == SubmissionState.REVISION_REQUIRED) {
 
                 String subject = resourceBundle.getString("email.requireRevision.subject");
@@ -393,15 +409,46 @@ public class SubmissionService implements Serializable {
                         + "\n" + newSubmission.getTitle() + "\n"
                         + url;
 
-                return informAboutState(transaction, newSubmission, subject, body);
+                Transaction transInform = new Transaction();
+                informAboutState(transInform, newSubmission, subject, body);
+
+                List<User> reviewerList = getReviewerList(newSubmission);
+
+                if (reviewerList == null) {
+                    return false;
+                }
+
+                String reviewerSub = resourceBundle.getString("email.requireRevisionReviewer.subject");
+                String reviewerBody = resourceBundle.getString("email.requireRevisionReviewer.body")
+                        + "\n" + newSubmission.getTitle() + "\n"
+                        + url;
+
+                return sendMultipleEmails(null, reviewerList, reviewerSub, reviewerBody);
             } else if (newSubmission.getState() == SubmissionState.SUBMITTED) {
                 uiMessageEvent.fire(new UIMessage(resourceBundle.getString("newPaper"), MessageCategory.INFO));
-                transaction.commit();
                 return true;
             }
         }
         return false;
 
+    }
+
+    private List<User> getReviewerList(Submission newSubmission) {
+        Transaction trans = new Transaction();
+        List<User> reviewerList = new ArrayList<>();
+        try {
+            reviewerList = UserRepository.getList(trans, newSubmission, Privilege.REVIEWER);
+            trans.commit();
+        } catch (NotFoundException e) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("submissionNotFound"), MessageCategory.ERROR));
+            trans.abort();
+            return null;
+        } catch (DataNotCompleteException e) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("notComplete"), MessageCategory.ERROR));
+            trans.abort();
+            return null;
+        }
+        return reviewerList;
     }
 
     private List<User> getCoAuthors(Transaction transaction, Submission submission) {
@@ -492,6 +539,8 @@ public class SubmissionService implements Serializable {
             if (reviewerList.contains(reviewer)) {
                 try {
                     ReviewedByRepository.change(reviewedBy, transaction);
+                    uiMessageEvent.fire(new UIMessage(resourceBundle.getString("changedReviewerDeadline"), MessageCategory.INFO));
+                    transaction.commit();
                 } catch (DataNotWrittenException e) {
                     transaction.abort();
                     uiMessageEvent.fire(new UIMessage(resourceBundle.getString("reviewRequestDoesNotExist"), MessageCategory.ERROR));
@@ -504,6 +553,7 @@ public class SubmissionService implements Serializable {
                     uiMessageEvent.fire(new UIMessage(resourceBundle.getString("addReviewerToSub"), MessageCategory.INFO));
                 } else {
                     uiMessageEvent.fire(new UIMessage(resourceBundle.getString("couldNotInformReviewer"), MessageCategory.WARNING));
+                    transaction.abort();
                 }
             }
         } else {
@@ -531,6 +581,7 @@ public class SubmissionService implements Serializable {
 
         try {
             SubmissionRepository.addReviewer(reviewedBy, transaction);
+            transaction.commit();
         } catch (DataNotWrittenException e) {
 
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotWritten"), MessageCategory.WARNING));
@@ -562,13 +613,7 @@ public class SubmissionService implements Serializable {
                     + EmailUtil.generateLinkForEmail(facesContext, "views/anonymous/register.xhtml\"");
         }
 
-        if (sendEmail(reviewer, subject, null, body)) {
-            transaction.commit();
-            return true;
-        } else {
-            transaction.abort();
-            return false;
-        }
+        return sendEmail(reviewer, subject, null, body);
     }
 
     private boolean sendEmail(User user, String subject, String[] cc, String body) {
@@ -593,13 +638,19 @@ public class SubmissionService implements Serializable {
     private boolean sendMultipleEmails(User user, List<User> userList, String subject, String body) {
 
         assert !userList.isEmpty();
-        assert user != null;
 
-        String userEmail = user.getEmailAddress();
+        String userEmail = "";
+        if (user != null) {
+            userEmail = user.getEmailAddress();
+        }
 
         List<String> emailAddressList = userList.stream().map(User::getEmailAddress).toList();
         try {
-            EmailUtil.sendEmail(new String[]{userEmail}, emailAddressList.toArray(new String[0]), subject, body);
+            if (user != null) {
+                EmailUtil.sendEmail(new String[]{userEmail}, emailAddressList.toArray(new String[0]), subject, body);
+            } else {
+                EmailUtil.sendEmail(emailAddressList.toArray(new String[0]), null, subject, body);
+            }
         } catch (EmailTransmissionFailedException e) {
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("emailNotSent") + " " + String.join(", ", e.getInvalidAddresses()), MessageCategory.ERROR));
             return false;
@@ -704,6 +755,7 @@ public class SubmissionService implements Serializable {
 
         try {
             ReviewedByRepository.removeReviewer(submission, reviewer, transaction);
+            transaction.commit();
         } catch (DataNotWrittenException e) {
 
             uiMessageEvent.fire(new UIMessage(resourceBundle.getString("dataNotWritten"), MessageCategory.WARNING));
@@ -722,11 +774,7 @@ public class SubmissionService implements Serializable {
         body.append(" ");
         body.append(submission.getTitle());
 
-        if (sendEmail(reviewer, subject, null, body.toString())) {
-            transaction.commit();
-        } else {
-            transaction.abort();
-        }
+        sendEmail(reviewer, subject, null, body.toString());
     }
 
     /**
