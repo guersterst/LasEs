@@ -1,0 +1,24 @@
+goto:administration, 1033, 938
+goto:newUser, 1618
+action:saveNewUser, 4820
+action:search, 1421
+action:newForumSave, 3229
+action:newSubmissionRejectRevision, 2569
+action:logOut, 1721
+action:newForumAddEditor, 1605
+action:newSubmissionSubmit, 6949
+action:login, 2215, 1440
+goto:register, 2120
+goto:homepage, 3096
+goto:forum, 5266
+goto:newForum, 3169
+action:newSubmissionRevision, 5720
+action:newSubmissionReleaseRevision, 4694
+goto:forumList, 1852
+action:forumDelete, 1851
+goto:newSubmission, 2837
+goto:profile, 3118, 2228, 1640
+callPage, 2093, 2356, 1032
+action:register, 1822
+action:profileSave, 2959
+action:profileDelete, 2355, 1025
