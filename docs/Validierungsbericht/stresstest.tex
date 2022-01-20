@@ -15,9 +15,7 @@ Wir haben uns dafür entschieden, die Messung der Antwortzeiten auf einem Rechne
 	\item Da der Messungsrechner im selben Netzwerk ist wie der Webserver, verfälscht die Internetverbindung des Messungsrechners nicht das Ergebnis.
 	\item Da der Messungsrechner und die Stressoren verschieden sind, verfälscht die Auslastung der Stressoren selbst durch die Belastungstests nicht das Messergebnis.	
 \end{itemize}
-Natürlich hat diese Entscheidung einen großen Nachteil: Die Rohdaten sind unrealistisch, da der Endnutzer über das Internet auf die Website zugreifen wird. Dem kann man entgegenwirken, in dem man auf alle Zahlen eine Schätzung der round trip Time zwischen Webserver und Client addiert.
-
-\subsubsection{Schätzung der round trip Time}
+Natürlich hat diese Entscheidung einen großen Nachteil: Die im Pflichtenheft geforderte Antwortzeit von maximal 3 Sekunden bezieht sich auf den Endnutzer, aber in den Messdaten fehlt die round trip Time zwischen dem Endnutzer und dem Universitätsnetzwerk. Es ist wohl eine sinnvolle Annahme, dass eine Verdreifachung der Messwerte diesen Effekt im Mittel ausgleicht. Also müssen wir im folgenden Überprüfen, dass unsere Messwerte unter einer Sekunde liegen.
 
 \subsubsection{Software}
 
@@ -52,7 +50,7 @@ Bei beiden Konfigurationen wurde auf den restlichen Rechnern je folgendes ausgef
 
 \subsection{Ergebnisse}
 
-Bei beiden Konfigurartionen wurden für eine Reihe verschiedener Nutzerinteraktionen Messwerte aufgezeichnet. Meistens existiert pro Nutzerinteraktion ein Messwert. Wenn zwei oder drei Messwerte existieren wurde im folgenden Balkendiagramm jeweils der größte Messwert aufgenommen. In \hyperref[fig:worst30]{Abbildung 1} findet sich das Balkendiagramm für Konfiguration 1, in \hyperref[fig:worst50]{Abbildung 2} findet sich das Balkendiagramm für Konfiguration 2.
+Bei beiden Konfigurartionen wurden für eine Reihe verschiedener Nutzerinteraktionen Messwerte aufgezeichnet. Meistens existiert pro Nutzerinteraktion ein Messwert. Wenn zwei oder drei Messwerte existieren wurde im folgenden Balkendiagramm jeweils der größte Messwert aufgenommen. Alle Messwerte werden in Millisekunden angegeben. In \hyperref[fig:worst30]{Abbildung 1} findet sich das Balkendiagramm für Konfiguration 1, in \hyperref[fig:worst50]{Abbildung 2} findet sich das Balkendiagramm für Konfiguration 2.
 
 \begin{figure}[H]
 	\includegraphics[width=\linewidth]{graphics/30worstcase.pdf}
