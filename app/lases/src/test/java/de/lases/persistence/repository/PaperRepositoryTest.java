@@ -1,10 +1,7 @@
 package de.lases.persistence.repository;
 
 import de.lases.global.transport.*;
-import de.lases.persistence.exception.DataNotCompleteException;
-import de.lases.persistence.exception.DataNotWrittenException;
-import de.lases.persistence.exception.InvalidFieldsException;
-import de.lases.persistence.exception.NotFoundException;
+import de.lases.persistence.exception.*;
 import de.lases.persistence.internal.ConfigReader;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.context.SessionScoped;
@@ -47,7 +44,11 @@ class PaperRepositoryTest {
 
     private static Paper paper1;
 
+    private static Paper paper2;
+
     private static Submission submission1;
+
+    private static Submission submission2;
 
     private static ScientificForum scientificForum1;
 
@@ -139,6 +140,27 @@ class PaperRepositoryTest {
         paper1 = new Paper();
         paper1.setSubmissionId(submission1.getId());
         paper1.setUploadTime(LocalDateTime.now());
+
+        submission2 = new Submission();
+        submission2.setAuthorId(user1.getId());
+        submission2.setScientificForumId(scientificForum1.getId());
+        submission2.setTitle("Test submission");
+        submission2.setEditorId(editor.getId());
+        submission2.setState(SubmissionState.SUBMITTED);
+        submission2.setSubmissionTime(LocalDateTime.now());
+
+        SubmissionRepository.add(submission2, transaction);
+        submission2 = SubmissionRepository.get(submission2, transaction);
+
+        Paper existingPaper = new Paper();
+        existingPaper.setSubmissionId(submission2.getId());
+        existingPaper.setUploadTime(LocalDateTime.now());
+        existingPaper.setVersionNumber(1);
+
+        PaperRepository.add(existingPaper, pdf, transaction);
+
+        paper2 = PaperRepository.get(existingPaper, transaction);
+
     }
 
     /**
@@ -185,7 +207,7 @@ class PaperRepositoryTest {
     }
 
     @Test
-    void testAddPaperNoVersionNumber() {
+    void testGetPaperNoVersionNumber() {
         Paper noVersion = new Paper();
         noVersion.setSubmissionId(submission1.getId());
         noVersion.setUploadTime(LocalDateTime.now());
@@ -195,29 +217,31 @@ class PaperRepositoryTest {
     }
 
     @Test
-    void testChange() throws SQLException, DataNotWrittenException, NotFoundException {
+    void testAddPaperNoVersion() {
+        Paper noVersion = new Paper();
+        noVersion.setSubmissionId(submission1.getId());
+        noVersion.setUploadTime(LocalDateTime.now());
+
         Transaction transaction = new Transaction();
-        Connection connection = transaction.getConnection();
-        PaperRepository.add(paperNonExistent, pdf, transaction);
+        assertThrows(DatasourceQueryFailedException.class, () -> PaperRepository.add(noVersion, pdf, transaction));
+    }
 
-        Paper changed = paperNonExistent.clone();
-        changed.setVisible(true);
+    @Test
+    void testGetPaperNotFound() {
+        Paper paper = paper2.clone();
+        paper.setVersionNumber(-30000);
 
-        PreparedStatement statement = connection.prepareStatement(
-                """
-                        UPDATE paper
-                        SET is_visible = ?
-                        WHERE version = ? AND submission_id = ?
-                        """
-        );
-        statement.setBoolean(1, changed.isVisible());
-        statement.setInt(2, changed.getVersionNumber());
-        statement.setInt(3, changed.getSubmissionId());
+        assertThrows(NotFoundException.class, () -> PaperRepository.get(paper, transaction));
+    }
 
-        PaperRepository.change(changed, transaction);
+    @Test
+    void testChangePaper() throws DataNotWrittenException, NotFoundException {
+        Paper paper = paper2.clone();
+        paper.setVisible(true);
+        PaperRepository.change(paper, transaction);
+        Paper changedPaper = PaperRepository.get(paper, transaction);
 
-        assertEquals(changed, paperNonExistent);
-        transaction.abort();
+        assertEquals(paper.isVisible(), changedPaper.isVisible());
     }
 
     @Test
