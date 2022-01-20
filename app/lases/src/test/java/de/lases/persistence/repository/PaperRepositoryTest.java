@@ -1,6 +1,7 @@
 package de.lases.persistence.repository;
 
 import de.lases.global.transport.*;
+import de.lases.persistence.exception.DataNotCompleteException;
 import de.lases.persistence.exception.DataNotWrittenException;
 import de.lases.persistence.exception.InvalidFieldsException;
 import de.lases.persistence.exception.NotFoundException;
@@ -40,6 +41,18 @@ class PaperRepositoryTest {
 
     private static FileDTO pdf;
 
+    private static Transaction transaction;
+
+    private static User user1;
+
+    private static Paper paper1;
+
+    private static Submission submission1;
+
+    private static ScientificForum scientificForum1;
+
+    private static User editor;
+
     @BeforeAll
     static void initPaper() {
         paper = new Paper();
@@ -64,7 +77,7 @@ class PaperRepositoryTest {
      * methods don't work with our weld plugin.
      */
     @BeforeEach
-    void startConnectionPool() {
+    void startConnectionPool() throws Exception {
         FileDTO file = new FileDTO();
 
         Class<PaperRepositoryTest> clazz = PaperRepositoryTest.class;
@@ -74,39 +87,74 @@ class PaperRepositoryTest {
 
         weld.select(ConfigReader.class).get().setProperties(file);
         ConnectionPool.init();
+
+        transaction = new Transaction();
+        createData();
     }
 
     @AfterEach
     void shutDownConnectionPool() {
+        transaction.abort();
         ConnectionPool.shutDown();
     }
 
+    void createData() throws Exception{
+        user1 = new User();
+        user1.setFirstName("Hans");
+        user1.setLastName("Mayer");
+        user1.setEmailAddress("hans.mayer@example.com");
+        user1.setAdmin(false);
+
+        UserRepository.add(user1, transaction);
+        user1 = UserRepository.get(user1, transaction);
+
+        editor = new User();
+        editor.setFirstName("Hans");
+        editor.setLastName("Peter");
+        editor.setEmailAddress("hans.peter@example.com");
+        editor.setAdmin(false);
+
+        UserRepository.add(editor, transaction);
+        editor = UserRepository.get(editor, transaction);
+
+        scientificForum1 = new ScientificForum();
+        scientificForum1.setName("Forum1");
+        scientificForum1.setDescription("great forum");
+        scientificForum1.setReviewManual("just review");
+
+        scientificForum1 = ScientificForumRepository.add(scientificForum1,transaction);
+        ScientificForumRepository.addEditor(scientificForum1, editor, transaction);
+
+        submission1 = new Submission();
+        submission1.setAuthorId(user1.getId());
+        submission1.setScientificForumId(scientificForum1.getId());
+        submission1.setTitle("Test submission");
+        submission1.setEditorId(editor.getId());
+        submission1.setState(SubmissionState.SUBMITTED);
+        submission1.setSubmissionTime(LocalDateTime.now());
+
+        SubmissionRepository.add(submission1, transaction);
+        submission1 = SubmissionRepository.get(submission1, transaction);
+
+        paper1 = new Paper();
+        paper1.setSubmissionId(submission1.getId());
+        paper1.setUploadTime(LocalDateTime.now());
+    }
+
+    /**
+     * @author Stefanie Gürster
+     */
     @Test
-    void testGetPaper() throws SQLException, NotFoundException, DataNotWrittenException {
-        Transaction transaction = new Transaction();
+    void testGetAndAddPaper() throws DataNotWrittenException, NotFoundException, DataNotCompleteException {
+        paper1.setVersionNumber(1);
+        PaperRepository.add(paper1, pdf, transaction);
 
-        Connection connection = transaction.getConnection();
-        PreparedStatement statement = connection.prepareStatement(
-                """
-                        SELECT * FROM paper
-                        WHERE  submission_id = ? AND version = ?
-                        """
+        Paper getPaper = PaperRepository.get(paper1, transaction);
+
+        assertAll(
+                () -> assertEquals(paper1.getSubmissionId(), getPaper.getSubmissionId()),
+                () -> assertEquals(1, getPaper.getVersionNumber())
         );
-        statement.setInt(1, paper.getSubmissionId());
-        statement.setInt(2, paper.getVersionNumber());
-
-        ResultSet resultSet = statement.executeQuery();
-
-        Paper resultPaper = new Paper();
-        if (resultSet.next()) {
-            resultPaper.setSubmissionId(resultSet.getInt("submission_id"));
-            resultPaper.setVisible(resultSet.getBoolean("is_visible"));
-            resultPaper.setVersionNumber(resultSet.getInt("version"));
-            resultPaper.setUploadTime(resultSet.getTimestamp("timestamp_upload").toLocalDateTime());
-        }
-
-        assertEquals(resultPaper, PaperRepository.get(resultPaper, transaction));
-        transaction.abort();
     }
 
     @Test
