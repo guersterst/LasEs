@@ -22,8 +22,10 @@ public class InjectionTest {
 
     private final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
-    private static final String ADMIN_EMAIL = "thomas.kirz2+lasesadmin@gmail.com";
-    private static final String ADMIN_PASSWORD = "Password1!";
+    private static final String ORIGINAL_ADMIN_EMAIL = "admin@example.com";
+    private static final String ORIGINAL_ADMIN_PASSWORD = "admin1!ADMIN";
+    private static final String TEST_ADMIN_EMAIL = "thomas.kirz2+lasesadmin@gmail.com";
+    private static final String TEST_ADMIN_PASSWORD = "Password1!";
 
     private static final String TEST_TITLE = "\";DROP TABLE user;--";
 
@@ -33,7 +35,7 @@ public class InjectionTest {
     @Test
     public void injectionTest() {
         // Create Security forum
-        createForum();
+        createForumAndAddAdmin();
 
         driver.get(WebDriverFactory.LOCALHOST_URL);
 
@@ -112,17 +114,46 @@ public class InjectionTest {
         // Delete Forum
         wait.until(ExpectedConditions.elementToBeClickable(By.id("login-form:email-itxt")));
         deleteForum();
+
+        // Delete Admin
+        deleteAdmin();
     }
 
-    private void createForum() {
+    private void createForumAndAddAdmin() {
         driver.get(WebDriverFactory.LOCALHOST_URL);
 
+        // Login as original admin
         WebElement emailBox = driver.findElement(By.id("login-form:email-itxt"));
         WebElement passwordBox = driver.findElement(By.id("login-form:password-iscrt"));
+        emailBox.sendKeys(ORIGINAL_ADMIN_EMAIL);
+        passwordBox.sendKeys(ORIGINAL_ADMIN_PASSWORD);
+        driver.findElement(By.id("login-form:login-cbtn")).click();
 
-        emailBox.sendKeys(ADMIN_EMAIL);
-        passwordBox.sendKeys(ADMIN_PASSWORD);
+        // Create second admin
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-administration-link")));
+        driver.findElement(By.id("nav-administration-link")).click();
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("new-user-link")));
+        driver.findElement(By.id("new-user-link")).click();
+        driver.findElement(By.id("register-frm:password-iscrt")).click();
+        driver.findElement(By.id("register-frm:password-iscrt")).clear();
+        driver.findElement(By.id("register-frm:password-iscrt")).sendKeys("Password1!");
+        driver.findElement(By.id("register-frm:first-name-itxt")).click();
+        driver.findElement(By.id("register-frm:first-name-itxt")).clear();
+        driver.findElement(By.id("register-frm:first-name-itxt")).sendKeys("Thomas");
+        driver.findElement(By.id("register-frm:last-name-itxt")).click();
+        driver.findElement(By.id("register-frm:last-name-itxt")).clear();
+        driver.findElement(By.id("register-frm:last-name-itxt")).sendKeys("James II");
+        driver.findElement(By.id("register-frm:email-itxt")).click();
+        driver.findElement(By.id("register-frm:email-itxt")).clear();
+        driver.findElement(By.id("register-frm:email-itxt")).sendKeys(TEST_ADMIN_EMAIL);
+        driver.findElement(By.id("register-frm:is-admin-cbx")).click();
+        driver.findElement(By.id("register-frm:save-btn")).click();
 
+        // Login as new admin
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("logout-frm:logout-cbtn")));
+        driver.findElement(By.id("logout-frm:logout-cbtn")).click();
+        driver.findElement(By.id("login-form:email-itxt")).sendKeys(TEST_ADMIN_EMAIL);
+        driver.findElement(By.id("login-form:password-iscrt")).sendKeys(TEST_ADMIN_PASSWORD);
         driver.findElement(By.id("login-form:login-cbtn")).click();
 
         driver.findElement(By.id("nav-forumlist-link")).click();
@@ -131,7 +162,7 @@ public class InjectionTest {
 
         // add editor.
         WebElement emailField = driver.findElement(By.id("add-editors-form:email-editor-itxt"));
-        emailField.sendKeys(ADMIN_EMAIL);
+        emailField.sendKeys(TEST_ADMIN_EMAIL);
         driver.findElement(By.id("add-editors-form:add-editor-btn")).click();
 
 
@@ -143,7 +174,6 @@ public class InjectionTest {
         actions.perform();
 
         // enter the rest of the data.
-
         driver.findElement(By.id("create-forum-form:forum-name-itxt")).sendKeys("Security Conference");
         driver.findElement(By.id("create-forum-form:deadline-itxt")).sendKeys("30.12.2099, 22:00:00");
         driver.findElement(By.id("create-forum-form:url-itxt")).sendKeys("https://security.las.es/");
@@ -160,8 +190,8 @@ public class InjectionTest {
         WebElement emailBox = driver.findElement(By.id("login-form:email-itxt"));
         WebElement passwordBox = driver.findElement(By.id("login-form:password-iscrt"));
 
-        emailBox.sendKeys(ADMIN_EMAIL);
-        passwordBox.sendKeys(ADMIN_PASSWORD);
+        emailBox.sendKeys(TEST_ADMIN_EMAIL);
+        passwordBox.sendKeys(TEST_ADMIN_PASSWORD);
 
         driver.findElement(By.id("login-form:login-cbtn")).click();
 
@@ -175,6 +205,29 @@ public class InjectionTest {
 
         wait.until(ExpectedConditions.elementToBeClickable(By.id("logout-frm:logout-cbtn")));
         driver.findElement(By.id("logout-frm:logout-cbtn")).click();
+    }
+
+    private void deleteAdmin() {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+
+        // Log in
+        driver.get(WebDriverFactory.LOCALHOST_URL);
+        WebElement emailBox = driver.findElement(By.id("login-form:email-itxt"));
+        WebElement passwordBox = driver.findElement(By.id("login-form:password-iscrt"));
+
+        emailBox.sendKeys(TEST_ADMIN_EMAIL);
+        passwordBox.sendKeys(TEST_ADMIN_PASSWORD);
+
+        driver.findElement(By.id("login-form:login-cbtn")).click();
+
+        driver.findElement(By.linkText("Profil")).click();
+
+        // Scroll to and click on 'Delete' button
+        WebElement deleteButton = driver.findElement(By.id("delete-profile-form:delete-cbtn"));
+        js.executeScript("arguments[0].scrollIntoView(true)", deleteButton);
+        deleteButton.click();
+        driver.findElement(By.id("delete-profile-form:delete-really-cbtn")).click();
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("login-form:email-itxt")));
     }
 
     @AfterEach

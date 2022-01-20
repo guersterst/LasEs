@@ -8,7 +8,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,14 +17,11 @@ public class SessionFixationTest {
 
     private WebDriver driver;
 
-    private static final String ADMIN_EMAIL = "thomas.kirz2+lasesadmin@gmail.com";
-    private static final String ADMIN_PASSWORD = "Password1!";
+    private static final String ADMIN_EMAIL = "admin@example.com";
+    private static final String ADMIN_PASSWORD = "admin1!ADMIN";
 
-    private static final String SESSION_ID_IDENTIFIER = "jsessionid";
+    private static final String SESSION_ID_IDENTIFIER = "sessionid";
 
-    /**
-     * Prerequisite: Admin 'thomas.kirz2+lasesadmin@gmail.com' w/ Password 'Password1!' exists in the database.
-     */
     @BeforeEach
     public void setUp() {
         driver = WebDriverFactory.createFirefoxWebDriverNoCookies();
