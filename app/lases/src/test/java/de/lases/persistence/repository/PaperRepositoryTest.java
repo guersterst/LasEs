@@ -16,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import java.io.InputStream;
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -443,20 +444,19 @@ class PaperRepositoryTest {
     }
 
     @Test
-    void testGetListNotFound() {
-        Transaction transaction = new Transaction();
+    void testGetListNotFound() throws DataNotCompleteException, NotFoundException, DataNotWrittenException {
         Submission submission = new Submission();
-        submission.setId(9990000);
+        submission.setId(-999);
 
-        User user = new User();
-        user.setId(99999999);
+        Paper paper = paper2.clone();
+        paper.setSubmissionId(-999);
+        PaperRepository.add(paper2, pdf, transaction);
 
-        ResultListParameters resultListParameters = new ResultListParameters();
+        resultListParameters.setSortColumn("");
 
-        assertThrows(NotFoundException.class, () -> {
-            PaperRepository.getList(submission, transaction, user, resultListParameters);
-        });
-        transaction.abort();
+
+        assertThrows(NotFoundException.class, () -> PaperRepository.getList(submission, transaction, user1, resultListParameters));
+
     }
 
 }
