@@ -58,7 +58,7 @@
                                                     <h:form>
                                                         <h:commandButton styleClass="btn btn-primary"
                                                                          id="agree-delete-cbtn"
-                                                                         value="#{labels.agreeButton}"
+                                                                         value="#{labels.agreeButton}" title="#{help.deleteSubmission}"
                                                                          action="#{submissionBacking.deleteSubmission()}"/>
                                                     </h:form>
                                                 </div>
@@ -89,7 +89,7 @@
                                                 <div class="form-group">
                                                     <h:inputFile id="upload-revision-ifile"
                                                                  value="#{submissionBacking.uploadedRevisionPDF}"
-                                                                 required="true"
+                                                                 required="true" title="#{help.uploadPaper}"
                                                                  requiredMessage="#{message.inputFile}"
                                                                  rendered="#{submissionBacking.isViewerSubmitter()}"
                                                                  styleClass="form-control">
