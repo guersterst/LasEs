@@ -185,6 +185,16 @@ class PaperRepositoryTest {
     }
 
     @Test
+    void testAddPaperNoVersionNumber() {
+        Paper noVersion = new Paper();
+        noVersion.setSubmissionId(submission1.getId());
+        noVersion.setUploadTime(LocalDateTime.now());
+
+        Transaction transaction = new Transaction();
+        assertThrows(InvalidFieldsException.class, () -> PaperRepository.get(paper1, transaction));
+    }
+
+    @Test
     void testChange() throws SQLException, DataNotWrittenException, NotFoundException {
         Transaction transaction = new Transaction();
         Connection connection = transaction.getConnection();
