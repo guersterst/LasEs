@@ -54,7 +54,7 @@ public class UserRegistersClicksRandomlyAndDeletesHimself implements Callable<Li
         driver.quit();
     }
 
-    private List<ResponseTimeEntry> userRegistersClicksRandomlyAndDeletesHimself(int globalId) {
+    private List<ResponseTimeEntry> userRegistersClicksRandomlyAndDeletesHimself(int globalId) throws InterruptedException {
         List<ResponseTimeEntry> responseTimes = new LinkedList<>();
 
         long start = System.currentTimeMillis();
