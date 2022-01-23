@@ -140,8 +140,8 @@ public class IDORTest {
         WebElement emailBox = driver.findElement(By.id("login-form:email-itxt"));
         WebElement passwordBox = driver.findElement(By.id("login-form:password-iscrt"));
 
-        emailBox.sendKeys(TEST_ADMIN_EMAIL);
-        passwordBox.sendKeys(TEST_PASSWORD);
+        emailBox.sendKeys(ORIGINAL_ADMIN_EMAIL);
+        passwordBox.sendKeys(ORIGINAL_ADMIN_PASSWORD);
 
         driver.findElement(By.id("login-form:login-cbtn")).click();
 

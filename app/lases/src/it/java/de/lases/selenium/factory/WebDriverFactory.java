@@ -9,7 +9,7 @@ import java.time.Duration;
 
 public class WebDriverFactory {
 
-    public static String LOCALHOST_URL = "http://localhost:8080/lases_war_exploded/";
+    public static String LOCALHOST_URL = "https://sebastianvogt.me/lases-1.0-SNAPSHOT/";
     //public static String LOCALHOST_URL = "http://horizon.fim.uni-passau.de:8002/lases_war_exploded/";
 
     public static WebDriver createFirefoxWebDriver() {

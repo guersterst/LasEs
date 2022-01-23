@@ -29,9 +29,6 @@ public class InjectionTest {
 
     private static final String TEST_TITLE = "\";DROP TABLE user;--";
 
-    /**
-     * Prerequisite: Admin 'thomas.kirz2+lasesadmin@gmail.com' w/ Password 'Password1!' exists in the database.
-     */
     @Test
     public void injectionTest() {
         // Create Security forum

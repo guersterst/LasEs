@@ -31,6 +31,7 @@ public class SessionFixationTest {
     public void testNotAuthenticated() {
         driver.get(WebDriverFactory.LOCALHOST_URL);
 
+        // Click on logo so session id is written in url
         driver.findElement(By.xpath("//nav/a")).click();
 
         Pattern pattern = Pattern.compile(".*" + SESSION_ID_IDENTIFIER + "=([\\w]*).*");
