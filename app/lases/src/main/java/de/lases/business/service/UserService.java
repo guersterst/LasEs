@@ -220,7 +220,7 @@ public class UserService implements Serializable {
             transaction.commit();
         } catch (NotFoundException e) {
             transaction.abort();
-            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dateNotFound"),
+            uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataNotFound"),
                     MessageCategory.ERROR));
         } catch (DataNotWrittenException | DataNotCompleteException e) {
             uiMessageEvent.fire(new UIMessage(propertyResourceBundle.getString("dataNotWritten"),

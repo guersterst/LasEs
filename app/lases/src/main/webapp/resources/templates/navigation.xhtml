@@ -57,7 +57,9 @@
                         <h:inputText styleClass="form-control mr-sm2"
                                      id="search-itxt"
                                      value="#{navigationBacking.resultListParameters.globalSearchWord}"
-                                     title="#{help.search}"/>
+                                     title="#{help.search}"
+                                     maxlength="30"
+                        />
                         <h:commandButton action="#{navigationBacking.search}"
                                          id="search-btn"
                                          value="#{labels.search}"
