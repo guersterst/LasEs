@@ -423,7 +423,7 @@ class PaperRepositoryTest {
     }
 
     @Test
-    void testSizeOfFile() throws NotFoundException {
+    void testSizeOfFile() throws NotFoundException, DataNotCompleteException {
         FileDTO fileDTO = PaperRepository.getPDF(paper2, transaction);
         int fileLength = fileDTO.getFile().length;
 

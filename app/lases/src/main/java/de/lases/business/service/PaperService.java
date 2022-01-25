@@ -299,7 +299,7 @@ public class PaperService implements Serializable {
                 file = PaperRepository.getPDF(paper, transaction);
                 transaction.commit();
 
-            }  catch (NotFoundException exception) {
+            }  catch (NotFoundException | DataNotCompleteException exception) {
 
                 uiMessageEvent.fire(new UIMessage(resourceBundle.getString("paperNotFound"), MessageCategory.ERROR));
                 transaction.abort();
