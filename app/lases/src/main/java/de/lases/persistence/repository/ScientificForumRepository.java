@@ -684,12 +684,13 @@ public class ScientificForumRepository {
             String update = """
                 UPDATE submission
                 SET editor_id = ?
-                WHERE forum_id = ?
+                WHERE forum_id = ? AND editor_id = ?
                 """;
 
             try (PreparedStatement preparedStatement = transaction.getConnection().prepareStatement(update)){
                 preparedStatement.setInt(1, newEditor.getId());
                 preparedStatement.setInt(2, scientificForum.getId());
+                preparedStatement.setInt(3, editor.getId());
 
                 preparedStatement.executeUpdate();
             } catch (SQLException ex) {
