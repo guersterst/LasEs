@@ -10,6 +10,9 @@ import de.lases.control.internal.Pagination;
 import de.lases.control.internal.SessionInformation;
 import de.lases.global.transport.*;
 import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.event.Event;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -21,6 +24,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PropertyResourceBundle;
 
 /**
  * Backing bean for the scientific forum page.
@@ -49,6 +53,12 @@ public class ScientificForumBacking implements Serializable {
 
     @Inject
     private ConfigPropagator config;
+
+    @Inject
+    private Event<UIMessage> uiMessageEvent;
+
+    @Inject
+    private transient PropertyResourceBundle resourceBundle;
 
     private ScientificForum forum;
 
@@ -277,9 +287,15 @@ public class ScientificForumBacking implements Serializable {
     /**
      * Remove a specific user form the list of editors.
      */
-    public void removeEditor(User editor) {
+    public String removeEditor(User editor) {
+        if (editors.size() <= 1) {
+            uiMessageEvent.fire(new UIMessage(resourceBundle.getString("contactAdmin"), MessageCategory.WARNING));
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+            return "/views/authenticated/scientificForum.xhtml?faces-redirect=true&id=" + forum.getId();
+        }
         forumService.removeEditor(editor, forum);
         editors.remove(editor);
+        return "/views/authenticated/scientificForum.xhtml?faces-redirect=true&id=" + forum.getId();
     }
 
     /**

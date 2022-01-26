@@ -651,6 +651,59 @@ public class ScientificForumRepository {
                         + "occurred", ex);
             }
         }
+
+        ResultSet resultSet;
+        User newEditor = new User();
+
+        String sql2 = """
+                SELECT editor_id
+                FROM member_of
+                WHERE scientific_forum_id = ?
+                """;
+        try (PreparedStatement preparedStatement = transaction.getConnection().prepareStatement(sql2)){
+            preparedStatement.setInt(1, scientificForum.getId());
+
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                newEditor.setId(resultSet.getInt("editor_id"));
+            } else {
+                throw new NotFoundException("No new editor found");
+            }
+        } catch (SQLException ex) {
+            DatasourceUtil.logSQLException(ex, logger);
+
+            if (TransientSQLExceptionChecker.isTransient(ex.getSQLState())) {
+                throw new DataNotWrittenException("The editor could not be set", ex);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("A datasource exception"
+                        + "occurred", ex);
+            }
+        }
+        if (newEditor.getId() != null) {
+            String update = """
+                UPDATE submission
+                SET editor_id = ?
+                WHERE forum_id = ?
+                """;
+
+            try (PreparedStatement preparedStatement = transaction.getConnection().prepareStatement(update)){
+                preparedStatement.setInt(1, newEditor.getId());
+                preparedStatement.setInt(2, scientificForum.getId());
+
+                preparedStatement.executeUpdate();
+            } catch (SQLException ex) {
+                DatasourceUtil.logSQLException(ex, logger);
+
+                if (TransientSQLExceptionChecker.isTransient(ex.getSQLState())) {
+                    throw new DataNotWrittenException("The new editor could not be set", ex);
+                } else {
+                    transaction.abort();
+                    throw new DatasourceQueryFailedException("A datasource exception"
+                            + "occurred", ex);
+                }
+            }
+        }
     }
 
     /**

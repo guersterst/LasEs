@@ -214,6 +214,9 @@ public class ToolbarBacking implements Serializable {
      * @return A {@code null} if there is no title. Otherwise, returns the title.
      */
     public String getTitle(User user) {
+        if (user == null) {
+            return "";
+        }
         return Objects.requireNonNullElse(user.getTitle(), "");
     }
 
