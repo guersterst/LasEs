@@ -114,7 +114,26 @@ public class SubmissionService implements Serializable {
             uiMessageEvent.fire(new UIMessage(
                     resourceBundle.getString("dataNotWritten"),
                     MessageCategory.ERROR));
-            logger.log(Level.WARNING, e.getMessage());
+            transaction.abort();
+            return null;
+        } catch (NotFoundException e) {
+            if (e.getMessage().equals("author")) {
+                uiMessageEvent.fire(new UIMessage(
+                        resourceBundle.getString("ownAccountDeleted"),
+                        MessageCategory.ERROR));
+            }  else if (e.getMessage().equals("editor")) {
+                uiMessageEvent.fire(new UIMessage(
+                        resourceBundle.getString("newSubmissionEditorNotFound"),
+                        MessageCategory.ERROR));
+            } else if (e.getMessage().equals("forum")) {
+                uiMessageEvent.fire(new UIMessage(
+                        resourceBundle.getString("newSubmissionForumNotFound"),
+                        MessageCategory.ERROR));
+            } else {
+                uiMessageEvent.fire(new UIMessage(
+                        resourceBundle.getString("dataNotWritten"),
+                        MessageCategory.ERROR));
+            }
             transaction.abort();
             return null;
         }
