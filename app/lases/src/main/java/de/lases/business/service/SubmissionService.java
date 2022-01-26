@@ -277,7 +277,7 @@ public class SubmissionService implements Serializable {
                 sendEmail(author, subject, emailAddress.toArray(new String[0]), body);
             }
 
-            if (reviewerList != null) {
+            if (reviewerList != null && ! reviewerList.isEmpty()) {
 
                 sendMultipleEmails(null, reviewerList, subject, body);
             }

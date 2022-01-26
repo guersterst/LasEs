@@ -308,8 +308,13 @@ public class SubmissionBacking implements Serializable {
      * @param paper The paper to download.
      * @throws IOException If the download fails.
      */
-    public void downloadPaper(Paper paper) {
+    public String downloadPaper(Paper paper) {
         FileDTO file = paperService.getFile(paper);
+
+        if (file == null) {
+            return "/views/authenticated/homepage.xhtml";
+        }
+
         byte[] pdf = file.getFile();
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream(pdf.length);
@@ -333,6 +338,8 @@ public class SubmissionBacking implements Serializable {
 
 
         facesContext.responseComplete();
+
+        return null;
     }
 
     /**
