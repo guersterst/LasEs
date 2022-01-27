@@ -77,7 +77,7 @@ class SubmissionRepositoryTest {
      * @author Sebastian Vogt
      */
     @Test
-    void testAddSubmission() throws DataNotWrittenException, SQLException {
+    void testAddSubmission() throws DataNotWrittenException, SQLException, NotFoundException {
 
         Transaction transaction = new Transaction();
         Connection conn = transaction.getConnection();
