@@ -133,7 +133,7 @@ public class SubmissionRepository {
      * @author Sebastian Vogt
      */
     public static Submission add(Submission submission, Transaction transaction)
-            throws DataNotWrittenException {
+            throws DataNotWrittenException, NotFoundException {
         if (submission.getTitle() == null || submission.getState() == null || submission.getSubmissionTime() == null) {
             throw new InvalidFieldsException("At least one of the required fields of the submission was null");
         }
@@ -167,6 +167,18 @@ public class SubmissionRepository {
             submission.setId(resultSet.getInt(1));
         } catch (SQLException ex) {
             DatasourceUtil.logSQLException(ex, logger);
+            if (ex.getSQLState().equals("23503")) {
+                String message = ex.getMessage();
+                if (message.contains("table \"user\"") && message.contains("author_id")) {
+                    throw new NotFoundException("author");
+                } else if (message.contains("table \"user\"")) {
+                    throw new NotFoundException("editor");
+                } else if (message.contains("table \"scientific_forum\"")) {
+                    throw new NotFoundException("forum");
+                } else {
+                    throw new NotFoundException();
+                }
+            }
             if (TransientSQLExceptionChecker.isTransient(ex.getSQLState())) {
                 throw new DataNotWrittenException("Submission could not be added", ex);
             } else {

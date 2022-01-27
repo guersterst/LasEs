@@ -195,7 +195,12 @@ public class NewSubmissionBacking implements Serializable {
             initNewSubmission();
 
             logger.log(Level.WARNING, "the submission was not successfully added.");
-            return null;
+            if (userService.emailExists(sessionInformation.getUser())) {
+                return "/views/authenticated/scientificForumList.xhtml";
+            } else {
+                sessionInformation.setUser(null);
+                return "/views/anonymous/welcome.xhtml";
+            }
         } else {
             return "submission?faces-redirect=true&id=" + newSubmission.getId();
         }
