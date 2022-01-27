@@ -20,6 +20,7 @@ import java.util.logging.Logger;
  *
  * @author Thomas Kirz
  * @author Sebastian Vogt
+ * @author Stefanie Gürster
  */
 public class SubmissionRepository {
 

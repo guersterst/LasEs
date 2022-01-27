@@ -175,6 +175,11 @@ public class NewSubmissionBacking implements Serializable {
         paper.setUploadTime(LocalDateTime.now());
         FileDTO file = new FileDTO();
 
+        if (newSubmission.getEditorId() == null) {
+            uiMessageEvent.fire(new UIMessage(messageBundle.getString("noEditorForNewSubmission"), MessageCategory.ERROR));
+            return "/views/authenticated/scientificForumList.xhtml";
+        }
+
         try {
             file.setFile(uploadedPDF.getInputStream().readAllBytes());
             newSubmission = submissionService.add(newSubmission, coAuthors, paper, file);

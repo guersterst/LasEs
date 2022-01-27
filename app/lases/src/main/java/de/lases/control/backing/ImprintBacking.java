@@ -9,6 +9,8 @@ import jakarta.inject.Named;
 
 /**
  * Backing bean for the imprint view.
+ *
+ * @author Stefanie Gürster
  */
 @RequestScoped
 @Named

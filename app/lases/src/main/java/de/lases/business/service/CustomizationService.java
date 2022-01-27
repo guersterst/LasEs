@@ -22,6 +22,7 @@ import java.util.PropertyResourceBundle;
 import java.util.logging.Logger;
 
 /**
+ * @author Stefanie Gürster
  * Provides functionality for the customization of the applications look and feel and for
  * database information.
  * In case of an unexpected state, a {@link de.lases.global.transport.UIMessage} event will be fired.

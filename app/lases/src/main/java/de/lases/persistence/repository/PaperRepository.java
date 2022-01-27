@@ -583,9 +583,10 @@ public class PaperRepository {
             DatasourceUtil.logSQLException(e, logger);
             if (TransientSQLExceptionChecker.isTransient(e.getSQLState())) {
                 throw new DataNotCompleteException("Count the items of the paper pagination failed.", e);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("A datasource exception occurred while loading all papers of a submission.", e);
             }
-            transaction.abort();
-            throw new DatasourceQueryFailedException("A datasource exception occurred while loading all papers of a submission.", e);
         }
 
         return count;
@@ -603,7 +604,7 @@ public class PaperRepository {
      * @throws DatasourceQueryFailedException If the datasource cannot be
      *                                        queried.
      */
-    public static FileDTO getPDF(Paper paper, Transaction transaction) throws NotFoundException {
+    public static FileDTO getPDF(Paper paper, Transaction transaction) throws NotFoundException, DataNotCompleteException {
 
         if (paper.getSubmissionId() == null) {
             transaction.abort();
@@ -638,9 +639,13 @@ public class PaperRepository {
             }
 
         } catch (SQLException exception) {
-            transaction.abort();
             DatasourceUtil.logSQLException(exception, logger);
-            throw new DatasourceQueryFailedException("A datasource exception occurred while loading a file.", exception);
+            if (TransientSQLExceptionChecker.isTransient(exception.getSQLState())) {
+                throw new DataNotCompleteException("Get file for paper failed.", exception);
+            } else {
+                transaction.abort();
+                throw new DatasourceQueryFailedException("A datasource exception occurred while loading a file.", exception);
+            }
         }
     }
 
