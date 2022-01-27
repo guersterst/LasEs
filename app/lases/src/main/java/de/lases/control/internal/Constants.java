@@ -2,6 +2,7 @@ package de.lases.control.internal;
 
 /**
  * Holds all constants for validating maximal length.
+ * @author Stefanie Gürster
  */
 public final class Constants {
 

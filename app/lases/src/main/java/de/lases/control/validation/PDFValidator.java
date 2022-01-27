@@ -19,6 +19,7 @@ import java.util.PropertyResourceBundle;
  * file size for an uploaded pdf as specified in the configuration.
  *
  * @author Sebastian Vogt
+ * @author Stefaie Gürster
  */
 @FacesValidator("pdfValidator")
 public class PDFValidator implements Validator<Part> {

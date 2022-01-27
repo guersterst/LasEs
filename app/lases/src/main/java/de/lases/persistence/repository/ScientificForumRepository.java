@@ -19,6 +19,7 @@ import java.util.logging.Logger;
  *
  * @author Thomas Kirz
  * @author Johannes Garstenauer
+ * @author Stefanie Gürster
  */
 public class ScientificForumRepository {
 

@@ -28,6 +28,8 @@ import java.util.PropertyResourceBundle;
 
 /**
  * Backing bean for the scientific forum page.
+ *
+ * @author Stefanie Gürster
  */
 @ViewScoped
 @Named

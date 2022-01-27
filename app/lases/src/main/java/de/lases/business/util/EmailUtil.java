@@ -20,6 +20,7 @@ import java.util.Map;
  * Provides functionality for sending emails.
  *
  * @author Thomas Kirz
+ * @author Stefanie Gürster
  */
 public class EmailUtil {
 
